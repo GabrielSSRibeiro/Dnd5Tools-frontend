@@ -1,0 +1,47 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* font-family: ; */
+}
+
+:root {
+  --background: white;
+  --text: black;
+  /* font sizes */
+  --small: 10px;
+  --regular: 12px;
+  --large: 16px;
+  --extra: 20px;
+  --title: 35px;
+}
+
+@media (max-width: 1080px) {
+  :root {
+    /* font sizes */
+    --small: 12px;
+    --regular: 14px;
+    --large: 18px;
+  }
+}
+
+@media (max-width: 720px) {
+  html {
+    /* font-size: 87.5%; */
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+}
+
+button {
+  cursor: pointer;
+}
