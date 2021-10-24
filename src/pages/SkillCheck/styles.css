@@ -1,4 +1,4 @@
-.Home-container {
+.SkillCheck-container {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -6,13 +6,13 @@
   justify-content: center;
 }
 
-.Home-container > div {
+.SkillCheck-container > div {
   margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.Home-container > div > button {
+.SkillCheck-container > div > button {
   margin: 5px;
 }

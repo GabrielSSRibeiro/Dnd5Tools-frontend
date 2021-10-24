@@ -1,0 +1,27 @@
+.SignUp-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.SignUp-container > form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.SignUp-container > form > div {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.SignUp-container > form > button {
+  margin: 10px;
+}

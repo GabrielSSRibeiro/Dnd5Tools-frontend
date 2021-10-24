@@ -1,13 +1,13 @@
-import { ContextProvider } from "./contexts/myContext";
+import { AuthProvider } from "./contexts/Auth";
 import Routes from "./routes";
 
 import "./styles/global.css";
 
 function App() {
   return (
-    <ContextProvider>
+    <AuthProvider>
       <Routes />
-    </ContextProvider>
+    </AuthProvider>
   );
 }
 
