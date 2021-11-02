@@ -3,7 +3,7 @@ import React from "react";
 
 import "./styles.css";
 
-function Encounter({ history }) {
+function Encounter() {
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -12,16 +12,9 @@ function Encounter({ history }) {
   //   });
   // }, []);
 
-  async function HandleBack() {
-    history.push("/");
-  }
-
   return (
     <div className="Encounter-container">
       <h1>Encontro</h1>
-      <div>
-        <button onClick={HandleBack}>Voltar</button>
-      </div>
     </div>
   );
 }

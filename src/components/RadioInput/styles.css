@@ -1,0 +1,19 @@
+.RadioInput-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  width: 20px;
+  height: 20px;
+  border: solid 1px var(--fontColor);
+  border-radius: 100%;
+  background-color: #ffffff;
+}
+
+.RadioInput-container .innerCircle {
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+  background-color: var(--fontColor);
+}

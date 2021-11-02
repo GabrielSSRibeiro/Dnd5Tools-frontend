@@ -1,0 +1,76 @@
+.Select-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+
+.Select-container label {
+  font-family: var(--secondaryFont);
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+}
+
+.Select-container > section {
+  position: relative;
+}
+
+.Select-container > section > div {
+  font-family: var(--secondaryFont);
+  font-size: 14px;
+}
+
+.Select-container > section > div {
+  width: 225px;
+  height: 45px;
+  padding: 11px 16px 12px;
+  border-radius: 5px;
+  border: solid 1px #1b4947;
+  background-color: #ffffff;
+  appearance: none;
+}
+
+.Select-container > section > .fa-caret-down {
+  position: absolute;
+  transform: translate(0, -50%);
+  right: 15px;
+  top: 50%;
+}
+
+.Select-container > ul {
+  width: 225px;
+  height: 177.3px;
+  padding: 6px 8.8px 4.3px 8px;
+  border-radius: 5px;
+  box-shadow: 0 0 19px 0 rgba(0, 0, 0, 0.1);
+  border: solid 1px var(--fontColor);
+  background-color: #ffffff;
+  position: absolute;
+  transform: translate(0, 100%);
+  bottom: -5px;
+  z-index: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.Select-container > ul > li {
+  list-style-type: none;
+  width: 195.4px;
+  height: 32px;
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-top: 5px;
+  font-family: var(--secondaryFont);
+  font-size: 14px;
+}
+.Select-container > ul > li:hover {
+  background-color: var(--fontColor);
+  color: #ffffff;
+}

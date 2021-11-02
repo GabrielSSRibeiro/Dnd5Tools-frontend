@@ -1,0 +1,17 @@
+.CheckInput-container {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: solid 1px var(--fontColor);
+  background-color: #ffffff;
+
+  cursor: pointer;
+}
+
+.CheckInput-container > .fa-check {
+  color: #ffffff;
+}
+
+.check-checked {
+  background-color: var(--fontColor);
+}

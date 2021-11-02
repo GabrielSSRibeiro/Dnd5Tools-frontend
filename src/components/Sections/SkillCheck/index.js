@@ -3,7 +3,7 @@ import React from "react";
 
 import "./styles.css";
 
-function Reward({ history }) {
+function SkillCheck({ history }) {
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -12,18 +12,11 @@ function Reward({ history }) {
   //   });
   // }, []);
 
-  async function HandleBack() {
-    history.push("/");
-  }
-
   return (
-    <div className="Reward-container">
-      <h1>Recompensa</h1>
-      <div>
-        <button onClick={HandleBack}>Voltar</button>
-      </div>
+    <div className="SkillCheck-container">
+      <h1>Teste</h1>
     </div>
   );
 }
 
-export default Reward;
+export default SkillCheck;
