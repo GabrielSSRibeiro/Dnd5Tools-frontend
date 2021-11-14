@@ -3,16 +3,18 @@ import { mainTabs } from "../../enums";
 //  import api from "../../services/api";
 
 import NaviBar from "../../components/NaviBar";
-import TabBar from "../../components/TabBar";
 import SkillCheck from "../../components/Sections/SkillCheck";
 import Encounter from "../../components/Sections/Encounter";
-import Reward from "../../components/Sections/Reward";
+import Treasure from "../../components/Sections/Treasure";
 
 import background from "../../assets/background.png";
 import "./styles.css";
 
 function Home() {
   const [openTab, setOpenTab] = useState(mainTabs.encounter);
+  const [isPartyOpen, setIsPartyOpen] = useState(false);
+  const [isBestiaryOpen, setIsBestiaryOpen] = useState(false);
+  const [isEditingCreature, setIsEditingCreature] = useState(false);
 
   //   useEffect(() => {
   //   api.get("items").then((response) => {
@@ -22,12 +24,26 @@ function Home() {
 
   return (
     <div className="Home-container">
-      <NaviBar />
-      <TabBar setOpenTab={setOpenTab} />
-      <img src={background} alt="background" />
+      <NaviBar
+        isPartyOpen={isPartyOpen}
+        setIsPartyOpen={setIsPartyOpen}
+        setOpenTab={setOpenTab}
+        isBestiaryOpen={isBestiaryOpen}
+        setIsBestiaryOpen={setIsBestiaryOpen}
+        setIsPBestiaryOpen={setIsBestiaryOpen}
+        isEditingCreature={isEditingCreature}
+      />
+      <img
+        src={background}
+        alt={
+          <a href="https://www.freepik.com/photos/people">
+            People photo created by liuzishan - www.freepik.com
+          </a>
+        }
+      />
       {openTab === mainTabs.skillCheck && <SkillCheck />}
       {openTab === mainTabs.encounter && <Encounter />}
-      {openTab === mainTabs.reward && <Reward />}
+      {openTab === mainTabs.reward && <Treasure />}
     </div>
   );
 }

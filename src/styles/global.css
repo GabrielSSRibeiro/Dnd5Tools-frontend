@@ -2,17 +2,17 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* font-family: ; */
 }
 
 :root {
-  --titleFont1: Cinzel Decorative, cursive;
-  --titleFont2: Cinzel, serif;
-  --primaryFont: Open Sans, sans-serif;
+  --titleFont: Cinzel Decorative, cursive;
+  --primaryFont: Cinzel, serif;
 
   --primaryPurple1: #472e73;
   --primaryPurple2: #38245a;
   --primaryPurple3: #281a40;
+  --purpleLight: #d8c8f4;
+
   --secondaryBlue1: #61cad9;
   --secondaryBlue2: #5bbecc;
   --secondaryBlue3: #50a7b2;
@@ -25,15 +25,19 @@
 
   --successColor: #2f5852;
   --errorColor: #a72638;
+
+  --purpleGradient: linear-gradient(180deg, #70549f 0%, #2f2146 100%);
+  --grayGradient: linear-gradient(
+    45deg,
+    #252525 2.86%,
+    rgba(37, 37, 37, 0.37) 91.25%
+  );
 }
 
 html,
 body,
 #root {
   height: 100%;
-}
-
-body {
 }
 
 h1 {

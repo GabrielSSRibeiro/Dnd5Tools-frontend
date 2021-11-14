@@ -1,4 +1,4 @@
-.Reward-container {
+.EditCreature-container {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -6,9 +6,13 @@
   justify-content: center;
 }
 
-.Reward-container > div {
+.EditCreature-container > div {
   margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.EditCreature-container > h1 {
+  color: white;
 }

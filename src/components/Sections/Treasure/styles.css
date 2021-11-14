@@ -1,4 +1,4 @@
-.Encounter-container {
+.Treasure-container {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -6,13 +6,13 @@
   justify-content: center;
 }
 
-.Encounter-container > div {
+.Treasure-container > div {
   margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.Encounter-container > h1 {
+.Treasure-container > h1 {
   color: white;
 }

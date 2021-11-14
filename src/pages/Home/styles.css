@@ -3,12 +3,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   height: 100%;
 }
 
 .Home-container img {
   position: absolute;
+  object-fit: cover;
+  object-position: 0 -75px;
   z-index: -1;
   width: 100%;
   height: 100%;

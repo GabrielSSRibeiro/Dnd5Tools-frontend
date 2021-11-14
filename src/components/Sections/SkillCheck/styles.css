@@ -12,3 +12,7 @@
   align-items: center;
   justify-content: center;
 }
+
+.SkillCheck-container > h1 {
+  color: white;
+}

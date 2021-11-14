@@ -1,52 +1,253 @@
 .NaviBar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.NaviBar-container > section:first-child {
   width: 100%;
   height: 60px;
-  padding: 5px 40px 5px 40px;
-  background: linear-gradient(90deg, #281a40 0%, #281a40 100%);
+  padding: 5px 100px 5px 100px;
+  /* background: #fff; */
 
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(232, 232, 232, 0.8) 100%
+  );
+  backdrop-filter: blur(14px);
 }
 
-.NaviBar-container div {
+.NaviBar-container > section:first-child {
+  border-bottom: 0.5px solid var(--primaryPurple1);
+}
+
+.NaviBar-container > section:first-child div {
   display: flex;
   align-items: center;
 }
 
-.NaviBar-container h3 {
-  color: var(--white);
-  font-family: var(--titleFont1);
+.NaviBar-container > section:first-child h3 {
+  color: var(--primaryPurple2);
+  font-family: var(--titleFont);
   font-weight: 400;
 }
 
-.NaviBar-container h3 + h3 {
-  color: var(--white);
+.NaviBar-container > section:first-child h3 + h3 {
+  color: var(--primaryPurple2);
   font-weight: 400;
-  font-family: var(--titleFont2);
+  font-family: var(--primaryFont);
   padding-right: 15px;
 }
 
-.NaviBar-container h4 {
-  color: var(--white);
+.NaviBar-container > section:first-child h4 {
+  color: var(--primaryPurple1);
   font-family: var(--primaryFont);
-  font-weight: 400;
+  font-weight: 700;
   line-height: 30px;
-  border-left: 1px solid var(--white);
+  border-left: 1px solid var(--primaryPurple1);
   text-align: center;
+  padding-top: 4px;
   padding-left: 15px;
+  height: 35px;
 }
 
-.NaviBar-container button {
+.NaviBar-container > section:first-child button {
   width: 50px;
-  color: var(--white);
+  text-decoration: underline;
+  color: var(--primaryPurple1);
   font-family: var(--primaryFont);
   font-weight: 400;
   font-size: 18px;
   background: none;
   border: none;
-  justify-self: flex-end;
 }
-.NaviBar-container button:hover {
-  color: var(--gray2);
+.NaviBar-container > section:first-child button:hover {
+  color: var(--primaryPurple3);
+  cursor: pointer;
+}
+
+.NaviBar-container > section:last-child {
+  width: 100%;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(232, 232, 232, 0.8) 100%
+  );
+  backdrop-filter: blur(14px);
+}
+
+/* /////////////////////// */
+
+.NaviBar-container > section:last-child > .sharp-button:first-child {
+  height: 100%;
+  width: 200px;
+  cursor: pointer;
+
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.NaviBar-container > section:last-child > .sharp-button:first-child div {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: absolute;
+  left: 0;
+}
+
+.NaviBar-container
+  > section:last-child
+  > .sharp-button:first-child
+  div:nth-child(1) {
+  left: 4px;
+}
+
+.NaviBar-container
+  > section:last-child
+  > .sharp-button:first-child
+  div:nth-child(2) {
+  left: 2px;
+}
+
+.NaviBar-container > section:last-child > .sharp-button:first-child div main {
+  background-color: var(--black);
+  height: 100%;
+  width: 170px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding-right: 10px;
+}
+
+.NaviBar-container
+  > section:last-child
+  > .sharp-button:first-child
+  div:nth-child(2)
+  main {
+  background-color: var(--white);
+}
+
+.NaviBar-container
+  > section:last-child
+  > .sharp-button:first-child
+  div
+  main
+  h4 {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.NaviBar-container > section:last-child > .sharp-button:first-child div aside {
+  width: 0;
+  height: 0;
+  border-top: 30px solid transparent;
+  border-bottom: 30px solid transparent;
+  border-left: 25px solid var(--black);
+  left: 0;
+}
+
+.NaviBar-container
+  > section:last-child
+  > .sharp-button:first-child
+  div:nth-child(2)
+  aside {
+  border-left: 25px solid var(--white);
+}
+
+/* //////////////////////////////// */
+
+.NaviBar-container > section:last-child > .sharp-button:last-child {
+  height: 100%;
+  width: 200px;
+
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.NaviBar-container > section:last-child > .sharp-button:last-child div {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: absolute;
+  right: 0;
+}
+
+.NaviBar-container
+  > section:last-child
+  > .sharp-button:last-child
+  div:nth-child(1) {
+  right: 4px;
+}
+
+.NaviBar-container
+  > section:last-child
+  > .sharp-button:last-child
+  div:nth-child(2) {
+  right: 2px;
+}
+
+.NaviBar-container > section:last-child > .sharp-button:last-child div main {
+  background-color: var(--black);
+  height: 100%;
+  width: 170px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding-left: 10px;
+}
+
+.NaviBar-container
+  > section:last-child
+  > .sharp-button:last-child
+  div:nth-child(2)
+  main {
+  background-color: var(--white);
+}
+
+.NaviBar-container > section:last-child > .sharp-button:last-child div main h4 {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.NaviBar-container > section:last-child > .sharp-button:last-child div aside {
+  width: 0;
+  height: 0;
+  border-top: 30px solid transparent;
+  border-bottom: 30px solid transparent;
+  border-right: 25px solid var(--black);
+  right: 0;
+}
+
+.NaviBar-container
+  > section:last-child
+  > .sharp-button:last-child
+  div:nth-child(2)
+  aside {
+  border-right: 25px solid var(--white);
 }

@@ -3,7 +3,7 @@ import React from "react";
 
 import "./styles.css";
 
-function Reward({ history }) {
+function EditCreature() {
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -13,10 +13,10 @@ function Reward({ history }) {
   // }, []);
 
   return (
-    <div className="Reward-container">
-      <h1>Recompensa</h1>
+    <div className="EditCreature-container">
+      <h1>Editar Criatura</h1>
     </div>
   );
 }
 
-export default Reward;
+export default EditCreature;
