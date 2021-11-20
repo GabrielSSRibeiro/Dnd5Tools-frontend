@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/Auth";
-// import { useHistory } from "react-router-dom";
-//  import api from "../../services/api";
 
 import Button from "../../components/Button";
+import TextInput from "../../components/TextInput";
 
 import "./styles.css";
 
@@ -13,13 +12,6 @@ function Login({ history }) {
   const [password, setPassword] = useState();
 
   const { Login } = useAuth();
-  // const history = useHistory();
-
-  //   useEffect(() => {
-  //   api.get("items").then((response) => {
-  //     setItems(response.data);
-  //   });
-  // }, []);
 
   async function HandleLogin() {
     await Login(email, password);
@@ -34,23 +26,21 @@ function Login({ history }) {
       </div>
       <h4>Ferramentas D&amp;D 5</h4>
       <form onSubmit={HandleLogin}>
-        <div>
-          <label>E-mail</label>
-          <input
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-        </div>
+        <TextInput
+          label="E-mail"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+        />
+        <TextInput
+          label="Password"
+          value={email}
+          type="password"
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+        />
         <footer>
           <Button text="Entrar" onClick={HandleLogin} />
         </footer>

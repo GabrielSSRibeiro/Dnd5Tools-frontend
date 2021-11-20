@@ -6,15 +6,8 @@
 }
 
 .TextInput-container label {
-  font-family: var(--secondaryFont);
-  margin-bottom: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: left;
+  margin-bottom: 5px;
+  align-self: flex-start;
 }
 
 .TextInput-container > main {
@@ -22,44 +15,10 @@
 }
 
 .TextInput-container input {
-  width: 360px;
-  height: 45px;
+  width: 350px;
+  height: 55px;
   padding: 12px 45px 11px 13px;
-  border-radius: 5px;
-  border: solid 1px var(--fontColor);
-  background-color: #ffffff;
-}
-
-.TextInput-container .text-noResults {
-  border-color: var(--errorColor);
-}
-
-.TextInput-container > main > .fas {
-  position: absolute;
-  transform: translate(0, -50%);
-  right: 15px;
-  top: 50%;
-}
-
-.TextInput-container .fa-check {
-  color: var(--fontColor);
-}
-
-.TextInput-container .fa-exclamation-triangle {
-  color: var(--errorColor);
-}
-
-.TextInput-container p {
-  width: 100%;
-  height: 16px;
-  margin-top: 10px;
-  font-family: var(--secondaryFont);
-  font-size: 14px;
-  font-weight: 600;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: var(--errorColor);
+  border: 1px solid var(--gray2);
+  border-radius: 8px;
+  background-color: var(--white);
 }

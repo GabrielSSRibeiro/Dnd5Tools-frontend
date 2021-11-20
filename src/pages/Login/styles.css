@@ -23,21 +23,10 @@
 }
 
 .Login-container > form {
-  margin-top: 20px;
+  height: 250px;
+  margin: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-}
-
-.Login-container > form > div {
-  margin-top: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: baseline;
-  justify-content: center;
-}
-
-.Login-container > form > footer {
-  margin: 15px;
+  justify-content: space-between;
 }

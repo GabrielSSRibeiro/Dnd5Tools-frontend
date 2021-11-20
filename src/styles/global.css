@@ -72,6 +72,21 @@ p {
   font-family: var(--primaryFont);
 }
 
+span {
+  font-size: 12px;
+  font-family: var(--primaryFont);
+}
+
+label {
+  font-size: 15px;
+  font-family: var(--primaryFont);
+}
+
+input {
+  font-size: 15px;
+  font-family: var(--primaryFont);
+}
+
 button {
   cursor: pointer;
 }

@@ -5,6 +5,7 @@ import { useAuth } from "../../contexts/Auth";
 //  import api from "../../services/api";
 
 import Button from "../../components/Button";
+import TextInput from "../../components/TextInput";
 
 import "./styles.css";
 
@@ -35,16 +36,18 @@ function SignUp({ history }) {
       <h4>Ferramentas D&amp;D 5</h4>
       <form>
         <div>
-          <label>E-mail</label>
-          <input
+          <TextInput
+            label="E-mail"
+            value={email}
             onChange={(e) => {
               setEmail(e.target.value);
             }}
           />
         </div>
         <div>
-          <label>Password</label>
-          <input
+          <TextInput
+            label="Password"
+            value={email}
             type="password"
             onChange={(e) => {
               setPassword(e.target.value);
