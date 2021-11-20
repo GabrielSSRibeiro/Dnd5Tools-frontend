@@ -6,6 +6,24 @@
   justify-content: center;
 }
 
+.SignUp-container div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SignUp-container div h1 {
+  color: var(--black);
+  font-family: var(--titleFont);
+  font-weight: 400;
+}
+
+.SignUp-container div h1 + h1 {
+  color: var(--black);
+  font-weight: 400;
+  font-family: var(--primaryFont);
+}
+
 .SignUp-container > form {
   margin-top: 20px;
   display: flex;
@@ -22,6 +40,6 @@
   justify-content: center;
 }
 
-.SignUp-container > form > button {
-  margin: 10px;
+.SignUp-container > form > footer {
+  margin: 15px;
 }

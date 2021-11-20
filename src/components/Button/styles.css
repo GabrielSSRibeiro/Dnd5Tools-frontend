@@ -1,0 +1,28 @@
+.Button-container {
+  height: 44px;
+  background: var(--purpleGradient);
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0 2px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Button-container > div {
+  height: 40px;
+  background: var(--purpleGradient);
+  border: 1px solid var(--white);
+  border-radius: 2px;
+  padding: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Button-container > div > h5 {
+  color: white;
+}

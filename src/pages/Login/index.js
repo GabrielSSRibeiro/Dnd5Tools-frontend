@@ -4,6 +4,8 @@ import { useAuth } from "../../contexts/Auth";
 // import { useHistory } from "react-router-dom";
 //  import api from "../../services/api";
 
+import Button from "../../components/Button";
+
 import "./styles.css";
 
 function Login({ history }) {
@@ -19,17 +21,18 @@ function Login({ history }) {
   //   });
   // }, []);
 
-  async function HandleLogin(e) {
-    e.preventDefault();
-
+  async function HandleLogin() {
     await Login(email, password);
     history.push("/");
   }
 
   return (
     <div className="Login-container">
-      <h1>ASCENDANCE</h1>
-      <h3>Ferramentas D&amp;D 5</h3>
+      <div>
+        <h1>A</h1>
+        <h1>SCENDANCE</h1>
+      </div>
+      <h4>Ferramentas D&amp;D 5</h4>
       <form onSubmit={HandleLogin}>
         <div>
           <label>E-mail</label>
@@ -48,7 +51,9 @@ function Login({ history }) {
             }}
           />
         </div>
-        <button>Entrar</button>
+        <footer>
+          <Button text="Entrar" onClick={HandleLogin} />
+        </footer>
       </form>
       <span>
         Não possui uma conta? <Link to="/signup">Criar Conta</Link>

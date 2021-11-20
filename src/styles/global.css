@@ -27,11 +27,7 @@
   --errorColor: #a72638;
 
   --purpleGradient: linear-gradient(180deg, #70549f 0%, #2f2146 100%);
-  --grayGradient: linear-gradient(
-    45deg,
-    #252525 2.86%,
-    rgba(37, 37, 37, 0.37) 91.25%
-  );
+  --grayGradient: linear-gradient(45deg, #252525 2.86%, rgba(37, 37, 37, 0.37) 91.25%);
 }
 
 html,
@@ -78,4 +74,9 @@ p {
 
 button {
   cursor: pointer;
+}
+
+.button-disabled {
+  opacity: 0.6;
+  pointer-events: none;
 }

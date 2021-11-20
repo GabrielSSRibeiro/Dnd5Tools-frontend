@@ -5,6 +5,22 @@
   align-items: center;
   justify-content: center;
 }
+.Login-container div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.Login-container div h1 {
+  color: var(--black);
+  font-family: var(--titleFont);
+  font-weight: 400;
+}
+
+.Login-container div h1 + h1 {
+  color: var(--black);
+  font-weight: 400;
+  font-family: var(--primaryFont);
+}
 
 .Login-container > form {
   margin-top: 20px;
@@ -22,6 +38,6 @@
   justify-content: center;
 }
 
-.Login-container > form > button {
-  margin: 10px;
+.Login-container > form > footer {
+  margin: 15px;
 }

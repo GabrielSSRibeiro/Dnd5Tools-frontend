@@ -4,6 +4,8 @@ import { useAuth } from "../../contexts/Auth";
 // import { useHistory } from "react-router-dom";
 //  import api from "../../services/api";
 
+import Button from "../../components/Button";
+
 import "./styles.css";
 
 function SignUp({ history }) {
@@ -19,18 +21,19 @@ function SignUp({ history }) {
   //   });
   // }, []);
 
-  async function HandleSignUp(e) {
-    e.preventDefault();
-
+  async function HandleSignUp() {
     await SignUp(email, password);
     history.push("/");
   }
 
   return (
     <div className="SignUp-container">
-      <h1>ASCENDANCE</h1>
-      <h3>Ferramentas D&amp;D 5</h3>
-      <form onSubmit={HandleSignUp}>
+      <div>
+        <h1>A</h1>
+        <h1>SCENDANCE</h1>
+      </div>
+      <h4>Ferramentas D&amp;D 5</h4>
+      <form>
         <div>
           <label>E-mail</label>
           <input
@@ -48,7 +51,9 @@ function SignUp({ history }) {
             }}
           />
         </div>
-        <button>Criar Conta</button>
+        <footer>
+          <Button text="Criar Conta" onClick={HandleSignUp} />
+        </footer>
       </form>
       <span>
         Já possui uma conta? <Link to="/login">Entrar</Link>
