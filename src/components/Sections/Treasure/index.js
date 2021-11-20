@@ -14,7 +14,7 @@ function Treasure({ history }) {
 
   return (
     <div className="Treasure-container">
-      <h1>Recompensa</h1>
+      <h1>Tesouro</h1>
     </div>
   );
 }

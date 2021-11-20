@@ -1,0 +1,55 @@
+.SelectButton-container {
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+
+  cursor: pointer;
+  position: relative;
+}
+
+.SelectButton-container section {
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SelectButton-container main {
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform: rotate(45deg);
+}
+
+.SelectButton-container main h5 {
+  font-family: var(--primaryFont);
+
+  font-weight: bold;
+  transform: rotate(-45deg);
+}
+
+.button-default {
+  background: var(--gray3);
+}
+.text-default {
+  color: var(--gray1);
+}
+
+.button-selected {
+  background: var(--purpleGradient);
+}
+.text-selected {
+  color: var(--white);
+}
+
+.button-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}

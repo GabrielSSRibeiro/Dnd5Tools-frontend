@@ -3,18 +3,13 @@ import { useAuth } from "../../contexts/Auth";
 import { useHistory } from "react-router-dom";
 
 import { mainTabs } from "../../enums";
-import Button from "../Button";
+import SelectButton from "../SelectButton";
+import Party from "../Sections/Party";
+import Bestiary from "../Sections/Bestiary";
 
 import "./styles.css";
 
-function NaviBar({
-  isPartyOpen,
-  setIsPartyOpen,
-  setOpenTab,
-  isBestiaryOpen,
-  setIsBestiaryOpen,
-  isEditingCreature,
-}) {
+function NaviBar({ openTab, setOpenTab, isEditCreatureOpen, setIsEditCreatureOpen }) {
   const { Logout } = useAuth();
   const history = useHistory();
 
@@ -33,61 +28,33 @@ function NaviBar({
         </div>
         <button onClick={HandleLogout}>Sair</button>
       </section>
-
-      <section>
-        <div
-          className="sharp-button"
-          onClick={() => {
-            setIsPartyOpen(!isPartyOpen);
-          }}
-        >
-          <div>
-            <main />
-            <aside />
-          </div>
-          <div>
-            <main />
-            <aside />
-          </div>
-          <div>
-            <main>
-              <h4>6 JOGADORES</h4>
-              <h4>Nível 12</h4>
-            </main>
-            <aside />
-          </div>
-        </div>
-
-        <Button onClick={() => setOpenTab(mainTabs.skillCheck)} text="Teste" />
-        <Button
-          onClick={() => setOpenTab(mainTabs.encounter)}
-          text="Encontro"
-        />
-        <Button onClick={() => setOpenTab(mainTabs.reward)} text="Tesouro" />
-
-        <div
-          className="sharp-button"
-          onClick={() => {
-            setIsBestiaryOpen(!isBestiaryOpen);
-          }}
-        >
-          <div>
-            <aside />
-            <main />
-          </div>
-          <div>
-            <aside />
-            <main />
-          </div>
-          <div>
-            <aside />
-            <main>
-              <h4>BESTIÁRIO</h4>
-              <h4>13 Criaturas</h4>
-            </main>
-          </div>
-        </div>
-      </section>
+      {!isEditCreatureOpen && (
+        <section>
+          <Party />
+          <SelectButton
+            isLarge={true}
+            isSelected={openTab === mainTabs.skillCheck}
+            isLong={false}
+            text="Teste"
+            onClick={() => setOpenTab(mainTabs.skillCheck)}
+          />
+          <SelectButton
+            isLarge={true}
+            isSelected={openTab === mainTabs.encounter}
+            isLong={true}
+            text="Encontro"
+            onClick={() => setOpenTab(mainTabs.encounter)}
+          />
+          <SelectButton
+            isLarge={true}
+            isSelected={openTab === mainTabs.treasure}
+            isLong={false}
+            text="Tesouro"
+            onClick={() => setOpenTab(mainTabs.treasure)}
+          />
+          <Bestiary setIsEditCreatureOpen={setIsEditCreatureOpen} />
+        </section>
+      )}
     </div>
   );
 }

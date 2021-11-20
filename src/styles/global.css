@@ -60,6 +60,16 @@ h4 {
   font-family: var(--primaryFont);
 }
 
+h5 {
+  font-size: 14px;
+  font-family: var(--primaryFont);
+}
+
+h6 {
+  font-size: 12px;
+  font-family: var(--primaryFont);
+}
+
 p {
   font-size: 15px;
   line-height: 27px;

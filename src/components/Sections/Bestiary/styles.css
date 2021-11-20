@@ -1,0 +1,83 @@
+.Bestiary-container > .sharp-button {
+  height: 60px;
+  width: 200px;
+
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.Bestiary-container > .sharp-button div {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: absolute;
+  right: 0;
+}
+
+.Bestiary-container > .sharp-button div:nth-child(1) {
+  right: 4px;
+}
+
+.Bestiary-container > .sharp-button div:nth-child(2) {
+  right: 2px;
+}
+
+.Bestiary-container > .sharp-button div main {
+  background-color: var(--black);
+  height: 100%;
+  width: 170px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding-left: 10px;
+}
+
+.Bestiary-container > .sharp-button div:nth-child(2) main {
+  background-color: var(--white);
+}
+
+.Bestiary-container > .sharp-button div main h4 {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.Bestiary-container > .sharp-button div aside {
+  width: 0;
+  height: 0;
+  border-top: 30px solid transparent;
+  border-bottom: 30px solid transparent;
+  border-right: 25px solid var(--black);
+  right: 0;
+}
+
+.Bestiary-container > .sharp-button div:nth-child(2) aside {
+  border-right: 25px solid var(--white);
+}
+
+.Bestiary-container > .bestiary-tab {
+  width: 50vw;
+  height: calc(100vh - 60px);
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(232, 232, 232, 0.8) 100%
+  );
+  backdrop-filter: blur(25px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

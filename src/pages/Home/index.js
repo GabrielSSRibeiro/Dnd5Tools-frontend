@@ -6,15 +6,14 @@ import NaviBar from "../../components/NaviBar";
 import SkillCheck from "../../components/Sections/SkillCheck";
 import Encounter from "../../components/Sections/Encounter";
 import Treasure from "../../components/Sections/Treasure";
+import EditCreature from "../../components/Sections/EditCreature";
 
 import background from "../../assets/background.png";
 import "./styles.css";
 
 function Home() {
   const [openTab, setOpenTab] = useState(mainTabs.encounter);
-  const [isPartyOpen, setIsPartyOpen] = useState(false);
-  const [isBestiaryOpen, setIsBestiaryOpen] = useState(false);
-  const [isEditingCreature, setIsEditingCreature] = useState(false);
+  const [isEditCreatureOpen, setIsEditCreatureOpen] = useState(false);
 
   //   useEffect(() => {
   //   api.get("items").then((response) => {
@@ -25,13 +24,10 @@ function Home() {
   return (
     <div className="Home-container">
       <NaviBar
-        isPartyOpen={isPartyOpen}
-        setIsPartyOpen={setIsPartyOpen}
+        openTab={openTab}
         setOpenTab={setOpenTab}
-        isBestiaryOpen={isBestiaryOpen}
-        setIsBestiaryOpen={setIsBestiaryOpen}
-        setIsPBestiaryOpen={setIsBestiaryOpen}
-        isEditingCreature={isEditingCreature}
+        isEditCreatureOpen={isEditCreatureOpen}
+        setIsEditCreatureOpen={setIsEditCreatureOpen}
       />
       <img
         src={background}
@@ -41,9 +37,15 @@ function Home() {
           </a>
         }
       />
-      {openTab === mainTabs.skillCheck && <SkillCheck />}
-      {openTab === mainTabs.encounter && <Encounter />}
-      {openTab === mainTabs.reward && <Treasure />}
+      {!isEditCreatureOpen ? (
+        <>
+          {openTab === mainTabs.skillCheck && <SkillCheck />}
+          {openTab === mainTabs.encounter && <Encounter />}
+          {openTab === mainTabs.treasure && <Treasure />}
+        </>
+      ) : (
+        <EditCreature setIsEditCreatureOpen={setIsEditCreatureOpen} />
+      )}
     </div>
   );
 }
