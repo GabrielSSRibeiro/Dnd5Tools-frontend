@@ -43,7 +43,7 @@
   background-color: var(--white);
 }
 
-.Bestiary-container > .sharp-button div main h4 {
+.Bestiary-container > .sharp-button div main h5 {
   color: var(--white);
   font-weight: 700;
 }
@@ -61,6 +61,8 @@
   border-right: 25px solid var(--white);
 }
 
+/* //////////////////////// */
+
 .Bestiary-container > .bestiary-tab {
   width: 50vw;
   height: calc(100vh - 60px);
@@ -69,15 +71,100 @@
   right: 0;
   z-index: 1;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.8) 50%,
-    rgba(232, 232, 232, 0.8) 100%
-  );
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 50%, rgba(232, 232, 232, 0.8) 100%);
   backdrop-filter: blur(25px);
 
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+}
+
+.Bestiary-container > .bestiary-tab > header {
+  height: 60px;
+  width: 100%;
+  background-color: var(--black);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 30px;
+}
+
+.Bestiary-container > .bestiary-tab > header > div {
+  display: flex;
+  align-items: center;
   justify-content: center;
+}
+
+.Bestiary-container > .bestiary-tab > header h5 {
+  color: var(--white);
+  font-weight: 700;
+  margin-right: 15px;
+}
+
+/* //////////////////////////// */
+
+.Bestiary-container > .bestiary-tab > header .sharp-button {
+  height: 60px;
+  width: 40px;
+  cursor: pointer;
+
+  margin-right: 35px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.Bestiary-container > .bestiary-tab > header .sharp-button div {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: absolute;
+  left: 0;
+}
+
+.Bestiary-container > .bestiary-tab > header .sharp-button div:nth-child(1) {
+  left: 4px;
+}
+
+.Bestiary-container > .bestiary-tab > header .sharp-button div:nth-child(2) {
+  left: 2px;
+}
+
+.Bestiary-container > .bestiary-tab > header .sharp-button div main {
+  background-color: var(--white);
+  height: 100%;
+  width: 15px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding-right: 10px;
+}
+
+.Bestiary-container > .bestiary-tab > header .sharp-button div:nth-child(2) main {
+  background-color: var(--black);
+}
+
+.Bestiary-container > .bestiary-tab > header .sharp-button div main h5 {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.Bestiary-container > .bestiary-tab > header .sharp-button div aside {
+  width: 0;
+  height: 0;
+  border-top: 30px solid transparent;
+  border-bottom: 30px solid transparent;
+  border-left: 25px solid var(--white);
+  left: 0;
+}
+
+.Bestiary-container > .bestiary-tab > header .sharp-button div:nth-child(2) aside {
+  border-left: 25px solid var(--black);
 }

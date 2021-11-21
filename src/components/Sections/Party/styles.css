@@ -43,7 +43,7 @@
   background-color: var(--white);
 }
 
-.Party-container > .sharp-button div main h4 {
+.Party-container > .sharp-button div main h5 {
   color: var(--white);
   font-weight: 700;
 }
@@ -61,6 +61,8 @@
   border-left: 25px solid var(--white);
 }
 
+/* //////////////////////// */
+
 .Party-container > .party-tab {
   width: 50vw;
   height: calc(100vh - 60px);
@@ -69,15 +71,95 @@
   left: 0;
   z-index: 1;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.8) 50%,
-    rgba(232, 232, 232, 0.8) 100%
-  );
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 50%, rgba(232, 232, 232, 0.8) 100%);
   backdrop-filter: blur(25px);
 
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+}
+
+.Party-container > .party-tab > header {
+  height: 60px;
+  width: 100%;
+  background-color: var(--black);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 30px;
+}
+
+.Party-container > .party-tab > header > div {
+  display: flex;
+  align-items: center;
   justify-content: center;
+}
+
+.Party-container > .party-tab > header > h5,
+.Party-container > .party-tab > header > div > h5 {
+  color: var(--white);
+  font-weight: 700;
+  margin-right: 15px;
+}
+
+/* /////////////////////////// */
+
+.Party-container > .party-tab > header .sharp-button {
+  height: 60px;
+  width: 40px;
+  cursor: pointer;
+  position: relative;
+
+  margin-left: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.Party-container > .party-tab > header .sharp-button div {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: absolute;
+  right: 0;
+}
+
+.Party-container > .party-tab > header .sharp-button div:nth-child(1) {
+  right: 4px;
+}
+
+.Party-container > .party-tab > header .sharp-button div:nth-child(2) {
+  right: 2px;
+}
+
+.Party-container > .party-tab > header .sharp-button div main {
+  background-color: var(--white);
+  height: 100%;
+  width: 15px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding-left: 10px;
+}
+
+.Party-container > .party-tab > header .sharp-button div:nth-child(2) main {
+  background-color: var(--black);
+}
+
+.Party-container > .party-tab > header .sharp-button div aside {
+  width: 0;
+  height: 0;
+  border-top: 30px solid transparent;
+  border-bottom: 30px solid transparent;
+  border-right: 25px solid var(--white);
+  right: 0;
+}
+
+.Party-container > .party-tab > header .sharp-button div:nth-child(2) aside {
+  border-right: 25px solid var(--black);
 }

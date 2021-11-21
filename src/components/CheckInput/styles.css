@@ -2,8 +2,8 @@
   width: 18px;
   height: 18px;
   border-radius: 5px;
-  border: solid 1px var(--fontColor);
-  background-color: #ffffff;
+  border: solid 1px var(--gray2);
+  background-color: var(--white);
 
   cursor: pointer;
 }
@@ -13,5 +13,5 @@
 }
 
 .check-checked {
-  background-color: var(--fontColor);
+  background-color: var(--primaryPurple1);
 }

@@ -77,6 +77,11 @@ span {
   font-family: var(--primaryFont);
 }
 
+li {
+  font-size: 14px;
+  font-family: var(--primaryFont);
+}
+
 label {
   font-size: 15px;
   font-family: var(--primaryFont);
@@ -94,4 +99,22 @@ button {
 .button-disabled {
   opacity: 0.6;
   pointer-events: none;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 999px;
+  scroll-margin-right: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--white);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray1);
 }

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 import "./styles.css";
 
-function Bestiary({ setShowCompleteNaviBar }) {
+function Bestiary() {
   const [isBestiaryOpen, setIsBestiaryOpen] = useState(false);
   // const history = useHistory();
 
@@ -35,19 +35,41 @@ function Bestiary({ setShowCompleteNaviBar }) {
         <div>
           <aside />
           <main>
-            <h4>BESTIÁRIO</h4>
-            <h4>13 Criaturas</h4>
+            <h5>BESTIÁRIO</h5>
+            <h5>13 Criaturas</h5>
           </main>
         </div>
       </div>
       {isBestiaryOpen && (
-        <div
-          className="bestiary-tab"
-          onClick={() => {
-            setIsBestiaryOpen(false);
-          }}
-        >
-          FECHAR
+        <div className="bestiary-tab">
+          <header>
+            <div>
+              <div
+                className="sharp-button"
+                onClick={() => {
+                  setIsBestiaryOpen(false);
+                }}
+              >
+                {/* border 2 */}
+                <div>
+                  <main />
+                  <aside />
+                </div>
+                {/* border 1 */}
+                <div>
+                  <main />
+                  <aside />
+                </div>
+                {/* button body */}
+                <div>
+                  <main />
+                  <aside />
+                </div>
+              </div>
+              <h5>13 Criaturas</h5>
+            </div>
+            <h5>BESTIÁRIO</h5>
+          </header>
         </div>
       )}
     </div>

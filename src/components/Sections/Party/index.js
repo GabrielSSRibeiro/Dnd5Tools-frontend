@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
 
+import Select from "../../Select";
+
 import "./styles.css";
 
-function Party({ onClick }) {
+function Party() {
   const [isPartyOpen, setIsPartyOpen] = useState(false);
+  const [level, setlevel] = useState(12);
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -12,6 +15,7 @@ function Party({ onClick }) {
   //     setItems(response.data);
   //   });
   // }, []);
+  const levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 
   return (
     <div className="Party-container">
@@ -34,20 +38,44 @@ function Party({ onClick }) {
         <div>
           {/* button body */}
           <main>
-            <h4>6 JOGADORES</h4>
-            <h4>Nível 12</h4>
+            <h5>6 JOGADORES</h5>
+            <h5>Nível 12</h5>
           </main>
           <aside />
         </div>
       </div>
       {isPartyOpen && (
-        <div
-          className="party-tab"
-          onClick={() => {
-            setIsPartyOpen(false);
-          }}
-        >
-          FECHAR
+        <div className="party-tab">
+          <header>
+            <h5>6 JOGADORES</h5>
+            <div>
+              <h5>Nível</h5>
+              <Select isLarge={false} isLong={false} value={level} setValue={setlevel} options={levels} />
+              <div
+                className="sharp-button"
+                onClick={() => {
+                  setIsPartyOpen(false);
+                }}
+              >
+                {/* border 2 */}
+                <div>
+                  <aside />
+                  <main />
+                </div>
+                {/* border 1 */}
+                <div>
+                  <aside />
+                  <main />
+                </div>
+                {/* button body */}
+                <div>
+                  <aside />
+                  <main />
+                </div>
+              </div>
+            </div>
+          </header>
+          <main>Grupos</main>
         </div>
       )}
     </div>

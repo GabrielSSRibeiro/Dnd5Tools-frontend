@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/Auth";
-// import { useHistory } from "react-router-dom";
-//  import api from "../../services/api";
 
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
@@ -14,13 +12,6 @@ function SignUp({ history }) {
   const [password, setPassword] = useState();
 
   const { SignUp } = useAuth();
-  // const history = useHistory();
-
-  //   useEffect(() => {
-  //   api.get("items").then((response) => {
-  //     setItems(response.data);
-  //   });
-  // }, []);
 
   async function HandleSignUp() {
     await SignUp(email, password);
