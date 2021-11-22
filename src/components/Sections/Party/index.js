@@ -2,12 +2,14 @@ import React, { useState } from "react";
 //  import api from "../../services/api";
 
 import Select from "../../Select";
+import CheckInput from "../../CheckInput";
 
 import "./styles.css";
 
 function Party() {
   const [isPartyOpen, setIsPartyOpen] = useState(false);
   const [level, setlevel] = useState(12);
+  const [selected, setselected] = useState(false);
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -16,6 +18,10 @@ function Party() {
   //   });
   // }, []);
   const levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+
+  function HandleSelect() {
+    setselected(!selected);
+  }
 
   return (
     <div className="Party-container">
@@ -76,6 +82,7 @@ function Party() {
             </div>
           </header>
           <main>Grupos</main>
+          <CheckInput onClick={HandleSelect} isSelected={selected} />
         </div>
       )}
     </div>

@@ -3,16 +3,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+}
+.SkillCheck-container > section {
+  margin-top: 75px;
 }
 
-.SkillCheck-container > div {
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.SkillCheck-container > h1 {
-  color: white;
+.SkillCheck-container > footer {
+  margin-top: 50px;
 }

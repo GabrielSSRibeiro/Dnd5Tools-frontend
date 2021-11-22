@@ -12,11 +12,7 @@ function Encounter() {
   //   });
   // }, []);
 
-  return (
-    <div className="Encounter-container">
-      <h1>Encontro</h1>
-    </div>
-  );
+  return <div className="Encounter-container"></div>;
 }
 
 export default Encounter;

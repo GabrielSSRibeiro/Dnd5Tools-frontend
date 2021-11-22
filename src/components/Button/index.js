@@ -1,17 +1,8 @@
 import React from "react";
-//  import api from "../../services/api";
 
 import "./styles.css";
 
-function Button({ text, onClick, isDisabled, className }) {
-  // const history = useHistory();
-
-  //   useEffect(() => {
-  //   api.get("items").then((response) => {
-  //     setItems(response.data);
-  //   });
-  // }, []);
-
+function Button({ text, onClick, isDisabled, className = "" }) {
   function HandleClick() {
     onClick();
   }

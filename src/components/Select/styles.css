@@ -9,7 +9,6 @@
 
 .Select-container > section {
   border-radius: 8px;
-  border: solid 1px var(--gray1);
   background-color: var(--white);
   padding: 10% 20%;
 
@@ -18,6 +17,15 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.Select-container .select-open {
+  border: solid 1px var(--primaryPurple2);
+}
+
+.Select-container .select-closed {
+  border: solid 1px var(--gray1);
+}
+
 .Select-container > section > h5 {
   color: var(--gray1);
 }

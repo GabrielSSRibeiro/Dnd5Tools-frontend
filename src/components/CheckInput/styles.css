@@ -1,7 +1,7 @@
 .CheckInput-container {
-  width: 18px;
-  height: 18px;
-  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
   border: solid 1px var(--gray2);
   background-color: var(--white);
 
@@ -9,9 +9,13 @@
 }
 
 .CheckInput-container > .fa-check {
-  color: #ffffff;
+  color: var(--white);
 }
 
 .check-checked {
   background-color: var(--primaryPurple1);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

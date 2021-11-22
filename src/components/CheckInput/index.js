@@ -10,7 +10,7 @@ function CheckInput({ onClick, className, isSelected }) {
       ${className} 
       ${isSelected && "check-checked"}`}
     >
-      {isSelected && <i className="fas fa-check"></i>}
+      {isSelected && <i className="fas fa-check fa-xs"></i>}
     </div>
   );
 }

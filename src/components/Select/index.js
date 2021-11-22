@@ -37,7 +37,7 @@ function Select({ isLarge, isLong, value, setValue, options, className = "" }) {
 
   return (
     <div className={`Select-container ${className}`} tabIndex="-1" onBlur={() => setIsOpen(false)}>
-      <section style={variant.select} onClick={() => setIsOpen(!isOpen)}>
+      <section style={variant.select} className={`${isOpen ? "select-open" : "select-closed"}`} onClick={() => setIsOpen(!isOpen)}>
         <h5>{value}</h5>
         <i className="fas fa-chevron-down"></i>
       </section>

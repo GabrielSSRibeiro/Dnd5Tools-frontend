@@ -2,7 +2,7 @@ import React from "react";
 
 import "./styles.css";
 
-function SelectButton({ isLarge, isSelected, isLong, text, onClick, isDisabled, className }) {
+function SelectButton({ isLarge, isSelected, isLong, text, onClick, isDisabled, className = "" }) {
   const containerWidth = 160;
   const containerHeight = 27;
   const containerLongExtra = 35;
@@ -77,12 +77,21 @@ function SelectButton({ isLarge, isSelected, isLong, text, onClick, isDisabled, 
         ${isDisabled && "button-disabled"} ${className}`}
           style={variant.button.body}
         >
-          <h5
-            className={`
+          {isLarge ? (
+            <h5
+              className={`
           text-${isSelected ? "selected" : "default"} `}
-          >
-            {text}
-          </h5>
+            >
+              {text}
+            </h5>
+          ) : (
+            <h6
+              className={`
+          text-${isSelected ? "selected" : "default"} `}
+            >
+              {text}
+            </h6>
+          )}
         </main>
       </section>
     </div>

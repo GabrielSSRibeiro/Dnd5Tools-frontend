@@ -28,7 +28,8 @@
   transform: rotate(45deg);
 }
 
-.SelectButton-container main h5 {
+.SelectButton-container main h5,
+.SelectButton-container main h6 {
   font-family: var(--primaryFont);
 
   font-weight: bold;

@@ -1,18 +1,118 @@
 .OptionBox-container {
-  height: 100%;
+  width: 1000px;
+  min-height: 110px;
+  position: relative;
+  background-color: rgba(249, 249, 249, 0.9);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  padding: 28px;
+  border: solid 1px var(--gray2);
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.OptionBox-container > div {
-  margin-top: 20px;
+.OptionBox-container > header {
+  background-color: var(--gray3);
+  width: 210px;
+  height: 45px;
+  position: absolute;
+  border: solid 1px var(--gray2);
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.OptionBox-container > h1 {
-  color: white;
+.OptionBox-container > header > .title-gem {
+  position: absolute;
+}
+
+.OptionBox-container > header > .title-gem:first-of-type {
+  transform: translate(-50%, 0);
+  left: 0;
+}
+
+.OptionBox-container > header > .title-gem:last-of-type {
+  transform: translate(50%, 0);
+  right: 0;
+}
+
+.OptionBox-container > header > .title-gem > div {
+  width: 20px;
+  height: 20px;
+  background-color: var(--gray3);
+  border: solid 1px var(--gray2);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(45deg);
+}
+
+.OptionBox-container > header > .title-gem > div > div {
+  width: 12px;
+  height: 12px;
+  background: var(--grayGradient);
+}
+
+.OptionBox-container > header > div {
+  width: calc(100% - 3px);
+  height: 100%;
+  border: solid 1px var(--gray2);
+  border-top: none;
+  border-bottom: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.OptionBox-container > section {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  margin: 4px;
+  background: transparent;
+  border: solid 1px var(--gray1);
+}
+
+.OptionBox-container > .box-top-left-corner {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+.OptionBox-container > .box-bottom-left-corner {
+  left: 0;
+  bottom: 0;
+  border-top: none;
+  border-right: none;
+}
+.OptionBox-container > .box-top-right-corner {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+.OptionBox-container > .box-bottom-right-corner {
+  right: 0;
+  bottom: 0;
+  border-top: none;
+  border-left: none;
+}
+
+.OptionBox-container > main {
+  margin-top: 22.5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  row-gap: 22.5px;
 }

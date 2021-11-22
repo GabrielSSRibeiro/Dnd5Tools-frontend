@@ -14,7 +14,7 @@
 .Button-container > div {
   height: 40px;
   background: var(--purpleGradient);
-  border: 1px solid var(--white);
+  border: 1px solid var(--gray2);
   border-radius: 2px;
   padding: 15px;
 
