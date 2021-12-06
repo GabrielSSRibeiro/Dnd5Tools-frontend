@@ -4,7 +4,7 @@ import { mainTabs } from "../../enums";
 
 import NaviBar from "../../components/NaviBar";
 import SkillCheck from "../../components/Sections/SkillCheck";
-import Encounter from "../../components/Sections/Encounter";
+import Combat from "../../components/Sections/Combat";
 import Treasure from "../../components/Sections/Treasure";
 import EditCreature from "../../components/Sections/EditCreature";
 
@@ -12,7 +12,7 @@ import background from "../../assets/background.png";
 import "./styles.css";
 
 function Home() {
-  const [openTab, setOpenTab] = useState(mainTabs.encounter);
+  const [openTab, setOpenTab] = useState(mainTabs.combat);
   const [isEditCreatureOpen, setIsEditCreatureOpen] = useState(false);
 
   //   useEffect(() => {
@@ -23,24 +23,12 @@ function Home() {
 
   return (
     <div className="Home-container">
-      <NaviBar
-        openTab={openTab}
-        setOpenTab={setOpenTab}
-        isEditCreatureOpen={isEditCreatureOpen}
-        setIsEditCreatureOpen={setIsEditCreatureOpen}
-      />
-      <img
-        src={background}
-        alt={
-          <a href="https://www.freepik.com/photos/people">
-            People photo created by liuzishan - www.freepik.com
-          </a>
-        }
-      />
+      <NaviBar openTab={openTab} setOpenTab={setOpenTab} isEditCreatureOpen={isEditCreatureOpen} setIsEditCreatureOpen={setIsEditCreatureOpen} />
+      <img src={background} alt={<a href="https://www.freepik.com/photos/people">People photo created by liuzishan - www.freepik.com</a>} />
       {!isEditCreatureOpen ? (
         <>
           {openTab === mainTabs.skillCheck && <SkillCheck />}
-          {openTab === mainTabs.encounter && <Encounter />}
+          {openTab === mainTabs.combat && <Combat />}
           {openTab === mainTabs.treasure && <Treasure />}
         </>
       ) : (

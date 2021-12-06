@@ -2,33 +2,12 @@ import React, { useState } from "react";
 
 import "./styles.css";
 
-function Select({ isLarge, isLong, value, setValue, options, className = "" }) {
+function Select({ isLarge = false, extraWidth = 0, value = "", setValue = () => {}, options = [], className = "" }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const selectWidth = 105;
-  const selectHeight = 37;
-  const selectLongExtra = 35;
-  const selectLargeExtra = { width: 90, height: 21 };
-
-  const variant = {
-    select: {
-      width: selectWidth + (isLarge && selectLargeExtra.width) + (isLong && selectLongExtra),
-      height: selectHeight + (isLarge && selectLargeExtra.height),
-    },
-    optionBox: {
-      width: selectWidth + (isLarge && selectLargeExtra.width) + (isLong && selectLongExtra),
-      height: (selectHeight + (isLarge && selectLargeExtra.height)) * options.length + options.length + 2,
-      maxHeight: (selectHeight + (isLarge && selectLargeExtra.height)) * 5 + 5 + 2,
-      borderBottomRightRadius: options.length <= 5 && 8,
-      borderTopRightRadius: options.length <= 5 && 8,
-      overflow: options.length <= 5 ? "none" : "auto",
-      overflowX: options.length <= 5 ? "none" : "hidden",
-    },
-    option: {
-      width: (selectWidth + (isLarge && selectLargeExtra.width) + (isLong && selectLongExtra)) * 0.6,
-      height: Math.floor(((selectHeight + (isLarge && selectLargeExtra.height)) * options.length + options.length) / options.length),
-    },
-  };
+  const optionsAtATime = 5;
+  const selectWidth = 100;
+  const height = isLarge ? 58 : 37;
 
   function HandleClick(option) {
     setIsOpen(false);
@@ -37,16 +16,44 @@ function Select({ isLarge, isLong, value, setValue, options, className = "" }) {
 
   return (
     <div className={`Select-container ${className}`} tabIndex="-1" onBlur={() => setIsOpen(false)}>
-      <section style={variant.select} className={`${isOpen ? "select-open" : "select-closed"}`} onClick={() => setIsOpen(!isOpen)}>
-        <h5>{value}</h5>
+      <section
+        style={{
+          width: selectWidth + extraWidth,
+          height: height,
+        }}
+        className={`${isOpen ? "select-open" : "select-closed"}`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{value}</h5>
         <i className="fas fa-chevron-down"></i>
       </section>
       {isOpen && (
-        <ul style={variant.optionBox}>
+        <ul
+          style={{
+            width: selectWidth + extraWidth,
+            height: height * options.length + 2,
+            maxHeight: height * optionsAtATime + 2,
+            borderBottomRightRadius: options.length <= optionsAtATime && 8,
+            borderTopRightRadius: options.length <= optionsAtATime && 8,
+            overflow: options.length <= optionsAtATime ? "none" : "auto",
+            overflowX: options.length <= optionsAtATime ? "none" : "hidden",
+          }}
+        >
           {options.map((option) => (
-            <li key={option} style={variant.option} value={option} onClick={() => HandleClick(option)}>
-              {option}
-            </li>
+            <div key={option}>
+              <li
+                className="select-item"
+                style={{
+                  width: (selectWidth + extraWidth) * 0.7,
+                  height: height,
+                  fontSize: isLarge ? 14 : 12,
+                }}
+                value={option}
+                onClick={() => HandleClick(option)}
+              >
+                {option}
+              </li>
+            </div>
           ))}
         </ul>
       )}

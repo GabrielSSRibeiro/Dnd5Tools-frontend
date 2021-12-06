@@ -10,16 +10,17 @@
 .Select-container > section {
   border-radius: 8px;
   background-color: var(--white);
-  padding: 10% 20%;
+  padding: 10px 10px 10px 15px;
 
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  column-gap: 10px;
 }
 
 .Select-container .select-open {
-  border: solid 1px var(--primaryPurple2);
+  border: solid 2px var(--primaryPurple2);
 }
 
 .Select-container .select-closed {
@@ -51,15 +52,28 @@
   justify-content: flex-start;
 }
 
-.Select-container > ul > li {
-  list-style-type: none;
-  border-bottom: solid 1px var(--gray2);
-  padding: 10% 0;
+.Select-container > ul > div {
+  width: 100%;
+  border-radius: inherit;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.Select-container > ul > li:hover {
+.Select-container > ul > div:hover {
   background-color: var(--gray3);
 }
 
-.Select-container > ul > li:last-of-type {
+.Select-container .select-item {
+  list-style-type: none;
+  border-bottom: solid 1px var(--gray2);
+  padding: 10% 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.Select-container > ul > div:last-of-type .select-item {
   border: none;
 }

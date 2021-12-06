@@ -1,9 +1,11 @@
 import React from "react";
 //  import api from "../../services/api";
 
+import Button from "../../Button";
+
 import "./styles.css";
 
-function EditCreature() {
+function EditCreature({ setIsEditCreatureOpen }) {
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -14,7 +16,7 @@ function EditCreature() {
 
   return (
     <div className="EditCreature-container">
-      <h1>Editar Criatura</h1>
+      <Button text="Salvar" onClick={() => setIsEditCreatureOpen(false)} />
     </div>
   );
 }

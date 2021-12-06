@@ -3,7 +3,7 @@ import React from "react";
 
 import "./styles.css";
 
-function Encounter() {
+function Combat() {
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -12,7 +12,7 @@ function Encounter() {
   //   });
   // }, []);
 
-  return <div className="Encounter-container"></div>;
+  return <div className="Combat-container"></div>;
 }
 
-export default Encounter;
+export default Combat;

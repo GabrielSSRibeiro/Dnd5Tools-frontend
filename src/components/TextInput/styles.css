@@ -18,7 +18,7 @@
   width: 350px;
   height: 55px;
   padding: 12px 45px 11px 13px;
+  background-color: var(--white);
   border: 1px solid var(--gray2);
   border-radius: 8px;
-  background-color: var(--white);
 }

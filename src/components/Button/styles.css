@@ -1,4 +1,5 @@
 .Button-container {
+  width: fit-content;
   height: 44px;
   background: var(--purpleGradient);
   cursor: pointer;

@@ -1,5 +1,5 @@
 export const mainTabs = {
   skillCheck: 0,
-  encounter: 1,
+  combat: 1,
   treasure: 2,
 };

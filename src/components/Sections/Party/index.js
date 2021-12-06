@@ -56,7 +56,7 @@ function Party() {
             <h5>6 JOGADORES</h5>
             <div>
               <h5>Nível</h5>
-              <Select isLarge={false} isLong={false} value={level} setValue={setlevel} options={levels} />
+              <Select value={level} setValue={setlevel} options={levels} />
               <div
                 className="sharp-button"
                 onClick={() => {

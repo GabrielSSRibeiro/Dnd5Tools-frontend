@@ -40,10 +40,10 @@ function NaviBar({ openTab, setOpenTab, isEditCreatureOpen, setIsEditCreatureOpe
           />
           <SelectButton
             isLarge={true}
-            isSelected={openTab === mainTabs.encounter}
+            isSelected={openTab === mainTabs.combat}
             isLong={true}
-            text="Encontro"
-            onClick={() => setOpenTab(mainTabs.encounter)}
+            text="Combate"
+            onClick={() => setOpenTab(mainTabs.combat)}
           />
           <SelectButton
             isLarge={true}
