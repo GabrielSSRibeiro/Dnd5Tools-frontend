@@ -9,6 +9,7 @@ import "./styles.css";
 
 function Bestiary({ setIsEditCreatureOpen }) {
   const [isBestiaryOpen, setIsBestiaryOpen] = useState(false);
+  const [scrollHide, setScrollHide] = useState(false);
 
   const creatures = [
     { name: "Criatura 1" },
@@ -84,27 +85,33 @@ function Bestiary({ setIsEditCreatureOpen }) {
             <h5>BESTIÁRIO</h5>
           </header>
           <main>
-            <aside>
+            {scrollHide && <i className="fas fa-chevron-down unhide-scroll"></i>}
+            <aside className={`${scrollHide && "hidden-scroll"}`}>
               <Button text="Adicionar Criatura" onClick={() => setIsEditCreatureOpen(true)} />
             </aside>
-            <div className="bestiary-filters">
+            <div className={`${scrollHide ? "bestiary-filters hidden-scroll" : "bestiary-filters"}`}>
               <h5>Filtrar Por</h5>
               <div className="filter-text">
-                <input onClick={() => {}} placeholder="Filtrar por nome"></input>
+                <input onClick={() => {}} placeholder="Nome"></input>
                 <button>LIMPAR</button>
               </div>
               <main>
                 <Select extraWidth={20} value={"Nível"} setValue={() => {}} options={levels} />
-                <Select extraWidth={60} value={"Subterraneo"} setValue={() => {}} options={environments} />
-                <Select extraWidth={60} value={"Monstruosidade"} setValue={() => {}} options={types} />
-                <Select extraWidth={20} value={"Pequeno"} setValue={() => {}} options={sizes} />
+                <Select extraWidth={60} value={"Ambiente"} setValue={() => {}} options={environments} />
+                <Select extraWidth={60} value={"Tipo"} setValue={() => {}} options={types} />
+                <Select extraWidth={20} value={"Tamanho"} setValue={() => {}} options={sizes} />
               </main>
             </div>
-            {/* <div className="bestiary-list">
+            <div
+              className="bestiary-list"
+              style={{ marginTop: scrollHide && 16 }}
+              onScroll={() => setScrollHide(true)}
+              onMouseLeave={() => setScrollHide(false)}
+            >
               {creatures.map((creature) => (
-                <div key={creature.name}></div>
+                <div className="list-creature" key={creature.name}></div>
               ))}
-            </div> */}
+            </div>
           </main>
         </div>
       )}

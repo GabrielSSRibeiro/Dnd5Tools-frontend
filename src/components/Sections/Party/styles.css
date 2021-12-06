@@ -61,10 +61,11 @@
   border-left: 25px solid var(--white);
 }
 
-/* //////////////////////// */
+/* //////////// tab //////////// */
 
 .Party-container > .party-tab {
   width: 50vw;
+  max-width: 750px;
   height: calc(100vh - 60px);
   position: absolute;
   top: 0;
