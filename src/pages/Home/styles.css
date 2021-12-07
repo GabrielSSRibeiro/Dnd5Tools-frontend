@@ -7,7 +7,7 @@
   /* min-width: 1400px; */
 }
 
-.Home-container img {
+.Home-container > img {
   position: absolute;
   object-fit: cover;
   object-position: 0 -75px;
