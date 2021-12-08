@@ -241,6 +241,7 @@
   padding: 8px;
   background-color: var(--white);
   width: 100%;
+  min-height: 488px;
   position: relative;
 
   display: flex;
@@ -297,7 +298,6 @@
   align-items: flex-end;
   justify-content: center;
   flex-wrap: wrap;
-  height: 50%;
   width: 100%;
   padding: 7px;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);

@@ -2,16 +2,21 @@ import React, { useState } from "react";
 
 import "./styles.css";
 
-function Select({ isLarge = false, extraWidth = 0, value = "", setValue = () => {}, options = [], className = "" }) {
+function Select({ isLarge = false, extraWidth = 0, value = "", onSelect = () => {}, defaultValue = null, options = [], className = "" }) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const selectOptions = defaultValue ? [defaultValue, ...options] : options;
   const optionsAtATime = 5;
   const selectWidth = 100;
   const height = isLarge ? 58 : 37;
 
   function HandleClick(option) {
     setIsOpen(false);
-    setValue(option);
+    if (option !== defaultValue) {
+      onSelect(option);
+    } else {
+      onSelect(null);
+    }
   }
 
   return (
@@ -24,22 +29,22 @@ function Select({ isLarge = false, extraWidth = 0, value = "", setValue = () => 
         className={`${isOpen ? "select-open" : "select-closed"}`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{value}</h5>
+        <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{value || defaultValue}</h5>
         <i className="fas fa-chevron-down"></i>
       </section>
       {isOpen && (
         <ul
           style={{
             width: selectWidth + extraWidth,
-            height: height * options.length + 2,
+            height: height * selectOptions.length + 2,
             maxHeight: height * optionsAtATime + 2,
-            borderBottomRightRadius: options.length <= optionsAtATime && 8,
-            borderTopRightRadius: options.length <= optionsAtATime && 8,
-            overflow: options.length <= optionsAtATime ? "none" : "auto",
-            overflowX: options.length <= optionsAtATime ? "none" : "hidden",
+            borderBottomRightRadius: selectOptions.length <= optionsAtATime && 8,
+            borderTopRightRadius: selectOptions.length <= optionsAtATime && 8,
+            overflow: selectOptions.length <= optionsAtATime ? "none" : "auto",
+            overflowX: selectOptions.length <= optionsAtATime ? "none" : "hidden",
           }}
         >
-          {options.map((option) => (
+          {selectOptions.map((option) => (
             <div key={option}>
               <li
                 className="select-item"

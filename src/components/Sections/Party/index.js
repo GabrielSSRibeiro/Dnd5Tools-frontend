@@ -8,7 +8,7 @@ import "./styles.css";
 
 function Party() {
   const [isPartyOpen, setIsPartyOpen] = useState(false);
-  const [level, setlevel] = useState(12);
+  const [level, setlevel] = useState(1);
   const [selected, setselected] = useState(false);
   // const history = useHistory();
 
@@ -56,7 +56,7 @@ function Party() {
             <h5>6 JOGADORES</h5>
             <div>
               <h5>Nível</h5>
-              <Select value={level} setValue={setlevel} options={levels} />
+              <Select value={level} onSelect={setlevel} options={levels} />
               <div
                 className="sharp-button"
                 onClick={() => {
