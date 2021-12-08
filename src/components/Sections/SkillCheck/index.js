@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
+import { checkDificulties, damageIntensities } from "../../../tables";
 
-import OptionBox from "../../OptionBox";
+import Panel from "../../Panel";
+import SelectButton from "../../SelectButton";
 import Button from "../../Button";
 
 import "./styles.css";
@@ -10,8 +12,6 @@ function SkillCheck({ history }) {
   const [checkDificulty, setCheckDificulty] = useState("");
   const [damageIntensity, setDamageIntensity] = useState("");
 
-  const treasureTypes = ["Peças de Ouro", "Material", "Equipamento"];
-  const treasureQuantities = ["Pouco", "Médio", "Muito", "Bastante"];
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -23,10 +23,36 @@ function SkillCheck({ history }) {
   return (
     <div className="SkillCheck-container">
       <section>
-        <OptionBox title="Dificuldade" options={treasureTypes} value={checkDificulty} setValue={setCheckDificulty} />
+        <Panel title="Dificuldade">
+          <main className="panel-select">
+            {checkDificulties.map((option) => (
+              <SelectButton
+                key={option}
+                isLarge={false}
+                isLong={false}
+                isSelected={checkDificulty === option}
+                text={option}
+                onClick={() => setCheckDificulty(option)}
+              />
+            ))}
+          </main>
+        </Panel>
       </section>
       <section>
-        <OptionBox title="Intensidade" options={treasureQuantities} value={damageIntensity} setValue={setDamageIntensity} />
+        <Panel title="Intensidade">
+          <main className="panel-select">
+            {damageIntensities.map((option) => (
+              <SelectButton
+                key={option}
+                isLarge={false}
+                isLong={false}
+                isSelected={damageIntensity === option}
+                text={option}
+                onClick={() => setDamageIntensity(option)}
+              />
+            ))}
+          </main>
+        </Panel>
       </section>
       <footer>
         <Button text="Rodar Teste" onClick={() => {}} />

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 //  import api from "../../services/api";
-import { levels, environments, types, sizes } from "../../../tables";
+import { creatureLevels, creatureEnvironments, creatureTypes, creatureSizes } from "../../../tables";
 
 import Button from "../../Button";
 import Select from "../../Select";
@@ -139,28 +139,28 @@ function Bestiary({ setIsEditCreatureOpen }) {
                   value={selectedLevel}
                   onSelect={(value) => handleFilter(setSelectedLevel, value)}
                   defaultValue="Nível"
-                  options={levels}
+                  options={creatureLevels}
                 />
                 <Select
                   extraWidth={60}
                   value={selectedEnv}
                   onSelect={(value) => handleFilter(setSelectedEnv, value)}
                   defaultValue="Ambiente"
-                  options={environments}
+                  options={creatureEnvironments}
                 />
                 <Select
                   extraWidth={60}
                   value={selectedType}
                   onSelect={(value) => handleFilter(setSelectedType, value)}
                   defaultValue="Tipo"
-                  options={types}
+                  options={creatureTypes}
                 />
                 <Select
                   extraWidth={20}
                   value={selectedSize}
                   onSelect={(value) => handleFilter(setSelectedSize, value)}
                   defaultValue="Tamanho"
-                  options={sizes}
+                  options={creatureSizes}
                 />
               </main>
             </div>

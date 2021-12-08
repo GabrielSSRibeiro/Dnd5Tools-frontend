@@ -1,5 +1,5 @@
-.OptionBox-container {
-  width: 1000px;
+.Panel-container {
+  width: 100%;
   min-height: 110px;
   position: relative;
   background-color: rgba(249, 249, 249, 0.9);
@@ -14,7 +14,7 @@
   justify-content: center;
 }
 
-.OptionBox-container > header {
+.Panel-container > header {
   background-color: var(--gray3);
   width: 210px;
   height: 45px;
@@ -29,21 +29,21 @@
   justify-content: center;
 }
 
-.OptionBox-container > header > .title-gem {
+.Panel-container > header > .title-gem {
   position: absolute;
 }
 
-.OptionBox-container > header > .title-gem:first-of-type {
+.Panel-container > header > .title-gem:first-of-type {
   transform: translate(-50%, 0);
   left: 0;
 }
 
-.OptionBox-container > header > .title-gem:last-of-type {
+.Panel-container > header > .title-gem:last-of-type {
   transform: translate(50%, 0);
   right: 0;
 }
 
-.OptionBox-container > header > .title-gem > div {
+.Panel-container > header > .title-gem > div {
   width: 20px;
   height: 20px;
   background-color: var(--gray3);
@@ -55,13 +55,13 @@
   transform: rotate(45deg);
 }
 
-.OptionBox-container > header > .title-gem > div > div {
+.Panel-container > header > .title-gem > div > div {
   width: 12px;
   height: 12px;
   background: var(--grayGradient);
 }
 
-.OptionBox-container > header > div {
+.Panel-container > header > div {
   width: calc(100% - 3px);
   height: 100%;
   border: solid 1px var(--gray2);
@@ -73,7 +73,7 @@
   justify-content: center;
 }
 
-.OptionBox-container > section {
+.Panel-container > section {
   position: absolute;
   width: 25px;
   height: 25px;
@@ -82,37 +82,27 @@
   border: solid 1px var(--gray1);
 }
 
-.OptionBox-container > .box-top-left-corner {
+.Panel-container > .box-top-left-corner {
   top: 0;
   left: 0;
   border-right: none;
   border-bottom: none;
 }
-.OptionBox-container > .box-bottom-left-corner {
+.Panel-container > .box-bottom-left-corner {
   left: 0;
   bottom: 0;
   border-top: none;
   border-right: none;
 }
-.OptionBox-container > .box-top-right-corner {
+.Panel-container > .box-top-right-corner {
   top: 0;
   right: 0;
   border-left: none;
   border-bottom: none;
 }
-.OptionBox-container > .box-bottom-right-corner {
+.Panel-container > .box-bottom-right-corner {
   right: 0;
   bottom: 0;
   border-top: none;
   border-left: none;
-}
-
-.OptionBox-container > main {
-  margin-top: 22.5px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  row-gap: 22.5px;
 }

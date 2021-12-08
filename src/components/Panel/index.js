@@ -1,11 +1,10 @@
 import React from "react";
-import SelectButton from "../SelectButton";
 
 import "./styles.css";
 
-function OptionBox({ title, options, value, setValue }) {
+function Panel({ title, children }) {
   return (
-    <div className="OptionBox-container">
+    <div className="Panel-container">
       <header>
         <aside className="title-gem">
           <div>
@@ -25,13 +24,9 @@ function OptionBox({ title, options, value, setValue }) {
       <section className="box-bottom-left-corner" />
       <section className="box-top-right-corner" />
       <section className="box-bottom-right-corner" />
-      <main>
-        {options.map((option) => (
-          <SelectButton key={option} isLarge={false} isLong={false} isSelected={value === option} text={option} onClick={() => setValue(option)} />
-        ))}
-      </main>
+      {children}
     </div>
   );
 }
 
-export default OptionBox;
+export default Panel;
