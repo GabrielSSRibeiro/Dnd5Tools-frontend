@@ -1,5 +1,7 @@
 import React from "react";
 
+import Jewel from "../Jewel";
+
 import "./styles.css";
 
 function Panel({ title, children }) {
@@ -8,17 +10,13 @@ function Panel({ title, children }) {
       {title && (
         <header>
           <aside className="title-gem">
-            <div>
-              <div />
-            </div>
+            <Jewel side={20} variant="panel" />
           </aside>
           <div>
             <h4>{title}</h4>
           </div>
           <aside className="title-gem">
-            <div>
-              <div />
-            </div>
+            <Jewel side={20} variant="panel" />
           </aside>
         </header>
       )}

@@ -28,6 +28,7 @@
 
   --purpleGradient: linear-gradient(180deg, #70549f 0%, #2f2146 100%);
   --grayGradient: linear-gradient(45deg, #252525 2.86%, rgba(37, 37, 37, 0.37) 91.25%);
+  --blackGradient: linear-gradient(3.01deg, #2e2e2e -0.46%, #454545 53.61%, #333333 106.2%);
 }
 
 html,

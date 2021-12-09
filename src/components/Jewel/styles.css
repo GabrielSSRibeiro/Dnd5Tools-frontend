@@ -1,0 +1,21 @@
+.Jewel-container {
+  border: solid 1px var(--gray2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(45deg);
+}
+
+.panel-jewel-outerStyle {
+  background: var(--gray3);
+}
+.Jewel-container .panel-innerStyle {
+  background: var(--grayGradient);
+}
+
+.resultBox-jewel-outerStyle {
+  background: var(--black);
+}
+.Jewel-container .resultBox-innerStyle {
+  background: var(--blackGradient);
+}
