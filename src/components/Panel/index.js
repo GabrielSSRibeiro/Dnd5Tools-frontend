@@ -5,21 +5,23 @@ import "./styles.css";
 function Panel({ title, children }) {
   return (
     <div className="Panel-container">
-      <header>
-        <aside className="title-gem">
+      {title && (
+        <header>
+          <aside className="title-gem">
+            <div>
+              <div />
+            </div>
+          </aside>
           <div>
-            <div />
+            <h4>{title}</h4>
           </div>
-        </aside>
-        <div>
-          <h4>{title}</h4>
-        </div>
-        <aside className="title-gem">
-          <div>
-            <div />
-          </div>
-        </aside>
-      </header>
+          <aside className="title-gem">
+            <div>
+              <div />
+            </div>
+          </aside>
+        </header>
+      )}
       <section className="box-top-left-corner" />
       <section className="box-bottom-left-corner" />
       <section className="box-top-right-corner" />

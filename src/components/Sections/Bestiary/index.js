@@ -26,7 +26,7 @@ function Bestiary({ setIsEditCreatureOpen }) {
     type: "Elemental",
     size: "Médio",
   };
-  const [creatures, setCreatures] = useState(new Array(6).fill(creature));
+  const [creatures, setCreatures] = useState(new Array(20).fill(creature));
 
   // const history = useHistory();
 

@@ -8,7 +8,7 @@
 }
 
 .Select-container > section {
-  border-radius: 8px;
+  /* border-radius: 8px; */
   background-color: var(--white);
   padding: 10px 10px 10px 15px;
 
@@ -36,8 +36,8 @@
 }
 
 .Select-container > ul {
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
+  /* border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px; */
   box-shadow: 0 0 19px 0 rgba(0, 0, 0, 0.1);
   border: solid 1px var(--gray1);
   background-color: var(--white);

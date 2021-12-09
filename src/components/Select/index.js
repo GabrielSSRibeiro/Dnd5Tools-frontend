@@ -38,8 +38,8 @@ function Select({ isLarge = false, extraWidth = 0, value = "", onSelect = () => 
             width: selectWidth + extraWidth,
             height: height * selectOptions.length + 2,
             maxHeight: height * optionsAtATime + 2,
-            borderBottomRightRadius: selectOptions.length <= optionsAtATime && 8,
-            borderTopRightRadius: selectOptions.length <= optionsAtATime && 8,
+            // borderBottomRightRadius: selectOptions.length <= optionsAtATime && 8,
+            // borderTopRightRadius: selectOptions.length <= optionsAtATime && 8,
             overflow: selectOptions.length <= optionsAtATime ? "none" : "auto",
             overflowX: selectOptions.length <= optionsAtATime ? "none" : "hidden",
           }}
