@@ -22,9 +22,9 @@ function Combat() {
       <div>
         <section>
           <Panel title="Jogadores">
-            <div className="panel-content" style={characters && { marginTop: 22.5 }}>
+            <div className="panel-content">
               {characters && characters.map((character) => <h4>{character}</h4>)}
-              <footer>
+              <footer style={characters && { marginTop: 12.5 }}>
                 <Button text="Selecionar" onClick={() => {}} />
               </footer>
             </div>
@@ -32,9 +32,9 @@ function Combat() {
         </section>
         <section>
           <Panel title="Criaturas">
-            <div className="panel-content" style={creatures && { marginTop: 22.5 }}>
+            <div className="panel-content">
               {creatures && creatures.map((creature) => <h4>{creature}</h4>)}
-              <footer>
+              <footer style={creatures && { marginTop: 12.5 }}>
                 <Button text="Selecionar" onClick={() => {}} />
               </footer>
             </div>

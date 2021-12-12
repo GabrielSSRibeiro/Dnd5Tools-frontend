@@ -9,10 +9,15 @@ function ResultBox({
   highlightSubHeader = false,
   highlightTopRow = false,
   highlightBottomRow = false,
-  columnBehind = false,
+  resultBackgroundColumn = false,
+  resultBackgroundColumnTitle = null,
   values = [{ label: null, topValue: "", bottomValue: "" }],
 }) {
-  return <div className="ResultBox-container"></div>;
+  return (
+    <div className="ResultBox-container">
+      <div></div>
+    </div>
+  );
 }
 
 export default ResultBox;

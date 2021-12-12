@@ -7,6 +7,7 @@
   backdrop-filter: blur(8px);
   padding: 28px;
   border: solid 1px var(--gray2);
+  padding-top: calc(45px / 2 + 28px);
 
   display: flex;
   flex-direction: column;
@@ -16,7 +17,7 @@
 
 .Panel-container > header {
   background-color: var(--gray3);
-  width: 210px;
+  /* width: 210px; */
   height: 45px;
   position: absolute;
   border: solid 1px var(--gray2);
@@ -44,6 +45,7 @@
 }
 
 .Panel-container > header > div {
+  padding: 0 50px;
   width: calc(100% - 3px);
   height: 100%;
   border: solid 1px var(--gray2);

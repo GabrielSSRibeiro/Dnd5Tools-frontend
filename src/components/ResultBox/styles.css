@@ -1,6 +1,22 @@
 .ResultBox-container {
+  width: 100%;
+  height: 115px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--blackGradient);
+  border: 1px solid var(--gray2);
+}
+
+.ResultBox-container > div {
+  width: calc(100% -3px);
+  height: 100%;
+  border: 1px solid var(--gray2);
+  border-top: none;
+  border-bottom: none;
+
+  display: flex;
   align-items: center;
   justify-content: center;
 }
