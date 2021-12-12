@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
-import { treasureTypes, treasureQuantities } from "../../../tables";
+import { treasureTypes, treasureQuantities } from "../../../Tables/treasure";
 
 import Panel from "../../Panel";
 import SelectButton from "../../SelectButton";
@@ -9,9 +9,9 @@ import ResultBox from "../../ResultBox";
 
 import "./styles.css";
 
-function Treasure({ history }) {
+function Treasure({ resultText }) {
   const [hasResult, setHasResult] = useState(true);
-  const [treasureType, setTreasureType] = useState("");
+  const [treasureType, setTreasureType] = useState(null);
   const [goldPiecesQuantity, setGoldPiecesQuantity] = useState("");
   const [GoldPiecesResult, setGoldPiecesResult] = useState(null);
 
@@ -22,6 +22,10 @@ function Treasure({ history }) {
   //     setItems(response.data);
   //   });
   // }, []);
+
+  function handleResult() {
+    setHasResult(true);
+  }
 
   return (
     <div className="Treasure-container">
@@ -43,22 +47,78 @@ function Treasure({ history }) {
               </main>
             </Panel>
           </section>
-          <section>
-            <Panel title="Quantidade">
-              <main className="panel-select">
-                {treasureQuantities.map((option) => (
-                  <SelectButton
-                    key={option}
-                    isLarge={false}
-                    isLong={false}
-                    isSelected={goldPiecesQuantity === option}
-                    text={option}
-                    onClick={() => setGoldPiecesQuantity(option)}
-                  />
-                ))}
-              </main>
-            </Panel>
-          </section>
+          {treasureType === treasureTypes[0] && (
+            <section>
+              <Panel title="Quantidade">
+                <main className="panel-select">
+                  {treasureQuantities.map((option) => (
+                    <SelectButton
+                      key={option}
+                      isLarge={false}
+                      isLong={false}
+                      isSelected={goldPiecesQuantity === option}
+                      text={option}
+                      onClick={() => setGoldPiecesQuantity(option)}
+                    />
+                  ))}
+                </main>
+              </Panel>
+            </section>
+          )}
+          {treasureType === treasureTypes[1] && (
+            <section>
+              <Panel title="Quantidade">
+                <main className="panel-select">
+                  {treasureQuantities.map((option) => (
+                    <SelectButton
+                      key={option}
+                      isLarge={false}
+                      isLong={false}
+                      isSelected={goldPiecesQuantity === option}
+                      text={option}
+                      onClick={() => setGoldPiecesQuantity(option)}
+                    />
+                  ))}
+                </main>
+              </Panel>
+            </section>
+          )}
+          {treasureType === treasureTypes[2] && (
+            <>
+              <section>
+                <Panel title="Quantidade">
+                  <main className="panel-select">
+                    {treasureQuantities.map((option) => (
+                      <SelectButton
+                        key={option}
+                        isLarge={false}
+                        isLong={false}
+                        isSelected={goldPiecesQuantity === option}
+                        text={option}
+                        onClick={() => setGoldPiecesQuantity(option)}
+                      />
+                    ))}
+                  </main>
+                </Panel>
+              </section>
+              <section>
+                <Panel title="Quantidade">
+                  <main className="panel-select">
+                    {treasureQuantities.map((option) => (
+                      <SelectButton
+                        key={option}
+                        isLarge={false}
+                        isLong={false}
+                        isSelected={goldPiecesQuantity === option}
+                        text={option}
+                        onClick={() => setGoldPiecesQuantity(option)}
+                      />
+                    ))}
+                  </main>
+                </Panel>
+              </section>
+            </>
+          )}
         </>
       ) : (
         <section>
@@ -66,7 +126,10 @@ function Treasure({ history }) {
         </section>
       )}
       <footer>
-        <Button text="Rodar Tesouro" onClick={() => {}} />
+        <Button
+          text={hasResult ? `Rodar ${resultText}` : `Rodar ${treasureType || "Novo"}`}
+          onClick={() => (hasResult ? setHasResult(false) : handleResult(treasureType))}
+        />
       </footer>
     </div>
   );

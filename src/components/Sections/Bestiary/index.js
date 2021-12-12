@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 //  import api from "../../services/api";
-import { creatureLevels, creatureEnvironments, creatureTypes, creatureSizes } from "../../../tables";
+import { creatureLevels, creatureEnvironments, creatureTypes, creatureSizes } from "../../../Tables/bestiary";
 
 import Button from "../../Button";
 import Select from "../../Select";

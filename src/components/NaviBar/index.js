@@ -2,14 +2,13 @@ import React from "react";
 import { useAuth } from "../../contexts/Auth";
 import { useHistory } from "react-router-dom";
 
-import { mainTabs } from "../../enums";
 import SelectButton from "../SelectButton";
 import Party from "../Sections/Party";
 import Bestiary from "../Sections/Bestiary";
 
 import "./styles.css";
 
-function NaviBar({ openTab, setOpenTab, isEditCreatureOpen, setIsEditCreatureOpen }) {
+function NaviBar({ tabOptions, openTab, setOpenTab, isEditCreatureOpen, setIsEditCreatureOpen }) {
   const { Logout } = useAuth();
   const history = useHistory();
 
@@ -33,24 +32,24 @@ function NaviBar({ openTab, setOpenTab, isEditCreatureOpen, setIsEditCreatureOpe
           <Party />
           <SelectButton
             isLarge={true}
-            isSelected={openTab === mainTabs.skillCheck}
+            isSelected={openTab === tabOptions[0]}
             isLong={false}
-            text="Teste"
-            onClick={() => setOpenTab(mainTabs.skillCheck)}
+            text={tabOptions[0]}
+            onClick={() => setOpenTab(tabOptions[0])}
           />
           <SelectButton
             isLarge={true}
-            isSelected={openTab === mainTabs.combat}
+            isSelected={openTab === tabOptions[1]}
             isLong={true}
-            text="Combate"
-            onClick={() => setOpenTab(mainTabs.combat)}
+            text={tabOptions[1]}
+            onClick={() => setOpenTab(tabOptions[1])}
           />
           <SelectButton
             isLarge={true}
-            isSelected={openTab === mainTabs.treasure}
+            isSelected={openTab === tabOptions[2]}
             isLong={false}
-            text="Tesouro"
-            onClick={() => setOpenTab(mainTabs.treasure)}
+            text={tabOptions[2]}
+            onClick={() => setOpenTab(tabOptions[2])}
           />
           <Bestiary setIsEditCreatureOpen={setIsEditCreatureOpen} />
         </section>

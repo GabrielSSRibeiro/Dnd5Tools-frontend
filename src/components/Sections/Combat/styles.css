@@ -14,8 +14,8 @@
 }
 
 .Combat-container > div > section {
-  width: 400px;
-  margin-top: 75px;
+  width: 480px;
+  margin-top: 5%;
 }
 
 .Combat-container .panel-content {
@@ -28,5 +28,5 @@
 }
 
 .Combat-container > footer {
-  margin-top: 50px;
+  margin-top: calc(5% - 20px);
 }

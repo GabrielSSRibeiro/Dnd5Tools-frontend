@@ -6,7 +6,7 @@ import Button from "../../Button";
 
 import "./styles.css";
 
-function Combat() {
+function Combat({ resultText }) {
   const [characters, setCharacters] = useState(["Soiaz", "Foux", "Isaac"]);
   const [creatures, setCreatures] = useState(null);
   // const history = useHistory();
@@ -42,7 +42,7 @@ function Combat() {
         </section>
       </div>
       <footer>
-        <Button text="Rodar Encontro" onClick={() => {}} />
+        <Button text={`Rodar ${resultText}`} onClick={() => {}} />
       </footer>
     </div>
   );

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { mainTabs } from "../../enums";
 //  import api from "../../services/api";
 
 import NaviBar from "../../components/NaviBar";
@@ -12,7 +11,9 @@ import background from "../../assets/background.png";
 import "./styles.css";
 
 function Home() {
-  const [openTab, setOpenTab] = useState(mainTabs.combat);
+  const mainTabs = ["Teste", "Combate", "Tesouro"];
+
+  const [openTab, setOpenTab] = useState(mainTabs[1]);
   const [isEditCreatureOpen, setIsEditCreatureOpen] = useState(false);
 
   //   useEffect(() => {
@@ -23,13 +24,19 @@ function Home() {
 
   return (
     <div className="Home-container">
-      <NaviBar openTab={openTab} setOpenTab={setOpenTab} isEditCreatureOpen={isEditCreatureOpen} setIsEditCreatureOpen={setIsEditCreatureOpen} />
+      <NaviBar
+        tabOptions={mainTabs}
+        openTab={openTab}
+        setOpenTab={setOpenTab}
+        isEditCreatureOpen={isEditCreatureOpen}
+        setIsEditCreatureOpen={setIsEditCreatureOpen}
+      />
       <img src={background} alt={<a href="https://www.freepik.com/photos/people">People photo created by liuzishan - www.freepik.com</a>} />
       {!isEditCreatureOpen ? (
         <>
-          {openTab === mainTabs.skillCheck && <SkillCheck />}
-          {openTab === mainTabs.combat && <Combat />}
-          {openTab === mainTabs.treasure && <Treasure />}
+          {openTab === mainTabs[0] && <SkillCheck resultText={openTab} />}
+          {openTab === mainTabs[1] && <Combat resultText={openTab} />}
+          {openTab === mainTabs[2] && <Treasure resultText={openTab} />}
         </>
       ) : (
         <EditCreature setIsEditCreatureOpen={setIsEditCreatureOpen} />

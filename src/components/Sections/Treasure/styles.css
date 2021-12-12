@@ -7,7 +7,7 @@
 }
 .Treasure-container > section {
   width: 1000px;
-  margin-top: 75px;
+  margin-top: 5%;
 }
 
 .Treasure-container .panel-select {
@@ -15,9 +15,9 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  row-gap: 22.5px;
+  row-gap: 20px;
 }
 
 .Treasure-container > footer {
-  margin-top: 50px;
+  margin-top: calc(5% - 20px);
 }

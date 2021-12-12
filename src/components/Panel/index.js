@@ -5,18 +5,20 @@ import Jewel from "../Jewel";
 import "./styles.css";
 
 function Panel({ title, children }) {
+  const jewelSide = 18;
+
   return (
     <div className="Panel-container">
       {title && (
         <header>
           <aside className="title-gem">
-            <Jewel side={20} variant="panel" />
+            <Jewel side={jewelSide} variant="panel" />
           </aside>
           <div>
             <h4>{title}</h4>
           </div>
           <aside className="title-gem">
-            <Jewel side={20} variant="panel" />
+            <Jewel side={jewelSide} variant="panel" />
           </aside>
         </header>
       )}

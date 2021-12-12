@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
-import { checkDificulties, damageIntensities } from "../../../tables";
+import { checkDificulties, damageIntensities } from "../../../Tables/skillCheck";
 
 import Panel from "../../Panel";
 import SelectButton from "../../SelectButton";
@@ -8,7 +8,7 @@ import Button from "../../Button";
 
 import "./styles.css";
 
-function SkillCheck({ history }) {
+function SkillCheck({ resultText }) {
   const [checkDificulty, setCheckDificulty] = useState("");
   const [damageIntensity, setDamageIntensity] = useState("");
 
@@ -55,7 +55,7 @@ function SkillCheck({ history }) {
         </Panel>
       </section>
       <footer>
-        <Button text="Rodar Teste" onClick={() => {}} />
+        <Button text={`Rodar ${resultText}`} onClick={() => {}} />
       </footer>
     </div>
   );
