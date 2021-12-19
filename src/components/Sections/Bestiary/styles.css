@@ -43,9 +43,10 @@
   background-color: var(--white);
 }
 
-.Bestiary-container > .sharp-button div main h5 {
+.Bestiary-container > .sharp-button div main h5,
+.Bestiary-container > .sharp-button div main h6 {
   color: var(--white);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .Bestiary-container > .sharp-button div aside {
@@ -100,7 +101,7 @@
 
 .Bestiary-container > .bestiary-tab > header h5 {
   color: var(--white);
-  font-weight: 700;
+  font-weight: 600;
   margin-right: 15px;
 }
 
@@ -154,7 +155,7 @@
 
 .Bestiary-container > .bestiary-tab > header .sharp-button div main h5 {
   color: var(--white);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .Bestiary-container > .bestiary-tab > header .sharp-button div aside {
@@ -220,7 +221,7 @@
   border: none;
   color: var(--primaryPurple1);
   font-family: var(--primaryFont);
-  font-weight: bold;
+  font-weight: 600;
   letter-spacing: 0.08em;
 }
 
@@ -241,12 +242,12 @@
   padding: 8px;
   background-color: var(--white);
   width: 100%;
-  min-height: 488px;
+  flex: 1;
   position: relative;
 
   display: flex;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 

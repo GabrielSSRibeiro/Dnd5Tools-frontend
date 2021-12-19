@@ -2,11 +2,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-weight: 400;
 }
 
 :root {
-  --titleFont: Cinzel Decorative, cursive;
-  --primaryFont: Cinzel, serif;
+  --titleFont: "Cinzel Decorative", cursive;
+  --primaryFont: "Cinzel", serif;
 
   --primaryPurple1: #472e73;
   --primaryPurple2: #38245a;

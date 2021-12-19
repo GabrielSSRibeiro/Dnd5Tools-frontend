@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
-import { checkDificulties, damageIntensities } from "../../../Tables/skillCheck";
+import { CHECK_DIFICULTIES, DAMAGE_INTENSITIES } from "../../../Tables/skillCheck";
 
 import Panel from "../../Panel";
 import SelectButton from "../../SelectButton";
@@ -25,7 +25,7 @@ function SkillCheck({ resultText }) {
       <section>
         <Panel title="Dificuldade">
           <main className="panel-select">
-            {checkDificulties.map((option) => (
+            {CHECK_DIFICULTIES.map((option) => (
               <SelectButton
                 key={option}
                 isLarge={false}
@@ -41,7 +41,7 @@ function SkillCheck({ resultText }) {
       <section>
         <Panel title="Intensidade">
           <main className="panel-select">
-            {damageIntensities.map((option) => (
+            {DAMAGE_INTENSITIES.map((option) => (
               <SelectButton
                 key={option}
                 isLarge={false}

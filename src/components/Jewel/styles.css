@@ -6,16 +6,16 @@
   transform: rotate(45deg);
 }
 
-.panel-jewel-outerStyle {
+.gray-jewel-outerStyle {
   background: var(--gray3);
 }
-.Jewel-container .panel-innerStyle {
+.Jewel-container .gray-gradient-innerStyle {
   background: var(--grayGradient);
 }
 
-.resultBox-jewel-outerStyle {
+.black-jewel-outerStyle {
   background: var(--black);
 }
-.Jewel-container .resultBox-innerStyle {
+.Jewel-container .black-gradient-innerStyle {
   background: var(--blackGradient);
 }

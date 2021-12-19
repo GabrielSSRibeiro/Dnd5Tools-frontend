@@ -45,7 +45,7 @@ function Party() {
           {/* button body */}
           <main>
             <h5>6 JOGADORES</h5>
-            <h5>Nível 12</h5>
+            <h6>Nível 12</h6>
           </main>
           <aside />
         </div>

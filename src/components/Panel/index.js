@@ -12,13 +12,13 @@ function Panel({ title, children }) {
       {title && (
         <header>
           <aside className="title-gem">
-            <Jewel side={jewelSide} variant="panel" />
+            <Jewel side={jewelSide} outerStyle="gray" innerStyle="gray-gradient" />
           </aside>
           <div>
             <h4>{title}</h4>
           </div>
           <aside className="title-gem">
-            <Jewel side={jewelSide} variant="panel" />
+            <Jewel side={jewelSide} outerStyle="gray" innerStyle="gray-gradient" />
           </aside>
         </header>
       )}

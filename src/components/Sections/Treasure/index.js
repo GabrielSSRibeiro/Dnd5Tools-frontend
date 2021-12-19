@@ -1,6 +1,19 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
-import { treasureTypes, treasureQuantities } from "../../../Tables/treasure";
+import {
+  TREASURE_TYPES,
+  GOLD_PIECES_QUANTITIES,
+  MATERIAL_PRICE_INFLATIONS,
+  getItemBuyPrices,
+  getItemSellPrices,
+  getItemCraftBuyPrices,
+  getItemCraftSellPrices,
+  getMaterialBuyPrices,
+  getMaterialSellPrices,
+  EQUIPMENT_TYPES,
+  EQUIPMENT_RARITIES,
+  getItemAfixes,
+} from "../../../Tables/treasure";
 
 import Panel from "../../Panel";
 import SelectButton from "../../SelectButton";
@@ -9,11 +22,16 @@ import ResultBox from "../../ResultBox";
 
 import "./styles.css";
 
-function Treasure({ resultText }) {
-  const [hasResult, setHasResult] = useState(true);
+function Treasure({ resultText, level }) {
+  const [hasResult, setHasResult] = useState(false);
   const [treasureType, setTreasureType] = useState(null);
-  const [goldPiecesQuantity, setGoldPiecesQuantity] = useState("");
-  const [GoldPiecesResult, setGoldPiecesResult] = useState(null);
+  const [goldPiecesQuantity, setGoldPiecesQuantity] = useState(null);
+  const [materialPriceInflation, setMaterialPriceInflation] = useState(null);
+  const [equipmentType, setEquipmentType] = useState(null);
+  const [equipmentRarity, setEquipmentRarity] = useState(null);
+
+  const treasureTypes = { GOLD_PIECES: TREASURE_TYPES[0], MATERIAL: TREASURE_TYPES[1], EQUIPMENT: TREASURE_TYPES[2] };
+  const generatedItem = getItemAfixes(level, equipmentType, equipmentRarity);
 
   // const history = useHistory();
 
@@ -23,6 +41,8 @@ function Treasure({ resultText }) {
   //   });
   // }, []);
 
+  // function calculateGoldPieces() {}
+
   function handleResult() {
     setHasResult(true);
   }
@@ -31,10 +51,10 @@ function Treasure({ resultText }) {
     <div className="Treasure-container">
       {!hasResult ? (
         <>
-          <section>
+          <section className="treasure-panels">
             <Panel title="Tipo">
               <main className="panel-select">
-                {treasureTypes.map((option) => (
+                {TREASURE_TYPES.map((option) => (
                   <SelectButton
                     key={option}
                     isLarge={false}
@@ -47,11 +67,11 @@ function Treasure({ resultText }) {
               </main>
             </Panel>
           </section>
-          {treasureType === treasureTypes[0] && (
-            <section>
+          {treasureType === treasureTypes.GOLD_PIECES && (
+            <section className="treasure-panels">
               <Panel title="Quantidade">
                 <main className="panel-select">
-                  {treasureQuantities.map((option) => (
+                  {GOLD_PIECES_QUANTITIES.map((option) => (
                     <SelectButton
                       key={option}
                       isLarge={false}
@@ -65,53 +85,53 @@ function Treasure({ resultText }) {
               </Panel>
             </section>
           )}
-          {treasureType === treasureTypes[1] && (
-            <section>
-              <Panel title="Quantidade">
+          {treasureType === treasureTypes.MATERIAL && (
+            <section className="treasure-panels">
+              <Panel title="Preço">
                 <main className="panel-select">
-                  {treasureQuantities.map((option) => (
+                  {MATERIAL_PRICE_INFLATIONS.map((option) => (
                     <SelectButton
                       key={option}
                       isLarge={false}
                       isLong={false}
-                      isSelected={goldPiecesQuantity === option}
+                      isSelected={materialPriceInflation === option}
                       text={option}
-                      onClick={() => setGoldPiecesQuantity(option)}
+                      onClick={() => setMaterialPriceInflation(option)}
                     />
                   ))}
                 </main>
               </Panel>
             </section>
           )}
-          {treasureType === treasureTypes[2] && (
+          {treasureType === treasureTypes.EQUIPMENT && (
             <>
-              <section>
-                <Panel title="Quantidade">
+              <section className="treasure-panels">
+                <Panel title="Tipo">
                   <main className="panel-select">
-                    {treasureQuantities.map((option) => (
+                    {EQUIPMENT_TYPES.map((option) => (
                       <SelectButton
                         key={option}
                         isLarge={false}
                         isLong={false}
-                        isSelected={goldPiecesQuantity === option}
+                        isSelected={equipmentType === option}
                         text={option}
-                        onClick={() => setGoldPiecesQuantity(option)}
+                        onClick={() => setEquipmentType(option)}
                       />
                     ))}
                   </main>
                 </Panel>
               </section>
-              <section>
-                <Panel title="Quantidade">
+              <section className="treasure-panels">
+                <Panel title="Raridade">
                   <main className="panel-select">
-                    {treasureQuantities.map((option) => (
+                    {EQUIPMENT_RARITIES.map((option) => (
                       <SelectButton
                         key={option}
                         isLarge={false}
                         isLong={false}
-                        isSelected={goldPiecesQuantity === option}
+                        isSelected={equipmentRarity === option}
                         text={option}
-                        onClick={() => setGoldPiecesQuantity(option)}
+                        onClick={() => setEquipmentRarity(option)}
                       />
                     ))}
                   </main>
@@ -121,13 +141,71 @@ function Treasure({ resultText }) {
           )}
         </>
       ) : (
-        <section>
-          <ResultBox />
-        </section>
+        <>
+          {treasureType === treasureTypes.GOLD_PIECES && (
+            <section className="result-tables">
+              <ResultBox headers={["Tesouro"]} highlightTopRow={true} values={[{ top: getItemCraftBuyPrices[0](), bottom: "Peças de Ouro" }]} />
+            </section>
+          )}
+          {treasureType === treasureTypes.MATERIAL && (
+            <>
+              <section className="result-tables">
+                <ResultBox
+                  headers={["Material"]}
+                  subHeaders={["Comprar", "Vender"]}
+                  resultBackgroundColumn={true}
+                  values={getItemBuyPrices.map((item, index) => ({
+                    label: EQUIPMENT_RARITIES[index],
+                    top: item() + " PO",
+                    bottom: getItemSellPrices[index]() + " PO",
+                  }))}
+                />
+              </section>
+              <section className="result-tables">
+                <ResultBox
+                  headers={["Criar Item"]}
+                  subHeaders={["Comprar", "Vender"]}
+                  resultBackgroundColumn={true}
+                  values={getItemCraftBuyPrices.map((item, index) => ({
+                    label: null,
+                    top: item() + " PO",
+                    bottom: getItemCraftSellPrices[index]() + " PO",
+                  }))}
+                />
+              </section>
+              <section className="result-tables">
+                <ResultBox
+                  headers={["Item Pronto"]}
+                  subHeaders={["Comprar", "Vender"]}
+                  resultBackgroundColumn={true}
+                  values={getMaterialBuyPrices.map((item, index) => ({
+                    label: null,
+                    top: item() + " PO",
+                    bottom: getMaterialSellPrices[index]() + " PO",
+                  }))}
+                />
+              </section>
+            </>
+          )}
+          {treasureType === treasureTypes.EQUIPMENT && (
+            <section className="result-tables">
+              <ResultBox
+                headers={generatedItem.name}
+                highlightSubHeaders={true}
+                highlightTopRow={true}
+                values={generatedItem.afixes.map((afix) => ({
+                  label: null,
+                  top: afix.bonus > 0 ? "+" + afix.bonus : afix.bonus,
+                  bottom: afix.name,
+                }))}
+              />
+            </section>
+          )}
+        </>
       )}
       <footer>
         <Button
-          text={hasResult ? `Rodar ${resultText}` : `Rodar ${treasureType || "Novo"}`}
+          text={!hasResult ? `Rodar ${treasureType || resultText}` : "Rodar Novo"}
           onClick={() => (hasResult ? setHasResult(false) : handleResult(treasureType))}
         />
       </footer>

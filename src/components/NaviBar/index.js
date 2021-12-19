@@ -8,7 +8,7 @@ import Bestiary from "../Sections/Bestiary";
 
 import "./styles.css";
 
-function NaviBar({ tabOptions, openTab, setOpenTab, isEditCreatureOpen, setIsEditCreatureOpen }) {
+function NaviBar({ setLevel, tabOptions, openTab, setOpenTab, isEditCreatureOpen, setIsEditCreatureOpen }) {
   const { Logout } = useAuth();
   const history = useHistory();
 
@@ -29,27 +29,27 @@ function NaviBar({ tabOptions, openTab, setOpenTab, isEditCreatureOpen, setIsEdi
       </section>
       {!isEditCreatureOpen && (
         <section>
-          <Party />
+          <Party setLevel={setLevel} />
           <SelectButton
             isLarge={true}
-            isSelected={openTab === tabOptions[0]}
+            isSelected={openTab === tabOptions.SKILL_CHECK}
             isLong={false}
-            text={tabOptions[0]}
-            onClick={() => setOpenTab(tabOptions[0])}
+            text={tabOptions.SKILL_CHECK}
+            onClick={() => setOpenTab(tabOptions.SKILL_CHECK)}
           />
           <SelectButton
             isLarge={true}
-            isSelected={openTab === tabOptions[1]}
+            isSelected={openTab === tabOptions.COMBAT}
             isLong={true}
-            text={tabOptions[1]}
-            onClick={() => setOpenTab(tabOptions[1])}
+            text={tabOptions.COMBAT}
+            onClick={() => setOpenTab(tabOptions.COMBAT)}
           />
           <SelectButton
             isLarge={true}
-            isSelected={openTab === tabOptions[2]}
+            isSelected={openTab === tabOptions.TREASURE}
             isLong={false}
-            text={tabOptions[2]}
-            onClick={() => setOpenTab(tabOptions[2])}
+            text={tabOptions.TREASURE}
+            onClick={() => setOpenTab(tabOptions.TREASURE)}
           />
           <Bestiary setIsEditCreatureOpen={setIsEditCreatureOpen} />
         </section>

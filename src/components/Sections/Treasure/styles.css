@@ -5,9 +5,22 @@
   align-items: center;
   justify-content: flex-start;
 }
-.Treasure-container > section {
+.Treasure-container .treasure-panels {
   width: 1000px;
   margin-top: 5%;
+}
+
+.Treasure-container .result-tables {
+  width: 1000px;
+  margin-top: 15px;
+}
+
+.Treasure-container .result-tables:first-of-type {
+  margin-top: 5%;
+}
+
+.Treasure-container .result-tables:last-of-type {
+  margin-bottom: 15px;
 }
 
 .Treasure-container .panel-select {

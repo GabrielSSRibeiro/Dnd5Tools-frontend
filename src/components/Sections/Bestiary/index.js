@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 //  import api from "../../services/api";
-import { creatureLevels, creatureEnvironments, creatureTypes, creatureSizes } from "../../../Tables/bestiary";
+import { CREATURE_LEVELS, CREATURE_ENVIROMENTS, CREATURE_TYPES, CREATURE_SIZE } from "../../../Tables/bestiary";
 
 import Button from "../../Button";
 import Select from "../../Select";
@@ -89,7 +89,7 @@ function Bestiary({ setIsEditCreatureOpen }) {
           <aside />
           <main>
             <h5>BESTIÁRIO</h5>
-            <h5>13 Criaturas</h5>
+            <h6>13 Criaturas</h6>
           </main>
         </div>
       </div>
@@ -139,28 +139,28 @@ function Bestiary({ setIsEditCreatureOpen }) {
                   value={selectedLevel}
                   onSelect={(value) => handleFilter(setSelectedLevel, value)}
                   defaultValue="Nível"
-                  options={creatureLevels}
+                  options={CREATURE_LEVELS}
                 />
                 <Select
                   extraWidth={60}
                   value={selectedEnv}
                   onSelect={(value) => handleFilter(setSelectedEnv, value)}
                   defaultValue="Ambiente"
-                  options={creatureEnvironments}
+                  options={CREATURE_ENVIROMENTS}
                 />
                 <Select
                   extraWidth={60}
                   value={selectedType}
                   onSelect={(value) => handleFilter(setSelectedType, value)}
                   defaultValue="Tipo"
-                  options={creatureTypes}
+                  options={CREATURE_TYPES}
                 />
                 <Select
                   extraWidth={20}
                   value={selectedSize}
                   onSelect={(value) => handleFilter(setSelectedSize, value)}
                   defaultValue="Tamanho"
-                  options={creatureSizes}
+                  options={CREATURE_SIZE}
                 />
               </main>
             </div>

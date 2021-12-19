@@ -45,7 +45,7 @@
 .NaviBar-container > section:first-child h4 {
   color: var(--primaryPurple1);
   font-family: var(--primaryFont);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 30px;
   border-left: 1px solid var(--primaryPurple1);
   text-align: center;

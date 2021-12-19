@@ -32,7 +32,7 @@
 .SelectButton-container main h6 {
   font-family: var(--primaryFont);
 
-  font-weight: bold;
+  font-weight: 600;
   transform: rotate(-45deg);
 }
 
