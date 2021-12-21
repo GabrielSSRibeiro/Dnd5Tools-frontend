@@ -3,7 +3,11 @@ import React, { useState } from "react";
 import {
   TREASURE_TYPES,
   GOLD_PIECES_QUANTITIES,
+  getGoldPiecesAmount,
+  DEFAULT_GOLD_PIECES_QUANTITIES,
   MATERIAL_PRICE_INFLATIONS,
+  DEFAULT_MATERIAL_PRICE_INFLATIONS,
+  ITEMS_CRAFT_TIMES,
   getItemBuyPrices,
   getItemSellPrices,
   getItemCraftBuyPrices,
@@ -25,8 +29,8 @@ import "./styles.css";
 function Treasure({ resultText, level }) {
   const [hasResult, setHasResult] = useState(false);
   const [treasureType, setTreasureType] = useState(null);
-  const [goldPiecesQuantity, setGoldPiecesQuantity] = useState(null);
-  const [materialPriceInflation, setMaterialPriceInflation] = useState(null);
+  const [goldPiecesQuantity, setGoldPiecesQuantity] = useState(DEFAULT_GOLD_PIECES_QUANTITIES);
+  const [materialPriceInflation, setMaterialPriceInflation] = useState(DEFAULT_MATERIAL_PRICE_INFLATIONS);
   const [equipmentType, setEquipmentType] = useState(null);
   const [equipmentRarity, setEquipmentRarity] = useState(null);
 
@@ -106,7 +110,7 @@ function Treasure({ resultText, level }) {
           {treasureType === treasureTypes.EQUIPMENT && (
             <>
               <section className="treasure-panels">
-                <Panel title="Tipo">
+                <Panel title="Tipo do Item">
                   <main className="panel-select">
                     {EQUIPMENT_TYPES.map((option) => (
                       <SelectButton
@@ -144,44 +148,48 @@ function Treasure({ resultText, level }) {
         <>
           {treasureType === treasureTypes.GOLD_PIECES && (
             <section className="result-tables">
-              <ResultBox headers={["Tesouro"]} highlightTopRow={true} values={[{ top: getItemCraftBuyPrices[0](), bottom: "Peças de Ouro" }]} />
+              <ResultBox
+                headers={["Tesouro"]}
+                highlightTopRow={true}
+                values={[{ top: getGoldPiecesAmount(goldPiecesQuantity), bottom: "Peças de Ouro" }]}
+              />
             </section>
           )}
           {treasureType === treasureTypes.MATERIAL && (
             <>
               <section className="result-tables">
                 <ResultBox
-                  headers={["Material"]}
+                  headers={["Preço", "Material"]}
                   subHeaders={["Comprar", "Vender"]}
                   resultBackgroundColumn={true}
-                  values={getItemBuyPrices.map((item, index) => ({
+                  values={getMaterialBuyPrices(materialPriceInflation).map((item, index) => ({
                     label: EQUIPMENT_RARITIES[index],
                     top: item() + " PO",
-                    bottom: getItemSellPrices[index]() + " PO",
+                    bottom: getMaterialSellPrices()[index]() + " PO",
                   }))}
                 />
               </section>
               <section className="result-tables">
                 <ResultBox
-                  headers={["Criar Item"]}
-                  subHeaders={["Comprar", "Vender"]}
+                  headers={["Preço", "Forja de Item"]}
+                  subHeaders={["Comprar / Dias", "Vender / Dias"]}
                   resultBackgroundColumn={true}
-                  values={getItemCraftBuyPrices.map((item, index) => ({
+                  values={getItemCraftBuyPrices(materialPriceInflation).map((item, index) => ({
                     label: null,
-                    top: item() + " PO",
-                    bottom: getItemCraftSellPrices[index]() + " PO",
+                    top: item() + " PO / " + ITEMS_CRAFT_TIMES[index]() + " d",
+                    bottom: getItemCraftSellPrices()[index]() + " PO / " + ITEMS_CRAFT_TIMES[index]() + " d",
                   }))}
                 />
               </section>
               <section className="result-tables">
                 <ResultBox
-                  headers={["Item Pronto"]}
+                  headers={["Preço", "Item Pronto"]}
                   subHeaders={["Comprar", "Vender"]}
                   resultBackgroundColumn={true}
-                  values={getMaterialBuyPrices.map((item, index) => ({
+                  values={getItemBuyPrices(materialPriceInflation).map((item, index) => ({
                     label: null,
                     top: item() + " PO",
-                    bottom: getMaterialSellPrices[index]() + " PO",
+                    bottom: getItemSellPrices()[index]() + " PO",
                   }))}
                 />
               </section>

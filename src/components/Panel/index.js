@@ -15,7 +15,9 @@ function Panel({ title, children }) {
             <Jewel side={jewelSide} outerStyle="gray" innerStyle="gray-gradient" />
           </aside>
           <div>
+            {/* <div> */}
             <h4>{title}</h4>
+            {/* </div> */}
           </div>
           <aside className="title-gem">
             <Jewel side={jewelSide} outerStyle="gray" innerStyle="gray-gradient" />

@@ -1,40 +1,90 @@
-import { randomIntFromInterval as rand, randomItemFromArray as randItem, GetProfByLevel, TrimDecimalPlaces, ProbabilityCheck } from "../utils";
+import {
+  randomIntFromInterval as rand,
+  averageOfArray as avg,
+  randomItemFromArray as randItem,
+  GetProfByLevel,
+  TrimDecimalPlaces,
+  ProbabilityCheck,
+} from "../utils";
 
 export const TREASURE_TYPES = ["Peças de Ouro", "Material", "Equipamento"];
 
 //Gold pieces
-export const GOLD_PIECES_QUANTITIES = ["Pouco", "Médio", "Muito", "Bastante"];
-export const GOLD_PIECES_AMOUNT = "";
+export const DEFAULT_GOLD_PIECES_QUANTITIES = "Médio";
+export const GOLD_PIECES_QUANTITIES = ["Pouco", DEFAULT_GOLD_PIECES_QUANTITIES, "Muito", "Bastante"];
+export const getGoldPiecesAmount = (quantity) => {
+  const quantityIndex = GOLD_PIECES_QUANTITIES.indexOf(quantity);
+
+  const lowerBound = getMaterialSellPrices(MATERIAL_PRICE_INFLATIONS[quantityIndex])[quantityIndex]();
+  const higherBound = getMaterialBuyPrices(MATERIAL_PRICE_INFLATIONS[quantityIndex])[quantityIndex]();
+
+  const amount = avg([lowerBound, higherBound]);
+  return amount;
+};
 
 //materials
-const uncommonItemMinPrice = 100;
-const uncommonItemMaxPrice = 500;
-const rareItemMinPrice = 500;
-const rareItemMaxPrice = 5000;
-const veryRareItemMinPrice = 5000;
-const veryRareItemMaxPrice = 50000;
-const legendaryItemMinPrice = 50000;
-const legendaryItemMaxPrice = 200000;
+// const uncommonItemMinPrice = 100;
+// const uncommonItemMaxPrice = 500;
+// const rareItemMinPrice = 500;
+// const rareItemMaxPrice = 5000;
+// const veryRareItemMinPrice = 5000;
+// const veryRareItemMaxPrice = 50000;
+// const legendaryItemMinPrice = 50000;
+// const legendaryItemMaxPrice = 200000;
+const RarityFactor = 2.5;
+
+const itemMaxPriceRate = 5;
+
+const uncommonItemMinPrice = 300;
+const uncommonItemMaxPrice = uncommonItemMinPrice * itemMaxPriceRate;
+const rareItemMinPrice = uncommonItemMinPrice * 1 * RarityFactor;
+const rareItemMaxPrice = rareItemMinPrice * itemMaxPriceRate;
+const veryRareItemMinPrice = uncommonItemMinPrice * 2 * RarityFactor;
+const veryRareItemMaxPrice = veryRareItemMinPrice * itemMaxPriceRate;
+const legendaryItemMinPrice = uncommonItemMinPrice * 3 * RarityFactor;
+const legendaryItemMaxPrice = legendaryItemMinPrice * itemMaxPriceRate;
 
 const sellRate = 0.5;
 const craftRate = 0.5;
 const materialRate = 0.1;
+const inflationVariance = 0.4;
 
-export const getItemBuyPrices = [
-  () => rand(uncommonItemMinPrice, uncommonItemMaxPrice),
-  () => rand(rareItemMinPrice, rareItemMaxPrice),
-  () => rand(veryRareItemMinPrice, veryRareItemMaxPrice),
-  () => rand(legendaryItemMinPrice, legendaryItemMaxPrice),
+const uncommonItemCraftTimeInDays = () => rand(1, 2);
+const rareItemCraftTimeInDays = () => Math.round(uncommonItemCraftTimeInDays() * RarityFactor);
+const veryRareItemCraftTimeInDays = () => Math.round(rareItemCraftTimeInDays() * RarityFactor);
+const legendaryItemCraftTimeInDays = () => Math.round(veryRareItemCraftTimeInDays() * RarityFactor);
+export const ITEMS_CRAFT_TIMES = [
+  () => uncommonItemCraftTimeInDays(),
+  () => rareItemCraftTimeInDays(),
+  () => veryRareItemCraftTimeInDays(),
+  () => legendaryItemCraftTimeInDays(),
 ];
-export const getItemSellPrices = getItemBuyPrices.map((itemBuyPrice) => () => itemBuyPrice() / sellRate);
-export const getItemCraftBuyPrices = getItemBuyPrices.map((itemBuyPrice) => () => itemBuyPrice() / craftRate);
-export const getItemCraftSellPrices = getItemCraftBuyPrices.map((itemCraftBuyPrice) => () => itemCraftBuyPrice() / sellRate);
-export const getMaterialBuyPrices = getItemBuyPrices.map((materialBuyPrice) => () => materialBuyPrice() / materialRate);
-export const getMaterialSellPrices = getMaterialBuyPrices.map((materialSellPrice) => () => materialSellPrice() / sellRate);
 
-export const MATERIAL_PRICE_INFLATIONS = ["Barato", "Normal", "Caro", "Abusivo"];
+export const getItemBuyPrices = (value) => {
+  const inflationIndex = MATERIAL_PRICE_INFLATIONS.indexOf(value);
+  const inflation = materialPriceInflation[inflationIndex];
+  return [
+    () => avg([uncommonItemMinPrice, uncommonItemMaxPrice], inflationVariance) * inflation,
+    () => avg([rareItemMinPrice, rareItemMaxPrice], inflationVariance) * inflation,
+    () => avg([veryRareItemMinPrice, veryRareItemMaxPrice], inflationVariance) * inflation,
+    () => avg([legendaryItemMinPrice, legendaryItemMaxPrice], inflationVariance) * inflation,
+  ];
+};
+export const getItemSellPrices = () =>
+  getItemBuyPrices(DEFAULT_MATERIAL_PRICE_INFLATIONS).map((itemBuyPrice) => () => Math.round(itemBuyPrice() * sellRate));
+export const getItemCraftBuyPrices = (inflation) => getItemBuyPrices(inflation).map((itemBuyPrice) => () => Math.round(itemBuyPrice() * craftRate));
+export const getItemCraftSellPrices = () =>
+  getItemCraftBuyPrices(DEFAULT_MATERIAL_PRICE_INFLATIONS).map((itemCraftBuyPrice) => () => Math.round(itemCraftBuyPrice() * sellRate));
+export const getMaterialBuyPrices = (inflation) =>
+  getItemBuyPrices(inflation).map((materialBuyPrice) => () => Math.round(materialBuyPrice() * materialRate));
+export const getMaterialSellPrices = () =>
+  getMaterialBuyPrices(DEFAULT_MATERIAL_PRICE_INFLATIONS).map((materialSellPrice) => () => Math.round(materialSellPrice() * sellRate));
 
-//Equipment
+export const DEFAULT_MATERIAL_PRICE_INFLATIONS = "Normal";
+export const MATERIAL_PRICE_INFLATIONS = ["Barato", DEFAULT_MATERIAL_PRICE_INFLATIONS, "Caro", "Abusivo"];
+const materialPriceInflation = [0.5, 1, 1.5, 2];
+
+//Item
 const potion = "Poçao";
 export const EQUIPMENT_TYPES = ["Arma", "Armadura", "Acessório", potion];
 export const EQUIPMENT_RARITIES = ["Incomum", "Raro", "Muito Raro", "Lendário"];

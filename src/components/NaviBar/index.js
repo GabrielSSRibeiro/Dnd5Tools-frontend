@@ -8,7 +8,7 @@ import Bestiary from "../Sections/Bestiary";
 
 import "./styles.css";
 
-function NaviBar({ setLevel, tabOptions, openTab, setOpenTab, isEditCreatureOpen, setIsEditCreatureOpen }) {
+function NaviBar({ level, setLevel, tabOptions, openTab, setOpenTab, isEditCreatureOpen, setIsEditCreatureOpen }) {
   const { Logout } = useAuth();
   const history = useHistory();
 
@@ -29,7 +29,7 @@ function NaviBar({ setLevel, tabOptions, openTab, setOpenTab, isEditCreatureOpen
       </section>
       {!isEditCreatureOpen && (
         <section>
-          <Party setLevel={setLevel} />
+          <Party level={level} setLevel={setLevel} />
           <SelectButton
             isLarge={true}
             isSelected={openTab === tabOptions.SKILL_CHECK}

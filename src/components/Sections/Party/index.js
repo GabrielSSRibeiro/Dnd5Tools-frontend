@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
 
+import { LEVELS } from "../../../Tables/party";
+
 import Select from "../../Select";
 import CheckInput from "../../CheckInput";
 
 import "./styles.css";
 
-function Party() {
+function Party({ level, setLevel }) {
   const [isPartyOpen, setIsPartyOpen] = useState(false);
-  const [level, setlevel] = useState(1);
   const [selected, setselected] = useState(false);
   // const history = useHistory();
 
@@ -17,7 +18,6 @@ function Party() {
   //     setItems(response.data);
   //   });
   // }, []);
-  const levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 
   function HandleSelect() {
     setselected(!selected);
@@ -56,7 +56,7 @@ function Party() {
             <h5>6 JOGADORES</h5>
             <div>
               <h5>Nível</h5>
-              <Select value={level} onSelect={setlevel} options={levels} />
+              <Select value={level} onSelect={setLevel} options={LEVELS} />
               <div
                 className="sharp-button"
                 onClick={() => {

@@ -3,6 +3,15 @@ export function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+export function averageOfArray(values, variance = 0) {
+  const sum = values.reduce((a, b) => a + b, 0);
+  const avg = sum / values.length || 0;
+  const lowerBound = avg * (1 - variance / 2);
+  const higherBound = avg * (1 + variance / 2);
+
+  return randomIntFromInterval(lowerBound, higherBound);
+}
+
 export function randomItemFromArray(array) {
   const index = randomIntFromInterval(0, array.length - 1);
 
