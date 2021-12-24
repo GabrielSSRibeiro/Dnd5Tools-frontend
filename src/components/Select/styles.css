@@ -67,7 +67,7 @@
 .Select-container .select-item {
   list-style-type: none;
   border-bottom: solid 1px var(--gray2);
-  padding: 10% 0;
+  padding: 10px 0;
 
   display: flex;
   align-items: center;

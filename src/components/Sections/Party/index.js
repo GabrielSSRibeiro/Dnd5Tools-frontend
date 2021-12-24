@@ -10,7 +10,8 @@ import "./styles.css";
 
 function Party({ level, setLevel }) {
   const [isPartyOpen, setIsPartyOpen] = useState(false);
-  const [selected, setselected] = useState(false);
+  const [selected, setSelected] = useState(false);
+  const [characters, setCharacters] = useState([]);
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -20,7 +21,7 @@ function Party({ level, setLevel }) {
   // }, []);
 
   function HandleSelect() {
-    setselected(!selected);
+    setSelected(!selected);
   }
 
   return (
@@ -44,8 +45,8 @@ function Party({ level, setLevel }) {
         <div>
           {/* button body */}
           <main>
-            <h5>6 JOGADORES</h5>
-            <h6>Nível 12</h6>
+            <h5>{characters.length} JOGADORES</h5>
+            <h6>Nível {level}</h6>
           </main>
           <aside />
         </div>
@@ -53,7 +54,7 @@ function Party({ level, setLevel }) {
       {isPartyOpen && (
         <div className="party-tab">
           <header>
-            <h5>6 JOGADORES</h5>
+            <h5>{characters.length} JOGADORES</h5>
             <div>
               <h5>Nível</h5>
               <Select value={level} onSelect={setLevel} options={LEVELS} />

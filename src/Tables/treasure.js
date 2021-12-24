@@ -1,6 +1,7 @@
 import {
   randomIntFromInterval as rand,
   averageOfArray as avg,
+  randomValueFromVariance as variance,
   randomItemFromArray as randItem,
   GetProfByLevel,
   TrimDecimalPlaces,
@@ -47,7 +48,7 @@ const legendaryItemMaxPrice = legendaryItemMinPrice * itemMaxPriceRate;
 const sellRate = 0.5;
 const craftRate = 0.5;
 const materialRate = 0.1;
-const inflationVariance = 0.4;
+const inflationVariance = 0.2;
 
 const uncommonItemCraftTimeInDays = () => rand(1, 2);
 const rareItemCraftTimeInDays = () => Math.round(uncommonItemCraftTimeInDays() * RarityFactor);
@@ -64,10 +65,10 @@ export const getItemBuyPrices = (value) => {
   const inflationIndex = MATERIAL_PRICE_INFLATIONS.indexOf(value);
   const inflation = materialPriceInflation[inflationIndex];
   return [
-    () => avg([uncommonItemMinPrice, uncommonItemMaxPrice], inflationVariance) * inflation,
-    () => avg([rareItemMinPrice, rareItemMaxPrice], inflationVariance) * inflation,
-    () => avg([veryRareItemMinPrice, veryRareItemMaxPrice], inflationVariance) * inflation,
-    () => avg([legendaryItemMinPrice, legendaryItemMaxPrice], inflationVariance) * inflation,
+    () => variance(avg([uncommonItemMinPrice, uncommonItemMaxPrice]), inflationVariance) * inflation,
+    () => variance(avg([rareItemMinPrice, rareItemMaxPrice]), inflationVariance) * inflation,
+    () => variance(avg([veryRareItemMinPrice, veryRareItemMaxPrice]), inflationVariance) * inflation,
+    () => variance(avg([legendaryItemMinPrice, legendaryItemMaxPrice]), inflationVariance) * inflation,
   ];
 };
 export const getItemSellPrices = () =>
@@ -93,7 +94,7 @@ const offensiveAfixes = (level) => {
   const bonus = GetProfByLevel(level) / 2;
 
   const afixes = [
-    { name: "Ataque", bonus },
+    { name: "Ataque", bonus: 1 }, //Math.ceil(bonus / 2) },
     { name: "Dano", bonus },
   ];
   const probability = 1 / afixes.length;
@@ -103,7 +104,7 @@ const offensiveAfixes = (level) => {
 
 const defensiveAfixes = (level) => {
   const afixes = [
-    { name: "CA", bonus: GetProfByLevel(level) / 2 },
+    { name: "CA", bonus: 1 }, //Math.ceil(GetProfByLevel(level) / 4) },
     { name: "PV", bonus: GetProfByLevel(level) * 2 },
   ];
   const probability = 1 / afixes.length;

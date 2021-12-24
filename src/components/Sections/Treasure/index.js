@@ -47,10 +47,6 @@ function Treasure({ resultText, level }) {
 
   // function calculateGoldPieces() {}
 
-  function handleResult() {
-    setHasResult(true);
-  }
-
   return (
     <div className="Treasure-container">
       {!hasResult ? (
@@ -214,7 +210,7 @@ function Treasure({ resultText, level }) {
       <footer>
         <Button
           text={!hasResult ? `Rodar ${treasureType || resultText}` : "Rodar Novo"}
-          onClick={() => (hasResult ? setHasResult(false) : handleResult(treasureType))}
+          onClick={() => (hasResult ? setHasResult(false) : setHasResult(true))}
         />
       </footer>
     </div>

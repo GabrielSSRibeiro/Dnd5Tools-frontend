@@ -89,7 +89,7 @@ function Bestiary({ setIsEditCreatureOpen }) {
           <aside />
           <main>
             <h5>BESTIÁRIO</h5>
-            <h6>13 Criaturas</h6>
+            <h6>{creatures.length} Criaturas</h6>
           </main>
         </div>
       </div>
@@ -119,7 +119,7 @@ function Bestiary({ setIsEditCreatureOpen }) {
                   <aside />
                 </div>
               </div>
-              <h5>13 Criaturas</h5>
+              <h5>{creatures.length} Criaturas</h5>
             </div>
             <h5>BESTIÁRIO</h5>
           </header>

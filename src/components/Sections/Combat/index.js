@@ -6,7 +6,7 @@ import Button from "../../Button";
 
 import "./styles.css";
 
-function Combat({ resultText }) {
+function Combat({ resultText, level }) {
   const [characters, setCharacters] = useState(["Soiaz", "Foux", "Isaac"]);
   const [creatures, setCreatures] = useState(null);
   // const history = useHistory();

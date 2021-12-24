@@ -15,7 +15,7 @@ function Home() {
 
   const [openTab, setOpenTab] = useState(MAIN_TABS.COMBAT);
   const [isEditCreatureOpen, setIsEditCreatureOpen] = useState(false);
-  const [level, setLevel] = useState(1);
+  const [level, setLevel] = useState(3);
 
   //   useEffect(() => {
   //   api.get("items").then((response) => {
@@ -37,8 +37,8 @@ function Home() {
       <img src={background} alt={<a href="https://www.freepik.com/photos/people">People photo created by liuzishan - www.freepik.com</a>} />
       {!isEditCreatureOpen ? (
         <>
-          {openTab === MAIN_TABS.SKILL_CHECK && <SkillCheck resultText={openTab} />}
-          {openTab === MAIN_TABS.COMBAT && <Combat resultText={openTab} />}
+          {openTab === MAIN_TABS.SKILL_CHECK && <SkillCheck resultText={openTab} level={level} />}
+          {openTab === MAIN_TABS.COMBAT && <Combat resultText={openTab} level={level} />}
           {openTab === MAIN_TABS.TREASURE && <Treasure resultText={openTab} level={level} />}
         </>
       ) : (
