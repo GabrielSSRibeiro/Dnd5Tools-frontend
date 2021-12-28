@@ -165,3 +165,20 @@
 .Party-container > .party-tab > header .sharp-button div:nth-child(2) aside {
   border-right: 25px solid var(--black);
 }
+
+/* //////////////////////// */
+
+.Party-container > .party-tab > main {
+  width: 100%;
+  padding: 25px 35px;
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.Party-container > .party-tab > main > aside {
+  align-self: flex-start;
+}

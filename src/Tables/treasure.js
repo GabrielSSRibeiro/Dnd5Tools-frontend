@@ -113,15 +113,14 @@ const defensiveAfixes = (level) => {
 };
 
 //to avoid athletics power peaks, strength and dexterity abilities are in the same pool
-// const strengthAbilities = ["Atletismo"];
-// const dexterityAbilities = ["Acrobacia", "Furtividade", "Prestidigitação"];
-const dexterityAbilities = ["Atletismo", "Acrobacia", "Furtividade", "Prestidigitação"];
+const strengthAbilities = "Atletismo";
+const dexterityAbilities = [strengthAbilities, "Acrobacia", "Furtividade", "Prestidigitação"];
 const intelligenceAbilities = ["Arcanismo", "História", "Investigação", "Natureza", "Religião"];
 const wisdomAbilities = ["Adestrar Animais", "Intuição", "Medicina", "Percepção", "Sobrevivência"];
 const charismathAbilities = ["Atuação", "Enganação", "Intimidação", "Persuasão"];
 
 const utilityAfixes = (level) => {
-  const bonus = GetProfByLevel(level) / 2;
+  const bonus = Math.ceil(GetProfByLevel(level) / 3);
 
   const afixes = [
     // { name: randItem(strengthAbilities), bonus },
@@ -190,10 +189,35 @@ const checkAndApplyPotion = (itemType, itemAfixes) => {
 };
 
 const getItemName = (type, rarity, itemAfixes) => {
-  let name = [type, rarity];
+  let name = [];
 
-  if (itemAfixes.some((afix) => afix.bonus < 0)) {
+  const hasDexterity = itemAfixes.some((afix) => dexterityAbilities.includes(afix.name));
+  const hasIntelligence = itemAfixes.some((afix) => intelligenceAbilities.includes(afix.name));
+  const hasWisdom = itemAfixes.some((afix) => wisdomAbilities.includes(afix.name));
+  const hasCharisma = itemAfixes.some((afix) => charismathAbilities.includes(afix.name));
+  const hasAttribute = hasDexterity || hasIntelligence || hasWisdom || hasCharisma;
+  const isCursed = itemAfixes.some((afix) => afix.bonus < 0);
+
+  if (hasAttribute && isCursed) {
+    name.push(`${type} ${rarity}`);
+  } else {
+    name.push(type, rarity);
+  }
+
+  if (isCursed) {
     name.push("Amaldiçoado");
+  }
+
+  if (hasAttribute) {
+    if (hasDexterity) {
+      name.push("Da Destreza");
+    } else if (hasIntelligence) {
+      name.push("Da Inteligência");
+    } else if (hasWisdom) {
+      name.push("Da Sabedoria");
+    } else if (hasCharisma) {
+      name.push("Do Carisma");
+    }
   }
 
   return name;

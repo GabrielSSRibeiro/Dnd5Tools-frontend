@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 import { LEVELS } from "../../../Tables/party";
 
+import Button from "../../Button";
 import Select from "../../Select";
 import CheckInput from "../../CheckInput";
 
@@ -11,6 +12,7 @@ import "./styles.css";
 function Party({ level, setLevel }) {
   const [isPartyOpen, setIsPartyOpen] = useState(false);
   const [selected, setSelected] = useState(false);
+  const [isEditCharacterOpen, setIsEditCharacterOpen] = useState(false);
   const [characters, setCharacters] = useState([]);
   // const history = useHistory();
 
@@ -82,8 +84,22 @@ function Party({ level, setLevel }) {
               </div>
             </div>
           </header>
-          <main>Grupos</main>
-          <CheckInput onClick={HandleSelect} isSelected={selected} />
+
+          <main>
+            <aside>
+              <Button text="Adicionar Jogador" onClick={() => setIsEditCharacterOpen(true)} />
+            </aside>
+            <div className="">
+              <h5>Grupo</h5>
+              <div className="">
+                <input onChange={(e) => {}} placeholder="" value={""}></input>
+                <button onClick={() => {}}>LIMPAR</button>
+              </div>
+              <main>
+                <CheckInput onClick={HandleSelect} isSelected={selected} />
+              </main>
+            </div>
+          </main>
         </div>
       )}
     </div>
