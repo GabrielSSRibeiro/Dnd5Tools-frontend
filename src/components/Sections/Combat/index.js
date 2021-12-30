@@ -7,7 +7,7 @@ import Button from "../../Button";
 import "./styles.css";
 
 function Combat({ resultText, level }) {
-  const [characters, setCharacters] = useState(["Soiaz", "Foux", "Isaac"]);
+  const [group, setGroup] = useState(["Soiaz", "Foux", "Isaac"]);
   const [creatures, setCreatures] = useState(null);
   // const history = useHistory();
 
@@ -23,8 +23,8 @@ function Combat({ resultText, level }) {
         <section>
           <Panel title="Jogadores">
             <div className="panel-content">
-              {characters && characters.map((character) => <h4>{character}</h4>)}
-              <footer style={characters && { marginTop: 12.5 }}>
+              {group && group.map((group) => <h4>{group}</h4>)}
+              <footer style={group && { marginTop: 12.5 }}>
                 <Button text="Selecionar" onClick={() => {}} />
               </footer>
             </div>

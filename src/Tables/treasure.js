@@ -8,7 +8,8 @@ import {
   ProbabilityCheck,
 } from "../utils";
 
-export const TREASURE_TYPES = ["Peças de Ouro", "Material", "Equipamento"];
+export const DEFAULT_TREASURE_TYPE = "Material";
+export const TREASURE_TYPES = ["Peças de Ouro", DEFAULT_TREASURE_TYPE, "Equipamento"];
 
 //Gold pieces
 export const DEFAULT_GOLD_PIECES_QUANTITIES = "Médio";

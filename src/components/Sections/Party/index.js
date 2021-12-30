@@ -6,14 +6,23 @@ import { LEVELS } from "../../../Tables/party";
 import Button from "../../Button";
 import Select from "../../Select";
 import CheckInput from "../../CheckInput";
+import TextInput from "../../TextInput";
 
 import "./styles.css";
 
 function Party({ level, setLevel }) {
   const [isPartyOpen, setIsPartyOpen] = useState(false);
   const [selected, setSelected] = useState(false);
+  const [groups, setGroups] = useState([["Soiaz", "Foux", "Isaac"]]);
+  const [inactiveGroup, setInactiveGroup] = useState([]);
+  const [isNewCharacterOpen, setIsNewCharacterOpen] = useState(false);
+  const [newCharacterName, setNewCharacterName] = useState(null);
+  const [newCharacterGroup, setNewCharacterGroup] = useState(null);
   const [isEditCharacterOpen, setIsEditCharacterOpen] = useState(false);
-  const [characters, setCharacters] = useState([]);
+
+  const numberOfCharacters = groups.reduce((acc, current) => acc.concat(current), []).length;
+  let groupOptions = groups.map((group, index) => `Grupo ${index + 1}`);
+
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -21,6 +30,31 @@ function Party({ level, setLevel }) {
   //     setItems(response.data);
   //   });
   // }, []);
+
+  function getNewCharacterGroupOptions() {
+    groupOptions.push("Novo Grupo", "Inativos");
+    return groupOptions;
+  }
+
+  function HandleAddNew(character, group) {
+    const groupIndex = groupOptions.indexOf(group);
+    const inactiveCharacters = groupOptions.length - 1;
+    const newGroup = groupOptions.length - 2;
+
+    if (groupIndex === inactiveCharacters) {
+      setInactiveGroup([...inactiveGroup, character]);
+    } else if (groupIndex === newGroup) {
+      setGroups([...groups, [character]]);
+    } else {
+      let updatedGroups = groups;
+      updatedGroups[groupIndex].push(character);
+      setGroups(updatedGroups);
+    }
+
+    setIsNewCharacterOpen(false);
+    setNewCharacterName(null);
+    setNewCharacterGroup(null);
+  }
 
   function HandleSelect() {
     setSelected(!selected);
@@ -47,7 +81,7 @@ function Party({ level, setLevel }) {
         <div>
           {/* button body */}
           <main>
-            <h5>{characters.length} JOGADORES</h5>
+            <h5>{numberOfCharacters} PERSONAGENS</h5>
             <h6>Nível {level}</h6>
           </main>
           <aside />
@@ -56,7 +90,7 @@ function Party({ level, setLevel }) {
       {isPartyOpen && (
         <div className="party-tab">
           <header>
-            <h5>{characters.length} JOGADORES</h5>
+            <h5>{numberOfCharacters} PERSONAGENS</h5>
             <div>
               <h5>Nível</h5>
               <Select value={level} onSelect={setLevel} options={LEVELS} />
@@ -86,18 +120,57 @@ function Party({ level, setLevel }) {
           </header>
 
           <main>
-            <aside>
-              <Button text="Adicionar Jogador" onClick={() => setIsEditCharacterOpen(true)} />
-            </aside>
-            <div className="">
-              <h5>Grupo</h5>
-              <div className="">
-                <input onChange={(e) => {}} placeholder="" value={""}></input>
-                <button onClick={() => {}}>LIMPAR</button>
+            {!isNewCharacterOpen ? (
+              <aside>
+                <Button text="Adicionar Personagem" onClick={() => setIsNewCharacterOpen(true)} />
+              </aside>
+            ) : (
+              <div className="add-new-container">
+                <div className="add-new">
+                  <div className="cancel-add-new" onClick={() => setIsNewCharacterOpen(false)}>
+                    <i class="fas fa-times"></i>
+                  </div>
+                  <section>
+                    <span>Nome do Personagem</span>
+                    <TextInput
+                      value={newCharacterName}
+                      onChange={(e) => {
+                        setNewCharacterName(e.target.value);
+                      }}
+                    />
+                  </section>
+                  <section>
+                    <span>Grupo</span>
+                    <Select
+                      isLarge={true}
+                      extraWidth={150}
+                      value={newCharacterGroup}
+                      onSelect={setNewCharacterGroup}
+                      options={getNewCharacterGroupOptions()}
+                    />
+                  </section>
+                </div>
+                <Button
+                  text="Salvar"
+                  onClick={() => HandleAddNew(newCharacterName, newCharacterGroup)}
+                  isDisabled={!newCharacterName || !newCharacterGroup}
+                />
               </div>
-              <main>
-                <CheckInput onClick={HandleSelect} isSelected={selected} />
-              </main>
+            )}
+            <div className="party-groups">
+              {groups.map((group, index) => (
+                <main>
+                  <h5>Grupo {index + 1}</h5>
+                  <div>
+                    <CheckInput onClick={HandleSelect} isSelected={selected} />
+                  </div>
+                </main>
+              ))}
+              {inactiveGroup.length > 0 && (
+                <div className="inactive-group">
+                  <h5>Inativos</h5>
+                </div>
+              )}
             </div>
           </main>
         </div>

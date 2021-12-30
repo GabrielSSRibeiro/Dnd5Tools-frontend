@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
 import {
+  DEFAULT_TREASURE_TYPE,
   TREASURE_TYPES,
   GOLD_PIECES_QUANTITIES,
   getGoldPiecesAmount,
@@ -28,7 +29,7 @@ import "./styles.css";
 
 function Treasure({ resultText, level }) {
   const [hasResult, setHasResult] = useState(false);
-  const [treasureType, setTreasureType] = useState(null);
+  const [treasureType, setTreasureType] = useState(DEFAULT_TREASURE_TYPE);
   const [goldPiecesQuantity, setGoldPiecesQuantity] = useState(DEFAULT_GOLD_PIECES_QUANTITIES);
   const [materialPriceInflation, setMaterialPriceInflation] = useState(DEFAULT_MATERIAL_PRICE_INFLATIONS);
   const [equipmentType, setEquipmentType] = useState(null);
@@ -167,7 +168,7 @@ function Treasure({ resultText, level }) {
               </section>
               <section className="result-tables">
                 <ResultBox
-                  headers={["Preço", "Forja de Item"]}
+                  headers={["Preço / Tempo", "Forja de Item"]}
                   subHeaders={["Comprar / Dias", "Vender / Dias"]}
                   resultBackgroundColumn={true}
                   values={getItemCraftBuyPrices(materialPriceInflation).map((item, index) => ({

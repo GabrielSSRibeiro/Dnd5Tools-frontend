@@ -8,7 +8,7 @@ function Select({ isLarge = false, extraWidth = 0, value = "", onSelect = () => 
   const selectOptions = defaultValue ? [defaultValue, ...options] : options;
   const optionsAtATime = 5;
   const selectWidth = 100;
-  const height = isLarge ? 58 : 37;
+  const height = isLarge ? 55 : 37;
 
   function HandleClick(option) {
     setIsOpen(false);
