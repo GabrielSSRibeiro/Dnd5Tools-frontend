@@ -12,17 +12,20 @@ import "./styles.css";
 
 function Party({ level, setLevel }) {
   const [isPartyOpen, setIsPartyOpen] = useState(false);
-  const [selected, setSelected] = useState(false);
-  const [groups, setGroups] = useState([["Soiaz", "Foux", "Isaac"]]);
+  const [groups, setGroups] = useState([
+    ["Soiaz", "Foux", "Isaac"],
+    ["a", "b"],
+  ]);
   const [inactiveGroup, setInactiveGroup] = useState([]);
   const [isNewCharacterOpen, setIsNewCharacterOpen] = useState(false);
   const [newCharacterName, setNewCharacterName] = useState(null);
   const [newCharacterGroup, setNewCharacterGroup] = useState(null);
-  const [isEditCharacterOpen, setIsEditCharacterOpen] = useState(false);
+  const [characterBeenEdited, setCharacterBeenEdited] = useState(null);
+  const [newEditedCharacterName, setNewEditedCharacterName] = useState(null);
+  const [selectedCharacters, setSelectedCharacters] = useState([]);
 
   const numberOfCharacters = groups.reduce((acc, current) => acc.concat(current), []).length;
   let groupOptions = groups.map((group, index) => `Grupo ${index + 1}`);
-
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -31,7 +34,7 @@ function Party({ level, setLevel }) {
   //   });
   // }, []);
 
-  function getNewCharacterGroupOptions() {
+  function GetGroupSelectionOptions() {
     groupOptions.push("Novo Grupo", "Inativos");
     return groupOptions;
   }
@@ -56,8 +59,107 @@ function Party({ level, setLevel }) {
     setNewCharacterGroup(null);
   }
 
-  function HandleSelect() {
-    setSelected(!selected);
+  function HandleOpenCharacterEdit(character) {
+    setCharacterBeenEdited(character);
+    setNewEditedCharacterName(character);
+  }
+
+  function HandleEditCharacter(characterIndex, groupIndex) {
+    if (groupIndex !== null) {
+      let updatedGroups = groups;
+      updatedGroups[groupIndex][characterIndex] = newEditedCharacterName;
+
+      setGroups(updatedGroups);
+    } else {
+      let updatedGroup = inactiveGroup;
+      updatedGroup[characterIndex] = newEditedCharacterName;
+
+      setInactiveGroup(updatedGroup);
+    }
+
+    //save in db
+
+    setCharacterBeenEdited(null);
+  }
+
+  function HandleSelectCharacters(character) {
+    const isAlreadySelected = selectedCharacters.some((selectedCharacter) => selectedCharacter === character);
+    let newSelection = selectedCharacters.filter((selectedCharacter) => selectedCharacter !== character);
+
+    if (!isAlreadySelected) {
+      newSelection.push(character);
+    }
+
+    setSelectedCharacters(newSelection);
+  }
+
+  function AllowToSelect(groupIndex) {
+    if (selectedCharacters.length === 0) {
+      return true;
+    }
+
+    if (groupIndex !== null) {
+      return selectedCharacters.some((selectedCharacter) => groups[groupIndex].includes(selectedCharacter));
+    } else {
+      return selectedCharacters.some((selectedCharacter) => inactiveGroup.includes(selectedCharacter));
+    }
+  }
+
+  function HandleDelete(groupIndex) {
+    if (groupIndex !== null) {
+      let updatedGroups = groups;
+
+      //filter selected characters
+      updatedGroups[groupIndex] = updatedGroups[groupIndex].filter((character) => !selectedCharacters.includes(character));
+
+      //filter empty groups
+      updatedGroups = updatedGroups.filter((group) => group.length !== 0);
+
+      setGroups(updatedGroups);
+    } else {
+      let updatedGroup = inactiveGroup;
+      updatedGroup = updatedGroup.filter((character) => !selectedCharacters.includes(character));
+
+      setInactiveGroup(updatedGroup);
+    }
+
+    //save in db
+
+    setSelectedCharacters([]);
+  }
+
+  function HandleSwapSelected(newGroupName, currentGroupIndex) {
+    let updatedGroups = groups;
+
+    if (currentGroupIndex !== null) {
+      //filter selected characters
+      updatedGroups[currentGroupIndex] = updatedGroups[currentGroupIndex].filter((character) => !selectedCharacters.includes(character));
+
+      //filter empty groups
+      updatedGroups = updatedGroups.filter((group) => group.length !== 0);
+    } else {
+      let updatedGroup = inactiveGroup;
+      updatedGroup = updatedGroup.filter((character) => !selectedCharacters.includes(character));
+
+      setInactiveGroup(updatedGroup);
+    }
+
+    const groupIndex = groupOptions.indexOf(newGroupName);
+    const inactiveCharacters = groupOptions.length - 1;
+    const newGroup = groupOptions.length - 2;
+
+    if (groupIndex === inactiveCharacters) {
+      setInactiveGroup([...inactiveGroup, ...selectedCharacters]);
+    } else if (groupIndex === newGroup) {
+      updatedGroups.push(selectedCharacters);
+    } else {
+      updatedGroups[groupIndex].push(...selectedCharacters);
+    }
+
+    //save in db
+
+    setGroups(updatedGroups);
+    setSelectedCharacters([]);
   }
 
   return (
@@ -146,7 +248,7 @@ function Party({ level, setLevel }) {
                       extraWidth={150}
                       value={newCharacterGroup}
                       onSelect={setNewCharacterGroup}
-                      options={getNewCharacterGroupOptions()}
+                      options={GetGroupSelectionOptions()}
                     />
                   </section>
                 </div>
@@ -158,18 +260,103 @@ function Party({ level, setLevel }) {
               </div>
             )}
             <div className="party-groups">
-              {groups.map((group, index) => (
+              {groups.map((group, groupIndex) => (
                 <main>
-                  <h5>Grupo {index + 1}</h5>
-                  <div>
-                    <CheckInput onClick={HandleSelect} isSelected={selected} />
+                  <div className="group-header">
+                    <h5>Grupo {groupIndex + 1}</h5>
+                    {selectedCharacters.length > 0 && AllowToSelect(groupIndex) && (
+                      <div className="header-options">
+                        <Select
+                          extraWidth={50}
+                          value="Mover Para"
+                          onSelect={(newGroup) => HandleSwapSelected(newGroup, groupIndex)}
+                          options={GetGroupSelectionOptions().filter((group, index) => index !== groupIndex)}
+                        />
+                        <button onClick={() => HandleDelete(groupIndex)}>DELETAR</button>
+                      </div>
+                    )}
+                  </div>
+                  <div className="group-characters">
+                    {group.map((character, characterIndex) => (
+                      <div className="group-character">
+                        {characterBeenEdited !== character ? (
+                          <>
+                            {AllowToSelect(groupIndex) && (
+                              <CheckInput
+                                onClick={() => HandleSelectCharacters(character)}
+                                isSelected={selectedCharacters.some((char) => char === character)}
+                              />
+                            )}
+                            <h6>{character}</h6>
+                            <div className="enable-edit-character" onClick={() => HandleOpenCharacterEdit(character)}>
+                              <i class="fas fa-pencil-alt"></i>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="edit-character">
+                              <input
+                                onChange={(e) => setNewEditedCharacterName(e.target.value)}
+                                placeholder="Nome"
+                                value={newEditedCharacterName}
+                              ></input>
+                              <button onClick={() => HandleEditCharacter(characterIndex, groupIndex)}>SALVAR</button>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </main>
               ))}
               {inactiveGroup.length > 0 && (
-                <div className="inactive-group">
-                  <h5>Inativos</h5>
-                </div>
+                <main>
+                  <div className="group-header">
+                    <h5>Inativos</h5>
+                    {selectedCharacters.length > 0 && AllowToSelect(null) && (
+                      <div className="header-options">
+                        <Select
+                          extraWidth={50}
+                          value="Mover Para"
+                          onSelect={(newGroup) => HandleSwapSelected(newGroup, null)}
+                          options={GetGroupSelectionOptions().filter((group) => group !== groupOptions[groupOptions.length - 1])}
+                        />
+                        <button onClick={() => HandleDelete(null)}>DELETAR</button>
+                      </div>
+                    )}
+                  </div>
+                  <div className="group-characters">
+                    {inactiveGroup.map((character, characterIndex) => (
+                      <div className="group-character">
+                        {characterBeenEdited !== character ? (
+                          <>
+                            {AllowToSelect(null) && (
+                              <CheckInput
+                                onClick={() => HandleSelectCharacters(character)}
+                                isSelected={selectedCharacters.some((char) => char === character)}
+                              />
+                            )}
+                            <h6>{character}</h6>
+                            <div className="enable-edit-character" onClick={() => HandleOpenCharacterEdit(character)}>
+                              <i class="fas fa-pencil-alt"></i>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="edit-character">
+                              <input
+                                onChange={(e) => setNewEditedCharacterName(e.target.value)}
+                                placeholder="Nome"
+                                value={newEditedCharacterName}
+                              ></input>
+                              <button onClick={() => HandleEditCharacter(characterIndex, null)}>SALVAR</button>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </main>
               )}
             </div>
           </main>

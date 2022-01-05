@@ -7,7 +7,7 @@ import Button from "../../Button";
 import "./styles.css";
 
 function Combat({ resultText, level }) {
-  const [group, setGroup] = useState(["Soiaz", "Foux", "Isaac"]);
+  const [group, setGroup] = useState(null);
   const [creatures, setCreatures] = useState(null);
   // const history = useHistory();
 
@@ -42,7 +42,7 @@ function Combat({ resultText, level }) {
         </section>
       </div>
       <footer>
-        <Button text={`Rodar ${resultText}`} onClick={() => {}} />
+        <Button text={`Rodar ${resultText}`} onClick={() => {}} isDisabled={true} />
       </footer>
     </div>
   );

@@ -125,7 +125,7 @@ function Bestiary({ setIsEditCreatureOpen }) {
           </header>
           <main>
             <aside>
-              <Button text="Adicionar Criatura" onClick={() => setIsEditCreatureOpen(true)} />
+              <Button text="Adicionar Criatura" onClick={() => setIsEditCreatureOpen(true)} isDisabled={true} />
             </aside>
             <div className="bestiary-filters">
               <h5>Filtrar Por</h5>
@@ -166,7 +166,8 @@ function Bestiary({ setIsEditCreatureOpen }) {
             </div>
             <div className="bestiary-list">
               {filteredCreatures.map((creature) => (
-                <div className="list-creature" key={creature.name} onClick={() => setIsEditCreatureOpen(true)}>
+                <div className="list-creature" key={creature.name}>
+                  {/* onClick={() => setIsEditCreatureOpen(true)}> */}
                   <div className="edit-creature">
                     <i class="fas fa-pencil-alt fa-xs"></i>
                   </div>
