@@ -10,12 +10,7 @@ import TextInput from "../../TextInput";
 
 import "./styles.css";
 
-function Party({ level, setLevel }) {
-  const [isPartyOpen, setIsPartyOpen] = useState(false);
-  const [groups, setGroups] = useState([
-    ["Soiaz", "Foux", "Isaac"],
-    ["a", "b"],
-  ]);
+function Party({ isPartyOpen, setIsPartyOpen, level, setLevel, groups, setGroups, isSelecting, setIsSelecting }) {
   const [inactiveGroup, setInactiveGroup] = useState([]);
   const [isNewCharacterOpen, setIsNewCharacterOpen] = useState(false);
   const [newCharacterName, setNewCharacterName] = useState(null);
@@ -33,6 +28,11 @@ function Party({ level, setLevel }) {
   //     setItems(response.data);
   //   });
   // }, []);
+
+  function HandleClose() {
+    setIsSelecting(false);
+    setIsPartyOpen(false);
+  }
 
   function GetGroupSelectionOptions() {
     groupOptions.push("Novo Grupo", "Inativos");
@@ -164,6 +164,7 @@ function Party({ level, setLevel }) {
 
   return (
     <div className="Party-container">
+      {isSelecting && <div className="screen-block"></div>}
       <div
         className="sharp-button"
         onClick={() => {
@@ -191,17 +192,16 @@ function Party({ level, setLevel }) {
       </div>
       {isPartyOpen && (
         <div className="party-tab">
-          <header>
-            <h5>{numberOfCharacters} PERSONAGENS</h5>
+          <header className={isSelecting ? "selecting-header" : ""}>
+            {!isSelecting ? <h5>{numberOfCharacters} PERSONAGENS</h5> : <h5>Selecione o grupo para esse combate</h5>}
             <div>
-              <h5>Nível</h5>
-              <Select value={level} onSelect={setLevel} options={LEVELS} />
-              <div
-                className="sharp-button"
-                onClick={() => {
-                  setIsPartyOpen(false);
-                }}
-              >
+              {!isSelecting && (
+                <>
+                  <h5>Nível</h5>
+                  <Select value={level} onSelect={setLevel} options={LEVELS} />
+                </>
+              )}
+              <div className="sharp-button" onClick={HandleClose}>
                 {/* border 2 */}
                 <div>
                   <aside />
@@ -222,48 +222,52 @@ function Party({ level, setLevel }) {
           </header>
 
           <main>
-            {!isNewCharacterOpen ? (
-              <aside>
-                <Button text="Adicionar Personagem" onClick={() => setIsNewCharacterOpen(true)} />
-              </aside>
-            ) : (
-              <div className="add-new-container">
-                <div className="add-new">
-                  <div className="cancel-add-new" onClick={() => setIsNewCharacterOpen(false)}>
-                    <i class="fas fa-times"></i>
+            {!isSelecting &&
+              (!isNewCharacterOpen ? (
+                <aside>
+                  <Button text="Adicionar Personagem" onClick={() => setIsNewCharacterOpen(true)} />
+                </aside>
+              ) : (
+                <div className="add-new-container">
+                  <div className="add-new">
+                    <div className="cancel-add-new" onClick={() => setIsNewCharacterOpen(false)}>
+                      <i class="fas fa-times"></i>
+                    </div>
+                    <section>
+                      <span>Nome do Personagem</span>
+                      <TextInput
+                        value={newCharacterName}
+                        onChange={(e) => {
+                          setNewCharacterName(e.target.value);
+                        }}
+                      />
+                    </section>
+                    <section>
+                      <span>Grupo</span>
+                      <Select
+                        isLarge={true}
+                        extraWidth={150}
+                        value={newCharacterGroup}
+                        onSelect={setNewCharacterGroup}
+                        options={GetGroupSelectionOptions()}
+                      />
+                    </section>
                   </div>
-                  <section>
-                    <span>Nome do Personagem</span>
-                    <TextInput
-                      value={newCharacterName}
-                      onChange={(e) => {
-                        setNewCharacterName(e.target.value);
-                      }}
-                    />
-                  </section>
-                  <section>
-                    <span>Grupo</span>
-                    <Select
-                      isLarge={true}
-                      extraWidth={150}
-                      value={newCharacterGroup}
-                      onSelect={setNewCharacterGroup}
-                      options={GetGroupSelectionOptions()}
-                    />
-                  </section>
+                  <Button
+                    text="Salvar"
+                    onClick={() => HandleAddNew(newCharacterName, newCharacterGroup)}
+                    isDisabled={!newCharacterName || !newCharacterGroup}
+                  />
                 </div>
-                <Button
-                  text="Salvar"
-                  onClick={() => HandleAddNew(newCharacterName, newCharacterGroup)}
-                  isDisabled={!newCharacterName || !newCharacterGroup}
-                />
-              </div>
-            )}
+              ))}
             <div className="party-groups">
               {groups.map((group, groupIndex) => (
-                <main>
+                <main className={isSelecting ? "selecting-group" : ""}>
                   <div className="group-header">
-                    <h5>Grupo {groupIndex + 1}</h5>
+                    <header>
+                      {isSelecting && <CheckInput onClick={() => {}} isSelected={false} />}
+                      <h5>Grupo {groupIndex + 1}</h5>
+                    </header>
                     {selectedCharacters.length > 0 && AllowToSelect(groupIndex) && (
                       <div className="header-options">
                         <Select
@@ -276,12 +280,12 @@ function Party({ level, setLevel }) {
                       </div>
                     )}
                   </div>
-                  <div className="group-characters">
+                  <div className="group-characters" style={{ borderWidth: !isSelecting ? 1 : 0 }}>
                     {group.map((character, characterIndex) => (
                       <div className="group-character">
                         {characterBeenEdited !== character ? (
                           <>
-                            {AllowToSelect(groupIndex) && (
+                            {!isSelecting && AllowToSelect(groupIndex) && (
                               <CheckInput
                                 onClick={() => HandleSelectCharacters(character)}
                                 isSelected={selectedCharacters.some((char) => char === character)}
@@ -289,7 +293,7 @@ function Party({ level, setLevel }) {
                             )}
                             <h6>{character}</h6>
                             <div className="enable-edit-character" onClick={() => HandleOpenCharacterEdit(character)}>
-                              <i class="fas fa-pencil-alt"></i>
+                              {!isSelecting && <i class="fas fa-pencil-alt"></i>}
                             </div>
                           </>
                         ) : (
@@ -360,6 +364,12 @@ function Party({ level, setLevel }) {
               )}
             </div>
           </main>
+          {isSelecting && (
+            <div className="selecting-footer">
+              <h5>Nenhum grupo selecionado</h5>
+              <Button text="Confirmar" onClick={HandleClose} />
+            </div>
+          )}
         </div>
       )}
     </div>

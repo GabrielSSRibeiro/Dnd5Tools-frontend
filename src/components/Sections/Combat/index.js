@@ -6,7 +6,7 @@ import Button from "../../Button";
 
 import "./styles.css";
 
-function Combat({ resultText, level }) {
+function Combat({ setIsSelectingParty, setIsSelectingBestiary, setIsPartyOpen, setIsBestiaryOpen, resultText, level }) {
   const [group, setGroup] = useState(null);
   const [creatures, setCreatures] = useState(null);
   // const history = useHistory();
@@ -17,6 +17,11 @@ function Combat({ resultText, level }) {
   //   });
   // }, []);
 
+  function HandleSelectCharacter() {
+    setIsSelectingParty(true);
+    setIsPartyOpen(true);
+  }
+
   return (
     <div className="Combat-container">
       <div>
@@ -25,7 +30,7 @@ function Combat({ resultText, level }) {
             <div className="panel-content">
               {group && group.map((group) => <h4>{group}</h4>)}
               <footer style={group && { marginTop: 12.5 }}>
-                <Button text="Selecionar" onClick={() => {}} />
+                <Button text="Selecionar" onClick={HandleSelectCharacter} />
               </footer>
             </div>
           </Panel>

@@ -8,7 +8,25 @@ import Bestiary from "../Sections/Bestiary";
 
 import "./styles.css";
 
-function NaviBar({ level, setLevel, tabOptions, openTab, setOpenTab, isEditCreatureOpen, setIsEditCreatureOpen }) {
+function NaviBar({
+  isSelectingParty,
+  isSelectingBestiary,
+  setIsSelectingParty,
+  setIsSelectingBestiary,
+  isPartyOpen,
+  setIsPartyOpen,
+  isBestiaryOpen,
+  setIsBestiaryOpen,
+  level,
+  setLevel,
+  groups,
+  setGroups,
+  tabOptions,
+  openTab,
+  setOpenTab,
+  isEditCreatureOpen,
+  setIsEditCreatureOpen,
+}) {
   const { Logout } = useAuth();
   const history = useHistory();
 
@@ -29,7 +47,16 @@ function NaviBar({ level, setLevel, tabOptions, openTab, setOpenTab, isEditCreat
       </section>
       {!isEditCreatureOpen && (
         <section>
-          <Party level={level} setLevel={setLevel} />
+          <Party
+            isSelecting={isSelectingParty}
+            setIsSelecting={setIsSelectingParty}
+            isPartyOpen={isPartyOpen}
+            setIsPartyOpen={setIsPartyOpen}
+            level={level}
+            setLevel={setLevel}
+            groups={groups}
+            setGroups={setGroups}
+          />
           <SelectButton
             isLarge={true}
             isSelected={openTab === tabOptions.SKILL_CHECK}
@@ -51,7 +78,13 @@ function NaviBar({ level, setLevel, tabOptions, openTab, setOpenTab, isEditCreat
             text={tabOptions.TREASURE}
             onClick={() => setOpenTab(tabOptions.TREASURE)}
           />
-          <Bestiary setIsEditCreatureOpen={setIsEditCreatureOpen} />
+          <Bestiary
+            isSelecting={isSelectingBestiary}
+            setIsSelecting={setIsSelectingBestiary}
+            isBestiaryOpen={isBestiaryOpen}
+            setIsBestiaryOpen={setIsBestiaryOpen}
+            setIsEditCreatureOpen={setIsEditCreatureOpen}
+          />
         </section>
       )}
     </div>

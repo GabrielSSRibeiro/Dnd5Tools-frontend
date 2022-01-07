@@ -7,8 +7,7 @@ import Select from "../../Select";
 
 import "./styles.css";
 
-function Bestiary({ setIsEditCreatureOpen }) {
-  const [isBestiaryOpen, setIsBestiaryOpen] = useState(false);
+function Bestiary({ isBestiaryOpen, setIsBestiaryOpen, setIsEditCreatureOpen }) {
   const [nameFilter, setNameFilter] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [selectedEnv, setSelectedEnv] = useState(null);

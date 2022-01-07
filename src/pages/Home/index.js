@@ -14,8 +14,16 @@ function Home() {
   const MAIN_TABS = { SKILL_CHECK: "Teste", COMBAT: "Combate", TREASURE: "Tesouro" };
 
   const [openTab, setOpenTab] = useState(MAIN_TABS.COMBAT);
+  const [isPartyOpen, setIsPartyOpen] = useState(false);
+  const [isSelectingParty, setIsSelectingParty] = useState(false);
+  const [isBestiaryOpen, setIsBestiaryOpen] = useState(false);
+  const [isSelectingBestiary, setIsSelectingBestiary] = useState(false);
   const [isEditCreatureOpen, setIsEditCreatureOpen] = useState(false);
   const [level, setLevel] = useState(3);
+  const [groups, setGroups] = useState([
+    ["Soiaz", "Foux", "Isaac"],
+    ["a", "b"],
+  ]);
 
   //   useEffect(() => {
   //   api.get("items").then((response) => {
@@ -26,8 +34,18 @@ function Home() {
   return (
     <div className="Home-container">
       <NaviBar
+        isSelectingParty={isSelectingParty}
+        isSelectingBestiary={isSelectingBestiary}
+        setIsSelectingParty={setIsSelectingParty}
+        setIsSelectingBestiary={setIsSelectingBestiary}
+        isPartyOpen={isPartyOpen}
+        setIsPartyOpen={setIsPartyOpen}
+        isBestiaryOpen={isBestiaryOpen}
+        setIsBestiaryOpen={setIsBestiaryOpen}
         level={level}
         setLevel={setLevel}
+        groups={groups}
+        setGroups={setGroups}
         tabOptions={MAIN_TABS}
         openTab={openTab}
         setOpenTab={setOpenTab}
@@ -38,7 +56,16 @@ function Home() {
       {!isEditCreatureOpen ? (
         <>
           {openTab === MAIN_TABS.SKILL_CHECK && <SkillCheck resultText={openTab} level={level} />}
-          {openTab === MAIN_TABS.COMBAT && <Combat resultText={openTab} level={level} />}
+          {openTab === MAIN_TABS.COMBAT && (
+            <Combat
+              setIsSelectingParty={setIsSelectingParty}
+              setIsSelectingBestiary={setIsSelectingBestiary}
+              setIsPartyOpen={setIsPartyOpen}
+              setIsBestiaryOpen={setIsBestiaryOpen}
+              resultText={openTab}
+              level={level}
+            />
+          )}
           {openTab === MAIN_TABS.TREASURE && <Treasure resultText={openTab} level={level} />}
         </>
       ) : (
