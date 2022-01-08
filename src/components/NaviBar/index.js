@@ -9,9 +9,13 @@ import Bestiary from "../Sections/Bestiary";
 import "./styles.css";
 
 function NaviBar({
+  selectedCharacters,
+  setSelectedCharacters,
+  selectedCreatures,
+  setSelectedCreatures,
   isSelectingParty,
-  isSelectingBestiary,
   setIsSelectingParty,
+  isSelectingBestiary,
   setIsSelectingBestiary,
   isPartyOpen,
   setIsPartyOpen,
@@ -48,6 +52,8 @@ function NaviBar({
       {!isEditCreatureOpen && (
         <section>
           <Party
+            selectedGroup={selectedCharacters}
+            setSelectedGroup={setSelectedCharacters}
             isSelecting={isSelectingParty}
             setIsSelecting={setIsSelectingParty}
             isPartyOpen={isPartyOpen}
@@ -79,6 +85,8 @@ function NaviBar({
             onClick={() => setOpenTab(tabOptions.TREASURE)}
           />
           <Bestiary
+            selectedCreatures={selectedCreatures}
+            setSelectedCreatures={setSelectedCreatures}
             isSelecting={isSelectingBestiary}
             setIsSelecting={setIsSelectingBestiary}
             isBestiaryOpen={isBestiaryOpen}

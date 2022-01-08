@@ -1,3 +1,17 @@
+.Bestiary-container .screen-block {
+  position: fixed;
+
+  background-color: var(--black);
+  opacity: 0.7;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  width: 100vw;
+  height: calc(100vh - 60px);
+}
+
 .Bestiary-container > .sharp-button {
   height: 60px;
   width: 200px;
@@ -91,6 +105,10 @@
   align-items: center;
   justify-content: space-between;
   padding-right: 30px;
+}
+
+.Bestiary-container > .bestiary-tab .selecting-header {
+  background-color: var(--primaryPurple1);
 }
 
 .Bestiary-container > .bestiary-tab > header > div {
@@ -282,6 +300,19 @@
   justify-content: center;
 }
 
+.Bestiary-container .list-creature .select-creature {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--gray1);
+  margin: 6px;
+  border: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .Bestiary-container .list-creature .edit-creature .fa-pencil-alt {
   color: var(--white);
 }
@@ -307,4 +338,18 @@
 
 .Bestiary-container .creature-details h6 {
   color: var(--white);
+}
+
+.bestiary-tab .selecting-footer {
+  position: absolute;
+  bottom: 0;
+  background-color: var(--white);
+  height: 60px;
+  width: 100%;
+  padding: 0 35px;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

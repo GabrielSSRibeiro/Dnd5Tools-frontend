@@ -1,12 +1,4 @@
-import {
-  randomIntFromInterval as rand,
-  averageOfArray as avg,
-  randomValueFromVariance as variance,
-  randomItemFromArray as randItem,
-  GetProfByLevel,
-  TrimDecimalPlaces,
-  ProbabilityCheck,
-} from "../utils";
+import { randomIntFromInterval as rand, randomValueFromVariance as variance, GetProfByLevel } from "../utils";
 
 export const DEFAULT_DIFFICULTY = ["Média"];
 export const CHECK_DIFFICULTIES = ["Baixa", DEFAULT_DIFFICULTY, "Alta", "Extrema"];

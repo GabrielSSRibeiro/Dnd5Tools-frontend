@@ -3,11 +3,20 @@ import React, { useState, useMemo } from "react";
 import { CREATURE_LEVELS, CREATURE_ENVIROMENTS, CREATURE_TYPES, CREATURE_SIZE } from "../../../Tables/bestiary";
 
 import Button from "../../Button";
+import CheckInput from "../../CheckInput";
 import Select from "../../Select";
 
 import "./styles.css";
 
-function Bestiary({ isBestiaryOpen, setIsBestiaryOpen, setIsEditCreatureOpen }) {
+function Bestiary({
+  selectedCreatures,
+  setSelectedCreatures,
+  isSelecting,
+  setIsSelecting,
+  isBestiaryOpen,
+  setIsBestiaryOpen,
+  setIsEditCreatureOpen,
+}) {
   const [nameFilter, setNameFilter] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [selectedEnv, setSelectedEnv] = useState(null);
@@ -34,6 +43,15 @@ function Bestiary({ isBestiaryOpen, setIsBestiaryOpen, setIsEditCreatureOpen }) 
   //     setItems(response.data);
   //   });
   // }, []);
+
+  function HandleSelectedFromBestiary() {
+    HandleClose();
+  }
+
+  function HandleClose() {
+    setIsSelecting(false);
+    setIsBestiaryOpen(false);
+  }
 
   function handleFilter(setValue, value) {
     setValue(value);
@@ -67,6 +85,7 @@ function Bestiary({ isBestiaryOpen, setIsBestiaryOpen, setIsEditCreatureOpen }) 
 
   return (
     <div className="Bestiary-container">
+      {isSelecting && <div className="screen-block" onClick={HandleClose}></div>}
       <div
         className="sharp-button"
         onClick={() => {
@@ -94,14 +113,9 @@ function Bestiary({ isBestiaryOpen, setIsBestiaryOpen, setIsEditCreatureOpen }) 
       </div>
       {isBestiaryOpen && (
         <div className="bestiary-tab">
-          <header>
+          <header className={isSelecting ? "selecting-header" : ""}>
             <div>
-              <div
-                className="sharp-button"
-                onClick={() => {
-                  setIsBestiaryOpen(false);
-                }}
-              >
+              <div className="sharp-button" onClick={HandleClose}>
                 {/* border 2 */}
                 <div>
                   <main />
@@ -118,14 +132,16 @@ function Bestiary({ isBestiaryOpen, setIsBestiaryOpen, setIsEditCreatureOpen }) 
                   <aside />
                 </div>
               </div>
-              <h5>{creatures.length} Criaturas</h5>
+              {!isSelecting ? <h5>{creatures.length} Criaturas</h5> : <h5>Selecione as criaturas para esse combate</h5>}
             </div>
             <h5>BESTIÁRIO</h5>
           </header>
           <main>
-            <aside>
-              <Button text="Adicionar Criatura" onClick={() => setIsEditCreatureOpen(true)} isDisabled={true} />
-            </aside>
+            {!isSelecting && (
+              <aside>
+                <Button text="Adicionar Criatura" onClick={() => setIsEditCreatureOpen(true)} isDisabled={true} />
+              </aside>
+            )}{" "}
             <div className="bestiary-filters">
               <h5>Filtrar Por</h5>
               <div className="filter-text">
@@ -167,9 +183,15 @@ function Bestiary({ isBestiaryOpen, setIsBestiaryOpen, setIsEditCreatureOpen }) 
               {filteredCreatures.map((creature) => (
                 <div className="list-creature" key={creature.name}>
                   {/* onClick={() => setIsEditCreatureOpen(true)}> */}
-                  <div className="edit-creature">
-                    <i class="fas fa-pencil-alt fa-xs"></i>
-                  </div>
+                  {!isSelecting ? (
+                    <div className="edit-creature">
+                      <i class="fas fa-pencil-alt fa-xs"></i>
+                    </div>
+                  ) : (
+                    <div className="select-creature">
+                      <CheckInput onClick={() => {}} isSelected={false} />
+                    </div>
+                  )}
                   <h6>{creature.name}</h6>
                   <img src={creature.image} alt="creature-avatar" />
                   <div className="creature-details">
@@ -182,6 +204,12 @@ function Bestiary({ isBestiaryOpen, setIsBestiaryOpen, setIsEditCreatureOpen }) 
               ))}
             </div>
           </main>
+          {isSelecting && (
+            <div className="selecting-footer">
+              <h5>{selectedCreatures ?? 0} criatura(s) selecionada(s)</h5>
+              <Button text="Confirmar" onClick={HandleSelectedFromBestiary} />
+            </div>
+          )}
         </div>
       )}
     </div>

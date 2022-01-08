@@ -10,7 +10,7 @@ import TextInput from "../../TextInput";
 
 import "./styles.css";
 
-function Party({ isPartyOpen, setIsPartyOpen, level, setLevel, groups, setGroups, isSelecting, setIsSelecting }) {
+function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, isPartyOpen, setIsPartyOpen, level, setLevel, groups, setGroups }) {
   const [inactiveGroup, setInactiveGroup] = useState([]);
   const [isNewCharacterOpen, setIsNewCharacterOpen] = useState(false);
   const [newCharacterName, setNewCharacterName] = useState(null);
@@ -28,6 +28,10 @@ function Party({ isPartyOpen, setIsPartyOpen, level, setLevel, groups, setGroups
   //     setItems(response.data);
   //   });
   // }, []);
+
+  function HandleSelectedFromParty() {
+    HandleClose();
+  }
 
   function HandleClose() {
     setIsSelecting(false);
@@ -164,7 +168,7 @@ function Party({ isPartyOpen, setIsPartyOpen, level, setLevel, groups, setGroups
 
   return (
     <div className="Party-container">
-      {isSelecting && <div className="screen-block"></div>}
+      {isSelecting && <div className="screen-block" onClick={HandleClose}></div>}
       <div
         className="sharp-button"
         onClick={() => {
@@ -366,8 +370,8 @@ function Party({ isPartyOpen, setIsPartyOpen, level, setLevel, groups, setGroups
           </main>
           {isSelecting && (
             <div className="selecting-footer">
-              <h5>Nenhum grupo selecionado</h5>
-              <Button text="Confirmar" onClick={HandleClose} />
+              <h5>{selectedGroup ?? "Nenhum grupo"} selecionado</h5>
+              <Button text="Confirmar" onClick={HandleSelectedFromParty} />
             </div>
           )}
         </div>

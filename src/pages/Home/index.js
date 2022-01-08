@@ -24,6 +24,9 @@ function Home() {
     ["Soiaz", "Foux", "Isaac"],
     ["a", "b"],
   ]);
+  const [selectedCharacters, setSelectedCharacters] = useState([]);
+  const [selectedCreatures, setSelectedCreatures] = useState([]);
+  const [combats, setCombats] = useState([]);
 
   //   useEffect(() => {
   //   api.get("items").then((response) => {
@@ -31,9 +34,27 @@ function Home() {
   //   });
   // }, []);
 
+  function HandleSelectFromParty() {
+    setIsSelectingParty(true);
+    setIsPartyOpen(true);
+  }
+
+  function HandleSelectFromBestiary() {
+    setIsSelectingBestiary(true);
+    setIsBestiaryOpen(true);
+  }
+
+  function HandleGenerateCombat(creatures) {
+    setCombats([...combats, { group: selectedCharacters, creatures: creatures }]);
+  }
+
   return (
     <div className="Home-container">
       <NaviBar
+        selectedCharacters={selectedCharacters}
+        setSelectedCharacters={setSelectedCharacters}
+        selectedCreatures={selectedCreatures}
+        setSelectedCreatures={setSelectedCreatures}
         isSelectingParty={isSelectingParty}
         isSelectingBestiary={isSelectingBestiary}
         setIsSelectingParty={setIsSelectingParty}
@@ -58,10 +79,11 @@ function Home() {
           {openTab === MAIN_TABS.SKILL_CHECK && <SkillCheck resultText={openTab} level={level} />}
           {openTab === MAIN_TABS.COMBAT && (
             <Combat
-              setIsSelectingParty={setIsSelectingParty}
-              setIsSelectingBestiary={setIsSelectingBestiary}
-              setIsPartyOpen={setIsPartyOpen}
-              setIsBestiaryOpen={setIsBestiaryOpen}
+              selectedCharacters={selectedCharacters}
+              selectedCreatures={selectedCreatures}
+              HandleSelectFromParty={HandleSelectFromParty}
+              HandleSelectFromBestiary={HandleSelectFromBestiary}
+              HandleGenerateCombat={HandleGenerateCombat}
               resultText={openTab}
               level={level}
             />
