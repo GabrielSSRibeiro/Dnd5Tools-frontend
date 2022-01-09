@@ -10,14 +10,26 @@ import TextInput from "../../TextInput";
 
 import "./styles.css";
 
-function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, isPartyOpen, setIsPartyOpen, level, setLevel, groups, setGroups }) {
+function Party({
+  selectedCharacters,
+  setSelectedCharacters,
+  isSelecting,
+  setIsSelecting,
+  isPartyOpen,
+  setIsPartyOpen,
+  level,
+  setLevel,
+  groups,
+  setGroups,
+}) {
   const [inactiveGroup, setInactiveGroup] = useState([]);
   const [isNewCharacterOpen, setIsNewCharacterOpen] = useState(false);
   const [newCharacterName, setNewCharacterName] = useState(null);
   const [newCharacterGroup, setNewCharacterGroup] = useState(null);
   const [characterBeenEdited, setCharacterBeenEdited] = useState(null);
   const [newEditedCharacterName, setNewEditedCharacterName] = useState(null);
-  const [selectedCharacters, setSelectedCharacters] = useState([]);
+  const [selectedCharactersInGroup, setSelectedCharactersInGroup] = useState([]);
+  const [tempSelectedCharacters, setTempSelectedCharacters] = useState(selectedCharacters);
 
   const numberOfCharacters = groups.reduce((acc, current) => acc.concat(current), []).length;
   let groupOptions = groups.map((group, index) => `Grupo ${index + 1}`);
@@ -31,9 +43,24 @@ function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, i
 
   function HandleSelectedFromParty() {
     HandleClose();
+    setSelectedCharacters(tempSelectedCharacters);
+  }
+
+  function HandleSelectGroup(selectedGroup) {
+    const isAlreadySelected = tempSelectedCharacters.some((selectedCharacter) => selectedGroup.includes(selectedCharacter));
+    let newSelection = tempSelectedCharacters.filter((selectedCharacter) => !selectedGroup.includes(selectedCharacter));
+
+    if (!isAlreadySelected) {
+      newSelection.push(...selectedGroup);
+    }
+
+    setTempSelectedCharacters(newSelection);
   }
 
   function HandleClose() {
+    setSelectedCharacters([]);
+    setTempSelectedCharacters([]);
+    setSelectedCharactersInGroup([]);
     setIsSelecting(false);
     setIsPartyOpen(false);
   }
@@ -61,6 +88,7 @@ function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, i
     setIsNewCharacterOpen(false);
     setNewCharacterName(null);
     setNewCharacterGroup(null);
+    setSelectedCharacters([]);
   }
 
   function HandleOpenCharacterEdit(character) {
@@ -84,28 +112,29 @@ function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, i
     //save in db
 
     setCharacterBeenEdited(null);
+    setSelectedCharacters([]);
   }
 
   function HandleSelectCharacters(character) {
-    const isAlreadySelected = selectedCharacters.some((selectedCharacter) => selectedCharacter === character);
-    let newSelection = selectedCharacters.filter((selectedCharacter) => selectedCharacter !== character);
+    const isAlreadySelected = selectedCharactersInGroup.some((selectedCharacter) => selectedCharacter === character);
+    let newSelection = selectedCharactersInGroup.filter((selectedCharacter) => selectedCharacter !== character);
 
     if (!isAlreadySelected) {
       newSelection.push(character);
     }
 
-    setSelectedCharacters(newSelection);
+    setSelectedCharactersInGroup(newSelection);
   }
 
   function AllowToSelect(groupIndex) {
-    if (selectedCharacters.length === 0) {
+    if (selectedCharactersInGroup.length === 0) {
       return true;
     }
 
     if (groupIndex !== null) {
-      return selectedCharacters.some((selectedCharacter) => groups[groupIndex].includes(selectedCharacter));
+      return selectedCharactersInGroup.some((selectedCharacter) => groups[groupIndex].includes(selectedCharacter));
     } else {
-      return selectedCharacters.some((selectedCharacter) => inactiveGroup.includes(selectedCharacter));
+      return selectedCharactersInGroup.some((selectedCharacter) => inactiveGroup.includes(selectedCharacter));
     }
   }
 
@@ -114,7 +143,7 @@ function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, i
       let updatedGroups = groups;
 
       //filter selected characters
-      updatedGroups[groupIndex] = updatedGroups[groupIndex].filter((character) => !selectedCharacters.includes(character));
+      updatedGroups[groupIndex] = updatedGroups[groupIndex].filter((character) => !selectedCharactersInGroup.includes(character));
 
       //filter empty groups
       updatedGroups = updatedGroups.filter((group) => group.length !== 0);
@@ -122,13 +151,14 @@ function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, i
       setGroups(updatedGroups);
     } else {
       let updatedGroup = inactiveGroup;
-      updatedGroup = updatedGroup.filter((character) => !selectedCharacters.includes(character));
+      updatedGroup = updatedGroup.filter((character) => !selectedCharactersInGroup.includes(character));
 
       setInactiveGroup(updatedGroup);
     }
 
     //save in db
 
+    setSelectedCharactersInGroup([]);
     setSelectedCharacters([]);
   }
 
@@ -137,13 +167,13 @@ function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, i
 
     if (currentGroupIndex !== null) {
       //filter selected characters
-      updatedGroups[currentGroupIndex] = updatedGroups[currentGroupIndex].filter((character) => !selectedCharacters.includes(character));
+      updatedGroups[currentGroupIndex] = updatedGroups[currentGroupIndex].filter((character) => !selectedCharactersInGroup.includes(character));
 
       //filter empty groups
       updatedGroups = updatedGroups.filter((group) => group.length !== 0);
     } else {
       let updatedGroup = inactiveGroup;
-      updatedGroup = updatedGroup.filter((character) => !selectedCharacters.includes(character));
+      updatedGroup = updatedGroup.filter((character) => !selectedCharactersInGroup.includes(character));
 
       setInactiveGroup(updatedGroup);
     }
@@ -153,16 +183,17 @@ function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, i
     const newGroup = groupOptions.length - 2;
 
     if (groupIndex === inactiveCharacters) {
-      setInactiveGroup([...inactiveGroup, ...selectedCharacters]);
+      setInactiveGroup([...inactiveGroup, ...selectedCharactersInGroup]);
     } else if (groupIndex === newGroup) {
-      updatedGroups.push(selectedCharacters);
+      updatedGroups.push(selectedCharactersInGroup);
     } else {
-      updatedGroups[groupIndex].push(...selectedCharacters);
+      updatedGroups[groupIndex].push(...selectedCharactersInGroup);
     }
 
     //save in db
 
     setGroups(updatedGroups);
+    setSelectedCharactersInGroup([]);
     setSelectedCharacters([]);
   }
 
@@ -266,13 +297,20 @@ function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, i
               ))}
             <div className="party-groups">
               {groups.map((group, groupIndex) => (
-                <main className={isSelecting ? "selecting-group" : ""}>
+                <main
+                  onClick={() => (isSelecting ? HandleSelectGroup(group) : {})}
+                  className={`${isSelecting ? "selecting-group" : ""} ${
+                    isSelecting && tempSelectedCharacters.some((selectedCharacter) => group.includes(selectedCharacter)) ? "selected-group" : ""
+                  }`}
+                >
                   <div className="group-header">
                     <header>
-                      {isSelecting && <CheckInput onClick={() => {}} isSelected={false} />}
+                      {isSelecting && (
+                        <CheckInput isSelected={tempSelectedCharacters.some((selectedCharacter) => group.includes(selectedCharacter))} />
+                      )}
                       <h5>Grupo {groupIndex + 1}</h5>
                     </header>
-                    {selectedCharacters.length > 0 && AllowToSelect(groupIndex) && (
+                    {selectedCharactersInGroup.length > 0 && AllowToSelect(groupIndex) && (
                       <div className="header-options">
                         <Select
                           extraWidth={50}
@@ -292,7 +330,7 @@ function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, i
                             {!isSelecting && AllowToSelect(groupIndex) && (
                               <CheckInput
                                 onClick={() => HandleSelectCharacters(character)}
-                                isSelected={selectedCharacters.some((char) => char === character)}
+                                isSelected={selectedCharactersInGroup.some((char) => char === character)}
                               />
                             )}
                             <h6>{character}</h6>
@@ -321,7 +359,7 @@ function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, i
                 <main>
                   <div className="group-header">
                     <h5>Inativos</h5>
-                    {selectedCharacters.length > 0 && AllowToSelect(null) && (
+                    {selectedCharactersInGroup.length > 0 && AllowToSelect(null) && (
                       <div className="header-options">
                         <Select
                           extraWidth={50}
@@ -341,7 +379,7 @@ function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, i
                             {AllowToSelect(null) && (
                               <CheckInput
                                 onClick={() => HandleSelectCharacters(character)}
-                                isSelected={selectedCharacters.some((char) => char === character)}
+                                isSelected={selectedCharactersInGroup.some((char) => char === character)}
                               />
                             )}
                             <h6>{character}</h6>
@@ -370,7 +408,9 @@ function Party({ selectedGroup, setSelectedGroup, isSelecting, setIsSelecting, i
           </main>
           {isSelecting && (
             <div className="selecting-footer">
-              <h5>{selectedGroup ?? "Nenhum grupo"} selecionado</h5>
+              <h5>
+                {tempSelectedCharacters.length > 0 ? `${tempSelectedCharacters.length} personagens selecionado(s)` : "Nenhum personagem selecionado"}
+              </h5>
               <Button text="Confirmar" onClick={HandleSelectedFromParty} />
             </div>
           )}

@@ -25,6 +25,8 @@ function NaviBar({
   setLevel,
   groups,
   setGroups,
+  creatures,
+  setCreatures,
   tabOptions,
   openTab,
   setOpenTab,
@@ -52,8 +54,8 @@ function NaviBar({
       {!isEditCreatureOpen && (
         <section>
           <Party
-            selectedGroup={selectedCharacters}
-            setSelectedGroup={setSelectedCharacters}
+            selectedCharacters={selectedCharacters}
+            setSelectedCharacters={setSelectedCharacters}
             isSelecting={isSelectingParty}
             setIsSelecting={setIsSelectingParty}
             isPartyOpen={isPartyOpen}
@@ -92,6 +94,8 @@ function NaviBar({
             isBestiaryOpen={isBestiaryOpen}
             setIsBestiaryOpen={setIsBestiaryOpen}
             setIsEditCreatureOpen={setIsEditCreatureOpen}
+            creatures={creatures}
+            setCreatures={setCreatures}
           />
         </section>
       )}

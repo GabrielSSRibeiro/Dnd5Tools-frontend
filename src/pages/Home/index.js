@@ -24,6 +24,16 @@ function Home() {
     ["Soiaz", "Foux", "Isaac"],
     ["a", "b"],
   ]);
+  const [creatures, setCreatures] = useState(
+    new Array(20).fill({
+      name: "Argon, o Temível",
+      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
+      levelRange: "5 - 8",
+      environment: "Floresta",
+      type: "Elemental",
+      size: "Médio",
+    })
+  );
   const [selectedCharacters, setSelectedCharacters] = useState([]);
   const [selectedCreatures, setSelectedCreatures] = useState([]);
   const [combats, setCombats] = useState([]);
@@ -35,8 +45,12 @@ function Home() {
   // }, []);
 
   function HandleSelectFromParty() {
-    setIsSelectingParty(true);
-    setIsPartyOpen(true);
+    if (groups.length === 1) {
+      setSelectedCharacters(...groups);
+    } else {
+      setIsSelectingParty(true);
+      setIsPartyOpen(true);
+    }
   }
 
   function HandleSelectFromBestiary() {
@@ -67,6 +81,8 @@ function Home() {
         setLevel={setLevel}
         groups={groups}
         setGroups={setGroups}
+        creatures={creatures}
+        setCreatures={setCreatures}
         tabOptions={MAIN_TABS}
         openTab={openTab}
         setOpenTab={setOpenTab}

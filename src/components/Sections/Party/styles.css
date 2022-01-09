@@ -108,7 +108,7 @@
 }
 
 .Party-container > .party-tab .selecting-header {
-  background-color: var(--primaryPurple1);
+  background-color: var(--primaryPurple3);
 }
 
 .Party-container > .party-tab > header > div {
@@ -268,6 +268,11 @@
 .party-groups .selecting-group {
   background-color: var(--white);
   margin-top: 20px;
+  border: 1px solid var(--white) !important;
+  cursor: pointer;
+}
+
+.party-groups .selected-group {
   border: 1px solid var(--primaryPurple1) !important;
 }
 

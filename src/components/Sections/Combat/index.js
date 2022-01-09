@@ -23,7 +23,7 @@ function Combat({ selectedCharacters, selectedCreatures, HandleSelectFromParty, 
   return (
     <div className="Combat-container">
       <div>
-        <section>
+        <section className="characters-container">
           <Panel title="Jogadores">
             <div className="panel-content">
               {selectedCharacters && selectedCharacters.map((character) => <h4>{character}</h4>)}
@@ -33,7 +33,7 @@ function Combat({ selectedCharacters, selectedCreatures, HandleSelectFromParty, 
             </div>
           </Panel>
         </section>
-        <section>
+        <section className="creatures-container">
           <Panel title="Criaturas">
             <div className="panel-content">
               {selectedCreatures && selectedCreatures.map((creature) => <h4>{creature}</h4>)}
@@ -45,7 +45,11 @@ function Combat({ selectedCharacters, selectedCreatures, HandleSelectFromParty, 
         </section>
       </div>
       <footer>
-        <Button text={`Rodar ${resultText}`} onClick={HandleGenerate} isDisabled={true} />
+        <Button
+          text={`Rodar ${resultText}`}
+          onClick={HandleGenerate}
+          isDisabled={selectedCharacters.length === 0 || selectedCreatures.length === 0 || true}
+        />
       </footer>
     </div>
   );

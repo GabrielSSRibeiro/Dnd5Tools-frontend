@@ -108,7 +108,7 @@
 }
 
 .Bestiary-container > .bestiary-tab .selecting-header {
-  background-color: var(--primaryPurple1);
+  background-color: var(--primaryPurple3);
 }
 
 .Bestiary-container > .bestiary-tab > header > div {
@@ -321,6 +321,7 @@
   position: absolute;
   bottom: 7px;
   object-fit: cover;
+  object-position: 0 top;
   width: 180px;
   height: 180px;
 }
