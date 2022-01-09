@@ -409,7 +409,9 @@ function Party({
           {isSelecting && (
             <div className="selecting-footer">
               <h5>
-                {tempSelectedCharacters.length > 0 ? `${tempSelectedCharacters.length} personagens selecionado(s)` : "Nenhum personagem selecionado"}
+                {tempSelectedCharacters.length > 0
+                  ? `${tempSelectedCharacters.length} personagem(s} selecionado(s)`
+                  : "Nenhum personagem selecionado"}
               </h5>
               <Button text="Confirmar" onClick={HandleSelectedFromParty} />
             </div>

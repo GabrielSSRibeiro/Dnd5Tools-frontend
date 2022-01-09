@@ -24,6 +24,7 @@ function Bestiary({
   const [selectedEnv, setSelectedEnv] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
+  const [tempSelectedCreatures, setTempSelectedCreatures] = useState(selectedCreatures);
 
   let filteredCreatures = [];
 
@@ -35,12 +36,25 @@ function Bestiary({
   //   });
   // }, []);
 
+  function HandleSelectCreature(creature) {
+    const isAlreadySelected = tempSelectedCreatures.some((selectedCreature) => selectedCreature.name === creature.name);
+    let newSelection = tempSelectedCreatures.filter((selectedCreature) => selectedCreature.name !== creature.name);
+
+    if (!isAlreadySelected) {
+      newSelection.push(creature);
+    }
+
+    setTempSelectedCreatures(newSelection);
+  }
+
   function HandleSelectedFromBestiary() {
     HandleClose();
+    setSelectedCreatures(tempSelectedCreatures);
   }
 
   function HandleClose() {
     setSelectedCreatures([]);
+    setTempSelectedCreatures([]);
     setIsSelecting(false);
     setIsBestiaryOpen(false);
   }
@@ -173,15 +187,25 @@ function Bestiary({
             </div>
             <div className="bestiary-list">
               {filteredCreatures.map((creature) => (
-                <div className="list-creature" key={creature.name}>
-                  {/* onClick={() => setIsEditCreatureOpen(true)}> */}
+                <div
+                  className={`list-creature ${
+                    isSelecting && tempSelectedCreatures.some((selectedCreature) => selectedCreature.name === creature.name)
+                      ? "selected-creature"
+                      : ""
+                  }`}
+                  key={creature.name}
+                  onClick={
+                    () => (isSelecting ? HandleSelectCreature(creature) : {})
+                    // setIsEditCreatureOpen(true)
+                  }
+                >
                   {!isSelecting ? (
                     <div className="edit-creature">
                       <i class="fas fa-pencil-alt fa-xs"></i>
                     </div>
                   ) : (
                     <div className="select-creature">
-                      <CheckInput onClick={() => {}} isSelected={false} />
+                      <CheckInput isSelected={tempSelectedCreatures.some((selectedCreature) => selectedCreature.name === creature.name)} />
                     </div>
                   )}
                   <h6>{creature.name}</h6>
@@ -198,7 +222,9 @@ function Bestiary({
           </main>
           {isSelecting && (
             <div className="selecting-footer">
-              <h5>{selectedCreatures ?? 0} criatura(s) selecionada(s)</h5>
+              <h5>
+                {tempSelectedCreatures.length > 0 ? `${tempSelectedCreatures.length} criatura(s) selecionada(s)` : "Nenhuma criatura selecionada"}
+              </h5>
               <Button text="Confirmar" onClick={HandleSelectedFromBestiary} />
             </div>
           )}

@@ -24,16 +24,48 @@ function Home() {
     ["Soiaz", "Foux", "Isaac"],
     ["a", "b"],
   ]);
-  const [creatures, setCreatures] = useState(
-    new Array(20).fill({
+  const [creatures, setCreatures] = useState([
+    {
       name: "Argon, o Temível",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
       levelRange: "5 - 8",
       environment: "Floresta",
       type: "Elemental",
       size: "Médio",
-    })
-  );
+    },
+    {
+      name: "Argon, o Temível 2",
+      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
+      levelRange: "5 - 8",
+      environment: "Floresta",
+      type: "Elemental",
+      size: "Médio",
+    },
+    {
+      name: "Argon, o Temível 3",
+      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
+      levelRange: "5 - 8",
+      environment: "Floresta",
+      type: "Elemental",
+      size: "Médio",
+    },
+    {
+      name: "Argon, o Temível 4",
+      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
+      levelRange: "5 - 8",
+      environment: "Floresta",
+      type: "Elemental",
+      size: "Médio",
+    },
+    {
+      name: "Argon, o Temível 5",
+      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
+      levelRange: "5 - 8",
+      environment: "Floresta",
+      type: "Elemental",
+      size: "Médio",
+    },
+  ]);
   const [selectedCharacters, setSelectedCharacters] = useState([]);
   const [selectedCreatures, setSelectedCreatures] = useState([]);
   const [combats, setCombats] = useState([]);

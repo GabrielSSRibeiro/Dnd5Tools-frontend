@@ -24,7 +24,7 @@ function Combat({ selectedCharacters, selectedCreatures, HandleSelectFromParty, 
     <div className="Combat-container">
       <div>
         <section className="characters-container">
-          <Panel title="Jogadores">
+          <Panel title="Personagens">
             <div className="panel-content">
               {selectedCharacters && selectedCharacters.map((character) => <h4>{character}</h4>)}
               <footer style={{ marginTop: selectedCharacters.length > 0 ? 12.5 : 0 }}>
@@ -36,7 +36,7 @@ function Combat({ selectedCharacters, selectedCreatures, HandleSelectFromParty, 
         <section className="creatures-container">
           <Panel title="Criaturas">
             <div className="panel-content">
-              {selectedCreatures && selectedCreatures.map((creature) => <h4>{creature}</h4>)}
+              {selectedCreatures && selectedCreatures.map((creature) => <h4>{creature.name}</h4>)}
               <footer style={{ marginTop: selectedCreatures.length > 0 ? 12.5 : 0 }}>
                 <Button text="Selecionar" onClick={HandleSelectFromBestiary} />
               </footer>

@@ -287,6 +287,10 @@
   border: 1px solid var(--primaryPurple2);
 }
 
+.Bestiary-container .selected-creature {
+  border: 1px solid var(--primaryPurple1) !important;
+}
+
 .Bestiary-container .list-creature .edit-creature {
   position: absolute;
   top: 0;
