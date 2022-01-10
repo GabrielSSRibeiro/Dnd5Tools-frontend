@@ -295,7 +295,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  background-color: var(--gray1);
+  /* background-color: var(--gray1); */
   width: 22px;
   height: 22px;
 

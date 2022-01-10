@@ -2,7 +2,16 @@ import React, { useState } from "react";
 
 import "./styles.css";
 
-function Select({ isLarge = false, extraWidth = 0, value = "", onSelect = () => {}, defaultValue = null, options = [], className = "" }) {
+function Select({
+  isLarge = false,
+  extraWidth = 0,
+  value = "",
+  onSelect = () => {},
+  defaultValue = null,
+  options = [],
+  dropUp = false,
+  className = "",
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const selectOptions = defaultValue ? [defaultValue, ...options] : options;
@@ -35,6 +44,7 @@ function Select({ isLarge = false, extraWidth = 0, value = "", onSelect = () => 
       {isOpen && (
         <ul
           style={{
+            bottom: dropUp ? `calc(${selectOptions.length <= 4 ? selectOptions.length + 1 : 6}00% + 5px)` : -5,
             width: selectWidth + extraWidth,
             height: height * selectOptions.length + 2,
             maxHeight: height * optionsAtATime + 2,

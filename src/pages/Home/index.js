@@ -26,7 +26,7 @@ function Home() {
   ]);
   const [creatures, setCreatures] = useState([
     {
-      name: "Argon, o Temível",
+      name: "Argon, o Temível A",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
       levelRange: "5 - 8",
       environment: "Floresta",
@@ -34,7 +34,7 @@ function Home() {
       size: "Médio",
     },
     {
-      name: "Argon, o Temível 2",
+      name: "Argon, o Temível B",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
       levelRange: "5 - 8",
       environment: "Floresta",
@@ -42,7 +42,7 @@ function Home() {
       size: "Médio",
     },
     {
-      name: "Argon, o Temível 3",
+      name: "Argon, o Temível C",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
       levelRange: "5 - 8",
       environment: "Floresta",
@@ -50,7 +50,7 @@ function Home() {
       size: "Médio",
     },
     {
-      name: "Argon, o Temível 4",
+      name: "Argon, o Temível D",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
       levelRange: "5 - 8",
       environment: "Floresta",
@@ -58,7 +58,7 @@ function Home() {
       size: "Médio",
     },
     {
-      name: "Argon, o Temível 5",
+      name: "Argon, o Temível E",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
       levelRange: "5 - 8",
       environment: "Floresta",
@@ -66,7 +66,7 @@ function Home() {
       size: "Médio",
     },
     {
-      name: "Argon, o Temível 6",
+      name: "Argon, o Temível F",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
       levelRange: "5 - 8",
       environment: "Floresta",
@@ -74,7 +74,7 @@ function Home() {
       size: "Médio",
     },
     {
-      name: "Argon, o Temível 7",
+      name: "Argon, o Temível G",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
       levelRange: "5 - 8",
       environment: "Floresta",
@@ -82,7 +82,7 @@ function Home() {
       size: "Médio",
     },
     {
-      name: "Argon, o Temível 8",
+      name: "Argon, o Temível H",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
       levelRange: "5 - 8",
       environment: "Floresta",
@@ -114,8 +114,8 @@ function Home() {
     setIsBestiaryOpen(true);
   }
 
-  function HandleGenerateCombat(creatures) {
-    setCombats([...combats, { group: selectedCharacters, creatures: creatures }]);
+  function HandleGenerateCombat() {
+    setCombats([...combats, { selectedCharacters, selectedCreatures }]);
   }
 
   return (
@@ -153,6 +153,7 @@ function Home() {
             <Combat
               selectedCharacters={selectedCharacters}
               selectedCreatures={selectedCreatures}
+              setSelectedCreatures={setSelectedCreatures}
               HandleSelectFromParty={HandleSelectFromParty}
               HandleSelectFromBestiary={HandleSelectFromBestiary}
               HandleGenerateCombat={HandleGenerateCombat}

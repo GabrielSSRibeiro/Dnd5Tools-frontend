@@ -33,3 +33,21 @@ export function TrimDecimalPlaces(value) {
 export function ProbabilityCheck(prob) {
   return Math.random() <= prob;
 }
+
+export function SortArrayOfObjByProperty(arrayOfObj, property) {
+  function compare(a, b) {
+    const bandA = a[property].toUpperCase();
+    const bandB = b[property].toUpperCase();
+
+    let comparison = 0;
+    if (bandA > bandB) {
+      comparison = 1;
+    } else if (bandA < bandB) {
+      comparison = -1;
+    }
+    return comparison;
+  }
+
+  arrayOfObj.sort(compare);
+  // return arrayOfObj;
+}

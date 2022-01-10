@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 //  import api from "../../services/api";
+import { SortArrayOfObjByProperty } from "../../../utils";
 import { CREATURE_LEVELS, CREATURE_ENVIROMENTS, CREATURE_TYPES, CREATURE_SIZE } from "../../../Tables/bestiary";
 
 import Button from "../../Button";
@@ -51,6 +52,8 @@ function Bestiary({
   }
 
   function HandleSelectedFromBestiary() {
+    SortArrayOfObjByProperty(tempSelectedCreatures, "name");
+
     HandleClose();
     setSelectedCreatures(tempSelectedCreatures);
   }

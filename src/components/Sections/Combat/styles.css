@@ -13,9 +13,14 @@
   column-gap: 40px;
 }
 
-.Combat-container > div > section {
+.Combat-container > div > section:first-of-type {
   margin-top: calc(5% - 20px);
-  width: 660px;
+  width: 400px;
+}
+
+.Combat-container > div > section:last-of-type {
+  margin-top: calc(5% - 20px);
+  width: 920px;
 }
 
 .Combat-container .characters-container .panel-content {
@@ -26,7 +31,7 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  row-gap: 3px;
+  row-gap: 2px;
 }
 .Combat-container .creatures-container .panel-content {
   width: 100%;
@@ -36,7 +41,7 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  row-gap: 3px;
+  row-gap: 2px;
 }
 
 .panel-content .creature-details,
@@ -46,7 +51,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  column-gap: 3px;
+  column-gap: 2px;
 }
 
 .panel-content .character-details .character-name,
@@ -54,11 +59,15 @@
   background-color: var(--white);
   width: 100%;
   height: 37px;
-  padding-left: 15px;
 
   display: flex;
   align-items: center;
   flex: 1;
+  text-align: center;
+}
+
+.panel-content .creature-details .creature-name {
+  padding-left: 15px;
 }
 
 .panel-content .character-details .character-name {
@@ -66,6 +75,17 @@
 }
 .panel-content .creature-details .creature-name {
   justify-content: flex-start;
+}
+
+.creature-details .creature-stats {
+  background-color: var(--white);
+  width: 75px;
+  height: 37px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .panel-content .creature-details button {
@@ -78,4 +98,9 @@
 
 .Combat-container > footer {
   margin-top: calc(5% - 40px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 15px;
 }
