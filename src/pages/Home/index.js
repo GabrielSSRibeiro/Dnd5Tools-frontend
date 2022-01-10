@@ -21,8 +21,8 @@ function Home() {
   const [isEditCreatureOpen, setIsEditCreatureOpen] = useState(false);
   const [level, setLevel] = useState(3);
   const [groups, setGroups] = useState([
-    ["Soiaz", "Foux", "Isaac"],
-    ["a", "b"],
+    ["Foux", "Isaac", "Zeth", "Adler", "Motonui", "Elros"],
+    ["Soiaz", "Yaisyl"],
   ]);
   const [creatures, setCreatures] = useState([
     {
@@ -59,6 +59,30 @@ function Home() {
     },
     {
       name: "Argon, o Temível 5",
+      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
+      levelRange: "5 - 8",
+      environment: "Floresta",
+      type: "Elemental",
+      size: "Médio",
+    },
+    {
+      name: "Argon, o Temível 6",
+      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
+      levelRange: "5 - 8",
+      environment: "Floresta",
+      type: "Elemental",
+      size: "Médio",
+    },
+    {
+      name: "Argon, o Temível 7",
+      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
+      levelRange: "5 - 8",
+      environment: "Floresta",
+      type: "Elemental",
+      size: "Médio",
+    },
+    {
+      name: "Argon, o Temível 8",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
       levelRange: "5 - 8",
       environment: "Floresta",

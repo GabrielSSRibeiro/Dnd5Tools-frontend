@@ -5,4 +5,3 @@ export const CREATURE_TYPES = ["Dragão", "Elemental"];
 export const CREATURE_SIZE = ["Miúdo", "Pequeno", "Médio", "Grande", "Enorme", "Imenso"];
 
 export const RANDOM = "Aleatório";
-// ALSO HAVE ARRAY OF OBJS WITH PROBABILITY

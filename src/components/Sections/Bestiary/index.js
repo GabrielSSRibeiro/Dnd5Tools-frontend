@@ -27,6 +27,7 @@ function Bestiary({
   const [tempSelectedCreatures, setTempSelectedCreatures] = useState(selectedCreatures);
 
   let filteredCreatures = [];
+  const MAX_SELECTED = 7;
 
   // const history = useHistory();
 
@@ -37,14 +38,16 @@ function Bestiary({
   // }, []);
 
   function HandleSelectCreature(creature) {
-    const isAlreadySelected = tempSelectedCreatures.some((selectedCreature) => selectedCreature.name === creature.name);
-    let newSelection = tempSelectedCreatures.filter((selectedCreature) => selectedCreature.name !== creature.name);
+    if (tempSelectedCreatures.length + 1 <= MAX_SELECTED) {
+      const isAlreadySelected = tempSelectedCreatures.some((selectedCreature) => selectedCreature.name === creature.name);
+      let newSelection = tempSelectedCreatures.filter((selectedCreature) => selectedCreature.name !== creature.name);
 
-    if (!isAlreadySelected) {
-      newSelection.push(creature);
+      if (!isAlreadySelected) {
+        newSelection.push(creature);
+      }
+
+      setTempSelectedCreatures(newSelection);
     }
-
-    setTempSelectedCreatures(newSelection);
   }
 
   function HandleSelectedFromBestiary() {
@@ -53,7 +56,7 @@ function Bestiary({
   }
 
   function HandleClose() {
-    setSelectedCreatures([]);
+    // setSelectedCreatures([]);
     setTempSelectedCreatures([]);
     setIsSelecting(false);
     setIsBestiaryOpen(false);
@@ -138,7 +141,7 @@ function Bestiary({
                   <aside />
                 </div>
               </div>
-              {!isSelecting ? <h5>{creatures.length} Criaturas</h5> : <h5>Selecione as criaturas para esse combate</h5>}
+              {!isSelecting ? <h5>{creatures.length} Criaturas</h5> : <h5>Selecione até {MAX_SELECTED} criaturas esse combate</h5>}
             </div>
             <h5>BESTIÁRIO</h5>
           </header>
@@ -152,7 +155,7 @@ function Bestiary({
               <h5>Filtrar Por</h5>
               <div className="filter-text">
                 <input onChange={(e) => handleFilter(setNameFilter, e.target.value)} placeholder="Nome" value={nameFilter}></input>
-                <button onClick={() => setNameFilter(null)}>LIMPAR</button>
+                <button onClick={() => setNameFilter("")}>LIMPAR</button>
               </div>
               <main>
                 <Select
