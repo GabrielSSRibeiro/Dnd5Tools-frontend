@@ -16,6 +16,7 @@ function EditCreature({ setIsEditCreatureOpen }) {
 
   return (
     <div className="EditCreature-container">
+      <h1>Em Desenvolvimento</h1>
       <Button text="Salvar" onClick={() => setIsEditCreatureOpen(false)} />
     </div>
   );

@@ -1,0 +1,120 @@
+.CombatSetup-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.CombatSetup-container > div {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  column-gap: 40px;
+}
+
+.CombatSetup-container > div > section:first-of-type {
+  margin-top: calc(5% - 20px);
+  width: 660px;
+}
+
+.CombatSetup-container > div > section:last-of-type {
+  margin-top: calc(5% - 20px);
+  width: 660px;
+}
+
+.CombatSetup-container .characters-container .panel-content {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 2px;
+}
+.CombatSetup-container .creatures-container .panel-content {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 2px;
+}
+
+.panel-content .creature-details,
+.panel-content .character-details {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 2px;
+}
+
+.panel-content .character-details .character-name,
+.panel-content .creature-details .creature-name {
+  background-color: var(--white);
+  width: 100%;
+  height: 37px;
+
+  display: flex;
+  align-items: center;
+  flex: 1;
+  text-align: center;
+}
+
+.panel-content .creature-details .creature-name {
+  padding-left: 15px;
+}
+
+.panel-content .character-details .character-name {
+  justify-content: center;
+}
+.panel-content .creature-details .creature-name {
+  justify-content: center;
+}
+
+.creature-details .creature-stats {
+  background-color: var(--white);
+  width: 75px;
+  height: 37px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.creature-details .toggle-npc {
+  border-color: var(--successColor) !important;
+}
+.creature-details .toggle-npc .fa-heart {
+  color: var(--successColor);
+}
+
+.creature-details .toggle-creature {
+  border-color: var(--errorColor) !important;
+}
+.creature-details .toggle-creature .fa-skull {
+  color: var(--errorColor);
+}
+
+.panel-content .creature-details button {
+  width: 37px;
+  height: 37px;
+  background-color: var(--white);
+  border: 1px solid var(--black);
+  color: var(--primaryPurple3);
+}
+
+.CombatSetup-container > footer {
+  margin-top: calc(5% - 40px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 15px;
+}

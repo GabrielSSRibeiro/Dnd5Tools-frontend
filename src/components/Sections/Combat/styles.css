@@ -3,104 +3,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .Combat-container > div {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  column-gap: 40px;
-}
-
-.Combat-container > div > section:first-of-type {
-  margin-top: calc(5% - 20px);
-  width: 400px;
-}
-
-.Combat-container > div > section:last-of-type {
-  margin-top: calc(5% - 20px);
-  width: 920px;
-}
-
-.Combat-container .characters-container .panel-content {
-  width: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  row-gap: 2px;
-}
-.Combat-container .creatures-container .panel-content {
-  width: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  row-gap: 2px;
-}
-
-.panel-content .creature-details,
-.panel-content .character-details {
-  width: 100%;
-
+  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  column-gap: 2px;
 }
 
-.panel-content .character-details .character-name,
-.panel-content .creature-details .creature-name {
-  background-color: var(--white);
-  width: 100%;
-  height: 37px;
-
-  display: flex;
-  align-items: center;
-  flex: 1;
-  text-align: center;
-}
-
-.panel-content .creature-details .creature-name {
-  padding-left: 15px;
-}
-
-.panel-content .character-details .character-name {
-  justify-content: center;
-}
-.panel-content .creature-details .creature-name {
-  justify-content: flex-start;
-}
-
-.creature-details .creature-stats {
-  background-color: var(--white);
-  width: 75px;
-  height: 37px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.panel-content .creature-details button {
-  width: 37px;
-  height: 37px;
-  background-color: var(--white);
-  border: 1px solid var(--black);
-  color: var(--primaryPurple3);
-}
-
-.Combat-container > footer {
-  margin-top: calc(5% - 40px);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  column-gap: 15px;
+.Combat-container > h1 {
+  color: white;
 }

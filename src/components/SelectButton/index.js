@@ -2,7 +2,7 @@ import React from "react";
 
 import "./styles.css";
 
-function SelectButton({ isLarge, isSelected, isLong, text, onClick, isDisabled, className = "" }) {
+function SelectButton({ isLarge, isSelected, isLong, text, onClick, isDisabled = false, className = "" }) {
   const containerWidth = 160;
   const containerHeight = 27;
   const containerLongExtra = 35;
@@ -50,13 +50,17 @@ function SelectButton({ isLarge, isSelected, isLong, text, onClick, isDisabled, 
   }
 
   return (
-    <div className="SelectButton-container" style={variant.container.secondBorder} onClick={HandleClick}>
+    <div
+      className={`SelectButton-container ${isDisabled ? "button-disabled" : ""}`}
+      style={variant.container.secondBorder}
+      onClick={!isDisabled ? HandleClick : () => {}}
+    >
       {/* border 2 */}
       <section style={variant.container.secondBorder}>
         <main
           className={`
           button-${isSelected ? "selected" : "default"} 
-        ${isDisabled && "button-disabled"} ${className}`}
+         ${className}`}
           style={variant.button.secondBorder}
         ></main>
       </section>

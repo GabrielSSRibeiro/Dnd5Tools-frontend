@@ -151,7 +151,7 @@ function Bestiary({
           <main>
             {!isSelecting && (
               <aside>
-                <Button text="Adicionar Criatura" onClick={() => setIsEditCreatureOpen(true)} isDisabled={true} />
+                <Button text="Adicionar Criatura" onClick={() => setIsEditCreatureOpen(true)} />
               </aside>
             )}{" "}
             <div className="bestiary-filters">

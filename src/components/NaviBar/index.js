@@ -9,6 +9,7 @@ import Bestiary from "../Sections/Bestiary";
 import "./styles.css";
 
 function NaviBar({
+  combats,
   selectedCharacters,
   setSelectedCharacters,
   selectedCreatures,
@@ -35,6 +36,8 @@ function NaviBar({
 }) {
   const { Logout } = useAuth();
   const history = useHistory();
+
+  const MAX_COMBATS = 4;
 
   async function HandleLogout() {
     await Logout();
@@ -78,7 +81,11 @@ function NaviBar({
             isLong={true}
             text={tabOptions.COMBAT}
             onClick={() => setOpenTab(tabOptions.COMBAT)}
+            isDisabled={combats.length >= MAX_COMBATS}
           />
+          {combats.map((combat, index) => (
+            <button onClick={() => setOpenTab(index + 1)}>{index + 1}</button>
+          ))}
           <SelectButton
             isLarge={true}
             isSelected={openTab === tabOptions.TREASURE}

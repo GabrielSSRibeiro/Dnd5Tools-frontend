@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 import NaviBar from "../../components/NaviBar";
 import SkillCheck from "../../components/Sections/SkillCheck";
+import CombatSetup from "../../components/Sections/CombatSetup";
 import Combat from "../../components/Sections/Combat";
 import Treasure from "../../components/Sections/Treasure";
 import EditCreature from "../../components/Sections/EditCreature";
@@ -107,20 +108,34 @@ function Home() {
       setIsSelectingParty(true);
       setIsPartyOpen(true);
     }
+    setIsBestiaryOpen(false);
   }
 
   function HandleSelectFromBestiary() {
     setIsSelectingBestiary(true);
     setIsBestiaryOpen(true);
+    setIsPartyOpen(false);
   }
 
   function HandleGenerateCombat() {
+    const newCombatTab = combats.length + 1;
     setCombats([...combats, { selectedCharacters, selectedCreatures }]);
+    setOpenTab(newCombatTab);
+  }
+
+  function HandleEndCombat() {
+    const NewCombats = combats.filter((combat, index) => openTab !== index + 1);
+
+    setSelectedCharacters([]);
+    setSelectedCreatures([]);
+    setCombats(NewCombats);
+    setOpenTab(MAIN_TABS.COMBAT);
   }
 
   return (
     <div className="Home-container">
       <NaviBar
+        combats={combats}
         selectedCharacters={selectedCharacters}
         setSelectedCharacters={setSelectedCharacters}
         selectedCreatures={selectedCreatures}
@@ -150,7 +165,7 @@ function Home() {
         <>
           {openTab === MAIN_TABS.SKILL_CHECK && <SkillCheck resultText={openTab} level={level} />}
           {openTab === MAIN_TABS.COMBAT && (
-            <Combat
+            <CombatSetup
               selectedCharacters={selectedCharacters}
               selectedCreatures={selectedCreatures}
               setSelectedCreatures={setSelectedCreatures}
@@ -161,6 +176,7 @@ function Home() {
               level={level}
             />
           )}
+          {combats.map((combat, index) => openTab === index + 1 && <Combat combat={combat} HandleEndCombat={HandleEndCombat} />)}
           {openTab === MAIN_TABS.TREASURE && <Treasure resultText={openTab} level={level} />}
         </>
       ) : (
