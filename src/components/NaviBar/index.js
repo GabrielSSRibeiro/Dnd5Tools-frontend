@@ -2,6 +2,8 @@ import React from "react";
 import { useAuth } from "../../contexts/Auth";
 import { useHistory } from "react-router-dom";
 
+import { MAX_COMBATS } from "../../Tables/combat";
+
 import SelectButton from "../SelectButton";
 import Party from "../Sections/Party";
 import Bestiary from "../Sections/Bestiary";
@@ -36,8 +38,6 @@ function NaviBar({
 }) {
   const { Logout } = useAuth();
   const history = useHistory();
-
-  const MAX_COMBATS = 4;
 
   async function HandleLogout() {
     await Logout();
@@ -75,17 +75,23 @@ function NaviBar({
             text={tabOptions.SKILL_CHECK}
             onClick={() => setOpenTab(tabOptions.SKILL_CHECK)}
           />
-          <SelectButton
-            isLarge={true}
-            isSelected={openTab === tabOptions.COMBAT}
-            isLong={true}
-            text={tabOptions.COMBAT}
-            onClick={() => setOpenTab(tabOptions.COMBAT)}
-            isDisabled={combats.length >= MAX_COMBATS}
-          />
-          {combats.map((combat, index) => (
-            <button onClick={() => setOpenTab(index + 1)}>{index + 1}</button>
-          ))}
+          <div className="combat-section">
+            <SelectButton
+              isLarge={true}
+              isSelected={openTab === tabOptions.COMBAT}
+              isLong={true}
+              text={tabOptions.COMBAT}
+              onClick={() => setOpenTab(tabOptions.COMBAT)}
+              isDisabled={combats.length >= MAX_COMBATS}
+            />
+            <div className="combat-buttons-container">
+              {combats.map((combat, index) => (
+                <div className="combat-buttons" style={{ zIndex: -1 - index }}>
+                  <SelectButton isLarge={true} text={index + 1} onClick={() => setOpenTab(index + 1)} isSelected={openTab === index + 1} />
+                </div>
+              ))}
+            </div>
+          </div>
           <SelectButton
             isLarge={true}
             isSelected={openTab === tabOptions.TREASURE}

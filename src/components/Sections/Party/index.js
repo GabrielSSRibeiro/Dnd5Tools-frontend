@@ -2,6 +2,7 @@ import React, { useState } from "react";
 //  import api from "../../services/api";
 
 import { LEVELS } from "../../../Tables/party";
+import { MAX_ALLOWED } from "../../../Tables/combat";
 
 import Button from "../../Button";
 import Select from "../../Select";
@@ -33,7 +34,7 @@ function Party({
 
   const numberOfCharacters = groups.reduce((acc, current) => acc.concat(current), []).length;
   let groupOptions = groups.map((group, index) => `Grupo ${index + 1}`);
-  const MAX_SELECTED = 7;
+
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -48,17 +49,13 @@ function Party({
   }
 
   function HandleSelectGroup(selectedGroup) {
-    console.log("tempSelectedCharacters.length + selectedGroup.length", tempSelectedCharacters.length + selectedGroup.length);
-    if (tempSelectedCharacters.length + selectedGroup.length <= MAX_SELECTED) {
-      const isAlreadySelected = tempSelectedCharacters.some((selectedCharacter) => selectedGroup.includes(selectedCharacter));
-      let newSelection = tempSelectedCharacters.filter((selectedCharacter) => !selectedGroup.includes(selectedCharacter));
+    const isAlreadySelected = tempSelectedCharacters.some((selectedCharacter) => selectedGroup.includes(selectedCharacter));
+    let newSelection = tempSelectedCharacters.filter((selectedCharacter) => !selectedGroup.includes(selectedCharacter));
 
-      if (!isAlreadySelected) {
-        newSelection.push(...selectedGroup);
-      }
-
-      setTempSelectedCharacters(newSelection);
+    if (!isAlreadySelected && tempSelectedCharacters.length + selectedGroup.length <= MAX_ALLOWED) {
+      newSelection.push(...selectedGroup);
     }
+    setTempSelectedCharacters(newSelection);
   }
 
   function HandleClose() {
@@ -232,7 +229,7 @@ function Party({
       {isPartyOpen && (
         <div className="party-tab">
           <header className={isSelecting ? "selecting-header" : ""}>
-            {!isSelecting ? <h5>{numberOfCharacters} PERSONAGENS</h5> : <h5>Selecione até {MAX_SELECTED} personagens esse combate</h5>}
+            {!isSelecting ? <h5>{numberOfCharacters} PERSONAGENS</h5> : <h5>Selecione até {MAX_ALLOWED} personagens esse combate</h5>}
             <div>
               {!isSelecting && (
                 <>

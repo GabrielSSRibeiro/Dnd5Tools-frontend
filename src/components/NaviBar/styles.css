@@ -80,3 +80,28 @@
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 50%, rgba(232, 232, 232, 0.8) 100%);
   backdrop-filter: blur(14px);
 }
+
+.NaviBar-container .combat-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+}
+
+.NaviBar-container .combat-buttons-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: -1;
+}
+
+.combat-buttons-container .combat-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: -160px;
+}
+
+.combat-buttons-container .combat-buttons h5 {
+  transform: rotate(-45deg) translate(70px, 0%);
+}

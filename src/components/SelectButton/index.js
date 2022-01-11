@@ -2,7 +2,7 @@ import React from "react";
 
 import "./styles.css";
 
-function SelectButton({ isLarge, isSelected, isLong, text, onClick, isDisabled = false, className = "" }) {
+function SelectButton({ isLarge = false, isSelected = false, isLong = false, text = "", onClick = () => {}, isDisabled = false, className = "" }) {
   const containerWidth = 160;
   const containerHeight = 27;
   const containerLongExtra = 35;
@@ -19,6 +19,7 @@ function SelectButton({ isLarge, isSelected, isLong, text, onClick, isDisabled =
       secondBorder: {
         width: containerWidth + containerBorderExtra.width * 2 + (isLarge && containerLargeExtra.width) + (isLong && containerLongExtra),
         height: containerHeight + containerBorderExtra.height * 2 + (isLarge && containerLargeExtra.height),
+        cursor: isDisabled ? "default" : "pointer",
       },
       firstBorder: {
         width: containerWidth + containerBorderExtra.width + (isLarge && containerLargeExtra.width) + (isLong && containerLongExtra),
@@ -50,11 +51,7 @@ function SelectButton({ isLarge, isSelected, isLong, text, onClick, isDisabled =
   }
 
   return (
-    <div
-      className={`SelectButton-container ${isDisabled ? "button-disabled" : ""}`}
-      style={variant.container.secondBorder}
-      onClick={!isDisabled ? HandleClick : () => {}}
-    >
+    <div className="SelectButton-container" style={variant.container.secondBorder} onClick={!isDisabled ? HandleClick : () => {}}>
       {/* border 2 */}
       <section style={variant.container.secondBorder}>
         <main

@@ -39,16 +39,13 @@ function Bestiary({
   // }, []);
 
   function HandleSelectCreature(creature) {
-    if (tempSelectedCreatures.length + 1 <= MAX_SELECTED) {
-      const isAlreadySelected = tempSelectedCreatures.some((selectedCreature) => selectedCreature.name === creature.name);
-      let newSelection = tempSelectedCreatures.filter((selectedCreature) => selectedCreature.name !== creature.name);
+    const isAlreadySelected = tempSelectedCreatures.some((selectedCreature) => selectedCreature.name === creature.name);
+    let newSelection = tempSelectedCreatures.filter((selectedCreature) => selectedCreature.name !== creature.name);
 
-      if (!isAlreadySelected) {
-        newSelection.push(creature);
-      }
-
-      setTempSelectedCreatures(newSelection);
+    if (!isAlreadySelected && tempSelectedCreatures.length + 1 <= MAX_SELECTED) {
+      newSelection.push(creature);
     }
+    setTempSelectedCreatures(newSelection);
   }
 
   function HandleSelectedFromBestiary() {

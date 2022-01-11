@@ -121,13 +121,13 @@ function Home() {
     const newCombatTab = combats.length + 1;
     setCombats([...combats, { selectedCharacters, selectedCreatures }]);
     setOpenTab(newCombatTab);
+    setSelectedCharacters([]);
+    setSelectedCreatures([]);
   }
 
   function HandleEndCombat() {
     const NewCombats = combats.filter((combat, index) => openTab !== index + 1);
 
-    setSelectedCharacters([]);
-    setSelectedCreatures([]);
     setCombats(NewCombats);
     setOpenTab(MAIN_TABS.COMBAT);
   }

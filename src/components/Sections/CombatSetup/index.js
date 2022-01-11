@@ -2,7 +2,7 @@ import React, { useState } from "react";
 //  import api from "../../services/api";
 
 import { SortArrayOfObjByProperty } from "../../../utils";
-import { COMBAT_DIFICULTIES } from "../../../Tables/combat";
+import { COMBAT_DIFICULTIES, MAX_ALLOWED } from "../../../Tables/combat";
 
 import Panel from "../../Panel";
 import Button from "../../Button";
@@ -22,7 +22,6 @@ function CombatSetup({
 }) {
   const [combatDificulty, setCombatDificulty] = useState(null);
 
-  const MAX_ALLOWED = 7;
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -144,7 +143,7 @@ function CombatSetup({
         <Button
           text={`Rodar ${resultText}`}
           onClick={HandleGenerateCombat}
-          isDisabled={selectedCharacters.length === 0 || selectedCreatures.length === 0}
+          isDisabled={selectedCharacters.length === 0 || selectedCreatures.length === 0 || !combatDificulty}
         />
       </footer>
     </div>

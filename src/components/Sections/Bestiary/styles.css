@@ -353,6 +353,7 @@
   width: 100%;
   padding: 0 35px;
   z-index: 1;
+  border-top: 1px solid var(--primaryPurple3);
 
   display: flex;
   align-items: center;
