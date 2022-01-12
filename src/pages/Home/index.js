@@ -2,7 +2,7 @@ import React, { useState } from "react";
 //  import api from "../../services/api";
 
 import NaviBar from "../../components/NaviBar";
-import Modal from "../../components/Modal";
+import MenuModal from "../../components/MenuModal";
 import SkillCheck from "../../components/Sections/SkillCheck";
 import CombatSetup from "../../components/Sections/CombatSetup";
 import Combat from "../../components/Sections/Combat";
@@ -136,7 +136,7 @@ function Home() {
 
   return (
     <div className="Home-container">
-      {IsMenuOpen && <Modal setIsMenuOpen={setIsMenuOpen} />}
+      {IsMenuOpen && <MenuModal setIsMenuOpen={setIsMenuOpen} />}
       <NaviBar
         combats={combats}
         selectedCharacters={selectedCharacters}

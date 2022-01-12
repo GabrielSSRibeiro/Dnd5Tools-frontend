@@ -48,6 +48,16 @@ function Treasure({ resultText, level }) {
 
   // function calculateGoldPieces() {}
 
+  function CheckFinalButtonDisable() {
+    let isDisabled = false;
+
+    if (treasureType === treasureTypes.EQUIPMENT && (!equipmentType || !equipmentRarity)) {
+      isDisabled = true;
+    }
+
+    return isDisabled;
+  }
+
   return (
     <div className="Treasure-container">
       {!hasResult ? (
@@ -212,6 +222,7 @@ function Treasure({ resultText, level }) {
         <Button
           text={!hasResult ? `Rodar ${treasureType || resultText}` : "Rodar Novo"}
           onClick={() => (hasResult ? setHasResult(false) : setHasResult(true))}
+          isDisabled={CheckFinalButtonDisable()}
         />
       </footer>
     </div>

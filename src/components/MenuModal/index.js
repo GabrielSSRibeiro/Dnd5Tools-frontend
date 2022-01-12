@@ -12,15 +12,9 @@ import Panel from "../Panel";
 
 import "./styles.css";
 
-function Modal({ setIsMenuOpen }) {
+function MenuModal({ setIsMenuOpen }) {
   const { Logout } = useAuth();
   const history = useHistory();
-
-  async function HandleLogout() {
-    await Logout();
-    history.push("/login");
-  }
-  // const history = useHistory();
 
   //   useEffect(() => {
   //   api.get("items").then((response) => {
@@ -28,12 +22,24 @@ function Modal({ setIsMenuOpen }) {
   //   });
   // }, []);
 
+  async function HandleLogout() {
+    await Logout();
+    history.push("/login");
+  }
+
+  function HandleClose() {
+    setIsMenuOpen(false);
+  }
+
   return (
-    <div className="Modal-container">
-      <div className="screen-block" onClick={() => setIsMenuOpen(false)}></div>
+    <div className="MenuModal-container">
+      <div className="screen-block" onClick={HandleClose}></div>
       <main>
         <header>
           <h3>Menu</h3>
+          <button className="modal-close" onClick={HandleClose}>
+            <i class="fas fa-times"></i>
+          </button>
         </header>
         <div className="modal-body">
           <Panel title="Teste">
@@ -58,4 +64,4 @@ function Modal({ setIsMenuOpen }) {
   );
 }
 
-export default Modal;
+export default MenuModal;
