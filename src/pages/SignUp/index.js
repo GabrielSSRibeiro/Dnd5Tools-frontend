@@ -38,7 +38,7 @@ function SignUp({ history }) {
         <div>
           <TextInput
             label="Password"
-            value={email}
+            value={password}
             type="password"
             onChange={(e) => {
               setPassword(e.target.value);
