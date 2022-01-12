@@ -76,6 +76,7 @@ function CombatSetup({
 
     const creatures = selectedCreatures.filter((selectedCreature) => selectedCreature.name !== creature.name);
     creatures.push(creature);
+    SortArrayOfObjByProperty(creatures, "name");
 
     setSelectedCreatures(creatures);
   }
