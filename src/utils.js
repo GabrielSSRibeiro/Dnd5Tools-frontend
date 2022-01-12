@@ -51,3 +51,7 @@ export function SortArrayOfObjByProperty(arrayOfObj, property) {
   arrayOfObj.sort(compare);
   // return arrayOfObj;
 }
+
+export function turnValueIntoPercentageString(value) {
+  return value * 100 + "%";
+}

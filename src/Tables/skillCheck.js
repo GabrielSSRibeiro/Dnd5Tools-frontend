@@ -20,17 +20,18 @@ export const CONDITIONS = [
   "Exaustão",
 ];
 
+export const MIN_DIFICULTY = 10;
+
 const getDifficulty = (level, checkDifficulty) => {
   const prof = GetProfByLevel(level);
   const difficultyIndex = CHECK_DIFFICULTIES.indexOf(checkDifficulty);
   const difficultyFactor = 5;
   const difficultyVariance = 0.1;
-  const minDifficulty = 10;
 
   let difficulty = (difficultyIndex + 1) * difficultyFactor + prof;
   difficulty = variance(difficulty, difficultyVariance);
 
-  return Math.max(difficulty, minDifficulty);
+  return Math.max(difficulty, MIN_DIFICULTY);
 };
 
 const getDamage = (level, damageIntensity) => {

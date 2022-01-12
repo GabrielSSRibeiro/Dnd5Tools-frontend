@@ -2,6 +2,7 @@ import React, { useState } from "react";
 //  import api from "../../services/api";
 
 import NaviBar from "../../components/NaviBar";
+import Modal from "../../components/Modal";
 import SkillCheck from "../../components/Sections/SkillCheck";
 import CombatSetup from "../../components/Sections/CombatSetup";
 import Combat from "../../components/Sections/Combat";
@@ -15,6 +16,7 @@ function Home() {
   const MAIN_TABS = { SKILL_CHECK: "Teste", COMBAT: "Combate", TREASURE: "Tesouro" };
 
   const [openTab, setOpenTab] = useState(MAIN_TABS.COMBAT);
+  const [IsMenuOpen, setIsMenuOpen] = useState(false);
   const [isPartyOpen, setIsPartyOpen] = useState(false);
   const [isSelectingParty, setIsSelectingParty] = useState(false);
   const [isBestiaryOpen, setIsBestiaryOpen] = useState(false);
@@ -134,6 +136,7 @@ function Home() {
 
   return (
     <div className="Home-container">
+      {IsMenuOpen && <Modal setIsMenuOpen={setIsMenuOpen} />}
       <NaviBar
         combats={combats}
         selectedCharacters={selectedCharacters}
@@ -155,6 +158,7 @@ function Home() {
         creatures={creatures}
         setCreatures={setCreatures}
         tabOptions={MAIN_TABS}
+        setIsMenuOpen={setIsMenuOpen}
         openTab={openTab}
         setOpenTab={setOpenTab}
         isEditCreatureOpen={isEditCreatureOpen}

@@ -25,7 +25,7 @@ export const getGoldPiecesAmount = (quantity) => {
 };
 
 //materials
-// const uncommonItemMinPrice = 100;
+// const UNCOMMON_ITEM_MIN_PRICE = 100;
 // const uncommonItemMaxPrice = 500;
 // const rareItemMinPrice = 500;
 // const rareItemMaxPrice = 5000;
@@ -37,13 +37,13 @@ const RarityFactor = 2.5;
 
 const itemMaxPriceRate = 5;
 
-const uncommonItemMinPrice = 300;
-const uncommonItemMaxPrice = uncommonItemMinPrice * itemMaxPriceRate;
-const rareItemMinPrice = uncommonItemMinPrice * 1 * RarityFactor;
+export const UNCOMMON_ITEM_MIN_PRICE = 300;
+const uncommonItemMaxPrice = UNCOMMON_ITEM_MIN_PRICE * itemMaxPriceRate;
+const rareItemMinPrice = UNCOMMON_ITEM_MIN_PRICE * 1 * RarityFactor;
 const rareItemMaxPrice = rareItemMinPrice * itemMaxPriceRate;
-const veryRareItemMinPrice = uncommonItemMinPrice * 2 * RarityFactor;
+const veryRareItemMinPrice = UNCOMMON_ITEM_MIN_PRICE * 2 * RarityFactor;
 const veryRareItemMaxPrice = veryRareItemMinPrice * itemMaxPriceRate;
-const legendaryItemMinPrice = uncommonItemMinPrice * 3 * RarityFactor;
+const legendaryItemMinPrice = UNCOMMON_ITEM_MIN_PRICE * 3 * RarityFactor;
 const legendaryItemMaxPrice = legendaryItemMinPrice * itemMaxPriceRate;
 
 const sellRate = 0.5;
@@ -66,10 +66,10 @@ export const getItemBuyPrices = (value) => {
   const inflationIndex = MATERIAL_PRICE_INFLATIONS.indexOf(value);
   const inflation = materialPriceInflation[inflationIndex];
   return [
-    () => variance(avg([uncommonItemMinPrice, uncommonItemMaxPrice]), inflationVariance) * inflation,
-    () => variance(avg([rareItemMinPrice, rareItemMaxPrice]), inflationVariance) * inflation,
-    () => variance(avg([veryRareItemMinPrice, veryRareItemMaxPrice]), inflationVariance) * inflation,
-    () => variance(avg([legendaryItemMinPrice, legendaryItemMaxPrice]), inflationVariance) * inflation,
+    () => Math.round(variance(avg([UNCOMMON_ITEM_MIN_PRICE, uncommonItemMaxPrice]), inflationVariance) * inflation),
+    () => Math.round(variance(avg([rareItemMinPrice, rareItemMaxPrice]), inflationVariance) * inflation),
+    () => Math.round(variance(avg([veryRareItemMinPrice, veryRareItemMaxPrice]), inflationVariance) * inflation),
+    () => Math.round(variance(avg([legendaryItemMinPrice, legendaryItemMaxPrice]), inflationVariance) * inflation),
   ];
 };
 export const getItemSellPrices = () =>
@@ -135,9 +135,9 @@ const utilityAfixes = (level) => {
   return afixes.map((afix) => ({ ...afix, probability }));
 };
 
-const primaryAfixProb = 8 / 10;
-const secondaryAfixProb = TrimDecimalPlaces((1 - primaryAfixProb) / 2);
-const curseAfixProb = 1 / 10;
+export const PRIMARY_AFIX_PROB = 8 / 10;
+export const SECONDARY_AFIX_PROB = TrimDecimalPlaces((1 - PRIMARY_AFIX_PROB) / 2);
+export const CURSE_AFIX_PROB = 1 / 10;
 
 const getPulledAfixType = (afixTypes) => {
   return afixTypes
@@ -148,7 +148,7 @@ const getPulledAfixType = (afixTypes) => {
 
 const checkAndApplyCurse = (pulledAfixes, pulledAfix, buffedAfixesBaseline) => {
   //check if it's cursed
-  if (pulledAfixes.length !== 0 && ProbabilityCheck(curseAfixProb)) {
+  if (pulledAfixes.length !== 0 && ProbabilityCheck(CURSE_AFIX_PROB)) {
     //curse this afix
     pulledAfix.bonus = pulledAfix.bonus * -1;
 
@@ -230,7 +230,7 @@ export const getItemAfixes = (level, type, rarity) => {
 
   //if not last(potion), use weighted probs
   if (typeIndex <= afixTypes.length - 1) {
-    afixTypes = afixTypes.map((afix, index) => ({ ...afix, probability: index === typeIndex ? primaryAfixProb : secondaryAfixProb }));
+    afixTypes = afixTypes.map((afix, index) => ({ ...afix, probability: index === typeIndex ? PRIMARY_AFIX_PROB : SECONDARY_AFIX_PROB }));
   } else {
     afixTypes = afixTypes.map((afix) => ({ ...afix, probability: 1 / afixTypes.length }));
   }
