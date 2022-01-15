@@ -173,7 +173,11 @@ function Home() {
         setIsEditCreatureOpen={setIsEditCreatureOpen}
         isPC={isPC()}
       />
-      <img src={background} alt={<a href="https://www.freepik.com/photos/people">People photo created by liuzishan - www.freepik.com</a>} />
+      <img
+        className="img-not-pc"
+        src={background}
+        alt={<a href="https://www.freepik.com/photos/people">People photo created by liuzishan - www.freepik.com</a>}
+      />
       {isPC() ? (
         !isEditCreatureOpen ? (
           <>
