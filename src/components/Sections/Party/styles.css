@@ -268,7 +268,7 @@
 .party-groups .selecting-group {
   background-color: var(--white);
   margin-top: 20px;
-  border: 1px solid var(--white) !important;
+  border: 1px solid var(--gray2);
   cursor: pointer;
 }
 
