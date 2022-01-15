@@ -174,7 +174,7 @@ function Home() {
         isPC={isPC()}
       />
       <img
-        className="img-not-pc"
+        className={isPC ? "" : "img-not-pc"}
         src={background}
         alt={<a href="https://www.freepik.com/photos/people">People photo created by liuzishan - www.freepik.com</a>}
       />
