@@ -107,7 +107,7 @@ function Home() {
     if (window.screen.width < 1440 || window.screen.height < 900) {
       return false;
     } else {
-      return true;
+      return false;
     }
   }
 
@@ -174,7 +174,7 @@ function Home() {
         isPC={isPC()}
       />
       <img
-        className={isPC ? "" : "img-not-pc"}
+        className={isPC() ? "" : "img-not-pc"}
         src={background}
         alt={<a href="https://www.freepik.com/photos/people">People photo created by liuzishan - www.freepik.com</a>}
       />
