@@ -107,7 +107,7 @@ function Home() {
     if (window.screen.width < 1440 || window.screen.height < 900) {
       return false;
     } else {
-      return false;
+      return true;
     }
   }
 
