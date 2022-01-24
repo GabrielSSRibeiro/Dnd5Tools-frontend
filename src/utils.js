@@ -9,7 +9,7 @@ export function averageOfArray(values) {
   return sum / values.length || 0;
 }
 
-export function randomValueFromVariance(value, variance = 0) {
+export function randomValueFromVariance(value, variance) {
   const lowerBound = value * (1 - variance);
   const higherBound = value * (1 + variance);
 

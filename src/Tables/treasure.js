@@ -20,7 +20,7 @@ export const getGoldPiecesAmount = (quantity) => {
   const lowerBound = getMaterialSellPrices(MATERIAL_PRICE_INFLATIONS[quantityIndex])[quantityIndex]();
   const higherBound = getMaterialBuyPrices(MATERIAL_PRICE_INFLATIONS[quantityIndex])[quantityIndex]();
 
-  const amount = avg([lowerBound, higherBound]);
+  const amount = Math.round(avg([lowerBound, higherBound]));
   return amount;
 };
 
@@ -52,9 +52,10 @@ const materialRate = 0.1;
 const inflationVariance = 0.2;
 
 const uncommonItemCraftTimeInDays = () => rand(1, 2);
-const rareItemCraftTimeInDays = () => Math.round(uncommonItemCraftTimeInDays() * RarityFactor);
-const veryRareItemCraftTimeInDays = () => Math.round(rareItemCraftTimeInDays() * RarityFactor);
-const legendaryItemCraftTimeInDays = () => Math.round(veryRareItemCraftTimeInDays() * RarityFactor);
+const rareItemCraftTimeInDays = () => Math.round(avg([uncommonItemCraftTimeInDays() * RarityFactor, uncommonItemCraftTimeInDays() * RarityFactor]));
+const veryRareItemCraftTimeInDays = () => Math.round(avg([rareItemCraftTimeInDays() * RarityFactor, rareItemCraftTimeInDays() * RarityFactor]));
+const legendaryItemCraftTimeInDays = () =>
+  Math.round(avg([veryRareItemCraftTimeInDays() * RarityFactor, veryRareItemCraftTimeInDays() * RarityFactor]));
 export const ITEMS_CRAFT_TIMES = [
   () => uncommonItemCraftTimeInDays(),
   () => rareItemCraftTimeInDays(),

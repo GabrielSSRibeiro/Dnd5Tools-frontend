@@ -103,14 +103,6 @@ function Home() {
   //   });
   // }, []);
 
-  function isPC() {
-    if (window.screen.width < 1440 || window.screen.height < 900) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   function HandleSelectFromParty() {
     if (groups.length === 1) {
       setSelectedCharacters(...groups);
@@ -171,39 +163,28 @@ function Home() {
         setOpenTab={setOpenTab}
         isEditCreatureOpen={isEditCreatureOpen}
         setIsEditCreatureOpen={setIsEditCreatureOpen}
-        isPC={isPC()}
       />
-      <img
-        className={isPC() ? "" : "img-not-pc"}
-        src={background}
-        alt={<a href="https://www.freepik.com/photos/people">People photo created by liuzishan - www.freepik.com</a>}
-      />
-      {isPC() ? (
-        !isEditCreatureOpen ? (
-          <>
-            {openTab === MAIN_TABS.SKILL_CHECK && <SkillCheck resultText={openTab} level={level} />}
-            {openTab === MAIN_TABS.COMBAT && (
-              <CombatSetup
-                selectedCharacters={selectedCharacters}
-                selectedCreatures={selectedCreatures}
-                setSelectedCreatures={setSelectedCreatures}
-                HandleSelectFromParty={HandleSelectFromParty}
-                HandleSelectFromBestiary={HandleSelectFromBestiary}
-                HandleGenerateCombat={HandleGenerateCombat}
-                resultText={openTab}
-                level={level}
-              />
-            )}
-            {combats.map((combat, index) => openTab === index + 1 && <Combat combat={combat} HandleEndCombat={HandleEndCombat} />)}
-            {openTab === MAIN_TABS.TREASURE && <Treasure resultText={openTab} level={level} />}
-          </>
-        ) : (
-          <EditCreature setIsEditCreatureOpen={setIsEditCreatureOpen} />
-        )
+      <img src={background} alt={<a href="https://www.freepik.com/photos/people">People photo created by liuzishan - www.freepik.com</a>} />
+      {!isEditCreatureOpen ? (
+        <>
+          {openTab === MAIN_TABS.SKILL_CHECK && <SkillCheck resultText={openTab} level={level} />}
+          {openTab === MAIN_TABS.COMBAT && (
+            <CombatSetup
+              selectedCharacters={selectedCharacters}
+              selectedCreatures={selectedCreatures}
+              setSelectedCreatures={setSelectedCreatures}
+              HandleSelectFromParty={HandleSelectFromParty}
+              HandleSelectFromBestiary={HandleSelectFromBestiary}
+              HandleGenerateCombat={HandleGenerateCombat}
+              resultText={openTab}
+              level={level}
+            />
+          )}
+          {combats.map((combat, index) => openTab === index + 1 && <Combat combat={combat} HandleEndCombat={HandleEndCombat} />)}
+          {openTab === MAIN_TABS.TREASURE && <Treasure resultText={openTab} level={level} />}
+        </>
       ) : (
-        <div className="not-pc">
-          <h2>Essa aplicação não possui versão mobile. Por favor acesse o website através de um PC ou notebook.</h2>
-        </div>
+        <EditCreature setIsEditCreatureOpen={setIsEditCreatureOpen} />
       )}
     </div>
   );

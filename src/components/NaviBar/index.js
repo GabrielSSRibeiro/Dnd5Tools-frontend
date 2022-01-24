@@ -34,7 +34,6 @@ function NaviBar({
   setOpenTab,
   isEditCreatureOpen,
   setIsEditCreatureOpen,
-  isPC,
 }) {
   return (
     <div className="NaviBar-container">
@@ -42,11 +41,11 @@ function NaviBar({
         <div>
           <h3>A</h3>
           <h3>SCENDANCE</h3>
-          {isPC && <h4>Ferramentas D&amp;D 5</h4>}
+          <h4>Ferramentas D&amp;D 5</h4>
         </div>
         <button onClick={() => setIsMenuOpen(true)}>Menu</button>
       </section>
-      {!isEditCreatureOpen && isPC && (
+      {!isEditCreatureOpen && (
         <section>
           <Party
             selectedCharacters={selectedCharacters}
