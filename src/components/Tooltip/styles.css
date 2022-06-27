@@ -32,6 +32,10 @@
   column-gap: 10px;
 }
 
+.Tooltip-container .tooltip-contents .content-wrapper i {
+  color: var(--white);
+}
+
 .Tooltip-container span {
   color: var(--white);
 }
