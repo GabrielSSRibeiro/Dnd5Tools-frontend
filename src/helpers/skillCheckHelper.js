@@ -5,7 +5,6 @@ export const CHECK_DIFFICULTIES = ["Baixa", DEFAULT_DIFFICULTY, "Alta", "Extrema
 export const DEFAULT_INTENSITY = ["Nenhuma"];
 export const DAMAGE_INTENSITIES = [DEFAULT_INTENSITY, "Baixa", "Média", "Alta", "Extrema"];
 export const DEFAULT_CONDITION = ["Nenhuma"];
-
 export const CONDITIONS = [
   DEFAULT_CONDITION,
   "Agarrado",
@@ -18,6 +17,16 @@ export const CONDITIONS = [
   "Petrificado",
   "Inconsciente",
   "Exaustão",
+];
+export const DEFAULT_CONDITION_DURATION = ["Nenhuma"];
+
+const conditionDurationTimes = ["1 turno", "1 minuto", "1 hora", "1 dia"];
+export const CONDITION_DURATIONS = [
+  DEFAULT_CONDITION_DURATION,
+  `Baixa (${conditionDurationTimes[0]})`,
+  `Média (${conditionDurationTimes[1]})`,
+  `Alta (${conditionDurationTimes[2]})`,
+  `Extrema (${conditionDurationTimes[3]})`,
 ];
 
 export const MIN_DIFICULTY = 10;
@@ -46,19 +55,23 @@ const getDamage = (level, damageIntensity) => {
   return variance(damage, damageVariance);
 };
 
-export const getSkillCheck = (level, checkDifficulty, condition, damageIntensity) => {
+export const getSkillCheck = (level, checkDifficulty, damageIntensity, condition, conditionDuration) => {
   let skillCheck = [];
 
   const difficulty = getDifficulty(level, checkDifficulty);
   skillCheck.push({ value: difficulty, name: "Dificuldade" });
 
+  if (damageIntensity !== DEFAULT_INTENSITY) {
+    const damage = getDamage(level, damageIntensity);
+    skillCheck.push({ value: damage, name: "Dano" });
+  }
+
   if (condition !== DEFAULT_CONDITION) {
     skillCheck.push({ value: condition, name: "Condição" });
   }
 
-  if (damageIntensity !== DEFAULT_INTENSITY) {
-    const damage = getDamage(level, damageIntensity);
-    skillCheck.push({ value: damage, name: "Dano" });
+  if (conditionDuration !== DEFAULT_CONDITION_DURATION) {
+    skillCheck.push({ value: conditionDurationTimes[CONDITION_DURATIONS.indexOf(conditionDuration)], name: "Duração" });
   }
 
   return skillCheck;

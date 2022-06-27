@@ -4,10 +4,27 @@
   align-items: flex-start;
   justify-content: center;
   position: relative;
-  cursor: pointer;
+}
+
+.Select-container .label-wrapper {
+  width: 100%;
+  margin-bottom: 5px;
+
+  display: flex;
+  align-items: center;
+}
+.Select-container .label-wrapper.label-and-info {
+  justify-content: space-between;
+}
+.Select-container .label-wrapper.label {
+  justify-content: flex-start;
+}
+.Select-container .label-wrapper.info {
+  justify-content: flex-end;
 }
 
 .Select-container > section {
+  cursor: pointer;
   /* border-radius: 8px; */
   background-color: var(--white);
   padding: 10px 10px 10px 15px;

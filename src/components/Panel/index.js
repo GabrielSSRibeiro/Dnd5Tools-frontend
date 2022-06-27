@@ -1,10 +1,11 @@
 import React from "react";
 
 import Jewel from "../Jewel";
+import Info from "../Info";
 
 import "./styles.css";
 
-function Panel({ title, children }) {
+function Panel({ title = null, info = null, children }) {
   const jewelSide = 18;
 
   return (
@@ -15,9 +16,10 @@ function Panel({ title, children }) {
             <Jewel side={jewelSide} outerStyle="gray" innerStyle="gray-gradient" />
           </aside>
           <div>
-            {/* <div> */}
-            <h4>{title}</h4>
-            {/* </div> */}
+            <div>
+              <h4>{title}</h4>
+              {info && <Info contents={info} />}
+            </div>
           </div>
           <aside className="title-gem">
             <Jewel side={jewelSide} outerStyle="gray" innerStyle="gray-gradient" />

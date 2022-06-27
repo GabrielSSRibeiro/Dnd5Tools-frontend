@@ -163,29 +163,41 @@ function Home() {
         setOpenTab={setOpenTab}
         isEditCreatureOpen={isEditCreatureOpen}
         setIsEditCreatureOpen={setIsEditCreatureOpen}
+        HandleEndCombat={HandleEndCombat}
       />
       <img src={background} alt={<a href="https://www.freepik.com/photos/people">People photo created by liuzishan - www.freepik.com</a>} />
-      {!isEditCreatureOpen ? (
-        <>
-          {openTab === MAIN_TABS.SKILL_CHECK && <SkillCheck resultText={openTab} level={level} />}
-          {openTab === MAIN_TABS.COMBAT && (
-            <CombatSetup
-              selectedCharacters={selectedCharacters}
-              selectedCreatures={selectedCreatures}
-              setSelectedCreatures={setSelectedCreatures}
-              HandleSelectFromParty={HandleSelectFromParty}
-              HandleSelectFromBestiary={HandleSelectFromBestiary}
-              HandleGenerateCombat={HandleGenerateCombat}
-              resultText={openTab}
-              level={level}
-            />
-          )}
-          {combats.map((combat, index) => openTab === index + 1 && <Combat combat={combat} HandleEndCombat={HandleEndCombat} />)}
-          {openTab === MAIN_TABS.TREASURE && <Treasure resultText={openTab} level={level} />}
-        </>
-      ) : (
+
+      <div className={`section-wrapper ${isEditCreatureOpen ? "hidden" : ""}`}>
+        <div className={`section-wrapper ${openTab !== MAIN_TABS.SKILL_CHECK ? "hidden" : ""}`}>
+          <SkillCheck resultText={openTab} level={level} />
+        </div>
+
+        <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
+          <CombatSetup
+            selectedCharacters={selectedCharacters}
+            selectedCreatures={selectedCreatures}
+            setSelectedCreatures={setSelectedCreatures}
+            HandleSelectFromParty={HandleSelectFromParty}
+            HandleSelectFromBestiary={HandleSelectFromBestiary}
+            HandleGenerateCombat={HandleGenerateCombat}
+            resultText={openTab}
+            level={level}
+          />
+        </div>
+        {combats.map((combat, index) => (
+          <div key={index} className={`section-wrapper ${openTab !== index + 1 ? "hidden" : ""}`}>
+            <Combat combat={combat} />
+          </div>
+        ))}
+
+        <div className={`section-wrapper ${openTab !== MAIN_TABS.TREASURE ? "hidden" : ""}`}>
+          <Treasure resultText={openTab} level={level} />
+        </div>
+      </div>
+
+      <div className={`section-wrapper ${!isEditCreatureOpen ? "hidden" : ""}`}>
         <EditCreature setIsEditCreatureOpen={setIsEditCreatureOpen} />
-      )}
+      </div>
     </div>
   );
 }

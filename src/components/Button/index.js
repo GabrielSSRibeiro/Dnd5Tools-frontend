@@ -8,7 +8,7 @@ function Button({ text, onClick, isDisabled, className = "" }) {
   }
 
   return (
-    <div className={`Button-container ${isDisabled && "button-disabled"} ${className}`} onClick={!isDisabled ? HandleClick : () => {}}>
+    <div className={`Button-container ${isDisabled ? "element-disabled" : ""} ${className}`} onClick={!isDisabled ? HandleClick : () => {}}>
       <div>
         <h5>{text}</h5>
       </div>

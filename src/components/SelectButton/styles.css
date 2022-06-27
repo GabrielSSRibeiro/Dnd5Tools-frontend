@@ -48,3 +48,6 @@
 .text-selected {
   color: var(--white);
 }
+.SelectButton-container section:last-child .button-selected.close {
+  background: var(--errorColor) !important;
+}

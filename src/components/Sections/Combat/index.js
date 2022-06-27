@@ -1,11 +1,9 @@
 import React from "react";
 //  import api from "../../services/api";
 
-import Button from "../../Button";
-
 import "./styles.css";
 
-function Combat({ combat, HandleEndCombat }) {
+function Combat({ combat }) {
   // const history = useHistory();
 
   //   useEffect(() => {
@@ -17,7 +15,7 @@ function Combat({ combat, HandleEndCombat }) {
   return (
     <div className="Combat-container">
       <h1>Em Desenvolvimento</h1>
-      <Button text="Finalizar" onClick={HandleEndCombat} />
+      <h2>Combate: {combat.selectedCreatures.length}</h2>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { MAX_COMBATS } from "../../Tables/combat";
+import { MAX_COMBATS } from "../../helpers/combatHelper";
 
 import SelectButton from "../SelectButton";
 import Party from "../Sections/Party";
@@ -34,7 +34,16 @@ function NaviBar({
   setOpenTab,
   isEditCreatureOpen,
   setIsEditCreatureOpen,
+  HandleEndCombat,
 }) {
+  function HandleCombatTabClick(combatNumber) {
+    if (openTab !== combatNumber) {
+      setOpenTab(combatNumber);
+    } else {
+      HandleEndCombat();
+    }
+  }
+
   return (
     <div className="NaviBar-container">
       <section>
@@ -77,8 +86,14 @@ function NaviBar({
             />
             <div className="combat-buttons-container">
               {combats.map((combat, index) => (
-                <div className="combat-buttons" style={{ zIndex: -1 - index }}>
-                  <SelectButton isLarge={true} text={index + 1} onClick={() => setOpenTab(index + 1)} isSelected={openTab === index + 1} />
+                <div key={index} className="combat-buttons" style={{ zIndex: -1 - index }}>
+                  <SelectButton
+                    isLarge={true}
+                    text={openTab !== index + 1 ? index + 1 : "X"}
+                    onClick={() => HandleCombatTabClick(index + 1)}
+                    isSelected={openTab === index + 1}
+                    className="close"
+                  />
                 </div>
               ))}
             </div>

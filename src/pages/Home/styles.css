@@ -4,6 +4,9 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+
+  min-width: 1440px;
+  min-height: 700px;
 }
 
 .Home-container > img {
@@ -12,5 +15,12 @@
   object-position: 0 -75px;
   z-index: -1;
   width: 100%;
+  height: 100%;
+
+  min-width: 1440px;
+  min-height: 700px;
+}
+
+.Home-container .section-wrapper {
   height: 100%;
 }

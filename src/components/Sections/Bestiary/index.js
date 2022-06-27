@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 //  import api from "../../services/api";
 import { SortArrayOfObjByProperty } from "../../../utils";
-import { CREATURE_LEVELS, CREATURE_ENVIROMENTS, CREATURE_TYPES, CREATURE_SIZE } from "../../../Tables/bestiary";
+import { CREATURE_LEVELS, CREATURE_ENVIROMENTS, CREATURE_TYPES, CREATURE_SIZE } from "../../../helpers/bestiaryHelper";
 
 import Button from "../../Button";
 import CheckInput from "../../CheckInput";
@@ -25,7 +25,7 @@ function Bestiary({
   const [selectedEnv, setSelectedEnv] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
-  const [tempSelectedCreatures, setTempSelectedCreatures] = useState(selectedCreatures);
+  const [tempSelectedCreatures, setTempSelectedCreatures] = useState([]);
 
   let filteredCreatures = [];
   const MAX_SELECTED = 7;
@@ -92,6 +92,10 @@ function Bestiary({
     return filterCreatures();
   }, [creatures, nameFilter, selectedLevel, selectedEnv, selectedType, selectedSize]);
 
+  useEffect(() => {
+    setTempSelectedCreatures(selectedCreatures);
+  }, [selectedCreatures]);
+
   return (
     <div className="Bestiary-container">
       {isSelecting && <div className="screen-block" onClick={HandleClose}></div>}
@@ -141,7 +145,7 @@ function Bestiary({
                   <aside />
                 </div>
               </div>
-              {!isSelecting ? <h5>{creatures.length} Criaturas</h5> : <h5>Selecione até {MAX_SELECTED} criaturas esse combate</h5>}
+              {!isSelecting ? <h5>{creatures.length} Criaturas</h5> : <h5>Selecione até {MAX_SELECTED} criaturas para esse combate</h5>}
             </div>
             <h5>BESTIÁRIO</h5>
           </header>
@@ -224,7 +228,7 @@ function Bestiary({
             </div>
           </main>
           {isSelecting && (
-            <div className="selecting-footer">
+            <div className={`selecting-footer ${filteredCreatures.length <= 3 ? "filtered" : ""}`}>
               <h5>
                 {tempSelectedCreatures.length > 0 ? `${tempSelectedCreatures.length} criatura(s) selecionada(s)` : "Nenhuma criatura selecionada"}
               </h5>

@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: flex-start;
 }
+
 .SkillCheck-container > section {
   margin-top: 5%;
   width: 1000px;
@@ -16,6 +17,9 @@
   justify-content: center;
   flex-wrap: wrap;
   row-gap: 20px;
+}
+.SkillCheck-container .panel-select.condition {
+  column-gap: 20px;
 }
 
 .SkillCheck-container > footer {

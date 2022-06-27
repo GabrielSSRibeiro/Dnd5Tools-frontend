@@ -5,9 +5,21 @@
   justify-content: center;
 }
 
-.TextInput-container label {
+.TextInput-container .label-wrapper {
+  width: 100%;
   margin-bottom: 5px;
-  align-self: flex-start;
+
+  display: flex;
+  align-items: center;
+}
+.TextInput-container .label-wrapper.label-and-info {
+  justify-content: space-between;
+}
+.TextInput-container .label-wrapper.label {
+  justify-content: flex-start;
+}
+.TextInput-container .label-wrapper.info {
+  justify-content: flex-end;
 }
 
 .TextInput-container > main {

@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
 import {
+  MIN_DIFICULTY,
   DEFAULT_DIFFICULTY,
   CHECK_DIFFICULTIES,
   DEFAULT_INTENSITY,
   DAMAGE_INTENSITIES,
   DEFAULT_CONDITION,
   CONDITIONS,
+  CONDITION_DURATIONS,
+  DEFAULT_CONDITION_DURATION,
   getSkillCheck,
-} from "../../../Tables/skillCheck";
+} from "../../../helpers/skillCheckHelper";
 
 import Panel from "../../Panel";
 import Select from "../../Select";
@@ -23,8 +26,17 @@ function SkillCheck({ resultText, level }) {
   const [checkDifficulty, setCheckDifficulty] = useState(DEFAULT_DIFFICULTY);
   const [damageIntensity, setDamageIntensity] = useState(DEFAULT_INTENSITY);
   const [condition, setCondition] = useState(DEFAULT_CONDITION);
+  const [conditionDuration, setConditionDuration] = useState(DEFAULT_CONDITION_DURATION);
 
-  const generatedSkillCheck = getSkillCheck(level, checkDifficulty, condition, damageIntensity);
+  const generatedSkillCheck = getSkillCheck(level, checkDifficulty, damageIntensity, condition, conditionDuration);
+
+  function HandleSetCondition(value) {
+    if (value === DEFAULT_CONDITION) {
+      setConditionDuration(DEFAULT_CONDITION_DURATION);
+    }
+
+    return setCondition(value);
+  }
 
   // const history = useHistory();
 
@@ -39,7 +51,7 @@ function SkillCheck({ resultText, level }) {
       {!hasResult ? (
         <>
           <section>
-            <Panel title="Dificuldade">
+            <Panel title="Dificuldade" info={[{ text: `Dificuldade mínima: ${MIN_DIFICULTY}` }]}>
               <main className="panel-select">
                 {CHECK_DIFFICULTIES.map((option) => (
                   <SelectButton
@@ -56,8 +68,15 @@ function SkillCheck({ resultText, level }) {
           </section>
           <section>
             <Panel title="Condição">
-              <main className="panel-select">
-                <Select extraWidth={150} value={condition} onSelect={setCondition} options={CONDITIONS} />
+              <main className="panel-select condition">
+                <Select extraWidth={150} value={condition} onSelect={HandleSetCondition} options={CONDITIONS} />
+                <Select
+                  extraWidth={150}
+                  value={conditionDuration}
+                  onSelect={setConditionDuration}
+                  options={CONDITION_DURATIONS}
+                  isDisabled={condition === DEFAULT_CONDITION}
+                />
               </main>
             </Panel>
           </section>

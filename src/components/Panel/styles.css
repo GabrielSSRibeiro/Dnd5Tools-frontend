@@ -21,9 +21,7 @@
   height: 40px;
   position: absolute;
   border: solid 1px var(--gray2);
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: -20px;
 
   display: flex;
   align-items: center;
@@ -49,17 +47,26 @@
   border: solid 1px var(--gray2);
   border-top: none;
   border-bottom: none;
+  height: 100%;
 
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.Panel-container > header > div > h4 {
+.Panel-container > header > div > div {
   width: 100%;
   margin: 0 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 5px;
+}
+
+.Panel-container > header > div > div > h4 {
+  width: fit-content;
   text-align: center;
+  white-space: nowrap;
 }
 
 .Panel-container > section {

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
 
-import { SortArrayOfObjByProperty } from "../../../utils";
-import { COMBAT_DIFICULTIES, MAX_ALLOWED } from "../../../Tables/combat";
+import * as utils from "../../../utils";
+import { COMBAT_DIFFICULTIES, MAX_ALLOWED } from "../../../helpers/combatHelper";
 
 import Panel from "../../Panel";
 import Button from "../../Button";
@@ -30,6 +30,16 @@ function CombatSetup({
   //   });
   // }, []);
 
+  function SelectFromParty() {
+    HandleSelectFromParty();
+    setCombatDificulty(null);
+  }
+
+  function SelectFromBestiary() {
+    HandleSelectFromBestiary();
+    setCombatDificulty(null);
+  }
+
   function HandleAddExtraOne(index) {
     let creature = { ...selectedCreatures[index] };
 
@@ -56,15 +66,17 @@ function CombatSetup({
     creature.name = latestCreatureNameArray.join(" ");
 
     let creatures = [...selectedCreatures, creature];
-    SortArrayOfObjByProperty(creatures, "name");
+    utils.SortArrayOfObjByProperty(creatures, "name");
 
     setSelectedCreatures(creatures);
+    setCombatDificulty(null);
   }
 
   function HandleDelete(creature) {
     const creatures = selectedCreatures.filter((selectedCreature) => selectedCreature.name !== creature.name);
 
     setSelectedCreatures(creatures);
+    setCombatDificulty(null);
   }
 
   function HandleNPC(creature) {
@@ -76,9 +88,14 @@ function CombatSetup({
 
     const creatures = selectedCreatures.filter((selectedCreature) => selectedCreature.name !== creature.name);
     creatures.push(creature);
-    SortArrayOfObjByProperty(creatures, "name");
+    utils.SortArrayOfObjByProperty(creatures, "name");
 
     setSelectedCreatures(creatures);
+    setCombatDificulty(null);
+  }
+
+  function GetCombatDifficultyNames() {
+    return COMBAT_DIFFICULTIES.map((cd) => `${cd} para ${selectedCharacters.length} personagens de nível ${level}`);
   }
 
   return (
@@ -89,14 +106,14 @@ function CombatSetup({
             <div className="panel-content">
               {selectedCharacters &&
                 selectedCharacters.map((character) => (
-                  <div className="character-details">
+                  <div key={character} className="character-details">
                     <div className="character-name">
                       <h4>{character}</h4>
                     </div>
                   </div>
                 ))}
               <footer style={{ marginTop: selectedCharacters.length > 0 ? 25 : 0 }}>
-                <Button text="Selecionar" onClick={HandleSelectFromParty} />
+                <Button text="Selecionar" onClick={SelectFromParty} />
               </footer>
             </div>
           </Panel>
@@ -106,8 +123,8 @@ function CombatSetup({
             <div className="panel-content">
               {selectedCreatures &&
                 selectedCreatures.map((creature, index) => (
-                  <div className="creature-details">
-                    <button onClick={() => HandleAddExtraOne(index)} className={selectedCreatures.length === MAX_ALLOWED ? "button-disabled" : ""}>
+                  <div key={index} className="creature-details">
+                    <button onClick={() => HandleAddExtraOne(index)} className={selectedCreatures.length === MAX_ALLOWED ? "element-disabled" : ""}>
                       +1
                     </button>
                     <button className={creature.isNPC ? "toggle-npc" : "toggle-creature"} onClick={() => HandleNPC(creature)}>
@@ -125,7 +142,7 @@ function CombatSetup({
                   </div>
                 ))}
               <footer style={{ marginTop: selectedCreatures.length > 0 ? 25 : 0 }}>
-                <Button text="Selecionar" onClick={HandleSelectFromBestiary} />
+                <Button text="Selecionar" onClick={SelectFromBestiary} />
               </footer>
             </div>
           </Panel>
@@ -134,11 +151,12 @@ function CombatSetup({
       <footer>
         <Select
           isLarge={true}
-          extraWidth={150}
+          extraWidth={315}
           value={combatDificulty ?? "DIficuldade do Combate"}
           onSelect={setCombatDificulty}
           dropUp={true}
-          options={COMBAT_DIFICULTIES}
+          options={GetCombatDifficultyNames()}
+          isDisabled={selectedCharacters.length === 0 || selectedCreatures.length === 0 || selectedCreatures.every((sl) => sl.isNPC)}
         />
 
         <Button

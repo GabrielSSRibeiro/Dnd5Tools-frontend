@@ -3,12 +3,7 @@ import { useAuth } from "../../contexts/Auth";
 import { useHistory } from "react-router-dom";
 //  import api from "../../services/api";
 
-import { turnValueIntoPercentageString as percentage } from "../../utils";
-import { MIN_DIFICULTY } from "../../Tables/skillCheck";
-import { UNCOMMON_ITEM_MIN_PRICE, PRIMARY_AFIX_PROB, SECONDARY_AFIX_PROB, CURSE_AFIX_PROB } from "../../Tables/treasure";
-
 import Button from "../Button";
-import Panel from "../Panel";
 
 import "./styles.css";
 
@@ -41,21 +36,7 @@ function MenuModal({ setIsMenuOpen }) {
             <i class="fas fa-times"></i>
           </button>
         </header>
-        <div className="modal-body">
-          <Panel title="Teste">
-            <div className="panel-body">
-              <h5>Dificuldade mínima: {MIN_DIFICULTY}</h5>
-            </div>
-          </Panel>
-          <Panel title="Tesouro">
-            <div className="panel-body">
-              <h5>Preço mínimo de item incomum: {UNCOMMON_ITEM_MIN_PRICE} PO</h5>
-              <h5>Probabilidade de afixo primário em item: {percentage(PRIMARY_AFIX_PROB)}</h5>
-              <h5>Probabilidade de afixo secundário em item: {percentage(SECONDARY_AFIX_PROB)}</h5>
-              <h5>Probabilidade de afixo amaldiçoado em item: {percentage(CURSE_AFIX_PROB)}</h5>
-            </div>
-          </Panel>
-        </div>
+        <div className="modal-body"></div>
         <footer>
           <Button text="Sair" onClick={HandleLogout} />
         </footer>

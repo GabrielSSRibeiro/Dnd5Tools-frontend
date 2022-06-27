@@ -66,7 +66,7 @@ function SelectButton({ isLarge = false, isSelected = false, isLong = false, tex
         <main
           className={`
           button-${!isSelected ? "selected" : "default"} 
-        ${isDisabled && "button-disabled"} ${className}`}
+        ${isDisabled && "element-disabled"} ${className}`}
           style={variant.button.firstBorder}
         ></main>
       </section>
@@ -75,7 +75,7 @@ function SelectButton({ isLarge = false, isSelected = false, isLong = false, tex
         <main
           className={`
           button-${isSelected ? "selected" : "default"} 
-        ${isDisabled && "button-disabled"} ${className}`}
+        ${isDisabled && "element-disabled"} ${className}`}
           style={variant.button.body}
         >
           {isLarge ? (

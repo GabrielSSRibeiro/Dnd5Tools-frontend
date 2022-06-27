@@ -193,6 +193,8 @@ const checkAndApplyPotion = (itemType, itemAfixes) => {
 const getItemName = (type, rarity, itemAfixes) => {
   let name = [];
 
+  const hasStrengthAndDexterity = itemAfixes.some((afix) => strengthAbilities.includes(afix.name) && dexterityAbilities.includes(afix.name));
+  const hasStrength = itemAfixes.some((afix) => strengthAbilities.includes(afix.name));
   const hasDexterity = itemAfixes.some((afix) => dexterityAbilities.includes(afix.name));
   const hasIntelligence = itemAfixes.some((afix) => intelligenceAbilities.includes(afix.name));
   const hasWisdom = itemAfixes.some((afix) => wisdomAbilities.includes(afix.name));
@@ -211,7 +213,11 @@ const getItemName = (type, rarity, itemAfixes) => {
   }
 
   if (hasAttribute) {
-    if (hasDexterity) {
+    if (hasStrengthAndDexterity) {
+      name.push("Da Força e Destreza");
+    } else if (hasStrength) {
+      name.push("Da Força");
+    } else if (hasDexterity) {
       name.push("Da Destreza");
     } else if (hasIntelligence) {
       name.push("Da Inteligência");

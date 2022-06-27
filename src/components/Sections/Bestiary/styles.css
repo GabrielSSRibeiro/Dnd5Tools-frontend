@@ -255,6 +255,7 @@
   align-items: center;
   justify-content: space-between;
 }
+
 .Bestiary-container > .bestiary-tab > main > .bestiary-list {
   margin-top: 16px;
   padding: 8px;
@@ -346,16 +347,20 @@
 }
 
 .bestiary-tab .selecting-footer {
-  position: absolute;
   bottom: 0;
   background-color: var(--white);
+  border-top: 1px solid var(--primaryPurple3);
   height: 60px;
+  min-height: 60px;
   width: 100%;
   padding: 0 35px;
   z-index: 1;
-  border-top: 1px solid var(--primaryPurple3);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.bestiary-tab .selecting-footer.filtered {
+  position: absolute;
 }

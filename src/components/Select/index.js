@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import Info from "../Info";
+
 import "./styles.css";
 
 function Select({
@@ -9,8 +11,11 @@ function Select({
   onSelect = () => {},
   defaultValue = null,
   options = [],
+  label = null,
+  info = null,
   dropUp = false,
   className = "",
+  isDisabled = false,
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,14 +34,20 @@ function Select({
   }
 
   return (
-    <div className={`Select-container ${className}`} tabIndex="-1" onBlur={() => setIsOpen(false)}>
+    <div className={`Select-container ${className} ${isDisabled ? "element-disabled" : ""}`} tabIndex="-1" onBlur={() => setIsOpen(false)}>
+      <div className={`label-wrapper ${label && info ? "label-and-info" : !info ? "label" : "info"}`}>
+        {label && <span>{label}</span>}
+        {info && <Info contents={info} />}
+      </div>
       <section
         style={{
           width: selectWidth + extraWidth,
           height: height,
         }}
-        className={`${isOpen ? "select-open" : "select-closed"}`}
-        onClick={() => setIsOpen(!isOpen)}
+        className={`
+        ${isOpen ? "select-open" : "select-closed"}
+        `}
+        onClick={() => (!isDisabled ? setIsOpen(!isOpen) : {})}
       >
         <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{value || defaultValue}</h5>
         <i className="fas fa-chevron-down"></i>

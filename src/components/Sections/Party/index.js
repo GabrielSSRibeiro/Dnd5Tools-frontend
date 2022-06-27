@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //  import api from "../../services/api";
 
-import { LEVELS } from "../../../Tables/party";
-import { MAX_ALLOWED } from "../../../Tables/combat";
+import { LEVELS } from "../../../helpers/partyHelper";
+import { MAX_ALLOWED } from "../../../helpers/combatHelper";
 
 import Button from "../../Button";
 import Select from "../../Select";
@@ -30,7 +30,7 @@ function Party({
   const [characterBeenEdited, setCharacterBeenEdited] = useState(null);
   const [newEditedCharacterName, setNewEditedCharacterName] = useState(null);
   const [selectedCharactersInGroup, setSelectedCharactersInGroup] = useState([]);
-  const [tempSelectedCharacters, setTempSelectedCharacters] = useState(selectedCharacters);
+  const [tempSelectedCharacters, setTempSelectedCharacters] = useState([]);
 
   const numberOfCharacters = groups.reduce((acc, current) => acc.concat(current), []).length;
   let groupOptions = groups.map((group, index) => `Grupo ${index + 1}`);
@@ -198,6 +198,10 @@ function Party({
     setSelectedCharacters([]);
   }
 
+  useEffect(() => {
+    setTempSelectedCharacters(selectedCharacters);
+  }, [selectedCharacters]);
+
   return (
     <div className="Party-container">
       {isSelecting && <div className="screen-block" onClick={HandleClose}></div>}
@@ -229,7 +233,7 @@ function Party({
       {isPartyOpen && (
         <div className="party-tab">
           <header className={isSelecting ? "selecting-header" : ""}>
-            {!isSelecting ? <h5>{numberOfCharacters} PERSONAGENS</h5> : <h5>Selecione até {MAX_ALLOWED} personagens esse combate</h5>}
+            {!isSelecting ? <h5>{numberOfCharacters} PERSONAGENS</h5> : <h5>Selecione até {MAX_ALLOWED} personagens para esse combate</h5>}
             <div>
               {!isSelecting && (
                 <>
@@ -270,8 +274,8 @@ function Party({
                       <i class="fas fa-times"></i>
                     </div>
                     <section>
-                      <span>Nome do Personagem</span>
                       <TextInput
+                        label="Nome do Personagem"
                         value={newCharacterName}
                         onChange={(e) => {
                           setNewCharacterName(e.target.value);
@@ -279,8 +283,8 @@ function Party({
                       />
                     </section>
                     <section>
-                      <span>Grupo</span>
                       <Select
+                        label="Grupo"
                         isLarge={true}
                         extraWidth={150}
                         value={newCharacterGroup}
@@ -299,6 +303,7 @@ function Party({
             <div className="party-groups">
               {groups.map((group, groupIndex) => (
                 <main
+                  key={groupIndex}
                   onClick={() => (isSelecting ? HandleSelectGroup(group) : {})}
                   className={`${isSelecting ? "selecting-group" : ""} ${
                     isSelecting && tempSelectedCharacters.some((selectedCharacter) => group.includes(selectedCharacter)) ? "selected-group" : ""
@@ -325,7 +330,7 @@ function Party({
                   </div>
                   <div className="group-characters" style={{ borderWidth: !isSelecting ? 1 : 0 }}>
                     {group.map((character, characterIndex) => (
-                      <div className="group-character">
+                      <div key={character} className="group-character">
                         {characterBeenEdited !== character ? (
                           <>
                             {!isSelecting && AllowToSelect(groupIndex) && (
@@ -374,7 +379,7 @@ function Party({
                   </div>
                   <div className="group-characters">
                     {inactiveGroup.map((character, characterIndex) => (
-                      <div className="group-character">
+                      <div key={character} className="group-character">
                         {characterBeenEdited !== character ? (
                           <>
                             {AllowToSelect(null) && (

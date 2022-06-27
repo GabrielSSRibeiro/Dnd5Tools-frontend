@@ -18,7 +18,9 @@ import {
   EQUIPMENT_TYPES,
   EQUIPMENT_RARITIES,
   getItemAfixes,
-} from "../../../Tables/treasure";
+} from "../../../helpers/treasureHelper";
+import { UNCOMMON_ITEM_MIN_PRICE, PRIMARY_AFIX_PROB, SECONDARY_AFIX_PROB, CURSE_AFIX_PROB } from "../../../helpers/treasureHelper";
+import { turnValueIntoPercentageString as percentage } from "../../../utils";
 
 import Panel from "../../Panel";
 import SelectButton from "../../SelectButton";
@@ -98,7 +100,7 @@ function Treasure({ resultText, level }) {
           )}
           {treasureType === treasureTypes.MATERIAL && (
             <section className="treasure-panels">
-              <Panel title="Preço">
+              <Panel title="Preço" info={[{ text: `Preço mínimo de item incomum: ${UNCOMMON_ITEM_MIN_PRICE} PO` }]}>
                 <main className="panel-select">
                   {MATERIAL_PRICE_INFLATIONS.map((option) => (
                     <SelectButton
@@ -117,7 +119,20 @@ function Treasure({ resultText, level }) {
           {treasureType === treasureTypes.EQUIPMENT && (
             <>
               <section className="treasure-panels">
-                <Panel title="Tipo do Item">
+                <Panel
+                  title="Tipo do Item"
+                  info={[
+                    {
+                      text: `Probabilidade de afixo primário em item: ${percentage(PRIMARY_AFIX_PROB)}`,
+                    },
+                    {
+                      text: `Probabilidade de afixo secundário em item: ${percentage(SECONDARY_AFIX_PROB)}`,
+                    },
+                    {
+                      text: `Probabilidade de afixo amaldiçoado em item: ${percentage(CURSE_AFIX_PROB)}`,
+                    },
+                  ]}
+                >
                   <main className="panel-select">
                     {EQUIPMENT_TYPES.map((option) => (
                       <SelectButton
