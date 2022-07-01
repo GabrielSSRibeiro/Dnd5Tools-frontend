@@ -40,8 +40,6 @@ function Treasure({ resultText, level }) {
   const treasureTypes = { GOLD_PIECES: TREASURE_TYPES[0], MATERIAL: TREASURE_TYPES[1], EQUIPMENT: TREASURE_TYPES[2] };
   const generatedItem = getItemAfixes(level, equipmentType, equipmentRarity);
 
-  // const history = useHistory();
-
   //   useEffect(() => {
   //   api.get("items").then((response) => {
   //     setItems(response.data);

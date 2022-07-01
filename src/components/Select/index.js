@@ -35,10 +35,12 @@ function Select({
 
   return (
     <div className={`Select-container ${className} ${isDisabled ? "element-disabled" : ""}`} tabIndex="-1" onBlur={() => setIsOpen(false)}>
-      <div className={`label-wrapper ${label && info ? "label-and-info" : !info ? "label" : "info"}`}>
-        {label && <span>{label}</span>}
-        {info && <Info contents={info} />}
-      </div>
+      {(label || info) && (
+        <div className={`label-wrapper ${label && info ? "label-and-info" : !info ? "label" : "info"}`}>
+          {label && <span>{label}</span>}
+          {info && <Info contents={info} />}
+        </div>
+      )}
       <section
         style={{
           width: selectWidth + extraWidth,

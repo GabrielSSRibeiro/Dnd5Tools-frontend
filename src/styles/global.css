@@ -26,6 +26,7 @@
 
   --successColor: #2f5852;
   --errorColor: #a72638;
+  --primaryBackground: #242029;
 
   --purpleGradient: linear-gradient(180deg, #70549f 0%, #2f2146 100%);
   --grayGradient: linear-gradient(45deg, #252525 2.86%, rgba(37, 37, 37, 0.37) 91.25%);
@@ -94,6 +95,11 @@ input {
   font-family: var(--primaryFont);
 }
 
+textarea {
+  font-size: 15px;
+  font-family: var(--primaryFont);
+}
+
 button {
   cursor: pointer;
 }
@@ -105,6 +111,10 @@ button {
 
 .hidden {
   display: none;
+}
+
+.invisible {
+  visibility: hidden;
 }
 
 ::-webkit-scrollbar {

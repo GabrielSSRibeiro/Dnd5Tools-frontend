@@ -38,8 +38,6 @@ function SkillCheck({ resultText, level }) {
     return setCondition(value);
   }
 
-  // const history = useHistory();
-
   //   useEffect(() => {
   //   api.get("items").then((response) => {
   //     setItems(response.data);
@@ -67,7 +65,7 @@ function SkillCheck({ resultText, level }) {
             </Panel>
           </section>
           <section>
-            <Panel title="Condição">
+            <Panel title="Condição e Duração">
               <main className="panel-select condition">
                 <Select extraWidth={150} value={condition} onSelect={HandleSetCondition} options={CONDITIONS} />
                 <Select

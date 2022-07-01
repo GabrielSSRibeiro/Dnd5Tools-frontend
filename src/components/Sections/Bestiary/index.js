@@ -30,8 +30,6 @@ function Bestiary({
   let filteredCreatures = [];
   const MAX_SELECTED = 7;
 
-  // const history = useHistory();
-
   //   useEffect(() => {
   //   api.get("items").then((response) => {
   //     setItems(response.data);

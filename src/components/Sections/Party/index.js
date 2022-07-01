@@ -35,8 +35,6 @@ function Party({
   const numberOfCharacters = groups.reduce((acc, current) => acc.concat(current), []).length;
   let groupOptions = groups.map((group, index) => `Grupo ${index + 1}`);
 
-  // const history = useHistory();
-
   //   useEffect(() => {
   //   api.get("items").then((response) => {
   //     setItems(response.data);
@@ -274,13 +272,7 @@ function Party({
                       <i class="fas fa-times"></i>
                     </div>
                     <section>
-                      <TextInput
-                        label="Nome do Personagem"
-                        value={newCharacterName}
-                        onChange={(e) => {
-                          setNewCharacterName(e.target.value);
-                        }}
-                      />
+                      <TextInput label="Nome do Personagem" value={newCharacterName} onChange={setNewCharacterName} />
                     </section>
                     <section>
                       <Select

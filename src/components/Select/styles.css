@@ -8,7 +8,6 @@
 
 .Select-container .label-wrapper {
   width: 100%;
-  margin-bottom: 5px;
 
   display: flex;
   align-items: center;
@@ -62,6 +61,7 @@
   transform: translate(0, 100%);
   bottom: -5px;
   z-index: 10;
+  cursor: pointer;
 
   display: flex;
   flex-direction: column;

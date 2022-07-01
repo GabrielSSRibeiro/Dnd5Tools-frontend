@@ -22,8 +22,6 @@ function CombatSetup({
 }) {
   const [combatDificulty, setCombatDificulty] = useState(null);
 
-  // const history = useHistory();
-
   //   useEffect(() => {
   //   api.get("items").then((response) => {
   //     setItems(response.data);

@@ -26,21 +26,8 @@ function Login({ history }) {
       </div>
       <h4>Ferramentas D&amp;D 5</h4>
       <form onSubmit={HandleLogin}>
-        <TextInput
-          label="E-mail"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-        />
-        <TextInput
-          label="Password"
-          value={password}
-          type="password"
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        />
+        <TextInput label="E-mail" value={email} onChange={setEmail} />
+        <TextInput label="Password" value={password} type="password" onChange={setPassword} />
         <footer>
           <Button text="Entrar" onClick={HandleLogin} />
         </footer>

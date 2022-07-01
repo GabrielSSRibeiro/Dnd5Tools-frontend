@@ -27,23 +27,10 @@ function SignUp({ history }) {
       <h4>Ferramentas D&amp;D 5</h4>
       <form>
         <div>
-          <TextInput
-            label="E-mail"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          />
+          <TextInput label="E-mail" value={email} onChange={setEmail} />
         </div>
         <div>
-          <TextInput
-            label="Password"
-            value={password}
-            type="password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
+          <TextInput label="Password" value={password} type="password" onChange={setPassword} />
         </div>
         <footer>
           <Button text="Criar Conta" onClick={HandleSignUp} />

@@ -2,7 +2,7 @@ import React from "react";
 
 import "./styles.css";
 
-function Button({ text, onClick, isDisabled, className = "" }) {
+function Button({ text, icon = null, onClick, isDisabled, className = "" }) {
   function HandleClick() {
     onClick();
   }
@@ -10,7 +10,8 @@ function Button({ text, onClick, isDisabled, className = "" }) {
   return (
     <div className={`Button-container ${isDisabled ? "element-disabled" : ""} ${className}`} onClick={!isDisabled ? HandleClick : () => {}}>
       <div>
-        <h5>{text}</h5>
+        {icon && <i className={icon}></i>}
+        {text && <h5>{text}</h5>}
       </div>
     </div>
   );

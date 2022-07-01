@@ -4,8 +4,6 @@ import React from "react";
 import "./styles.css";
 
 function Combat({ combat }) {
-  // const history = useHistory();
-
   //   useEffect(() => {
   //   api.get("items").then((response) => {
   //     setItems(response.data);
