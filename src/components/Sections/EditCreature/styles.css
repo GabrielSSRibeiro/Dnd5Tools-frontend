@@ -10,28 +10,28 @@
 }
 
 .EditCreature-container .end-editing {
-  width: 50px;
   text-decoration: underline;
   color: var(--white);
   font-family: var(--primaryFont);
   font-weight: 400;
-  font-size: 18px;
+  font-size: 14px;
+  line-height: 1;
   background: none;
   border: none;
 
   position: absolute;
-  top: 15px;
-  right: 15px;
-  transform: translate(-100%, 0);
+  top: 16px;
+  right: 16px;
 }
 
 .EditCreature-container .first-step-wrapper {
   margin-top: 30px;
 
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .EditCreature-container .first-step-wrapper h2 {
@@ -123,9 +123,71 @@
 
 /* --------------------------------- */
 
-.EditCreature-container .edit-process-wrapper {
-  width: 100%;
-  height: 45px;
+.EditCreature-container.main-edit-process {
+  background: var(--blurGradient);
+
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.EditCreature-container .edit-process-basic {
+  height: 100%;
+  width: 350px;
+  margin-top: 20px;
   background-color: var(--primaryBackground);
-  background-color: red;
+  margin-top: 0;
+  padding: 0 20px 20px 20px;
+
+  display: flex;
+  align-items: flex-start;
+}
+
+.EditCreature-container .edit-process-basic h2 {
+  margin: 16px 0 16px 16px;
+  line-height: 1;
+  font-size: 14px;
+}
+
+.EditCreature-container .edit-process-basic main {
+  display: flex;
+  flex-direction: column;
+  column-gap: 0;
+  margin-bottom: 0;
+}
+
+.EditCreature-container .edit-process-basic .creature-avatar {
+  width: 300px;
+  height: 300px;
+
+  margin-bottom: 15px;
+}
+
+.EditCreature-container .edit-process-basic .creature-avatar img {
+  width: 300px;
+  height: 300px;
+}
+
+.EditCreature-container .edit-process-basic .creature-avatar .update-avatar-wrapper .img-url input {
+  width: 100%;
+}
+
+.EditCreature-container .edit-process-basic .creature-details {
+  width: 300px;
+}
+
+.EditCreature-container .edit-process-basic .creature-details .creature-name input {
+  width: 300px;
+  margin-bottom: 30px;
+}
+
+.EditCreature-container .edit-process-basic .creature-details .creature-description textarea {
+  width: 300px;
+}
+
+.EditCreature-container .edit-process-details {
+  width: 100%;
+  height: 46px;
+  background-color: var(--primaryBackground);
+  color: var(--white);
 }

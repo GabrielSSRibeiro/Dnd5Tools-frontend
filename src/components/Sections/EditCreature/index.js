@@ -7,9 +7,8 @@ import TextInput from "../../TextInput";
 import "./styles.css";
 
 function EditCreature({ setIsEditCreatureOpen }) {
-  const [imgUrl, setImgUrl] = useState("");
   const [creature, setCreature] = useState({
-    name: null,
+    name: "Hidra Alada", //null,
     description: null,
     image: "https://i.pinimg.com/564x/01/d4/17/01d417c02bd190a056c718650fc9db3b.jpg", //null
     levelRange: null,
@@ -18,6 +17,7 @@ function EditCreature({ setIsEditCreatureOpen }) {
     size: null,
   });
   const [isFirstStep, setIsFirstStep] = useState(!!!creature.type);
+  const [imgUrl, setImgUrl] = useState(creature.image ?? "");
   const [tempCreatureAvatar, setTempCreatureAvatar] = useState(creature.image);
   const [isImgValid, setIsImgValid] = useState(!!creature.image ? true : null);
 
@@ -68,63 +68,60 @@ function EditCreature({ setIsEditCreatureOpen }) {
   // }, []);
 
   return (
-    <div className="EditCreature-container">
+    <div className={`EditCreature-container ${!isFirstStep ? "main-edit-process" : ""}`}>
       <button className="end-editing" onClick={HandleCancel}>
         Cancelar
       </button>
-      {isFirstStep ? (
-        <div className="first-step-wrapper">
-          <h2>Criar Criatura</h2>
-          <main>
-            <aside className="creature-avatar">
-              {tempCreatureAvatar ? (
-                <>
-                  <img
-                    src={tempCreatureAvatar}
-                    alt="creature-avatar"
-                    className={`${isImgValid === false ? "invisible" : ""}`}
-                    onLoad={HandleImgOnLoad}
-                    onError={HandleImgOnError}
-                  />
-                  <i className={`fas fa-exclamation-triangle ${isImgValid ? "hidden" : ""}`}></i>
-                </>
-              ) : (
-                <i className="fas fa-user-circle"></i>
-              )}
-              <div className="update-avatar-wrapper">
-                <TextInput
-                  label="URL da Imagem"
-                  className={`img-url ${imgUrl === null ? "invisible" : ""}`}
-                  value={imgUrl}
-                  onChange={HandleImgUrlOnChange}
+      <div className={`first-step-wrapper ${!isFirstStep ? "edit-process-basic" : ""}`}>
+        <h2>Criar Criatura</h2>
+        <main>
+          <aside className="creature-avatar">
+            {tempCreatureAvatar ? (
+              <>
+                <img
+                  src={tempCreatureAvatar}
+                  alt="creature-avatar"
+                  className={`${isImgValid === false ? "invisible" : ""}`}
+                  onLoad={HandleImgOnLoad}
+                  onError={HandleImgOnError}
                 />
-                <Button
-                  icon={imgUrl === null ? "fas fa-pencil-alt" : isImgValid === false && creature.image ? "fas fa-times" : "fas fa-check"}
-                  className="update-button"
-                  onClick={UpdateAvatar}
-                  isDisabled={imgUrl === ""}
-                />
-              </div>
-            </aside>
-            <aside className="creature-details">
-              <TextInput label="Nome" className="creature-name" value={creature} property="name" onChange={setCreature} />
+                <i className={`fas fa-exclamation-triangle ${isImgValid ? "hidden" : ""}`}></i>
+              </>
+            ) : (
+              <i className="fas fa-user-circle"></i>
+            )}
+            <div className="update-avatar-wrapper">
               <TextInput
-                isMultiLine={true}
-                label="Descrição (opcional)"
-                className="creature-description"
-                value={creature}
-                property="description"
-                onChange={setCreature}
+                label="URL da Imagem"
+                className={`img-url ${imgUrl === null ? "invisible" : ""}`}
+                value={imgUrl}
+                onChange={HandleImgUrlOnChange}
               />
-            </aside>
-          </main>
-          <Button text="Continuar" onClick={() => setIsFirstStep(false)} isDisabled={!creature.image || !creature.name} />
-        </div>
-      ) : (
-        <div className="edit-process-wrapper">
-          {/* check if img exists, mover fistStep pro lado(column, sizes and hide button) e fazer progress bar(nao eh comp) */}
-        </div>
-      )}
+              <Button
+                icon={imgUrl === null ? "fas fa-pencil-alt" : isImgValid === false && creature.image ? "fas fa-times" : "fas fa-check"}
+                className="update-button"
+                onClick={UpdateAvatar}
+                isDisabled={imgUrl === ""}
+              />
+            </div>
+          </aside>
+          <aside className="creature-details">
+            <TextInput label="Nome" className="creature-name" value={creature} property="name" onChange={setCreature} />
+            <TextInput
+              isMultiLine={true}
+              label="Descrição (opcional)"
+              className="creature-description"
+              value={creature}
+              property="description"
+              onChange={setCreature}
+            />
+          </aside>
+        </main>
+        {isFirstStep && <Button text="Continuar" onClick={() => setIsFirstStep(false)} isDisabled={!creature.image || !creature.name} />}
+      </div>
+      <div className={`${isFirstStep ? "hidden" : "edit-process-details"}`}>
+        --------------------fazer progress bar(nao eh comp)--------------------
+      </div>
     </div>
   );
 }

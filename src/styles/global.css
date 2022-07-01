@@ -28,8 +28,9 @@
   --errorColor: #a72638;
   --primaryBackground: #242029;
 
-  --purpleGradient: linear-gradient(180deg, #70549f 0%, #2f2146 100%);
+  --blurGradient: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 50%, rgba(232, 232, 232, 0.8) 100%);
   --grayGradient: linear-gradient(45deg, #252525 2.86%, rgba(37, 37, 37, 0.37) 91.25%);
+  --purpleGradient: linear-gradient(180deg, #70549f 0%, #2f2146 100%);
   --blackGradient: linear-gradient(-45.01deg, #2e2e2e -0.46%, #454545 53.61%, #333333 106.2%);
 }
 
