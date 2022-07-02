@@ -120,7 +120,10 @@ function EditCreature({ setIsEditCreatureOpen }) {
         {isFirstStep && <Button text="Continuar" onClick={() => setIsFirstStep(false)} isDisabled={!creature.image || !creature.name} />}
       </div>
       <div className={`${isFirstStep ? "hidden" : "edit-process-details"}`}>
-        --------------------fazer progress bar(nao eh comp)--------------------
+        <header className="progess-bar">--------------------fazer progress bar(nao eh comp)--------------------</header>
+        <main>
+          <div>fafa</div>
+        </main>
       </div>
     </div>
   );

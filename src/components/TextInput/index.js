@@ -20,13 +20,11 @@ function TextInput({ isMultiLine = false, label = null, info = null, className =
         {label && <label>{label}</label>}
         {info && <Info contents={info} />}
       </div>
-      <main>
-        {isMultiLine ? (
-          <textarea onChange={HandleOnChange} value={property ? value[property] : value} {...rest}></textarea>
-        ) : (
-          <input type="text" onChange={HandleOnChange} value={property ? value[property] : value} {...rest}></input>
-        )}
-      </main>
+      {isMultiLine ? (
+        <textarea onChange={HandleOnChange} value={property ? value[property] : value} {...rest}></textarea>
+      ) : (
+        <input type="text" onChange={HandleOnChange} value={property ? value[property] : value} {...rest}></input>
+      )}
     </div>
   );
 }

@@ -40,8 +40,9 @@
 }
 
 .EditCreature-container .first-step-wrapper > main {
+  height: 450px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   column-gap: 30px;
   margin-bottom: 30px;
@@ -106,19 +107,30 @@
   color: var(--white);
 }
 
+.EditCreature-container .first-step-wrapper .creature-details {
+  width: 450px;
+  height: inherit;
+  row-gap: 15px;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
 .EditCreature-container .first-step-wrapper .creature-details .creature-name input {
   width: 450px;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
+}
+
+.EditCreature-container .first-step-wrapper .creature-details .creature-description {
+  flex: 1;
 }
 
 .EditCreature-container .first-step-wrapper .creature-details .creature-description textarea {
   width: 450px;
-  height: 323px;
-}
-
-.EditCreature-container .first-step-wrapper .creature-details {
-  width: 450px;
-  height: 450px;
+  flex: 1;
 }
 
 /* --------------------------------- */
@@ -154,6 +166,7 @@
   flex-direction: column;
   column-gap: 0;
   margin-bottom: 0;
+  flex: 1;
 }
 
 .EditCreature-container .edit-process-basic .creature-avatar {
@@ -174,11 +187,11 @@
 
 .EditCreature-container .edit-process-basic .creature-details {
   width: 300px;
+  flex: 1;
 }
 
 .EditCreature-container .edit-process-basic .creature-details .creature-name input {
   width: 300px;
-  margin-bottom: 30px;
 }
 
 .EditCreature-container .edit-process-basic .creature-details .creature-description textarea {
@@ -187,7 +200,24 @@
 
 .EditCreature-container .edit-process-details {
   width: 100%;
+  height: calc(100% - 46px);
+}
+
+.EditCreature-container .edit-process-details .progess-bar {
+  width: 100%;
   height: 46px;
   background-color: var(--primaryBackground);
   color: var(--white);
+}
+
+.EditCreature-container .edit-process-details > main {
+  background-color: red;
+  height: 100%;
+  width: 100%;
+}
+
+.EditCreature-container .edit-process-details > main div {
+  background-color: green;
+  width: 100%;
+  flex: 1;
 }
