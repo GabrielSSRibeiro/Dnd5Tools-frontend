@@ -7,6 +7,8 @@ import TextInput from "../../TextInput";
 import "./styles.css";
 
 function EditCreature({ setIsEditCreatureOpen }) {
+  const progessBarSteps = ["Definiçao", "Atributos", "Resistências", "Passivas", "Açoes", "Tesouro", "Sumário"];
+
   const [creature, setCreature] = useState({
     name: "Hidra Alada", //null,
     description: null,
@@ -20,9 +22,7 @@ function EditCreature({ setIsEditCreatureOpen }) {
   const [imgUrl, setImgUrl] = useState(creature.image ?? "");
   const [tempCreatureAvatar, setTempCreatureAvatar] = useState(creature.image);
   const [isImgValid, setIsImgValid] = useState(!!creature.image ? true : null);
-  const [activeProgessBarStep, setActiveProgessBarStep] = useState("Definição");
-
-  const progessBarSteps = ["Definição", "Atributos", "Resistências", "Passivas", "Ações", "Tesouro", "Sumário"];
+  const [activeProgessBarStep, setActiveProgessBarStep] = useState(progessBarSteps[0]);
 
   function HandleCancel() {
     setIsEditCreatureOpen(false);
@@ -125,7 +125,7 @@ function EditCreature({ setIsEditCreatureOpen }) {
       <div className={`${isFirstStep ? "hidden" : "edit-process-details"}`}>
         <header className="progess-bar">
           {progessBarSteps.map((step, index) => (
-            <div className="progess-bar-step" style={{ zIndex: -1 - index }}>
+            <div className={`progess-bar-step ${activeProgessBarStep === step ? "selected-step" : ""}`} style={{ zIndex: -1 - index }}>
               <section className="step-border">
                 <div className="step-description"></div>
                 <aside className="step-arrow">

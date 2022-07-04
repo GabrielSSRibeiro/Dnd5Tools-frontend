@@ -228,21 +228,24 @@
 }
 
 .EditCreature-container .edit-process-details .progess-bar .progess-bar-step:hover .step-description {
-  transition: 0.2s;
-  cursor: pointer;
-
-  background-color: var(--gray3);
+  background-color: var(--gray2);
 }
 
 .EditCreature-container .edit-process-details .progess-bar .progess-bar-step:hover .step-description span {
-  transition: 0.2s;
-  color: var(--primaryPurple1);
 }
 
 .EditCreature-container .edit-process-details .progess-bar .progess-bar-step:hover .step-arrow > div {
-  transition: 0.2s;
-  cursor: pointer;
+  background-color: var(--gray2);
+}
 
+.EditCreature-container .edit-process-details .progess-bar .progess-bar-step.selected-step .step-description {
+  background-color: var(--gray3);
+}
+.EditCreature-container .edit-process-details .progess-bar .progess-bar-step.selected-step .step-description span {
+  color: var(--primaryPurple1);
+  font-weight: 600;
+}
+.EditCreature-container .edit-process-details .progess-bar .progess-bar-step.selected-step .step-arrow > div {
   background-color: var(--gray3);
 }
 
@@ -265,6 +268,8 @@
   height: 100%;
   background-color: var(--primaryBackground);
   padding-right: 10%;
+  transition: 0.2s;
+  cursor: pointer;
 
   display: flex;
   align-items: center;
@@ -283,6 +288,8 @@
   width: 46px;
   height: 46px;
   transform: rotate(45deg);
+  transition: 0.2s;
+  cursor: pointer;
 
   position: absolute;
   top: 0;
