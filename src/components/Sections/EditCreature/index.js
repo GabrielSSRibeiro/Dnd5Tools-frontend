@@ -22,7 +22,7 @@ function EditCreature({ setIsEditCreatureOpen }) {
   const [isImgValid, setIsImgValid] = useState(!!creature.image ? true : null);
   const [activeProgessBarStep, setActiveProgessBarStep] = useState("Definição");
 
-  const progessBarSteps = ["Definição", "Atributos", "Resistências", "Passivas", "Ações", "Tesouro", "Sumário"]; //effect/memo?
+  const progessBarSteps = ["Definição", "Atributos", "Resistências", "Passivas", "Ações", "Tesouro", "Sumário"];
 
   function HandleCancel() {
     setIsEditCreatureOpen(false);
@@ -124,17 +124,21 @@ function EditCreature({ setIsEditCreatureOpen }) {
       </div>
       <div className={`${isFirstStep ? "hidden" : "edit-process-details"}`}>
         <header className="progess-bar">
-          {progessBarSteps.map((step) => (
-            <div className="progess-bar-step" onClick={() => setActiveProgessBarStep(step)}>
+          {progessBarSteps.map((step, index) => (
+            <div className="progess-bar-step" style={{ zIndex: -1 - index }}>
               <section className="step-border">
                 <div className="step-description"></div>
-                <aside className="step-arrow"></aside>
+                <aside className="step-arrow">
+                  <div></div>
+                </aside>
               </section>
               <section>
-                <div className="step-description">
+                <div className="step-description" onClick={() => setActiveProgessBarStep(step)}>
                   <span>{step}</span>
                 </div>
-                <aside className="step-arrow"></aside>
+                <aside className="step-arrow">
+                  <div onClick={() => setActiveProgessBarStep(step)}></div>
+                </aside>
               </section>
             </div>
           ))}

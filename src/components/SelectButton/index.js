@@ -14,6 +14,7 @@ function SelectButton({ isLarge = false, isSelected = false, isLong = false, tex
   const buttonLargeExtra = 36;
   const buttonBorderExtra = 2;
 
+  //for side angles different than 45deg, use, in the parent, rotateX for < 45 and rotateY for > 45
   const variant = {
     container: {
       secondBorder: {
