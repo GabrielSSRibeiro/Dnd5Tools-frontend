@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 //  import api from "../../services/api";
 import { SortArrayOfObjByProperty } from "../../../utils";
 import { CREATURE_LEVELS, CREATURE_ENVIROMENTS, CREATURE_TYPES, CREATURE_SIZE } from "../../../helpers/bestiaryHelper";
+import { MAX_CREATURES_ALLOWED } from "../../../helpers/combatHelper";
 
 import Button from "../../Button";
 import CheckInput from "../../CheckInput";
@@ -11,6 +12,8 @@ import "./styles.css";
 
 function Bestiary({
   selectedCreatures,
+  selectedCharacters,
+  level,
   setSelectedCreatures,
   isSelecting,
   setIsSelecting,
@@ -25,10 +28,9 @@ function Bestiary({
   const [selectedEnv, setSelectedEnv] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
-  const [tempSelectedCreatures, setTempSelectedCreatures] = useState([]);
+  const [tempSelectedCreatures, setTempSelectedCreatures] = useState(selectedCreatures);
 
   let filteredCreatures = [];
-  const MAX_SELECTED = 7;
 
   //   useEffect(() => {
   //   api.get("items").then((response) => {
@@ -37,10 +39,10 @@ function Bestiary({
   // }, []);
 
   function HandleSelectCreature(creature) {
-    const isAlreadySelected = tempSelectedCreatures.some((selectedCreature) => selectedCreature.name === creature.name);
-    let newSelection = tempSelectedCreatures.filter((selectedCreature) => selectedCreature.name !== creature.name);
+    const isAlreadySelected = tempSelectedCreatures.some((selectedCreature) => selectedCreature.name.includes(creature.name));
+    let newSelection = tempSelectedCreatures.filter((selectedCreature) => !selectedCreature.name.includes(creature.name));
 
-    if (!isAlreadySelected && tempSelectedCreatures.length + 1 <= MAX_SELECTED) {
+    if (!isAlreadySelected && tempSelectedCreatures.length + 1 <= MAX_CREATURES_ALLOWED) {
       newSelection.push(creature);
     }
     setTempSelectedCreatures(newSelection);
@@ -54,8 +56,7 @@ function Bestiary({
   }
 
   function HandleClose() {
-    // setSelectedCreatures([]);
-    setTempSelectedCreatures([]);
+    setTempSelectedCreatures(selectedCreatures);
     setIsSelecting(false);
     setIsBestiaryOpen(false);
   }
@@ -71,15 +72,19 @@ function Bestiary({
       if (nameFilter) {
         temp = creatures.filter((creature) => creature.name.toLowerCase().includes(nameFilter.toLowerCase()));
       }
+
       if (selectedLevel) {
         temp = temp.filter((creature) => creature.levelRange === selectedLevel);
       }
+
       if (selectedEnv) {
         temp = temp.filter((creature) => creature.environment === selectedEnv);
       }
+
       if (selectedType) {
         temp = temp.filter((creature) => creature.type === selectedType);
       }
+
       if (selectedSize) {
         temp = temp.filter((creature) => creature.size === selectedSize);
       }
@@ -143,9 +148,15 @@ function Bestiary({
                   <aside />
                 </div>
               </div>
-              {!isSelecting ? <h5>{creatures.length} Criaturas</h5> : <h5>Selecione até {MAX_SELECTED} criaturas para esse combate</h5>}
+              {!isSelecting ? (
+                <h5>{creatures.length} Criaturas</h5>
+              ) : (
+                <h5>
+                  {tempSelectedCreatures.length} de até {MAX_CREATURES_ALLOWED} criaturas selecionadas
+                </h5>
+              )}
             </div>
-            <h5>BESTIÁRIO</h5>
+            {!isSelecting && <h5>BESTIÁRIO</h5>}
           </header>
           <main>
             {!isSelecting && (
@@ -228,7 +239,7 @@ function Bestiary({
           {isSelecting && (
             <div className={`selecting-footer ${filteredCreatures.length <= 3 ? "filtered" : ""}`}>
               <h5>
-                {tempSelectedCreatures.length > 0 ? `${tempSelectedCreatures.length} criatura(s) selecionada(s)` : "Nenhuma criatura selecionada"}
+                Dificuldade <strong>X</strong> para {selectedCharacters.length} personagens de nível {level}
               </h5>
               <Button text="Confirmar" onClick={HandleSelectedFromBestiary} />
             </div>

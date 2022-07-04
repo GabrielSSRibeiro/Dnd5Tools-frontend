@@ -20,6 +20,9 @@ function EditCreature({ setIsEditCreatureOpen }) {
   const [imgUrl, setImgUrl] = useState(creature.image ?? "");
   const [tempCreatureAvatar, setTempCreatureAvatar] = useState(creature.image);
   const [isImgValid, setIsImgValid] = useState(!!creature.image ? true : null);
+  const [activeProgessBarStep, setActiveProgessBarStep] = useState("Definição");
+
+  const progessBarSteps = ["Definição", "Atributos", "Resistências", "Passivas", "Ações", "Tesouro", "Sumário"]; //effect/memo?
 
   function HandleCancel() {
     setIsEditCreatureOpen(false);
@@ -120,9 +123,24 @@ function EditCreature({ setIsEditCreatureOpen }) {
         {isFirstStep && <Button text="Continuar" onClick={() => setIsFirstStep(false)} isDisabled={!creature.image || !creature.name} />}
       </div>
       <div className={`${isFirstStep ? "hidden" : "edit-process-details"}`}>
-        <header className="progess-bar">--------------------fazer progress bar(nao eh comp)--------------------</header>
+        <header className="progess-bar">
+          {progessBarSteps.map((step) => (
+            <div className="progess-bar-step" onClick={() => setActiveProgessBarStep(step)}>
+              <section className="step-border">
+                <div className="step-description"></div>
+                <aside className="step-arrow"></aside>
+              </section>
+              <section>
+                <div className="step-description">
+                  <span>{step}</span>
+                </div>
+                <aside className="step-arrow"></aside>
+              </section>
+            </div>
+          ))}
+        </header>
         <main>
-          <div>fafa</div>
+          <div>{activeProgessBarStep}</div>
         </main>
       </div>
     </div>

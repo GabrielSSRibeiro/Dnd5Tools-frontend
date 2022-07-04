@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 //  import api from "../../services/api";
 
 import { LEVELS } from "../../../helpers/partyHelper";
-import { MAX_ALLOWED } from "../../../helpers/combatHelper";
+import { MAX_CHARACTERS_ALLOWED } from "../../../helpers/combatHelper";
 
 import Button from "../../Button";
 import Select from "../../Select";
@@ -30,7 +30,7 @@ function Party({
   const [characterBeenEdited, setCharacterBeenEdited] = useState(null);
   const [newEditedCharacterName, setNewEditedCharacterName] = useState(null);
   const [selectedCharactersInGroup, setSelectedCharactersInGroup] = useState([]);
-  const [tempSelectedCharacters, setTempSelectedCharacters] = useState([]);
+  const [tempSelectedCharacters, setTempSelectedCharacters] = useState(selectedCharacters);
 
   const numberOfCharacters = groups.reduce((acc, current) => acc.concat(current), []).length;
   let groupOptions = groups.map((group, index) => `Grupo ${index + 1}`);
@@ -50,15 +50,14 @@ function Party({
     const isAlreadySelected = tempSelectedCharacters.some((selectedCharacter) => selectedGroup.includes(selectedCharacter));
     let newSelection = tempSelectedCharacters.filter((selectedCharacter) => !selectedGroup.includes(selectedCharacter));
 
-    if (!isAlreadySelected && tempSelectedCharacters.length + selectedGroup.length <= MAX_ALLOWED) {
+    if (!isAlreadySelected && tempSelectedCharacters.length + selectedGroup.length <= MAX_CHARACTERS_ALLOWED) {
       newSelection.push(...selectedGroup);
     }
     setTempSelectedCharacters(newSelection);
   }
 
   function HandleClose() {
-    // setSelectedCharacters([]);
-    setTempSelectedCharacters([]);
+    setTempSelectedCharacters(selectedCharacters);
     setSelectedCharactersInGroup([]);
     setIsSelecting(false);
     setIsPartyOpen(false);
@@ -231,7 +230,13 @@ function Party({
       {isPartyOpen && (
         <div className="party-tab">
           <header className={isSelecting ? "selecting-header" : ""}>
-            {!isSelecting ? <h5>{numberOfCharacters} PERSONAGENS</h5> : <h5>Selecione até {MAX_ALLOWED} personagens para esse combate</h5>}
+            {!isSelecting ? (
+              <h5>{numberOfCharacters} PERSONAGENS</h5>
+            ) : (
+              <h5>
+                {tempSelectedCharacters.length} de até {MAX_CHARACTERS_ALLOWED} personagens selecionados
+              </h5>
+            )}
             <div>
               {!isSelecting && (
                 <>
@@ -353,7 +358,7 @@ function Party({
                   </div>
                 </main>
               ))}
-              {inactiveGroup.length > 0 && (
+              {!isSelecting && inactiveGroup.length > 0 && (
                 <main>
                   <div className="group-header">
                     <h5>Inativos</h5>
@@ -407,9 +412,9 @@ function Party({
           {isSelecting && (
             <div className="selecting-footer">
               <h5>
-                {tempSelectedCharacters.length > 0
+                {/* {tempSelectedCharacters.length > 0
                   ? `${tempSelectedCharacters.length} personagem(s} selecionado(s)`
-                  : "Nenhum personagem selecionado"}
+                  : "Nenhum personagem selecionado"} */}
               </h5>
               <Button text="Confirmar" onClick={HandleSelectedFromParty} />
             </div>

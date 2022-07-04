@@ -204,6 +204,7 @@
 
 .Bestiary-container > .bestiary-tab > main > aside {
   align-self: flex-end;
+  margin-bottom: 16px;
 }
 
 .Bestiary-container > .bestiary-tab > main .bestiary-filters {
@@ -244,7 +245,6 @@
 }
 
 .Bestiary-container > .bestiary-tab > main .bestiary-filters > h5 {
-  margin-top: 16px;
   margin-bottom: 16px;
 }
 

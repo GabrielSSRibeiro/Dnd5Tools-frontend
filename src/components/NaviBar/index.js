@@ -107,6 +107,8 @@ function NaviBar({
           />
           <Bestiary
             selectedCreatures={selectedCreatures}
+            selectedCharacters={selectedCharacters}
+            level={level}
             setSelectedCreatures={setSelectedCreatures}
             isSelecting={isSelectingBestiary}
             setIsSelecting={setIsSelectingBestiary}

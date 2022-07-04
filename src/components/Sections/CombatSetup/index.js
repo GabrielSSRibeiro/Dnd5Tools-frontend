@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //  import api from "../../services/api";
 
 import * as utils from "../../../utils";
-import { COMBAT_DIFFICULTIES, MAX_ALLOWED } from "../../../helpers/combatHelper";
+import { COMBAT_DIFFICULTIES, MAX_CREATURES_ALLOWED } from "../../../helpers/combatHelper";
 
 import Panel from "../../Panel";
 import Button from "../../Button";
@@ -21,12 +21,28 @@ function CombatSetup({
   level,
 }) {
   const [combatDificulty, setCombatDificulty] = useState(null);
+  const [windowHeight, setWindowHeight] = useState(null);
 
-  //   useEffect(() => {
-  //   api.get("items").then((response) => {
-  //     setItems(response.data);
-  //   });
-  // }, []);
+  function getPanelsScroll(count) {
+    const scrollAfter = 7;
+    let panelScroll = {};
+
+    if (count > scrollAfter) {
+      panelScroll = { overflowY: "auto" };
+
+      const defaultCompHeight = 342;
+      const defaultWindowHeight = 700;
+      const currentHeight = windowHeight ?? window.innerHeight;
+      const extraHeightPerElement = 39;
+      const extraElements = count - scrollAfter;
+
+      const extraHeight = Math.max(Math.ceil((currentHeight - defaultWindowHeight - extraHeightPerElement) / extraElements), 0);
+
+      panelScroll.maxHeight = defaultCompHeight + extraHeight * extraHeightPerElement;
+    }
+
+    return panelScroll;
+  }
 
   function SelectFromParty() {
     HandleSelectFromParty();
@@ -93,15 +109,33 @@ function CombatSetup({
   }
 
   function GetCombatDifficultyNames() {
-    return COMBAT_DIFFICULTIES.map((cd) => `${cd} para ${selectedCharacters.length} personagens de nível ${level}`);
+    return COMBAT_DIFFICULTIES.map((cd) => `Dificuldade ${cd}`);
   }
+
+  //   useEffect(() => {
+  //   api.get("items").then((response) => {
+  //     setItems(response.data);
+  //   });
+  // }, []);
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowHeight(window.innerHeight);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className="CombatSetup-container">
       <div>
         <section className="characters-container">
           <Panel title="Personagens">
-            <div className="panel-content">
+            <div className="panel-content" style={getPanelsScroll(selectedCharacters.length)}>
               {selectedCharacters &&
                 selectedCharacters.map((character) => (
                   <div key={character} className="character-details">
@@ -118,11 +152,14 @@ function CombatSetup({
         </section>
         <section className="creatures-container">
           <Panel title="Criaturas">
-            <div className="panel-content">
+            <div className="panel-content" style={getPanelsScroll(selectedCreatures.length)}>
               {selectedCreatures &&
                 selectedCreatures.map((creature, index) => (
                   <div key={index} className="creature-details">
-                    <button onClick={() => HandleAddExtraOne(index)} className={selectedCreatures.length === MAX_ALLOWED ? "element-disabled" : ""}>
+                    <button
+                      onClick={() => HandleAddExtraOne(index)}
+                      className={selectedCreatures.length === MAX_CREATURES_ALLOWED ? "element-disabled" : ""}
+                    >
                       +1
                     </button>
                     <button className={creature.isNPC ? "toggle-npc" : "toggle-creature"} onClick={() => HandleNPC(creature)}>
@@ -140,7 +177,7 @@ function CombatSetup({
                   </div>
                 ))}
               <footer style={{ marginTop: selectedCreatures.length > 0 ? 25 : 0 }}>
-                <Button text="Selecionar" onClick={SelectFromBestiary} />
+                <Button text="Selecionar" onClick={SelectFromBestiary} isDisabled={selectedCharacters.length === 0} />
               </footer>
             </div>
           </Panel>
