@@ -1,21 +1,31 @@
 .CheckInput-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  column-gap: 10px;
+}
+
+.CheckInput-container button {
   width: 20px;
   height: 20px;
-  /* border-radius: 4px; */
   border: solid 1px var(--gray2);
   background-color: var(--white);
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.CheckInput-container label {
   cursor: pointer;
 }
 
-.CheckInput-container > .fa-check {
+.CheckInput-container .fa-check {
   color: var(--white);
 }
 
 .check-checked {
-  background-color: var(--primaryPurple1);
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-color: var(--primaryPurple1) !important;
+  border: none !important;
 }

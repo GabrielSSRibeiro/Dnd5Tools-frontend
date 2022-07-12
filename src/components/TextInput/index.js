@@ -1,14 +1,28 @@
 import React from "react";
 
+import * as util from "../../utils";
+
 import Info from "../Info";
 
 import "./styles.css";
 
-function TextInput({ isMultiLine = false, label = null, info = null, className = "", onChange = () => {}, value = null, property = null, ...rest }) {
+function TextInput({
+  isMultiLine = false,
+  label = null,
+  info = null,
+  className = "",
+  onChange = () => {},
+  value = null,
+  propertyPath = null,
+  displayProperty = null,
+  ...rest
+}) {
   function HandleOnChange(e) {
-    if (property) {
-      value[property] = e.target.value;
-      onChange({ ...value });
+    if (propertyPath) {
+      let obj = value;
+      util.setObjPropertyValue(obj, propertyPath, e.target.value);
+
+      onChange({ ...obj });
     } else {
       onChange(e.target.value);
     }
@@ -21,9 +35,9 @@ function TextInput({ isMultiLine = false, label = null, info = null, className =
         {info && <Info contents={info} />}
       </div>
       {isMultiLine ? (
-        <textarea onChange={HandleOnChange} value={property ? value[property] : value} {...rest}></textarea>
+        <textarea onChange={HandleOnChange} value={typeof value == "object" ? displayProperty : value} {...rest}></textarea>
       ) : (
-        <input type="text" onChange={HandleOnChange} value={property ? value[property] : value} {...rest}></input>
+        <input type="text" onChange={HandleOnChange} value={typeof value == "object" ? displayProperty : value} {...rest}></input>
       )}
     </div>
   );

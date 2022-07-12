@@ -1,28 +1,116 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 //  import api from "../../services/api";
 
+import {
+  DEFAULT_CREATURE_RACE,
+  DEFAULT_CREATURE_CLASS,
+  DEFAULT_CREATURE_SUBCLASS,
+  DEFAULT_CREATURE_SPEED,
+  DEFAULT_CREATURE_MOVEMENT,
+  DEFAULT_CREATURE_PRIMARY_ALIGNMENT,
+  DEFAULT_CREATURE_SECONDARY_ALIGNMENT,
+} from "../../../helpers/bestiaryHelper";
+
+import Definition from "../EditCreature/Definition";
+import Atributes from "../EditCreature/Atributes";
+import Resistencies from "../EditCreature/Resistencies";
+import Passives from "../EditCreature/Passives";
+import Actions from "../EditCreature/Actions";
+import TreasureReward from "../EditCreature/TreasureReward";
+import Summary from "../EditCreature/Summary";
 import Button from "../../Button";
 import TextInput from "../../TextInput";
 
 import "./styles.css";
 
 function EditCreature({ setIsEditCreatureOpen }) {
-  const progessBarSteps = ["Definiçao", "Atributos", "Resistências", "Passivas", "Açoes", "Tesouro", "Sumário"];
-
   const [creature, setCreature] = useState({
     name: "Hidra Alada", //null,
     description: null,
     image: "https://i.pinimg.com/564x/01/d4/17/01d417c02bd190a056c718650fc9db3b.jpg", //null
-    levelRange: null,
+    rarity: null,
     environment: null,
-    type: null,
     size: null,
+    type: null,
+    race: DEFAULT_CREATURE_RACE,
+    class: DEFAULT_CREATURE_CLASS,
+    subClass: DEFAULT_CREATURE_SUBCLASS,
+    multiclassing: false,
+    secondaryClass: DEFAULT_CREATURE_CLASS,
+    secondarySubClass: DEFAULT_CREATURE_SUBCLASS,
+    movement: {
+      speed: DEFAULT_CREATURE_SPEED,
+      flying: DEFAULT_CREATURE_MOVEMENT,
+      swimming: DEFAULT_CREATURE_MOVEMENT,
+      burrowing: DEFAULT_CREATURE_MOVEMENT,
+    },
+    primaryAlignment: DEFAULT_CREATURE_PRIMARY_ALIGNMENT,
+    secondaryAlignment: DEFAULT_CREATURE_SECONDARY_ALIGNMENT,
   });
+
+  const progessBarSteps = useMemo(() => {
+    function AreAllPreviousStepsValid() {
+      return progessBarSteps.every((s) => s.isValid);
+    }
+
+    function IsDefinitionStepValid() {
+      let areBasicsValid = [creature.name, creature.image].every((i) => i !== null);
+
+      return areBasicsValid;
+    }
+    let progessBarSteps = [{ name: "Definiçao", isValid: IsDefinitionStepValid() }];
+
+    function IsAtributesStepValid() {
+      let areBasicsDefinitionsValid = [creature.rarity, creature.environment, creature.size, creature.type].every((i) => i !== null);
+      let areMovimentsValid = [creature.movement.speed, creature.movement.flying, creature.movement.swimming, creature.movement.burrowing].some(
+        (i) => i !== DEFAULT_CREATURE_MOVEMENT
+      );
+
+      return AreAllPreviousStepsValid() && areBasicsDefinitionsValid && areMovimentsValid;
+    }
+    progessBarSteps.push({ name: "Atributos", isValid: IsAtributesStepValid() });
+
+    function IsResistenciesStepValid() {
+      let itemsToValidate = [].every((i) => i !== null);
+
+      return AreAllPreviousStepsValid() && itemsToValidate;
+    }
+    progessBarSteps.push({ name: "Resistências", isValid: IsResistenciesStepValid() });
+
+    function IsPassivesStepValid() {
+      let itemsToValidate = [].every((i) => i !== null);
+
+      return AreAllPreviousStepsValid() && itemsToValidate;
+    }
+    progessBarSteps.push({ name: "Passivas", isValid: IsPassivesStepValid() });
+
+    function IsActionsStepValid() {
+      let itemsToValidate = [].every((i) => i !== null);
+
+      return AreAllPreviousStepsValid() && itemsToValidate;
+    }
+    progessBarSteps.push({ name: "Açoes", isValid: IsActionsStepValid() });
+
+    function IsTreasureRewardStepValid() {
+      let itemsToValidate = [].every((i) => i !== null);
+
+      return AreAllPreviousStepsValid() && itemsToValidate;
+    }
+    progessBarSteps.push({ name: "Tesouro", isValid: IsTreasureRewardStepValid() });
+
+    function IsSummaryStepValid() {
+      return AreAllPreviousStepsValid();
+    }
+    progessBarSteps.push({ name: "Sumário", isValid: IsSummaryStepValid() });
+
+    return progessBarSteps;
+  }, [creature]);
+
   const [isFirstStep, setIsFirstStep] = useState(!!!creature.type);
   const [imgUrl, setImgUrl] = useState(creature.image ?? "");
   const [tempCreatureAvatar, setTempCreatureAvatar] = useState(creature.image);
   const [isImgValid, setIsImgValid] = useState(!!creature.image ? true : null);
-  const [activeProgessBarStep, setActiveProgessBarStep] = useState(progessBarSteps[0]);
+  const [activeProgessBarStep, setActiveProgessBarStep] = useState(progessBarSteps[0].name);
 
   function HandleCancel() {
     setIsEditCreatureOpen(false);
@@ -109,13 +197,21 @@ function EditCreature({ setIsEditCreatureOpen }) {
             </div>
           </aside>
           <aside className="creature-details">
-            <TextInput label="Nome" className="creature-name" value={creature} property="name" onChange={setCreature} />
+            <TextInput
+              label="Nome"
+              className="creature-name"
+              value={creature}
+              propertyPath="name"
+              displayProperty={creature.name}
+              onChange={setCreature}
+            />
             <TextInput
               isMultiLine={true}
               label="Descrição (opcional)"
               className="creature-description"
               value={creature}
-              property="description"
+              propertyPath="description"
+              displayProperty={creature.description}
               onChange={setCreature}
             />
           </aside>
@@ -125,7 +221,11 @@ function EditCreature({ setIsEditCreatureOpen }) {
       <div className={`${isFirstStep ? "hidden" : "edit-process-details"}`}>
         <header className="progess-bar">
           {progessBarSteps.map((step, index) => (
-            <div className={`progess-bar-step ${activeProgessBarStep === step ? "selected-step" : ""}`} style={{ zIndex: -1 - index }}>
+            <div
+              key={step.name}
+              className={`progess-bar-step${activeProgessBarStep === step.name ? " selected-step" : ""}${!step.isValid ? " step-disabled" : ""}`}
+              style={{ zIndex: -1 - index }}
+            >
               <section className="step-border">
                 <div className="step-description"></div>
                 <aside className="step-arrow">
@@ -133,18 +233,24 @@ function EditCreature({ setIsEditCreatureOpen }) {
                 </aside>
               </section>
               <section>
-                <div className="step-description" onClick={() => setActiveProgessBarStep(step)}>
-                  <span>{step}</span>
+                <div className="step-description" onClick={() => (activeProgessBarStep !== step.name ? setActiveProgessBarStep(step.name) : {})}>
+                  <span>{step.name}</span>
                 </div>
                 <aside className="step-arrow">
-                  <div onClick={() => setActiveProgessBarStep(step)}></div>
+                  <div onClick={() => (activeProgessBarStep !== step.name ? setActiveProgessBarStep(step) : {})}></div>
                 </aside>
               </section>
             </div>
           ))}
         </header>
         <main>
-          <div>{activeProgessBarStep}</div>
+          {activeProgessBarStep === "Definiçao" && <Definition creature={creature} setCreature={setCreature} />}
+          {activeProgessBarStep === "Atributos" && <Atributes creature={creature} setCreature={setCreature} />}
+          {activeProgessBarStep === "Resistências" && <Resistencies creature={creature} setCreature={setCreature} />}
+          {activeProgessBarStep === "Passivas" && <Passives creature={creature} setCreature={setCreature} />}
+          {activeProgessBarStep === "Açoes" && <Actions creature={creature} setCreature={setCreature} />}
+          {activeProgessBarStep === "Tesouro" && <TreasureReward creature={creature} setCreature={setCreature} />}
+          {activeProgessBarStep === "Sumário" && <Summary creature={creature} setCreature={setCreature} />}
         </main>
       </div>
     </div>

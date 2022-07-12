@@ -227,11 +227,20 @@
   justify-content: flex-start;
 }
 
-.EditCreature-container .edit-process-details .progess-bar .progess-bar-step:hover .step-description {
-  background-color: var(--gray2);
+.EditCreature-container .edit-process-details .progess-bar .progess-bar-step.step-disabled {
+  pointer-events: none;
 }
 
-.EditCreature-container .edit-process-details .progess-bar .progess-bar-step:hover .step-description span {
+.EditCreature-container .edit-process-details .progess-bar .progess-bar-step.step-disabled .step-description {
+  background-color: var(--gray1);
+}
+
+.EditCreature-container .edit-process-details .progess-bar .progess-bar-step.step-disabled .step-arrow > div {
+  background-color: var(--gray1);
+}
+
+.EditCreature-container .edit-process-details .progess-bar .progess-bar-step:hover .step-description {
+  background-color: var(--gray2);
 }
 
 .EditCreature-container .edit-process-details .progess-bar .progess-bar-step:hover .step-arrow > div {
@@ -311,10 +320,5 @@
 
 .EditCreature-container .edit-process-details > main {
   height: calc(100% - 46px);
-  width: 100%;
-}
-
-.EditCreature-container .edit-process-details > main div {
-  background-color: red;
   width: 100%;
 }

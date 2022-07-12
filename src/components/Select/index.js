@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import * as util from "../../utils";
+
 import Info from "../Info";
 
 import "./styles.css";
@@ -8,6 +10,8 @@ function Select({
   isLarge = false,
   extraWidth = 0,
   value = "",
+  propertyPath = null,
+  displayProperty = null,
   onSelect = () => {},
   defaultValue = null,
   options = [],
@@ -27,7 +31,14 @@ function Select({
   function HandleClick(option) {
     setIsOpen(false);
     if (option !== defaultValue) {
-      onSelect(option);
+      if (propertyPath) {
+        let obj = value;
+        util.setObjPropertyValue(obj, propertyPath, option);
+
+        onSelect({ ...obj });
+      } else {
+        onSelect(option);
+      }
     } else {
       onSelect(null);
     }
@@ -51,7 +62,7 @@ function Select({
         `}
         onClick={() => (!isDisabled ? setIsOpen(!isOpen) : {})}
       >
-        <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{value || defaultValue}</h5>
+        <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{(typeof value == "object" ? displayProperty : value) || defaultValue}</h5>
         <i className="fas fa-chevron-down"></i>
       </section>
       {isOpen && (

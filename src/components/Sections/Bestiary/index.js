@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 //  import api from "../../services/api";
 import { SortArrayOfObjByProperty } from "../../../utils";
-import { CREATURE_LEVELS, CREATURE_ENVIROMENTS, CREATURE_TYPES, CREATURE_SIZE } from "../../../helpers/bestiaryHelper";
+import { CREATURE_RARITIES, CREATURE_ENVIROMENTS, CREATURE_TYPES, CREATURE_SIZES } from "../../../helpers/bestiaryHelper";
 import { MAX_CREATURES_ALLOWED } from "../../../helpers/combatHelper";
 
 import Button from "../../Button";
@@ -24,7 +24,7 @@ function Bestiary({
   setCreatures,
 }) {
   const [nameFilter, setNameFilter] = useState(null);
-  const [selectedLevel, setSelectedLevel] = useState(null);
+  const [selectedRarity, setSelectedRarity] = useState(null);
   const [selectedEnv, setSelectedEnv] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
@@ -73,8 +73,8 @@ function Bestiary({
         temp = creatures.filter((creature) => creature.name.toLowerCase().includes(nameFilter.toLowerCase()));
       }
 
-      if (selectedLevel) {
-        temp = temp.filter((creature) => creature.levelRange === selectedLevel);
+      if (selectedRarity) {
+        temp = temp.filter((creature) => creature.rarity === selectedRarity);
       }
 
       if (selectedEnv) {
@@ -93,7 +93,7 @@ function Bestiary({
     }
 
     return filterCreatures();
-  }, [creatures, nameFilter, selectedLevel, selectedEnv, selectedType, selectedSize]);
+  }, [creatures, nameFilter, selectedRarity, selectedEnv, selectedType, selectedSize]);
 
   useEffect(() => {
     setTempSelectedCreatures(selectedCreatures);
@@ -173,10 +173,10 @@ function Bestiary({
               <main>
                 <Select
                   extraWidth={20}
-                  value={selectedLevel}
-                  onSelect={(value) => handleFilter(setSelectedLevel, value)}
+                  value={selectedRarity}
+                  onSelect={(value) => handleFilter(setSelectedRarity, value)}
                   defaultValue="Nível"
-                  options={CREATURE_LEVELS}
+                  options={CREATURE_RARITIES}
                 />
                 <Select
                   extraWidth={60}
@@ -197,7 +197,7 @@ function Bestiary({
                   value={selectedSize}
                   onSelect={(value) => handleFilter(setSelectedSize, value)}
                   defaultValue="Tamanho"
-                  options={CREATURE_SIZE}
+                  options={CREATURE_SIZES}
                 />
               </main>
             </div>
@@ -227,7 +227,7 @@ function Bestiary({
                   <h6>{creature.name}</h6>
                   <img src={creature.image} alt="creature-avatar" />
                   <div className="creature-details">
-                    <h6>{creature.levelRange}, &nbsp;</h6>
+                    <h6>{creature.rarity}, &nbsp;</h6>
                     <h6>{creature.environment}, &nbsp;</h6>
                     <h6>{creature.type}, &nbsp;</h6>
                     <h6>{creature.size}</h6>

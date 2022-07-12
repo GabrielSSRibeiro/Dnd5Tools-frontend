@@ -186,7 +186,7 @@ function CombatSetup({
       <footer>
         <Select
           isLarge={true}
-          extraWidth={315}
+          extraWidth={225}
           value={combatDificulty ?? "DIficuldade do Combate"}
           onSelect={setCombatDificulty}
           dropUp={true}

@@ -1,0 +1,45 @@
+.Definition-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 30px;
+  row-gap: 25px;
+}
+
+.Definition-container > h2 {
+  line-height: 1;
+}
+
+.Definition-container .basic-definitions,
+.Definition-container .extra-definitions,
+.Definition-container .multiclassing,
+.Definition-container .movement {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 25px;
+}
+
+.Definition-container .multiclassing .multiclassing-checkbox-wrapper {
+  width: 200px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.Definition-container .alignment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  column-gap: 30px;
+}
+
+.Definition-container .alignment aside {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

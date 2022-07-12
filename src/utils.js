@@ -55,3 +55,16 @@ export function SortArrayOfObjByProperty(arrayOfObj, property) {
 export function turnValueIntoPercentageString(value) {
   return value * 100 + "%";
 }
+
+export function setObjPropertyValue(obj, accessPath, value) {
+  const propertyKeys = accessPath.split(".");
+
+  let property = obj;
+  let lastKey = propertyKeys.pop();
+
+  propertyKeys.forEach((key) => {
+    property = property[key];
+  });
+
+  property[lastKey] = value;
+}
