@@ -11,13 +11,13 @@ import {
   CONDITION_DURATIONS,
   DEFAULT_CONDITION_DURATION,
   getSkillCheck,
-} from "../../../helpers/skillCheckHelper";
+} from "../../../../../helpers/skillCheckHelper";
 
-import Panel from "../../Panel";
-import Select from "../../Select";
-import SelectButton from "../../SelectButton";
-import Button from "../../Button";
-import ResultBox from "../../ResultBox";
+import Panel from "../../../../../components/Panel";
+import Select from "../../../../../components/Select";
+import SelectButton from "../../../../../components/SelectButton";
+import Button from "../../../../../components/Button";
+import ResultBox from "../../../../../components/ResultBox";
 
 import "./styles.css";
 

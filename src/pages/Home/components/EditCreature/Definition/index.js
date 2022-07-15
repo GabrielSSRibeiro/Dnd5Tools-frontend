@@ -1,7 +1,7 @@
 import React from "react";
 
 import {
-  CREATURE_RARITIES,
+  creatureRarities,
   CREATURE_ENVIROMENTS,
   CREATURE_SIZES,
   CREATURE_TYPES,
@@ -60,16 +60,17 @@ function Definition({ creature, setCreature }) {
           label={"Raridade"}
           extraWidth={150}
           value={creature}
-          propertyPath="rarity"
-          displayProperty={creature.rarity}
+          valuePropertyPath="rarity"
           onSelect={setCreature}
-          options={CREATURE_RARITIES}
+          options={creatureRarities}
+          optionDisplay={(o) => o.display}
+          optionValue={(o) => o.value}
         />
         <Select
           label={"Ambiente"}
           extraWidth={100}
           value={creature}
-          propertyPath="environment"
+          valuePropertyPath="environment"
           displayProperty={creature.environment}
           onSelect={setCreature}
           options={CREATURE_ENVIROMENTS}
@@ -78,7 +79,7 @@ function Definition({ creature, setCreature }) {
           label={"Tamanho"}
           extraWidth={100}
           value={creature}
-          propertyPath="size"
+          valuePropertyPath="size"
           displayProperty={creature.size}
           onSelect={setCreature}
           options={CREATURE_SIZES}
@@ -87,7 +88,7 @@ function Definition({ creature, setCreature }) {
           label={"Tipo"}
           extraWidth={100}
           value={creature}
-          propertyPath="type"
+          valuePropertyPath="type"
           displayProperty={creature.type}
           onSelect={setCreature}
           options={CREATURE_TYPES}
@@ -101,7 +102,7 @@ function Definition({ creature, setCreature }) {
               label={"Raça"}
               extraWidth={100}
               value={creature}
-              propertyPath="race"
+              valuePropertyPath="race"
               displayProperty={creature.race}
               onSelect={setCreature}
               options={CREATURE_RACES}
@@ -110,7 +111,7 @@ function Definition({ creature, setCreature }) {
               label={"Classe"}
               extraWidth={100}
               value={creature}
-              propertyPath="class"
+              valuePropertyPath="class"
               displayProperty={creature.class}
               onSelect={HandleSelectClass}
               options={creatureClasses}
@@ -119,7 +120,7 @@ function Definition({ creature, setCreature }) {
               label={"Subclasse"}
               extraWidth={250}
               value={creature}
-              propertyPath="subClass"
+              valuePropertyPath="subClass"
               displayProperty={creature.subClass}
               onSelect={setCreature}
               options={getSubClasses(creature.class)}
@@ -134,7 +135,7 @@ function Definition({ creature, setCreature }) {
               label={"Segunda Classe"}
               extraWidth={100}
               value={creature}
-              propertyPath="secondaryClass"
+              valuePropertyPath="secondaryClass"
               displayProperty={creature.secondaryClass}
               onSelect={HandleSelectSubClass}
               options={creatureClasses.filter((c) => c !== creature.class)}
@@ -144,7 +145,7 @@ function Definition({ creature, setCreature }) {
               label={"Segunda Subclasse"}
               extraWidth={250}
               value={creature}
-              propertyPath="secondarySubClass"
+              valuePropertyPath="secondarySubClass"
               displayProperty={creature.secondarySubClass}
               onSelect={setCreature}
               options={getSubClasses(creature.secondaryClass)}
@@ -161,7 +162,7 @@ function Definition({ creature, setCreature }) {
           label={"Terrestre"}
           extraWidth={100}
           value={creature}
-          propertyPath="movement.speed"
+          valuePropertyPath="movement.speed"
           displayProperty={creature.movement.speed}
           onSelect={setCreature}
           options={CREATURE_SPEED_MOVEMENTS}
@@ -170,7 +171,7 @@ function Definition({ creature, setCreature }) {
           label={"Vôo / Planar"}
           extraWidth={100}
           value={creature}
-          propertyPath="movement.flying"
+          valuePropertyPath="movement.flying"
           displayProperty={creature.movement.flying}
           onSelect={setCreature}
           options={CREATURE_FLYING_MOVEMENTS}
@@ -179,7 +180,7 @@ function Definition({ creature, setCreature }) {
           label={"Natação"}
           extraWidth={100}
           value={creature}
-          propertyPath="movement.swimming"
+          valuePropertyPath="movement.swimming"
           displayProperty={creature.movement.swimming}
           onSelect={setCreature}
           options={CREATURE_SWIMMING_MOVEMENTS}
@@ -188,7 +189,7 @@ function Definition({ creature, setCreature }) {
           label={"Escavação / Escalada"}
           extraWidth={100}
           value={creature}
-          propertyPath="movement.burrowing"
+          valuePropertyPath="movement.burrowing"
           displayProperty={creature.movement.burrowing}
           onSelect={setCreature}
           options={CREATURE_BURROWING_MOVEMENTS}

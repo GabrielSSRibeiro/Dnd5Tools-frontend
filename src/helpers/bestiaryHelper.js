@@ -1,14 +1,20 @@
 //Bestiary filters
-export const NONE = "Nenhum";
-export const RANDOM = "Aleatório";
 
-export const CREATURE_RARITIES = [
-  "Comum (Nível 1 - 5)",
-  "Incomum (Nível 6 - 10)",
-  "Rara (Nível 11 - 15)",
-  "Muito Rara (Nível 16 - 20)",
-  "Lendária (Nível 20+)",
+export const CREATURE_RARITIES = {
+  COMMON: 100,
+  UNCOMMON: 200,
+  RARE: 300,
+  VERY_RARE: 400,
+  LEGENDARY: 500,
+};
+export const creatureRarities = [
+  { display: "Comum (Nível 1 - 5)", value: CREATURE_RARITIES.COMMON, weight: 0 },
+  { display: "Incomum (Nível 6 - 10)", value: CREATURE_RARITIES.UNCOMMON, weight: 0 },
+  { display: "Rara (Nível 11 - 15)", value: CREATURE_RARITIES.RARE, weight: 0 },
+  { display: "Muito Rara (Nível 16 - 20)", value: CREATURE_RARITIES.VERY_RARE, weight: 0 },
+  { display: "Lendária (Nível 20+)", value: CREATURE_RARITIES.LEGENDARY, weight: 0 },
 ];
+
 export const CREATURE_ENVIROMENTS = [
   "Cósmico",
   "Celestial",
@@ -41,7 +47,7 @@ export const CREATURE_TYPES = [
   "Planta",
 ];
 
-export const DEFAULT_CREATURE_RACE = NONE;
+export const DEFAULT_CREATURE_RACE = "Nenhuma";
 export const CREATURE_RACES = [
   DEFAULT_CREATURE_RACE,
   "Anão",
@@ -55,8 +61,8 @@ export const CREATURE_RACES = [
   "Tiefling",
 ];
 
-export const DEFAULT_CREATURE_CLASS = NONE;
-export const DEFAULT_CREATURE_SUBCLASS = NONE;
+export const DEFAULT_CREATURE_CLASS = "Nenhuma";
+export const DEFAULT_CREATURE_SUBCLASS = "Nenhuma";
 export const CREATURE_CLASSES = [
   { name: "Artifice", subClasses: ["Alquimista", "Armeiro", "Atirador", "Ferreiro de Batalha"] },
   {
@@ -198,7 +204,7 @@ export const CREATURE_CLASSES = [
 ];
 
 export const DEFAULT_CREATURE_SPEED = "Médio";
-export const DEFAULT_CREATURE_MOVEMENT = NONE;
+export const DEFAULT_CREATURE_MOVEMENT = "Nenhum";
 export const CREATURE_SPEED_MOVEMENTS = [DEFAULT_CREATURE_MOVEMENT, "Baixo", DEFAULT_CREATURE_SPEED, "Alto", "Extremo"];
 export const CREATURE_FLYING_MOVEMENTS = [DEFAULT_CREATURE_MOVEMENT, "Baixo", "Médio", "Alto", "Extremo"];
 export const CREATURE_SWIMMING_MOVEMENTS = [DEFAULT_CREATURE_MOVEMENT, "Baixo", "Médio", "Alto", "Extremo"];

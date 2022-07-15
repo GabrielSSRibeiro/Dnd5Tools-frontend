@@ -68,3 +68,15 @@ export function setObjPropertyValue(obj, accessPath, value) {
 
   property[lastKey] = value;
 }
+
+export function getObjPropertyValue(obj, accessPath) {
+  const propertyKeys = accessPath.split(".");
+
+  let property = obj;
+
+  propertyKeys.forEach((key) => {
+    property = property[key];
+  });
+
+  return property;
+}

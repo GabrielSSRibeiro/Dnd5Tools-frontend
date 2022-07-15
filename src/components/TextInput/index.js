@@ -13,14 +13,13 @@ function TextInput({
   className = "",
   onChange = () => {},
   value = null,
-  propertyPath = null,
-  displayProperty = null,
+  valuePropertyPath = null,
   ...rest
 }) {
   function HandleOnChange(e) {
-    if (propertyPath) {
+    if (valuePropertyPath) {
       let obj = value;
-      util.setObjPropertyValue(obj, propertyPath, e.target.value);
+      util.setObjPropertyValue(obj, valuePropertyPath, e.target.value);
 
       onChange({ ...obj });
     } else {
@@ -35,9 +34,18 @@ function TextInput({
         {info && <Info contents={info} />}
       </div>
       {isMultiLine ? (
-        <textarea onChange={HandleOnChange} value={typeof value == "object" ? displayProperty : value} {...rest}></textarea>
+        <textarea
+          onChange={HandleOnChange}
+          value={valuePropertyPath ? util.getObjPropertyValue(value, valuePropertyPath) : value}
+          {...rest}
+        ></textarea>
       ) : (
-        <input type="text" onChange={HandleOnChange} value={typeof value == "object" ? displayProperty : value} {...rest}></input>
+        <input
+          type="text"
+          onChange={HandleOnChange}
+          value={valuePropertyPath ? util.getObjPropertyValue(value, valuePropertyPath) : value}
+          {...rest}
+        ></input>
       )}
     </div>
   );

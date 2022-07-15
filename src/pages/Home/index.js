@@ -31,7 +31,7 @@ function Home() {
     {
       name: "Argon, o Temível A",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: "Comum (Nível 1 - 5)",
+      rarity: 100,
       environment: "Floresta",
       type: "Elemental",
       size: "Médio",
@@ -39,7 +39,7 @@ function Home() {
     {
       name: "Argon, o Temível B",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: "Comum (Nível 1 - 5)",
+      rarity: 100,
       environment: "Floresta",
       type: "Elemental",
       size: "Médio",
@@ -47,7 +47,7 @@ function Home() {
     {
       name: "Argon, o Temível C",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: "Comum (Nível 1 - 5)",
+      rarity: 100,
       environment: "Floresta",
       type: "Elemental",
       size: "Médio",
@@ -55,7 +55,7 @@ function Home() {
     {
       name: "Argon, o Temível D",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: "Comum (Nível 1 - 5)",
+      rarity: 100,
       environment: "Floresta",
       type: "Elemental",
       size: "Médio",
@@ -63,7 +63,7 @@ function Home() {
     {
       name: "Argon, o Temível E",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: "Comum (Nível 1 - 5)",
+      rarity: 100,
       environment: "Floresta",
       type: "Elemental",
       size: "Médio",
@@ -71,7 +71,7 @@ function Home() {
     {
       name: "Argon, o Temível F",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: "Comum (Nível 1 - 5)",
+      rarity: 100,
       environment: "Floresta",
       type: "Elemental",
       size: "Médio",
@@ -79,7 +79,7 @@ function Home() {
     {
       name: "Argon, o Temível G",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: "Comum (Nível 1 - 5)",
+      rarity: 100,
       environment: "Floresta",
       type: "Elemental",
       size: "Médio",
@@ -87,7 +87,7 @@ function Home() {
     {
       name: "Argon, o Temível H",
       image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: "Comum (Nível 1 - 5)",
+      rarity: 100,
       environment: "Floresta",
       type: "Elemental",
       size: "Médio",

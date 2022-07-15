@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 //  import api from "../../services/api";
 import { SortArrayOfObjByProperty } from "../../../utils";
-import { CREATURE_RARITIES, CREATURE_ENVIROMENTS, CREATURE_TYPES, CREATURE_SIZES } from "../../../helpers/bestiaryHelper";
+import { creatureRarities, CREATURE_ENVIROMENTS, CREATURE_TYPES, CREATURE_SIZES } from "../../../helpers/bestiaryHelper";
 import { MAX_CREATURES_ALLOWED } from "../../../helpers/combatHelper";
 
 import Button from "../../Button";
@@ -175,28 +175,30 @@ function Bestiary({
                   extraWidth={20}
                   value={selectedRarity}
                   onSelect={(value) => handleFilter(setSelectedRarity, value)}
-                  defaultValue="Nível"
-                  options={CREATURE_RARITIES}
+                  nothingSelected="Nível"
+                  options={creatureRarities}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
                 />
                 <Select
                   extraWidth={60}
                   value={selectedEnv}
                   onSelect={(value) => handleFilter(setSelectedEnv, value)}
-                  defaultValue="Ambiente"
+                  nothingSelected="Ambiente"
                   options={CREATURE_ENVIROMENTS}
                 />
                 <Select
                   extraWidth={60}
                   value={selectedType}
                   onSelect={(value) => handleFilter(setSelectedType, value)}
-                  defaultValue="Tipo"
+                  nothingSelected="Tipo"
                   options={CREATURE_TYPES}
                 />
                 <Select
                   extraWidth={20}
                   value={selectedSize}
                   onSelect={(value) => handleFilter(setSelectedSize, value)}
-                  defaultValue="Tamanho"
+                  nothingSelected="Tamanho"
                   options={CREATURE_SIZES}
                 />
               </main>

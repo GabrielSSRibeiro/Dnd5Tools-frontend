@@ -197,21 +197,13 @@ function EditCreature({ setIsEditCreatureOpen }) {
             </div>
           </aside>
           <aside className="creature-details">
-            <TextInput
-              label="Nome"
-              className="creature-name"
-              value={creature}
-              propertyPath="name"
-              displayProperty={creature.name}
-              onChange={setCreature}
-            />
+            <TextInput label="Nome" className="creature-name" value={creature} valuePropertyPath="name" onChange={setCreature} />
             <TextInput
               isMultiLine={true}
               label="Descrição (opcional)"
               className="creature-description"
               value={creature}
-              propertyPath="description"
-              displayProperty={creature.description}
+              valuePropertyPath="description"
               onChange={setCreature}
             />
           </aside>
