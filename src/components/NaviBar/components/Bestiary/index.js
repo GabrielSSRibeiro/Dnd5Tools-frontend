@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
 //  import api from "../../services/api";
-import { SortArrayOfObjByProperty } from "../../../utils";
-import { creatureRarities, CREATURE_ENVIROMENTS, CREATURE_TYPES, CREATURE_SIZES } from "../../../helpers/bestiaryHelper";
-import { MAX_CREATURES_ALLOWED } from "../../../helpers/combatHelper";
+import * as utils from "../../../../utils";
+import { creatureRarities, CREATURE_ENVIROMENTS, CREATURE_TYPES, CREATURE_SIZES } from "../../../../data/creatureConstants";
+import { MAX_CREATURES_ALLOWED } from "../../../../data/combatConstants";
 
-import Button from "../../Button";
-import CheckInput from "../../CheckInput";
-import Select from "../../Select";
+import Button from "../../../Button";
+import CheckInput from "../../../CheckInput";
+import Select from "../../../Select";
 
 import "./styles.css";
 
@@ -49,7 +49,7 @@ function Bestiary({
   }
 
   function HandleSelectedFromBestiary() {
-    SortArrayOfObjByProperty(tempSelectedCreatures, "name");
+    utils.SortArrayOfObjByProperty(tempSelectedCreatures, "name");
 
     HandleClose();
     setSelectedCreatures(tempSelectedCreatures);

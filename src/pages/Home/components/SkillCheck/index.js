@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
+import { getSkillCheck } from "./utils";
 import {
   MIN_DIFICULTY,
   DEFAULT_DIFFICULTY,
@@ -10,14 +11,13 @@ import {
   CONDITIONS,
   CONDITION_DURATIONS,
   DEFAULT_CONDITION_DURATION,
-  getSkillCheck,
-} from "../../../../../helpers/skillCheckHelper";
+} from "../../../../data/skillCheckConstants";
 
-import Panel from "../../../../../components/Panel";
-import Select from "../../../../../components/Select";
-import SelectButton from "../../../../../components/SelectButton";
-import Button from "../../../../../components/Button";
-import ResultBox from "../../../../../components/ResultBox";
+import Panel from "../../../../components/Panel";
+import Select from "../../../../components/Select";
+import SelectButton from "../../../../components/SelectButton";
+import Button from "../../../../components/Button";
+import ResultBox from "../../../../components/ResultBox";
 
 import "./styles.css";
 

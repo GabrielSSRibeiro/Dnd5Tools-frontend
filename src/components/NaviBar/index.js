@@ -1,10 +1,10 @@
 import React from "react";
 
-import { MAX_COMBATS } from "../../helpers/combatHelper";
+import { MAX_COMBATS } from "../../data/combatConstants";
 
 import SelectButton from "../SelectButton";
-import Party from "../Sections/Party";
-import Bestiary from "../Sections/Bestiary";
+import Party from "./components/Party";
+import Bestiary from "./components/Bestiary";
 
 import "./styles.css";
 

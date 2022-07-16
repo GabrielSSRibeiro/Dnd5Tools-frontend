@@ -16,11 +16,11 @@ import {
   CREATURE_FLYING_MOVEMENTS,
   CREATURE_SWIMMING_MOVEMENTS,
   CREATURE_BURROWING_MOVEMENTS,
-} from "../../../../helpers/bestiaryHelper";
+} from "../../../../../../data/creatureConstants";
 
-import CheckInput from "../../../CheckInput";
-import Select from "../../../Select";
-import SelectButton from "../../../SelectButton";
+import CheckInput from "../../../../../../components/CheckInput";
+import Select from "../../../../../../components/Select";
+import SelectButton from "../../../../../../components/SelectButton";
 
 import "./styles.css";
 

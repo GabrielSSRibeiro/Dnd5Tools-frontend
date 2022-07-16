@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 //  import api from "../../services/api";
 
-import { LEVELS } from "../../../helpers/partyHelper";
-import { MAX_CHARACTERS_ALLOWED } from "../../../helpers/combatHelper";
+import { LEVELS } from "../../../../data/combatConstants";
+import { MAX_CHARACTERS_ALLOWED } from "../../../../data/combatConstants";
 
-import Button from "../../Button";
-import Select from "../../Select";
-import CheckInput from "../../CheckInput";
-import TextInput from "../../TextInput";
+import Button from "../../../Button";
+import Select from "../../../Select";
+import CheckInput from "../../../CheckInput";
+import TextInput from "../../../TextInput";
 
 import "./styles.css";
 

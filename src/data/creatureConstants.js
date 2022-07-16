@@ -1,5 +1,4 @@
 //Bestiary filters
-
 export const CREATURE_RARITIES = {
   COMMON: 100,
   UNCOMMON: 200,

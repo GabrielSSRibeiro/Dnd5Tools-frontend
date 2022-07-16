@@ -1,38 +1,19 @@
-import { randomIntFromInterval as rand, randomValueFromVariance as variance, GetProfByLevel } from "../utils";
-
-export const DEFAULT_DIFFICULTY = ["Média"];
-export const CHECK_DIFFICULTIES = ["Baixa", DEFAULT_DIFFICULTY, "Alta", "Extrema"];
-export const DEFAULT_INTENSITY = ["Nenhuma"];
-export const DAMAGE_INTENSITIES = [DEFAULT_INTENSITY, "Baixa", "Média", "Alta", "Extrema"];
-export const DEFAULT_CONDITION = ["Nenhuma"];
-export const CONDITIONS = [
+import * as utils from "../../../../utils";
+import {
+  MIN_DIFICULTY,
+  CHECK_DIFFICULTIES,
+  DEFAULT_INTENSITY,
+  DAMAGE_INTENSITIES,
   DEFAULT_CONDITION,
-  "Agarrado",
-  "Derrubado",
-  "Cego/Surdo",
-  "Impedido",
-  "Amedrontado",
-  "Envenenado",
-  "Atordoado",
-  "Petrificado",
-  "Inconsciente",
-  "Exaustão",
-];
-export const DEFAULT_CONDITION_DURATION = ["Nenhuma"];
-
-const conditionDurationTimes = ["1 turno", "1 minuto", "1 hora", "1 dia"];
-export const CONDITION_DURATIONS = [
   DEFAULT_CONDITION_DURATION,
-  `Baixa (${conditionDurationTimes[0]})`,
-  `Média (${conditionDurationTimes[1]})`,
-  `Alta (${conditionDurationTimes[2]})`,
-  `Extrema (${conditionDurationTimes[3]})`,
-];
+  CONDITION_DURATIONS,
+} from "../../../../data/skillCheckConstants";
 
-export const MIN_DIFICULTY = 10;
+const rand = utils.randomIntFromInterval;
+const variance = utils.randomIntFromInterval;
 
 const getDifficulty = (level, checkDifficulty) => {
-  const prof = GetProfByLevel(level);
+  const prof = utils.GetProfByLevel(level);
   const difficultyIndex = CHECK_DIFFICULTIES.indexOf(checkDifficulty);
   const difficultyFactor = 5;
   const difficultyVariance = 0.1;
@@ -71,6 +52,10 @@ export const getSkillCheck = (level, checkDifficulty, damageIntensity, condition
   }
 
   if (conditionDuration !== DEFAULT_CONDITION_DURATION) {
+    const conditionDurationTimes = CONDITION_DURATIONS.filter((cd) => cd !== DEFAULT_CONDITION_DURATION).map(
+      (cd) => cd.split(")")[0].split("(").reverse()[0]
+    );
+
     skillCheck.push({ value: conditionDurationTimes[CONDITION_DURATIONS.indexOf(conditionDuration)], name: "Duração" });
   }
 

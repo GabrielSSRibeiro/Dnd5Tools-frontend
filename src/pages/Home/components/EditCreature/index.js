@@ -9,17 +9,17 @@ import {
   DEFAULT_CREATURE_MOVEMENT,
   DEFAULT_CREATURE_PRIMARY_ALIGNMENT,
   DEFAULT_CREATURE_SECONDARY_ALIGNMENT,
-} from "../../../helpers/bestiaryHelper";
+} from "../../../../data/creatureConstants";
 
-import Definition from "../EditCreature/Definition";
-import Atributes from "../EditCreature/Atributes";
-import Resistencies from "../EditCreature/Resistencies";
-import Passives from "../EditCreature/Passives";
-import Actions from "../EditCreature/Actions";
-import TreasureReward from "../EditCreature/TreasureReward";
-import Summary from "../EditCreature/Summary";
-import Button from "../../Button";
-import TextInput from "../../TextInput";
+import Definition from "./components/Definition";
+import Atributes from "./components/Atributes";
+import Resistencies from "./components/Resistencies";
+import Passives from "./components/Passives";
+import Actions from "./components/Actions";
+import TreasureReward from "./components/TreasureReward";
+import Summary from "./components/Summary";
+import Button from "../../../../components/Button";
+import TextInput from "../../../../components/TextInput";
 
 import "./styles.css";
 

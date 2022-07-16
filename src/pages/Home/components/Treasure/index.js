@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
 import {
-  DEFAULT_TREASURE_TYPE,
-  TREASURE_TYPES,
-  GOLD_PIECES_QUANTITIES,
   getGoldPiecesAmount,
-  DEFAULT_GOLD_PIECES_QUANTITIES,
-  MATERIAL_PRICE_INFLATIONS,
-  DEFAULT_MATERIAL_PRICE_INFLATIONS,
   ITEMS_CRAFT_TIMES,
   getItemBuyPrices,
   getItemSellPrices,
@@ -15,17 +9,28 @@ import {
   getItemCraftSellPrices,
   getMaterialBuyPrices,
   getMaterialSellPrices,
+  getItemAfixes,
+} from "./utils";
+import {
+  DEFAULT_TREASURE_TYPE,
+  DEFAULT_GOLD_PIECES_QUANTITIES,
+  DEFAULT_MATERIAL_PRICE_INFLATIONS,
+  TREASURE_TYPES,
+  GOLD_PIECES_QUANTITIES,
+  MATERIAL_PRICE_INFLATIONS,
   EQUIPMENT_TYPES,
   EQUIPMENT_RARITIES,
-  getItemAfixes,
-} from "../../../helpers/treasureHelper";
-import { UNCOMMON_ITEM_MIN_PRICE, PRIMARY_AFIX_PROB, SECONDARY_AFIX_PROB, CURSE_AFIX_PROB } from "../../../helpers/treasureHelper";
-import { turnValueIntoPercentageString as percentage } from "../../../utils";
+  UNCOMMON_ITEM_MIN_PRICE,
+  PRIMARY_AFIX_PROB,
+  SECONDARY_AFIX_PROB,
+  CURSE_AFIX_PROB,
+} from "../../../../data/treasureConstants";
+import * as utils from "../../../../utils";
 
-import Panel from "../../Panel";
-import SelectButton from "../../SelectButton";
-import Button from "../../Button";
-import ResultBox from "../../ResultBox";
+import Panel from "../../../../components/Panel";
+import SelectButton from "../../../../components/SelectButton";
+import Button from "../../../../components/Button";
+import ResultBox from "../../../../components/ResultBox";
 
 import "./styles.css";
 
@@ -121,13 +126,13 @@ function Treasure({ resultText, level }) {
                   title="Tipo do Item"
                   info={[
                     {
-                      text: `Probabilidade de afixo primário em item: ${percentage(PRIMARY_AFIX_PROB)}`,
+                      text: `Probabilidade de afixo primário em item: ${utils.turnValueIntoPercentageString(PRIMARY_AFIX_PROB)}`,
                     },
                     {
-                      text: `Probabilidade de afixo secundário em item: ${percentage(SECONDARY_AFIX_PROB)}`,
+                      text: `Probabilidade de afixo secundário em item: ${utils.turnValueIntoPercentageString(SECONDARY_AFIX_PROB)}`,
                     },
                     {
-                      text: `Probabilidade de afixo amaldiçoado em item: ${percentage(CURSE_AFIX_PROB)}`,
+                      text: `Probabilidade de afixo amaldiçoado em item: ${utils.turnValueIntoPercentageString(CURSE_AFIX_PROB)}`,
                     },
                   ]}
                 >

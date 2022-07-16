@@ -1,19 +1,23 @@
+import * as utils from "../../../../utils";
 import {
-  randomIntFromInterval as rand,
-  averageOfArray as avg,
-  randomValueFromVariance as variance,
-  randomItemFromArray as randItem,
-  GetProfByLevel,
-  TrimDecimalPlaces,
-  ProbabilityCheck,
-} from "../utils";
+  GOLD_PIECES_QUANTITIES,
+  UNCOMMON_ITEM_MIN_PRICE,
+  DEFAULT_MATERIAL_PRICE_INFLATIONS,
+  MATERIAL_PRICE_INFLATIONS,
+  EQUIPMENT_TYPES,
+  EQUIPMENT_RARITIES,
+  PRIMARY_AFIX_PROB,
+  SECONDARY_AFIX_PROB,
+  CURSE_AFIX_PROB,
+} from "../../../../data/treasureConstants";
 
-export const DEFAULT_TREASURE_TYPE = "Material";
-export const TREASURE_TYPES = ["Peças de Ouro", DEFAULT_TREASURE_TYPE, "Equipamento"];
+const rand = utils.randomIntFromInterval;
+const avg = utils.averageOfArray;
+const variance = utils.randomValueFromVariance;
+const randItem = utils.randomItemFromArray;
 
 //Gold pieces
-export const DEFAULT_GOLD_PIECES_QUANTITIES = "Médio";
-export const GOLD_PIECES_QUANTITIES = ["Pouco", DEFAULT_GOLD_PIECES_QUANTITIES, "Muito", "Bastante"];
+
 export const getGoldPiecesAmount = (quantity) => {
   const quantityIndex = GOLD_PIECES_QUANTITIES.indexOf(quantity);
 
@@ -37,7 +41,6 @@ const RarityFactor = 2.5;
 
 const itemMaxPriceRate = 5;
 
-export const UNCOMMON_ITEM_MIN_PRICE = 300;
 const uncommonItemMaxPrice = UNCOMMON_ITEM_MIN_PRICE * itemMaxPriceRate;
 const rareItemMinPrice = UNCOMMON_ITEM_MIN_PRICE * 1 * RarityFactor;
 const rareItemMaxPrice = rareItemMinPrice * itemMaxPriceRate;
@@ -83,17 +86,13 @@ export const getMaterialBuyPrices = (inflation) =>
 export const getMaterialSellPrices = () =>
   getMaterialBuyPrices(DEFAULT_MATERIAL_PRICE_INFLATIONS).map((materialSellPrice) => () => Math.round(materialSellPrice() * sellRate));
 
-export const DEFAULT_MATERIAL_PRICE_INFLATIONS = "Normal";
-export const MATERIAL_PRICE_INFLATIONS = ["Barato", DEFAULT_MATERIAL_PRICE_INFLATIONS, "Caro", "Abusivo"];
 const materialPriceInflation = [0.5, 1, 1.5, 2];
 
 //Item
-const potion = "Poçao";
-export const EQUIPMENT_TYPES = ["Arma", "Armadura", "Acessório", potion];
-export const EQUIPMENT_RARITIES = ["Incomum", "Raro", "Muito Raro", "Lendário"];
+const potion = EQUIPMENT_TYPES[EQUIPMENT_TYPES.length - 1];
 
 const offensiveAfixes = (level) => {
-  const bonus = GetProfByLevel(level) / 2;
+  const bonus = utils.GetProfByLevel(level) / 2;
 
   const afixes = [
     { name: "Ataque", bonus: 1 }, //Math.ceil(bonus / 2) },
@@ -107,7 +106,7 @@ const offensiveAfixes = (level) => {
 const defensiveAfixes = (level) => {
   const afixes = [
     { name: "CA", bonus: 1 }, //Math.ceil(GetProfByLevel(level) / 4) },
-    { name: "PV", bonus: GetProfByLevel(level) * 2 },
+    { name: "PV", bonus: utils.GetProfByLevel(level) * 2 },
   ];
   const probability = 1 / afixes.length;
 
@@ -122,7 +121,7 @@ const wisdomAbilities = ["Adestrar Animais", "Intuição", "Medicina", "Percepç
 const charismathAbilities = ["Atuação", "Enganação", "Intimidação", "Persuasão"];
 
 const utilityAfixes = (level) => {
-  const bonus = Math.ceil(GetProfByLevel(level) / 3);
+  const bonus = Math.ceil(utils.GetProfByLevel(level) / 3);
 
   const afixes = [
     // { name: randItem(strengthAbilities), bonus },
@@ -136,20 +135,16 @@ const utilityAfixes = (level) => {
   return afixes.map((afix) => ({ ...afix, probability }));
 };
 
-export const PRIMARY_AFIX_PROB = 8 / 10;
-export const SECONDARY_AFIX_PROB = TrimDecimalPlaces((1 - PRIMARY_AFIX_PROB) / 2);
-export const CURSE_AFIX_PROB = 1 / 10;
-
 const getPulledAfixType = (afixTypes) => {
   return afixTypes
     .sort((a, b) => (a.probability > b.probability ? 1 : -1))
-    .find((type, index) => ProbabilityCheck(type.probability) || index === afixTypes.length - 1)
+    .find((type, index) => utils.ProbabilityCheck(type.probability) || index === afixTypes.length - 1)
     .type();
 };
 
 const checkAndApplyCurse = (pulledAfixes, pulledAfix, buffedAfixesBaseline) => {
   //check if it's cursed
-  if (pulledAfixes.length !== 0 && ProbabilityCheck(CURSE_AFIX_PROB)) {
+  if (pulledAfixes.length !== 0 && utils.ProbabilityCheck(CURSE_AFIX_PROB)) {
     //curse this afix
     pulledAfix.bonus = pulledAfix.bonus * -1;
 

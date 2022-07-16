@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 //  import api from "../../services/api";
 
-import * as utils from "../../../utils";
-import { COMBAT_DIFFICULTIES, MAX_CREATURES_ALLOWED } from "../../../helpers/combatHelper";
+import * as utils from "../../../../utils";
+import { MAX_CREATURES_ALLOWED, COMBAT_DIFFICULTIES } from "../../../../data/combatConstants";
 
-import Panel from "../../Panel";
-import Button from "../../Button";
-import Select from "../../Select";
+import Panel from "../../../../components/Panel";
+import Button from "../../../../components/Button";
+import Select from "../../../../components/Select";
 
 import "./styles.css";
 

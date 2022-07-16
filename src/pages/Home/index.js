@@ -3,11 +3,11 @@ import React, { useState } from "react";
 
 import NaviBar from "../../components/NaviBar";
 import MenuModal from "../../components/MenuModal";
-import SkillCheck from "../../components/Sections/SkillCheck";
-import CombatSetup from "../../components/Sections/CombatSetup";
-import Combat from "../../components/Sections/Combat";
-import Treasure from "../../components/Sections/Treasure";
-import EditCreature from "../../components/Sections/EditCreature";
+import SkillCheck from "./components/SkillCheck";
+import CombatSetup from "./components/CombatSetup";
+import Combat from "./components/Combat";
+import Treasure from "./components/Treasure";
+import EditCreature from "./components/EditCreature";
 
 import background from "../../assets/background.png";
 import "./styles.css";
