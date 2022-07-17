@@ -2,20 +2,18 @@ import React from "react";
 
 import {
   creatureRarities,
-  CREATURE_ENVIROMENTS,
-  CREATURE_SIZES,
+  creatureEnvironments,
+  creatureSizes,
   CREATURE_TYPES,
-  HUMANOID_CREATURE_TYPE,
-  CREATURE_RACES,
-  CREATURE_CLASSES,
-  DEFAULT_CREATURE_CLASS,
-  DEFAULT_CREATURE_SUBCLASS,
-  CREATURE_PRIMARY_ALIGNMENT,
-  CREATURE_SECONDARY_ALIGNMENT,
-  CREATURE_SPEED_MOVEMENTS,
-  CREATURE_FLYING_MOVEMENTS,
-  CREATURE_SWIMMING_MOVEMENTS,
-  CREATURE_BURROWING_MOVEMENTS,
+  creatureTypes,
+  creatureRaces,
+  creatureClasses,
+  creaturePrimaryAlignments,
+  creatureSecondaryAlignments,
+  creatureSpeedMovements,
+  creatureFlyingMovements,
+  creatureSwimmingMovements,
+  creatureBurrowingMovements,
 } from "../../../../../../data/creatureConstants";
 
 import CheckInput from "../../../../../../components/CheckInput";
@@ -25,20 +23,19 @@ import SelectButton from "../../../../../../components/SelectButton";
 import "./styles.css";
 
 function Definition({ creature, setCreature }) {
-  const creatureClasses = [DEFAULT_CREATURE_CLASS].concat(CREATURE_CLASSES.map((c) => c.name));
   function getSubClasses(selectedClass) {
-    let foundClass = CREATURE_CLASSES.find((c) => c.name === selectedClass);
-    return [DEFAULT_CREATURE_SUBCLASS].concat(foundClass ? foundClass.subClasses : []);
+    let foundClass = creatureClasses.find((c) => c.value === selectedClass);
+    return foundClass ? foundClass.subClasses : [];
   }
 
   function HandleSelectClass(creature) {
-    creature.subClass = DEFAULT_CREATURE_SUBCLASS;
+    creature.subClass = null;
 
     setCreature(creature);
   }
 
   function HandleSelectSubClass(creature) {
-    creature.secondarySubClass = DEFAULT_CREATURE_SUBCLASS;
+    creature.secondarySubClass = null;
 
     setCreature(creature);
   }
@@ -47,8 +44,8 @@ function Definition({ creature, setCreature }) {
     setCreature({
       ...creature,
       multiclassing: !creature.multiclassing,
-      secondaryClass: DEFAULT_CREATURE_CLASS,
-      secondarySubClass: DEFAULT_CREATURE_SUBCLASS,
+      secondaryClass: null,
+      secondarySubClass: null,
     });
   }
 
@@ -73,7 +70,9 @@ function Definition({ creature, setCreature }) {
           valuePropertyPath="environment"
           displayProperty={creature.environment}
           onSelect={setCreature}
-          options={CREATURE_ENVIROMENTS}
+          options={creatureEnvironments}
+          optionDisplay={(o) => o.display}
+          optionValue={(o) => o.value}
         />
         <Select
           label={"Tamanho"}
@@ -82,7 +81,9 @@ function Definition({ creature, setCreature }) {
           valuePropertyPath="size"
           displayProperty={creature.size}
           onSelect={setCreature}
-          options={CREATURE_SIZES}
+          options={creatureSizes}
+          optionDisplay={(o) => o.display}
+          optionValue={(o) => o.value}
         />
         <Select
           label={"Tipo"}
@@ -91,11 +92,13 @@ function Definition({ creature, setCreature }) {
           valuePropertyPath="type"
           displayProperty={creature.type}
           onSelect={setCreature}
-          options={CREATURE_TYPES}
+          options={creatureTypes}
+          optionDisplay={(o) => o.display}
+          optionValue={(o) => o.value}
         />
       </div>
 
-      {creature.type === HUMANOID_CREATURE_TYPE && (
+      {creature.type === CREATURE_TYPES.HUMANOID && (
         <>
           <div className="extra-definitions">
             <Select
@@ -105,7 +108,10 @@ function Definition({ creature, setCreature }) {
               valuePropertyPath="race"
               displayProperty={creature.race}
               onSelect={setCreature}
-              options={CREATURE_RACES}
+              nothingSelected="Nenhuma"
+              options={creatureRaces}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
             />
             <Select
               label={"Classe"}
@@ -114,7 +120,10 @@ function Definition({ creature, setCreature }) {
               valuePropertyPath="class"
               displayProperty={creature.class}
               onSelect={HandleSelectClass}
+              nothingSelected="Nenhuma"
               options={creatureClasses}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
             />
             <Select
               label={"Subclasse"}
@@ -123,7 +132,10 @@ function Definition({ creature, setCreature }) {
               valuePropertyPath="subClass"
               displayProperty={creature.subClass}
               onSelect={setCreature}
+              nothingSelected="Nenhuma"
               options={getSubClasses(creature.class)}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
               isDisabled={!creature.class}
             />
           </div>
@@ -138,7 +150,10 @@ function Definition({ creature, setCreature }) {
               valuePropertyPath="secondaryClass"
               displayProperty={creature.secondaryClass}
               onSelect={HandleSelectSubClass}
-              options={creatureClasses.filter((c) => c !== creature.class)}
+              nothingSelected="Nenhuma"
+              options={creatureClasses.filter((c) => c.value !== creature.class)}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
               className={creature.multiclassing ? "" : "invisible"}
             />
             <Select
@@ -148,7 +163,10 @@ function Definition({ creature, setCreature }) {
               valuePropertyPath="secondarySubClass"
               displayProperty={creature.secondarySubClass}
               onSelect={setCreature}
+              nothingSelected="Nenhuma"
               options={getSubClasses(creature.secondaryClass)}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
               className={creature.multiclassing ? "" : "invisible"}
               isDisabled={!creature.secondaryClass}
             />
@@ -165,7 +183,10 @@ function Definition({ creature, setCreature }) {
           valuePropertyPath="movement.speed"
           displayProperty={creature.movement.speed}
           onSelect={setCreature}
-          options={CREATURE_SPEED_MOVEMENTS}
+          nothingSelected="Nenhum"
+          options={creatureSpeedMovements}
+          optionDisplay={(o) => o.display}
+          optionValue={(o) => o.value}
         />
         <Select
           label={"Vôo / Planar"}
@@ -174,7 +195,10 @@ function Definition({ creature, setCreature }) {
           valuePropertyPath="movement.flying"
           displayProperty={creature.movement.flying}
           onSelect={setCreature}
-          options={CREATURE_FLYING_MOVEMENTS}
+          nothingSelected="Nenhum"
+          options={creatureFlyingMovements}
+          optionDisplay={(o) => o.display}
+          optionValue={(o) => o.value}
         />
         <Select
           label={"Natação"}
@@ -183,7 +207,10 @@ function Definition({ creature, setCreature }) {
           valuePropertyPath="movement.swimming"
           displayProperty={creature.movement.swimming}
           onSelect={setCreature}
-          options={CREATURE_SWIMMING_MOVEMENTS}
+          nothingSelected="Nenhum"
+          options={creatureSwimmingMovements}
+          optionDisplay={(o) => o.display}
+          optionValue={(o) => o.value}
         />
         <Select
           label={"Escavação / Escalada"}
@@ -192,29 +219,32 @@ function Definition({ creature, setCreature }) {
           valuePropertyPath="movement.burrowing"
           displayProperty={creature.movement.burrowing}
           onSelect={setCreature}
-          options={CREATURE_BURROWING_MOVEMENTS}
+          nothingSelected="Nenhum"
+          options={creatureBurrowingMovements}
+          optionDisplay={(o) => o.display}
+          optionValue={(o) => o.value}
         />
       </div>
 
       <h2>Tendências</h2>
       <div className="alignment">
         <aside>
-          {CREATURE_PRIMARY_ALIGNMENT.map((option) => (
+          {creaturePrimaryAlignments.map((option) => (
             <SelectButton
-              key={option}
-              isSelected={creature.primaryAlignment === option}
-              text={option}
-              onClick={() => setCreature({ ...creature, primaryAlignment: option })}
+              key={option.value}
+              isSelected={creature.primaryAlignment === option.value}
+              text={option.display}
+              onClick={() => setCreature({ ...creature, primaryAlignment: option.value })}
             />
           ))}
         </aside>
         <aside>
-          {CREATURE_SECONDARY_ALIGNMENT.map((option) => (
+          {creatureSecondaryAlignments.map((option) => (
             <SelectButton
-              key={option}
-              isSelected={creature.secondaryAlignment === option}
-              text={option}
-              onClick={() => setCreature({ ...creature, secondaryAlignment: option })}
+              key={option.value}
+              isSelected={creature.secondaryAlignment === option.value}
+              text={option.display}
+              onClick={() => setCreature({ ...creature, secondaryAlignment: option.value })}
             />
           ))}
         </aside>

@@ -27,13 +27,13 @@ function NaviBar({
   groups,
   setGroups,
   creatures,
-  setCreatures,
   tabOptions,
   setIsMenuOpen,
   openTab,
   setOpenTab,
   isEditCreatureOpen,
   setIsEditCreatureOpen,
+  setCreatureToEdit,
   HandleEndCombat,
 }) {
   function HandleCombatTabClick(combatNumber) {
@@ -115,8 +115,8 @@ function NaviBar({
             isBestiaryOpen={isBestiaryOpen}
             setIsBestiaryOpen={setIsBestiaryOpen}
             setIsEditCreatureOpen={setIsEditCreatureOpen}
+            setCreatureToEdit={setCreatureToEdit}
             creatures={creatures}
-            setCreatures={setCreatures}
           />
         </section>
       )}

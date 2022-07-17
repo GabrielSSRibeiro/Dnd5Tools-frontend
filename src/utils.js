@@ -80,3 +80,7 @@ export function getObjPropertyValue(obj, accessPath) {
 
   return property;
 }
+
+export function clone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}

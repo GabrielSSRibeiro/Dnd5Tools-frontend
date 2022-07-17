@@ -19,31 +19,33 @@ function Select({
   info = null,
   nothingSelected = null,
   dropUp = false,
+  optionsAtATime = 5,
   className = "",
   isDisabled = false,
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const selectOptions = useMemo(() => (nothingSelected ? [nothingSelected, ...options] : options), [options, nothingSelected]);
-  const optionsAtATime = 5;
   const selectWidth = 100;
   const height = isLarge ? 55 : 37;
 
   function HandleClick(option) {
-    option = optionValue(option);
-
     setIsOpen(false);
-    if (option !== nothingSelected) {
-      if (valuePropertyPath) {
-        let obj = value;
-        util.setObjPropertyValue(obj, valuePropertyPath, option);
-
-        onSelect({ ...obj });
+    if (valuePropertyPath) {
+      let obj = value;
+      if (option !== nothingSelected) {
+        util.setObjPropertyValue(obj, valuePropertyPath, optionValue(option));
       } else {
-        onSelect(option);
+        util.setObjPropertyValue(obj, valuePropertyPath, null);
       }
+
+      onSelect({ ...obj });
     } else {
-      onSelect(null);
+      if (option !== nothingSelected) {
+        onSelect(option);
+      } else {
+        onSelect(null);
+      }
     }
   }
 

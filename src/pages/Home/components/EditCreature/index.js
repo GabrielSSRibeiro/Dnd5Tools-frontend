@@ -1,15 +1,7 @@
 import React, { useState, useMemo } from "react";
 //  import api from "../../services/api";
-
-import {
-  DEFAULT_CREATURE_RACE,
-  DEFAULT_CREATURE_CLASS,
-  DEFAULT_CREATURE_SUBCLASS,
-  DEFAULT_CREATURE_SPEED,
-  DEFAULT_CREATURE_MOVEMENT,
-  DEFAULT_CREATURE_PRIMARY_ALIGNMENT,
-  DEFAULT_CREATURE_SECONDARY_ALIGNMENT,
-} from "../../../../data/creatureConstants";
+import * as utils from "../../../../utils";
+import { CREATURE_MOVEMENTS, CREATURE_PRIMARY_ALIGNMENTS, CREATURE_SECONDARY_ALIGNMENTS } from "../../../../data/creatureConstants";
 
 import Definition from "./components/Definition";
 import Atributes from "./components/Atributes";
@@ -23,30 +15,31 @@ import TextInput from "../../../../components/TextInput";
 
 import "./styles.css";
 
-function EditCreature({ setIsEditCreatureOpen }) {
-  const [creature, setCreature] = useState({
-    name: "Hidra Alada", //null,
+function EditCreature({ creatureToEdit = null, setCreatures, setIsEditCreatureOpen }) {
+  const newCreature = {
+    name: null,
     description: null,
-    image: "https://i.pinimg.com/564x/01/d4/17/01d417c02bd190a056c718650fc9db3b.jpg", //null
+    image: null,
     rarity: null,
     environment: null,
     size: null,
     type: null,
-    race: DEFAULT_CREATURE_RACE,
-    class: DEFAULT_CREATURE_CLASS,
-    subClass: DEFAULT_CREATURE_SUBCLASS,
+    race: null,
+    class: null,
+    subClass: null,
     multiclassing: false,
-    secondaryClass: DEFAULT_CREATURE_CLASS,
-    secondarySubClass: DEFAULT_CREATURE_SUBCLASS,
+    secondaryClass: null,
+    secondarySubClass: null,
     movement: {
-      speed: DEFAULT_CREATURE_SPEED,
-      flying: DEFAULT_CREATURE_MOVEMENT,
-      swimming: DEFAULT_CREATURE_MOVEMENT,
-      burrowing: DEFAULT_CREATURE_MOVEMENT,
+      speed: CREATURE_MOVEMENTS.MEDIUM,
+      flying: null,
+      swimming: null,
+      burrowing: null,
     },
-    primaryAlignment: DEFAULT_CREATURE_PRIMARY_ALIGNMENT,
-    secondaryAlignment: DEFAULT_CREATURE_SECONDARY_ALIGNMENT,
-  });
+    primaryAlignment: CREATURE_PRIMARY_ALIGNMENTS.NEUTRAL,
+    secondaryAlignment: CREATURE_SECONDARY_ALIGNMENTS.NEUTRAL,
+  };
+  const [creature, setCreature] = useState(creatureToEdit ?? newCreature);
 
   const progessBarSteps = useMemo(() => {
     function AreAllPreviousStepsValid() {
@@ -54,7 +47,7 @@ function EditCreature({ setIsEditCreatureOpen }) {
     }
 
     function IsDefinitionStepValid() {
-      let areBasicsValid = [creature.name, creature.image].every((i) => i !== null);
+      let areBasicsValid = true; //[creature.name, creature.image].every((i) => i !== null);
 
       return areBasicsValid;
     }
@@ -63,7 +56,7 @@ function EditCreature({ setIsEditCreatureOpen }) {
     function IsAtributesStepValid() {
       let areBasicsDefinitionsValid = [creature.rarity, creature.environment, creature.size, creature.type].every((i) => i !== null);
       let areMovimentsValid = [creature.movement.speed, creature.movement.flying, creature.movement.swimming, creature.movement.burrowing].some(
-        (i) => i !== DEFAULT_CREATURE_MOVEMENT
+        (i) => i !== null
       );
 
       return AreAllPreviousStepsValid() && areBasicsDefinitionsValid && areMovimentsValid;
@@ -71,28 +64,28 @@ function EditCreature({ setIsEditCreatureOpen }) {
     progessBarSteps.push({ name: "Atributos", isValid: IsAtributesStepValid() });
 
     function IsResistenciesStepValid() {
-      let itemsToValidate = [].every((i) => i !== null);
+      let itemsToValidate = [null].every((i) => i !== null);
 
       return AreAllPreviousStepsValid() && itemsToValidate;
     }
     progessBarSteps.push({ name: "Resistências", isValid: IsResistenciesStepValid() });
 
     function IsPassivesStepValid() {
-      let itemsToValidate = [].every((i) => i !== null);
+      let itemsToValidate = [null].every((i) => i !== null);
 
       return AreAllPreviousStepsValid() && itemsToValidate;
     }
     progessBarSteps.push({ name: "Passivas", isValid: IsPassivesStepValid() });
 
     function IsActionsStepValid() {
-      let itemsToValidate = [].every((i) => i !== null);
+      let itemsToValidate = [null].every((i) => i !== null);
 
       return AreAllPreviousStepsValid() && itemsToValidate;
     }
     progessBarSteps.push({ name: "Açoes", isValid: IsActionsStepValid() });
 
     function IsTreasureRewardStepValid() {
-      let itemsToValidate = [].every((i) => i !== null);
+      let itemsToValidate = [null].every((i) => i !== null);
 
       return AreAllPreviousStepsValid() && itemsToValidate;
     }
@@ -110,7 +103,12 @@ function EditCreature({ setIsEditCreatureOpen }) {
   const [imgUrl, setImgUrl] = useState(creature.image ?? "");
   const [tempCreatureAvatar, setTempCreatureAvatar] = useState(creature.image);
   const [isImgValid, setIsImgValid] = useState(!!creature.image ? true : null);
-  const [activeProgessBarStep, setActiveProgessBarStep] = useState(progessBarSteps[0].name);
+  const [activeProgessBarStep, setActiveProgessBarStep] = useState(
+    utils
+      .clone(progessBarSteps)
+      .reverse()
+      .find((s) => s.isValid).name
+  );
 
   function HandleCancel() {
     setIsEditCreatureOpen(false);

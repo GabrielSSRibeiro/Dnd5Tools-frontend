@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //  import api from "../../services/api";
+import * as utils from "../../utils";
 
 import NaviBar from "../../components/NaviBar";
 import MenuModal from "../../components/MenuModal";
@@ -22,86 +23,58 @@ function Home() {
   const [isBestiaryOpen, setIsBestiaryOpen] = useState(false);
   const [isSelectingBestiary, setIsSelectingBestiary] = useState(false);
   const [isEditCreatureOpen, setIsEditCreatureOpen] = useState(false);
-  const [level, setLevel] = useState(3);
-  const [groups, setGroups] = useState([
-    ["Foux", "Isaac", "Zeth", "Adler", "Motonui", "Elros"],
-    ["Soiaz", "Yaisyl"],
-  ]);
-  const [creatures, setCreatures] = useState([
-    {
-      name: "Argon, o Temível A",
-      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: 100,
-      environment: "Floresta",
-      type: "Elemental",
-      size: "Médio",
-    },
-    {
-      name: "Argon, o Temível B",
-      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: 100,
-      environment: "Floresta",
-      type: "Elemental",
-      size: "Médio",
-    },
-    {
-      name: "Argon, o Temível C",
-      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: 100,
-      environment: "Floresta",
-      type: "Elemental",
-      size: "Médio",
-    },
-    {
-      name: "Argon, o Temível D",
-      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: 100,
-      environment: "Floresta",
-      type: "Elemental",
-      size: "Médio",
-    },
-    {
-      name: "Argon, o Temível E",
-      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: 100,
-      environment: "Floresta",
-      type: "Elemental",
-      size: "Médio",
-    },
-    {
-      name: "Argon, o Temível F",
-      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: 100,
-      environment: "Floresta",
-      type: "Elemental",
-      size: "Médio",
-    },
-    {
-      name: "Argon, o Temível G",
-      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: 100,
-      environment: "Floresta",
-      type: "Elemental",
-      size: "Médio",
-    },
-    {
-      name: "Argon, o Temível H",
-      image: "https://i.pinimg.com/564x/35/66/9f/35669f32657cd4e0c5420e1e16fe301d.jpg",
-      rarity: 100,
-      environment: "Floresta",
-      type: "Elemental",
-      size: "Médio",
-    },
-  ]);
+  const [creatureToEdit, setCreatureToEdit] = useState(null);
+  const [level, setLevel] = useState(null);
+  const [groups, setGroups] = useState([]);
+  const [creatures, setCreatures] = useState([]);
   const [selectedCharacters, setSelectedCharacters] = useState([]);
   const [selectedCreatures, setSelectedCreatures] = useState([]);
   const [combats, setCombats] = useState([]);
 
-  //   useEffect(() => {
-  //   api.get("items").then((response) => {
-  //     setItems(response.data);
-  //   });
-  // }, []);
+  useEffect(() => {
+    // api.get("items").then((response) => {
+    //   setItems(response.data);
+    // });
+
+    setLevel(3);
+    setGroups([
+      ["Foux", "Isaac", "Zeth", "Adler", "Motonui", "Elros"],
+      ["Soiaz", "Yaisyl"],
+    ]);
+
+    let savedCreatures = [];
+    let savedCreature = {
+      name: "Hidra Alada",
+      description: null,
+      image: "https://i.pinimg.com/564x/01/d4/17/01d417c02bd190a056c718650fc9db3b.jpg",
+      rarity: 10,
+      environment: 10,
+      size: 10,
+      type: 10,
+      race: null,
+      class: null,
+      subClass: null,
+      multiclassing: false,
+      secondaryClass: null,
+      secondarySubClass: null,
+      movement: {
+        speed: 10,
+        flying: null,
+        swimming: null,
+        burrowing: null,
+      },
+      primaryAlignment: 10,
+      secondaryAlignment: 10,
+    };
+    for (let index = 1; index <= 5; index++) {
+      let newCreature = utils.clone(savedCreature);
+      newCreature.name = [newCreature.name, index].join(" ");
+      newCreature.rarity = index * 10;
+      savedCreatures.push(newCreature);
+    }
+
+    setCreatures(savedCreatures);
+  }, [setCreatures]);
 
   function HandleSelectFromParty() {
     if (groups.length === 1) {
@@ -162,6 +135,7 @@ function Home() {
         openTab={openTab}
         setOpenTab={setOpenTab}
         isEditCreatureOpen={isEditCreatureOpen}
+        setCreatureToEdit={setCreatureToEdit}
         setIsEditCreatureOpen={setIsEditCreatureOpen}
         HandleEndCombat={HandleEndCombat}
       />
@@ -195,9 +169,11 @@ function Home() {
         </div>
       </div>
 
-      <div className={`section-wrapper ${!isEditCreatureOpen ? "hidden" : ""}`}>
-        <EditCreature setIsEditCreatureOpen={setIsEditCreatureOpen} />
-      </div>
+      {isEditCreatureOpen && (
+        <div className={"section-wrapper"}>
+          <EditCreature creatureToEdit={creatureToEdit} setCreatures={setCreatures} setIsEditCreatureOpen={setIsEditCreatureOpen} />
+        </div>
+      )}
     </div>
   );
 }

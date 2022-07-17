@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 //  import api from "../../services/api";
 import * as utils from "../../../../utils";
-import { creatureRarities, CREATURE_ENVIROMENTS, CREATURE_TYPES, CREATURE_SIZES } from "../../../../data/creatureConstants";
+import { creatureRarities, creatureEnvironments, creatureSizes, creatureTypes } from "../../../../data/creatureConstants";
 import { MAX_CREATURES_ALLOWED } from "../../../../data/combatConstants";
 
 import Button from "../../../Button";
@@ -20,8 +20,8 @@ function Bestiary({
   isBestiaryOpen,
   setIsBestiaryOpen,
   setIsEditCreatureOpen,
+  setCreatureToEdit,
   creatures,
-  setCreatures,
 }) {
   const [nameFilter, setNameFilter] = useState(null);
   const [selectedRarity, setSelectedRarity] = useState(null);
@@ -37,6 +37,16 @@ function Bestiary({
   //     setItems(response.data);
   //   });
   // }, []);
+
+  function HandleEditNewCreature() {
+    setCreatureToEdit(null);
+    setIsEditCreatureOpen(true);
+  }
+
+  function HandleEditCreature(creature) {
+    setCreatureToEdit(creature);
+    setIsEditCreatureOpen(true);
+  }
 
   function HandleSelectCreature(creature) {
     const isAlreadySelected = tempSelectedCreatures.some((selectedCreature) => selectedCreature.name.includes(creature.name));
@@ -161,7 +171,7 @@ function Bestiary({
           <main>
             {!isSelecting && (
               <aside>
-                <Button text="Adicionar Criatura" onClick={() => setIsEditCreatureOpen(true)} />
+                <Button text="Adicionar Criatura" onClick={HandleEditNewCreature} />
               </aside>
             )}{" "}
             <div className="bestiary-filters">
@@ -185,21 +195,27 @@ function Bestiary({
                   value={selectedEnv}
                   onSelect={(value) => handleFilter(setSelectedEnv, value)}
                   nothingSelected="Ambiente"
-                  options={CREATURE_ENVIROMENTS}
+                  options={creatureEnvironments}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
                 />
                 <Select
                   extraWidth={60}
                   value={selectedType}
                   onSelect={(value) => handleFilter(setSelectedType, value)}
                   nothingSelected="Tipo"
-                  options={CREATURE_TYPES}
+                  options={creatureTypes}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
                 />
                 <Select
                   extraWidth={20}
                   value={selectedSize}
                   onSelect={(value) => handleFilter(setSelectedSize, value)}
                   nothingSelected="Tamanho"
-                  options={CREATURE_SIZES}
+                  options={creatureSizes}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
                 />
               </main>
             </div>
@@ -212,10 +228,7 @@ function Bestiary({
                       : ""
                   }`}
                   key={creature.name}
-                  onClick={
-                    () => (isSelecting ? HandleSelectCreature(creature) : {})
-                    // setIsEditCreatureOpen(true)
-                  }
+                  onClick={() => (isSelecting ? HandleSelectCreature(creature) : HandleEditCreature(creature))}
                 >
                   {!isSelecting ? (
                     <div className="edit-creature">
