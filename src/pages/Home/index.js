@@ -54,10 +54,9 @@ function Home() {
       race: null,
       class: null,
       subClass: null,
-      multiclassing: false,
       secondaryClass: null,
       secondarySubClass: null,
-      movement: {
+      movements: {
         speed: 10,
         flying: null,
         swimming: null,
@@ -65,6 +64,19 @@ function Home() {
       },
       primaryAlignment: 10,
       secondaryAlignment: 10,
+      attributes: {
+        strength: 10,
+        dexterity: 10,
+        constitution: 10,
+        intelligence: 10,
+        wisdom: 10,
+        charisma: 10,
+      },
+      hitPoints: 10,
+      attack: 10,
+      armorClass: 10,
+      initiative: 10,
+      weakSpots: [],
     };
     for (let index = 1; index <= 5; index++) {
       let newCreature = utils.clone(savedCreature);
@@ -171,7 +183,7 @@ function Home() {
 
       {isEditCreatureOpen && (
         <div className={"section-wrapper"}>
-          <EditCreature creatureToEdit={creatureToEdit} setCreatures={setCreatures} setIsEditCreatureOpen={setIsEditCreatureOpen} />
+          <EditCreature creatureToEdit={creatureToEdit} setIsEditCreatureOpen={setIsEditCreatureOpen} />
         </div>
       )}
     </div>

@@ -1,0 +1,25 @@
+.Attributes-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 30px;
+  row-gap: 25px;
+}
+
+.Attributes-container > h2 {
+  line-height: 1;
+}
+
+.Attributes-container .basic-attributes,
+.Attributes-container .weak-spots {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 25px;
+}
+
+.Attributes-container .weak-spots .creature-weak-spot input {
+  width: 200px;
+}

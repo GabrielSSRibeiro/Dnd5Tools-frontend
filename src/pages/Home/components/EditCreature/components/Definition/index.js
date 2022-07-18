@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   creatureRarities,
@@ -23,6 +23,8 @@ import SelectButton from "../../../../../../components/SelectButton";
 import "./styles.css";
 
 function Definition({ creature, setCreature }) {
+  const [isMulticlass, setIsMulticlass] = useState(!!creature.secondaryClass);
+
   function getSubClasses(selectedClass) {
     let foundClass = creatureClasses.find((c) => c.value === selectedClass);
     return foundClass ? foundClass.subClasses : [];
@@ -41,12 +43,7 @@ function Definition({ creature, setCreature }) {
   }
 
   function HandleToggleMulticlass() {
-    setCreature({
-      ...creature,
-      multiclassing: !creature.multiclassing,
-      secondaryClass: null,
-      secondarySubClass: null,
-    });
+    setIsMulticlass(!isMulticlass);
   }
 
   return (
@@ -68,7 +65,6 @@ function Definition({ creature, setCreature }) {
           extraWidth={100}
           value={creature}
           valuePropertyPath="environment"
-          displayProperty={creature.environment}
           onSelect={setCreature}
           options={creatureEnvironments}
           optionDisplay={(o) => o.display}
@@ -79,7 +75,6 @@ function Definition({ creature, setCreature }) {
           extraWidth={100}
           value={creature}
           valuePropertyPath="size"
-          displayProperty={creature.size}
           onSelect={setCreature}
           options={creatureSizes}
           optionDisplay={(o) => o.display}
@@ -90,7 +85,6 @@ function Definition({ creature, setCreature }) {
           extraWidth={100}
           value={creature}
           valuePropertyPath="type"
-          displayProperty={creature.type}
           onSelect={setCreature}
           options={creatureTypes}
           optionDisplay={(o) => o.display}
@@ -106,7 +100,6 @@ function Definition({ creature, setCreature }) {
               extraWidth={100}
               value={creature}
               valuePropertyPath="race"
-              displayProperty={creature.race}
               onSelect={setCreature}
               nothingSelected="Nenhuma"
               options={creatureRaces}
@@ -118,7 +111,6 @@ function Definition({ creature, setCreature }) {
               extraWidth={100}
               value={creature}
               valuePropertyPath="class"
-              displayProperty={creature.class}
               onSelect={HandleSelectClass}
               nothingSelected="Nenhuma"
               options={creatureClasses}
@@ -130,7 +122,6 @@ function Definition({ creature, setCreature }) {
               extraWidth={250}
               value={creature}
               valuePropertyPath="subClass"
-              displayProperty={creature.subClass}
               onSelect={setCreature}
               nothingSelected="Nenhuma"
               options={getSubClasses(creature.class)}
@@ -141,33 +132,31 @@ function Definition({ creature, setCreature }) {
           </div>
           <div className="multiclassing">
             <div className="multiclassing-checkbox-wrapper">
-              <CheckInput label="Multiclasse" onClick={HandleToggleMulticlass} isSelected={creature.multiclassing} />
+              <CheckInput label="Multiclasse" onClick={HandleToggleMulticlass} isSelected={isMulticlass} />
             </div>
             <Select
               label={"Segunda Classe"}
               extraWidth={100}
               value={creature}
               valuePropertyPath="secondaryClass"
-              displayProperty={creature.secondaryClass}
               onSelect={HandleSelectSubClass}
               nothingSelected="Nenhuma"
               options={creatureClasses.filter((c) => c.value !== creature.class)}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
-              className={creature.multiclassing ? "" : "invisible"}
+              className={isMulticlass ? "" : "invisible"}
             />
             <Select
               label={"Segunda Subclasse"}
               extraWidth={250}
               value={creature}
               valuePropertyPath="secondarySubClass"
-              displayProperty={creature.secondarySubClass}
               onSelect={setCreature}
               nothingSelected="Nenhuma"
               options={getSubClasses(creature.secondaryClass)}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
-              className={creature.multiclassing ? "" : "invisible"}
+              className={isMulticlass ? "" : "invisible"}
               isDisabled={!creature.secondaryClass}
             />
           </div>
@@ -180,8 +169,7 @@ function Definition({ creature, setCreature }) {
           label={"Terrestre"}
           extraWidth={100}
           value={creature}
-          valuePropertyPath="movement.speed"
-          displayProperty={creature.movement.speed}
+          valuePropertyPath="movements.speed"
           onSelect={setCreature}
           nothingSelected="Nenhum"
           options={creatureSpeedMovements}
@@ -192,8 +180,7 @@ function Definition({ creature, setCreature }) {
           label={"Vôo / Planar"}
           extraWidth={100}
           value={creature}
-          valuePropertyPath="movement.flying"
-          displayProperty={creature.movement.flying}
+          valuePropertyPath="movements.flying"
           onSelect={setCreature}
           nothingSelected="Nenhum"
           options={creatureFlyingMovements}
@@ -204,8 +191,7 @@ function Definition({ creature, setCreature }) {
           label={"Natação"}
           extraWidth={100}
           value={creature}
-          valuePropertyPath="movement.swimming"
-          displayProperty={creature.movement.swimming}
+          valuePropertyPath="movements.swimming"
           onSelect={setCreature}
           nothingSelected="Nenhum"
           options={creatureSwimmingMovements}
@@ -216,8 +202,7 @@ function Definition({ creature, setCreature }) {
           label={"Escavação / Escalada"}
           extraWidth={100}
           value={creature}
-          valuePropertyPath="movement.burrowing"
-          displayProperty={creature.movement.burrowing}
+          valuePropertyPath="movements.burrowing"
           onSelect={setCreature}
           nothingSelected="Nenhum"
           options={creatureBurrowingMovements}

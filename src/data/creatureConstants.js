@@ -503,3 +503,68 @@ export const creatureSecondaryAlignments = [
   { display: "Neutro", value: CREATURE_SECONDARY_ALIGNMENTS.NEUTRAL, weight: 0 },
   { display: "Bom", value: CREATURE_SECONDARY_ALIGNMENTS.GOOD, weight: 0 },
 ];
+
+export const CREATURE_ATTRIBUTES = {
+  LOW: 10,
+  MEDIUM: 20,
+  HIGH: 30,
+  EXTREME: 40,
+};
+export const creatureAttributes = [
+  { display: "Baixo", value: CREATURE_ATTRIBUTES.LOW, weight: 0 },
+  { display: "Médio", value: CREATURE_ATTRIBUTES.MEDIUM, weight: 0 },
+  { display: "Alto", value: CREATURE_ATTRIBUTES.HIGH, weight: 0 },
+  { display: "Extremo", value: CREATURE_ATTRIBUTES.EXTREME, weight: 0 },
+];
+
+export const CREATURE_HIT_POINTS = {
+  LOW: 10,
+  MEDIUM: 20,
+  HIGH: 30,
+  EXTREME: 40,
+};
+export const creatureHitPoints = [
+  { display: "Baixo", value: CREATURE_HIT_POINTS.LOW, weight: 0 },
+  { display: "Médio", value: CREATURE_HIT_POINTS.MEDIUM, weight: 0 },
+  { display: "Alto", value: CREATURE_HIT_POINTS.HIGH, weight: 0 },
+  { display: "Extremo", value: CREATURE_HIT_POINTS.EXTREME, weight: 0 },
+];
+
+export const CREATURE_ATTACKS = {
+  LOW: 10,
+  MEDIUM: 20,
+  HIGH: 30,
+  EXTREME: 40,
+};
+export const creatureAttacks = [
+  { display: "Baixo", value: CREATURE_ATTACKS.LOW, weight: 0 },
+  { display: "Médio", value: CREATURE_ATTACKS.MEDIUM, weight: 0 },
+  { display: "Alto", value: CREATURE_ATTACKS.HIGH, weight: 0 },
+  { display: "Extremo", value: CREATURE_ATTACKS.EXTREME, weight: 0 },
+];
+
+export const CREATURE_ARMOR_CLASS = {
+  LOW: 10,
+  MEDIUM: 20,
+  HIGH: 30,
+  EXTREME: 40,
+};
+export const creatureArmorClass = [
+  { display: "Baixo", value: CREATURE_ARMOR_CLASS.LOW, weight: 0 },
+  { display: "Médio", value: CREATURE_ARMOR_CLASS.MEDIUM, weight: 0 },
+  { display: "Alto", value: CREATURE_ARMOR_CLASS.HIGH, weight: 0 },
+  { display: "Extremo", value: CREATURE_ARMOR_CLASS.EXTREME, weight: 0 },
+];
+
+export const CREATURE_INITIATIVES = {
+  LOW: 10,
+  MEDIUM: 20,
+  HIGH: 30,
+  EXTREME: 40,
+};
+export const creatureInitiatives = [
+  { display: "Baixo", value: CREATURE_INITIATIVES.LOW, weight: 0 },
+  { display: "Médio", value: CREATURE_INITIATIVES.MEDIUM, weight: 0 },
+  { display: "Alto", value: CREATURE_INITIATIVES.HIGH, weight: 0 },
+  { display: "Extremo", value: CREATURE_INITIATIVES.EXTREME, weight: 0 },
+];

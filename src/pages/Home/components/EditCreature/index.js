@@ -4,7 +4,7 @@ import * as utils from "../../../../utils";
 import { CREATURE_MOVEMENTS, CREATURE_PRIMARY_ALIGNMENTS, CREATURE_SECONDARY_ALIGNMENTS } from "../../../../data/creatureConstants";
 
 import Definition from "./components/Definition";
-import Atributes from "./components/Atributes";
+import Atributes from "./components/Attributes";
 import Resistencies from "./components/Resistencies";
 import Passives from "./components/Passives";
 import Actions from "./components/Actions";
@@ -15,7 +15,7 @@ import TextInput from "../../../../components/TextInput";
 
 import "./styles.css";
 
-function EditCreature({ creatureToEdit = null, setCreatures, setIsEditCreatureOpen }) {
+function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
   const newCreature = {
     name: null,
     description: null,
@@ -27,10 +27,9 @@ function EditCreature({ creatureToEdit = null, setCreatures, setIsEditCreatureOp
     race: null,
     class: null,
     subClass: null,
-    multiclassing: false,
     secondaryClass: null,
     secondarySubClass: null,
-    movement: {
+    movements: {
       speed: CREATURE_MOVEMENTS.MEDIUM,
       flying: null,
       swimming: null,
@@ -38,6 +37,19 @@ function EditCreature({ creatureToEdit = null, setCreatures, setIsEditCreatureOp
     },
     primaryAlignment: CREATURE_PRIMARY_ALIGNMENTS.NEUTRAL,
     secondaryAlignment: CREATURE_SECONDARY_ALIGNMENTS.NEUTRAL,
+    attributes: {
+      strength: null,
+      dexterity: null,
+      constitution: null,
+      intelligence: null,
+      wisdom: null,
+      charisma: null,
+    },
+    hitPoints: null,
+    attack: null,
+    armorClass: null,
+    initiative: null,
+    weakSpots: [],
   };
   const [creature, setCreature] = useState(creatureToEdit ?? newCreature);
 
@@ -55,7 +67,7 @@ function EditCreature({ creatureToEdit = null, setCreatures, setIsEditCreatureOp
 
     function IsAtributesStepValid() {
       let areBasicsDefinitionsValid = [creature.rarity, creature.environment, creature.size, creature.type].every((i) => i !== null);
-      let areMovimentsValid = [creature.movement.speed, creature.movement.flying, creature.movement.swimming, creature.movement.burrowing].some(
+      let areMovimentsValid = [creature.movements.speed, creature.movements.flying, creature.movements.swimming, creature.movements.burrowing].some(
         (i) => i !== null
       );
 
