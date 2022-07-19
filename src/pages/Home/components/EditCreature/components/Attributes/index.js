@@ -15,10 +15,20 @@ import TextInput from "../../../../../../components/TextInput";
 import "./styles.css";
 
 function Attributes({ creature, setCreature }) {
-  const [hasWeakSpots, setHasWeakSpots] = useState(false);
+  const [hasWeakSpots, setHasWeakSpots] = useState(creature.weakSpots.length > 0);
+
+  const numberOfWeakSpots = 4;
 
   function HandleToggleWeakSpots() {
     setHasWeakSpots(!hasWeakSpots);
+  }
+
+  function HandleWeakSpotChange(value, index) {
+    if (value.weakSpots[index] === "") {
+      value.weakSpots[index] = null;
+    }
+
+    setCreature(value);
   }
 
   return (
@@ -141,38 +151,17 @@ function Attributes({ creature, setCreature }) {
       <CheckInput label="Pontos Fracos" info={[{ text: "Pontos Fracos" }]} onClick={HandleToggleWeakSpots} isSelected={hasWeakSpots} />
       {hasWeakSpots && (
         <div className="weak-spots">
-          <TextInput
-            label="Ponto fraco 1"
-            value={creature}
-            valuePropertyPath="weakSpots"
-            onChange={setCreature}
-            className="creature-weak-spot"
-            maxlength="14"
-          />
-          <TextInput
-            label="Ponto fraco 2"
-            value={creature}
-            valuePropertyPath="weakSpots"
-            onChange={setCreature}
-            className="creature-weak-spot"
-            maxlength="14"
-          />
-          <TextInput
-            label="Ponto fraco 3"
-            value={creature}
-            valuePropertyPath="weakSpots"
-            onChange={setCreature}
-            className="creature-weak-spot"
-            maxlength="14"
-          />
-          <TextInput
-            label="Ponto fraco 4"
-            value={creature}
-            valuePropertyPath="weakSpots"
-            onChange={setCreature}
-            className="creature-weak-spot"
-            maxlength="14"
-          />
+          {Array.from(Array(numberOfWeakSpots)).map((ws, index) => (
+            <TextInput
+              key={index}
+              label={`Ponto fraco`}
+              value={creature}
+              valuePropertyPath={`weakSpots[${index}]`}
+              onChange={(value) => HandleWeakSpotChange(value, index)}
+              className="creature-weak-spot"
+              maxlength="14"
+            />
+          ))}
         </div>
       )}
     </div>

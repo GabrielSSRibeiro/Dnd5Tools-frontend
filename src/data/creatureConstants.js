@@ -550,10 +550,10 @@ export const CREATURE_ARMOR_CLASS = {
   EXTREME: 40,
 };
 export const creatureArmorClass = [
-  { display: "Baixo", value: CREATURE_ARMOR_CLASS.LOW, weight: 0 },
-  { display: "Médio", value: CREATURE_ARMOR_CLASS.MEDIUM, weight: 0 },
-  { display: "Alto", value: CREATURE_ARMOR_CLASS.HIGH, weight: 0 },
-  { display: "Extremo", value: CREATURE_ARMOR_CLASS.EXTREME, weight: 0 },
+  { display: "Baixa", value: CREATURE_ARMOR_CLASS.LOW, weight: 0 },
+  { display: "Média", value: CREATURE_ARMOR_CLASS.MEDIUM, weight: 0 },
+  { display: "Alta", value: CREATURE_ARMOR_CLASS.HIGH, weight: 0 },
+  { display: "Extrema", value: CREATURE_ARMOR_CLASS.EXTREME, weight: 0 },
 ];
 
 export const CREATURE_INITIATIVES = {
@@ -563,8 +563,8 @@ export const CREATURE_INITIATIVES = {
   EXTREME: 40,
 };
 export const creatureInitiatives = [
-  { display: "Baixo", value: CREATURE_INITIATIVES.LOW, weight: 0 },
-  { display: "Médio", value: CREATURE_INITIATIVES.MEDIUM, weight: 0 },
-  { display: "Alto", value: CREATURE_INITIATIVES.HIGH, weight: 0 },
-  { display: "Extremo", value: CREATURE_INITIATIVES.EXTREME, weight: 0 },
+  { display: "Baixa", value: CREATURE_INITIATIVES.LOW, weight: 0 },
+  { display: "Média", value: CREATURE_INITIATIVES.MEDIUM, weight: 0 },
+  { display: "Alta", value: CREATURE_INITIATIVES.HIGH, weight: 0 },
+  { display: "Extrema", value: CREATURE_INITIATIVES.EXTREME, weight: 0 },
 ];

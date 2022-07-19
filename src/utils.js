@@ -49,24 +49,54 @@ export function SortArrayOfObjByProperty(arrayOfObj, property) {
   }
 
   arrayOfObj.sort(compare);
-  // return arrayOfObj;
 }
 
 export function turnValueIntoPercentageString(value) {
   return value * 100 + "%";
 }
 
+function getKeyDetails(key) {
+  let [k, ...rest] = key.split("[");
+
+  let keyDetails = { key: k, indicesArray: [] };
+  if (rest.length > 0) {
+    let indicesArray = rest.map((e) => parseInt(e.split("]")[0]));
+
+    keyDetails.indicesArray = indicesArray;
+  }
+
+  return keyDetails;
+}
+
 export function setObjPropertyValue(obj, accessPath, value) {
   const propertyKeys = accessPath.split(".");
 
   let property = obj;
-  let lastKey = propertyKeys.pop();
+  let lastKeyDetails = getKeyDetails(propertyKeys.pop());
 
+  //traverse middle path
   propertyKeys.forEach((key) => {
-    property = property[key];
+    let keyDetails = getKeyDetails(key);
+
+    if (keyDetails.key) {
+      property = property[keyDetails.key];
+    }
+
+    keyDetails.indicesArray.forEach((i) => (property = property[i]));
   });
 
-  property[lastKey] = value;
+  if (lastKeyDetails.indicesArray.length > 0) {
+    if (lastKeyDetails.key) {
+      property = property[lastKeyDetails.key];
+    }
+
+    let lastIndex = lastKeyDetails.indicesArray.pop();
+    lastKeyDetails.indicesArray.forEach((i) => (property = property[i]));
+
+    property[lastIndex] = value;
+  } else {
+    property[lastKeyDetails.key] = value;
+  }
 }
 
 export function getObjPropertyValue(obj, accessPath) {
@@ -74,8 +104,15 @@ export function getObjPropertyValue(obj, accessPath) {
 
   let property = obj;
 
+  //traverse middle path
   propertyKeys.forEach((key) => {
-    property = property[key];
+    let keyDetails = getKeyDetails(key);
+
+    if (keyDetails.key) {
+      property = property[keyDetails.key];
+    }
+
+    keyDetails.indicesArray.forEach((i) => (property = property[i]));
   });
 
   return property;

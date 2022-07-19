@@ -76,9 +76,19 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
     progessBarSteps.push({ name: "Atributos", isValid: IsAtributesStepValid() });
 
     function IsResistenciesStepValid() {
-      let itemsToValidate = [null].every((i) => i !== null);
+      let areAttributesValid = [
+        creature.attributes.strength,
+        creature.attributes.dexterity,
+        creature.attributes.constitution,
+        creature.attributes.intelligence,
+        creature.attributes.wisdom,
+        creature.attributes.charisma,
+      ].every((i) => i !== null);
 
-      return AreAllPreviousStepsValid() && itemsToValidate;
+      let actualWeakSpots = creature.weakSpots.filter((ws) => ws);
+      let areWeakSpotsValid = new Set(actualWeakSpots).size === actualWeakSpots.length;
+
+      return AreAllPreviousStepsValid() && areAttributesValid && areWeakSpotsValid;
     }
     progessBarSteps.push({ name: "Resistências", isValid: IsResistenciesStepValid() });
 
