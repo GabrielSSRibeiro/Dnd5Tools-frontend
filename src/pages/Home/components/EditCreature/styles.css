@@ -273,7 +273,7 @@
 }
 
 .EditCreature-container .edit-process-details .progess-bar .progess-bar-step .step-description {
-  width: calc(85% - 2px);
+  width: calc(100% - 25px);
   height: 100%;
   background-color: var(--primaryBackground);
   padding-right: 10%;

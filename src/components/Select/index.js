@@ -42,7 +42,7 @@ function Select({
       onSelect({ ...obj });
     } else {
       if (option !== nothingSelected) {
-        onSelect(option);
+        onSelect(optionValue(option));
       } else {
         onSelect(null);
       }

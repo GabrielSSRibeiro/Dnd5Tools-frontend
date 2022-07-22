@@ -1,2 +1,91 @@
 .Resistencies-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 25px;
+  height: 100%;
+  gap: 25px;
+}
+
+.Resistencies-container h2 {
+  line-height: 1;
+  margin-bottom: 25px;
+  white-space: nowrap;
+}
+
+.Resistencies-container .resistencies {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.Resistencies-container .conditions {
+  width: fit-content;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.Resistencies-container .resistencies .damage-effectiveness-wrapper {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.Resistencies-container .resistencies .damage-effectiveness {
+  width: 775px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Resistencies-container .resistencies .damage-effectiveness .damage-effectiveness-options {
+  position: relative;
+  height: fit-content;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.Resistencies-container .resistencies .damage-effectiveness .damage-effectiveness-options .damage-effectiveness-divider {
+  border-left: 1px solid var(--gray1);
+  height: 20px;
+  margin-right: 10px;
+}
+
+.Resistencies-container .conditions .conditions-wrapper {
+  height: 100%;
+  width: fit-content;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.Resistencies-container .conditions .conditions-wrapper .conditions-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.Resistencies-container .conditions .conditions-wrapper .conditions-divider {
+  border-top: 1px solid var(--gray1);
+  width: 150px;
+}
+
+.Resistencies-container .conditions .conditions-wrapper .conditions-divider:last-of-type {
+  display: none;
 }

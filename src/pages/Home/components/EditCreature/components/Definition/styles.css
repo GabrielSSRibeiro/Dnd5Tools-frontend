@@ -3,7 +3,8 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: 30px;
+  padding: 25px;
+  height: 100%;
   row-gap: 25px;
 }
 

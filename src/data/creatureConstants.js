@@ -6,11 +6,11 @@ export const CREATURE_RARITIES = {
   LEGENDARY: 50,
 };
 export const creatureRarities = [
-  { display: "Comum (Nível 1 - 5)", value: CREATURE_RARITIES.COMMON, weight: 0 },
-  { display: "Incomum (Nível 6 - 10)", value: CREATURE_RARITIES.UNCOMMON, weight: 0 },
-  { display: "Rara (Nível 11 - 15)", value: CREATURE_RARITIES.RARE, weight: 0 },
-  { display: "Muito Rara (Nível 16 - 20)", value: CREATURE_RARITIES.VERY_RARE, weight: 0 },
-  { display: "Lendária (Nível 20+)", value: CREATURE_RARITIES.LEGENDARY, weight: 0 },
+  { display: "Comum (Nível 1 - 5)", value: CREATURE_RARITIES.COMMON, weight: 1 },
+  { display: "Incomum (Nível 6 - 10)", value: CREATURE_RARITIES.UNCOMMON, weight: 2 },
+  { display: "Rara (Nível 11 - 15)", value: CREATURE_RARITIES.RARE, weight: 3 },
+  { display: "Muito Rara (Nível 16 - 20)", value: CREATURE_RARITIES.VERY_RARE, weight: 4 },
+  { display: "Lendária (Nível 20+)", value: CREATURE_RARITIES.LEGENDARY, weight: 5 },
 ];
 
 export const CREATURE_ENVIRONMENTS = {
@@ -49,12 +49,12 @@ export const CREATURE_SIZES = {
   GARGANTUAN: 60,
 };
 export const creatureSizes = [
-  { display: "Miúdo", value: CREATURE_SIZES.TINY, weight: 0 },
-  { display: "Pequeno", value: CREATURE_SIZES.SMALL, weight: 0 },
-  { display: "Médio", value: CREATURE_SIZES.MEDIUM, weight: 0 },
-  { display: "Grande", value: CREATURE_SIZES.LARGE, weight: 0 },
-  { display: "Enorme", value: CREATURE_SIZES.HUGE, weight: 0 },
-  { display: "Imenso", value: CREATURE_SIZES.GARGANTUAN, weight: 0 },
+  { display: "Miúdo", value: CREATURE_SIZES.TINY, weight: 1 },
+  { display: "Pequeno", value: CREATURE_SIZES.SMALL, weight: 2 },
+  { display: "Médio", value: CREATURE_SIZES.MEDIUM, weight: 3 },
+  { display: "Grande", value: CREATURE_SIZES.LARGE, weight: 4 },
+  { display: "Enorme", value: CREATURE_SIZES.HUGE, weight: 5 },
+  { display: "Imenso", value: CREATURE_SIZES.GARGANTUAN, weight: 6 },
 ];
 
 export const CREATURE_TYPES = {
@@ -458,28 +458,28 @@ export const CREATURE_MOVEMENTS = {
   EXTREME: 40,
 };
 export const creatureSpeedMovements = [
-  { display: "Baixo", value: CREATURE_MOVEMENTS.LOW, weight: 0 },
-  { display: "Médio", value: CREATURE_MOVEMENTS.MEDIUM, weight: 0 },
-  { display: "Alto", value: CREATURE_MOVEMENTS.HIGH, weight: 0 },
-  { display: "Extremo", value: CREATURE_MOVEMENTS.EXTREME, weight: 0 },
+  { display: "Baixo", value: CREATURE_MOVEMENTS.LOW, weight: 1 },
+  { display: "Médio", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2 },
+  { display: "Alto", value: CREATURE_MOVEMENTS.HIGH, weight: 3 },
+  { display: "Extremo", value: CREATURE_MOVEMENTS.EXTREME, weight: 4 },
 ];
 export const creatureFlyingMovements = [
-  { display: "Baixo", value: CREATURE_MOVEMENTS.LOW, weight: 0 },
-  { display: "Médio", value: CREATURE_MOVEMENTS.MEDIUM, weight: 0 },
-  { display: "Alto", value: CREATURE_MOVEMENTS.HIGH, weight: 0 },
-  { display: "Extremo", value: CREATURE_MOVEMENTS.EXTREME, weight: 0 },
+  { display: "Baixo", value: CREATURE_MOVEMENTS.LOW, weight: 1 },
+  { display: "Médio", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2 },
+  { display: "Alto", value: CREATURE_MOVEMENTS.HIGH, weight: 3 },
+  { display: "Extremo", value: CREATURE_MOVEMENTS.EXTREME, weight: 4 },
 ];
 export const creatureSwimmingMovements = [
-  { display: "Baixo", value: CREATURE_MOVEMENTS.LOW, weight: 0 },
-  { display: "Médio", value: CREATURE_MOVEMENTS.MEDIUM, weight: 0 },
-  { display: "Alto", value: CREATURE_MOVEMENTS.HIGH, weight: 0 },
-  { display: "Extremo", value: CREATURE_MOVEMENTS.EXTREME, weight: 0 },
+  { display: "Baixo", value: CREATURE_MOVEMENTS.LOW, weight: 1 },
+  { display: "Médio", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2 },
+  { display: "Alto", value: CREATURE_MOVEMENTS.HIGH, weight: 3 },
+  { display: "Extremo", value: CREATURE_MOVEMENTS.EXTREME, weight: 4 },
 ];
 export const creatureBurrowingMovements = [
-  { display: "Baixo", value: CREATURE_MOVEMENTS.LOW, weight: 0 },
-  { display: "Médio", value: CREATURE_MOVEMENTS.MEDIUM, weight: 0 },
-  { display: "Alto", value: CREATURE_MOVEMENTS.HIGH, weight: 0 },
-  { display: "Extremo", value: CREATURE_MOVEMENTS.EXTREME, weight: 0 },
+  { display: "Baixo", value: CREATURE_MOVEMENTS.LOW, weight: 1 },
+  { display: "Médio", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2 },
+  { display: "Alto", value: CREATURE_MOVEMENTS.HIGH, weight: 3 },
+  { display: "Extremo", value: CREATURE_MOVEMENTS.EXTREME, weight: 4 },
 ];
 
 export const CREATURE_PRIMARY_ALIGNMENTS = {
@@ -511,10 +511,10 @@ export const CREATURE_ATTRIBUTES = {
   EXTREME: 40,
 };
 export const creatureAttributes = [
-  { display: "Baixo", value: CREATURE_ATTRIBUTES.LOW, weight: 0 },
-  { display: "Médio", value: CREATURE_ATTRIBUTES.MEDIUM, weight: 0 },
-  { display: "Alto", value: CREATURE_ATTRIBUTES.HIGH, weight: 0 },
-  { display: "Extremo", value: CREATURE_ATTRIBUTES.EXTREME, weight: 0 },
+  { display: "Baixo", value: CREATURE_ATTRIBUTES.LOW, weight: 1 },
+  { display: "Médio", value: CREATURE_ATTRIBUTES.MEDIUM, weight: 2 },
+  { display: "Alto", value: CREATURE_ATTRIBUTES.HIGH, weight: 3 },
+  { display: "Extremo", value: CREATURE_ATTRIBUTES.EXTREME, weight: 4 },
 ];
 
 export const CREATURE_HIT_POINTS = {
@@ -524,10 +524,10 @@ export const CREATURE_HIT_POINTS = {
   EXTREME: 40,
 };
 export const creatureHitPoints = [
-  { display: "Baixo", value: CREATURE_HIT_POINTS.LOW, weight: 0 },
-  { display: "Médio", value: CREATURE_HIT_POINTS.MEDIUM, weight: 0 },
-  { display: "Alto", value: CREATURE_HIT_POINTS.HIGH, weight: 0 },
-  { display: "Extremo", value: CREATURE_HIT_POINTS.EXTREME, weight: 0 },
+  { display: "Baixo", value: CREATURE_HIT_POINTS.LOW, weight: 1 },
+  { display: "Médio", value: CREATURE_HIT_POINTS.MEDIUM, weight: 2 },
+  { display: "Alto", value: CREATURE_HIT_POINTS.HIGH, weight: 3 },
+  { display: "Extremo", value: CREATURE_HIT_POINTS.EXTREME, weight: 4 },
 ];
 
 export const CREATURE_ATTACKS = {
@@ -537,10 +537,10 @@ export const CREATURE_ATTACKS = {
   EXTREME: 40,
 };
 export const creatureAttacks = [
-  { display: "Baixo", value: CREATURE_ATTACKS.LOW, weight: 0 },
-  { display: "Médio", value: CREATURE_ATTACKS.MEDIUM, weight: 0 },
-  { display: "Alto", value: CREATURE_ATTACKS.HIGH, weight: 0 },
-  { display: "Extremo", value: CREATURE_ATTACKS.EXTREME, weight: 0 },
+  { display: "Baixo", value: CREATURE_ATTACKS.LOW, weight: 1 },
+  { display: "Médio", value: CREATURE_ATTACKS.MEDIUM, weight: 2 },
+  { display: "Alto", value: CREATURE_ATTACKS.HIGH, weight: 3 },
+  { display: "Extremo", value: CREATURE_ATTACKS.EXTREME, weight: 4 },
 ];
 
 export const CREATURE_ARMOR_CLASS = {
@@ -550,10 +550,10 @@ export const CREATURE_ARMOR_CLASS = {
   EXTREME: 40,
 };
 export const creatureArmorClass = [
-  { display: "Baixa", value: CREATURE_ARMOR_CLASS.LOW, weight: 0 },
-  { display: "Média", value: CREATURE_ARMOR_CLASS.MEDIUM, weight: 0 },
-  { display: "Alta", value: CREATURE_ARMOR_CLASS.HIGH, weight: 0 },
-  { display: "Extrema", value: CREATURE_ARMOR_CLASS.EXTREME, weight: 0 },
+  { display: "Baixa", value: CREATURE_ARMOR_CLASS.LOW, weight: 1 },
+  { display: "Média", value: CREATURE_ARMOR_CLASS.MEDIUM, weight: 2 },
+  { display: "Alta", value: CREATURE_ARMOR_CLASS.HIGH, weight: 3 },
+  { display: "Extrema", value: CREATURE_ARMOR_CLASS.EXTREME, weight: 4 },
 ];
 
 export const CREATURE_INITIATIVES = {
@@ -563,8 +563,85 @@ export const CREATURE_INITIATIVES = {
   EXTREME: 40,
 };
 export const creatureInitiatives = [
-  { display: "Baixa", value: CREATURE_INITIATIVES.LOW, weight: 0 },
-  { display: "Média", value: CREATURE_INITIATIVES.MEDIUM, weight: 0 },
-  { display: "Alta", value: CREATURE_INITIATIVES.HIGH, weight: 0 },
-  { display: "Extrema", value: CREATURE_INITIATIVES.EXTREME, weight: 0 },
+  { display: "Baixa", value: CREATURE_INITIATIVES.LOW, weight: 1 },
+  { display: "Média", value: CREATURE_INITIATIVES.MEDIUM, weight: 2 },
+  { display: "Alta", value: CREATURE_INITIATIVES.HIGH, weight: 3 },
+  { display: "Extrema", value: CREATURE_INITIATIVES.EXTREME, weight: 4 },
+];
+
+export const DAMAGES_EFFECTIVENESS = {
+  VULNERABLE: 10,
+  NORMAL: 20,
+  RESISTENT: 30,
+  IMMUNE: 40,
+};
+export const physicalDamagesEffectiveness = [
+  { display: "Vulnerável", value: DAMAGES_EFFECTIVENESS.VULNERABLE, weight: 1 },
+  { display: "Normal", value: DAMAGES_EFFECTIVENESS.NORMAL, weight: 2 },
+  { display: "Resistente", value: DAMAGES_EFFECTIVENESS.RESISTENT, weight: 3 },
+  { display: "Imune", value: DAMAGES_EFFECTIVENESS.IMMUNE, weight: 4 },
+];
+export const magicalDamagesEffectiveness = [
+  { display: "Vulnerável", value: DAMAGES_EFFECTIVENESS.VULNERABLE, weight: 1 },
+  { display: "Normal", value: DAMAGES_EFFECTIVENESS.NORMAL, weight: 2 },
+  { display: "Resistente", value: DAMAGES_EFFECTIVENESS.RESISTENT, weight: 3 },
+  { display: "Imune", value: DAMAGES_EFFECTIVENESS.IMMUNE, weight: 4 },
+];
+
+export const DAMAGE_TYPES = {
+  SLASHING: 10,
+  BLUDGEONING: 20,
+  PIERCING: 30,
+  ACID: 40,
+  COLD: 50,
+  FIRE: 60,
+  FORCE: 70,
+  LIGHTNING: 80,
+  NECROTIC: 90,
+  POISON: 100,
+  PSYCHIC: 110,
+  RADIANT: 120,
+  THUNDER: 130,
+};
+export const damageTypes = [
+  { display: "Cortante", value: DAMAGE_TYPES.SLASHING, damageEffectiveness: physicalDamagesEffectiveness },
+  { display: "Perfurante", value: DAMAGE_TYPES.BLUDGEONING, damageEffectiveness: physicalDamagesEffectiveness },
+  { display: "Concussão", value: DAMAGE_TYPES.PIERCING, damageEffectiveness: physicalDamagesEffectiveness },
+  { display: "Ácido", value: DAMAGE_TYPES.ACID, damageEffectiveness: magicalDamagesEffectiveness },
+  { display: "Elétrico", value: DAMAGE_TYPES.LIGHTNING, damageEffectiveness: magicalDamagesEffectiveness },
+  { display: "Energia", value: DAMAGE_TYPES.FORCE, damageEffectiveness: magicalDamagesEffectiveness },
+  { display: "Fogo", value: DAMAGE_TYPES.FIRE, damageEffectiveness: magicalDamagesEffectiveness },
+  { display: "Frio", value: DAMAGE_TYPES.COLD, damageEffectiveness: magicalDamagesEffectiveness },
+  { display: "Necrótico", value: DAMAGE_TYPES.NECROTIC, damageEffectiveness: magicalDamagesEffectiveness },
+  { display: "Psíquico", value: DAMAGE_TYPES.PSYCHIC, damageEffectiveness: magicalDamagesEffectiveness },
+  { display: "Radiante", value: DAMAGE_TYPES.RADIANT, damageEffectiveness: magicalDamagesEffectiveness },
+  { display: "Trovejante", value: DAMAGE_TYPES.THUNDER, damageEffectiveness: magicalDamagesEffectiveness },
+  { display: "Veneno", value: DAMAGE_TYPES.POISON, damageEffectiveness: magicalDamagesEffectiveness },
+];
+
+export const CONDITIONS = {
+  GRAPPLED: 10,
+  PRONE: 20,
+  BLINDED: 30,
+  RESTRAINED: 40,
+  POISONED: 50,
+  FRIGHTENED: 60,
+  STUNNED: 70,
+  PARALYZED: 80,
+  PETRIFIED: 90,
+  UNCONSCIOUS: 100,
+  EXHAUSTION: 110,
+};
+export const conditions = [
+  { display: "Agarrado", value: CONDITIONS.GRAPPLED, weight: 1 },
+  { display: "Derrubado", value: CONDITIONS.PRONE, weight: 2 },
+  { display: "Cego/Surdo", value: CONDITIONS.BLINDED, weight: 3 },
+  { display: "Impedido", value: CONDITIONS.RESTRAINED, weight: 4 },
+  { display: "Envenenado", value: CONDITIONS.POISONED, weight: 5 },
+  { display: "Amedrontado", value: CONDITIONS.FRIGHTENED, weight: 6 },
+  { display: "Atordoado/Incapacitado", value: CONDITIONS.STUNNED, weight: 7 },
+  { display: "Paralizado", value: CONDITIONS.PARALYZED, weight: 8 },
+  { display: "Petrificado", value: CONDITIONS.PETRIFIED, weight: 9 },
+  { display: "Inconsciente", value: CONDITIONS.UNCONSCIOUS, weight: 10 },
+  { display: "Exaustão", value: CONDITIONS.EXHAUSTION, weight: 11 },
 ];

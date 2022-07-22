@@ -8,10 +8,10 @@ import {
   DEFAULT_INTENSITY,
   DAMAGE_INTENSITIES,
   DEFAULT_CONDITION,
-  CONDITIONS,
   CONDITION_DURATIONS,
   DEFAULT_CONDITION_DURATION,
 } from "../../../../data/skillCheckConstants";
+import { conditions } from "../../../../data/creatureConstants";
 
 import Panel from "../../../../components/Panel";
 import Select from "../../../../components/Select";
@@ -25,13 +25,13 @@ function SkillCheck({ resultText, level }) {
   const [hasResult, setHasResult] = useState(false);
   const [checkDifficulty, setCheckDifficulty] = useState(DEFAULT_DIFFICULTY);
   const [damageIntensity, setDamageIntensity] = useState(DEFAULT_INTENSITY);
-  const [condition, setCondition] = useState(DEFAULT_CONDITION);
+  const [condition, setCondition] = useState(null);
   const [conditionDuration, setConditionDuration] = useState(DEFAULT_CONDITION_DURATION);
 
   const generatedSkillCheck = getSkillCheck(level, checkDifficulty, damageIntensity, condition, conditionDuration);
 
   function HandleSetCondition(value) {
-    if (value === DEFAULT_CONDITION) {
+    if (value === null) {
       setConditionDuration(DEFAULT_CONDITION_DURATION);
     }
 
@@ -67,11 +67,20 @@ function SkillCheck({ resultText, level }) {
           <section>
             <Panel title="Condição e Duração">
               <main className="panel-select condition">
-                <Select extraWidth={150} value={condition} onSelect={HandleSetCondition} options={CONDITIONS} />
+                <Select
+                  extraWidth={150}
+                  value={condition}
+                  onSelect={HandleSetCondition}
+                  nothingSelected={DEFAULT_CONDITION}
+                  options={conditions}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
+                />
                 <Select
                   extraWidth={150}
                   value={conditionDuration}
                   onSelect={setConditionDuration}
+                  nothingSelected={DEFAULT_CONDITION_DURATION}
                   options={CONDITION_DURATIONS}
                   isDisabled={condition === DEFAULT_CONDITION}
                 />
@@ -108,7 +117,7 @@ function SkillCheck({ resultText, level }) {
         </section>
       )}
       <footer>
-        <Button text={!hasResult ? `Rodar ${resultText}` : "Rodar Novo"} onClick={() => (hasResult ? setHasResult(false) : setHasResult(true))} />
+        <Button text={!hasResult ? `Rodar ${resultText}` : "Rodar Novo"} onClick={() => setHasResult(!hasResult)} />
       </footer>
     </div>
   );

@@ -1,7 +1,18 @@
 import React, { useState, useMemo } from "react";
 //  import api from "../../services/api";
 import * as utils from "../../../../utils";
-import { CREATURE_MOVEMENTS, CREATURE_PRIMARY_ALIGNMENTS, CREATURE_SECONDARY_ALIGNMENTS } from "../../../../data/creatureConstants";
+import {
+  CREATURE_MOVEMENTS,
+  CREATURE_PRIMARY_ALIGNMENTS,
+  CREATURE_SECONDARY_ALIGNMENTS,
+  CREATURE_HIT_POINTS,
+  CREATURE_ATTACKS,
+  CREATURE_ARMOR_CLASS,
+  CREATURE_INITIATIVES,
+  DAMAGES_EFFECTIVENESS,
+  DAMAGE_TYPES,
+  CONDITIONS,
+} from "../../../../data/creatureConstants";
 
 import Definition from "./components/Definition";
 import Atributes from "./components/Attributes";
@@ -45,11 +56,39 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
       wisdom: null,
       charisma: null,
     },
-    hitPoints: null,
-    attack: null,
-    armorClass: null,
-    initiative: null,
+    hitPoints: CREATURE_HIT_POINTS.MEDIUM,
+    attack: CREATURE_ATTACKS.MEDIUM,
+    armorClass: CREATURE_ARMOR_CLASS.MEDIUM,
+    initiative: CREATURE_INITIATIVES.MEDIUM,
     weakSpots: [],
+    damagesEffectiveness: [
+      { type: DAMAGE_TYPES.SLASHING, value: DAMAGES_EFFECTIVENESS.NORMAL },
+      { type: DAMAGE_TYPES.PIERCING, value: DAMAGES_EFFECTIVENESS.NORMAL },
+      { type: DAMAGE_TYPES.BLUDGEONING, value: DAMAGES_EFFECTIVENESS.NORMAL },
+      { type: DAMAGE_TYPES.ACID, value: DAMAGES_EFFECTIVENESS.NORMAL },
+      { type: DAMAGE_TYPES.COLD, value: DAMAGES_EFFECTIVENESS.NORMAL },
+      { type: DAMAGE_TYPES.FIRE, value: DAMAGES_EFFECTIVENESS.NORMAL },
+      { type: DAMAGE_TYPES.FORCE, value: DAMAGES_EFFECTIVENESS.NORMAL },
+      { type: DAMAGE_TYPES.LIGHTNING, value: DAMAGES_EFFECTIVENESS.NORMAL },
+      { type: DAMAGE_TYPES.NECROTIC, value: DAMAGES_EFFECTIVENESS.NORMAL },
+      { type: DAMAGE_TYPES.POISON, value: DAMAGES_EFFECTIVENESS.NORMAL },
+      { type: DAMAGE_TYPES.PSYCHIC, value: DAMAGES_EFFECTIVENESS.NORMAL },
+      { type: DAMAGE_TYPES.RADIANT, value: DAMAGES_EFFECTIVENESS.NORMAL },
+      { type: DAMAGE_TYPES.THUNDER, value: DAMAGES_EFFECTIVENESS.NORMAL },
+    ],
+    conditionImmunities: [
+      { type: CONDITIONS.GRAPPLED, value: false },
+      { type: CONDITIONS.PRONE, value: false },
+      { type: CONDITIONS.BLINDED, value: false },
+      { type: CONDITIONS.RESTRAINED, value: false },
+      { type: CONDITIONS.POISONED, value: false },
+      { type: CONDITIONS.FRIGHTENED, value: false },
+      { type: CONDITIONS.STUNNED, value: false },
+      { type: CONDITIONS.PARALYZED, value: false },
+      { type: CONDITIONS.PETRIFIED, value: false },
+      { type: CONDITIONS.UNCONSCIOUS, value: false },
+      { type: CONDITIONS.EXHAUSTION, value: false },
+    ],
   };
   const [creature, setCreature] = useState(creatureToEdit ?? newCreature);
 
@@ -93,9 +132,7 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
     progessBarSteps.push({ name: "Resistências", isValid: IsResistenciesStepValid() });
 
     function IsPassivesStepValid() {
-      let itemsToValidate = [null].every((i) => i !== null);
-
-      return AreAllPreviousStepsValid() && itemsToValidate;
+      return AreAllPreviousStepsValid();
     }
     progessBarSteps.push({ name: "Passivas", isValid: IsPassivesStepValid() });
 

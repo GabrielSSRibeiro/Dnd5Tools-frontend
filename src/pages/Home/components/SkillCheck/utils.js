@@ -4,10 +4,10 @@ import {
   CHECK_DIFFICULTIES,
   DEFAULT_INTENSITY,
   DAMAGE_INTENSITIES,
-  DEFAULT_CONDITION,
   DEFAULT_CONDITION_DURATION,
   CONDITION_DURATIONS,
 } from "../../../../data/skillCheckConstants";
+import { conditions } from "../../../../data/creatureConstants";
 
 const rand = utils.randomIntFromInterval;
 const variance = utils.randomIntFromInterval;
@@ -47,8 +47,8 @@ export const getSkillCheck = (level, checkDifficulty, damageIntensity, condition
     skillCheck.push({ value: damage, name: "Dano" });
   }
 
-  if (condition !== DEFAULT_CONDITION) {
-    skillCheck.push({ value: condition, name: "Condição" });
+  if (condition !== null) {
+    skillCheck.push({ value: conditions.find((c) => c.value === condition).display, name: "Condição" });
   }
 
   if (conditionDuration !== DEFAULT_CONDITION_DURATION) {
