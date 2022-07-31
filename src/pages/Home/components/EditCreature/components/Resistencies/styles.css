@@ -83,7 +83,7 @@
 
 .Resistencies-container .conditions .conditions-wrapper .conditions-divider {
   border-top: 1px solid var(--gray1);
-  width: 150px;
+  width: 100%;
 }
 
 .Resistencies-container .conditions .conditions-wrapper .conditions-divider:last-of-type {

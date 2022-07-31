@@ -13,9 +13,13 @@ function Resistencies({ creature, setCreature }) {
     setCreature({ ...creature });
   }
 
-  function setCreatureConditionImmunity(type) {
-    let conditionImmunity = creature.conditionImmunities.find((de) => de.type === type);
-    conditionImmunity.value = !conditionImmunity.value;
+  function setCreatureConditionImmunity(value) {
+    let conditionImmunity = creature.conditionImmunities.find((ci) => ci === value);
+    if (conditionImmunity) {
+      creature.conditionImmunities = creature.conditionImmunities.filter((ci) => ci !== value);
+    } else {
+      creature.conditionImmunities.push(value);
+    }
 
     setCreature({ ...creature });
   }
@@ -32,7 +36,7 @@ function Resistencies({ creature, setCreature }) {
                 <div className="damage-effectiveness-divider"></div>
                 {dt.damageEffectiveness.map((option) => (
                   <SelectButton
-                    key={option.value}
+                    key={dt.value + "" + option.value}
                     isSelected={creature.damagesEffectiveness.find((de) => de.type === dt.value).value === option.value}
                     text={option.display}
                     onClick={() => setCreatureDamageEffectiveness(dt.value, option.value)}
@@ -50,9 +54,10 @@ function Resistencies({ creature, setCreature }) {
             <>
               <div className="conditions-options">
                 <CheckInput
+                  key={c.value}
                   label={c.display}
                   onClick={() => setCreatureConditionImmunity(c.value)}
-                  isSelected={creature.conditionImmunities.find((ci) => ci.type === c.value).value}
+                  isSelected={creature.conditionImmunities.find((ci) => ci === c.value)}
                 />
               </div>
               <div className="conditions-divider"></div>

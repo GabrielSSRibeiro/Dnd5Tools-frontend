@@ -92,19 +92,17 @@ function Home() {
         { type: 120, value: 20 },
         { type: 130, value: 20 },
       ],
-      conditionImmunities: [
-        { type: 10, value: false },
-        { type: 20, value: false },
-        { type: 30, value: false },
-        { type: 40, value: false },
-        { type: 50, value: false },
-        { type: 60, value: false },
-        { type: 70, value: false },
-        { type: 80, value: false },
-        { type: 90, value: false },
-        { type: 100, value: false },
-        { type: 110, value: false },
-      ],
+      conditionImmunities: [],
+      languages: [10],
+      senses: {
+        darkVision: null,
+        tremorsense: null,
+        blindSight: null,
+        trueSight: null,
+      },
+      legendaryResistences: null,
+      regeneration: { amount: null, breakDamage: null },
+      customSpecials: [],
     };
     for (let index = 1; index <= 5; index++) {
       let newCreature = utils.clone(savedCreature);

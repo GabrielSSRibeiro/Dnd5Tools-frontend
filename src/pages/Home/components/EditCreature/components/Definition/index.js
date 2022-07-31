@@ -30,19 +30,29 @@ function Definition({ creature, setCreature }) {
     return foundClass ? foundClass.subClasses : [];
   }
 
-  function HandleSelectClass(creature) {
-    creature.subClass = null;
+  function HandleSelectClass(updatedCreature) {
+    updatedCreature.subClass = null;
+    if (!updatedCreature.class || updatedCreature.class === updatedCreature.secondaryClass) {
+      HandleToggleMulticlass();
+    }
 
-    setCreature(creature);
+    setCreature(updatedCreature);
   }
 
-  function HandleSelectSubClass(creature) {
-    creature.secondarySubClass = null;
+  function HandleSelectSecondaryClass(updatedCreature) {
+    updatedCreature.secondarySubClass = null;
 
-    setCreature(creature);
+    setCreature(updatedCreature);
   }
 
   function HandleToggleMulticlass() {
+    if (isMulticlass) {
+      creature.secondaryClass = null;
+      creature.secondarySubClass = null;
+
+      setCreature(creature);
+    }
+
     setIsMulticlass(!isMulticlass);
   }
 
@@ -62,6 +72,7 @@ function Definition({ creature, setCreature }) {
         />
         <Select
           label={"Ambiente"}
+          optionsAtATime={11}
           extraWidth={100}
           value={creature}
           valuePropertyPath="environment"
@@ -72,6 +83,7 @@ function Definition({ creature, setCreature }) {
         />
         <Select
           label={"Tamanho"}
+          optionsAtATime={6}
           extraWidth={100}
           value={creature}
           valuePropertyPath="size"
@@ -82,6 +94,7 @@ function Definition({ creature, setCreature }) {
         />
         <Select
           label={"Tipo"}
+          optionsAtATime={10}
           extraWidth={100}
           value={creature}
           valuePropertyPath="type"
@@ -97,7 +110,8 @@ function Definition({ creature, setCreature }) {
           <div className="extra-definitions">
             <Select
               label={"Raça"}
-              extraWidth={100}
+              extraWidth={150}
+              optionsAtATime={7}
               value={creature}
               valuePropertyPath="race"
               onSelect={setCreature}
@@ -108,6 +122,7 @@ function Definition({ creature, setCreature }) {
             />
             <Select
               label={"Classe"}
+              optionsAtATime={8}
               extraWidth={100}
               value={creature}
               valuePropertyPath="class"
@@ -120,6 +135,7 @@ function Definition({ creature, setCreature }) {
             <Select
               label={"Subclasse"}
               extraWidth={250}
+              optionsAtATime={7}
               value={creature}
               valuePropertyPath="subClass"
               onSelect={setCreature}
@@ -132,14 +148,15 @@ function Definition({ creature, setCreature }) {
           </div>
           <div className="multiclassing">
             <div className="multiclassing-checkbox-wrapper">
-              <CheckInput label="Multiclasse" onClick={HandleToggleMulticlass} isSelected={isMulticlass} />
+              <CheckInput label="Multiclasse" onClick={HandleToggleMulticlass} isSelected={isMulticlass} isDisabled={!creature.class} />
             </div>
             <Select
               label={"Segunda Classe"}
               extraWidth={100}
+              optionsAtATime={7}
               value={creature}
               valuePropertyPath="secondaryClass"
-              onSelect={HandleSelectSubClass}
+              onSelect={HandleSelectSecondaryClass}
               nothingSelected="Nenhuma"
               options={creatureClasses.filter((c) => c.value !== creature.class)}
               optionDisplay={(o) => o.display}
@@ -149,6 +166,7 @@ function Definition({ creature, setCreature }) {
             <Select
               label={"Segunda Subclasse"}
               extraWidth={250}
+              optionsAtATime={7}
               value={creature}
               valuePropertyPath="secondarySubClass"
               onSelect={setCreature}
@@ -168,6 +186,7 @@ function Definition({ creature, setCreature }) {
         <Select
           label={"Terrestre"}
           extraWidth={100}
+          optionsAtATime={4}
           value={creature}
           valuePropertyPath="movements.speed"
           onSelect={setCreature}
@@ -179,6 +198,7 @@ function Definition({ creature, setCreature }) {
         <Select
           label={"Vôo / Planar"}
           extraWidth={100}
+          optionsAtATime={4}
           value={creature}
           valuePropertyPath="movements.flying"
           onSelect={setCreature}
@@ -190,6 +210,7 @@ function Definition({ creature, setCreature }) {
         <Select
           label={"Natação"}
           extraWidth={100}
+          optionsAtATime={4}
           value={creature}
           valuePropertyPath="movements.swimming"
           onSelect={setCreature}
@@ -201,6 +222,7 @@ function Definition({ creature, setCreature }) {
         <Select
           label={"Escavação / Escalada"}
           extraWidth={100}
+          optionsAtATime={4}
           value={creature}
           valuePropertyPath="movements.burrowing"
           onSelect={setCreature}

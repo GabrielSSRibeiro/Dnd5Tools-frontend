@@ -604,19 +604,19 @@ export const DAMAGE_TYPES = {
   THUNDER: 130,
 };
 export const damageTypes = [
-  { display: "Cortante", value: DAMAGE_TYPES.SLASHING, damageEffectiveness: physicalDamagesEffectiveness },
-  { display: "Perfurante", value: DAMAGE_TYPES.BLUDGEONING, damageEffectiveness: physicalDamagesEffectiveness },
-  { display: "Concussão", value: DAMAGE_TYPES.PIERCING, damageEffectiveness: physicalDamagesEffectiveness },
-  { display: "Ácido", value: DAMAGE_TYPES.ACID, damageEffectiveness: magicalDamagesEffectiveness },
-  { display: "Elétrico", value: DAMAGE_TYPES.LIGHTNING, damageEffectiveness: magicalDamagesEffectiveness },
-  { display: "Energia", value: DAMAGE_TYPES.FORCE, damageEffectiveness: magicalDamagesEffectiveness },
-  { display: "Fogo", value: DAMAGE_TYPES.FIRE, damageEffectiveness: magicalDamagesEffectiveness },
-  { display: "Frio", value: DAMAGE_TYPES.COLD, damageEffectiveness: magicalDamagesEffectiveness },
-  { display: "Necrótico", value: DAMAGE_TYPES.NECROTIC, damageEffectiveness: magicalDamagesEffectiveness },
-  { display: "Psíquico", value: DAMAGE_TYPES.PSYCHIC, damageEffectiveness: magicalDamagesEffectiveness },
-  { display: "Radiante", value: DAMAGE_TYPES.RADIANT, damageEffectiveness: magicalDamagesEffectiveness },
-  { display: "Trovejante", value: DAMAGE_TYPES.THUNDER, damageEffectiveness: magicalDamagesEffectiveness },
-  { display: "Veneno", value: DAMAGE_TYPES.POISON, damageEffectiveness: magicalDamagesEffectiveness },
+  { display: "Cortante", value: DAMAGE_TYPES.SLASHING, damageEffectiveness: physicalDamagesEffectiveness, weight: 1 },
+  { display: "Perfurante", value: DAMAGE_TYPES.BLUDGEONING, damageEffectiveness: physicalDamagesEffectiveness, weight: 1 },
+  { display: "Concussão", value: DAMAGE_TYPES.PIERCING, damageEffectiveness: physicalDamagesEffectiveness, weight: 1 },
+  { display: "Ácido", value: DAMAGE_TYPES.ACID, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
+  { display: "Elétrico", value: DAMAGE_TYPES.LIGHTNING, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
+  { display: "Energia", value: DAMAGE_TYPES.FORCE, damageEffectiveness: magicalDamagesEffectiveness, weight: 3 },
+  { display: "Fogo", value: DAMAGE_TYPES.FIRE, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
+  { display: "Frio", value: DAMAGE_TYPES.COLD, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
+  { display: "Necrótico", value: DAMAGE_TYPES.NECROTIC, damageEffectiveness: magicalDamagesEffectiveness, weight: 3 },
+  { display: "Psíquico", value: DAMAGE_TYPES.PSYCHIC, damageEffectiveness: magicalDamagesEffectiveness, weight: 3 },
+  { display: "Radiante", value: DAMAGE_TYPES.RADIANT, damageEffectiveness: magicalDamagesEffectiveness, weight: 3 },
+  { display: "Trovejante", value: DAMAGE_TYPES.THUNDER, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
+  { display: "Veneno", value: DAMAGE_TYPES.POISON, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
 ];
 
 export const CONDITIONS = {
@@ -644,4 +644,91 @@ export const conditions = [
   { display: "Petrificado", value: CONDITIONS.PETRIFIED, weight: 9 },
   { display: "Inconsciente", value: CONDITIONS.UNCONSCIOUS, weight: 10 },
   { display: "Exaustão", value: CONDITIONS.EXHAUSTION, weight: 11 },
+];
+
+export const LANGUAGES = {
+  COMMON: 10,
+  UNDERCOMMON: 20,
+  ABYSSAL: 30,
+  DWARVISH: 40,
+  CELESTIAL: 50,
+  DRACONIC: 60,
+  ELVISH: 70,
+  GIANT: 80,
+  GNOMISH: 90,
+  HALFLING: 100,
+  INFERNAL: 110,
+  ORC: 120,
+  PRIMORDIAL: 130,
+  SYLVAN: 140,
+  DEEP_SPEECH: 150,
+};
+export const languages = [
+  { display: "Comum", value: LANGUAGES.COMMON, weight: 0 },
+  { display: "Subcomum", value: LANGUAGES.UNDERCOMMON, weight: 0 },
+  { display: "Abissal", value: LANGUAGES.ABYSSAL, weight: 0 },
+  { display: "Anão", value: LANGUAGES.DWARVISH, weight: 0 },
+  { display: "Celestial", value: LANGUAGES.CELESTIAL, weight: 0 },
+  { display: "Dracônico", value: LANGUAGES.DRACONIC, weight: 0 },
+  { display: "Élfico", value: LANGUAGES.ELVISH, weight: 0 },
+  { display: "Gigante", value: LANGUAGES.GIANT, weight: 0 },
+  { display: "Gnômico", value: LANGUAGES.GNOMISH, weight: 0 },
+  { display: "Halfling", value: LANGUAGES.HALFLING, weight: 0 },
+  { display: "Infernal", value: LANGUAGES.INFERNAL, weight: 0 },
+  { display: "Orc", value: LANGUAGES.ORC, weight: 0 },
+  { display: "Primordial", value: LANGUAGES.PRIMORDIAL, weight: 0 },
+  { display: "Silvestre", value: LANGUAGES.SYLVAN, weight: 0 },
+  { display: "Subterrâneo", value: LANGUAGES.DEEP_SPEECH, weight: 0 },
+];
+
+export const CREATURE_SENSE_REACHES = {
+  SHORT: 10,
+  MEDIUM: 20,
+  LONG: 30,
+  EXTREME: 40,
+};
+export const creatureSenseReaches = [
+  { display: "Curto (3m)", value: CREATURE_SENSE_REACHES.SHORT, weight: 1 },
+  { display: "Médio (6m)", value: CREATURE_SENSE_REACHES.MEDIUM, weight: 2 },
+  { display: "Longo (9m)", value: CREATURE_SENSE_REACHES.LONG, weight: 3 },
+  { display: "Extremo (18m)", value: CREATURE_SENSE_REACHES.EXTREME, weight: 4 },
+];
+
+export const CREATURE_LEGENDARY_RESISTENCES = {
+  LOW: 10,
+  MEDIUM: 20,
+  HIGH: 30,
+  EXTREME: 40,
+};
+export const creatureLegendaryResistences = [
+  { display: "Baixa (1 uso)", value: CREATURE_LEGENDARY_RESISTENCES.LOW, weight: 1, totalNumber: 1 },
+  { display: "Média (2 uso)", value: CREATURE_LEGENDARY_RESISTENCES.MEDIUM, weight: 2, totalNumber: 2 },
+  { display: "Alta (3 uso)", value: CREATURE_LEGENDARY_RESISTENCES.HIGH, weight: 3, totalNumber: 3 },
+  { display: "Extrema (4 uso)", value: CREATURE_LEGENDARY_RESISTENCES.EXTREME, weight: 4, totalNumber: 4 },
+];
+
+export const CREATURE_REGENERATIONS = {
+  WEAK: 10,
+  MEDIUM: 20,
+  STRONG: 30,
+  EXTREME: 40,
+};
+export const creatureRegenerations = [
+  { display: "Fraca (5 PV)", value: CREATURE_REGENERATIONS.WEAK, weight: 1, amount: 5 },
+  { display: "Média (10 PV)", value: CREATURE_REGENERATIONS.MEDIUM, weight: 2, amount: 10 },
+  { display: "Forte (15 PV)", value: CREATURE_REGENERATIONS.STRONG, weight: 3, amount: 15 },
+  { display: "Extrema (20 PV)", value: CREATURE_REGENERATIONS.EXTREME, weight: 4, amount: 20 },
+];
+
+export const CREATURE_CUSTOM_SPECIAL_MULTIPLIERS = {
+  WEAK: 10,
+  MEDIUM: 20,
+  STRONG: 30,
+  EXTREME: 40,
+};
+export const creatureCustomSpecialMultipliers = [
+  { display: "Fraca (Extra 10%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.WEAK, weight: 1, multiplier: 1.1 },
+  { display: "Média (Extra 20%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.MEDIUM, weight: 2, multiplier: 1.2 },
+  { display: "Forte (Extra 50%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.STRONG, weight: 3, multiplier: 1.5 },
+  { display: "Extrema (Extra 100%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.EXTREME, weight: 4, multiplier: 2 },
 ];

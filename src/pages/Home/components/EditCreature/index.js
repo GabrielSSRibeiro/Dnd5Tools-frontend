@@ -11,7 +11,7 @@ import {
   CREATURE_INITIATIVES,
   DAMAGES_EFFECTIVENESS,
   DAMAGE_TYPES,
-  CONDITIONS,
+  LANGUAGES,
 } from "../../../../data/creatureConstants";
 
 import Definition from "./components/Definition";
@@ -76,19 +76,17 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
       { type: DAMAGE_TYPES.RADIANT, value: DAMAGES_EFFECTIVENESS.NORMAL },
       { type: DAMAGE_TYPES.THUNDER, value: DAMAGES_EFFECTIVENESS.NORMAL },
     ],
-    conditionImmunities: [
-      { type: CONDITIONS.GRAPPLED, value: false },
-      { type: CONDITIONS.PRONE, value: false },
-      { type: CONDITIONS.BLINDED, value: false },
-      { type: CONDITIONS.RESTRAINED, value: false },
-      { type: CONDITIONS.POISONED, value: false },
-      { type: CONDITIONS.FRIGHTENED, value: false },
-      { type: CONDITIONS.STUNNED, value: false },
-      { type: CONDITIONS.PARALYZED, value: false },
-      { type: CONDITIONS.PETRIFIED, value: false },
-      { type: CONDITIONS.UNCONSCIOUS, value: false },
-      { type: CONDITIONS.EXHAUSTION, value: false },
-    ],
+    conditionImmunities: [],
+    languages: [LANGUAGES.COMMON],
+    senses: {
+      darkVision: null,
+      tremorsense: null,
+      blindSight: null,
+      trueSight: null,
+    },
+    legendaryResistences: null,
+    regeneration: { amount: null, breakDamage: null },
+    customSpecials: [],
   };
   const [creature, setCreature] = useState(creatureToEdit ?? newCreature);
 
@@ -137,9 +135,7 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
     progessBarSteps.push({ name: "Passivas", isValid: IsPassivesStepValid() });
 
     function IsActionsStepValid() {
-      let itemsToValidate = [null].every((i) => i !== null);
-
-      return AreAllPreviousStepsValid() && itemsToValidate;
+      return AreAllPreviousStepsValid();
     }
     progessBarSteps.push({ name: "Açoes", isValid: IsActionsStepValid() });
 

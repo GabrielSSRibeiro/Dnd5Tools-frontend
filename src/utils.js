@@ -121,3 +121,7 @@ export function getObjPropertyValue(obj, accessPath) {
 export function clone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
+
+export function createArrayFromInt(int) {
+  return Array.from(Array(int));
+}

@@ -1,2 +1,116 @@
 .Passives-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 25px;
+  height: 100%;
+  gap: 25px;
+}
+
+.Passives-container h2 {
+  line-height: 1;
+  margin-bottom: 25px;
+  white-space: nowrap;
+}
+
+.Passives-container .languages {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.Passives-container .languages .languages-wrapper {
+  height: 100%;
+  width: fit-content;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.Passives-container .languages .languages-wrapper .languages-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.Passives-container .languages .languages-wrapper .languages-divider {
+  border-top: 1px solid var(--gray1);
+  width: 100%;
+}
+
+.Passives-container .languages .languages-wrapper .languages-divider:last-of-type {
+  display: none;
+}
+
+.Passives-container .senses {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.Passives-container .senses .senses-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  row-gap: 15px;
+}
+
+.Passives-container .senses .senses-wrapper .senses-divider {
+  border-top: 1px solid var(--gray1);
+  width: 200px;
+}
+
+.Passives-container .extras {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+/* .Passives-container .specials {
+  flex: 1;
+} */
+
+.Passives-container .specials .specials-wrapper {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  row-gap: 15px;
+}
+
+.Passives-container .specials .specials-wrapper .specials-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  column-gap: 25px;
+}
+
+.Passives-container .specials .specials-wrapper .specials-divider {
+  border-top: 1px solid var(--gray1);
+  width: 100%;
+}
+
+.Passives-container .specials .specials-wrapper .specials-row .specials-row-item {
+  width: 200px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.Passives-container .specials .specials-wrapper .specials-row input {
+  width: 425px;
 }

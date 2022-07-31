@@ -20,6 +20,10 @@ function Attributes({ creature, setCreature }) {
   const numberOfWeakSpots = 4;
 
   function HandleToggleWeakSpots() {
+    if (hasWeakSpots) {
+      creature.weakSpots = [];
+    }
+
     setHasWeakSpots(!hasWeakSpots);
   }
 
