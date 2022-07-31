@@ -103,6 +103,9 @@ function Home() {
       legendaryResistences: null,
       regeneration: { amount: null, breakDamage: null },
       customSpecials: [],
+      actions: [],
+      reactions: [],
+      aura: null,
     };
     for (let index = 1; index <= 5; index++) {
       let newCreature = utils.clone(savedCreature);

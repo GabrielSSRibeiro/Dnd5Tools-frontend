@@ -82,7 +82,7 @@ function SkillCheck({ resultText, level }) {
                   onSelect={setConditionDuration}
                   nothingSelected={DEFAULT_CONDITION_DURATION}
                   options={CONDITION_DURATIONS}
-                  isDisabled={condition === DEFAULT_CONDITION}
+                  isDisabled={!condition}
                 />
               </main>
             </Panel>

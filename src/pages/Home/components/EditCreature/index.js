@@ -87,6 +87,9 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
     legendaryResistences: null,
     regeneration: { amount: null, breakDamage: null },
     customSpecials: [],
+    actions: [],
+    reactions: [],
+    aura: null,
   };
   const [creature, setCreature] = useState(creatureToEdit ?? newCreature);
 
@@ -140,9 +143,9 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
     progessBarSteps.push({ name: "Açoes", isValid: IsActionsStepValid() });
 
     function IsTreasureRewardStepValid() {
-      let itemsToValidate = [null].every((i) => i !== null);
+      let areActionsValid = creature.actions.length > 0;
 
-      return AreAllPreviousStepsValid() && itemsToValidate;
+      return AreAllPreviousStepsValid() && areActionsValid;
     }
     progessBarSteps.push({ name: "Tesouro", isValid: IsTreasureRewardStepValid() });
 
