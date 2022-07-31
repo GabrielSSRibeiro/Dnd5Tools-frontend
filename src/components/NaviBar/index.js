@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
+import { useAuth } from "../../contexts/Auth";
+import { useHistory } from "react-router-dom";
 
 import { MAX_COMBATS } from "../../data/combatConstants";
 
 import SelectButton from "../SelectButton";
+import Modal from "../../components/Modal";
+import Button from "../../components/Button";
 import Party from "./components/Party";
 import Bestiary from "./components/Bestiary";
 
@@ -28,7 +32,6 @@ function NaviBar({
   setGroups,
   creatures,
   tabOptions,
-  setIsMenuOpen,
   openTab,
   setOpenTab,
   isEditCreatureOpen,
@@ -36,6 +39,16 @@ function NaviBar({
   setCreatureToEdit,
   HandleEndCombat,
 }) {
+  const { Logout } = useAuth();
+  const history = useHistory();
+
+  const [IsMenuOpen, setIsMenuOpen] = useState(false);
+
+  async function HandleLogout() {
+    await Logout();
+    history.push("/login");
+  }
+
   function HandleCombatTabClick(combatNumber) {
     if (openTab !== combatNumber) {
       setOpenTab(combatNumber);
@@ -46,6 +59,11 @@ function NaviBar({
 
   return (
     <div className="NaviBar-container">
+      {IsMenuOpen && (
+        <Modal title="Menu" clickToClose={true} onClose={() => setIsMenuOpen(false)} className="menu-modal-body">
+          <Button text="Sair" onClick={HandleLogout} />
+        </Modal>
+      )}
       <section>
         <div>
           <h3>A</h3>

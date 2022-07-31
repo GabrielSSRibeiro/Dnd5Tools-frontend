@@ -7,6 +7,11 @@
   z-index: 1;
 }
 
+.NaviBar-container .menu-modal-body {
+  width: 500px;
+  margin-top: -300px;
+}
+
 .NaviBar-container > section:first-of-type {
   width: 100%;
   height: 60px;
