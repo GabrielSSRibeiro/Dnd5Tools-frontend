@@ -5,11 +5,11 @@ import Info from "../Info";
 
 import "./styles.css";
 
-function Panel({ title = null, info = null, children }) {
+function Panel({ title = null, info = null, className = "", children }) {
   const jewelSide = 18;
 
   return (
-    <div className="Panel-container">
+    <div className={`Panel-container ${className}`}>
       {title && (
         <header>
           <aside className="title-gem">

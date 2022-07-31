@@ -9,7 +9,7 @@
 
 .NaviBar-container .menu-modal-body {
   width: 500px;
-  margin-top: -300px;
+  height: fit-content;
 }
 
 .NaviBar-container > section:first-of-type {

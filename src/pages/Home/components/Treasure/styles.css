@@ -5,21 +5,37 @@
   align-items: center;
   justify-content: flex-start;
 }
+
+.Treasure-container .result-tables {
+  width: 1100px;
+  height: fit-content;
+}
+
 .Treasure-container .treasure-panels {
   width: 1000px;
   margin-top: 5%;
 }
 
-.Treasure-container .result-tables {
-  width: 1000px;
-  margin-top: 15px;
+.Treasure-container .modal-materials-wrapper {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-.Treasure-container .result-tables:first-of-type {
+.Treasure-container .modal-materials-wrapper .modal-materials {
+  margin-top: 15px;
+  width: 100%;
+}
+
+.Treasure-container .modal-materials-wrapper .modal-materials:first-of-type {
   margin-top: 5%;
 }
 
-.Treasure-container .result-tables:last-of-type {
+.Treasure-container .modal-materials-wrapper .modal-materials:last-of-type {
   margin-bottom: 15px;
 }
 

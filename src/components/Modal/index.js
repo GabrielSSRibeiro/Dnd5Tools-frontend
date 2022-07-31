@@ -12,11 +12,9 @@ function Modal({ title, info, clickToClose = false, onClose = () => {}, classNam
   return (
     <div className="Modal-container">
       <div className="screen-block" onClick={clickToClose ? HandleClose : () => {}}></div>
-      <div className={`${className}`}>
-        <Panel title={title} info={info}>
-          {children}
-        </Panel>
-      </div>
+      <Panel title={title} info={info} className={`modal-body ${className}`}>
+        {children}
+      </Panel>
     </div>
   );
 }

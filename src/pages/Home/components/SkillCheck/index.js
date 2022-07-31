@@ -14,6 +14,7 @@ import {
 import { conditions } from "../../../../data/creatureConstants";
 
 import Panel from "../../../../components/Panel";
+import Modal from "../../../../components/Modal";
 import Select from "../../../../components/Select";
 import SelectButton from "../../../../components/SelectButton";
 import Button from "../../../../components/Button";
@@ -46,66 +47,63 @@ function SkillCheck({ resultText, level }) {
 
   return (
     <div className="SkillCheck-container">
-      {!hasResult ? (
-        <>
-          <section>
-            <Panel title="Dificuldade" info={[{ text: `Dificuldade mínima: ${MIN_DIFICULTY}` }]}>
-              <main className="panel-select">
-                {CHECK_DIFFICULTIES.map((option) => (
-                  <SelectButton
-                    key={option}
-                    isLarge={false}
-                    isLong={false}
-                    isSelected={checkDifficulty === option}
-                    text={option}
-                    onClick={() => setCheckDifficulty(option)}
-                  />
-                ))}
-              </main>
-            </Panel>
-          </section>
-          <section>
-            <Panel title="Condição e Duração">
-              <main className="panel-select condition">
-                <Select
-                  extraWidth={150}
-                  value={condition}
-                  onSelect={HandleSetCondition}
-                  nothingSelected={DEFAULT_CONDITION}
-                  options={conditions}
-                  optionDisplay={(o) => o.display}
-                  optionValue={(o) => o.value}
-                />
-                <Select
-                  extraWidth={150}
-                  value={conditionDuration}
-                  onSelect={setConditionDuration}
-                  nothingSelected={DEFAULT_CONDITION_DURATION}
-                  options={CONDITION_DURATIONS}
-                  isDisabled={!condition}
-                />
-              </main>
-            </Panel>
-          </section>
-          <section>
-            <Panel title="Intensidade do Dano">
-              <main className="panel-select">
-                {DAMAGE_INTENSITIES.map((option) => (
-                  <SelectButton
-                    key={option}
-                    isLarge={false}
-                    isLong={false}
-                    isSelected={damageIntensity === option}
-                    text={option}
-                    onClick={() => setDamageIntensity(option)}
-                  />
-                ))}
-              </main>
-            </Panel>
-          </section>
-        </>
-      ) : (
-        <section className="result-tables">
+      <section>
+        <Panel title="Dificuldade" info={[{ text: `Dificuldade mínima: ${MIN_DIFICULTY}` }]}>
+          <main className="panel-select">
+            {CHECK_DIFFICULTIES.map((option) => (
+              <SelectButton
+                key={option}
+                isLarge={false}
+                isLong={false}
+                isSelected={checkDifficulty === option}
+                text={option}
+                onClick={() => setCheckDifficulty(option)}
+              />
+            ))}
+          </main>
+        </Panel>
+      </section>
+      <section>
+        <Panel title="Condição e Duração">
+          <main className="panel-select condition">
+            <Select
+              extraWidth={150}
+              value={condition}
+              onSelect={HandleSetCondition}
+              nothingSelected={DEFAULT_CONDITION}
+              options={conditions}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+            <Select
+              extraWidth={150}
+              value={conditionDuration}
+              onSelect={setConditionDuration}
+              nothingSelected={DEFAULT_CONDITION_DURATION}
+              options={CONDITION_DURATIONS}
+              isDisabled={!condition}
+            />
+          </main>
+        </Panel>
+      </section>
+      <section>
+        <Panel title="Intensidade do Dano">
+          <main className="panel-select">
+            {DAMAGE_INTENSITIES.map((option) => (
+              <SelectButton
+                key={option}
+                isLarge={false}
+                isLong={false}
+                isSelected={damageIntensity === option}
+                text={option}
+                onClick={() => setDamageIntensity(option)}
+              />
+            ))}
+          </main>
+        </Panel>
+      </section>
+      {hasResult && (
+        <Modal title="Teste" clickToClose={true} onClose={() => setHasResult(!hasResult)} className="result-tables">
           <ResultBox
             highlightTopRow={true}
             values={generatedSkillCheck.map((skillCheck) => ({
@@ -114,10 +112,10 @@ function SkillCheck({ resultText, level }) {
               bottom: skillCheck.name,
             }))}
           />
-        </section>
+        </Modal>
       )}
       <footer>
-        <Button text={!hasResult ? `Rodar ${resultText}` : "Rodar Novo"} onClick={() => setHasResult(!hasResult)} />
+        <Button text={`Rodar ${resultText}`} onClick={() => setHasResult(!hasResult)} />
       </footer>
     </div>
   );

@@ -28,6 +28,7 @@ import {
 import * as utils from "../../../../utils";
 
 import Panel from "../../../../components/Panel";
+import Modal from "../../../../components/Modal";
 import SelectButton from "../../../../components/SelectButton";
 import Button from "../../../../components/Button";
 import ResultBox from "../../../../components/ResultBox";
@@ -65,124 +66,119 @@ function Treasure({ resultText, level }) {
 
   return (
     <div className="Treasure-container">
-      {!hasResult ? (
+      <section className="treasure-panels">
+        <Panel title="Tipo">
+          <main className="panel-select">
+            {TREASURE_TYPES.map((option) => (
+              <SelectButton
+                key={option}
+                isLarge={false}
+                isLong={false}
+                isSelected={treasureType === option}
+                text={option}
+                onClick={() => setTreasureType(option)}
+              />
+            ))}
+          </main>
+        </Panel>
+      </section>
+      {treasureType === treasureTypes.GOLD_PIECES && (
+        <section className="treasure-panels">
+          <Panel title="Quantidade">
+            <main className="panel-select">
+              {GOLD_PIECES_QUANTITIES.map((option) => (
+                <SelectButton
+                  key={option}
+                  isLarge={false}
+                  isLong={false}
+                  isSelected={goldPiecesQuantity === option}
+                  text={option}
+                  onClick={() => setGoldPiecesQuantity(option)}
+                />
+              ))}
+            </main>
+          </Panel>
+        </section>
+      )}
+      {treasureType === treasureTypes.MATERIAL && (
+        <section className="treasure-panels">
+          <Panel title="Preço" info={[{ text: `Preço mínimo de item incomum: ${UNCOMMON_ITEM_MIN_PRICE} PO` }]}>
+            <main className="panel-select">
+              {MATERIAL_PRICE_INFLATIONS.map((option) => (
+                <SelectButton
+                  key={option}
+                  isLarge={false}
+                  isLong={false}
+                  isSelected={materialPriceInflation === option}
+                  text={option}
+                  onClick={() => setMaterialPriceInflation(option)}
+                />
+              ))}
+            </main>
+          </Panel>
+        </section>
+      )}
+      {treasureType === treasureTypes.EQUIPMENT && (
         <>
           <section className="treasure-panels">
-            <Panel title="Tipo">
+            <Panel
+              title="Tipo do Item"
+              info={[
+                {
+                  text: `Probabilidade de afixo primário em item: ${utils.turnValueIntoPercentageString(PRIMARY_AFIX_PROB)}`,
+                },
+                {
+                  text: `Probabilidade de afixo secundário em item: ${utils.turnValueIntoPercentageString(SECONDARY_AFIX_PROB)}`,
+                },
+                {
+                  text: `Probabilidade de afixo amaldiçoado em item: ${utils.turnValueIntoPercentageString(CURSE_AFIX_PROB)}`,
+                },
+              ]}
+            >
               <main className="panel-select">
-                {TREASURE_TYPES.map((option) => (
+                {EQUIPMENT_TYPES.map((option) => (
                   <SelectButton
                     key={option}
                     isLarge={false}
                     isLong={false}
-                    isSelected={treasureType === option}
+                    isSelected={equipmentType === option}
                     text={option}
-                    onClick={() => setTreasureType(option)}
+                    onClick={() => setEquipmentType(option)}
                   />
                 ))}
               </main>
             </Panel>
           </section>
-          {treasureType === treasureTypes.GOLD_PIECES && (
-            <section className="treasure-panels">
-              <Panel title="Quantidade">
-                <main className="panel-select">
-                  {GOLD_PIECES_QUANTITIES.map((option) => (
-                    <SelectButton
-                      key={option}
-                      isLarge={false}
-                      isLong={false}
-                      isSelected={goldPiecesQuantity === option}
-                      text={option}
-                      onClick={() => setGoldPiecesQuantity(option)}
-                    />
-                  ))}
-                </main>
-              </Panel>
-            </section>
-          )}
-          {treasureType === treasureTypes.MATERIAL && (
-            <section className="treasure-panels">
-              <Panel title="Preço" info={[{ text: `Preço mínimo de item incomum: ${UNCOMMON_ITEM_MIN_PRICE} PO` }]}>
-                <main className="panel-select">
-                  {MATERIAL_PRICE_INFLATIONS.map((option) => (
-                    <SelectButton
-                      key={option}
-                      isLarge={false}
-                      isLong={false}
-                      isSelected={materialPriceInflation === option}
-                      text={option}
-                      onClick={() => setMaterialPriceInflation(option)}
-                    />
-                  ))}
-                </main>
-              </Panel>
-            </section>
-          )}
-          {treasureType === treasureTypes.EQUIPMENT && (
-            <>
-              <section className="treasure-panels">
-                <Panel
-                  title="Tipo do Item"
-                  info={[
-                    {
-                      text: `Probabilidade de afixo primário em item: ${utils.turnValueIntoPercentageString(PRIMARY_AFIX_PROB)}`,
-                    },
-                    {
-                      text: `Probabilidade de afixo secundário em item: ${utils.turnValueIntoPercentageString(SECONDARY_AFIX_PROB)}`,
-                    },
-                    {
-                      text: `Probabilidade de afixo amaldiçoado em item: ${utils.turnValueIntoPercentageString(CURSE_AFIX_PROB)}`,
-                    },
-                  ]}
-                >
-                  <main className="panel-select">
-                    {EQUIPMENT_TYPES.map((option) => (
-                      <SelectButton
-                        key={option}
-                        isLarge={false}
-                        isLong={false}
-                        isSelected={equipmentType === option}
-                        text={option}
-                        onClick={() => setEquipmentType(option)}
-                      />
-                    ))}
-                  </main>
-                </Panel>
-              </section>
-              <section className="treasure-panels">
-                <Panel title="Raridade">
-                  <main className="panel-select">
-                    {EQUIPMENT_RARITIES.map((option) => (
-                      <SelectButton
-                        key={option}
-                        isLarge={false}
-                        isLong={false}
-                        isSelected={equipmentRarity === option}
-                        text={option}
-                        onClick={() => setEquipmentRarity(option)}
-                      />
-                    ))}
-                  </main>
-                </Panel>
-              </section>
-            </>
-          )}
+          <section className="treasure-panels">
+            <Panel title="Raridade">
+              <main className="panel-select">
+                {EQUIPMENT_RARITIES.map((option) => (
+                  <SelectButton
+                    key={option}
+                    isLarge={false}
+                    isLong={false}
+                    isSelected={equipmentRarity === option}
+                    text={option}
+                    onClick={() => setEquipmentRarity(option)}
+                  />
+                ))}
+              </main>
+            </Panel>
+          </section>
         </>
-      ) : (
-        <>
+      )}
+      {hasResult && (
+        <Modal title={treasureType} clickToClose={true} onClose={() => setHasResult(!hasResult)} className="result-tables">
           {treasureType === treasureTypes.GOLD_PIECES && (
-            <section className="result-tables">
-              <ResultBox
-                headers={["Tesouro"]}
-                highlightTopRow={true}
-                values={[{ top: getGoldPiecesAmount(goldPiecesQuantity), bottom: "Peças de Ouro" }]}
-              />
-            </section>
+            <ResultBox
+              headers={["Tesouro"]}
+              highlightTopRow={true}
+              values={[{ top: getGoldPiecesAmount(goldPiecesQuantity), bottom: "Peças de Ouro" }]}
+            />
           )}
           {treasureType === treasureTypes.MATERIAL && (
-            <>
-              <section className="result-tables">
+            <div className="modal-materials-wrapper">
+              <div className="modal-materials">
                 <ResultBox
                   headers={["Preço", "Material"]}
                   subHeaders={["Comprar", "Vender"]}
@@ -193,8 +189,8 @@ function Treasure({ resultText, level }) {
                     bottom: getMaterialSellPrices()[index]() + " PO",
                   }))}
                 />
-              </section>
-              <section className="result-tables">
+              </div>
+              <div className="modal-materials">
                 <ResultBox
                   headers={["Preço / Tempo", "Forja de Item"]}
                   subHeaders={["Comprar / Dias", "Vender / Dias"]}
@@ -205,8 +201,8 @@ function Treasure({ resultText, level }) {
                     bottom: getItemCraftSellPrices()[index]() + " PO / " + ITEMS_CRAFT_TIMES[index]() + " d",
                   }))}
                 />
-              </section>
-              <section className="result-tables">
+              </div>
+              <div className="modal-materials">
                 <ResultBox
                   headers={["Preço", "Item Pronto"]}
                   subHeaders={["Comprar", "Vender"]}
@@ -217,28 +213,26 @@ function Treasure({ resultText, level }) {
                     bottom: getItemSellPrices()[index]() + " PO",
                   }))}
                 />
-              </section>
-            </>
+              </div>
+            </div>
           )}
           {treasureType === treasureTypes.EQUIPMENT && (
-            <section className="result-tables">
-              <ResultBox
-                headers={generatedItem.name}
-                highlightSubHeaders={true}
-                highlightTopRow={true}
-                values={generatedItem.afixes.map((afix) => ({
-                  label: null,
-                  top: afix.bonus > 0 ? "+" + afix.bonus : afix.bonus,
-                  bottom: afix.name,
-                }))}
-              />
-            </section>
+            <ResultBox
+              headers={generatedItem.name}
+              highlightSubHeaders={true}
+              highlightTopRow={true}
+              values={generatedItem.afixes.map((afix) => ({
+                label: null,
+                top: afix.bonus > 0 ? "+" + afix.bonus : afix.bonus,
+                bottom: afix.name,
+              }))}
+            />
           )}
-        </>
+        </Modal>
       )}
       <footer>
         <Button
-          text={!hasResult ? `Rodar ${treasureType || resultText}` : "Rodar Novo"}
+          text={`Rodar ${treasureType || resultText}`}
           onClick={() => (hasResult ? setHasResult(false) : setHasResult(true))}
           isDisabled={CheckFinalButtonDisable()}
         />
