@@ -732,3 +732,16 @@ export const creatureCustomSpecialMultipliers = [
   { display: "Forte (Extra 50%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.STRONG, weight: 3, multiplier: 1.5 },
   { display: "Extrema (Extra 100%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.EXTREME, weight: 4, multiplier: 2 },
 ];
+
+export const CREATURE_LEGENDARY_REACTIONS = {
+  LOW: 10,
+  MEDIUM: 20,
+  HIGH: 30,
+  EXTREME: 40,
+};
+export const creatureLegendaryReactions = [
+  { display: "Baixa (1 uso)", value: CREATURE_LEGENDARY_REACTIONS.LOW, weight: 1, number: 1 },
+  { display: "Média (2 usos)", value: CREATURE_LEGENDARY_REACTIONS.MEDIUM, weight: 2, number: 2 },
+  { display: "Alta (3 usos)", value: CREATURE_LEGENDARY_REACTIONS.HIGH, weight: 3, number: 3 },
+  { display: "Extrema (5 usos)", value: CREATURE_LEGENDARY_REACTIONS.EXTREME, weight: 4, number: 5 },
+];

@@ -102,6 +102,7 @@ function Home() {
       regeneration: { amount: null, breakDamage: null },
       customSpecials: [],
       actions: [],
+      multiactions: [],
       reactions: [],
       aura: null,
     };

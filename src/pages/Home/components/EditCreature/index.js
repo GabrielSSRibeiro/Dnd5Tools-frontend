@@ -88,6 +88,7 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
     regeneration: { amount: null, breakDamage: null },
     customSpecials: [],
     actions: [],
+    multiactions: [],
     reactions: [],
     aura: null,
   };
@@ -285,7 +286,7 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
                   <span>{step.name}</span>
                 </div>
                 <aside className="step-arrow">
-                  <div onClick={() => (activeProgessBarStep !== step.name ? setActiveProgessBarStep(step) : {})}></div>
+                  <div onClick={() => (activeProgessBarStep !== step.name ? setActiveProgessBarStep(step.name) : {})}></div>
                 </aside>
               </section>
             </div>
