@@ -24,7 +24,20 @@ export const getGoldPiecesAmount = (quantity) => {
   const lowerBound = getMaterialSellPrices(MATERIAL_PRICE_INFLATIONS[quantityIndex])[quantityIndex]();
   const higherBound = getMaterialBuyPrices(MATERIAL_PRICE_INFLATIONS[quantityIndex])[quantityIndex]();
 
-  const amount = Math.round(avg([lowerBound, higherBound]));
+  let amount = Math.round(avg([lowerBound, higherBound]));
+
+  switch (quantityIndex) {
+    case 0:
+    case 1:
+      amount = Math.round(amount / 2);
+      break;
+    case 3:
+      amount = amount * 4;
+      break;
+    default:
+      break;
+  }
+
   return amount;
 };
 
