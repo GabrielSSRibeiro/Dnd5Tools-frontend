@@ -7,6 +7,10 @@
   z-index: 1;
 }
 
+.NaviBar-container .menu {
+  font-size: 18px;
+}
+
 .NaviBar-container .menu-modal-body {
   width: 500px;
   height: fit-content;
@@ -61,13 +65,6 @@
 
 .NaviBar-container > section:first-of-type button {
   width: 50px;
-  text-decoration: underline;
-  color: var(--primaryPurple1);
-  font-family: var(--primaryFont);
-  font-weight: 400;
-  font-size: 18px;
-  background: none;
-  border: none;
 }
 .NaviBar-container > section:first-of-type button:hover {
   color: var(--primaryPurple3);

@@ -1,59 +1,115 @@
 import React, { useState } from "react";
 
-import { creatureLegendaryReactions } from "../../../../../../data/creatureConstants";
+import { creatureLegendaryReactions, CREATURE_ACTION_FREQUENCIES, creatureActionFrequencies } from "../../../../../../data/creatureConstants";
 
 import Button from "../../../../../../components/Button";
 import Select from "../../../../../../components/Select";
-import Modal from "../../../../../../components/Modal";
 import Info from "../../../../../../components/Info";
+import ModalManageAction from "./components/ModalManageAction";
+import ModalManageReaction from "./components/ModalManageReaction";
+import ModalManageMultiaction from "./components/ModalManageMultiaction";
+import ModalManageAura from "./components/ModalManageAura";
 
 import "./styles.css";
 
 function Actions({ creature, setCreature }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modal, setModal] = useState(null);
 
-  const ACTION_TYPES = { ACTIONS: "Ações", REACTIONS: "Reações", MULTIACTIONS: "Multiações", AURA: "Aura" };
+  const maxNumberOfActions = 6;
 
-  function HandleOpenModal(actionType) {
-    //modificar ACTION_TYPES para ter essa logica no obj
-    switch (actionType) {
-      case ACTION_TYPES.ACTIONS:
-        break;
-      case ACTION_TYPES.REACTIONS:
-        break;
-      case ACTION_TYPES.MULTIACTIONS:
-        break;
-      case ACTION_TYPES.AURA:
-        break;
-      default:
-        break;
+  function OpenModalManageAction(action) {
+    setModal(
+      <ModalManageAction action={action} weakSpots={creature.weakSpots} onClose={(tempAction) => HandleCloseModalManageAction(action, tempAction)} />
+    );
+  }
+  function HandleCloseModalManageAction(action, tempAction) {
+    if (tempAction) {
+      if (action) {
+        let actionIndex = creature.actions.findIndex((a) => a.name === action.name);
+        creature.actions.splice(actionIndex, 1, tempAction);
+      } else {
+        creature.actions.push(tempAction);
+      }
     }
 
-    setIsModalOpen(!isModalOpen);
+    setModal(null);
+  }
+  function DeleteAction(action) {
+    creature.actions = creature.actions.filter((a) => a.name !== action.name);
+    setCreature({ ...creature });
+  }
+
+  function OpenModalManageReaction(reaction) {
+    setModal(<ModalManageReaction reaction={reaction} onClose={(tempReaction) => HandleCloseModalManageReaction(reaction, tempReaction)} />);
+  }
+  function HandleCloseModalManageReaction(reaction, tempReaction) {
+    if (tempReaction) {
+      if (reaction) {
+        let reactionIndex = creature.reactions.findIndex((a) => a.name === reaction.name);
+        creature.reactions.splice(reactionIndex, 1, tempReaction);
+      } else {
+        creature.reactions.push(tempReaction);
+      }
+    }
+
+    setModal(null);
+  }
+
+  function OpenModalManageMultiaction(multiaction) {
+    setModal(<ModalManageMultiaction multiaction={multiaction} onClose={(newMultiaction) => HandleCloseModalManageMultiaction(newMultiaction)} />);
+  }
+  function HandleCloseModalManageMultiaction(newMultiaction) {
+    if (newMultiaction) {
+      creature.multiaction = newMultiaction;
+    }
+
+    setModal(null);
+  }
+
+  function OpenModalManageAura(aura) {
+    setModal(<ModalManageAura aura={aura} onClose={(newAura) => HandleCloseModalManageAura(newAura)} />);
+  }
+  function HandleCloseModalManageAura(newAura) {
+    if (newAura) {
+      creature.aura = newAura;
+    }
+
+    setModal(null);
   }
 
   return (
     <div className="Actions-container">
-      {isModalOpen && <Modal title="Teste" clickToClose={true} onClose={() => setIsModalOpen(!isModalOpen)} className=""></Modal>}
+      {modal}
       <div className="actions-row">
         <div className="actions">
           <div className="section-label">
-            <h2>{ACTION_TYPES.ACTIONS}</h2>
+            <h2>Ações</h2>
             <Info contents={[{ text: "Mínimo de 1 ação comum" }]} />
           </div>
-          <Button text="Adicionar" onClick={() => HandleOpenModal(ACTION_TYPES.ACTIONS)} />
+          <Button text="Adicionar" onClick={() => OpenModalManageAction()} isDisabled={creature.actions.length >= maxNumberOfActions} />
           <div className="actions-wrapper">
-            {creature.actions.map((a) => (
-              <div className="creature-action">{a}</div>
+            {creature.actions.map((action) => (
+              <div className="creature-action">
+                <span>{action.name}</span>
+                <div>
+                  <span>{creatureActionFrequencies.find((af) => af.value === action.frequency).display}</span>
+                  <button onClick={() => OpenModalManageAction(action)} className="edit-row">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button onClick={() => DeleteAction(action)} className="delete-row">
+                    Deletar
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
         </div>
         <div className="reactions">
-          <h2>{ACTION_TYPES.REACTIONS}</h2>
+          <h2>Reações</h2>
           <div className="reactions-options-wrapper">
-            <Button text="Adicionar" onClick={() => HandleOpenModal(ACTION_TYPES.REACTIONS)} />
+            <Button text="Adicionar" onClick={() => OpenModalManageReaction()} isDisabled={creature.reactions.length >= maxNumberOfActions} />
             <Select
-              label={"Reações Lendárias"}
+              label={"Reações Extras / Rodada"}
               extraWidth={75}
               value={creature}
               valuePropertyPath="movements.swimming"
@@ -69,20 +125,25 @@ function Actions({ creature, setCreature }) {
         </div>
       </div>
       <div className="actions-divider"></div>
+      {/* {creature.actions.length === 0 && creature.reactions.length === 0 && <div className="actions-divider"></div>} */}
       <div className="actions-row">
-        <div className="multiactions">
+        <div className="multiaction">
           <div className="section-label">
-            <h2>{ACTION_TYPES.MULTIACTIONS}</h2>
+            <h2>Multiação</h2>
             <Info contents={[{ text: "Seleciona e crie uma combinação de ações comuns" }]} />
           </div>
-          <Button text="Selecionar" onClick={() => HandleOpenModal(ACTION_TYPES.MULTIACTIONS)} isDisabled={true} />
+          <Button
+            text="Selecionar"
+            onClick={() => OpenModalManageMultiaction()}
+            isDisabled={!creature.actions.some((a) => a.frequency === CREATURE_ACTION_FREQUENCIES.COMMON)}
+          />
         </div>
         <div className="aura">
           <div className="section-label">
-            <h2>{ACTION_TYPES.AURA}</h2>
+            <h2>Aura</h2>
             <Info contents={[{ text: "Opcional" }, { text: "Efeito ativado quando uma criatura entra no alcance da aura" }]} />
           </div>
-          <Button text="Definir" onClick={() => HandleOpenModal(ACTION_TYPES.AURA)} />
+          <Button text="Definir" onClick={() => OpenModalManageAura()} />
         </div>
       </div>
     </div>

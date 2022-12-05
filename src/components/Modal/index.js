@@ -4,14 +4,14 @@ import Panel from "../Panel";
 
 import "./styles.css";
 
-function Modal({ title, info, clickToClose = false, onClose = () => {}, className = "", children }) {
+function Modal({ title, info, onClickToClose, className = "", children }) {
   function HandleClose() {
-    onClose();
+    onClickToClose();
   }
 
   return (
     <div className="Modal-container">
-      <div className="screen-block" onClick={clickToClose ? HandleClose : () => {}}></div>
+      <div className="screen-block" onClick={onClickToClose ? HandleClose : () => {}}></div>
       <Panel title={title} info={info} className={`modal-body ${className}`}>
         {children}
       </Panel>

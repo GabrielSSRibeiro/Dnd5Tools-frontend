@@ -101,8 +101,12 @@ function Home() {
       legendaryResistences: null,
       regeneration: { amount: null, breakDamage: null },
       customSpecials: [],
-      actions: [],
-      multiactions: [],
+      actions: [
+        // {
+        //   frequency: 10,
+        // },
+      ],
+      multiaction: null,
       reactions: [],
       aura: null,
     };

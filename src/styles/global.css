@@ -105,6 +105,16 @@ button {
   cursor: pointer;
 }
 
+.button-simple {
+  text-decoration: underline;
+  color: var(--primaryPurple1);
+  font-family: var(--primaryFont);
+  line-height: 1;
+  font-weight: 400;
+  background: none;
+  border: none;
+}
+
 .element-disabled {
   opacity: 0.6;
   pointer-events: none;

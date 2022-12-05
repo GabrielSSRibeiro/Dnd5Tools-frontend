@@ -80,7 +80,11 @@ function Select({
       {isOpen && (
         <ul
           style={{
-            bottom: dropUp ? `calc(${selectOptions.length <= 4 ? selectOptions.length + 1 : 6}00% + 5px)` : -5,
+            bottom: dropUp
+              ? `calc(${selectOptions.length <= 4 ? selectOptions.length + 1 : 6}00% + ${
+                  (label ? (selectOptions.length <= 4 ? selectOptions.length + 1 : 6) * -23 : 0) + 5
+                }px)`
+              : -5,
             width: selectWidth + extraWidth,
             height: height * selectOptions.length + 2,
             maxHeight: height * optionsAtATime + 2,

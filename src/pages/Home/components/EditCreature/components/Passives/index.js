@@ -25,6 +25,7 @@ function Passives({ creature, setCreature }) {
   const [hasCustomSpecials, setHasCustomSpecials] = useState(creature.customSpecials.some((cs) => cs.description));
 
   const numberOfCustomSpecials = 3;
+  const customSpecialsArray = utils.createArrayFromInt(numberOfCustomSpecials);
 
   function setCreatureLanguages(value) {
     let language = creature.languages.find((l) => l === value);
@@ -58,10 +59,8 @@ function Passives({ creature, setCreature }) {
   }
 
   function HandleToggleCustomSpecials() {
-    if (hasCustomSpecials) {
-      creature.customSpecials = utils.createArrayFromInt(numberOfCustomSpecials).map((cs) => ({ description: null, multiplier: null }));
-      setCreature(creature);
-    }
+    creature.customSpecials = customSpecialsArray.map((cs) => ({ description: null, multiplier: null }));
+    setCreature(creature);
 
     setHasCustomSpecials(!hasCustomSpecials);
   }
@@ -223,7 +222,7 @@ function Passives({ creature, setCreature }) {
             isSelected={hasCustomSpecials}
           />
           {hasCustomSpecials &&
-            utils.createArrayFromInt(numberOfCustomSpecials).map((os, index) => (
+            customSpecialsArray.map((os, index) => (
               <div className="specials-row" key={index}>
                 <TextInput
                   label={`Descrição`}

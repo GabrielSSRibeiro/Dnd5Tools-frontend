@@ -10,14 +10,7 @@
 }
 
 .EditCreature-container .end-editing {
-  text-decoration: underline;
   color: var(--white);
-  font-family: var(--primaryFont);
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1;
-  background: none;
-  border: none;
   z-index: 1;
 
   position: absolute;

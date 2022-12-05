@@ -646,6 +646,19 @@ export const conditions = [
   { display: "Exaustão", value: CONDITIONS.EXHAUSTION, weight: 11 },
 ];
 
+export const CONDITION_DURATIONS = {
+  SHORT: 10,
+  MEDIUM: 20,
+  LONG: 30,
+  EXTREME: 40,
+};
+export const conditionDurations = [
+  { display: "Baixa (1 turno)", value: CONDITION_DURATIONS.SHORT, weight: 1 },
+  { display: "Média (1 minuto)", value: CONDITION_DURATIONS.MEDIUM, weight: 2 },
+  { display: "Alta (1 hora)", value: CONDITION_DURATIONS.LONG, weight: 3 },
+  { display: "Extrema (1 dia)", value: CONDITION_DURATIONS.EXTREME, weight: 4 },
+];
+
 export const LANGUAGES = {
   COMMON: 10,
   UNDERCOMMON: 20,
@@ -721,15 +734,15 @@ export const creatureRegenerations = [
 ];
 
 export const CREATURE_CUSTOM_SPECIAL_MULTIPLIERS = {
-  WEAK: 10,
+  SMALL: 10,
   MEDIUM: 20,
-  STRONG: 30,
+  LARGE: 30,
   EXTREME: 40,
 };
 export const creatureCustomSpecialMultipliers = [
-  { display: "Fraca (Extra 10%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.WEAK, weight: 1, multiplier: 1.1 },
+  { display: "Pequeno (Extra 10%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.SMALL, weight: 1, multiplier: 1.1 },
   { display: "Média (Extra 20%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.MEDIUM, weight: 2, multiplier: 1.2 },
-  { display: "Forte (Extra 50%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.STRONG, weight: 3, multiplier: 1.5 },
+  { display: "Grande (Extra 50%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.LARGE, weight: 3, multiplier: 1.5 },
   { display: "Extrema (Extra 100%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.EXTREME, weight: 4, multiplier: 2 },
 ];
 
@@ -740,8 +753,96 @@ export const CREATURE_LEGENDARY_REACTIONS = {
   EXTREME: 40,
 };
 export const creatureLegendaryReactions = [
-  { display: "Baixa (1 uso)", value: CREATURE_LEGENDARY_REACTIONS.LOW, weight: 1, number: 1 },
+  { display: "Pouca (1 uso)", value: CREATURE_LEGENDARY_REACTIONS.LOW, weight: 1, number: 1 },
   { display: "Média (2 usos)", value: CREATURE_LEGENDARY_REACTIONS.MEDIUM, weight: 2, number: 2 },
-  { display: "Alta (3 usos)", value: CREATURE_LEGENDARY_REACTIONS.HIGH, weight: 3, number: 3 },
+  { display: "Muita (3 usos)", value: CREATURE_LEGENDARY_REACTIONS.HIGH, weight: 3, number: 3 },
   { display: "Extrema (5 usos)", value: CREATURE_LEGENDARY_REACTIONS.EXTREME, weight: 4, number: 5 },
+];
+
+export const CREATURE_ACTION_TYPES = {
+  ATTACK: 10,
+  SAVING_THROW: 20,
+  HEALING: 30,
+  OTHER: 40,
+};
+export const creatureActionTypes = [
+  { display: "Ataque", value: CREATURE_ACTION_TYPES.ATTACK, weight: 0 },
+  { display: "Teste de Resistência", value: CREATURE_ACTION_TYPES.SAVING_THROW, weight: 0 },
+  { display: "Cura", value: CREATURE_ACTION_TYPES.HEALING, weight: 0 },
+  { display: "Outro", value: CREATURE_ACTION_TYPES.OTHER, weight: 0 },
+];
+
+export const CREATURE_ACTION_ATTACK_REACHES = {
+  MELEE_CLOSE: 10,
+  MELEE_EXTRA: 20,
+  MELEE_FAR: 30,
+  RANGED_CLOSE: 40,
+  RANGED_EXTRA: 50,
+  RANGED_FAR: 60,
+};
+export const creatureActionAttackReaches = [
+  { display: "Corpo a Corpo (1,5m)", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE, weight: 1 },
+  { display: "Corpo a Corpo (3m)", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_EXTRA, weight: 2 },
+  { display: "Corpo a Corpo (4,5m)", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_FAR, weight: 3 },
+  { display: "Distância (9m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_CLOSE, weight: 4 },
+  { display: "Distância (18m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_EXTRA, weight: 5 },
+  { display: "Distância (36m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_FAR, weight: 6 },
+];
+
+export const CREATURE_ACTION_SAVING_THROW_REACHES = {
+  LINE_CLOSE: 10,
+  LINE_FAR: 20,
+  CONE_SHORT: 30,
+  CONE_LARGE: 40,
+  SPHERE_SMALL: 50,
+  SHEPRE_BIG: 60,
+};
+export const creatureActionSavingThrowReaches = [
+  { display: "Linha (9m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_CLOSE, weight: 1 },
+  { display: "Linha (18m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_FAR, weight: 2 },
+  { display: "Cone (9m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_SHORT, weight: 3 },
+  { display: "Cone (9m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_LARGE, weight: 4 },
+  { display: "Esfera (3m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.SPHERE_SMALL, weight: 5 },
+  { display: "Esfera (6m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.SHEPRE_BIG, weight: 6 },
+];
+
+export const creatureActionHealingReaches = [...creatureActionAttackReaches, ...creatureActionSavingThrowReaches];
+
+export const CREATURE_ACTION_FREQUENCIES = {
+  COMMON: 10,
+  UNCOMMON: 20,
+  RARE: 30,
+  VERY_RARE: 40,
+};
+export const creatureActionFrequencies = [
+  { display: "Comum", value: CREATURE_ACTION_FREQUENCIES.COMMON, weight: 1, cooldown: 0 },
+  { display: "Incomum", value: CREATURE_ACTION_FREQUENCIES.UNCOMMON, weight: 2, cooldown: 1 },
+  { display: "Raro", value: CREATURE_ACTION_FREQUENCIES.RARE, weight: 3, cooldown: 2 },
+  { display: "Muito Raro", value: CREATURE_ACTION_FREQUENCIES.VERY_RARE, weight: 4, cooldown: 3 },
+];
+
+export const DAMAGE_INTENSITIES = {
+  LOW: 10,
+  MEDIUM: 20,
+  HIGH: 30,
+  EXTREME: 40,
+};
+export const damageIntensities = [
+  { display: "Baixa", value: DAMAGE_INTENSITIES.LOW, weight: 1 },
+  { display: "Média", value: DAMAGE_INTENSITIES.MEDIUM, weight: 2 },
+  { display: "Alta", value: DAMAGE_INTENSITIES.HIGH, weight: 3 },
+  { display: "Extrema", value: DAMAGE_INTENSITIES.EXTREME, weight: 4 },
+];
+
+export const DIFFICULTY_CLASSES = {
+  LOW: 10,
+  MEDIUM: 20,
+  HIGH: 30,
+  EXTREME: 40,
+};
+export const difficultyClasses = [
+  { display: "Baixa", value: DIFFICULTY_CLASSES.LOW, weight: 1 },
+  { display: "Média", value: DIFFICULTY_CLASSES.MEDIUM, weight: 2 },
+  { display: "Alta", value: DIFFICULTY_CLASSES.HIGH, weight: 3 },
+  { display: "Extrema", value: DIFFICULTY_CLASSES.EXTREME, weight: 4 },
 ];

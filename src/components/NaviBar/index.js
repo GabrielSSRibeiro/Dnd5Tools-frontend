@@ -42,11 +42,19 @@ function NaviBar({
   const { Logout } = useAuth();
   const history = useHistory();
 
-  const [IsMenuOpen, setIsMenuOpen] = useState(false);
+  const [modal, setModal] = useState(null);
 
   async function HandleLogout() {
     await Logout();
     history.push("/login");
+  }
+
+  async function OpenModalMenu() {
+    setModal(
+      <Modal title="Menu" onClickToClose={() => setModal(null)} className="menu-modal-body">
+        <Button text="Sair" onClick={HandleLogout} />
+      </Modal>
+    );
   }
 
   function HandleCombatTabClick(combatNumber) {
@@ -59,18 +67,16 @@ function NaviBar({
 
   return (
     <div className="NaviBar-container">
-      {IsMenuOpen && (
-        <Modal title="Menu" clickToClose={true} onClose={() => setIsMenuOpen(false)} className="menu-modal-body">
-          <Button text="Sair" onClick={HandleLogout} />
-        </Modal>
-      )}
+      {modal}
       <section>
         <div>
           <h3>A</h3>
           <h3>SCENDANCE</h3>
           <h4>Ferramentas D&amp;D 5</h4>
         </div>
-        <button onClick={() => setIsMenuOpen(true)}>Menu</button>
+        <button className="button-simple menu" onClick={OpenModalMenu}>
+          Menu
+        </button>
       </section>
       {!isEditCreatureOpen && (
         <section>

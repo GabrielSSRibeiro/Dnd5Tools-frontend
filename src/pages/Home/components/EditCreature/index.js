@@ -12,6 +12,7 @@ import {
   DAMAGES_EFFECTIVENESS,
   DAMAGE_TYPES,
   LANGUAGES,
+  CREATURE_ACTION_FREQUENCIES,
 } from "../../../../data/creatureConstants";
 
 import Definition from "./components/Definition";
@@ -88,7 +89,7 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
     regeneration: { amount: null, breakDamage: null },
     customSpecials: [],
     actions: [],
-    multiactions: [],
+    multiaction: null,
     reactions: [],
     aura: null,
   };
@@ -144,7 +145,7 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
     progessBarSteps.push({ name: "Açoes", isValid: IsActionsStepValid() });
 
     function IsTreasureRewardStepValid() {
-      let areActionsValid = creature.actions.length > 0;
+      let areActionsValid = creature.actions.some((a) => a.frequency === CREATURE_ACTION_FREQUENCIES.COMMON);
 
       return AreAllPreviousStepsValid() && areActionsValid;
     }
@@ -217,7 +218,7 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
 
   return (
     <div className={`EditCreature-container ${!isFirstStep ? "main-edit-process" : ""}`}>
-      <button className="end-editing" onClick={HandleCancel}>
+      <button className="button-simple end-editing" onClick={HandleCancel}>
         Cancelar
       </button>
       <div className={`first-step-wrapper ${!isFirstStep ? "edit-process-basic" : ""}`}>

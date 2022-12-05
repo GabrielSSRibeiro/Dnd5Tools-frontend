@@ -12,7 +12,7 @@ export const DEFAULT_MATERIAL_PRICE_INFLATIONS = "Normal";
 export const MATERIAL_PRICE_INFLATIONS = ["Barato", DEFAULT_MATERIAL_PRICE_INFLATIONS, "Caro", "Abusivo"];
 
 export const EQUIPMENT_TYPES = ["Arma", "Armadura", "Acessório", "Poçao"];
-export const EQUIPMENT_RARITIES = ["Incomum", "Raro", "Muito Raro", "Lendário"];
+export const EQUIPMENT_RARITIES = ["Comum", "Incomum", "Raro", "Muito Raro"];
 
 export const PRIMARY_AFIX_PROB = 8 / 10;
 export const SECONDARY_AFIX_PROB = utils.TrimDecimalPlaces((1 - PRIMARY_AFIX_PROB) / 2);

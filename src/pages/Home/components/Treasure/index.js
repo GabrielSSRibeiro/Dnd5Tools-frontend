@@ -150,7 +150,14 @@ function Treasure({ resultText, level }) {
             </Panel>
           </section>
           <section className="treasure-panels">
-            <Panel title="Raridade">
+            <Panel
+              title="Raridade"
+              info={[
+                {
+                  text: "lendários só podem vir de criaturas e tem afixos além da habilidade única infundida",
+                },
+              ]}
+            >
               <main className="panel-select">
                 {EQUIPMENT_RARITIES.map((option) => (
                   <SelectButton
@@ -168,7 +175,7 @@ function Treasure({ resultText, level }) {
         </>
       )}
       {hasResult && (
-        <Modal title={treasureType} clickToClose={true} onClose={() => setHasResult(!hasResult)} className="result-tables">
+        <Modal title={treasureType} onClickToClose={() => setHasResult(!hasResult)} className="result-tables">
           {treasureType === treasureTypes.GOLD_PIECES && (
             <ResultBox
               headers={["Tesouro"]}

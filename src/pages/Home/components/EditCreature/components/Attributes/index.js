@@ -20,9 +20,7 @@ function Attributes({ creature, setCreature }) {
   const numberOfWeakSpots = 4;
 
   function HandleToggleWeakSpots() {
-    if (hasWeakSpots) {
-      creature.weakSpots = [];
-    }
+    creature.weakSpots = [];
 
     setHasWeakSpots(!hasWeakSpots);
   }
@@ -152,7 +150,12 @@ function Attributes({ creature, setCreature }) {
           optionValue={(o) => o.value}
         />
       </div>
-      <CheckInput label="Pontos Fracos" info={[{ text: "Pontos Fracos" }]} onClick={HandleToggleWeakSpots} isSelected={hasWeakSpots} />
+      <CheckInput
+        label="Pontos Fracos"
+        info={[{ text: "Recomendado apenas para criaturas grandes ou maiores" }]}
+        onClick={HandleToggleWeakSpots}
+        isSelected={hasWeakSpots}
+      />
       {hasWeakSpots && (
         <div className="weak-spots">
           {Array.from(Array(numberOfWeakSpots)).map((ws, index) => (
