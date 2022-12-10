@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 
-import {
-  creatureLegendaryReactions,
-  CREATURE_ACTION_FREQUENCIES,
-  creatureActionFrequencies,
-  creatureAuraReaches,
-} from "../../../../../../data/creatureConstants";
+import { creatureReactions, creatureActionFrequencies, creatureAuraReaches } from "../../../../../../data/creatureConstants";
 
 import Button from "../../../../../../components/Button";
 import Select from "../../../../../../components/Select";
 import Info from "../../../../../../components/Info";
 import ModalManageAction from "./components/ModalManageAction";
 import ModalManageReaction from "./components/ModalManageReaction";
-import ModalManageMultiaction from "./components/ModalManageMultiaction";
 import ModalManageAura from "./components/ModalManageAura";
 
 import "./styles.css";
@@ -64,23 +58,6 @@ function Actions({ creature, setCreature }) {
     setCreature({ ...creature });
   }
 
-  function OpenModalManageMultiaction() {
-    setModal(
-      <ModalManageMultiaction multiaction={creature.multiaction} onClose={(newMultiaction) => HandleCloseModalManageMultiaction(newMultiaction)} />
-    );
-  }
-  function HandleCloseModalManageMultiaction(newMultiaction) {
-    if (newMultiaction) {
-      creature.multiaction = newMultiaction;
-    }
-
-    setModal(null);
-  }
-  function DeleteMultiAction() {
-    creature.multiaction = null;
-    setCreature({ ...creature });
-  }
-
   function OpenModalManageAura() {
     setModal(<ModalManageAura aura={creature.aura} onClose={(newAura) => HandleCloseModalManageAura(newAura)} />);
   }
@@ -128,13 +105,12 @@ function Actions({ creature, setCreature }) {
           <div className="reactions-options-wrapper">
             <Button text="Adicionar" onClick={() => OpenModalManageReaction()} isDisabled={creature.reactions.length >= maxNumberOfActions} />
             <Select
-              label={"Reações Extras / Rodada"}
+              label={"Reações / Rodada"}
               extraWidth={75}
               value={creature}
-              valuePropertyPath="movements.swimming"
+              valuePropertyPath="reactionsPerRound"
               onSelect={setCreature}
-              nothingSelected="Nenhuma"
-              options={creatureLegendaryReactions}
+              options={creatureReactions}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               className="reaction-number"
@@ -160,56 +136,28 @@ function Actions({ creature, setCreature }) {
         </div>
       </div>
       <div className="actions-divider"></div>
-      {/* {creature.actions.length === 0 && creature.reactions.length === 0 && <div className="actions-divider"></div>} */}
-      <div className="actions-row">
-        <div className="multiaction">
-          <div className="section-label">
-            <h2>Multiação</h2>
-            <Info contents={[{ text: "Seleciona e crie uma combinação de ações comuns" }]} />
-          </div>
-          <Button
-            text="Selecionar"
-            onClick={() => OpenModalManageMultiaction()}
-            isDisabled={!creature.actions.some((a) => a.frequency === CREATURE_ACTION_FREQUENCIES.COMMON)}
-          />
-          {creature.multiaction && (
+      <div className="aura">
+        <div className="section-label">
+          <h2>Aura</h2>
+          <Info contents={[{ text: "Opcional" }, { text: "Efeito ativado quando uma criatura começa sua turno dentro do alcance da aura" }]} />
+        </div>
+        <Button text="Definir" onClick={() => OpenModalManageAura()} isDisabled={creature.aura} />
+        {creature.aura && (
+          <div className="actions-wrapper">
             <div className="creature-action">
-              <span>{creature.multiaction.name}</span>
+              <span>{creature.aura.name}</span>
               <div>
-                <span>aaa</span>
-                <button onClick={() => OpenModalManageMultiaction()} className="edit-row">
+                <span>{creatureAuraReaches.find((ar) => ar.value === creature.aura.reach).display}</span>
+                <button onClick={() => OpenModalManageAura()} className="edit-row">
                   <i class="fas fa-pencil-alt"></i>
                 </button>
-                <button onClick={() => DeleteMultiAction()} className="delete-row">
+                <button onClick={() => DeleteAura()} className="delete-row">
                   Deletar
                 </button>
               </div>
             </div>
-          )}
-        </div>
-        <div className="aura">
-          <div className="section-label">
-            <h2>Aura</h2>
-            <Info contents={[{ text: "Opcional" }, { text: "Efeito ativado quando uma criatura começa sua turno dentro do alcance da aura" }]} />
           </div>
-          <Button text="Definir" onClick={() => OpenModalManageAura()} isDisabled={creature.aura} />
-          {creature.aura && (
-            <div className="actions-wrapper">
-              <div className="creature-action">
-                <span>{creature.aura.name}</span>
-                <div>
-                  <span>{creatureAuraReaches.find((ar) => ar.value === creature.aura.reach).display}</span>
-                  <button onClick={() => OpenModalManageAura()} className="edit-row">
-                    <i class="fas fa-pencil-alt"></i>
-                  </button>
-                  <button onClick={() => DeleteAura()} className="delete-row">
-                    Deletar
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </div>
   );

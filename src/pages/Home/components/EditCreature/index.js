@@ -89,8 +89,8 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
     regeneration: { amount: null, breakDamage: null },
     customSpecials: [],
     actions: [],
-    multiaction: null,
     reactions: [],
+    reactionsPerRound: 1,
     aura: null,
   };
   const [creature, setCreature] = useState(creatureToEdit ?? newCreature);

@@ -40,8 +40,16 @@ function ModalManageAction({ action, weakSpots, onClose }) {
       difficultyClass: null,
       associatedWeakSpot: null,
       isSpell: false,
+      repetitions: 1,
     }
   );
+
+  const actionRepetitions = [
+    { display: "Normal (x1)", multiplier: 1 },
+    { display: "Multiação comum (x2)", multiplier: 2 },
+    { display: "Multiação extra (x3)", multiplier: 3 },
+    { display: "Multiação extrema (x4)", multiplier: 4 },
+  ];
 
   function HandleSelectType(updatedValue) {
     updatedValue.reach = null;
@@ -141,6 +149,17 @@ function ModalManageAction({ action, weakSpots, onClose }) {
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
                 />
+                <Select
+                  label={"Repetições"}
+                  extraWidth={100}
+                  isLarge={true}
+                  value={tempAction}
+                  valuePropertyPath="repetitions"
+                  onSelect={setTempAction}
+                  options={actionRepetitions}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.multiplier}
+                />
               </section>
             </aside>
           </section>
@@ -183,7 +202,7 @@ function ModalManageAction({ action, weakSpots, onClose }) {
               optionValue={(o) => o.value}
             />
             <Select
-              label={"Condição "}
+              label={"Condição"}
               extraWidth={100}
               isLarge={true}
               nothingSelected="Nenhuma"

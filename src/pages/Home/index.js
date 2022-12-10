@@ -107,12 +107,14 @@ function Home() {
       regeneration: { amount: null, breakDamage: null },
       customSpecials: [],
       actions: [
-        // {
-        //   frequency: 10,
-        // },
+        {
+          name: "Ataque Comum",
+          frequency: 10,
+          reach: 10,
+        },
       ],
-      multiaction: null,
       reactions: [],
+      reactionsPerRound: 10,
       aura: null,
     };
     for (let index = 1; index <= 5; index++) {

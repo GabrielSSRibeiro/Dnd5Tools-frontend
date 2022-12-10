@@ -69,7 +69,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
   }
 
   return (
-    <div className="ModalManageAction-container">
+    <div className="ModalManageAura-container">
       <Modal title="Aura" className="modal-action">
         <div className="new-action-wrapper">
           <section className="action-row">
