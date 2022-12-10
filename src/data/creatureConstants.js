@@ -846,3 +846,16 @@ export const difficultyClasses = [
   { display: "Alta", value: DIFFICULTY_CLASSES.HIGH, weight: 3 },
   { display: "Extrema", value: DIFFICULTY_CLASSES.EXTREME, weight: 4 },
 ];
+
+export const CREATURE_REACTION_TRIGGERS = {
+  ON_DAMAGE_TAKEN: 10,
+  ON_ALLY_DEATH: 20,
+  ON_END_OF_PLAYER_TURN: 30,
+  OTHER: 40,
+};
+export const creatureReactionTriggers = [
+  { display: "Ao sofrer dano", value: CREATURE_REACTION_TRIGGERS.ON_DAMAGE_TAKEN, weight: 1 },
+  { display: "Quando um aliado morre", value: CREATURE_REACTION_TRIGGERS.ON_ALLY_DEATH, weight: 1 },
+  { display: "Ao final do turno de jogador", value: CREATURE_REACTION_TRIGGERS.ON_END_OF_PLAYER_TURN, weight: 3 },
+  { display: "Outro", value: CREATURE_REACTION_TRIGGERS.OTHER, weight: 0 },
+];

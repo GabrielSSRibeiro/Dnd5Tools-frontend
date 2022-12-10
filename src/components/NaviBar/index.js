@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../../contexts/Auth";
 import { useHistory } from "react-router-dom";
 
-import { MAX_COMBATS } from "../../data/combatConstants";
+// import { MAX_COMBATS } from "../../data/combatConstants";
 
 import SelectButton from "../SelectButton";
 import Modal from "../../components/Modal";
@@ -13,7 +13,7 @@ import Bestiary from "./components/Bestiary";
 import "./styles.css";
 
 function NaviBar({
-  combats,
+  // combats,
   selectedCharacters,
   setSelectedCharacters,
   selectedCreatures,
@@ -57,13 +57,13 @@ function NaviBar({
     );
   }
 
-  function HandleCombatTabClick(combatNumber) {
-    if (openTab !== combatNumber) {
-      setOpenTab(combatNumber);
-    } else {
-      HandleEndCombat();
-    }
-  }
+  // function HandleCombatTabClick(combatNumber) {
+  //   if (openTab !== combatNumber) {
+  //     setOpenTab(combatNumber);
+  //   } else {
+  //     HandleEndCombat();
+  //   }
+  // }
 
   return (
     <div className="NaviBar-container">
@@ -99,7 +99,14 @@ function NaviBar({
             text={tabOptions.SKILL_CHECK}
             onClick={() => setOpenTab(tabOptions.SKILL_CHECK)}
           />
-          <div className="combat-section">
+          <SelectButton
+            isLarge={true}
+            isSelected={openTab === tabOptions.GENERAL}
+            isLong={true}
+            text={tabOptions.GENERAL}
+            onClick={() => setOpenTab(tabOptions.GENERAL)}
+          />
+          {/* <div className="combat-section">
             <SelectButton
               isLarge={true}
               isSelected={openTab === tabOptions.COMBAT}
@@ -121,7 +128,7 @@ function NaviBar({
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
           <SelectButton
             isLarge={true}
             isSelected={openTab === tabOptions.TREASURE}

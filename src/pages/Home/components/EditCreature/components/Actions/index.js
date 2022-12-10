@@ -54,6 +54,10 @@ function Actions({ creature, setCreature }) {
 
     setModal(null);
   }
+  function DeleteReaction(reaction) {
+    creature.reactions = creature.reactions.filter((r) => r.name !== reaction.name);
+    setCreature({ ...creature });
+  }
 
   function OpenModalManageMultiaction(multiaction) {
     setModal(<ModalManageMultiaction multiaction={multiaction} onClose={(newMultiaction) => HandleCloseModalManageMultiaction(newMultiaction)} />);
@@ -120,6 +124,22 @@ function Actions({ creature, setCreature }) {
               optionValue={(o) => o.value}
               className="reaction-number"
             />
+          </div>
+          <div className="actions-wrapper">
+            {creature.reactions.map((reaction) => (
+              <div className="creature-action">
+                <span>{reaction.name}</span>
+                <div>
+                  <span>{creatureActionFrequencies.find((af) => af.value === reaction.frequency).display}</span>
+                  <button onClick={() => OpenModalManageReaction(reaction)} className="edit-row">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button onClick={() => DeleteReaction(reaction)} className="delete-row">
+                    Deletar
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
           <div className="reactions-wrapper"></div>
         </div>

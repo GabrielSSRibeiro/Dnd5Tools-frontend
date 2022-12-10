@@ -4,8 +4,8 @@ import * as utils from "../../utils";
 
 import NaviBar from "../../components/NaviBar";
 import SkillCheck from "./components/SkillCheck";
-import CombatSetup from "./components/CombatSetup";
-import Combat from "./components/Combat";
+// import CombatSetup from "./components/CombatSetup";
+// import Combat from "./components/Combat";
 import Treasure from "./components/Treasure";
 import EditCreature from "./components/EditCreature";
 
@@ -13,9 +13,14 @@ import background from "../../assets/background.png";
 import "./styles.css";
 
 function Home() {
-  const MAIN_TABS = { SKILL_CHECK: "Teste", COMBAT: "Combate", TREASURE: "Tesouro" };
+  const MAIN_TABS = {
+    SKILL_CHECK: "Teste",
+    GENERAL: "Início",
+    // COMBAT: "Combate",
+    TREASURE: "Tesouro",
+  };
 
-  const [openTab, setOpenTab] = useState(MAIN_TABS.COMBAT);
+  const [openTab, setOpenTab] = useState(MAIN_TABS.GENERAL);
   const [isPartyOpen, setIsPartyOpen] = useState(false);
   const [isSelectingParty, setIsSelectingParty] = useState(false);
   const [isBestiaryOpen, setIsBestiaryOpen] = useState(false);
@@ -120,29 +125,29 @@ function Home() {
     setCreatures(savedCreatures);
   }, [setCreatures]);
 
-  function HandleSelectFromParty() {
-    if (groups.length === 1) {
-      setSelectedCharacters(...groups);
-    } else {
-      setIsSelectingParty(true);
-      setIsPartyOpen(true);
-    }
-    setIsBestiaryOpen(false);
-  }
+  // function HandleSelectFromParty() {
+  //   if (groups.length === 1) {
+  //     setSelectedCharacters(...groups);
+  //   } else {
+  //     setIsSelectingParty(true);
+  //     setIsPartyOpen(true);
+  //   }
+  //   setIsBestiaryOpen(false);
+  // }
 
-  function HandleSelectFromBestiary() {
-    setIsSelectingBestiary(true);
-    setIsBestiaryOpen(true);
-    setIsPartyOpen(false);
-  }
+  // function HandleSelectFromBestiary() {
+  //   setIsSelectingBestiary(true);
+  //   setIsBestiaryOpen(true);
+  //   setIsPartyOpen(false);
+  // }
 
-  function HandleGenerateCombat() {
-    const newCombatTab = combats.length + 1;
-    setCombats([...combats, { selectedCharacters, selectedCreatures }]);
-    setOpenTab(newCombatTab);
-    setSelectedCharacters([]);
-    setSelectedCreatures([]);
-  }
+  // function HandleGenerateCombat() {
+  //   const newCombatTab = combats.length + 1;
+  //   setCombats([...combats, { selectedCharacters, selectedCreatures }]);
+  //   setOpenTab(newCombatTab);
+  //   setSelectedCharacters([]);
+  //   setSelectedCreatures([]);
+  // }
 
   function HandleEndCombat() {
     const NewCombats = combats.filter((combat, index) => openTab !== index + 1);
@@ -187,8 +192,10 @@ function Home() {
         <div className={`section-wrapper ${openTab !== MAIN_TABS.SKILL_CHECK ? "hidden" : ""}`}>
           <SkillCheck resultText={openTab} level={level} />
         </div>
-
-        <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
+        <div className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
+          <span></span>
+        </div>
+        {/* <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
           <CombatSetup
             selectedCharacters={selectedCharacters}
             selectedCreatures={selectedCreatures}
@@ -204,7 +211,7 @@ function Home() {
           <div key={index} className={`section-wrapper ${openTab !== index + 1 ? "hidden" : ""}`}>
             <Combat combat={combat} />
           </div>
-        ))}
+        ))} */}
 
         <div className={`section-wrapper ${openTab !== MAIN_TABS.TREASURE ? "hidden" : ""}`}>
           <Treasure resultText={openTab} level={level} />

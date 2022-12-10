@@ -235,7 +235,7 @@ function ModalManageAction({ action, weakSpots, onClose }) {
                 <button className="button-simple" onClick={HandleCancel}>
                   Cancelar
                 </button>
-                <Button text="Adicionar" onClick={HandleConfirm} isDisabled={!tempAction.name || !tempAction.reach} />
+                <Button text="Salvar" onClick={HandleConfirm} isDisabled={!tempAction.name || !tempAction.reach} />
               </aside>
             </div>
           </footer>
