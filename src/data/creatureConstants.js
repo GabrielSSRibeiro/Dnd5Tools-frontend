@@ -859,3 +859,16 @@ export const creatureReactionTriggers = [
   { display: "Ao final do turno de jogador", value: CREATURE_REACTION_TRIGGERS.ON_END_OF_PLAYER_TURN, weight: 3 },
   { display: "Outro", value: CREATURE_REACTION_TRIGGERS.OTHER, weight: 0 },
 ];
+
+export const CREATURE_AURA_REACHES = {
+  SHORT: 10,
+  MEDIUM: 20,
+  LONG: 30,
+  EXTREME: 40,
+};
+export const creatureAuraReaches = [
+  { display: "Curto (1,5m)", value: CREATURE_AURA_REACHES.SHORT, weight: 1 },
+  { display: "Médio (3m)", value: CREATURE_AURA_REACHES.MEDIUM, weight: 2 },
+  { display: "Alto (4,5m)", value: CREATURE_AURA_REACHES.LONG, weight: 3 },
+  { display: "Extremo (6m)", value: CREATURE_AURA_REACHES.EXTREME, weight: 4 },
+];

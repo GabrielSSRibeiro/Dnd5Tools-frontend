@@ -1,80 +1,210 @@
 import React, { useState } from "react";
 
+import {
+  CREATURE_ACTION_TYPES,
+  creatureActionTypes,
+  CREATURE_AURA_REACHES,
+  creatureAuraReaches,
+  damageIntensities,
+  damageTypes,
+  conditions,
+  conditionDurations,
+  difficultyClasses,
+} from "../../../../../../../../data/creatureConstants";
+
 import Button from "../../../../../../../../components/Button";
 import TextInput from "../../../../../../../../components/TextInput";
-import CheckInput from "../../../../../../../../components/CheckInput";
 import Select from "../../../../../../../../components/Select";
 import Modal from "../../../../../../../../components/Modal";
 
 import "./styles.css";
 
-function ModalManageAura({ aura, onClose }) {
-  const [tempAura, setTempAura] = useState(
+function ModalManageAura({ aura, weakSpots, onClose }) {
+  const [tempAction, setTempAction] = useState(
     aura ?? {
       name: null,
       description: null,
-      type: null,
+      type: CREATURE_ACTION_TYPES.SAVING_THROW,
       typeDescription: null,
-      reach: null,
-      frequency: null,
-      intensity: null,
+      reach: CREATURE_AURA_REACHES.MEDIUM,
+      damageIntensity: null,
       damageType: null,
       condition: null,
       conditionDuration: null,
       difficultyClass: null,
       associatedWeakSpot: null,
-      isSpell: null,
+      isSpell: false,
     }
   );
+
+  function HandleSelectType(updatedValue) {
+    updatedValue.reach = null;
+    updatedValue.typeDescription = null;
+
+    setTempAction(updatedValue);
+  }
+
+  function HandleSelectDamageIntensity(updatedValue) {
+    if (!updatedValue.damageIntensity) {
+      updatedValue.damageType = null;
+    }
+
+    setTempAction(updatedValue);
+  }
+
+  function HandleSelectCondition(updatedValue) {
+    if (!updatedValue.condition) {
+      updatedValue.conditionDuration = null;
+    }
+
+    setTempAction(updatedValue);
+  }
 
   function HandleCancel() {
     onClose();
   }
 
   function HandleConfirm() {
-    onClose(tempAura);
+    onClose(tempAction);
   }
 
   return (
-    <div className="ModalManageAura-container">
-      <Modal title="Ação" className="modal-action">
+    <div className="ModalManageAction-container">
+      <Modal title="Aura" className="modal-action">
         <div className="new-action-wrapper">
           <section className="action-row">
-            <TextInput label="Nome" />
-            <Select label={"Tipo"} extraWidth={100} isLarge={true} />
-            <TextInput label="Descrição (Tipo)" />
+            <TextInput label="Nome" value={tempAction} valuePropertyPath="name" onChange={setTempAction} className="longer-input" />
+            <Select
+              label={"Tipo"}
+              extraWidth={100}
+              isLarge={true}
+              value={tempAction}
+              valuePropertyPath="type"
+              onSelect={HandleSelectType}
+              options={creatureActionTypes.filter((t) => t.value !== CREATURE_ACTION_TYPES.ATTACK)}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+            {tempAction.type === CREATURE_ACTION_TYPES.OTHER && (
+              <TextInput
+                label="Descrição (Tipo)"
+                value={tempAction}
+                valuePropertyPath="typeDescription"
+                onChange={setTempAction}
+                className="shorter-input"
+              />
+            )}
           </section>
           <section className="action-row">
-            <TextInput label="Descrição (Opcional)" isMultiLine={true} />
+            <TextInput
+              label="Descrição (Opcional)"
+              isMultiLine={true}
+              value={tempAction}
+              valuePropertyPath="description"
+              onChange={setTempAction}
+              className="longer-input"
+            />
             <aside>
               <section className="action-row">
-                <Select label={"Alcance"} extraWidth={100} isLarge={true} />
-                <Select label={"Frequência"} info={[{ text: "" }]} extraWidth={100} isLarge={true} />
+                <Select
+                  label={"Alcance"}
+                  extraWidth={100}
+                  isLarge={true}
+                  value={tempAction}
+                  valuePropertyPath="reach"
+                  onSelect={setTempAction}
+                  options={creatureAuraReaches}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
+                />
               </section>
             </aside>
           </section>
           <section className="action-row">
-            <Select label={"Intensidade (Opcional)"} extraWidth={100} isLarge={true} />
-            <Select label={"Tipo de Dano"} extraWidth={100} isLarge={true} />
-            <Select label={"Condição (Opcional)"} extraWidth={100} isLarge={true} />
-            <Select label={"Duração"} extraWidth={100} isLarge={true} />
-            <Select label={"Dificuldade"} extraWidth={100} isLarge={true} />
+            <Select
+              label={"Intensidade"}
+              extraWidth={100}
+              isLarge={true}
+              nothingSelected="Nenhuma"
+              value={tempAction}
+              valuePropertyPath="damageIntensity"
+              onSelect={HandleSelectDamageIntensity}
+              options={damageIntensities}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+            <Select
+              label={"Tipo de Dano"}
+              extraWidth={100}
+              isLarge={true}
+              value={tempAction}
+              valuePropertyPath="damageType"
+              onSelect={setTempAction}
+              options={damageTypes}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+              optionsAtATime={4}
+              isDisabled={!tempAction.damageIntensity}
+            />
+            <Select
+              label={"Dificuldade"}
+              extraWidth={100}
+              isLarge={true}
+              nothingSelected="Nenhuma"
+              value={tempAction}
+              valuePropertyPath="difficultyClass"
+              onSelect={setTempAction}
+              options={difficultyClasses}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+            <Select
+              label={"Condição "}
+              extraWidth={100}
+              isLarge={true}
+              nothingSelected="Nenhuma"
+              value={tempAction}
+              valuePropertyPath="condition"
+              onSelect={HandleSelectCondition}
+              options={conditions}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+              optionsAtATime={4}
+            />
+            <Select
+              label={"Duração"}
+              extraWidth={100}
+              isLarge={true}
+              value={tempAction}
+              valuePropertyPath="conditionDuration"
+              onSelect={setTempAction}
+              options={conditionDurations}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+              isDisabled={!tempAction.condition}
+            />
           </section>
           <footer>
-            <Select label={"Ponto Fraco associado"} extraWidth={100} isLarge={true} nothingSelected="Nenhum" />
-            <CheckInput
-              label="Magia"
-              info={[
-                { text: "Efeitos relacionados a magias afetam essa ação" },
-                { text: "Magias não podem ser selecionadas como efeito para possível recompensa" },
-              ]}
+            <Select
+              label={"Ponto Fraco associado"}
+              extraWidth={100}
+              isLarge={true}
+              nothingSelected="Nenhum"
+              value={tempAction}
+              valuePropertyPath="associatedWeakSpot"
+              onSelect={setTempAction}
+              options={weakSpots}
+              dropUp={true}
             />
-            <span>Ação com poder X/X</span>
-            <div>
-              <button className="button-simple" onClick={HandleCancel}>
-                Cancelar
-              </button>
-              <Button text="Adicionar" onClick={HandleConfirm} />
+            <div className="extra-details">
+              <div></div>
+              {/* <span>Ação com poder X/X</span> */}
+              <aside>
+                <button className="button-simple" onClick={HandleCancel}>
+                  Cancelar
+                </button>
+                <Button text="Salvar" onClick={HandleConfirm} isDisabled={!tempAction.name || !tempAction.reach} />
+              </aside>
             </div>
           </footer>
         </div>

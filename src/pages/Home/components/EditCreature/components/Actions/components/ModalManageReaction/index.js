@@ -54,6 +54,12 @@ function ModalManageReaction({ reaction, weakSpots, onClose }) {
     setTempReaction(updatedValue);
   }
 
+  function HandleSelectTrigger(updatedValue) {
+    updatedValue.triggerDescription = null;
+
+    setTempReaction(updatedValue);
+  }
+
   function HandleSelectDamageIntensity(updatedValue) {
     if (!updatedValue.damageIntensity) {
       updatedValue.damageType = null;
@@ -80,7 +86,7 @@ function ModalManageReaction({ reaction, weakSpots, onClose }) {
 
   return (
     <div className="ModalManageReaction-container">
-      <Modal title="Ação" className="modal-action">
+      <Modal title="Reação" className="modal-action">
         <div className="new-action-wrapper">
           <section className="action-row">
             <TextInput label="Nome" value={tempReaction} valuePropertyPath="name" onChange={setTempReaction} className="longer-input" />
@@ -153,7 +159,7 @@ function ModalManageReaction({ reaction, weakSpots, onClose }) {
                   isLarge={true}
                   value={tempReaction}
                   valuePropertyPath="trigger"
-                  onSelect={HandleSelectType}
+                  onSelect={HandleSelectTrigger}
                   options={creatureReactionTriggers}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
