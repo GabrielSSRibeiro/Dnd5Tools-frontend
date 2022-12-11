@@ -9,10 +9,11 @@ const getDifficulty = (level, checkDifficulty) => {
   const prof = utils.GetProfByLevel(level);
   const difficultyIndex = difficultyClasses.findIndex((dc) => dc.value === checkDifficulty);
   const difficultyFactor = 5;
-  const difficultyVariance = 0.1;
 
   let difficulty = (difficultyIndex + 1) * difficultyFactor + prof;
-  difficulty = variance(difficulty, difficultyVariance);
+  // const difficultyVariance = 0.1;
+  // difficulty = variance(difficulty, difficultyVariance);
+  difficulty = utils.randomIntFromInterval(difficulty - 1, difficulty + 1);
 
   return Math.max(difficulty, MIN_DIFICULTY);
 };

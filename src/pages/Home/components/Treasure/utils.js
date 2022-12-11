@@ -1,11 +1,12 @@
 import * as utils from "../../../../utils";
 import {
-  GOLD_PIECES_QUANTITIES,
+  goldPiecesQuantities,
   UNCOMMON_ITEM_MIN_PRICE,
-  DEFAULT_MATERIAL_PRICE_INFLATIONS,
   MATERIAL_PRICE_INFLATIONS,
+  materialPriceInflations,
   EQUIPMENT_TYPES,
-  EQUIPMENT_RARITIES,
+  equipmentTypes,
+  equipmentRarities,
   PRIMARY_AFIX_PROB,
   SECONDARY_AFIX_PROB,
   CURSE_AFIX_PROB,
@@ -19,10 +20,10 @@ const randItem = utils.randomItemFromArray;
 //Gold pieces
 
 export const getGoldPiecesAmount = (quantity) => {
-  const quantityIndex = GOLD_PIECES_QUANTITIES.indexOf(quantity);
+  const quantityIndex = goldPiecesQuantities.findIndex((gpq) => gpq.value === quantity);
 
-  const lowerBound = getMaterialSellPrices(MATERIAL_PRICE_INFLATIONS[quantityIndex])[quantityIndex]();
-  const higherBound = getMaterialBuyPrices(MATERIAL_PRICE_INFLATIONS[quantityIndex])[quantityIndex]();
+  const lowerBound = getMaterialSellPrices(materialPriceInflations[quantityIndex])[quantityIndex]();
+  const higherBound = getMaterialBuyPrices(materialPriceInflations[quantityIndex].value)[quantityIndex]();
 
   let amount = Math.round(avg([lowerBound, higherBound]));
 
@@ -80,7 +81,7 @@ export const ITEMS_CRAFT_TIMES = [
 ];
 
 export const getItemBuyPrices = (value) => {
-  const inflationIndex = MATERIAL_PRICE_INFLATIONS.indexOf(value);
+  const inflationIndex = materialPriceInflations.findIndex((mpi) => mpi.value === value);
   const inflation = materialPriceInflation[inflationIndex];
   return [
     () => Math.round(variance(avg([UNCOMMON_ITEM_MIN_PRICE, uncommonItemMaxPrice]), inflationVariance) * inflation),
@@ -90,20 +91,18 @@ export const getItemBuyPrices = (value) => {
   ];
 };
 export const getItemSellPrices = () =>
-  getItemBuyPrices(DEFAULT_MATERIAL_PRICE_INFLATIONS).map((itemBuyPrice) => () => Math.round(itemBuyPrice() * sellRate));
+  getItemBuyPrices(MATERIAL_PRICE_INFLATIONS.AVERAGE).map((itemBuyPrice) => () => Math.round(itemBuyPrice() * sellRate));
 export const getItemCraftBuyPrices = (inflation) => getItemBuyPrices(inflation).map((itemBuyPrice) => () => Math.round(itemBuyPrice() * craftRate));
 export const getItemCraftSellPrices = () =>
-  getItemCraftBuyPrices(DEFAULT_MATERIAL_PRICE_INFLATIONS).map((itemCraftBuyPrice) => () => Math.round(itemCraftBuyPrice() * sellRate));
+  getItemCraftBuyPrices(MATERIAL_PRICE_INFLATIONS.AVERAGE).map((itemCraftBuyPrice) => () => Math.round(itemCraftBuyPrice() * sellRate));
 export const getMaterialBuyPrices = (inflation) =>
   getItemBuyPrices(inflation).map((materialBuyPrice) => () => Math.round(materialBuyPrice() * materialRate));
 export const getMaterialSellPrices = () =>
-  getMaterialBuyPrices(DEFAULT_MATERIAL_PRICE_INFLATIONS).map((materialSellPrice) => () => Math.round(materialSellPrice() * sellRate));
+  getMaterialBuyPrices(MATERIAL_PRICE_INFLATIONS.AVERAGE).map((materialSellPrice) => () => Math.round(materialSellPrice() * sellRate));
 
 const materialPriceInflation = [0.5, 1, 1.5, 2];
 
 //Item
-const potion = EQUIPMENT_TYPES[EQUIPMENT_TYPES.length - 1];
-
 const offensiveAfixes = (level) => {
   const bonus = utils.GetProfByLevel(level) / 2;
 
@@ -193,7 +192,7 @@ const sortAndTrimItemAfixes = (itemAfixes) => {
 };
 
 const checkAndApplyPotion = (itemType, itemAfixes) => {
-  if (itemType === potion) {
+  if (itemType === EQUIPMENT_TYPES.POTION) {
     itemAfixes.forEach((afix) => (afix.bonus = afix.bonus * 2));
   }
 };
@@ -241,7 +240,7 @@ const getItemName = (type, rarity, itemAfixes) => {
 
 export const getItemAfixes = (level, type, rarity) => {
   let afixTypes = [{ type: () => offensiveAfixes(level) }, { type: () => defensiveAfixes(level) }, { type: () => utilityAfixes(level) }];
-  const typeIndex = EQUIPMENT_TYPES.indexOf(type);
+  const typeIndex = equipmentTypes.findIndex((et) => et.value === type);
 
   //if not last(potion), use weighted probs
   if (typeIndex <= afixTypes.length - 1) {
@@ -250,7 +249,7 @@ export const getItemAfixes = (level, type, rarity) => {
     afixTypes = afixTypes.map((afix) => ({ ...afix, probability: 1 / afixTypes.length }));
   }
 
-  let pullsRemaining = EQUIPMENT_RARITIES.indexOf(rarity) + 1;
+  let pullsRemaining = equipmentRarities.findIndex((er) => er.value === rarity) + 1;
   let pulledAfixes = [];
   let utilityAfixIndex = -1;
   let buffedAfixesBaseline = {};
@@ -282,7 +281,11 @@ export const getItemAfixes = (level, type, rarity) => {
 
   checkAndApplyPotion(type, itemAfixes);
 
-  const itemName = getItemName(type, rarity, itemAfixes);
+  const itemName = getItemName(
+    equipmentTypes.find((et) => et.value === type).display,
+    equipmentRarities.find((er) => er.value === rarity).display,
+    itemAfixes
+  );
 
   return { name: itemName, afixes: itemAfixes };
 };

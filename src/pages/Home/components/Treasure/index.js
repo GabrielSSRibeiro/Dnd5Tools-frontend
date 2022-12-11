@@ -12,14 +12,14 @@ import {
   getItemAfixes,
 } from "./utils";
 import {
-  DEFAULT_TREASURE_TYPE,
-  DEFAULT_GOLD_PIECES_QUANTITIES,
-  DEFAULT_MATERIAL_PRICE_INFLATIONS,
   TREASURE_TYPES,
+  treasureTypes,
   GOLD_PIECES_QUANTITIES,
+  goldPiecesQuantities,
   MATERIAL_PRICE_INFLATIONS,
-  EQUIPMENT_TYPES,
-  EQUIPMENT_RARITIES,
+  materialPriceInflations,
+  equipmentTypes,
+  equipmentRarities,
   UNCOMMON_ITEM_MIN_PRICE,
   PRIMARY_AFIX_PROB,
   SECONDARY_AFIX_PROB,
@@ -37,14 +37,13 @@ import "./styles.css";
 
 function Treasure({ resultText, level }) {
   const [hasResult, setHasResult] = useState(false);
-  const [treasureType, setTreasureType] = useState(DEFAULT_TREASURE_TYPE);
-  const [goldPiecesQuantity, setGoldPiecesQuantity] = useState(DEFAULT_GOLD_PIECES_QUANTITIES);
-  const [materialPriceInflation, setMaterialPriceInflation] = useState(DEFAULT_MATERIAL_PRICE_INFLATIONS);
+  const [treasureType, setTreasureType] = useState(TREASURE_TYPES.MATERIAL);
+  const [goldPiecesQuantity, setGoldPiecesQuantity] = useState(GOLD_PIECES_QUANTITIES.AVERAGE);
+  const [materialPriceInflation, setMaterialPriceInflation] = useState(MATERIAL_PRICE_INFLATIONS.AVERAGE);
   const [equipmentType, setEquipmentType] = useState(null);
   const [equipmentRarity, setEquipmentRarity] = useState(null);
 
-  const treasureTypes = { GOLD_PIECES: TREASURE_TYPES[0], MATERIAL: TREASURE_TYPES[1], EQUIPMENT: TREASURE_TYPES[2] };
-  const generatedItem = getItemAfixes(level, equipmentType, equipmentRarity);
+  const generatedItem = equipmentType && equipmentRarity ? getItemAfixes(level, equipmentType, equipmentRarity) : null;
 
   //   useEffect(() => {
   //   api.get("items").then((response) => {
@@ -57,7 +56,7 @@ function Treasure({ resultText, level }) {
   function CheckFinalButtonDisable() {
     let isDisabled = false;
 
-    if (treasureType === treasureTypes.EQUIPMENT && (!equipmentType || !equipmentRarity)) {
+    if (treasureType === TREASURE_TYPES.EQUIPMENT && (!equipmentType || !equipmentRarity)) {
       isDisabled = true;
     }
 
@@ -69,56 +68,56 @@ function Treasure({ resultText, level }) {
       <section className="treasure-panels">
         <Panel title="Tipo">
           <main className="panel-select">
-            {TREASURE_TYPES.map((option) => (
+            {treasureTypes.map((option) => (
               <SelectButton
-                key={option}
+                key={option.value}
                 isLarge={false}
                 isLong={false}
-                isSelected={treasureType === option}
-                text={option}
-                onClick={() => setTreasureType(option)}
+                isSelected={treasureType === option.value}
+                text={option.display}
+                onClick={() => setTreasureType(option.value)}
               />
             ))}
           </main>
         </Panel>
       </section>
-      {treasureType === treasureTypes.GOLD_PIECES && (
+      {treasureType === TREASURE_TYPES.GOLD_PIECES && (
         <section className="treasure-panels">
           <Panel title="Quantidade">
             <main className="panel-select">
-              {GOLD_PIECES_QUANTITIES.map((option) => (
+              {goldPiecesQuantities.map((option) => (
                 <SelectButton
-                  key={option}
+                  key={option.value}
                   isLarge={false}
                   isLong={false}
-                  isSelected={goldPiecesQuantity === option}
-                  text={option}
-                  onClick={() => setGoldPiecesQuantity(option)}
+                  isSelected={goldPiecesQuantity === option.value}
+                  text={option.display}
+                  onClick={() => setGoldPiecesQuantity(option.value)}
                 />
               ))}
             </main>
           </Panel>
         </section>
       )}
-      {treasureType === treasureTypes.MATERIAL && (
+      {treasureType === TREASURE_TYPES.MATERIAL && (
         <section className="treasure-panels">
           <Panel title="Preço" info={[{ text: `Preço mínimo de item incomum: ${UNCOMMON_ITEM_MIN_PRICE} PO` }]}>
             <main className="panel-select">
-              {MATERIAL_PRICE_INFLATIONS.map((option) => (
+              {materialPriceInflations.map((option) => (
                 <SelectButton
-                  key={option}
+                  key={option.value}
                   isLarge={false}
                   isLong={false}
-                  isSelected={materialPriceInflation === option}
-                  text={option}
-                  onClick={() => setMaterialPriceInflation(option)}
+                  isSelected={materialPriceInflation === option.value}
+                  text={option.display}
+                  onClick={() => setMaterialPriceInflation(option.value)}
                 />
               ))}
             </main>
           </Panel>
         </section>
       )}
-      {treasureType === treasureTypes.EQUIPMENT && (
+      {treasureType === TREASURE_TYPES.EQUIPMENT && (
         <>
           <section className="treasure-panels">
             <Panel
@@ -136,14 +135,14 @@ function Treasure({ resultText, level }) {
               ]}
             >
               <main className="panel-select">
-                {EQUIPMENT_TYPES.map((option) => (
+                {equipmentTypes.map((option) => (
                   <SelectButton
-                    key={option}
+                    key={option.value}
                     isLarge={false}
                     isLong={false}
-                    isSelected={equipmentType === option}
-                    text={option}
-                    onClick={() => setEquipmentType(option)}
+                    isSelected={equipmentType === option.value}
+                    text={option.display}
+                    onClick={() => setEquipmentType(option.value)}
                   />
                 ))}
               </main>
@@ -159,14 +158,14 @@ function Treasure({ resultText, level }) {
               ]}
             >
               <main className="panel-select">
-                {EQUIPMENT_RARITIES.map((option) => (
+                {equipmentRarities.map((option) => (
                   <SelectButton
-                    key={option}
+                    key={option.value}
                     isLarge={false}
                     isLong={false}
-                    isSelected={equipmentRarity === option}
-                    text={option}
-                    onClick={() => setEquipmentRarity(option)}
+                    isSelected={equipmentRarity === option.value}
+                    text={option.display}
+                    onClick={() => setEquipmentRarity(option.value)}
                   />
                 ))}
               </main>
@@ -175,15 +174,19 @@ function Treasure({ resultText, level }) {
         </>
       )}
       {hasResult && (
-        <Modal title={treasureType} onClickToClose={() => setHasResult(!hasResult)} className="result-tables">
-          {treasureType === treasureTypes.GOLD_PIECES && (
+        <Modal
+          title={treasureTypes.find((tt) => tt.value === treasureType).display}
+          onClickToClose={() => setHasResult(!hasResult)}
+          className="result-tables"
+        >
+          {treasureType === TREASURE_TYPES.GOLD_PIECES && (
             <ResultBox
               headers={["Tesouro"]}
               highlightTopRow={true}
               values={[{ top: getGoldPiecesAmount(goldPiecesQuantity), bottom: "Peças de Ouro" }]}
             />
           )}
-          {treasureType === treasureTypes.MATERIAL && (
+          {treasureType === TREASURE_TYPES.MATERIAL && (
             <div className="modal-materials-wrapper">
               <div className="modal-materials">
                 <ResultBox
@@ -191,7 +194,7 @@ function Treasure({ resultText, level }) {
                   subHeaders={["Comprar", "Vender"]}
                   resultBackgroundColumn={true}
                   values={getMaterialBuyPrices(materialPriceInflation).map((item, index) => ({
-                    label: EQUIPMENT_RARITIES[index],
+                    label: equipmentRarities[index].display,
                     top: item() + " PO",
                     bottom: getMaterialSellPrices()[index]() + " PO",
                   }))}
@@ -223,7 +226,7 @@ function Treasure({ resultText, level }) {
               </div>
             </div>
           )}
-          {treasureType === treasureTypes.EQUIPMENT && (
+          {treasureType === TREASURE_TYPES.EQUIPMENT && (
             <ResultBox
               headers={generatedItem.name}
               highlightSubHeaders={true}
@@ -239,7 +242,7 @@ function Treasure({ resultText, level }) {
       )}
       <footer>
         <Button
-          text={`Rodar ${treasureType || resultText}`}
+          text={`Rodar ${treasureTypes.find((tt) => tt.value === treasureType).display || resultText}`}
           onClick={() => (hasResult ? setHasResult(false) : setHasResult(true))}
           isDisabled={CheckFinalButtonDisable()}
         />
