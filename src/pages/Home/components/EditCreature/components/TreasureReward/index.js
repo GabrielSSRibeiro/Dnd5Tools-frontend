@@ -1,137 +1,76 @@
-import React from "react";
+import React, { useState } from "react";
 
-import {
-  TREASURE_TYPES,
-  treasureTypes,
-  goldPiecesQuantities,
-  EQUIPMENT_TYPES,
-  equipmentTypes,
-  equipmentRarities,
-} from "../../../../../../data/treasureConstants";
+import { treasureTypes } from "../../../../../../data/treasureConstants";
 
-import Select from "../../../../../../components/Select";
+import Button from "../../../../../../components/Button";
+import Info from "../../../../../../components/Info";
+import ModalManageTreasure from "./components/ModalManageTreasure";
 
 import "./styles.css";
 
 function TreasureReward({ creature, setCreature }) {
+  const [modal, setModal] = useState(null);
+
+  const maxNumberOfTreasures = 3;
+
+  function OpenModalManageTreasure(treasure) {
+    let invalidNames = creature.treasures.filter((t) => t.name !== treasure?.name).map((t) => t.name);
+
+    setModal(
+      <ModalManageTreasure
+        treasure={treasure}
+        creatureRarity={creature.rarity}
+        creatureActions={creature.actions}
+        invalidNames={invalidNames}
+        onClose={(tempTreasure) => HandleCloseModalManageTreasure(treasure, tempTreasure)}
+      />
+    );
+  }
+  function HandleCloseModalManageTreasure(treasure, tempTreasure) {
+    if (tempTreasure) {
+      if (treasure) {
+        let treasureIndex = creature.treasures.findIndex((a) => a.name === treasure.name);
+        creature.treasures.splice(treasureIndex, 1, tempTreasure);
+      } else {
+        creature.treasures.push(tempTreasure);
+      }
+    }
+
+    setModal(null);
+  }
+  function DeleteTreasure(treasure) {
+    creature.treasures = creature.treasures.filter((a) => a.name !== treasure.name);
+    setCreature({ ...creature });
+  }
+
   return (
     <div className="TreasureReward-container">
-      <h2>Tesouro</h2>
-      <Select
-        label={"Tipo"}
-        extraWidth={100}
-        value={creature}
-        valuePropertyPath="treasure.type"
-        onSelect={setCreature}
-        nothingSelected="Nenhum"
-        options={treasureTypes}
-        optionDisplay={(o) => o.display}
-        optionValue={(o) => o.value}
-      />
-      {creature.treasure.type === TREASURE_TYPES.GOLD_PIECES && (
-        <Select
-          label={"Quantidade"}
-          extraWidth={100}
-          value={creature}
-          valuePropertyPath="treasure.goldPieces.quantity"
-          onSelect={setCreature}
-          nothingSelected="Nenhum"
-          options={goldPiecesQuantities}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
-      )}
-      {creature.treasure.type === TREASURE_TYPES.MATERIAL && (
-        <Select
-          label={"Raridade"}
-          extraWidth={100}
-          value={creature}
-          valuePropertyPath="treasure.material.rarity"
-          onSelect={setCreature}
-          nothingSelected="Nenhum"
-          options={equipmentRarities}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
-      )}
-      {creature.treasure.type === TREASURE_TYPES.EQUIPMENT && (
-        <div className="equipment-details">
-          <Select
-            label={"Raridade"}
-            extraWidth={100}
-            value={creature}
-            valuePropertyPath="treasure.equipment.rarity"
-            onSelect={setCreature}
-            nothingSelected="Nenhum"
-            options={equipmentRarities}
-            optionDisplay={(o) => o.display}
-            optionValue={(o) => o.value}
-          />
-          <Select
-            label={"Tipo do Item"}
-            extraWidth={100}
-            value={creature}
-            valuePropertyPath="treasure.equipment.type"
-            onSelect={setCreature}
-            nothingSelected="Nenhum"
-            options={equipmentTypes}
-            optionDisplay={(o) => o.display}
-            optionValue={(o) => o.value}
-          />
-          {creature.treasure.equipment.type === EQUIPMENT_TYPES.WEAPON && (
-            <Select
-              label={"Tipo de Possível Dano"}
-              extraWidth={100}
-              value={creature}
-              valuePropertyPath="treasure.equipment.rarity"
-              onSelect={setCreature}
-              nothingSelected="Nenhum"
-              options={equipmentRarities}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-            />
-          )}
-          {creature.treasure.equipment.type === EQUIPMENT_TYPES.ARMOR && (
-            <Select
-              label={"Tipo de Possível Redução"}
-              extraWidth={100}
-              value={creature}
-              valuePropertyPath="treasure.equipment.rarity"
-              onSelect={setCreature}
-              nothingSelected="Nenhum"
-              options={equipmentRarities}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-            />
-          )}
-          {creature.treasure.equipment.type === EQUIPMENT_TYPES.JEWELRY && (
-            <Select
-              label={"Atributo de Possível Bônus"}
-              extraWidth={100}
-              value={creature}
-              valuePropertyPath="treasure.equipment.rarity"
-              onSelect={setCreature}
-              nothingSelected="Nenhum"
-              options={equipmentRarities}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-            />
-          )}
-          {creature.treasure.equipment.type === EQUIPMENT_TYPES.POTION && (
-            <Select
-              label={"Atributo de Possível Bônus"}
-              extraWidth={100}
-              value={creature}
-              valuePropertyPath="treasure.equipment.rarity"
-              onSelect={setCreature}
-              nothingSelected="Nenhum"
-              options={equipmentRarities}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-            />
-          )}
+      {modal}
+      <div className="treasures-row">
+        <div className="treasures">
+          <div className="section-label">
+            <h2>Tesouros</h2>
+            <Info contents={[{ text: "Opcional" }]} />
+          </div>
+          <Button text="Adicionar" onClick={() => OpenModalManageTreasure()} isDisabled={creature.treasures.length >= maxNumberOfTreasures} />
+          <div className="treasure-wrapper">
+            {creature.treasures.map((treasure) => (
+              <div className="creature-treasure" key={treasure.name}>
+                <span>{treasure.name}</span>
+                <div>
+                  <span>{treasureTypes.find((tr) => tr.value === treasure.type).display}</span>
+                  <button onClick={() => OpenModalManageTreasure(treasure)} className="edit-row">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button onClick={() => DeleteTreasure(treasure)} className="delete-row">
+                    Deletar
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

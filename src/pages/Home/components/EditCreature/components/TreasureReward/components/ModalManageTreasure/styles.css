@@ -1,0 +1,75 @@
+.ModalManageTreasure-container .modal-action {
+  justify-content: flex-start;
+  width: fit-content;
+  height: fit-content;
+  margin-top: 80px;
+}
+
+.ModalManageTreasure-container .modal-action .new-action-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  row-gap: 10px;
+}
+
+.ModalManageTreasure-container .modal-action .new-action-wrapper .action-row {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  column-gap: 15px;
+}
+
+.ModalManageTreasure-container .modal-action .new-action-wrapper .action-row aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  row-gap: 10px;
+}
+
+.ModalManageTreasure-container .modal-action .new-action-wrapper .action-row .shorter-input input {
+  width: 200px;
+}
+
+.ModalManageTreasure-container .modal-action .new-action-wrapper .action-row .longer-input input {
+  width: 415px;
+}
+
+.ModalManageTreasure-container .modal-action .new-action-wrapper .action-row .longer-input textarea {
+  width: 415px;
+  height: 143px;
+}
+
+.ModalManageTreasure-container .modal-action footer {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.ModalManageTreasure-container .modal-action footer .extra-details {
+  padding-left: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 15px;
+  flex: 1;
+}
+
+.ModalManageTreasure-container .modal-action footer .extra-details aside {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 15px;
+}
+
+.ModalManageTreasure-container .treasure-type .Tooltip-container {
+  width: 750px;
+}
+
+.ModalManageTreasure-container .equipment-ability .Tooltip-container {
+  width: 500px;
+}

@@ -5,16 +5,81 @@
   justify-content: flex-start;
   padding: 25px;
   height: 100%;
-  row-gap: 25px;
+  gap: 25px;
 }
 
-.TreasureReward-container > h2 {
+.TreasureReward-container .edit-row {
+  margin: 0 10px 0 30px;
+
+  background-color: transparent;
+  border: none;
+}
+.TreasureReward-container .delete-row {
+  width: fit-content;
+  height: 40px;
+  background-color: transparent;
+  border: none;
+  color: var(--primaryPurple1);
+  font-family: var(--primaryFont);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+}
+
+.TreasureReward-container h2 {
   line-height: 1;
+  margin-bottom: 25px;
+  white-space: nowrap;
 }
 
-.TreasureReward-container .equipment-details {
+.TreasureReward-container .treasures-row {
+  width: 100%;
+
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   gap: 25px;
+}
+
+.TreasureReward-container .treasures {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.TreasureReward-container .treasure-wrapper {
+  width: 80%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.TreasureReward-container .treasure-wrapper .creature-treasure {
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid var(--gray2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.TreasureReward-container .treasure-wrapper .creature-treasure span {
+  font-size: 14px;
+}
+
+.TreasureReward-container .section-label {
+  margin-bottom: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10px;
+}
+
+.TreasureReward-container .section-label h2 {
+  margin-bottom: 0;
 }

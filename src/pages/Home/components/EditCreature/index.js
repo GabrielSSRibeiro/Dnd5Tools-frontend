@@ -92,19 +92,7 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
     reactions: [],
     reactionsPerRound: 1,
     aura: null,
-    treasure: {
-      type: null,
-      goldPieces: {
-        quantity: null,
-      },
-      material: {
-        rarity: null,
-      },
-      equipment: {
-        type: null,
-        rarity: null,
-      },
-    },
+    treasures: [],
   };
   const [creature, setCreature] = useState(creatureToEdit ?? newCreature);
 

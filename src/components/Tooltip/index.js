@@ -11,7 +11,7 @@ function Tooltip({ contents, top = 0, left = 0, className = "" }) {
         {contents.map((content, index) => (
           <div key={index} className="content-wrapper">
             {content.icon && <i className={content.icon}></i>}
-            {content.text && <span>{content.text}</span>}
+            {content.text != null && (content.text === "" ? <br /> : <span>{content.text}</span>)}
           </div>
         ))}
       </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import * as utils from "../../../../../../../../utils";
 import {
   CREATURE_ACTION_TYPES,
   creatureActionTypes,
@@ -24,24 +25,26 @@ import Modal from "../../../../../../../../components/Modal";
 
 import "./styles.css";
 
-function ModalManageAction({ action, weakSpots, onClose }) {
+function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
   const [tempAction, setTempAction] = useState(
-    action ?? {
-      name: null,
-      description: null,
-      type: CREATURE_ACTION_TYPES.ATTACK,
-      typeDescription: null,
-      reach: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
-      frequency: CREATURE_ACTION_FREQUENCIES.COMMON,
-      damageIntensity: null,
-      damageType: null,
-      condition: null,
-      conditionDuration: null,
-      difficultyClass: null,
-      associatedWeakSpot: null,
-      isSpell: false,
-      repetitions: 1,
-    }
+    action
+      ? utils.clone(action)
+      : {
+          name: null,
+          description: null,
+          type: CREATURE_ACTION_TYPES.ATTACK,
+          typeDescription: null,
+          reach: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
+          frequency: CREATURE_ACTION_FREQUENCIES.COMMON,
+          damageIntensity: null,
+          damageType: null,
+          condition: null,
+          conditionDuration: null,
+          difficultyClass: null,
+          associatedWeakSpot: null,
+          isSpell: false,
+          repetitions: 1,
+        }
   );
 
   const actionRepetitions = [
@@ -124,6 +127,7 @@ function ModalManageAction({ action, weakSpots, onClose }) {
           <section className="action-row">
             <TextInput
               label="Descrição (Opcional)"
+              info={[{ text: "Recomendado apenas para texto descritivo e não mecânicas extras" }]}
               isMultiLine={true}
               value={tempAction}
               valuePropertyPath="description"
@@ -151,6 +155,7 @@ function ModalManageAction({ action, weakSpots, onClose }) {
                 />
                 <Select
                   label={"Repetições"}
+                  info={[{ text: "Recomendado apenas para ações comuns de baixo poder, pois isto aumenta muito o poder da ação" }]}
                   extraWidth={100}
                   isLarge={true}
                   value={tempAction}
@@ -254,7 +259,11 @@ function ModalManageAction({ action, weakSpots, onClose }) {
                 <button className="button-simple" onClick={HandleCancel}>
                   Cancelar
                 </button>
-                <Button text="Salvar" onClick={HandleConfirm} isDisabled={!tempAction.name || !tempAction.reach} />
+                <Button
+                  text="Salvar"
+                  onClick={HandleConfirm}
+                  isDisabled={!tempAction.name || invalidNames.includes(tempAction.name) || !tempAction.reach}
+                />
               </aside>
             </div>
           </footer>

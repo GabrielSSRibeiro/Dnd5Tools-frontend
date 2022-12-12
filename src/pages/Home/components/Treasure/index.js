@@ -19,12 +19,12 @@ import {
   MATERIAL_PRICE_INFLATIONS,
   materialPriceInflations,
   equipmentTypes,
-  equipmentRarities,
   UNCOMMON_ITEM_MIN_PRICE,
   PRIMARY_AFIX_PROB,
   SECONDARY_AFIX_PROB,
   CURSE_AFIX_PROB,
 } from "../../../../data/treasureConstants";
+import { CREATURE_RARITIES, creatureRarities } from "../../../../data/creatureConstants";
 import * as utils from "../../../../utils";
 
 import Panel from "../../../../components/Panel";
@@ -158,16 +158,18 @@ function Treasure({ resultText, level }) {
               ]}
             >
               <main className="panel-select">
-                {equipmentRarities.map((option) => (
-                  <SelectButton
-                    key={option.value}
-                    isLarge={false}
-                    isLong={false}
-                    isSelected={equipmentRarity === option.value}
-                    text={option.display}
-                    onClick={() => setEquipmentRarity(option.value)}
-                  />
-                ))}
+                {creatureRarities
+                  .filter((cr) => cr.value !== CREATURE_RARITIES.LEGENDARY)
+                  .map((option) => (
+                    <SelectButton
+                      key={option.value}
+                      isLarge={false}
+                      isLong={false}
+                      isSelected={equipmentRarity === option.value}
+                      text={option.treasureDisplay}
+                      onClick={() => setEquipmentRarity(option.value)}
+                    />
+                  ))}
               </main>
             </Panel>
           </section>
@@ -194,7 +196,7 @@ function Treasure({ resultText, level }) {
                   subHeaders={["Comprar", "Vender"]}
                   resultBackgroundColumn={true}
                   values={getMaterialBuyPrices(materialPriceInflation).map((item, index) => ({
-                    label: equipmentRarities[index].display,
+                    label: creatureRarities[index].treasureDisplay,
                     top: item() + " PO",
                     bottom: getMaterialSellPrices()[index]() + " PO",
                   }))}

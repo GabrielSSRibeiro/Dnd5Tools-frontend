@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import * as utils from "../../../../../../../../utils";
 import {
   CREATURE_ACTION_TYPES,
   creatureActionTypes,
@@ -26,25 +27,27 @@ import Modal from "../../../../../../../../components/Modal";
 
 import "./styles.css";
 
-function ModalManageReaction({ reaction, weakSpots, onClose }) {
+function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
   const [tempReaction, setTempReaction] = useState(
-    reaction ?? {
-      name: null,
-      description: null,
-      type: CREATURE_ACTION_TYPES.ATTACK,
-      typeDescription: null,
-      reach: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
-      trigger: CREATURE_REACTION_TRIGGERS.ON_DAMAGE_TAKEN,
-      triggerDescription: null,
-      frequency: CREATURE_ACTION_FREQUENCIES.COMMON,
-      damageIntensity: null,
-      damageType: null,
-      condition: null,
-      conditionDuration: null,
-      difficultyClass: null,
-      associatedWeakSpot: null,
-      isSpell: false,
-    }
+    reaction
+      ? utils.clone(reaction)
+      : {
+          name: null,
+          description: null,
+          type: CREATURE_ACTION_TYPES.ATTACK,
+          typeDescription: null,
+          reach: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
+          trigger: CREATURE_REACTION_TRIGGERS.ON_DAMAGE_TAKEN,
+          triggerDescription: null,
+          frequency: CREATURE_ACTION_FREQUENCIES.COMMON,
+          damageIntensity: null,
+          damageType: null,
+          condition: null,
+          conditionDuration: null,
+          difficultyClass: null,
+          associatedWeakSpot: null,
+          isSpell: false,
+        }
   );
 
   function HandleSelectType(updatedValue) {
@@ -116,6 +119,7 @@ function ModalManageReaction({ reaction, weakSpots, onClose }) {
             {tempReaction.type === CREATURE_ACTION_TYPES.OTHER && (
               <TextInput
                 label="Descrição (Tipo)"
+                info={[{ text: "Recomendado apenas para texto descritivo e não mecânicas extras" }]}
                 value={tempReaction}
                 valuePropertyPath="typeDescription"
                 onChange={setTempReaction}
@@ -267,7 +271,11 @@ function ModalManageReaction({ reaction, weakSpots, onClose }) {
                 <button className="button-simple" onClick={HandleCancel}>
                   Cancelar
                 </button>
-                <Button text="Salvar" onClick={HandleConfirm} isDisabled={!tempReaction.name || !tempReaction.reach} />
+                <Button
+                  text="Salvar"
+                  onClick={HandleConfirm}
+                  isDisabled={!tempReaction.name || invalidNames.includes(tempReaction.name) || !tempReaction.reach}
+                />
               </aside>
             </div>
           </footer>

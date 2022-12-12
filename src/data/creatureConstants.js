@@ -6,11 +6,11 @@ export const CREATURE_RARITIES = {
   LEGENDARY: 50,
 };
 export const creatureRarities = [
-  { display: "Comum (Nível 1 - 5)", value: CREATURE_RARITIES.COMMON, weight: 1 },
-  { display: "Incomum (Nível 6 - 10)", value: CREATURE_RARITIES.UNCOMMON, weight: 2 },
-  { display: "Rara (Nível 11 - 15)", value: CREATURE_RARITIES.RARE, weight: 3 },
-  { display: "Muito Rara (Nível 16 - 20)", value: CREATURE_RARITIES.VERY_RARE, weight: 4 },
-  { display: "Lendária (Nível 20+)", value: CREATURE_RARITIES.LEGENDARY, weight: 5 },
+  { display: "Comum (Nível 1 - 5)", treasureDisplay: "Comum", value: CREATURE_RARITIES.COMMON, weight: 1 },
+  { display: "Incomum (Nível 6 - 10)", treasureDisplay: "Incomum", value: CREATURE_RARITIES.UNCOMMON, weight: 2 },
+  { display: "Rara (Nível 11 - 15)", treasureDisplay: "Raro", value: CREATURE_RARITIES.RARE, weight: 3 },
+  { display: "Muito Rara (Nível 16 - 20)", treasureDisplay: "Muito Raro", value: CREATURE_RARITIES.VERY_RARE, weight: 4 },
+  { display: "Lendária (Nível 20+)", treasureDisplay: "Lendário", value: CREATURE_RARITIES.LEGENDARY, weight: 5 },
 ];
 
 export const CREATURE_ENVIRONMENTS = {

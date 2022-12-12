@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import * as utils from "../../../../../../../../utils";
 import {
   CREATURE_ACTION_TYPES,
   creatureActionTypes,
@@ -21,20 +22,22 @@ import "./styles.css";
 
 function ModalManageAura({ aura, weakSpots, onClose }) {
   const [tempAction, setTempAction] = useState(
-    aura ?? {
-      name: null,
-      description: null,
-      type: CREATURE_ACTION_TYPES.SAVING_THROW,
-      typeDescription: null,
-      reach: CREATURE_AURA_REACHES.MEDIUM,
-      damageIntensity: null,
-      damageType: null,
-      condition: null,
-      conditionDuration: null,
-      difficultyClass: null,
-      associatedWeakSpot: null,
-      isSpell: false,
-    }
+    aura
+      ? utils.clone(aura)
+      : {
+          name: null,
+          description: null,
+          type: CREATURE_ACTION_TYPES.SAVING_THROW,
+          typeDescription: null,
+          reach: CREATURE_AURA_REACHES.MEDIUM,
+          damageIntensity: null,
+          damageType: null,
+          condition: null,
+          conditionDuration: null,
+          difficultyClass: null,
+          associatedWeakSpot: null,
+          isSpell: false,
+        }
   );
 
   function HandleSelectType(updatedValue) {
@@ -98,6 +101,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
           <section className="action-row">
             <TextInput
               label="Descrição (Opcional)"
+              info={[{ text: "Recomendado apenas para texto descritivo e não mecânicas extras" }]}
               isMultiLine={true}
               value={tempAction}
               valuePropertyPath="description"

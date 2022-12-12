@@ -116,19 +116,7 @@ function Home() {
       reactions: [],
       reactionsPerRound: 10,
       aura: null,
-      treasure: {
-        type: null,
-        goldPieces: {
-          quantity: null,
-        },
-        material: {
-          rarity: null,
-        },
-        equipment: {
-          type: null,
-          rarity: null,
-        },
-      },
+      treasures: [],
     };
     for (let index = 1; index <= 5; index++) {
       let newCreature = utils.clone(savedCreature);

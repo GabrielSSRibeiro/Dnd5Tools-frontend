@@ -57,7 +57,7 @@ function Select({
   }
 
   return (
-    <div className={`Select-container ${className} ${isDisabled ? "element-disabled" : ""}`} tabIndex="-1" onBlur={() => setIsOpen(false)}>
+    <div className={`Select-container ${className}`} tabIndex="-1" onBlur={() => setIsOpen(false)}>
       {(label || info) && (
         <div className={`label-wrapper ${label && info ? "label-and-info" : !info ? "label" : "info"}`}>
           {label && <span>{label}</span>}
@@ -70,7 +70,7 @@ function Select({
           height: height,
         }}
         className={`
-        ${isOpen ? "select-open" : "select-closed"}
+        ${isOpen ? "select-open" : "select-closed"} ${isDisabled ? "element-disabled" : ""}
         `}
         onClick={() => (!isDisabled ? setIsOpen(!isOpen) : {})}
       >

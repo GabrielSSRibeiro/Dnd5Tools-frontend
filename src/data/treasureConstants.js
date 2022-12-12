@@ -39,6 +39,34 @@ export const materialPriceInflations = [
   { display: "Abusivo", value: MATERIAL_PRICE_INFLATIONS.ABUSIVE },
 ];
 
+export const MATERIAL_QUANTITIES = {
+  FEW: 10,
+  AVERAGE: 20,
+  SEVERAL: 30,
+  MANY: 40,
+};
+export const materialQuantities = [
+  { display: "Pouco (1 tentativa)", value: MATERIAL_QUANTITIES.FEW },
+  { display: "Médio (2 tentativas)", value: MATERIAL_QUANTITIES.AVERAGE },
+  { display: "Muito (3 tentativas)", value: MATERIAL_QUANTITIES.SEVERAL },
+  { display: "Bastante (4 tentativas)", value: MATERIAL_QUANTITIES.MANY },
+];
+
+export const MATERIAL_WEIGHTS = {
+  IRRELEVANT: 10,
+  LIGHT: 20,
+  MEDIUM: 30,
+  HEAVY: 40,
+  EXTREME: 50,
+};
+export const materialWeigths = [
+  { display: "Irrelevante", value: MATERIAL_WEIGHTS.IRRELEVANT },
+  { display: "Leve (5kg)", value: MATERIAL_WEIGHTS.LIGHT },
+  { display: "Médio (10kg)", value: MATERIAL_WEIGHTS.MEDIUM },
+  { display: "Pesado (30kg)", value: MATERIAL_WEIGHTS.HEAVY },
+  { display: "Extremo (70kg)", value: MATERIAL_WEIGHTS.EXTREME },
+];
+
 export const EQUIPMENT_TYPES = {
   WEAPON: 10,
   ARMOR: 20,
@@ -52,19 +80,23 @@ export const equipmentTypes = [
   { display: "Poçao", value: EQUIPMENT_TYPES.POTION },
 ];
 
-export const EQUIPMENT_RARITIES = {
-  COMMON: 10,
-  UNCOMMON: 20,
-  RARE: 30,
-  VERY_RATRE: 40,
-};
-export const equipmentRarities = [
-  { display: "Comum", value: EQUIPMENT_RARITIES.COMMON },
-  { display: "Incomum", value: EQUIPMENT_RARITIES.UNCOMMON },
-  { display: "Raro", value: EQUIPMENT_RARITIES.RARE },
-  { display: "Muito Raro", value: EQUIPMENT_RARITIES.VERY_RATRE },
-];
-
 export const PRIMARY_AFIX_PROB = 8 / 10;
 export const SECONDARY_AFIX_PROB = utils.TrimDecimalPlaces((1 - PRIMARY_AFIX_PROB) / 2);
 export const CURSE_AFIX_PROB = 1 / 10;
+
+export const EQUIPMENT_ATTRIBUTES = {
+  STRENGTH: 10,
+  DEXTERITY: 20,
+  CONSTITUTION: 30,
+  INTELLIGENCE: 40,
+  WISDOM: 50,
+  CHARISMA: 60,
+};
+export const equipmentAttributes = [
+  { display: "Força", value: EQUIPMENT_ATTRIBUTES.STRENGTH },
+  { display: "Destreza", value: EQUIPMENT_ATTRIBUTES.DEXTERITY },
+  { display: "Constituição", value: EQUIPMENT_ATTRIBUTES.CONSTITUTION },
+  { display: "Inteligência", value: EQUIPMENT_ATTRIBUTES.INTELLIGENCE },
+  { display: "Sabedoria", value: EQUIPMENT_ATTRIBUTES.WISDOM },
+  { display: "Carisma", value: EQUIPMENT_ATTRIBUTES.CHARISMA },
+];

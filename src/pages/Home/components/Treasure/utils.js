@@ -6,11 +6,11 @@ import {
   materialPriceInflations,
   EQUIPMENT_TYPES,
   equipmentTypes,
-  equipmentRarities,
   PRIMARY_AFIX_PROB,
   SECONDARY_AFIX_PROB,
   CURSE_AFIX_PROB,
 } from "../../../../data/treasureConstants";
+import { creatureRarities } from "../../../../data/creatureConstants";
 
 const rand = utils.randomIntFromInterval;
 const avg = utils.averageOfArray;
@@ -249,7 +249,7 @@ export const getItemAfixes = (level, type, rarity) => {
     afixTypes = afixTypes.map((afix) => ({ ...afix, probability: 1 / afixTypes.length }));
   }
 
-  let pullsRemaining = equipmentRarities.findIndex((er) => er.value === rarity) + 1;
+  let pullsRemaining = creatureRarities.findIndex((er) => er.value === rarity) + 1;
   let pulledAfixes = [];
   let utilityAfixIndex = -1;
   let buffedAfixesBaseline = {};
@@ -283,7 +283,7 @@ export const getItemAfixes = (level, type, rarity) => {
 
   const itemName = getItemName(
     equipmentTypes.find((et) => et.value === type).display,
-    equipmentRarities.find((er) => er.value === rarity).display,
+    creatureRarities.find((er) => er.value === rarity).treasureDisplay,
     itemAfixes
   );
 
