@@ -763,13 +763,13 @@ export const CREATURE_ACTION_TYPES = {
   ATTACK: 10,
   SAVING_THROW: 20,
   HEALING: 30,
-  OTHER: 40,
+  EFFECT: 40,
 };
 export const creatureActionTypes = [
   { display: "Ataque", value: CREATURE_ACTION_TYPES.ATTACK, weight: 0 },
   { display: "Teste de Resistência", value: CREATURE_ACTION_TYPES.SAVING_THROW, weight: 0 },
   { display: "Cura", value: CREATURE_ACTION_TYPES.HEALING, weight: 0 },
-  { display: "Outro", value: CREATURE_ACTION_TYPES.OTHER, weight: 0 },
+  { display: "Efeito", value: CREATURE_ACTION_TYPES.EFFECT, weight: 0 },
 ];
 
 export const CREATURE_ACTION_ATTACK_REACHES = {

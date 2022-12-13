@@ -35,7 +35,6 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
           name: null,
           description: null,
           type: CREATURE_ACTION_TYPES.ATTACK,
-          typeDescription: null,
           reach: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
           trigger: CREATURE_REACTION_TRIGGERS.ON_DAMAGE_TAKEN,
           triggerDescription: null,
@@ -52,7 +51,6 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
 
   function HandleSelectType(updatedValue) {
     updatedValue.reach = null;
-    updatedValue.typeDescription = null;
 
     setTempReaction(updatedValue);
   }
@@ -116,16 +114,6 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
             />
-            {tempReaction.type === CREATURE_ACTION_TYPES.OTHER && (
-              <TextInput
-                label="Descrição (Tipo)"
-                info={[{ text: "Recomendado apenas para texto descritivo e não mecânicas extras" }]}
-                value={tempReaction}
-                valuePropertyPath="typeDescription"
-                onChange={setTempReaction}
-                className="shorter-input"
-              />
-            )}
           </section>
           <section className="action-row">
             <TextInput

@@ -17,7 +17,7 @@ const avg = utils.averageOfArray;
 const variance = utils.randomValueFromVariance;
 const randItem = utils.randomItemFromArray;
 
-//Gold pieces
+//Gold pieces ------------------------------------
 
 export const getGoldPiecesAmount = (quantity) => {
   const quantityIndex = goldPiecesQuantities.findIndex((gpq) => gpq.value === quantity);
@@ -42,7 +42,8 @@ export const getGoldPiecesAmount = (quantity) => {
   return amount;
 };
 
-//materials
+//materials------------------------------------
+
 // const UNCOMMON_ITEM_MIN_PRICE = 100;
 // const uncommonItemMaxPrice = 500;
 // const rareItemMinPrice = 500;
@@ -102,7 +103,8 @@ export const getMaterialSellPrices = () =>
 
 const materialPriceInflation = [0.5, 1, 1.5, 2];
 
-//Item
+//Equipamento ------------------------------------
+
 const offensiveAfixes = (level) => {
   const bonus = utils.GetProfByLevel(level) / 2;
 

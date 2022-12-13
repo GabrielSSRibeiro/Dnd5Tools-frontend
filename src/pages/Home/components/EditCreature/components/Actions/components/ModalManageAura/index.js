@@ -28,7 +28,6 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
           name: null,
           description: null,
           type: CREATURE_ACTION_TYPES.SAVING_THROW,
-          typeDescription: null,
           reach: CREATURE_AURA_REACHES.MEDIUM,
           damageIntensity: null,
           damageType: null,
@@ -42,7 +41,6 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
 
   function HandleSelectType(updatedValue) {
     updatedValue.reach = null;
-    updatedValue.typeDescription = null;
 
     setTempAction(updatedValue);
   }
@@ -88,20 +86,10 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
             />
-            {tempAction.type === CREATURE_ACTION_TYPES.OTHER && (
-              <TextInput
-                label="Descrição (Tipo)"
-                value={tempAction}
-                valuePropertyPath="typeDescription"
-                onChange={setTempAction}
-                className="shorter-input"
-              />
-            )}
           </section>
           <section className="action-row">
             <TextInput
               label="Descrição (Opcional)"
-              info={[{ text: "Recomendado apenas para texto descritivo e não mecânicas extras" }]}
               isMultiLine={true}
               value={tempAction}
               valuePropertyPath="description"

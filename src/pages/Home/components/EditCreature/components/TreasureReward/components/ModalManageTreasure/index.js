@@ -78,7 +78,7 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
     setTempTreasure(updatedValue);
   }
 
-  function HandleSelectEquipmentType(updatedValue) {
+  function HandleSelectEquipmentRarity(updatedValue) {
     tempTreasure.equipment.damageType = null;
     tempTreasure.equipment.attribute = null;
 
@@ -184,7 +184,7 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                 isLarge={true}
                 value={tempTreasure}
                 valuePropertyPath="equipment.rarity"
-                onSelect={HandleSelectEquipmentType}
+                onSelect={HandleSelectEquipmentRarity}
                 options={creatureRarities}
                 optionDisplay={(o) => o.treasureDisplay}
                 optionValue={(o) => o.value}
@@ -235,7 +235,11 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                 <section className="action-row">
                   <Select
                     label={"Tipo do Equipamento"}
-                    info={[{ text: "Poções tem bônus de afixos dobrado, mas so duram até o final do próximo turno de quem a consumir" }]}
+                    info={[
+                      { text: "todos os itens gerados não poções são mágicos e precisam de sintonização" },
+                      { text: "" },
+                      { text: "Poções tem bônus de afixos dobrado, mas só duram até o final do próximo turno de quem a consumir" },
+                    ]}
                     extraWidth={100}
                     isLarge={true}
                     value={tempTreasure}

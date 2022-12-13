@@ -46,10 +46,10 @@ export const MATERIAL_QUANTITIES = {
   MANY: 40,
 };
 export const materialQuantities = [
-  { display: "Pouco (1 tentativa)", value: MATERIAL_QUANTITIES.FEW },
-  { display: "Médio (2 tentativas)", value: MATERIAL_QUANTITIES.AVERAGE },
-  { display: "Muito (3 tentativas)", value: MATERIAL_QUANTITIES.SEVERAL },
-  { display: "Bastante (4 tentativas)", value: MATERIAL_QUANTITIES.MANY },
+  { display: "Pouco (1 tentativa)", resultDisplay: "1 tentativa", value: MATERIAL_QUANTITIES.FEW },
+  { display: "Médio (2 tentativas)", resultDisplay: "2 tentativas", value: MATERIAL_QUANTITIES.AVERAGE },
+  { display: "Muito (3 tentativas)", resultDisplay: "3 tentativas", value: MATERIAL_QUANTITIES.SEVERAL },
+  { display: "Bastante (4 tentativas)", resultDisplay: "4 tentativas", value: MATERIAL_QUANTITIES.MANY },
 ];
 
 export const MATERIAL_WEIGHTS = {
@@ -60,11 +60,11 @@ export const MATERIAL_WEIGHTS = {
   EXTREME: 50,
 };
 export const materialWeigths = [
-  { display: "Irrelevante", value: MATERIAL_WEIGHTS.IRRELEVANT },
-  { display: "Leve (5kg)", value: MATERIAL_WEIGHTS.LIGHT },
-  { display: "Médio (10kg)", value: MATERIAL_WEIGHTS.MEDIUM },
-  { display: "Pesado (30kg)", value: MATERIAL_WEIGHTS.HEAVY },
-  { display: "Extremo (70kg)", value: MATERIAL_WEIGHTS.EXTREME },
+  { display: "Irrelevante", resultDisplay: "0 kg", value: MATERIAL_WEIGHTS.IRRELEVANT },
+  { display: "Leve (5kg)", resultDisplay: "5 kg", value: MATERIAL_WEIGHTS.LIGHT },
+  { display: "Médio (10kg)", resultDisplay: "10 kg", value: MATERIAL_WEIGHTS.MEDIUM },
+  { display: "Pesado (30kg)", resultDisplay: "30 kg", value: MATERIAL_WEIGHTS.HEAVY },
+  { display: "Extremo (70kg)", resultDisplay: "70 kg", value: MATERIAL_WEIGHTS.EXTREME },
 ];
 
 export const EQUIPMENT_TYPES = {
@@ -95,7 +95,7 @@ export const EQUIPMENT_ATTRIBUTES = {
 export const equipmentAttributes = [
   { display: "Força", value: EQUIPMENT_ATTRIBUTES.STRENGTH },
   { display: "Destreza", value: EQUIPMENT_ATTRIBUTES.DEXTERITY },
-  { display: "Constituição", value: EQUIPMENT_ATTRIBUTES.CONSTITUTION },
+  // { display: "Constituição", value: EQUIPMENT_ATTRIBUTES.CONSTITUTION },
   { display: "Inteligência", value: EQUIPMENT_ATTRIBUTES.INTELLIGENCE },
   { display: "Sabedoria", value: EQUIPMENT_ATTRIBUTES.WISDOM },
   { display: "Carisma", value: EQUIPMENT_ATTRIBUTES.CHARISMA },
