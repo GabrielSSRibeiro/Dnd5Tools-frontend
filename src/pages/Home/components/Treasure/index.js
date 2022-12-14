@@ -28,7 +28,7 @@ import {
   UNCOMMON_ITEM_MIN_PRICE,
   CURSE_AFIX_PROB,
 } from "../../../../data/treasureConstants";
-import { creatureRarities, damageTypes } from "../../../../data/creatureConstants";
+import { creatureRarities, CREATURE_RARITIES, damageTypes } from "../../../../data/creatureConstants";
 import * as utils from "../../../../utils";
 
 import Panel from "../../../../components/Panel";
@@ -52,7 +52,8 @@ function Treasure({ resultText, level }) {
   const [equipmentDamageType, setEquipmentDamageType] = useState(null);
   const [equipmentAttribute, setEquipmentAttribute] = useState(null);
 
-  const generatedItem = equipmentType && equipmentRarity ? getItemAfixes(level, equipmentType, equipmentRarity) : null;
+  const generatedItem =
+    equipmentType && equipmentRarity ? getItemAfixes(equipmentType, equipmentRarity, equipmentDamageType, equipmentAttribute) : null;
 
   //   useEffect(() => {
   //   api.get("items").then((response) => {
@@ -194,9 +195,13 @@ function Treasure({ resultText, level }) {
                   text: `Probabilidade de afixo especial em item: ${utils.turnValueIntoPercentageString(CURSE_AFIX_PROB)}`,
                 },
                 { text: "" },
-                { text: "todos os itens gerados não poções são mágicos e precisam de sintonização" },
+                { text: "todos os itens não poções gerados são mágicos e precisam de sintonização" },
                 { text: "" },
                 { text: "Poções tem bônus de afixos dobrado, mas so duram até o final do próximo turno de quem a consumir" },
+                { text: "" },
+                {
+                  text: "Equipamentos lendários só podem ser criados como tesouro de criaturas lendárias e possuem ambos 5 afixos e habilidade bônus",
+                },
               ]}
             >
               <main className="panel-select details">
@@ -212,7 +217,7 @@ function Treasure({ resultText, level }) {
                   extraWidth={150}
                   value={equipmentRarity}
                   onSelect={setEquipmentRarity}
-                  options={creatureRarities}
+                  options={creatureRarities.filter((r) => r.value !== CREATURE_RARITIES.LEGENDARY)}
                   optionDisplay={(o) => o.treasureDisplay}
                   optionValue={(o) => o.value}
                 />
@@ -304,10 +309,19 @@ function Treasure({ resultText, level }) {
                   {materialQuantities.find((mq) => mq.value === materialQuantity).resultDisplay})
                 </p>
                 <div className="crafting-tools">
-                  <span>Armas: Ferramentas de ferreiro</span>
-                  <span>Armaduras: Ferramentas de ferreiro, ferramentas de costureiro, ferramentas de coureiro, ferramentas de sapateiro</span>
-                  <span>Acessórios: Ferramentas de joalheiro</span>
-                  <span>Poções: Suprimentos de Alquimista</span>
+                  <span>
+                    <span className="label">Armas: </span>Ferramentas de ferreiro
+                  </span>
+                  <span>
+                    <span className="label">Armaduras: </span>Ferramentas de ferreiro, ferramentas de costureiro, ferramentas de coureiro, ferramentas
+                    de sapateiro
+                  </span>
+                  <span>
+                    <span className="label">Acessórios: </span>Ferramentas de joalheiro
+                  </span>
+                  <span>
+                    <span className="label">Poçoes: </span>Suprimentos de Alquimista
+                  </span>
                 </div>
               </footer>
             </div>

@@ -1,5 +1,3 @@
-import * as utils from "../utils";
-
 export const TREASURE_TYPES = {
   GOLD_PIECES: 10,
   MATERIAL: 20,
@@ -80,10 +78,6 @@ export const equipmentTypes = [
   { display: "Poçao", value: EQUIPMENT_TYPES.POTION },
 ];
 
-export const PRIMARY_AFIX_PROB = 8 / 10;
-export const SECONDARY_AFIX_PROB = utils.TrimDecimalPlaces((1 - PRIMARY_AFIX_PROB) / 2);
-export const CURSE_AFIX_PROB = 1 / 10;
-
 export const EQUIPMENT_ATTRIBUTES = {
   STRENGTH: 10,
   DEXTERITY: 20,
@@ -93,10 +87,12 @@ export const EQUIPMENT_ATTRIBUTES = {
   CHARISMA: 60,
 };
 export const equipmentAttributes = [
-  { display: "Força", value: EQUIPMENT_ATTRIBUTES.STRENGTH },
-  { display: "Destreza", value: EQUIPMENT_ATTRIBUTES.DEXTERITY },
-  // { display: "Constituição", value: EQUIPMENT_ATTRIBUTES.CONSTITUTION },
-  { display: "Inteligência", value: EQUIPMENT_ATTRIBUTES.INTELLIGENCE },
-  { display: "Sabedoria", value: EQUIPMENT_ATTRIBUTES.WISDOM },
-  { display: "Carisma", value: EQUIPMENT_ATTRIBUTES.CHARISMA },
+  { display: "Força", resultDisplay: "Habilidades de Força", value: EQUIPMENT_ATTRIBUTES.STRENGTH },
+  { display: "Destreza", resultDisplay: "Habilidades de Destreza", value: EQUIPMENT_ATTRIBUTES.DEXTERITY },
+  // { display: "Constituição", resultDisplay: "Habilidades de Força", value: EQUIPMENT_ATTRIBUTES.CONSTITUTION },
+  { display: "Inteligência", resultDisplay: "Habilidades de Inteligência", value: EQUIPMENT_ATTRIBUTES.INTELLIGENCE },
+  { display: "Sabedoria", resultDisplay: "Habilidades de Sabedoria", value: EQUIPMENT_ATTRIBUTES.WISDOM },
+  { display: "Carisma", resultDisplay: "Habilidades de Carisma", value: EQUIPMENT_ATTRIBUTES.CHARISMA },
 ];
+
+export const CURSE_AFIX_PROB = 1 / 10;

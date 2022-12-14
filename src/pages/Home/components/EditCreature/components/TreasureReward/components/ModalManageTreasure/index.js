@@ -180,6 +180,11 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
             {tempTreasure.type === TREASURE_TYPES.EQUIPMENT && (
               <Select
                 label={"Raridade"}
+                info={[
+                  {
+                    text: "Equipamentos lendários só podem ser criados como tesouro de criaturas lendárias e possuem ambos 5 afixos e habilidade bônus",
+                  },
+                ]}
                 extraWidth={100}
                 isLarge={true}
                 value={tempTreasure}
@@ -254,7 +259,11 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                     className="equipment-ability"
                     info={[
                       {
-                        text: "Transforme uma das ações da criatura em uma abilidade que pode ser usada 1 vez por dia. Essa habilidade também pode ser usada uma vez adicional, fazendo a habilidade não ser mais recuperada diariamente. É apenas possível recuperar uma habilidade usada assim através de forja com uma material da mesma raridade do equipamento",
+                        text: "Transforme uma das ações não comuns da criatura em uma abilidade que número de usos diários de acordo com a frequência",
+                      },
+                      { text: "" },
+                      {
+                        text: "Essa habilidade também pode ser usada uma vez adicional, fazendo a habilidade não ser mais recuperada diariamente. É apenas possível recuperar uma habilidade usada assim através de forja com uma material da mesma raridade do equipamento",
                       },
                       { text: "" },
                       { text: "Um equipamento pode ter afixos OU uma habilidade. Lendários tem ambos" },

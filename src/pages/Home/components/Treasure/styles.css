@@ -46,11 +46,16 @@
   align-items: center;
   justify-content: center;
 }
+
 .Treasure-container .modal-materials-wrapper footer .crafting-tools {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+}
+
+.Treasure-container .modal-materials-wrapper footer .crafting-tools .label {
+  font-weight: 600;
 }
 
 .Treasure-container .panel-select {

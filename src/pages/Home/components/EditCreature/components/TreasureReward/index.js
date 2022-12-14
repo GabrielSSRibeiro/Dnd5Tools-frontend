@@ -7,6 +7,7 @@ import Info from "../../../../../../components/Info";
 import ModalManageTreasure from "./components/ModalManageTreasure";
 
 import "./styles.css";
+import { CREATURE_ACTION_FREQUENCIES } from "../../../../../../data/creatureConstants";
 
 function TreasureReward({ creature, setCreature }) {
   const [modal, setModal] = useState(null);
@@ -20,7 +21,7 @@ function TreasureReward({ creature, setCreature }) {
       <ModalManageTreasure
         treasure={treasure}
         creatureRarity={creature.rarity}
-        creatureActions={creature.actions}
+        creatureActions={creature.actions.filter((a) => a.frequency !== CREATURE_ACTION_FREQUENCIES.COMMON)}
         invalidNames={invalidNames}
         onClose={(tempTreasure) => HandleCloseModalManageTreasure(treasure, tempTreasure)}
       />

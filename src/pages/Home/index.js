@@ -40,10 +40,10 @@ function Home() {
     // });
 
     setLevel(3);
-    setGroups([
-      ["Foux", "Isaac", "Zeth", "Adler", "Motonui", "Elros"],
-      ["Soiaz", "Yaisyl"],
-    ]);
+    // setGroups([
+    //   ["Foux", "Isaac", "Zeth", "Adler", "Motonui", "Elros"],
+    //   ["Soiaz", "Yaisyl"],
+    // ]);
 
     let savedCreatures = [];
     let savedCreature = {

@@ -6,8 +6,6 @@ import {
   materialPriceInflations,
   EQUIPMENT_TYPES,
   equipmentTypes,
-  PRIMARY_AFIX_PROB,
-  SECONDARY_AFIX_PROB,
   CURSE_AFIX_PROB,
 } from "../../../../data/treasureConstants";
 import { creatureRarities } from "../../../../data/creatureConstants";
@@ -105,55 +103,76 @@ const materialPriceInflation = [0.5, 1, 1.5, 2];
 
 //Equipamento ------------------------------------
 
-const offensiveAfixes = (level) => {
-  const bonus = utils.GetProfByLevel(level) / 2;
+export const getItemAfixes = (type, rarity, damageType, attribute) => {
+  let afixTypes = [
+    { type: EQUIPMENT_TYPES.WEAPON, getAfixes: getWeaponAfixes },
+    { type: EQUIPMENT_TYPES.ARMOR, getAfixes: getArmorAfixes },
+    { type: EQUIPMENT_TYPES.JEWELRY, getAfixes: getJewelryAfixes },
+    { type: EQUIPMENT_TYPES.POTION, getAfixes: () => [...getWeaponAfixes(), ...getArmorAfixes(), ...getJewelryAfixes()] },
+  ];
 
+  //pull
+  let pullsRemaining = creatureRarities.findIndex((er) => er.value === rarity) + 1;
+  let pulledAfixes = [];
+  let buffedAfixesBaseline = {};
+
+  while (pullsRemaining > 0) {
+    let pulledAfix = randItem(afixTypes.find((at) => at.type === type).getAfixes());
+
+    checkAndApplyCurse(pulledAfixes, pulledAfix, buffedAfixesBaseline);
+
+    pulledAfixes.push(pulledAfix);
+    pullsRemaining--;
+  }
+
+  //set
+  let itemAfixes = getFormedItemAfixes(pulledAfixes, type, damageType, attribute);
+
+  //name
+  const itemName = getItemName(
+    equipmentTypes.find((et) => et.value === type).display,
+    creatureRarities.find((er) => er.value === rarity).treasureDisplay,
+    itemAfixes
+  );
+
+  //add ability here after calculating mechanics and getting text
+  return { name: itemName, afixes: itemAfixes };
+};
+
+const getWeaponAfixes = () => {
   const afixes = [
-    { name: "Ataque", bonus: 1 }, //Math.ceil(bonus / 2) },
-    { name: "Dano", bonus },
+    { name: "Ataque", bonus: 1 },
+    { name: "Dano", bonus: 2 },
+    { name: "Dado Crítico", bonus: 1 },
+    // { name: "Alcance dobrado", bonus: 1 },
+    // { name: "Deslocamento", bonus: 3 },
+    // { name: "Resis a Condição", bonus: 1 },
   ];
   const probability = 1 / afixes.length;
 
   return afixes.map((afix) => ({ ...afix, probability }));
 };
 
-const defensiveAfixes = (level) => {
+const getArmorAfixes = () => {
   const afixes = [
-    { name: "CA", bonus: 1 }, //Math.ceil(GetProfByLevel(level) / 4) },
-    { name: "PV", bonus: utils.GetProfByLevel(level) * 2 },
+    { name: "CA", bonus: 1 },
+    { name: "PV", bonus: 6 },
+    { name: "Redução de Dano", bonus: 3 },
   ];
   const probability = 1 / afixes.length;
 
   return afixes.map((afix) => ({ ...afix, probability }));
 };
 
-//to avoid athletics power peaks, strength and dexterity abilities are in the same pool
-const strengthAbilities = "Atletismo";
-const dexterityAbilities = [strengthAbilities, "Acrobacia", "Furtividade", "Prestidigitação"];
-const intelligenceAbilities = ["Arcanismo", "História", "Investigação", "Natureza", "Religião"];
-const wisdomAbilities = ["Adestrar Animais", "Intuição", "Medicina", "Percepção", "Sobrevivência"];
-const charismathAbilities = ["Atuação", "Enganação", "Intimidação", "Persuasão"];
-
-const utilityAfixes = (level) => {
-  const bonus = Math.ceil(utils.GetProfByLevel(level) / 3);
-
+const getJewelryAfixes = () => {
   const afixes = [
-    // { name: randItem(strengthAbilities), bonus },
-    { name: randItem(dexterityAbilities), bonus },
-    { name: randItem(intelligenceAbilities), bonus },
-    { name: randItem(wisdomAbilities), bonus },
-    { name: randItem(charismathAbilities), bonus },
+    { name: "TR", bonus: 1 },
+    { name: "Habilidades", bonus: 2 },
+    { name: "Idioma", bonus: 1 },
   ];
   const probability = 1 / afixes.length;
 
   return afixes.map((afix) => ({ ...afix, probability }));
-};
-
-const getPulledAfixType = (afixTypes) => {
-  return afixTypes
-    .sort((a, b) => (a.probability > b.probability ? 1 : -1))
-    .find((type, index) => utils.ProbabilityCheck(type.probability) || index === afixTypes.length - 1)
-    .type();
 };
 
 const checkAndApplyCurse = (pulledAfixes, pulledAfix, buffedAfixesBaseline) => {
@@ -176,15 +195,21 @@ const checkAndApplyCurse = (pulledAfixes, pulledAfix, buffedAfixesBaseline) => {
   }
 };
 
-const formItemAfixes = (pulledAfixes, itemAfixes) => {
+const getFormedItemAfixes = (pulledAfixes, type, damageType, attribute) => {
+  let formedItemAfixes = [];
   pulledAfixes.forEach((afix) => {
-    const foundAfix = itemAfixes.find((itemAfix) => itemAfix.name === afix.name);
-    if (!foundAfix) {
-      itemAfixes.push({ name: afix.name, bonus: afix.bonus });
-    } else {
+    const foundAfix = formedItemAfixes.find((itemAfix) => itemAfix.name === afix.name);
+    if (foundAfix) {
       foundAfix.bonus += afix.bonus;
+    } else {
+      formedItemAfixes.push({ name: afix.name, bonus: afix.bonus });
     }
   });
+
+  formedItemAfixes = sortAndTrimItemAfixes(formedItemAfixes);
+  applyPotionBonusIfNeeded(formedItemAfixes, type);
+
+  return formedItemAfixes;
 };
 
 const sortAndTrimItemAfixes = (itemAfixes) => {
@@ -193,101 +218,19 @@ const sortAndTrimItemAfixes = (itemAfixes) => {
   return itemAfixes.filter((itemAfix) => itemAfix.bonus !== 0);
 };
 
-const checkAndApplyPotion = (itemType, itemAfixes) => {
-  if (itemType === EQUIPMENT_TYPES.POTION) {
+const applyPotionBonusIfNeeded = (itemAfixes, type) => {
+  if (type === EQUIPMENT_TYPES.POTION) {
     itemAfixes.forEach((afix) => (afix.bonus = afix.bonus * 2));
   }
 };
 
 const getItemName = (type, rarity, itemAfixes) => {
-  let name = [];
+  let name = [type, rarity];
 
-  const hasStrengthAndDexterity = itemAfixes.some((afix) => strengthAbilities.includes(afix.name) && dexterityAbilities.includes(afix.name));
-  const hasStrength = itemAfixes.some((afix) => strengthAbilities.includes(afix.name));
-  const hasDexterity = itemAfixes.some((afix) => dexterityAbilities.includes(afix.name));
-  const hasIntelligence = itemAfixes.some((afix) => intelligenceAbilities.includes(afix.name));
-  const hasWisdom = itemAfixes.some((afix) => wisdomAbilities.includes(afix.name));
-  const hasCharisma = itemAfixes.some((afix) => charismathAbilities.includes(afix.name));
-  const hasAttribute = hasDexterity || hasIntelligence || hasWisdom || hasCharisma;
   const isCursed = itemAfixes.some((afix) => afix.bonus < 0);
-
-  if (hasAttribute && isCursed) {
-    name.push(`${type} ${rarity}`);
-  } else {
-    name.push(type, rarity);
-  }
-
   if (isCursed) {
     name.push("Amaldiçoado");
   }
 
-  if (hasAttribute) {
-    if (hasStrengthAndDexterity) {
-      name.push("Da Força e Destreza");
-    } else if (hasStrength) {
-      name.push("Da Força");
-    } else if (hasDexterity) {
-      name.push("Da Destreza");
-    } else if (hasIntelligence) {
-      name.push("Da Inteligência");
-    } else if (hasWisdom) {
-      name.push("Da Sabedoria");
-    } else if (hasCharisma) {
-      name.push("Do Carisma");
-    }
-  }
-
   return name;
-};
-
-export const getItemAfixes = (level, type, rarity) => {
-  let afixTypes = [{ type: () => offensiveAfixes(level) }, { type: () => defensiveAfixes(level) }, { type: () => utilityAfixes(level) }];
-  const typeIndex = equipmentTypes.findIndex((et) => et.value === type);
-
-  //if not last(potion), use weighted probs
-  if (typeIndex <= afixTypes.length - 1) {
-    afixTypes = afixTypes.map((afix, index) => ({ ...afix, probability: index === typeIndex ? PRIMARY_AFIX_PROB : SECONDARY_AFIX_PROB }));
-  } else {
-    afixTypes = afixTypes.map((afix) => ({ ...afix, probability: 1 / afixTypes.length }));
-  }
-
-  let pullsRemaining = creatureRarities.findIndex((er) => er.value === rarity) + 1;
-  let pulledAfixes = [];
-  let utilityAfixIndex = -1;
-  let buffedAfixesBaseline = {};
-
-  while (pullsRemaining > 0) {
-    const pulledAfixType = getPulledAfixType(afixTypes);
-
-    let pulledAfix = randItem(pulledAfixType);
-
-    // check And Apply Utility Synergy
-    if (pulledAfixType.length === utilityAfixes().length) {
-      if (utilityAfixIndex >= 0) {
-        pulledAfix = pulledAfixType[utilityAfixIndex];
-      } else {
-        utilityAfixIndex = pulledAfixType.findIndex((aflixType) => aflixType.name === pulledAfix.name);
-      }
-    }
-
-    checkAndApplyCurse(pulledAfixes, pulledAfix, buffedAfixesBaseline);
-
-    pulledAfixes.push(pulledAfix);
-    pullsRemaining--;
-  }
-
-  let itemAfixes = [];
-  formItemAfixes(pulledAfixes, itemAfixes);
-
-  itemAfixes = sortAndTrimItemAfixes(itemAfixes);
-
-  checkAndApplyPotion(type, itemAfixes);
-
-  const itemName = getItemName(
-    equipmentTypes.find((et) => et.value === type).display,
-    creatureRarities.find((er) => er.value === rarity).treasureDisplay,
-    itemAfixes
-  );
-
-  return { name: itemName, afixes: itemAfixes };
 };

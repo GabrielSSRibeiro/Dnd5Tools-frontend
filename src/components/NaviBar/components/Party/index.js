@@ -268,7 +268,7 @@ function Party({
             {!isSelecting &&
               (!isNewCharacterOpen ? (
                 <aside>
-                  <Button text="Adicionar Personagem" onClick={() => setIsNewCharacterOpen(true)} />
+                  <Button text="Adicionar Personagem" onClick={() => setIsNewCharacterOpen(true)} isDisabled={true} />
                 </aside>
               ) : (
                 <div className="add-new-container">
