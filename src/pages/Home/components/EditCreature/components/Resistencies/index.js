@@ -1,6 +1,6 @@
 import React from "react";
 
-import { damageTypes, conditions } from "../../../../../../data/creatureConstants";
+import { damageTypes, conditions } from "../../../../../../constants/creatureConstants";
 
 import CheckInput from "../../../../../../components/CheckInput";
 import SelectButton from "../../../../../../components/SelectButton";

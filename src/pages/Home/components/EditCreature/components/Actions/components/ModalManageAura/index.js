@@ -4,6 +4,7 @@ import * as utils from "../../../../../../../../utils";
 import {
   CREATURE_ACTION_TYPES,
   creatureActionTypes,
+  creatureActionPowerTotalPercentages,
   CREATURE_AURA_REACHES,
   creatureAuraReaches,
   damageIntensities,
@@ -11,7 +12,7 @@ import {
   conditions,
   conditionDurations,
   difficultyClasses,
-} from "../../../../../../../../data/creatureConstants";
+} from "../../../../../../../../constants/creatureConstants";
 
 import Button from "../../../../../../../../components/Button";
 import TextInput from "../../../../../../../../components/TextInput";
@@ -21,13 +22,14 @@ import Modal from "../../../../../../../../components/Modal";
 import "./styles.css";
 
 function ModalManageAura({ aura, weakSpots, onClose }) {
-  const [tempAction, setTempAction] = useState(
+  const [tempAura, setTempAura] = useState(
     aura
       ? utils.clone(aura)
       : {
           name: null,
           description: null,
           type: CREATURE_ACTION_TYPES.SAVING_THROW,
+          effectPowerTotalPercentage: null,
           reach: CREATURE_AURA_REACHES.MEDIUM,
           damageIntensity: null,
           damageType: null,
@@ -42,7 +44,17 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
   function HandleSelectType(updatedValue) {
     updatedValue.reach = null;
 
-    setTempAction(updatedValue);
+    if (updatedValue.type === CREATURE_ACTION_TYPES.EFFECT) {
+      updatedValue.damageIntensity = null;
+      updatedValue.damageType = null;
+      updatedValue.condition = null;
+      updatedValue.conditionDuration = null;
+      updatedValue.difficultyClass = null;
+    } else {
+      updatedValue.effectPowerTotalPercentage = null;
+    }
+
+    setTempAura(updatedValue);
   }
 
   function HandleSelectDamageIntensity(updatedValue) {
@@ -50,7 +62,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
       updatedValue.damageType = null;
     }
 
-    setTempAction(updatedValue);
+    setTempAura(updatedValue);
   }
 
   function HandleSelectCondition(updatedValue) {
@@ -58,7 +70,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
       updatedValue.conditionDuration = null;
     }
 
-    setTempAction(updatedValue);
+    setTempAura(updatedValue);
   }
 
   function HandleCancel() {
@@ -66,7 +78,27 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
   }
 
   function HandleConfirm() {
-    onClose(tempAction);
+    onClose(tempAura);
+  }
+
+  function CheckFinalButtonValid() {
+    if (!tempAura.name || !tempAura.reach) {
+      return false;
+    }
+
+    if (tempAura.type === CREATURE_ACTION_TYPES.EFFECT && !tempAura.creatureActionPowerTotalPercentages) {
+      return false;
+    }
+
+    if (tempAura.damageIntensity && !tempAura.damageType) {
+      return false;
+    }
+
+    if (tempAura.condition && !tempAura.conditionDuration) {
+      return false;
+    }
+
+    return true;
   }
 
   return (
@@ -74,26 +106,40 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
       <Modal title="Aura" className="modal-action">
         <div className="new-action-wrapper">
           <section className="action-row">
-            <TextInput label="Nome" value={tempAction} valuePropertyPath="name" onChange={setTempAction} className="longer-input" />
+            <TextInput label="Nome" value={tempAura} valuePropertyPath="name" onChange={setTempAura} className="longer-input" />
             <Select
               label={"Tipo"}
               extraWidth={100}
               isLarge={true}
-              value={tempAction}
+              value={tempAura}
               valuePropertyPath="type"
               onSelect={HandleSelectType}
               options={creatureActionTypes.filter((t) => t.value !== CREATURE_ACTION_TYPES.ATTACK)}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
             />
+            {tempAura.type === CREATURE_ACTION_TYPES.EFFECT && (
+              <Select
+                label={"Multiplicador (Efeito)"}
+                info={[{ text: "Porcetagem do Poder Total da ação que esse Efeito representa" }]}
+                extraWidth={100}
+                isLarge={true}
+                value={tempAura}
+                valuePropertyPath="creatureActionPowerTotalPercentages"
+                onSelect={setTempAura}
+                options={creatureActionPowerTotalPercentages}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+            )}
           </section>
           <section className="action-row">
             <TextInput
               label="Descrição (Opcional)"
               isMultiLine={true}
-              value={tempAction}
+              value={tempAura}
               valuePropertyPath="description"
-              onChange={setTempAction}
+              onChange={setTempAura}
               className="longer-input"
             />
             <aside>
@@ -102,9 +148,9 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
                   label={"Alcance"}
                   extraWidth={100}
                   isLarge={true}
-                  value={tempAction}
+                  value={tempAura}
                   valuePropertyPath="reach"
-                  onSelect={setTempAction}
+                  onSelect={setTempAura}
                   options={creatureAuraReaches}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
@@ -118,62 +164,65 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
               extraWidth={100}
               isLarge={true}
               nothingSelected="Nenhuma"
-              value={tempAction}
+              value={tempAura}
               valuePropertyPath="damageIntensity"
               onSelect={HandleSelectDamageIntensity}
               options={damageIntensities}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              isDisabled={tempAura.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
               label={"Tipo de Dano"}
               extraWidth={100}
               isLarge={true}
-              value={tempAction}
+              value={tempAura}
               valuePropertyPath="damageType"
-              onSelect={setTempAction}
+              onSelect={setTempAura}
               options={damageTypes}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               optionsAtATime={4}
-              isDisabled={!tempAction.damageIntensity}
+              isDisabled={!tempAura.damageIntensity || tempAura.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
               label={"Dificuldade"}
               extraWidth={100}
               isLarge={true}
               nothingSelected="Nenhuma"
-              value={tempAction}
+              value={tempAura}
               valuePropertyPath="difficultyClass"
-              onSelect={setTempAction}
+              onSelect={setTempAura}
               options={difficultyClasses}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              isDisabled={tempAura.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
               label={"Condição "}
               extraWidth={100}
               isLarge={true}
               nothingSelected="Nenhuma"
-              value={tempAction}
+              value={tempAura}
               valuePropertyPath="condition"
               onSelect={HandleSelectCondition}
               options={conditions}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               optionsAtATime={4}
+              isDisabled={tempAura.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
               label={"Duração"}
               extraWidth={100}
               isLarge={true}
-              value={tempAction}
+              value={tempAura}
               valuePropertyPath="conditionDuration"
-              onSelect={setTempAction}
+              onSelect={setTempAura}
               options={conditionDurations}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
-              isDisabled={!tempAction.condition}
+              isDisabled={!tempAura.condition || tempAura.type === CREATURE_ACTION_TYPES.EFFECT}
             />
           </section>
           <footer>
@@ -182,9 +231,9 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
               extraWidth={100}
               isLarge={true}
               nothingSelected="Nenhum"
-              value={tempAction}
+              value={tempAura}
               valuePropertyPath="associatedWeakSpot"
-              onSelect={setTempAction}
+              onSelect={setTempAura}
               options={weakSpots}
               dropUp={true}
             />
@@ -195,7 +244,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
                 <button className="button-simple" onClick={HandleCancel}>
                   Cancelar
                 </button>
-                <Button text="Salvar" onClick={HandleConfirm} isDisabled={!tempAction.name || !tempAction.reach} />
+                <Button text="Salvar" onClick={HandleConfirm} isDisabled={!CheckFinalButtonValid()} />
               </aside>
             </div>
           </footer>

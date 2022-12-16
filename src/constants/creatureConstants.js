@@ -772,6 +772,19 @@ export const creatureActionTypes = [
   { display: "Efeito", value: CREATURE_ACTION_TYPES.EFFECT, weight: 0 },
 ];
 
+export const CREATURE_ACTION_POWER_TOTAL_PERCENTAGES = {
+  SMALL: 10,
+  MEDIUM: 20,
+  LARGE: 30,
+  EXTREME: 40,
+};
+export const creatureActionPowerTotalPercentages = [
+  { display: "10% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.SMALL, weight: 1, powerTotal: 0.1 },
+  { display: "20% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.MEDIUM, weight: 2, powerTotal: 0.2 },
+  { display: "50% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.LARGE, weight: 3, powerTotal: 0.5 },
+  { display: "100% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.EXTREME, weight: 4, powerTotal: 1 },
+];
+
 export const CREATURE_ACTION_ATTACK_REACHES = {
   MELEE_CLOSE: 10,
   MELEE_EXTRA: 20,

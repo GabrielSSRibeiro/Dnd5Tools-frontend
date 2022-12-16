@@ -1,11 +1,11 @@
-import * as utils from "../../../../utils";
-import { MIN_DIFICULTY } from "../../../../data/skillCheckConstants";
-import { conditions, conditionDurations, damageIntensities, difficultyClasses } from "../../../../data/creatureConstants";
+import * as utils from "../utils";
+import { MIN_DIFICULTY } from "../constants/skillCheckConstants";
+import { conditions, conditionDurations, damageIntensities, difficultyClasses } from "../constants/creatureConstants";
 
 const rand = utils.randomIntFromInterval;
 const variance = utils.randomValueFromVariance;
 
-const getDifficulty = (level, checkDifficulty) => {
+export const getDifficulty = (level, checkDifficulty) => {
   const prof = utils.GetProfByLevel(level);
   const difficultyIndex = difficultyClasses.findIndex((dc) => dc.value === checkDifficulty);
   const difficultyFactor = 5;

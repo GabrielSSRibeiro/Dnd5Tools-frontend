@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 //  import api from "../../services/api";
 import * as utils from "../../../../utils";
-import { creatureRarities, creatureEnvironments, creatureSizes, creatureTypes } from "../../../../data/creatureConstants";
-import { MAX_CREATURES_ALLOWED } from "../../../../data/combatConstants";
+import { creatureRarities, creatureEnvironments, creatureSizes, creatureTypes } from "../../../../constants/creatureConstants";
+import { MAX_CREATURES_ALLOWED } from "../../../../constants/combatConstants";
 
 import Button from "../../../Button";
 import CheckInput from "../../../CheckInput";

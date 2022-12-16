@@ -13,7 +13,7 @@ import {
   DAMAGE_TYPES,
   LANGUAGES,
   CREATURE_ACTION_FREQUENCIES,
-} from "../../../../data/creatureConstants";
+} from "../../../../constants/creatureConstants";
 
 import Definition from "./components/Definition";
 import Atributes from "./components/Attributes";

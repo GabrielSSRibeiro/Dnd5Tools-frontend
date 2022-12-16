@@ -10,8 +10,8 @@ import {
   materialWeigths,
   equipmentAttributes,
   equipmentTypes,
-} from "../../../../../../../../data/treasureConstants";
-import { CREATURE_RARITIES, creatureRarities, damageTypes } from "../../../../../../../../data/creatureConstants";
+} from "../../../../../../../../constants/treasureConstants";
+import { CREATURE_RARITIES, creatureRarities, damageTypes } from "../../../../../../../../constants/creatureConstants";
 
 import Button from "../../../../../../../../components/Button";
 import TextInput from "../../../../../../../../components/TextInput";
@@ -190,7 +190,11 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                 value={tempTreasure}
                 valuePropertyPath="equipment.rarity"
                 onSelect={HandleSelectEquipmentRarity}
-                options={creatureRarities}
+                options={
+                  creatureRarity === CREATURE_RARITIES.LEGENDARY
+                    ? creatureRarities
+                    : creatureRarities.filter((r) => r.value !== CREATURE_RARITIES.LEGENDARY)
+                }
                 optionDisplay={(o) => o.treasureDisplay}
                 optionValue={(o) => o.value}
               />

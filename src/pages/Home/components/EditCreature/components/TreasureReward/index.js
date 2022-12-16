@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
-import { treasureTypes } from "../../../../../../data/treasureConstants";
+import { treasureTypes } from "../../../../../../constants/treasureConstants";
 
 import Button from "../../../../../../components/Button";
 import Info from "../../../../../../components/Info";
 import ModalManageTreasure from "./components/ModalManageTreasure";
 
 import "./styles.css";
-import { CREATURE_ACTION_FREQUENCIES } from "../../../../../../data/creatureConstants";
+import { CREATURE_ACTION_FREQUENCIES } from "../../../../../../constants/creatureConstants";
 
 function TreasureReward({ creature, setCreature }) {
   const [modal, setModal] = useState(null);

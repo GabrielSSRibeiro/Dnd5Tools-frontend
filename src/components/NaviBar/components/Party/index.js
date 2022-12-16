@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 //  import api from "../../services/api";
 
-import { LEVELS } from "../../../../data/combatConstants";
-import { MAX_CHARACTERS_ALLOWED } from "../../../../data/combatConstants";
+import { LEVELS } from "../../../../constants/combatConstants";
+import { MAX_CHARACTERS_ALLOWED } from "../../../../constants/combatConstants";
 
 import Button from "../../../Button";
 import Select from "../../../Select";

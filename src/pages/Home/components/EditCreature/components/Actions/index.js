@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import { TREASURE_TYPES } from "../../../../../../data/treasureConstants";
-import { creatureReactions, creatureActionFrequencies, creatureAuraReaches } from "../../../../../../data/creatureConstants";
+import { TREASURE_TYPES } from "../../../../../../constants/treasureConstants";
+import { creatureReactions, creatureActionFrequencies, creatureAuraReaches } from "../../../../../../constants/creatureConstants";
 
 import Button from "../../../../../../components/Button";
 import Select from "../../../../../../components/Select";

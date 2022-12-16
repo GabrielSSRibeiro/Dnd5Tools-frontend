@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
+import { getDifficulty } from "../../../../helpers/skillCheckHelper";
 import {
   getGoldPiecesAmount,
   ITEMS_CRAFT_TIMES,
@@ -10,7 +11,7 @@ import {
   getMaterialBuyPrices,
   getMaterialSellPrices,
   getItemAfixes,
-} from "./utils";
+} from "../../../../helpers/treasureHelper";
 import {
   TREASURE_TYPES,
   treasureTypes,
@@ -27,8 +28,8 @@ import {
   equipmentAttributes,
   UNCOMMON_ITEM_MIN_PRICE,
   CURSE_AFIX_PROB,
-} from "../../../../data/treasureConstants";
-import { creatureRarities, CREATURE_RARITIES, damageTypes } from "../../../../data/creatureConstants";
+} from "../../../../constants/treasureConstants";
+import { creatureRarities, CREATURE_RARITIES, damageTypes } from "../../../../constants/creatureConstants";
 import * as utils from "../../../../utils";
 
 import Panel from "../../../../components/Panel";
@@ -281,13 +282,19 @@ function Treasure({ resultText, level }) {
               </div>
               <div className="modal-materials">
                 <ResultBox
-                  headers={["Preço / Tempo", "Forja de Item"]}
-                  subHeaders={["Comprar / Dias", "Vender / Dias"]}
+                  headers={["Preço / CD / Dias", "Forja de Item"]}
+                  subHeaders={["Comprar", "Vender"]}
                   resultBackgroundColumn={true}
                   values={getItemCraftBuyPrices(materialPriceInflation).map((item, index) => ({
                     label: null,
-                    top: item() + " PO / " + ITEMS_CRAFT_TIMES[index]() + " d",
-                    bottom: getItemCraftSellPrices()[index]() + " PO / " + ITEMS_CRAFT_TIMES[index]() + " d",
+                    top: item() + " PO / " + getDifficulty(level, creatureRarities[index].value) + " / " + ITEMS_CRAFT_TIMES[index]() + " d",
+                    bottom:
+                      getItemCraftSellPrices()[index]() +
+                      " PO / " +
+                      getDifficulty(level, creatureRarities[index].value) +
+                      " / " +
+                      ITEMS_CRAFT_TIMES[index]() +
+                      " d",
                   }))}
                 />
               </div>
@@ -305,8 +312,8 @@ function Treasure({ resultText, level }) {
               </div>
               <footer>
                 <p>
-                  Peso: {materialWeigths.find((mw) => mw.value === materialWeigth).resultDisplay}, Forja: CD {15} (
-                  {materialQuantities.find((mq) => mq.value === materialQuantity).resultDisplay})
+                  Peso: {materialWeigths.find((mw) => mw.value === materialWeigth).resultDisplay}, Forja:{" "}
+                  {materialQuantities.find((mq) => mq.value === materialQuantity).resultDisplay}
                 </p>
                 <div className="crafting-tools">
                   <span>

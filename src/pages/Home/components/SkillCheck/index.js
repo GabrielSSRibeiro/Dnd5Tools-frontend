@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 //  import api from "../../services/api";
-import { getSkillCheck } from "./utils";
-import { MIN_DIFICULTY } from "../../../../data/skillCheckConstants";
-import { conditions, conditionDurations, DAMAGE_INTENSITIES, damageIntensities, difficultyClasses } from "../../../../data/creatureConstants";
+import { getSkillCheck } from "../../../../helpers/skillCheckHelper";
+import { MIN_DIFICULTY } from "../../../../constants/skillCheckConstants";
+import { conditions, conditionDurations, DAMAGE_INTENSITIES, damageIntensities, difficultyClasses } from "../../../../constants/creatureConstants";
 
 import Panel from "../../../../components/Panel";
 import Modal from "../../../../components/Modal";

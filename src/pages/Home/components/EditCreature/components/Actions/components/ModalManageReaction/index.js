@@ -4,6 +4,7 @@ import * as utils from "../../../../../../../../utils";
 import {
   CREATURE_ACTION_TYPES,
   creatureActionTypes,
+  creatureActionPowerTotalPercentages,
   CREATURE_ACTION_FREQUENCIES,
   creatureActionAttackReaches,
   creatureActionSavingThrowReaches,
@@ -17,7 +18,7 @@ import {
   difficultyClasses,
   CREATURE_REACTION_TRIGGERS,
   creatureReactionTriggers,
-} from "../../../../../../../../data/creatureConstants";
+} from "../../../../../../../../constants/creatureConstants";
 
 import Button from "../../../../../../../../components/Button";
 import TextInput from "../../../../../../../../components/TextInput";
@@ -35,6 +36,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
           name: null,
           description: null,
           type: CREATURE_ACTION_TYPES.ATTACK,
+          effectPowerTotalPercentage: null,
           reach: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
           trigger: CREATURE_REACTION_TRIGGERS.ON_DAMAGE_TAKEN,
           triggerDescription: null,
@@ -51,6 +53,16 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
 
   function HandleSelectType(updatedValue) {
     updatedValue.reach = null;
+
+    if (updatedValue.type === CREATURE_ACTION_TYPES.EFFECT) {
+      updatedValue.damageIntensity = null;
+      updatedValue.damageType = null;
+      updatedValue.condition = null;
+      updatedValue.conditionDuration = null;
+      updatedValue.difficultyClass = null;
+    } else {
+      updatedValue.effectPowerTotalPercentage = null;
+    }
 
     setTempReaction(updatedValue);
   }
@@ -85,6 +97,26 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
     onClose(tempReaction);
   }
 
+  function CheckFinalButtonValid() {
+    if (!tempReaction.name || invalidNames.includes(tempReaction.name) || !tempReaction.reach) {
+      return false;
+    }
+
+    if (tempReaction.type === CREATURE_ACTION_TYPES.EFFECT && !tempReaction.creatureActionPowerTotalPercentages) {
+      return false;
+    }
+
+    if (tempReaction.damageIntensity && !tempReaction.damageType) {
+      return false;
+    }
+
+    if (tempReaction.condition && !tempReaction.conditionDuration) {
+      return false;
+    }
+
+    return true;
+  }
+
   return (
     <div className="ModalManageReaction-container">
       <Modal title="Reação" className="modal-action">
@@ -114,6 +146,20 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
             />
+            {tempReaction.type === CREATURE_ACTION_TYPES.EFFECT && (
+              <Select
+                label={"Multiplicador (Efeito)"}
+                info={[{ text: "Porcetagem do Poder Total da ação que esse Efeito representa" }]}
+                extraWidth={100}
+                isLarge={true}
+                value={tempReaction}
+                valuePropertyPath="creatureActionPowerTotalPercentages"
+                onSelect={setTempReaction}
+                options={creatureActionPowerTotalPercentages}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+            )}
           </section>
           <section className="action-row">
             <TextInput
@@ -180,6 +226,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               options={damageIntensities}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              isDisabled={tempReaction.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
               label={"Tipo de Dano"}
@@ -192,7 +239,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               optionsAtATime={4}
-              isDisabled={!tempReaction.damageIntensity}
+              isDisabled={!tempReaction.damageIntensity || tempReaction.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
               label={"Dificuldade"}
@@ -205,9 +252,10 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               options={difficultyClasses}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              isDisabled={tempReaction.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
-              label={"Condição "}
+              label={"Condição"}
               extraWidth={100}
               isLarge={true}
               nothingSelected="Nenhuma"
@@ -218,6 +266,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               optionsAtATime={4}
+              isDisabled={tempReaction.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
               label={"Duração"}
@@ -229,7 +278,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               options={conditionDurations}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
-              isDisabled={!tempReaction.condition}
+              isDisabled={!tempReaction.condition || tempReaction.type === CREATURE_ACTION_TYPES.EFFECT}
             />
           </section>
           <footer>
@@ -259,11 +308,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
                 <button className="button-simple" onClick={HandleCancel}>
                   Cancelar
                 </button>
-                <Button
-                  text="Salvar"
-                  onClick={HandleConfirm}
-                  isDisabled={!tempReaction.name || invalidNames.includes(tempReaction.name) || !tempReaction.reach}
-                />
+                <Button text="Salvar" onClick={HandleConfirm} isDisabled={!CheckFinalButtonValid()} />
               </aside>
             </div>
           </footer>

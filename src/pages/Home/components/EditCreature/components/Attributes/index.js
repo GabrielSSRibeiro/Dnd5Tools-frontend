@@ -6,7 +6,7 @@ import {
   creatureAttacks,
   creatureArmorClass,
   creatureInitiatives,
-} from "../../../../../../data/creatureConstants";
+} from "../../../../../../constants/creatureConstants";
 
 import CheckInput from "../../../../../../components/CheckInput";
 import Select from "../../../../../../components/Select";

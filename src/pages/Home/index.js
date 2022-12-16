@@ -110,6 +110,7 @@ function Home() {
         {
           name: "Ataque Comum",
           frequency: 10,
+          type: 10,
           reach: 10,
         },
       ],

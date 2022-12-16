@@ -1,4 +1,4 @@
-import * as utils from "../../../../utils";
+import * as utils from "../utils";
 import {
   goldPiecesQuantities,
   UNCOMMON_ITEM_MIN_PRICE,
@@ -7,8 +7,8 @@ import {
   EQUIPMENT_TYPES,
   equipmentTypes,
   CURSE_AFIX_PROB,
-} from "../../../../data/treasureConstants";
-import { creatureRarities } from "../../../../data/creatureConstants";
+} from "../constants/treasureConstants";
+import { creatureRarities } from "../constants/creatureConstants";
 
 const rand = utils.randomIntFromInterval;
 const avg = utils.averageOfArray;
@@ -156,7 +156,7 @@ const getWeaponAfixes = () => {
 const getArmorAfixes = () => {
   const afixes = [
     { name: "CA", bonus: 1 },
-    { name: "PV", bonus: 6 },
+    { name: "PV Máximo", bonus: 6 },
     { name: "Redução de Dano", bonus: 3 },
   ];
   const probability = 1 / afixes.length;
