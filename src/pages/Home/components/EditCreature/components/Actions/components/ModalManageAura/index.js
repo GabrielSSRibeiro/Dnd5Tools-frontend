@@ -109,6 +109,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
             <TextInput label="Nome" value={tempAura} valuePropertyPath="name" onChange={setTempAura} className="longer-input" />
             <Select
               label={"Tipo"}
+              info={[{ text: "Efeito é uma ação que, por exemplo afete a própria criatura a concedendo um benefício" }]}
               extraWidth={100}
               isLarge={true}
               value={tempAura}

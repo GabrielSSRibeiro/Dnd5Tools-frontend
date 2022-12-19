@@ -135,6 +135,7 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
             />
             <Select
               label={"Tipo"}
+              info={[{ text: "Efeito é uma ação que, por exemplo afete a própria criatura a concedendo um benefício" }]}
               extraWidth={100}
               isLarge={true}
               value={tempAction}

@@ -243,6 +243,11 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
             <div className="update-avatar-wrapper">
               <TextInput
                 label="URL da Imagem"
+                info={[
+                  { text: "Copie o endereço de image imagem na web e o cole aqui para utilizar a imagem" },
+                  { text: "" },
+                  { text: "Lembre de manter o uso de imagens registradas para fins não comerciais" },
+                ]}
                 className={`img-url ${imgUrl === null ? "invisible" : ""}`}
                 value={imgUrl}
                 onChange={HandleImgUrlOnChange}
