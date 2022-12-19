@@ -11,6 +11,9 @@ import {
   getMaterialBuyPrices,
   getMaterialSellPrices,
   getItemAfixes,
+  getWeaponAfixes,
+  getArmorAfixes,
+  getJewelryAfixes,
 } from "../../../../helpers/treasureHelper";
 import {
   TREASURE_TYPES,
@@ -54,7 +57,9 @@ function Treasure({ resultText, level }) {
   const [equipmentAttribute, setEquipmentAttribute] = useState(null);
 
   const generatedItem =
-    equipmentType && equipmentRarity ? getItemAfixes(equipmentType, equipmentRarity, equipmentDamageType, equipmentAttribute) : null;
+    hasResult && treasureType === TREASURE_TYPES.EQUIPMENT
+      ? getItemAfixes(equipmentType, equipmentRarity, equipmentDamageType, equipmentAttribute)
+      : null;
 
   //   useEffect(() => {
   //   api.get("items").then((response) => {
@@ -192,16 +197,37 @@ function Treasure({ resultText, level }) {
             <Panel
               title="Tipo e Raridade"
               info={[
-                {
-                  text: `Probabilidade de afixo especial em item: ${utils.turnValueIntoPercentageString(CURSE_AFIX_PROB)}`,
-                },
-                { text: "" },
                 { text: "todos os itens não poções gerados são mágicos e precisam de sintonização" },
                 { text: "" },
                 { text: "Poções tem bônus de afixos dobrado, mas so duram até o final do próximo turno de quem a consumir" },
                 { text: "" },
                 {
                   text: "Equipamentos lendários só podem ser criados como tesouro de criaturas lendárias e possuem ambos 5 afixos e habilidade bônus",
+                },
+                { text: "" },
+                {
+                  text: `Probabilidade de afixo amaldiçoado: ${utils.turnValueIntoPercentageString(CURSE_AFIX_PROB)}`,
+                },
+                {
+                  text:
+                    "Probabilidade de afixo em armas: " +
+                    getWeaponAfixes()
+                      .map((a) => `${a.infoDisplay} (${utils.turnValueIntoPercentageString(a.probability)})`)
+                      .join(", "),
+                },
+                {
+                  text:
+                    "Probabilidade de afixo em armadura: " +
+                    getArmorAfixes()
+                      .map((a) => `${a.infoDisplay} (${utils.turnValueIntoPercentageString(a.probability)})`)
+                      .join(", "),
+                },
+                {
+                  text:
+                    "Probabilidade de afixo em acessório: " +
+                    getJewelryAfixes()
+                      .map((a) => `${a.infoDisplay} (${utils.turnValueIntoPercentageString(a.probability)})`)
+                      .join(", "),
                 },
               ]}
             >
@@ -340,7 +366,7 @@ function Treasure({ resultText, level }) {
               highlightTopRow={true}
               values={generatedItem.afixes.map((afix) => ({
                 label: null,
-                top: afix.bonus > 0 ? "+" + afix.bonus : afix.bonus,
+                top: afix.bonus,
                 bottom: afix.name,
               }))}
             />
@@ -350,7 +376,7 @@ function Treasure({ resultText, level }) {
       <footer>
         <Button
           text={`Rodar ${treasureTypes.find((tt) => tt.value === treasureType).display || resultText}`}
-          onClick={() => (hasResult ? setHasResult(false) : setHasResult(true))}
+          onClick={() => setHasResult(!hasResult)}
           isDisabled={!CheckFinalButtonValid()}
         />
       </footer>

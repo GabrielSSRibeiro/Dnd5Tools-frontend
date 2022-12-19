@@ -17,9 +17,25 @@ export function randomValueFromVariance(value, variance) {
 }
 
 export function randomItemFromArray(array) {
-  const index = randomIntFromInterval(0, array.length - 1);
+  if (!array) {
+    return null;
+  }
+
+  const index = randomIntFromInterval(0, Math.max(array.length - 1, 0));
 
   return array[index];
+}
+
+export function randomIndexFromArrayOfProbs(probArray) {
+  const randValue = Math.random();
+
+  let probSum = 0;
+  const pickedIndex = probArray.findIndex((p) => {
+    probSum += p;
+    return randValue <= probSum;
+  });
+
+  return pickedIndex ?? probArray.length - 1;
 }
 
 export function GetProfByLevel(level) {

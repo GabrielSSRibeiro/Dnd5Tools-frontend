@@ -606,7 +606,7 @@ export const DAMAGE_TYPES = {
 export const damageTypes = [
   { display: "Cortante", value: DAMAGE_TYPES.SLASHING, damageEffectiveness: physicalDamagesEffectiveness, weight: 1 },
   { display: "Perfurante", value: DAMAGE_TYPES.BLUDGEONING, damageEffectiveness: physicalDamagesEffectiveness, weight: 1 },
-  { display: "Concussão", value: DAMAGE_TYPES.PIERCING, damageEffectiveness: physicalDamagesEffectiveness, weight: 1 },
+  { display: "Concussao", value: DAMAGE_TYPES.PIERCING, damageEffectiveness: physicalDamagesEffectiveness, weight: 1 },
   { display: "Ácido", value: DAMAGE_TYPES.ACID, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
   { display: "Elétrico", value: DAMAGE_TYPES.LIGHTNING, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
   { display: "Energia", value: DAMAGE_TYPES.FORCE, damageEffectiveness: magicalDamagesEffectiveness, weight: 3 },
@@ -639,11 +639,10 @@ export const conditions = [
   { display: "Impedido", value: CONDITIONS.RESTRAINED, weight: 4 },
   { display: "Envenenado", value: CONDITIONS.POISONED, weight: 5 },
   { display: "Amedrontado", value: CONDITIONS.FRIGHTENED, weight: 6 },
-  { display: "Atordoado/Incapacitado", value: CONDITIONS.STUNNED, weight: 7 },
+  { display: "Atordoado", value: CONDITIONS.STUNNED, weight: 7 },
   { display: "Paralizado", value: CONDITIONS.PARALYZED, weight: 8 },
   { display: "Petrificado", value: CONDITIONS.PETRIFIED, weight: 9 },
-  { display: "Inconsciente", value: CONDITIONS.UNCONSCIOUS, weight: 10 },
-  { display: "Exaustão", value: CONDITIONS.EXHAUSTION, weight: 11 },
+  { display: "Exaustao", value: CONDITIONS.EXHAUSTION, weight: 10 },
 ];
 
 export const CONDITION_DURATIONS = {

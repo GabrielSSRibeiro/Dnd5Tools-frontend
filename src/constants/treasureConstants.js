@@ -95,4 +95,4 @@ export const equipmentAttributes = [
   { display: "Carisma", resultDisplay: "Habilidades de Carisma", value: EQUIPMENT_ATTRIBUTES.CHARISMA },
 ];
 
-export const CURSE_AFIX_PROB = 1 / 10;
+export const CURSE_AFIX_PROB = 0.1;

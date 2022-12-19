@@ -96,7 +96,7 @@
 .ResultBox-container .main > aside {
   width: 180px;
   margin: 0 10px;
-  height: calc(105px - 32px);
+  height: calc(105px - 40px);
 
   display: flex;
   flex-direction: column;
@@ -113,8 +113,8 @@
 
 .ResultBox-container .highlight-top-row {
   font-weight: 600;
-  font-size: 30px !important;
-  margin-top: -8px;
+  font-size: 18px !important;
+  height: 36px;
   opacity: 1;
 }
 
