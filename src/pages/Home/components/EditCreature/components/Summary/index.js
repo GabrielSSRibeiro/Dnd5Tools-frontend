@@ -6,7 +6,7 @@ import ModalWarning from "../../../../../../components/ModalWarning";
 
 import "./styles.css";
 
-function Summary({ creature, isNew }) {
+function Summary({ onSave, onDelete }) {
   const [modal, setModal] = useState(null);
 
   async function OpenModalExport() {
@@ -32,6 +32,7 @@ function Summary({ creature, isNew }) {
     );
   }
   function HandleDeleteCreature() {
+    onDelete();
     setModal();
   }
 
@@ -52,12 +53,12 @@ function Summary({ creature, isNew }) {
           <button onClick={OpenModalExport} className="creature-export">
             <i class="fas fa-download"></i>
           </button>
-          {!isNew && (
+          {onDelete && (
             <button className="button-simple" onClick={OpenDeleteConfirmation}>
               Deletar
             </button>
           )}
-          <Button text="Salvar" onClick={() => {}} className />
+          <Button text="Salvar" onClick={onSave} className />
         </div>
       </div>
     </div>

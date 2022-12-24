@@ -27,7 +27,7 @@ import TextInput from "../../../../components/TextInput";
 
 import "./styles.css";
 
-function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
+function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishEditing }) {
   const newCreature = {
     name: null,
     description: null,
@@ -94,7 +94,7 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
     aura: null,
     treasures: [],
   };
-  const [creature, setCreature] = useState(creatureToEdit ?? newCreature);
+  const [creature, setCreature] = useState(utils.clone(creatureToEdit) ?? newCreature);
 
   const progessBarSteps = useMemo(() => {
     function AreAllPreviousStepsValid() {
@@ -171,10 +171,6 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
       .find((s) => s.isValid).name
   );
 
-  function HandleCancel() {
-    setIsEditCreatureOpen(false);
-  }
-
   function UpdateAvatar() {
     if (imgUrl === null) {
       setImgUrl(tempCreatureAvatar);
@@ -219,7 +215,7 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
 
   return (
     <div className={`EditCreature-container ${!isFirstStep ? "main-edit-process" : ""}`}>
-      <button className="button-simple end-editing" onClick={HandleCancel}>
+      <button className="button-simple end-editing" onClick={FinishEditing}>
         Cancelar
       </button>
       <div className={`first-step-wrapper ${!isFirstStep ? "edit-process-basic" : ""}`}>
@@ -306,7 +302,9 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
           {activeProgessBarStep === "Passivas" && <Passives creature={creature} setCreature={setCreature} />}
           {activeProgessBarStep === "Açoes" && <Actions creature={creature} setCreature={setCreature} />}
           {activeProgessBarStep === "Tesouro" && <TreasureReward creature={creature} setCreature={setCreature} />}
-          {activeProgessBarStep === "Sumário" && <Summary creature={creature} isNew={!creatureToEdit} />}
+          {activeProgessBarStep === "Sumário" && (
+            <Summary creature={creature} onSave={() => HandleSave(creature)} onDelete={creatureToEdit ? () => HandleDelete(creature) : null} />
+          )}
         </main>
       </div>
     </div>

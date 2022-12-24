@@ -1,13 +1,13 @@
-.ModalWarning-container .modal-body {
+.ModalWarning-container.modal-body {
   width: fit-content;
   height: fit-content;
 }
 
-.ModalWarning-container .modal-body .warning-message {
+.ModalWarning-container .warning-message {
   margin-bottom: 25px;
 }
 
-.ModalWarning-container .modal-body .warning-actions-wrapper {
+.ModalWarning-container .warning-actions-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;

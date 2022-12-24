@@ -8,6 +8,11 @@
   gap: 25px;
 }
 
+.Summary-container .modal-export {
+  width: 500px;
+  height: fit-content;
+}
+
 .Summary-container .summary-header > h2 {
   line-height: 1;
 }
@@ -29,11 +34,6 @@
   justify-content: center;
   column-gap: 50px;
   transform: skew(-30deg);
-}
-
-.Summary-container .modal-export {
-  width: 500px;
-  height: fit-content;
 }
 
 .Summary-container .power-status-wrapper .power-status {

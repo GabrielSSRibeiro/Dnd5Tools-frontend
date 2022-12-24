@@ -119,7 +119,7 @@ function Home() {
       aura: null,
       treasures: [],
     };
-    for (let index = 1; index <= 5; index++) {
+    for (let index = 1; index <= 1; index++) {
       let newCreature = utils.clone(savedCreature);
       newCreature.name = [newCreature.name, index].join(" ");
       newCreature.rarity = index * 10;
@@ -158,6 +158,30 @@ function Home() {
 
     setCombats(NewCombats);
     setOpenTab(MAIN_TABS.COMBAT);
+  }
+
+  function HandleSave(creatureToSave) {
+    //call api and proceed on success
+
+    let creatureIndex = creatures.findIndex((c) => c.name === creatureToSave.name);
+    if (creatureIndex >= 0) {
+      creatures.splice(creatureIndex, 1, creatureToSave);
+    } else {
+      creatures.push(creatureToSave);
+    }
+
+    setIsEditCreatureOpen(false);
+  }
+
+  function HandleDelete(creatureToDelete) {
+    //call api and proceed on success
+
+    let creatureIndex = creatures.findIndex((c) => c.name === creatureToDelete.name);
+
+    creatures.splice(creatureIndex, 1);
+
+    setCreatures(creatures);
+    setIsEditCreatureOpen(false);
   }
 
   return (
@@ -224,7 +248,12 @@ function Home() {
 
       {isEditCreatureOpen && (
         <div className={"section-wrapper"}>
-          <EditCreature creatureToEdit={creatureToEdit} setIsEditCreatureOpen={setIsEditCreatureOpen} />
+          <EditCreature
+            creatureToEdit={creatureToEdit}
+            HandleSave={HandleSave}
+            HandleDelete={HandleDelete}
+            FinishEditing={() => setIsEditCreatureOpen(false)}
+          />
         </div>
       )}
     </div>
