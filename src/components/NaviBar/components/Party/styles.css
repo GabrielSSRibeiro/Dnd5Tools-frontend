@@ -90,6 +90,9 @@
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 50%, rgba(232, 232, 232, 0.95) 100%);
   backdrop-filter: blur(25px);
 
+  min-width: 720px;
+  min-height: 646px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
