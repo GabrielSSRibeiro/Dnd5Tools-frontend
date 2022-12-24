@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useMemo } from "react";
 //  import api from "../../services/api";
 import * as utils from "../../../../utils";
-import { creatureRarities, creatureEnvironments, creatureSizes, creatureTypes } from "../../../../constants/creatureConstants";
+import { CREATURE_RARITIES, creatureRarities, creatureEnvironments, creatureSizes, creatureTypes } from "../../../../constants/creatureConstants";
 import { MAX_CREATURES_ALLOWED } from "../../../../constants/combatConstants";
 
 import Button from "../../../Button";
 import CheckInput from "../../../CheckInput";
 import Select from "../../../Select";
 
+import commonGem from "../../../../assets/Common-gem.png";
+import uncommonGem from "../../../../assets/Uncommon-gem.png";
+import rareGem from "../../../../assets/Rare-gem.png";
+import veryRareGem from "../../../../assets/Very Rare-gem.png";
+import LegendaryGem from "../../../../assets/Legendary-gem.png";
 import "./styles.css";
 
 function Bestiary({
@@ -31,6 +36,13 @@ function Bestiary({
   const [tempSelectedCreatures, setTempSelectedCreatures] = useState(selectedCreatures);
 
   const maxNumberOfCreatures = 20;
+  const rarityGems = [
+    { rarity: CREATURE_RARITIES.COMMON, gem: commonGem },
+    { rarity: CREATURE_RARITIES.UNCOMMON, gem: uncommonGem },
+    { rarity: CREATURE_RARITIES.RARE, gem: rareGem },
+    { rarity: CREATURE_RARITIES.VERY_RARE, gem: veryRareGem },
+    { rarity: CREATURE_RARITIES.LEGENDARY, gem: LegendaryGem },
+  ];
   let filteredCreatures = [];
 
   //   useEffect(() => {
@@ -99,6 +111,8 @@ function Bestiary({
       if (selectedSize) {
         temp = temp.filter((creature) => creature.size === selectedSize);
       }
+
+      utils.SortArrayOfObjByProperty(temp, "name");
 
       return temp;
     }
@@ -231,22 +245,36 @@ function Bestiary({
                   key={creature.name}
                   onClick={() => (isSelecting ? HandleSelectCreature(creature) : HandleEditCreature(creature))}
                 >
-                  {!isSelecting ? (
-                    <div className="edit-creature">
-                      <i class="fas fa-pencil-alt fa-xs"></i>
-                    </div>
-                  ) : (
+                  {isSelecting && (
                     <div className="select-creature">
                       <CheckInput isSelected={tempSelectedCreatures.some((selectedCreature) => selectedCreature.name === creature.name)} />
                     </div>
                   )}
                   <h6>{creature.name}</h6>
-                  <img src={creature.image} alt="creature-avatar" />
-                  <div className="creature-details">
-                    <h6>{creature.rarity}, &nbsp;</h6>
-                    <h6>{creature.environment}, &nbsp;</h6>
-                    <h6>{creature.type}, &nbsp;</h6>
-                    <h6>{creature.size}</h6>
+                  <div className="creature-portrait">
+                    <div className="creature-gem">
+                      <div className="gem-border">
+                        <div className="placement">
+                          <div className="shape"></div>
+                        </div>
+                      </div>
+                      <img src={rarityGems.find((rg) => rg.rarity === creature.rarity).gem} alt="creature-gem" />
+                    </div>
+                    <img className="creature-avatar" src={creature.image} alt="creature-avatar" />
+                  </div>
+                  <div className="power-scale">
+                    <div className="wrapper-with-icon">
+                      <i class="fas fa-khanda power-scale-icon"></i>
+                      <aside className="power-scale-bar">
+                        <div className="power-scale-fill offensive"></div>
+                      </aside>
+                    </div>
+                    <div className="wrapper-with-icon">
+                      <i class="fas fa-shield-alt power-scale-icon"></i>
+                      <aside className="power-scale-bar">
+                        <div className="power-scale-fill defensive"></div>
+                      </aside>
+                    </div>
                   </div>
                 </div>
               ))}

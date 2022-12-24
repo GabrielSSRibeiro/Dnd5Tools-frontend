@@ -275,18 +275,20 @@
 }
 
 .Bestiary-container .list-creature {
+  position: relative;
   margin: 8px;
   padding: 7px;
   width: calc(100% / 3 - 16px);
-  height: 220px;
-  border: 1px solid var(--gray2);
+  height: 245px;
+  background-color: var(--black);
+  /* border: 1px solid var(--gray2); */
   position: relative;
   cursor: pointer;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 .Bestiary-container .list-creature:hover {
   border: 1px solid var(--primaryPurple2);
@@ -294,19 +296,6 @@
 
 .Bestiary-container .selected-creature {
   border: 1px solid var(--primaryPurple1) !important;
-}
-
-.Bestiary-container .list-creature .edit-creature {
-  position: absolute;
-  top: 0;
-  right: 0;
-  /* background-color: var(--gray1); */
-  width: 22px;
-  height: 22px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .Bestiary-container .list-creature .select-creature {
@@ -322,12 +311,57 @@
   justify-content: center;
 }
 
-.Bestiary-container .list-creature .edit-creature .fa-pencil-alt {
+.Bestiary-container .list-creature > h6 {
   color: var(--white);
+  margin-top: 3px;
+  margin-bottom: 9px;
 }
 
-.Bestiary-container .list-creature > img {
+.Bestiary-container .list-creature .creature-portrait {
+  position: relative;
+}
+
+.Bestiary-container .list-creature .creature-gem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.Bestiary-container .list-creature .gem-border {
+  position: absolute;
+  top: 0;
+  z-index: -1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  width: 24px;
+  height: 24px;
+}
+
+.Bestiary-container .list-creature .gem-border .placement {
+  position: absolute;
+  top: 0;
+  transform: translate(0, -50%);
+}
+
+.Bestiary-container .list-creature .gem-border .shape {
+  transform: rotate(45deg) skew(18deg, 18deg);
+  background-color: var(--black);
+  width: 24px;
+  height: 24px;
+}
+
+.Bestiary-container .list-creature .creature-gem img {
+  width: 18px;
+  height: 18px;
+}
+
+.Bestiary-container .list-creature .creature-avatar {
   bottom: 7px;
   object-fit: cover;
   object-position: 0 top;
@@ -335,15 +369,49 @@
   height: 180px;
 }
 
-.Bestiary-container .creature-details {
+.Bestiary-container .list-creature .power-scale {
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  column-gap: 10px;
+  margin-top: 9px;
+
   width: 100%;
-  padding: 7px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
-  z-index: 1;
+}
+
+.Bestiary-container .power-scale .wrapper-with-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 7px;
+}
+
+.Bestiary-container .power-scale .power-scale-bar {
+  transform: skew(-30deg);
+  background: var(--gray2);
+  width: 60px;
+  height: 8px;
+}
+
+.Bestiary-container .power-scale .power-scale-icon {
+  font-size: 10px;
+  color: var(--gray2);
+  /* margin-right: -30px; */
+}
+
+.Bestiary-container .power-scale .power-scale-fill {
+  box-shadow: 0px 2px 2px rgba(19, 46, 18, 0.2);
+
+  width: 50%;
+  height: 100%;
+}
+
+.Bestiary-container .power-scale .offensive {
+  background-color: var(--offensiveColor);
+}
+
+.Bestiary-container .power-scale .defensive {
+  background-color: var(--defensiveColor);
 }
 
 .Bestiary-container .creature-details h6 {

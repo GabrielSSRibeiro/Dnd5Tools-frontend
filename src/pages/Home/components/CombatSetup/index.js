@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 //  import api from "../../services/api";
 
 import * as utils from "../../../../utils";
-import { MAX_CREATURES_ALLOWED, COMBAT_DIFFICULTIES } from "../../../../data/combatConstants";
+import { MAX_CREATURES_ALLOWED, COMBAT_DIFFICULTIES } from "../../../../constants/combatConstants";
 
 import Panel from "../../../../components/Panel";
 import Button from "../../../../components/Button";
@@ -177,7 +177,7 @@ function CombatSetup({
                   </div>
                 ))}
               <footer style={{ marginTop: selectedCreatures.length > 0 ? 25 : 0 }}>
-                <Button text="Selecionar" onClick={SelectFromBestiary} isDisabled={selectedCharacters.length === 0} />
+                <Button text="Selecionar" onClick={SelectFromBestiary} isDisabled={false && selectedCharacters.length === 0} />
               </footer>
             </div>
           </Panel>

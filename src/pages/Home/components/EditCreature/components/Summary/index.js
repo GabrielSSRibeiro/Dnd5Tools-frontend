@@ -41,12 +41,14 @@ function Summary({ onSave, onDelete }) {
       {modal}
       <div className="summary-header">
         <h2>Detalhes</h2>
-        <div className="power-status-wrapper">
-          <aside className="power-status">
-            <div className="power-status-fill offensive"></div>
+        <div className="power-scale-wrapper">
+          <i class="fas fa-khanda power-scale-icon"></i>
+          <aside className="power-scale-bar">
+            <div className="power-scale-fill offensive"></div>
           </aside>
-          <aside className="power-status">
-            <div className="power-status-fill defensive"></div>
+          <i class="fas fa-shield-alt power-scale-icon"></i>
+          <aside className="power-scale-bar">
+            <div className="power-scale-fill defensive"></div>
           </aside>
         </div>
         <div className="actions">
