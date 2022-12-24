@@ -223,7 +223,7 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
         Cancelar
       </button>
       <div className={`first-step-wrapper ${!isFirstStep ? "edit-process-basic" : ""}`}>
-        <h2>Criar Criatura</h2>
+        <h2>{creatureToEdit ? "Editar" : "Criar"} Criatura</h2>
         <main>
           <aside className="creature-avatar">
             {tempCreatureAvatar ? (
@@ -306,7 +306,7 @@ function EditCreature({ creatureToEdit = null, setIsEditCreatureOpen }) {
           {activeProgessBarStep === "Passivas" && <Passives creature={creature} setCreature={setCreature} />}
           {activeProgessBarStep === "Açoes" && <Actions creature={creature} setCreature={setCreature} />}
           {activeProgessBarStep === "Tesouro" && <TreasureReward creature={creature} setCreature={setCreature} />}
-          {activeProgessBarStep === "Sumário" && <Summary creature={creature} setCreature={setCreature} />}
+          {activeProgessBarStep === "Sumário" && <Summary creature={creature} isNew={!creatureToEdit} />}
         </main>
       </div>
     </div>

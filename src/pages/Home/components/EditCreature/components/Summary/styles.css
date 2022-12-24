@@ -8,10 +8,63 @@
   gap: 25px;
 }
 
-.Summary-container .save-creature {
-  width: 100%;
+.Summary-container .summary-header > h2 {
+  line-height: 1;
+}
+
+.Summary-container .summary-header {
+  margin: -25px;
+  background-color: var(--white);
+  width: calc(100% + 50px);
+  padding: 15px 25px;
 
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+
+.Summary-container .power-status-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 50px;
+  transform: skew(-30deg);
+}
+
+.Summary-container .modal-export {
+  width: 500px;
+  height: fit-content;
+}
+
+.Summary-container .power-status-wrapper .power-status {
+  background-color: var(--gray2);
+  width: 250px;
+  height: 25px;
+}
+
+/* .Summary-container .power-status .power-status-fill {
+  box-shadow: 0px 2px 2px rgba(19, 46, 18, 0.2);
+
+  width: 50%;
+  height: 100%;
+}
+
+.Summary-container .power-status .offensive {
+  background-color: var(--offensiveColor);
+}
+
+.Summary-container .power-status .defensive {
+  background-color: var(--defensiveColor);
+} */
+
+.Summary-container .summary-header .actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 15px;
+}
+
+.Summary-container .summary-header .actions .creature-export {
+  background-color: transparent;
+  border: none;
 }

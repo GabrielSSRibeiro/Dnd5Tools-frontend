@@ -1,0 +1,15 @@
+.ModalWarning-container .modal-body {
+  width: fit-content;
+  height: fit-content;
+}
+
+.ModalWarning-container .modal-body .warning-message {
+  margin-bottom: 25px;
+}
+
+.ModalWarning-container .modal-body .warning-actions-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 25px;
+}

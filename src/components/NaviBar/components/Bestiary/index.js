@@ -30,6 +30,7 @@ function Bestiary({
   const [selectedSize, setSelectedSize] = useState(null);
   const [tempSelectedCreatures, setTempSelectedCreatures] = useState(selectedCreatures);
 
+  const maxNumberOfCreatures = 20;
   let filteredCreatures = [];
 
   //   useEffect(() => {
@@ -171,7 +172,7 @@ function Bestiary({
           <main>
             {!isSelecting && (
               <aside>
-                <Button text="Adicionar Criatura" onClick={HandleEditNewCreature} />
+                <Button text="Adicionar Criatura" onClick={HandleEditNewCreature} isDisabled={creatures.length >= maxNumberOfCreatures} />
               </aside>
             )}{" "}
             <div className="bestiary-filters">

@@ -296,10 +296,11 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
             />
             <div className="extra-details">
               <CheckInput
-                label="Magia"
+                label="Origem Mágica"
                 info={[
-                  { text: "Efeitos relacionados a magias afetam essa ação" },
-                  { text: "Magias não podem ser selecionadas como efeito para possível recompensa" },
+                  { text: "Essa ação é equivalente a uma magia com componentes(V,S) e nível proporcional a raridade da criatura" },
+                  { text: "" },
+                  { text: "Efeitos relacionados/que interagem com magias afetam essa ação" },
                 ]}
                 onClick={() => setTempReaction({ ...tempReaction, isSpell: !tempReaction.isSpell })}
                 isSelected={tempReaction.isSpell}

@@ -1,14 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Button from "../../../../../../components/Button";
+import Modal from "../../../../../../components/Modal";
+import ModalWarning from "../../../../../../components/ModalWarning";
 
 import "./styles.css";
 
-function Summary({ creature, setCreature }) {
+function Summary({ creature, isNew }) {
+  const [modal, setModal] = useState(null);
+
+  async function OpenModalExport() {
+    setModal(
+      <Modal title="Exportar Criatura" onClickToClose={setModal} className="modal-export">
+        <Button text="Foundry VTT" onClick={HandleFoundryExport} />
+      </Modal>
+    );
+  }
+
+  function HandleFoundryExport() {}
+
+  async function OpenDeleteConfirmation() {
+    setModal(
+      <ModalWarning
+        title="Deletar Criatura"
+        message="Tem certeza que deseja deletar essa criatura?"
+        cancelText="Cancelar"
+        onCancel={setModal}
+        confirmText="Deletar"
+        onConfirm={HandleDeleteCreature}
+      />
+    );
+  }
+  function HandleDeleteCreature() {
+    setModal();
+  }
+
   return (
     <div className="Summary-container">
-      <div className="save-creature">
-        <Button text="Salvar" onClick={() => {}} />
+      {modal}
+      <div className="summary-header">
+        <h2>Detalhes</h2>
+        <div className="power-status-wrapper">
+          <aside className="power-status">
+            <div className="power-status-fill offensive"></div>
+          </aside>
+          <aside className="power-status">
+            <div className="power-status-fill defensive"></div>
+          </aside>
+        </div>
+        <div className="actions">
+          <button onClick={OpenModalExport} className="creature-export">
+            <i class="fas fa-download"></i>
+          </button>
+          {!isNew && (
+            <button className="button-simple" onClick={OpenDeleteConfirmation}>
+              Deletar
+            </button>
+          )}
+          <Button text="Salvar" onClick={() => {}} className />
+        </div>
       </div>
     </div>
   );

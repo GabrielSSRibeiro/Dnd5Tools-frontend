@@ -26,6 +26,8 @@
 
   --successColor: #2f5852;
   --errorColor: #a72638;
+  --defensiveColor: #4b8c58;
+  --offensiveColor: #b3293c;
   --primaryBackground: #242029;
 
   --blurGradient: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 50%, rgba(232, 232, 232, 0.8) 100%);
