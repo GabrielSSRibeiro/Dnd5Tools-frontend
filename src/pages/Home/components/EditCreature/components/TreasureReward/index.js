@@ -61,7 +61,7 @@ function TreasureReward({ creature, setCreature }) {
                 <div>
                   <span>{treasureTypes.find((tr) => tr.value === treasure.type).display}</span>
                   <button onClick={() => OpenModalManageTreasure(treasure)} className="edit-row">
-                    <i class="fas fa-pencil-alt"></i>
+                    <i className="fas fa-pencil-alt"></i>
                   </button>
                   <button onClick={() => DeleteTreasure(treasure)} className="delete-row">
                     Deletar

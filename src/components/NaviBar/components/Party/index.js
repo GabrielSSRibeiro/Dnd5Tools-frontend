@@ -274,7 +274,7 @@ function Party({
                 <div className="add-new-container">
                   <div className="add-new">
                     <div className="cancel-add-new" onClick={() => setIsNewCharacterOpen(false)}>
-                      <i class="fas fa-times"></i>
+                      <i className="fas fa-times"></i>
                     </div>
                     <section>
                       <TextInput label="Nome do Personagem" value={newCharacterName} onChange={setNewCharacterName} />
@@ -338,7 +338,7 @@ function Party({
                             )}
                             <h6>{character}</h6>
                             <div className="enable-edit-character" onClick={() => HandleOpenCharacterEdit(character)}>
-                              {!isSelecting && <i class="fas fa-pencil-alt"></i>}
+                              {!isSelecting && <i className="fas fa-pencil-alt"></i>}
                             </div>
                           </>
                         ) : (
@@ -347,7 +347,7 @@ function Party({
                               <input
                                 onChange={(e) => setNewEditedCharacterName(e.target.value)}
                                 placeholder="Nome"
-                                value={newEditedCharacterName}
+                                value={newEditedCharacterName ?? ""}
                               ></input>
                               <button onClick={() => HandleEditCharacter(characterIndex, groupIndex)}>SALVAR</button>
                             </div>
@@ -387,7 +387,7 @@ function Party({
                             )}
                             <h6>{character}</h6>
                             <div className="enable-edit-character" onClick={() => HandleOpenCharacterEdit(character)}>
-                              <i class="fas fa-pencil-alt"></i>
+                              <i className="fas fa-pencil-alt"></i>
                             </div>
                           </>
                         ) : (
@@ -396,7 +396,7 @@ function Party({
                               <input
                                 onChange={(e) => setNewEditedCharacterName(e.target.value)}
                                 placeholder="Nome"
-                                value={newEditedCharacterName}
+                                value={newEditedCharacterName ?? ""}
                               ></input>
                               <button onClick={() => HandleEditCharacter(characterIndex, null)}>SALVAR</button>
                             </div>

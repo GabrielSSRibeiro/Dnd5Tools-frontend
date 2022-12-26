@@ -36,14 +36,14 @@ function TextInput({
       {isMultiLine ? (
         <textarea
           onChange={HandleOnChange}
-          value={valuePropertyPath ? util.getObjPropertyValue(value, valuePropertyPath) : value}
+          value={(valuePropertyPath ? util.getObjPropertyValue(value, valuePropertyPath) : value) ?? ""}
           {...rest}
         ></textarea>
       ) : (
         <input
           type="text"
           onChange={HandleOnChange}
-          value={valuePropertyPath ? util.getObjPropertyValue(value, valuePropertyPath) : value}
+          value={(valuePropertyPath ? util.getObjPropertyValue(value, valuePropertyPath) : value) ?? ""}
           {...rest}
         ></input>
       )}

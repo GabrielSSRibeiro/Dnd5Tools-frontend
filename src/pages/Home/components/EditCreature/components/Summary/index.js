@@ -42,18 +42,18 @@ function Summary({ onSave, onDelete }) {
       <div className="summary-header">
         <h2>Detalhes</h2>
         <div className="power-scale-wrapper">
-          <i class="fas fa-khanda power-scale-icon"></i>
+          <i className="fas fa-khanda power-scale-icon"></i>
           <aside className="power-scale-bar">
             <div className="power-scale-fill offensive"></div>
           </aside>
-          <i class="fas fa-shield-alt power-scale-icon"></i>
+          <i className="fas fa-shield-alt power-scale-icon"></i>
           <aside className="power-scale-bar">
             <div className="power-scale-fill defensive"></div>
           </aside>
         </div>
         <div className="actions">
           <button onClick={OpenModalExport} className="creature-export">
-            <i class="fas fa-download"></i>
+            <i className="fas fa-download"></i>
           </button>
           {onDelete && (
             <button className="button-simple" onClick={OpenDeleteConfirmation}>

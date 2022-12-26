@@ -5,7 +5,7 @@ import Tooltip from "../Tooltip";
 import "./styles.css";
 
 function Info({ contents }) {
-  const [positions, setPositions] = useState({ top: 0, left: 0 });
+  const [positions, setPositions] = useState({ width: 0, top: 0, left: 0 });
 
   function GetComponentPositions(e) {
     setPositions(e.target.getBoundingClientRect());

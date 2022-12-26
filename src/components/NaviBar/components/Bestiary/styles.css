@@ -281,7 +281,7 @@
   width: calc(100% / 3 - 16px);
   height: 245px;
   background-color: var(--black);
-  /* border: 1px solid var(--gray2); */
+  border: 1px solid var(--gray2);
   position: relative;
   cursor: pointer;
 

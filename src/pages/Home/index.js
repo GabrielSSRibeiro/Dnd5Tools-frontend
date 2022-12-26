@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-//  import api from "../../services/api";
+import api from "../../services/api";
 import * as utils from "../../utils";
 
 import NaviBar from "../../components/NaviBar";
@@ -35,8 +35,8 @@ function Home() {
   const [combats, setCombats] = useState([]);
 
   useEffect(() => {
-    // api.get("items").then((response) => {
-    //   setItems(response.data);
+    // api.get("GetCreatures").then((response) => {
+    //   console.log(response.data);
     // });
 
     setLevel(3);

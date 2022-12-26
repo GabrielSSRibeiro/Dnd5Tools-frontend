@@ -125,7 +125,7 @@ function Actions({ creature, setCreature }) {
                 <div>
                   <span>{creatureActionFrequencies.find((af) => af.value === action.frequency).display}</span>
                   <button onClick={() => OpenModalManageAction(action)} className="edit-row">
-                    <i class="fas fa-pencil-alt"></i>
+                    <i className="fas fa-pencil-alt"></i>
                   </button>
                   <button onClick={() => DeleteAction(action)} className="delete-row">
                     Deletar
@@ -158,7 +158,7 @@ function Actions({ creature, setCreature }) {
                 <div>
                   <span>{creatureActionFrequencies.find((af) => af.value === reaction.frequency).display}</span>
                   <button onClick={() => OpenModalManageReaction(reaction)} className="edit-row">
-                    <i class="fas fa-pencil-alt"></i>
+                    <i className="fas fa-pencil-alt"></i>
                   </button>
                   <button onClick={() => DeleteReaction(reaction)} className="delete-row">
                     Deletar
@@ -184,7 +184,7 @@ function Actions({ creature, setCreature }) {
               <div>
                 <span>{creatureAuraReaches.find((ar) => ar.value === creature.aura.reach).display}</span>
                 <button onClick={() => OpenModalManageAura()} className="edit-row">
-                  <i class="fas fa-pencil-alt"></i>
+                  <i className="fas fa-pencil-alt"></i>
                 </button>
                 <button onClick={() => DeleteAura()} className="delete-row">
                   Deletar

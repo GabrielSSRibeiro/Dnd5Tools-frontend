@@ -166,7 +166,7 @@ function Attributes({ creature, setCreature }) {
               valuePropertyPath={`weakSpots[${index}]`}
               onChange={(value) => HandleWeakSpotChange(value, index)}
               className="creature-weak-spot"
-              maxlength="14"
+              maxLength="14"
             />
           ))}
         </div>

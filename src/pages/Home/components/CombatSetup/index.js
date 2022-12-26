@@ -163,7 +163,7 @@ function CombatSetup({
                       +1
                     </button>
                     <button className={creature.isNPC ? "toggle-npc" : "toggle-creature"} onClick={() => HandleNPC(creature)}>
-                      {creature.isNPC ? <i class="fas fa-heart"></i> : <i class="fas fa-skull"></i>}
+                      {creature.isNPC ? <i className="fas fa-heart"></i> : <i className="fas fa-skull"></i>}
                     </button>
                     <div className="creature-name">
                       <h4>{creature.name}</h4>
@@ -172,7 +172,7 @@ function CombatSetup({
                       <h4>86 PV</h4>
                     </div>
                     <button onClick={() => HandleDelete(creature)}>
-                      <i class="fas fa-times"></i>
+                      <i className="fas fa-times"></i>
                     </button>
                   </div>
                 ))}

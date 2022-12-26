@@ -192,7 +192,7 @@ function Bestiary({
             <div className="bestiary-filters">
               <h5>Filtrar Por</h5>
               <div className="filter-text">
-                <input onChange={(e) => handleFilter(setNameFilter, e.target.value)} placeholder="Nome" value={nameFilter}></input>
+                <input onChange={(e) => handleFilter(setNameFilter, e.target.value)} placeholder="Nome" value={nameFilter ?? ""}></input>
                 <button onClick={() => setNameFilter("")}>LIMPAR</button>
               </div>
               <main>
@@ -264,13 +264,13 @@ function Bestiary({
                   </div>
                   <div className="power-scale">
                     <div className="wrapper-with-icon">
-                      <i class="fas fa-khanda power-scale-icon"></i>
+                      <i className="fas fa-khanda power-scale-icon"></i>
                       <aside className="power-scale-bar">
                         <div className="power-scale-fill offensive"></div>
                       </aside>
                     </div>
                     <div className="wrapper-with-icon">
-                      <i class="fas fa-shield-alt power-scale-icon"></i>
+                      <i className="fas fa-shield-alt power-scale-icon"></i>
                       <aside className="power-scale-bar">
                         <div className="power-scale-fill defensive"></div>
                       </aside>
