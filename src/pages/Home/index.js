@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../services/api";
+import { useAuth } from "../../contexts/Auth";
 
 import NaviBar from "../../components/NaviBar";
 import SkillCheck from "./components/SkillCheck";
@@ -28,13 +29,15 @@ function Home() {
   const [creatureToEdit, setCreatureToEdit] = useState(null);
   const [level, setLevel] = useState(null);
   const [groups, setGroups] = useState([]);
-  const [creatures, setCreatures] = useState([]);
+  const [creatures, setCreatures] = useState(null);
   const [selectedCharacters, setSelectedCharacters] = useState([]);
   const [selectedCreatures, setSelectedCreatures] = useState([]);
   const [combats, setCombats] = useState([]);
 
+  const { currentUser } = useAuth();
+
   useEffect(() => {
-    api.get("GetCreatures").then((response) => {
+    api.get("GetCreaturesByOwner", { params: { owner: currentUser.uid } }).then((response) => {
       setCreatures(response.data);
     });
 
@@ -43,7 +46,7 @@ function Home() {
     //   ["Foux", "Isaac", "Zeth", "Adler", "Motonui", "Elros"],
     //   ["Soiaz", "Yaisyl"],
     // ]);
-  }, [setCreatures]);
+  }, [setCreatures, currentUser.uid]);
 
   function HandleSelectFromParty() {
     if (groups.length === 1) {
@@ -77,6 +80,10 @@ function Home() {
   }
 
   function HandleSave(creatureToSave) {
+    // if (!creatureToEdit) {
+    creatureToSave.owner = currentUser.uid;
+    // }
+
     (creatureToEdit ? api.put("UpdateCreature", creatureToSave) : api.post("SaveCreature", creatureToSave))
       .then((response) => {
         if (response.data) {
@@ -114,78 +121,80 @@ function Home() {
   }
 
   return (
-    <div className="Home-container">
-      <NaviBar
-        combats={combats}
-        selectedCharacters={selectedCharacters}
-        setSelectedCharacters={setSelectedCharacters}
-        selectedCreatures={selectedCreatures}
-        setSelectedCreatures={setSelectedCreatures}
-        isSelectingParty={isSelectingParty}
-        isSelectingBestiary={isSelectingBestiary}
-        setIsSelectingParty={setIsSelectingParty}
-        setIsSelectingBestiary={setIsSelectingBestiary}
-        isPartyOpen={isPartyOpen}
-        setIsPartyOpen={setIsPartyOpen}
-        isBestiaryOpen={isBestiaryOpen}
-        setIsBestiaryOpen={setIsBestiaryOpen}
-        level={level}
-        setLevel={setLevel}
-        groups={groups}
-        setGroups={setGroups}
-        creatures={creatures}
-        setCreatures={setCreatures}
-        tabOptions={MAIN_TABS}
-        openTab={openTab}
-        setOpenTab={setOpenTab}
-        isEditCreatureOpen={isEditCreatureOpen}
-        setCreatureToEdit={setCreatureToEdit}
-        setIsEditCreatureOpen={setIsEditCreatureOpen}
-        HandleEndCombat={HandleEndCombat}
-      />
-      <img src={background} alt="Created by liuzishan - www.freepik.com" />
+    creatures && (
+      <div className="Home-container">
+        <NaviBar
+          combats={combats}
+          selectedCharacters={selectedCharacters}
+          setSelectedCharacters={setSelectedCharacters}
+          selectedCreatures={selectedCreatures}
+          setSelectedCreatures={setSelectedCreatures}
+          isSelectingParty={isSelectingParty}
+          isSelectingBestiary={isSelectingBestiary}
+          setIsSelectingParty={setIsSelectingParty}
+          setIsSelectingBestiary={setIsSelectingBestiary}
+          isPartyOpen={isPartyOpen}
+          setIsPartyOpen={setIsPartyOpen}
+          isBestiaryOpen={isBestiaryOpen}
+          setIsBestiaryOpen={setIsBestiaryOpen}
+          level={level}
+          setLevel={setLevel}
+          groups={groups}
+          setGroups={setGroups}
+          creatures={creatures}
+          setCreatures={setCreatures}
+          tabOptions={MAIN_TABS}
+          openTab={openTab}
+          setOpenTab={setOpenTab}
+          isEditCreatureOpen={isEditCreatureOpen}
+          setCreatureToEdit={setCreatureToEdit}
+          setIsEditCreatureOpen={setIsEditCreatureOpen}
+          HandleEndCombat={HandleEndCombat}
+        />
+        <img src={background} alt="Created by liuzishan - www.freepik.com" />
 
-      <div className={`section-wrapper ${isEditCreatureOpen ? "hidden" : ""}`}>
-        <div className={`section-wrapper ${openTab !== MAIN_TABS.SKILL_CHECK ? "hidden" : ""}`}>
-          <SkillCheck resultText={openTab} level={level} />
-        </div>
-        <div className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
-          <span></span>
-        </div>
-        <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
-          <CombatSetup
-            selectedCharacters={selectedCharacters}
-            selectedCreatures={selectedCreatures}
-            setSelectedCreatures={setSelectedCreatures}
-            HandleSelectFromParty={HandleSelectFromParty}
-            HandleSelectFromBestiary={HandleSelectFromBestiary}
-            HandleGenerateCombat={HandleGenerateCombat}
-            resultText={openTab}
-            level={level}
-          />
-        </div>
-        {combats.map((combat, index) => (
-          <div key={index} className={`section-wrapper ${openTab !== index + 1 ? "hidden" : ""}`}>
-            <Combat combat={combat} />
+        <div className={`section-wrapper ${isEditCreatureOpen ? "hidden" : ""}`}>
+          <div className={`section-wrapper ${openTab !== MAIN_TABS.SKILL_CHECK ? "hidden" : ""}`}>
+            <SkillCheck resultText={openTab} level={level} />
           </div>
-        ))}
+          <div className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
+            <span></span>
+          </div>
+          <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
+            <CombatSetup
+              selectedCharacters={selectedCharacters}
+              selectedCreatures={selectedCreatures}
+              setSelectedCreatures={setSelectedCreatures}
+              HandleSelectFromParty={HandleSelectFromParty}
+              HandleSelectFromBestiary={HandleSelectFromBestiary}
+              HandleGenerateCombat={HandleGenerateCombat}
+              resultText={openTab}
+              level={level}
+            />
+          </div>
+          {combats.map((combat, index) => (
+            <div key={index} className={`section-wrapper ${openTab !== index + 1 ? "hidden" : ""}`}>
+              <Combat combat={combat} />
+            </div>
+          ))}
 
-        <div className={`section-wrapper ${openTab !== MAIN_TABS.TREASURE ? "hidden" : ""}`}>
-          <Treasure resultText={openTab} level={level} />
+          <div className={`section-wrapper ${openTab !== MAIN_TABS.TREASURE ? "hidden" : ""}`}>
+            <Treasure resultText={openTab} level={level} />
+          </div>
         </div>
+
+        {isEditCreatureOpen && (
+          <div className={"section-wrapper"}>
+            <EditCreature
+              creatureToEdit={creatureToEdit}
+              HandleSave={HandleSave}
+              HandleDelete={HandleDelete}
+              FinishEditing={() => setIsEditCreatureOpen(false)}
+            />
+          </div>
+        )}
       </div>
-
-      {isEditCreatureOpen && (
-        <div className={"section-wrapper"}>
-          <EditCreature
-            creatureToEdit={creatureToEdit}
-            HandleSave={HandleSave}
-            HandleDelete={HandleDelete}
-            FinishEditing={() => setIsEditCreatureOpen(false)}
-          />
-        </div>
-      )}
-    </div>
+    )
   );
 }
 
