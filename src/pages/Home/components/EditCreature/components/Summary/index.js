@@ -17,7 +17,9 @@ function Summary({ onSave, onDelete }) {
     );
   }
 
-  function HandleFoundryExport() {}
+  function HandleFoundryExport() {
+    //download josn file
+  }
 
   async function OpenDeleteConfirmation() {
     setModal(

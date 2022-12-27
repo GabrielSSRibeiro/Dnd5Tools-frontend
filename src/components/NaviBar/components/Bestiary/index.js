@@ -105,7 +105,9 @@ function Bestiary({
         temp = temp.filter((creature) => creature.size === selectedSize);
       }
 
-      utils.SortArrayOfObjByProperty(temp, "name");
+      if (temp.length > 0) {
+        utils.SortArrayOfObjByProperty(temp, "name");
+      }
 
       return temp;
     }
