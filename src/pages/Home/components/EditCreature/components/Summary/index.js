@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import * as utils from "../../../../../../utils";
+import { GetFoundryFormattedCreature } from "../../../../../../helpers/creatureHelper";
 
 import Button from "../../../../../../components/Button";
 import Modal from "../../../../../../components/Modal";
@@ -6,7 +8,7 @@ import ModalWarning from "../../../../../../components/ModalWarning";
 
 import "./styles.css";
 
-function Summary({ onSave, onDelete }) {
+function Summary({ creature, onSave, onDelete }) {
   const [modal, setModal] = useState(null);
 
   async function OpenModalExport() {
@@ -18,7 +20,8 @@ function Summary({ onSave, onDelete }) {
   }
 
   function HandleFoundryExport() {
-    //download josn file
+    const foundryFormattedCreature = GetFoundryFormattedCreature(creature);
+    utils.downloadObjectAsJson(foundryFormattedCreature, `${creature.name}.json`);
   }
 
   async function OpenDeleteConfirmation() {
