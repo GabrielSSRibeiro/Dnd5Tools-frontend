@@ -21,6 +21,7 @@ This project was developed with the following:
 - Firebase
 - REST API
 - Node.js
+- MongoDB
 
 <br>
 
@@ -33,4 +34,4 @@ Web application to create, manage and control D&D 5e party, creatures, combat an
 - Install node.js
 - Run npm install
 - To run frontend: yarn start
-- To run backend: yarn dev
+- To run backend: yarn start
