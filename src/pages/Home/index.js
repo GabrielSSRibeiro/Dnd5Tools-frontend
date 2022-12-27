@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import api from "../../services/api";
-import * as utils from "../../utils";
 
 import NaviBar from "../../components/NaviBar";
 import SkillCheck from "./components/SkillCheck";
@@ -35,98 +34,15 @@ function Home() {
   const [combats, setCombats] = useState([]);
 
   useEffect(() => {
-    // api.get("GetCreatures").then((response) => {
-    //   console.log(response.data);
-    // });
+    api.get("GetCreatures").then((response) => {
+      setCreatures(response.data);
+    });
 
     setLevel(3);
     // setGroups([
     //   ["Foux", "Isaac", "Zeth", "Adler", "Motonui", "Elros"],
     //   ["Soiaz", "Yaisyl"],
     // ]);
-
-    let savedCreatures = [];
-    let savedCreature = {
-      name: "Hidra Alada",
-      description: null,
-      image: "https://i.pinimg.com/564x/01/d4/17/01d417c02bd190a056c718650fc9db3b.jpg",
-      rarity: 10,
-      environment: 10,
-      size: 10,
-      type: 10,
-      race: null,
-      class: null,
-      subClass: null,
-      secondaryClass: null,
-      secondarySubClass: null,
-      movements: {
-        speed: 10,
-        flying: null,
-        swimming: null,
-        burrowing: null,
-      },
-      primaryAlignment: 10,
-      secondaryAlignment: 10,
-      attributes: {
-        strength: 10,
-        dexterity: 10,
-        constitution: 10,
-        intelligence: 10,
-        wisdom: 10,
-        charisma: 10,
-      },
-      hitPoints: 10,
-      attack: 10,
-      armorClass: 10,
-      initiative: 10,
-      weakSpots: [],
-      damagesEffectiveness: [
-        { type: 10, value: 20 },
-        { type: 20, value: 20 },
-        { type: 30, value: 20 },
-        { type: 40, value: 20 },
-        { type: 50, value: 20 },
-        { type: 60, value: 20 },
-        { type: 70, value: 20 },
-        { type: 80, value: 20 },
-        { type: 90, value: 20 },
-        { type: 100, value: 20 },
-        { type: 110, value: 20 },
-        { type: 120, value: 20 },
-        { type: 130, value: 20 },
-      ],
-      conditionImmunities: [],
-      languages: [10],
-      senses: {
-        darkVision: null,
-        tremorsense: null,
-        blindSight: null,
-        trueSight: null,
-      },
-      legendaryResistences: null,
-      regeneration: { amount: null, breakDamage: null },
-      customSpecials: [],
-      actions: [
-        {
-          name: "Ataque Comum",
-          frequency: 10,
-          type: 10,
-          reach: 10,
-        },
-      ],
-      reactions: [],
-      reactionsPerRound: 10,
-      aura: null,
-      treasures: [],
-    };
-    for (let index = 1; index <= 1; index++) {
-      let newCreature = utils.clone(savedCreature);
-      newCreature.name = [newCreature.name, index].join(" ");
-      newCreature.rarity = index * 10;
-      savedCreatures.push(newCreature);
-    }
-
-    setCreatures(savedCreatures);
   }, [setCreatures]);
 
   function HandleSelectFromParty() {
@@ -161,27 +77,40 @@ function Home() {
   }
 
   function HandleSave(creatureToSave) {
-    //call api and proceed on success
+    (creatureToEdit ? api.put("UpdateCreature", creatureToSave) : api.post("SaveCreature", creatureToSave))
+      .then((response) => {
+        if (response.data) {
+          let creatureIndex = creatures.findIndex((c) => c._id === response.data._id);
+          if (creatureIndex >= 0) {
+            creatures.splice(creatureIndex, 1, creatureToSave);
+          } else {
+            creatures.push(creatureToSave);
+          }
 
-    let creatureIndex = creatures.findIndex((c) => c.name === creatureToSave.name);
-    if (creatureIndex >= 0) {
-      creatures.splice(creatureIndex, 1, creatureToSave);
-    } else {
-      creatures.push(creatureToSave);
-    }
-
-    setIsEditCreatureOpen(false);
+          setIsEditCreatureOpen(false);
+        }
+      })
+      .catch((err) => {
+        console.log("error in SaveCreature", err);
+      });
   }
 
   function HandleDelete(creatureToDelete) {
-    //call api and proceed on success
+    api
+      .delete("DeleteCreature", { params: { id: creatureToDelete._id } })
+      .then((response) => {
+        if (response.data) {
+          let creatureIndex = creatures.findIndex((c) => c._id === response.data._id);
 
-    let creatureIndex = creatures.findIndex((c) => c.name === creatureToDelete.name);
+          creatures.splice(creatureIndex, 1);
 
-    creatures.splice(creatureIndex, 1);
-
-    setCreatures(creatures);
-    setIsEditCreatureOpen(false);
+          setCreatures(creatures);
+          setIsEditCreatureOpen(false);
+        }
+      })
+      .catch((err) => {
+        console.log("error in DeleteCreature", err);
+      });
   }
 
   return (

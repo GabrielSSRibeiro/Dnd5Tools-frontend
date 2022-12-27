@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-//  import api from "../../services/api";
 
 import { LEVELS } from "../../../../constants/combatConstants";
 import { MAX_CHARACTERS_ALLOWED } from "../../../../constants/combatConstants";
@@ -34,12 +33,6 @@ function Party({
 
   const numberOfCharacters = groups.reduce((acc, current) => acc.concat(current), []).length;
   let groupOptions = groups.map((group, index) => `Grupo ${index + 1}`);
-
-  //   useEffect(() => {
-  //   api.get("items").then((response) => {
-  //     setItems(response.data);
-  //   });
-  // }, []);
 
   function HandleSelectedFromParty() {
     HandleClose();

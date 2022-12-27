@@ -36,7 +36,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
           name: null,
           description: null,
           type: CREATURE_ACTION_TYPES.ATTACK,
-          effectPowerTotalPercentage: null,
+          creatureActionPowerTotalPercentage: null,
           reach: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
           trigger: CREATURE_REACTION_TRIGGERS.ON_DAMAGE_TAKEN,
           triggerDescription: null,
@@ -102,7 +102,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
       return false;
     }
 
-    if (tempReaction.type === CREATURE_ACTION_TYPES.EFFECT && !tempReaction.creatureActionPowerTotalPercentages) {
+    if (tempReaction.type === CREATURE_ACTION_TYPES.EFFECT && !tempReaction.creatureActionPowerTotalPercentage) {
       return false;
     }
 
@@ -154,7 +154,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
                 extraWidth={100}
                 isLarge={true}
                 value={tempReaction}
-                valuePropertyPath="creatureActionPowerTotalPercentages"
+                valuePropertyPath="creatureActionPowerTotalPercentage"
                 onSelect={setTempReaction}
                 options={creatureActionPowerTotalPercentages}
                 optionDisplay={(o) => o.display}

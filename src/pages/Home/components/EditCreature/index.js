@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-//  import api from "../../services/api";
 import * as utils from "../../../../utils";
 import {
   CREATURE_MOVEMENTS,
@@ -206,12 +205,6 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
   function HandleImgOnError() {
     setIsImgValid(false);
   }
-
-  //   useEffect(() => {
-  //   api.get("items").then((response) => {
-  //     setItems(response.data);
-  //   });
-  // }, []);
 
   return (
     <div className={`EditCreature-container ${!isFirstStep ? "main-edit-process" : ""}`}>

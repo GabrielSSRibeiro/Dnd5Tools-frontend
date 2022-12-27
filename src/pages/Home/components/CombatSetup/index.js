@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-//  import api from "../../services/api";
 
 import * as utils from "../../../../utils";
 import { MAX_CREATURES_ALLOWED, COMBAT_DIFFICULTIES } from "../../../../constants/combatConstants";
@@ -111,12 +110,6 @@ function CombatSetup({
   function GetCombatDifficultyNames() {
     return COMBAT_DIFFICULTIES.map((cd) => `Dificuldade ${cd}`);
   }
-
-  //   useEffect(() => {
-  //   api.get("items").then((response) => {
-  //     setItems(response.data);
-  //   });
-  // }, []);
 
   useEffect(() => {
     function handleResize() {

@@ -51,17 +51,16 @@ function Resistencies({ creature, setCreature }) {
         <h2>Imune a Condições</h2>
         <div className="conditions-wrapper">
           {conditions.map((c) => (
-            <>
+            <React.Fragment key={c.value}>
               <div className="conditions-options">
                 <CheckInput
-                  key={c.value}
                   label={c.display}
                   onClick={() => setCreatureConditionImmunity(c.value)}
                   isSelected={creature.conditionImmunities.find((ci) => ci === c.value)}
                 />
               </div>
               <div className="conditions-divider"></div>
-            </>
+            </React.Fragment>
           ))}
         </div>
       </div>

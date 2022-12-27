@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-//  import api from "../../services/api";
 import * as utils from "../../../../utils";
 import { CREATURE_RARITIES, creatureRarities, creatureEnvironments, creatureSizes, creatureTypes } from "../../../../constants/creatureConstants";
 import { MAX_CREATURES_ALLOWED } from "../../../../constants/combatConstants";
@@ -44,12 +43,6 @@ function Bestiary({
     { rarity: CREATURE_RARITIES.LEGENDARY, gem: LegendaryGem },
   ];
   let filteredCreatures = [];
-
-  //   useEffect(() => {
-  //   api.get("items").then((response) => {
-  //     setItems(response.data);
-  //   });
-  // }, []);
 
   function HandleEditNewCreature() {
     setCreatureToEdit(null);
@@ -235,14 +228,14 @@ function Bestiary({
               </main>
             </div>
             <div className="bestiary-list">
-              {filteredCreatures.map((creature) => (
+              {filteredCreatures.map((creature, index) => (
                 <div
                   className={`list-creature ${
                     isSelecting && tempSelectedCreatures.some((selectedCreature) => selectedCreature.name === creature.name)
                       ? "selected-creature"
                       : ""
                   }`}
-                  key={creature.name}
+                  key={index}
                   onClick={() => (isSelecting ? HandleSelectCreature(creature) : HandleEditCreature(creature))}
                 >
                   {isSelecting && (

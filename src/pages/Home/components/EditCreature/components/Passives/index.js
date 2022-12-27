@@ -79,17 +79,13 @@ function Passives({ creature, setCreature }) {
         <h2>Idiomas</h2>
         <div className="languages-wrapper">
           {languages.map((l) => (
-            <>
-              <div className="languages-options">
-                <CheckInput
-                  key={l.value}
-                  label={l.display}
-                  onClick={() => setCreatureLanguages(l.value)}
-                  isSelected={creature.languages.find((ci) => ci === l.value)}
-                />
-              </div>
-              {/* <div className="languages-divider"></div> */}
-            </>
+            <div key={l.value} className="languages-options">
+              <CheckInput
+                label={l.display}
+                onClick={() => setCreatureLanguages(l.value)}
+                isSelected={creature.languages.find((ci) => ci === l.value)}
+              />
+            </div>
           ))}
         </div>
       </div>

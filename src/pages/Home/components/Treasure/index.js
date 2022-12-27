@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-//  import api from "../../services/api";
 import { getDifficulty } from "../../../../helpers/skillCheckHelper";
 import {
   getGoldPiecesAmount,
@@ -60,12 +59,6 @@ function Treasure({ resultText, level }) {
     hasResult && treasureType === TREASURE_TYPES.EQUIPMENT
       ? getItemAfixes(equipmentType, equipmentRarity, equipmentDamageType, equipmentAttribute)
       : null;
-
-  //   useEffect(() => {
-  //   api.get("items").then((response) => {
-  //     setItems(response.data);
-  //   });
-  // }, []);
 
   // function calculateGoldPieces() {}
 

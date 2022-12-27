@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-//  import api from "../../services/api";
 import { getSkillCheck } from "../../../../helpers/skillCheckHelper";
 import { MIN_DIFICULTY } from "../../../../constants/skillCheckConstants";
 import { conditions, conditionDurations, DAMAGE_INTENSITIES, damageIntensities, difficultyClasses } from "../../../../constants/creatureConstants";
@@ -29,12 +28,6 @@ function SkillCheck({ resultText, level }) {
 
     return setCondition(value);
   }
-
-  //   useEffect(() => {
-  //   api.get("items").then((response) => {
-  //     setItems(response.data);
-  //   });
-  // }, []);
 
   return (
     <div className="SkillCheck-container">

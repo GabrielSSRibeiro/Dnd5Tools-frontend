@@ -34,7 +34,7 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
           name: null,
           description: null,
           type: CREATURE_ACTION_TYPES.ATTACK,
-          effectPowerTotalPercentage: null,
+          creatureActionPowerTotalPercentage: null,
           reach: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
           frequency: CREATURE_ACTION_FREQUENCIES.COMMON,
           damageIntensity: null,
@@ -65,7 +65,7 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
       updatedValue.conditionDuration = null;
       updatedValue.difficultyClass = null;
     } else {
-      updatedValue.effectPowerTotalPercentage = null;
+      updatedValue.creatureActionPowerTotalPercentage = null;
     }
 
     setTempAction(updatedValue);
@@ -100,7 +100,7 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
       return false;
     }
 
-    if (tempAction.type === CREATURE_ACTION_TYPES.EFFECT && !tempAction.creatureActionPowerTotalPercentages) {
+    if (tempAction.type === CREATURE_ACTION_TYPES.EFFECT && !tempAction.creatureActionPowerTotalPercentage) {
       return false;
     }
 
@@ -152,7 +152,7 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
                 extraWidth={100}
                 isLarge={true}
                 value={tempAction}
-                valuePropertyPath="creatureActionPowerTotalPercentages"
+                valuePropertyPath="creatureActionPowerTotalPercentage"
                 onSelect={setTempAction}
                 options={creatureActionPowerTotalPercentages}
                 optionDisplay={(o) => o.display}

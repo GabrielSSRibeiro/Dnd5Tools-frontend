@@ -29,7 +29,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
           name: null,
           description: null,
           type: CREATURE_ACTION_TYPES.SAVING_THROW,
-          effectPowerTotalPercentage: null,
+          creatureActionPowerTotalPercentage: null,
           reach: CREATURE_AURA_REACHES.MEDIUM,
           damageIntensity: null,
           damageType: null,
@@ -37,7 +37,6 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
           conditionDuration: null,
           difficultyClass: null,
           associatedWeakSpot: null,
-          isSpell: false,
         }
   );
 
@@ -86,7 +85,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
       return false;
     }
 
-    if (tempAura.type === CREATURE_ACTION_TYPES.EFFECT && !tempAura.creatureActionPowerTotalPercentages) {
+    if (tempAura.type === CREATURE_ACTION_TYPES.EFFECT && !tempAura.creatureActionPowerTotalPercentage) {
       return false;
     }
 
@@ -126,7 +125,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
                 extraWidth={100}
                 isLarge={true}
                 value={tempAura}
-                valuePropertyPath="creatureActionPowerTotalPercentages"
+                valuePropertyPath="creatureActionPowerTotalPercentage"
                 onSelect={setTempAura}
                 options={creatureActionPowerTotalPercentages}
                 optionDisplay={(o) => o.display}
