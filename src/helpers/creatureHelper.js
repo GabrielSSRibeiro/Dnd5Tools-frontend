@@ -2,7 +2,7 @@ export const GetFoundryFormattedCreature = (creature) => {
   let foundryJson = {
     name: "Skeleton",
     type: "npc",
-    img: "https://i.pinimg.com/564x/01/d4/17/01d417c02bd190a056c718650fc9db3b.jpg", //"https://5etools-mirror-1.github.io/img/bestiary/MM/Skeleton.jpg",
+    img: "https://i.pinimg.com/564x/01/d4/17/01d417c02bd190a056c718650fc9db3b.jpg",
     data: {
       abilities: {
         str: {
