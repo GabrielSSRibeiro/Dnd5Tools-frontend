@@ -192,7 +192,7 @@ function Bestiary({
               </div>
               <main>
                 <Select
-                  extraWidth={20}
+                  extraWidth={40}
                   value={selectedRarity}
                   onSelect={(value) => handleFilter(setSelectedRarity, value)}
                   nothingSelected="Nível"
@@ -201,7 +201,7 @@ function Bestiary({
                   optionValue={(o) => o.value}
                 />
                 <Select
-                  extraWidth={60}
+                  extraWidth={80}
                   value={selectedEnv}
                   onSelect={(value) => handleFilter(setSelectedEnv, value)}
                   nothingSelected="Ambiente"
