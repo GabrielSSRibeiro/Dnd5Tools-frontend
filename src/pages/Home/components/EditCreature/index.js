@@ -11,6 +11,7 @@ import {
   DAMAGES_EFFECTIVENESS,
   DAMAGE_TYPES,
   LANGUAGES,
+  CREATURE_REACTIONS_PER_ROUND,
   CREATURE_ACTION_FREQUENCIES,
 } from "../../../../constants/creatureConstants";
 
@@ -89,7 +90,7 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
     customSpecials: [],
     actions: [],
     reactions: [],
-    reactionsPerRound: 1,
+    reactionsPerRound: CREATURE_REACTIONS_PER_ROUND.NORMAL,
     aura: null,
     treasures: [],
   };

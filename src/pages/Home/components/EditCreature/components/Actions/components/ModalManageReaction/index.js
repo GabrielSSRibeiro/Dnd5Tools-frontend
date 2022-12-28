@@ -110,10 +110,6 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
       return false;
     }
 
-    if (tempReaction.condition && !tempReaction.conditionDuration) {
-      return false;
-    }
-
     return true;
   }
 
@@ -227,6 +223,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               options={damageIntensities}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              optionsAtATime={4}
               isDisabled={tempReaction.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
@@ -253,6 +250,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               options={difficultyClasses}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              optionsAtATime={4}
               isDisabled={tempReaction.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
@@ -277,8 +275,10 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               valuePropertyPath="conditionDuration"
               onSelect={setTempReaction}
               options={conditionDurations}
+              nothingSelected="Nenhuma"
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              optionsAtATime={4}
               isDisabled={!tempReaction.condition || tempReaction.type === CREATURE_ACTION_TYPES.EFFECT}
             />
           </section>

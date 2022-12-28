@@ -93,10 +93,6 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
       return false;
     }
 
-    if (tempAura.condition && !tempAura.conditionDuration) {
-      return false;
-    }
-
     return true;
   }
 
@@ -170,6 +166,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
               options={damageIntensities}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              optionsAtATime={4}
               isDisabled={tempAura.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
@@ -196,10 +193,11 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
               options={difficultyClasses}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              optionsAtATime={4}
               isDisabled={tempAura.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
-              label={"Condição "}
+              label={"Condição"}
               extraWidth={100}
               isLarge={true}
               nothingSelected="Nenhuma"
@@ -220,8 +218,10 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
               valuePropertyPath="conditionDuration"
               onSelect={setTempAura}
               options={conditionDurations}
+              nothingSelected="Nenhuma"
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              optionsAtATime={4}
               isDisabled={!tempAura.condition || tempAura.type === CREATURE_ACTION_TYPES.EFFECT}
             />
           </section>

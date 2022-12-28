@@ -745,17 +745,17 @@ export const creatureCustomSpecialMultipliers = [
   { display: "Extrema (Extra 100%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.EXTREME, weight: 4, multiplier: 2 },
 ];
 
-export const CREATURE_REACTIONS = {
+export const CREATURE_REACTIONS_PER_ROUND = {
   NORMAL: 10,
   EXTRA_LOW: 20,
   EXTRA_HIGH: 30,
   EXTRA_EXTREME: 40,
 };
-export const creatureReactions = [
-  { display: "Normal (1 uso)", value: CREATURE_REACTIONS.NORMAL, weight: 1, number: 1 },
-  { display: "Extra Pouca (2 usos)", value: CREATURE_REACTIONS.EXTRA_LOW, weight: 2, number: 2 },
-  { display: "Extra Muita (3 usos)", value: CREATURE_REACTIONS.EXTRA_HIGH, weight: 3, number: 3 },
-  { display: "Extra Extrema (5 usos)", value: CREATURE_REACTIONS.EXTRA_EXTREME, weight: 5, number: 5 },
+export const creatureReactionsPerRound = [
+  { display: "Normal (1 uso)", value: CREATURE_REACTIONS_PER_ROUND.NORMAL, weight: 1, number: 1 },
+  { display: "Extra Pouca (2 usos)", value: CREATURE_REACTIONS_PER_ROUND.EXTRA_LOW, weight: 2, number: 2 },
+  { display: "Extra Muita (3 usos)", value: CREATURE_REACTIONS_PER_ROUND.EXTRA_HIGH, weight: 3, number: 3 },
+  { display: "Extra Extrema (5 usos)", value: CREATURE_REACTIONS_PER_ROUND.EXTRA_EXTREME, weight: 5, number: 5 },
 ];
 
 export const CREATURE_ACTION_TYPES = {
@@ -798,24 +798,30 @@ export const creatureActionAttackReaches = [
   { display: "Corpo a Corpo (4,5m)", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_FAR, weight: 3 },
   { display: "Distância (9m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_CLOSE, weight: 4 },
   { display: "Distância (18m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_EXTRA, weight: 5 },
-  { display: "Distância (36m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_FAR, weight: 6 },
+  { display: "Distância (36-90m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_FAR, weight: 6 },
 ];
 
 export const CREATURE_ACTION_SAVING_THROW_REACHES = {
   LINE_CLOSE: 10,
-  LINE_FAR: 20,
-  CONE_SHORT: 30,
-  CONE_LARGE: 40,
-  SPHERE_SMALL: 50,
-  SHEPRE_BIG: 60,
+  LINE_MEDIUM: 20,
+  LINE_FAR: 30,
+  CONE_SHORT: 40,
+  CONE_MEDIUM: 50,
+  CONE_LARGE: 60,
+  SPHERE_SMALL: 70,
+  SPHERE_MEDIUM: 80,
+  SHEPRE_BIG: 90,
 };
 export const creatureActionSavingThrowReaches = [
-  { display: "Linha (9m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_CLOSE, weight: 1 },
-  { display: "Linha (18m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_FAR, weight: 2 },
-  { display: "Cone (9m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_SHORT, weight: 3 },
-  { display: "Cone (9m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_LARGE, weight: 4 },
-  { display: "Esfera (3m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.SPHERE_SMALL, weight: 5 },
-  { display: "Esfera (6m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.SHEPRE_BIG, weight: 6 },
+  { display: "Linha (3m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_CLOSE, weight: 1 },
+  { display: "Linha (9m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_MEDIUM, weight: 2 },
+  { display: "Linha (18m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_FAR, weight: 3 },
+  { display: "Cone (1,5m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_SHORT, weight: 1 },
+  { display: "Cone (4,5m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_MEDIUM, weight: 2 },
+  { display: "Cone (9m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_LARGE, weight: 3 },
+  { display: "Esfera (1,5m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.SPHERE_SMALL, weight: 2 },
+  { display: "Esfera (3m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.SPHERE_MEDIUM, weight: 3 },
+  { display: "Esfera (6m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.SHEPRE_BIG, weight: 4 },
 ];
 
 export const creatureActionHealingReaches = [...creatureActionAttackReaches, ...creatureActionSavingThrowReaches];

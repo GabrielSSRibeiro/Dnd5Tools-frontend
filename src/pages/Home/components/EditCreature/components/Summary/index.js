@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as utils from "../../../../../../utils";
-import { GetFoundryFormattedCreature } from "../../../../../../helpers/creatureHelper";
+import { GetFoundryFormattedCreature } from "../../../../../../helpers/foundryHelper";
 
 import Button from "../../../../../../components/Button";
 import Modal from "../../../../../../components/Modal";

@@ -108,10 +108,6 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
       return false;
     }
 
-    if (tempAction.condition && !tempAction.conditionDuration) {
-      return false;
-    }
-
     return true;
   }
 
@@ -216,6 +212,7 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
               options={damageIntensities}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              optionsAtATime={4}
               isDisabled={tempAction.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
@@ -242,6 +239,7 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
               options={difficultyClasses}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              optionsAtATime={4}
               isDisabled={tempAction.type === CREATURE_ACTION_TYPES.EFFECT}
             />
             <Select
@@ -266,6 +264,7 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
               valuePropertyPath="conditionDuration"
               onSelect={setTempAction}
               options={conditionDurations}
+              nothingSelected="Nenhuma"
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               isDisabled={!tempAction.condition || tempAction.type === CREATURE_ACTION_TYPES.EFFECT}

@@ -38,6 +38,42 @@ function Passives({ creature, setCreature }) {
     setCreature({ ...creature });
   }
 
+  function HandleToggleDarkVision() {
+    if (hasDarkVision) {
+      creature.senses.darkVision = null;
+
+      setCreature(creature);
+    }
+    setHasDarkVision(!hasDarkVision);
+  }
+
+  function HandleToggleTremorsense() {
+    if (hasTremorsense) {
+      creature.senses.tremorsense = null;
+
+      setCreature(creature);
+    }
+    setHasTremorsense(!hasTremorsense);
+  }
+
+  function HandleToggleBlindSight() {
+    if (hasBlindSight) {
+      creature.senses.blindSight = null;
+
+      setCreature(creature);
+    }
+    setHasBlindSight(!hasBlindSight);
+  }
+
+  function HandleToggleTrueSight() {
+    if (hasTrueSight) {
+      creature.senses.trueSight = null;
+
+      setCreature(creature);
+    }
+    setHasTrueSight(!hasTrueSight);
+  }
+
   function HandleToggleLegendaryResistences() {
     if (hasLegendaryResistences) {
       creature.legendaryResistences = null;
@@ -92,7 +128,7 @@ function Passives({ creature, setCreature }) {
       <div className="senses">
         <h2>Sentidos</h2>
         <div className="senses-wrapper">
-          <CheckInput label="Visão no Escuro" onClick={() => setHasDarkVision(!hasDarkVision)} isSelected={hasDarkVision} />
+          <CheckInput label="Visão no Escuro" onClick={HandleToggleDarkVision} isSelected={hasDarkVision} />
           {hasDarkVision && (
             <Select
               label={"Alcance"}
@@ -106,7 +142,7 @@ function Passives({ creature, setCreature }) {
             />
           )}
           <div className="senses-divider"></div>
-          <CheckInput label="Sentido Sísmico" onClick={() => setHasTremorsense(!hasTremorsense)} isSelected={hasTremorsense} />
+          <CheckInput label="Sentido Sísmico" onClick={HandleToggleTremorsense} isSelected={hasTremorsense} />
           {hasTremorsense && (
             <Select
               label={"Alcance"}
@@ -120,7 +156,7 @@ function Passives({ creature, setCreature }) {
             />
           )}
           <div className="senses-divider"></div>
-          <CheckInput label="Visão Cega" onClick={() => setHasBlindSight(!hasBlindSight)} isSelected={hasBlindSight} />
+          <CheckInput label="Visão Cega" onClick={HandleToggleBlindSight} isSelected={hasBlindSight} />
           {hasBlindSight && (
             <Select
               label={"Alcance"}
@@ -134,17 +170,18 @@ function Passives({ creature, setCreature }) {
             />
           )}
           <div className="senses-divider"></div>
-          <CheckInput label="Visão Verdadeira" onClick={() => setHasTrueSight(!hasTrueSight)} isSelected={hasTrueSight} />
+          <CheckInput label="Visão Verdadeira" onClick={HandleToggleTrueSight} isSelected={hasTrueSight} />
           {hasTrueSight && (
             <Select
               label={"Alcance"}
               extraWidth={100}
               value={creature}
-              valuePropertyPath="senses.blindSight"
+              valuePropertyPath="senses.trueSight"
               onSelect={setCreature}
               options={creatureSenseReaches}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              dropUp={true}
             />
           )}
         </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { TREASURE_TYPES } from "../../../../../../constants/treasureConstants";
-import { creatureReactions, creatureActionFrequencies, creatureAuraReaches } from "../../../../../../constants/creatureConstants";
+import { creatureReactionsPerRound, creatureActionFrequencies, creatureAuraReaches } from "../../../../../../constants/creatureConstants";
 
 import Button from "../../../../../../components/Button";
 import Select from "../../../../../../components/Select";
@@ -145,7 +145,7 @@ function Actions({ creature, setCreature }) {
               value={creature}
               valuePropertyPath="reactionsPerRound"
               onSelect={setCreature}
-              options={creatureReactions}
+              options={creatureReactionsPerRound}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               className="reaction-number"
