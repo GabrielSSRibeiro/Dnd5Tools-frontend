@@ -6,7 +6,7 @@ import {
   CREATURE_SECONDARY_ALIGNMENTS,
   CREATURE_HIT_POINTS,
   CREATURE_ATTACKS,
-  CREATURE_ARMOR_CLASS,
+  CREATURE_ARMOR_CLASSES,
   CREATURE_INITIATIVES,
   DAMAGES_EFFECTIVENESS,
   DAMAGE_TYPES,
@@ -59,7 +59,7 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
     },
     hitPoints: CREATURE_HIT_POINTS.MEDIUM,
     attack: CREATURE_ATTACKS.MEDIUM,
-    armorClass: CREATURE_ARMOR_CLASS.MEDIUM,
+    armorClass: CREATURE_ARMOR_CLASSES.MEDIUM,
     initiative: CREATURE_INITIATIVES.MEDIUM,
     weakSpots: [],
     damagesEffectiveness: [

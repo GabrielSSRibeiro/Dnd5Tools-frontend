@@ -13,7 +13,7 @@ import { creatureRarities, damageTypes, conditions } from "../constants/creature
 
 const rand = utils.randomIntFromInterval;
 const avg = utils.averageOfArray;
-const variance = utils.randomValueFromVariance;
+const variance = utils.randomValueFromVariancePercentage;
 const randItem = utils.randomItemFromArray;
 
 //Gold pieces ------------------------------------

@@ -3,7 +3,7 @@ import { MIN_DIFICULTY } from "../constants/skillCheckConstants";
 import { conditions, conditionDurations, damageIntensities, difficultyClasses } from "../constants/creatureConstants";
 
 const rand = utils.randomIntFromInterval;
-const variance = utils.randomValueFromVariance;
+const variance = utils.randomValueFromVariancePercentage;
 
 export const getDifficulty = (level, checkDifficulty) => {
   const prof = utils.GetProfByLevel(level);
@@ -18,7 +18,7 @@ export const getDifficulty = (level, checkDifficulty) => {
   return Math.max(difficulty, MIN_DIFICULTY);
 };
 
-const getDamage = (level, damageIntensity) => {
+export const getDamage = (level, damageIntensity) => {
   const damageIndex = damageIntensities.findIndex((di) => di.value === damageIntensity);
   const intensityFactor = 2;
   const damageMultiplier = Math.pow(intensityFactor, damageIndex + 1 - intensityFactor); // 2^-1, 2^0, 2^1, 2^2

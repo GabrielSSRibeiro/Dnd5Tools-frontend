@@ -1,4 +1,6 @@
+import * as utils from "../utils";
 import * as creatureHelper from "./creatureHelper";
+import { creatureRarities } from "../constants/creatureConstants";
 
 export const GetFoundryFormattedCreature = (creature) => {
   let foundryJson = {
@@ -25,60 +27,67 @@ export const GetFoundryFormattedCreature = (creature) => {
 };
 
 const GetAbilities = (creature) => {
+  const str = creatureHelper.GetAttributeValue(creature.attributes.strength);
+  const dex = creatureHelper.GetAttributeValue(creature.attributes.dexterity);
+  const con = creatureHelper.GetAttributeValue(creature.attributes.constitution);
+  const int = creatureHelper.GetAttributeValue(creature.attributes.intelligence);
+  const wis = creatureHelper.GetAttributeValue(creature.attributes.wisdom);
+  const cha = creatureHelper.GetAttributeValue(creature.attributes.charisma);
+
   const abilities = {
     str: {
-      value: creatureHelper.GetAttributeValue(creature.attributes.strength),
+      value: str,
       proficient: 0,
       bonuses: {
         check: 0,
         save: "",
       },
-      mod: 0,
+      mod: utils.GetAttributeMod(str),
     },
     dex: {
-      value: 14,
+      value: dex,
       proficient: 0,
       bonuses: {
         check: 0,
         save: "",
       },
-      mod: 2,
+      mod: utils.GetAttributeMod(dex),
     },
     con: {
-      value: 15,
+      value: con,
       proficient: 0,
       bonuses: {
         check: 0,
         save: "",
       },
-      mod: 2,
+      mod: utils.GetAttributeMod(con),
     },
     int: {
-      value: 6,
+      value: int,
       proficient: 0,
       bonuses: {
         check: 0,
         save: "",
       },
-      mod: -2,
+      mod: utils.GetAttributeMod(int),
     },
     wis: {
-      value: 8,
+      value: wis,
       proficient: 0,
       bonuses: {
         check: 0,
         save: "",
       },
-      mod: -1,
+      mod: utils.GetAttributeMod(wis),
     },
     cha: {
-      value: 5,
+      value: cha,
       proficient: 0,
       bonuses: {
         check: 0,
         save: "",
       },
-      mod: -3,
+      mod: utils.GetAttributeMod(cha),
     },
   };
 
@@ -86,48 +95,51 @@ const GetAbilities = (creature) => {
 };
 
 const GetAttributes = (creature) => {
+  const level = GetAverageLevel(creature.rarity);
+  const hp = creatureHelper.GetHPValue(level, creature.hitPoints, creature.attributes.constitution);
+
   const attributes = {
     ac: {
-      flat: null,
-      calc: "custom",
+      flat: creatureHelper.GetACValue(creature.armorClass),
+      calc: "flat",
       formula: "@attributes.ac.armor + @attributes.ac.dex +1",
       min: 0,
       value: null,
     },
     hp: {
-      value: 13,
+      value: hp,
       min: 0,
-      max: 13,
+      max: hp,
       temp: 0,
       tempmax: 0,
-      formula: "2d8 + 4",
+      formula: utils.GetValueAsDiceString(hp, true, 0.5),
     },
     init: {
       value: 0,
       bonus: 0,
       mod: 0,
-      total: 2,
+      total: creatureHelper.GetInitiativeValue(creature.initiative),
       prof: 0,
     },
     movement: {
-      burrow: null,
+      burrow: creatureHelper.GetBurrowingValue(creature.movement.burrowing),
       climb: null,
-      fly: null,
-      swim: null,
-      walk: 30,
+      fly: creatureHelper.GetFlyingValue(creature.movement.flying),
+      swim: creatureHelper.GetSwimmingValue(creature.movement.swimming),
+      walk: creatureHelper.GetSpeedValue(creature.movement.speed),
       units: "ft",
       hover: false,
     },
     senses: {
-      darkvision: 60,
-      blindsight: null,
-      tremorsense: null,
-      truesight: null,
+      darkvision: creatureHelper.GetSenseValue(creature.senses.darkVision),
+      blindsight: creatureHelper.GetSenseValue(creature.senses.blindSight),
+      tremorsense: creatureHelper.GetSenseValue(creature.senses.tremorsense),
+      truesight: creatureHelper.GetSenseValue(creature.senses.trueSight),
       units: "ft",
       special: "",
     },
     spellcasting: "",
-    prof: 2,
+    prof: utils.GetProfByLevel(level),
     spelldc: 8,
   };
 
@@ -191,6 +203,7 @@ const GetTraits = (creature) => {
 };
 
 const GetCurrency = (creature) => {
+  //nao usado por enqaunto. Ate PO é dado como item de inventorio
   const currency = {
     pp: 0,
     gp: 0,
@@ -782,4 +795,10 @@ const GetFlags = (creature) => {
   };
 
   return flags;
+};
+
+const GetAverageLevel = (creatureRarity) => {
+  const rarityObj = creatureRarities.find((a) => a.value === creatureRarity);
+
+  return Math.round((rarityObj.baseOutputMin + rarityObj.baseOutputMax) / 2);
 };

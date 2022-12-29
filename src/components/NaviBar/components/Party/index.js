@@ -234,7 +234,7 @@ function Party({
               {!isSelecting && (
                 <>
                   <h5>Nível</h5>
-                  <Select value={level} onSelect={setLevel} options={LEVELS} />
+                  <Select value={level} onSelect={setLevel} options={LEVELS} optionsAtATime={10} />
                 </>
               )}
               <div className="sharp-button" onClick={HandleClose}>

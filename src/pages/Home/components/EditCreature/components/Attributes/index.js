@@ -4,7 +4,7 @@ import {
   creatureAttributes,
   creatureHitPoints,
   creatureAttacks,
-  creatureArmorClass,
+  creatureArmorClasses,
   creatureInitiatives,
 } from "../../../../../../constants/creatureConstants";
 
@@ -135,7 +135,7 @@ function Attributes({ creature, setCreature }) {
           value={creature}
           valuePropertyPath="armorClass"
           onSelect={setCreature}
-          options={creatureArmorClass}
+          options={creatureArmorClasses}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />

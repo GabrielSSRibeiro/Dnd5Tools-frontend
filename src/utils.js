@@ -9,9 +9,16 @@ export function averageOfArray(values) {
   return sum / values.length || 0;
 }
 
-export function randomValueFromVariance(value, variance) {
-  const lowerBound = value * (1 - variance);
-  const higherBound = value * (1 + variance);
+export function randomValueFromVarianceInt(value, varianceInt) {
+  const lowerBound = value - varianceInt;
+  const higherBound = value + varianceInt;
+
+  return randomIntFromInterval(lowerBound, higherBound);
+}
+
+export function randomValueFromVariancePercentage(value, variancePercentage) {
+  const lowerBound = value * (1 - variancePercentage);
+  const higherBound = value * (1 + variancePercentage);
 
   return randomIntFromInterval(lowerBound, higherBound);
 }
@@ -40,6 +47,10 @@ export function randomIndexFromArrayOfProbs(probArray) {
 
 export function GetProfByLevel(level) {
   return Math.floor(2 + (level - 1) / 4);
+}
+
+export function GetAttributeMod(attribute) {
+  return Math.floor((attribute - 10) / 2);
 }
 
 export function TrimDecimalPlaces(value) {
@@ -151,3 +162,29 @@ export function downloadObjectAsJson(exportObj, exportName) {
   downloadAnchorNode.click();
   downloadAnchorNode.remove();
 }
+
+export const GetValueAsDiceString = (value, keepRemainder = false, dicedPercentage = 1) => {
+  const valueToTransform = Math.round(value * dicedPercentage);
+  let remainingValue = value - valueToTransform;
+
+  let diceDetails = [{ sides: 4 }, { sides: 6 }, { sides: 8 }, { sides: 10 }, { sides: 12 }];
+
+  diceDetails.forEach((dd) => {
+    dd.average = (1 + dd.sides) / 2;
+    dd.result = Math.floor(valueToTransform / dd.average);
+    dd.remainder = valueToTransform - Math.ceil(dd.result * dd.average);
+  });
+  const selectedRemainder = Math.max(...diceDetails.map((dd) => dd.remainder));
+
+  const selectedDie = diceDetails.find((dd) => dd.remainder === selectedRemainder);
+  if (keepRemainder) {
+    remainingValue += selectedDie.remainder;
+  }
+
+  let diceString = selectedDie.result > 0 ? `${selectedDie.result}d${selectedDie.sides}` : "0";
+  if (remainingValue > 0) {
+    diceString += ` + ${remainingValue}`;
+  }
+
+  return diceString;
+};
