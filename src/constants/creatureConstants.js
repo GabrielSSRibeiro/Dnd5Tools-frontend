@@ -1,3 +1,8 @@
+export const creatureXps = [
+  200, 450, 700, 1100, 1800, 2300, 2900, 3900, 5000, 5900, 7200, 8400, 10000, 11500, 13000, 15000, 18000, 20000, 22000, 25000, 33000, 41000, 50000,
+  62000, 75000, 90000, 105000, 12000, 135000, 155000,
+];
+
 export const CREATURE_RARITIES = {
   COMMON: 10,
   UNCOMMON: 20,
@@ -70,12 +75,12 @@ export const CREATURE_SIZES = {
   GARGANTUAN: 60,
 };
 export const creatureSizes = [
-  { display: "Miúdo", value: CREATURE_SIZES.TINY, weight: 1 },
-  { display: "Pequeno", value: CREATURE_SIZES.SMALL, weight: 2 },
-  { display: "Médio", value: CREATURE_SIZES.MEDIUM, weight: 3 },
-  { display: "Grande", value: CREATURE_SIZES.LARGE, weight: 4 },
-  { display: "Enorme", value: CREATURE_SIZES.HUGE, weight: 5 },
-  { display: "Imenso", value: CREATURE_SIZES.GARGANTUAN, weight: 6 },
+  { display: "Miúdo", value: CREATURE_SIZES.TINY, weight: 1, foundryExport: "tiny" },
+  { display: "Pequeno", value: CREATURE_SIZES.SMALL, weight: 2, foundryExport: "sm" },
+  { display: "Médio", value: CREATURE_SIZES.MEDIUM, weight: 3, foundryExport: "med" },
+  { display: "Grande", value: CREATURE_SIZES.LARGE, weight: 4, foundryExport: "lg" },
+  { display: "Enorme", value: CREATURE_SIZES.HUGE, weight: 5, foundryExport: "huge" },
+  { display: "Imenso", value: CREATURE_SIZES.GARGANTUAN, weight: 6, foundryExport: "grg" },
 ];
 
 export const CREATURE_TYPES = {

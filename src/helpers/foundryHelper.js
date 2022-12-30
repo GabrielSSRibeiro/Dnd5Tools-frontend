@@ -1,6 +1,6 @@
 import * as utils from "../utils";
-import * as creatureHelper from "./creatureHelper";
-import { creatureRarities } from "../constants/creatureConstants";
+import * as ch from "./creatureHelper";
+import * as cc from "../constants/creatureConstants";
 
 export const GetFoundryFormattedCreature = (creature) => {
   let foundryJson = {
@@ -27,12 +27,12 @@ export const GetFoundryFormattedCreature = (creature) => {
 };
 
 const GetAbilities = (creature) => {
-  const str = creatureHelper.GetAttributeValue(creature.attributes.strength);
-  const dex = creatureHelper.GetAttributeValue(creature.attributes.dexterity);
-  const con = creatureHelper.GetAttributeValue(creature.attributes.constitution);
-  const int = creatureHelper.GetAttributeValue(creature.attributes.intelligence);
-  const wis = creatureHelper.GetAttributeValue(creature.attributes.wisdom);
-  const cha = creatureHelper.GetAttributeValue(creature.attributes.charisma);
+  const str = ch.GetAttributeValue(creature.attributes.strength);
+  const dex = ch.GetAttributeValue(creature.attributes.dexterity);
+  const con = ch.GetAttributeValue(creature.attributes.constitution);
+  const int = ch.GetAttributeValue(creature.attributes.intelligence);
+  const wis = ch.GetAttributeValue(creature.attributes.wisdom);
+  const cha = ch.GetAttributeValue(creature.attributes.charisma);
 
   const abilities = {
     str: {
@@ -95,12 +95,12 @@ const GetAbilities = (creature) => {
 };
 
 const GetAttributes = (creature) => {
-  const level = GetAverageLevel(creature.rarity);
-  const hp = creatureHelper.GetHPValue(level, creature.hitPoints, creature.attributes.constitution);
+  const level = ch.GetAverageLevel(creature.rarity);
+  const hp = ch.GetHPValue(level, creature.hitPoints, creature.attributes.constitution);
 
   const attributes = {
     ac: {
-      flat: creatureHelper.GetACValue(creature.armorClass),
+      flat: ch.GetACValue(creature.armorClass),
       calc: "flat",
       formula: "@attributes.ac.armor + @attributes.ac.dex +1",
       min: 0,
@@ -118,23 +118,23 @@ const GetAttributes = (creature) => {
       value: 0,
       bonus: 0,
       mod: 0,
-      total: creatureHelper.GetInitiativeValue(creature.initiative),
+      total: ch.GetInitiativeValue(creature.initiative),
       prof: 0,
     },
     movement: {
-      burrow: creatureHelper.GetBurrowingValue(creature.movement.burrowing),
+      burrow: ch.GetBurrowingValue(creature.movements.burrowing),
       climb: null,
-      fly: creatureHelper.GetFlyingValue(creature.movement.flying),
-      swim: creatureHelper.GetSwimmingValue(creature.movement.swimming),
-      walk: creatureHelper.GetSpeedValue(creature.movement.speed),
+      fly: ch.GetFlyingValue(creature.movements.flying),
+      swim: ch.GetSwimmingValue(creature.movements.swimming),
+      walk: ch.GetSpeedValue(creature.movements.speed),
       units: "ft",
       hover: false,
     },
     senses: {
-      darkvision: creatureHelper.GetSenseValue(creature.senses.darkVision),
-      blindsight: creatureHelper.GetSenseValue(creature.senses.blindSight),
-      tremorsense: creatureHelper.GetSenseValue(creature.senses.tremorsense),
-      truesight: creatureHelper.GetSenseValue(creature.senses.trueSight),
+      darkvision: ch.GetSenseValue(creature.senses.darkVision),
+      blindsight: ch.GetSenseValue(creature.senses.blindSight),
+      tremorsense: ch.GetSenseValue(creature.senses.tremorsense),
+      truesight: ch.GetSenseValue(creature.senses.trueSight),
       units: "ft",
       special: "",
     },
@@ -147,27 +147,35 @@ const GetAttributes = (creature) => {
 };
 
 const GetDetails = (creature) => {
+  const level = ch.GetAverageLevel(creature.rarity);
+  const raceAndClasses = [
+    ch.GetRaceValue(creature.race),
+    ch.GetClassValue(creature.class),
+    ch.GetSubClassValue(creature.class, creature.subClass),
+    ch.GetClassValue(creature.secondaryClass),
+    ch.GetSubClassValue(creature.secondaryClass, creature.secondarySubClass),
+  ];
+
   const details = {
     biography: {
-      value:
-        '<div class="rd__b  rd__b--1"><div class="rd__b  rd__b--2"><p>Skeletons arise when animated by dark magic. They heed the summons of spellcasters who call them from their stony tombs and ancient battlefields, or rise of their own accord in places saturated with death and loss, awakened by stirrings of necromantic energy or the presence of corrupting evil.</p><div class="rd__b  rd__b--3"><span class="rd__h rd__h--3" data-title-index="9"> <span class="entry-title-inner">Animated Dead.</span></span> <p>Whatever sinister force awakens a skeleton infuses its bones with a dark vitality, adhering joint to joint and reassembling dismantled limbs. This energy motivates a skeleton to move and think in a rudimentary fashion, though only as a pale imitation of the way it behaved in life. An animated skeleton retains no connection to its past, although resurrecting a skeleton restores it body and soul, banishing the hateful undead spirit that empowers it.</p><div class="rd__spc-inline-post"></div><p>While most skeletons are the animated remains of dead humans and other humanoids, skeletal undead can be created from the bones of other creatures besides humanoids, giving rise to a host of terrifying and unique forms.</p></div><div class="rd__b  rd__b--3"><span class="rd__h rd__h--3" data-title-index="10"> <span class="entry-title-inner">Obedient Servants.</span></span> <p>Skeletons raised by spell are bound to the will of their creator. They follow orders to the letter, never questioning the tasks their masters give them, regardless of the consequences. Because of their literal interpretation of commands and unwavering obedience, skeletons adapt poorly to changing circumstances. They can\'t read, speak, emote, or communicate in any way except to nod, shake their heads, or point. Still, skeletons are able to accomplish a variety of relatively complex tasks.</p><div class="rd__spc-inline-post"></div><p>A skeleton can fight with weapons and wear armor, can load and fire a catapult or trebuchet, scale a siege ladder, form a shield wall, or dump boiling oil. However, it must receive careful instructions explaining how such tasks are accomplished.</p><p>Although they lack the intellect they possessed in life, skeletons aren\'t mindless. Rather than break its limbs attempting to batter its way through an iron door, a skeleton tries the handle first. If that doesn\'t work, it searches for another way through or around the obstacle.</p></div><div class="rd__b  rd__b--3"><span class="rd__h rd__h--3" data-title-index="11"> <span class="entry-title-inner">Habitual Behaviors.</span></span> <p>Independent skeletons temporarily or permanently free of a master\'s control sometimes pantomime actions from their past lives, their bones echoing the rote behaviors of their former living selves. The skeleton of a miner might lift a pick and start chipping away at stone walls. The skeleton of a guard might strike up a post at a random doorway. The skeleton of a dragon might lie down on a pile of treasure, while the skeleton of a horse crops grass it can\'t eat. Left alone in a ballroom, the skeletons of nobles might continue an eternally unfinished dance.</p><div class="rd__spc-inline-post"></div><p>When skeletons encounter living creatures, the necromantic energy that drives them compels them to kill unless they are commanded by their masters to refrain from doing so. They attack without mercy and fight until destroyed, for skeletons possess little sense of self and even less sense of self-preservation.</p></div><div class="rd__b  rd__b--3"><span class="rd__h rd__h--3" data-title-index="12"> <span class="entry-title-inner">Undead Nature.</span></span> <p>A skeleton doesn\'t require air, food, drink, or sleep.</p><div class="rd__spc-inline-post"></div></div></div></div>',
+      value: '<div class="rd__b  rd__b--1"><div class="rd__b  rd__b--2"><p>' + creature.description + "</p></div></div>",
       public: "",
     },
-    alignment: "Lawful Evil",
+    alignment: `${ch.GetPrimaryAlignmentValue(creature.primaryAlignment)} ${ch.GetSecondaryAlignmentValue(creature.secondaryAlignment)}`,
     race: "",
     type: {
-      value: "undead",
+      value: "custom",
       subtype: "",
       swarm: null,
-      custom: "",
+      custom: `${ch.GetTypeValue(creature.type)} (${raceAndClasses.filter((i) => i).join(", ")})`,
     },
-    environment: "Urban",
-    cr: 0.25,
+    environment: ch.GetEnviromentValue(creature.environment),
+    cr: level,
     spellLevel: 0,
     xp: {
-      value: 50,
+      value: ch.GetXpValue(level),
     },
-    source: "MM",
+    source: "Dnd5Tools",
     class: {},
   };
 
@@ -176,26 +184,54 @@ const GetDetails = (creature) => {
 
 const GetTraits = (creature) => {
   const traits = {
-    size: "med",
+    size: cc.creatureSizes.find((s) => s.value === creature.size).foundryExport,
     di: {
-      value: ["poison"],
-      custom: null,
+      value: [],
+      custom: cc.damageTypes
+        .filter((dt) =>
+          creature.damagesEffectiveness.some(
+            (cde) => cde.type === dt.value && cde.value === dt.damageEffectiveness.find((de) => de.value === cc.DAMAGES_EFFECTIVENESS.IMMUNE).value
+          )
+        )
+        .map((dt) => dt.display)
+        .join(";"),
     },
     dr: {
       value: [],
-      custom: null,
+      custom: cc.damageTypes
+        .filter((dt) =>
+          creature.damagesEffectiveness.some(
+            (cde) => cde.type === dt.value && cde.value === dt.damageEffectiveness.find((de) => de.value === cc.DAMAGES_EFFECTIVENESS.RESISTENT).value
+          )
+        )
+        .map((dt) => dt.display)
+        .join(";"),
     },
     dv: {
-      value: ["bludgeoning"],
-      custom: null,
+      value: [],
+      custom: cc.damageTypes
+        .filter((dt) =>
+          creature.damagesEffectiveness.some(
+            (cde) =>
+              cde.type === dt.value && cde.value === dt.damageEffectiveness.find((de) => de.value === cc.DAMAGES_EFFECTIVENESS.VULNERABLE).value
+          )
+        )
+        .map((dt) => dt.display)
+        .join(";"),
     },
     ci: {
-      value: ["exhaustion", "poisoned"],
-      custom: null,
+      value: [],
+      custom: cc.conditions
+        .filter((c) => creature.conditionImmunities.includes(c.value))
+        .map((c) => c.display)
+        .join(";"),
     },
     languages: {
       value: [],
-      custom: "understands all languages it spoke in life but can't speak",
+      custom: cc.languages
+        .filter((l) => creature.languages.includes(l.value))
+        .map((l) => l.display)
+        .join(";"),
     },
   };
 
@@ -428,18 +464,22 @@ const GetSpells = (creature) => {
 
 const GetBonuses = (creature) => {
   const bonuses = {
+    //melee weapon attack
     mwak: {
       attack: "",
       damage: "",
     },
+    //ranged weapon attack
     rwak: {
       attack: "",
       damage: "",
     },
+    //melee spell attack
     msak: {
       attack: "",
       damage: "",
     },
+    //ranged spell attack
     rsak: {
       attack: "",
       damage: "",
@@ -458,14 +498,17 @@ const GetBonuses = (creature) => {
 };
 
 const GetResources = (creature) => {
+  const lr = ch.GetLegendaryResistenciesValue(creature.legendaryResistences);
+  const rpr = ch.GetReactionsPerRoundValue(creature.reactionsPerRound);
+
   const resources = {
     legact: {
-      value: 0,
-      max: 0,
+      value: rpr - 1,
+      max: rpr - 1,
     },
     legres: {
-      value: 0,
-      max: 0,
+      value: lr,
+      max: lr,
     },
     lair: {
       value: false,
@@ -477,8 +520,8 @@ const GetResources = (creature) => {
 
 const GetToken = (creature) => {
   const token = {
-    name: "Skeleton",
-    img: "assets/srd5e/img/MM/Skeleton.png",
+    name: creature.name,
+    img: "icons/creatures/mammals/beast-horned-scaled-glowing-orange.webp",
     displayName: 20,
     actorLink: false,
     width: 1,
@@ -490,7 +533,7 @@ const GetToken = (creature) => {
     rotation: 0,
     alpha: 1,
     vision: true,
-    dimSight: 60,
+    dimSight: ch.GetSenseValue(creature.senses.darkVision),
     brightSight: 0,
     sightAngle: 0,
     light: {
@@ -777,8 +820,8 @@ const GetFlags = (creature) => {
   const flags = {
     srd5e: {
       page: "bestiary.html",
-      source: "MM",
-      hash: "skeleton_mm",
+      source: "dnd5Tools",
+      hash: "custom",
     },
     core: {
       sheetClass: "dnd5e.MonsterBlock5e",
@@ -795,10 +838,4 @@ const GetFlags = (creature) => {
   };
 
   return flags;
-};
-
-const GetAverageLevel = (creatureRarity) => {
-  const rarityObj = creatureRarities.find((a) => a.value === creatureRarity);
-
-  return Math.round((rarityObj.baseOutputMin + rarityObj.baseOutputMax) / 2);
 };

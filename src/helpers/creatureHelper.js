@@ -2,13 +2,24 @@ import * as utils from "../utils";
 import * as creatureConstants from "../constants/creatureConstants";
 import * as skillCheckHelper from "./skillCheckHelper";
 
+export const GetAverageLevel = (creatureRarity) => {
+  const rarityObj = creatureConstants.creatureRarities.find((r) => r.value === creatureRarity);
+
+  return Math.round((rarityObj.baseOutputMin + rarityObj.baseOutputMax) / 2);
+};
+
+export const GetXpValue = (level) => {
+  const baseOutput = creatureConstants.creatureXps[level - 1];
+  return baseOutput;
+};
+
 export const GetAttributeValue = (attribute) => {
   const baseValue = creatureConstants.creatureAttributes.find((a) => a.value === attribute).baseOutput;
   return utils.randomValueFromVarianceInt(baseValue, 2);
 };
 
 export const GetACValue = (armorClass) => {
-  const baseValue = creatureConstants.creatureArmorClasses.find((a) => a.value === armorClass).baseOutput;
+  const baseValue = creatureConstants.creatureArmorClasses.find((ac) => ac.value === armorClass).baseOutput;
   return Math.max(10, utils.randomValueFromVarianceInt(baseValue, 2));
 };
 
@@ -31,7 +42,7 @@ export const GetHPValue = (level, HP, con) => {
 };
 
 export const GetInitiativeValue = (initiative) => {
-  const baseValue = creatureConstants.creatureInitiatives.find((a) => a.value === initiative).baseOutput;
+  const baseValue = creatureConstants.creatureInitiatives.find((i) => i.value === initiative).baseOutput;
   return utils.randomValueFromVarianceInt(baseValue, 2);
 };
 
@@ -40,7 +51,7 @@ export const GetSpeedValue = (speed) => {
     return null;
   }
 
-  const baseValue = creatureConstants.creatureSpeedMovements.find((a) => a.value === speed).baseOutput;
+  const baseValue = creatureConstants.creatureSpeedMovements.find((m) => m.value === speed).baseOutput;
   return utils.randomValueFromVarianceInt(baseValue, 0);
 };
 export const GetFlyingValue = (flying) => {
@@ -48,7 +59,7 @@ export const GetFlyingValue = (flying) => {
     return null;
   }
 
-  const baseValue = creatureConstants.creatureFlyingMovements.find((a) => a.value === flying).baseOutput;
+  const baseValue = creatureConstants.creatureFlyingMovements.find((m) => m.value === flying).baseOutput;
   return utils.randomValueFromVarianceInt(baseValue, 0);
 };
 export const GetSwimmingValue = (swimming) => {
@@ -56,7 +67,7 @@ export const GetSwimmingValue = (swimming) => {
     return null;
   }
 
-  const baseValue = creatureConstants.creatureSwimmingMovements.find((a) => a.value === swimming).baseOutput;
+  const baseValue = creatureConstants.creatureSwimmingMovements.find((m) => m.value === swimming).baseOutput;
   return utils.randomValueFromVarianceInt(baseValue, 0);
 };
 export const GetBurrowingValue = (burrowing) => {
@@ -64,7 +75,7 @@ export const GetBurrowingValue = (burrowing) => {
     return null;
   }
 
-  const baseValue = creatureConstants.creatureBurrowingMovements.find((a) => a.value === burrowing).baseOutput;
+  const baseValue = creatureConstants.creatureBurrowingMovements.find((m) => m.value === burrowing).baseOutput;
   return utils.randomValueFromVarianceInt(baseValue, 0);
 };
 
@@ -73,7 +84,71 @@ export const GetSenseValue = (sense) => {
     return null;
   }
 
-  const baseValue = creatureConstants.creatureSenseReaches.find((a) => a.value === sense).baseOutput;
+  const baseValue = creatureConstants.creatureSenseReaches.find((s) => s.value === sense).baseOutput;
   return utils.randomValueFromVarianceInt(baseValue, 0);
 };
-console.log(utils.randomValueFromVarianceInt(30, 0));
+
+export const GetPrimaryAlignmentValue = (alignment) => {
+  const baseOutput = creatureConstants.creaturePrimaryAlignments.find((a) => a.value === alignment).display;
+  return baseOutput;
+};
+export const GetSecondaryAlignmentValue = (alignment) => {
+  const baseOutput = creatureConstants.creatureSecondaryAlignments.find((a) => a.value === alignment).display;
+  return baseOutput;
+};
+
+export const GetRaceValue = (race) => {
+  if (race == null) {
+    return null;
+  }
+
+  const baseOutput = creatureConstants.creatureRaces.find((r) => r.value === race).display;
+  return baseOutput;
+};
+
+export const GetClassValue = (cClass) => {
+  if (cClass == null) {
+    return null;
+  }
+
+  const baseOutput = creatureConstants.creatureClasses.find((c) => c.value === cClass).display;
+  return baseOutput;
+};
+
+export const GetSubClassValue = (cClass, subClass) => {
+  if (cClass == null || subClass == null) {
+    return null;
+  }
+
+  const baseOutput = creatureConstants.creatureClasses.find((a) => a.value === cClass).subClasses.find((sc) => sc.value === subClass).display;
+  return baseOutput;
+};
+
+export const GetTypeValue = (type) => {
+  const baseOutput = creatureConstants.creatureTypes.find((a) => a.value === type).display;
+  return baseOutput;
+};
+
+export const GetEnviromentValue = (environment) => {
+  const baseOutput = creatureConstants.creatureEnvironments.find((a) => a.value === environment).display;
+  return baseOutput;
+};
+
+export const GetSizeValue = (size) => {
+  const baseOutput = creatureConstants.creatureSizes.find((a) => a.value === size).display;
+  return baseOutput;
+};
+
+export const GetLegendaryResistenciesValue = (lr) => {
+  if (lr == null) {
+    return null;
+  }
+
+  const baseOutput = creatureConstants.creatureLegendaryResistences.find((a) => a.value === lr).totalNumber;
+  return baseOutput;
+};
+
+export const GetReactionsPerRoundValue = (rpr) => {
+  const baseOutput = creatureConstants.creatureReactionsPerRound.find((a) => a.value === rpr).number;
+  return baseOutput;
+};
