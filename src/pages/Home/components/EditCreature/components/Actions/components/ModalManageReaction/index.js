@@ -61,6 +61,13 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
       updatedValue.effectPowerTotalPercentage = null;
     }
 
+    if (updatedValue.type === CREATURE_ACTION_TYPES.HEALING) {
+      updatedValue.damageType = null;
+      updatedValue.condition = null;
+      updatedValue.conditionDuration = null;
+      updatedValue.difficultyClass = null;
+    }
+
     setTempReaction(updatedValue);
   }
 
@@ -103,8 +110,14 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
       return false;
     }
 
-    if (tempReaction.damageIntensity && !tempReaction.damageType) {
-      return false;
+    if (tempReaction.type === CREATURE_ACTION_TYPES.HEALING) {
+      if (!tempReaction.damageIntensity) {
+        return false;
+      }
+    } else {
+      if (tempReaction.damageIntensity && !tempReaction.damageType) {
+        return false;
+      }
     }
 
     if (tempReaction.difficultyClass && !tempReaction.damageIntensity && !tempReaction.condition) {
@@ -161,7 +174,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
           </section>
           <section className="action-row">
             <TextInput
-              label="Descrição (Opcional)"
+              label="Descrição"
               isMultiLine={true}
               value={tempReaction}
               valuePropertyPath="description"
@@ -232,7 +245,11 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               optionsAtATime={4}
-              isDisabled={!tempReaction.damageIntensity || tempReaction.type === CREATURE_ACTION_TYPES.EFFECT}
+              isDisabled={
+                !tempReaction.damageIntensity ||
+                tempReaction.type === CREATURE_ACTION_TYPES.EFFECT ||
+                tempReaction.type === CREATURE_ACTION_TYPES.HEALING
+              }
             />
             <Select
               label={"Dificuldade"}
@@ -246,7 +263,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               optionsAtATime={4}
-              isDisabled={tempReaction.type === CREATURE_ACTION_TYPES.EFFECT}
+              isDisabled={tempReaction.type === CREATURE_ACTION_TYPES.EFFECT || tempReaction.type === CREATURE_ACTION_TYPES.HEALING}
             />
             <Select
               label={"Condição"}
@@ -260,7 +277,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               optionsAtATime={4}
-              isDisabled={tempReaction.type === CREATURE_ACTION_TYPES.EFFECT}
+              isDisabled={tempReaction.type === CREATURE_ACTION_TYPES.EFFECT || tempReaction.type === CREATURE_ACTION_TYPES.HEALING}
             />
             <Select
               label={"Duração"}
@@ -274,7 +291,9 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               optionsAtATime={4}
-              isDisabled={!tempReaction.condition || tempReaction.type === CREATURE_ACTION_TYPES.EFFECT}
+              isDisabled={
+                !tempReaction.condition || tempReaction.type === CREATURE_ACTION_TYPES.EFFECT || tempReaction.type === CREATURE_ACTION_TYPES.HEALING
+              }
             />
           </section>
           <footer>

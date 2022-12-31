@@ -53,6 +53,13 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
       updatedValue.effectPowerTotalPercentage = null;
     }
 
+    if (updatedValue.type === CREATURE_ACTION_TYPES.HEALING) {
+      updatedValue.damageType = null;
+      updatedValue.condition = null;
+      updatedValue.conditionDuration = null;
+      updatedValue.difficultyClass = null;
+    }
+
     setTempAura(updatedValue);
   }
 
@@ -89,8 +96,14 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
       return false;
     }
 
-    if (tempAura.damageIntensity && !tempAura.damageType) {
-      return false;
+    if (tempAura.type === CREATURE_ACTION_TYPES.HEALING) {
+      if (!tempAura.damageIntensity) {
+        return false;
+      }
+    } else {
+      if (tempAura.damageIntensity && !tempAura.damageType) {
+        return false;
+      }
     }
 
     if (tempAura.difficultyClass && !tempAura.damageIntensity && !tempAura.condition) {
@@ -135,7 +148,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
           </section>
           <section className="action-row">
             <TextInput
-              label="Descrição (Opcional)"
+              label="Descrição"
               isMultiLine={true}
               value={tempAura}
               valuePropertyPath="description"
@@ -184,7 +197,9 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               optionsAtATime={4}
-              isDisabled={!tempAura.damageIntensity || tempAura.type === CREATURE_ACTION_TYPES.EFFECT}
+              isDisabled={
+                !tempAura.damageIntensity || tempAura.type === CREATURE_ACTION_TYPES.EFFECT || tempAura.type === CREATURE_ACTION_TYPES.HEALING
+              }
             />
             <Select
               label={"Dificuldade"}
@@ -198,7 +213,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               optionsAtATime={4}
-              isDisabled={tempAura.type === CREATURE_ACTION_TYPES.EFFECT}
+              isDisabled={tempAura.type === CREATURE_ACTION_TYPES.EFFECT || tempAura.type === CREATURE_ACTION_TYPES.HEALING}
             />
             <Select
               label={"Condição"}
@@ -212,7 +227,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               optionsAtATime={4}
-              isDisabled={tempAura.type === CREATURE_ACTION_TYPES.EFFECT}
+              isDisabled={tempAura.type === CREATURE_ACTION_TYPES.EFFECT || tempAura.type === CREATURE_ACTION_TYPES.HEALING}
             />
             <Select
               label={"Duração"}
@@ -226,7 +241,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               optionsAtATime={4}
-              isDisabled={!tempAura.condition || tempAura.type === CREATURE_ACTION_TYPES.EFFECT}
+              isDisabled={!tempAura.condition || tempAura.type === CREATURE_ACTION_TYPES.EFFECT || tempAura.type === CREATURE_ACTION_TYPES.HEALING}
             />
           </section>
           <footer>

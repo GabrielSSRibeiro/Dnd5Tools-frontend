@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../../services/api";
 import { useAuth } from "../../contexts/Auth";
 
+import Panel from "../../components/Panel";
 import NaviBar from "../../components/NaviBar";
 import SkillCheck from "./components/SkillCheck";
 import CombatSetup from "./components/CombatSetup";
@@ -157,8 +158,20 @@ function Home() {
           <div className={`section-wrapper ${openTab !== MAIN_TABS.SKILL_CHECK ? "hidden" : ""}`}>
             <SkillCheck resultText={openTab} level={level} />
           </div>
-          <div className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
-            <span></span>
+          <div style={{ marginTop: 100 }} className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
+            <Panel title="Notas - v1.0">
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <p>Motivaçoes</p>
+                <span>Abstrair o processo de criacao de criaturas, testes e tesouros</span>
+                <span>Simplificar o controle de criaturas</span>
+                <span>Ter um sistema de forja de items</span>
+                <p>-</p>
+                <p>Dicas</p>
+                <span>Ficha de criatura recomendada para Foundry: "Monster Blocks"</span>
+                <span>Todas as açoes de criaturas sao de facil etendimento e uso</span>
+                <span>Criaturas exportadas tem efeitos de "Comportamento" pre-pronto. Quando ativos, afetam o ataque e a CA</span>
+              </div>
+            </Panel>
           </div>
           <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
             <CombatSetup

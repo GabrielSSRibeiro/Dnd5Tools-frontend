@@ -28,7 +28,12 @@ export const GetAttributeValue = (attribute) => {
 
 export const GetACValue = (armorClass) => {
   const baseValue = cc.creatureArmorClasses.find((ac) => ac.value === armorClass).baseOutput;
-  return Math.max(10, utils.randomValueFromVarianceInt(baseValue, 2));
+  return Math.max(10, utils.randomValueFromVarianceInt(baseValue, 1));
+};
+
+export const GetAttackBonusValue = (attack) => {
+  const baseValue = cc.creatureAttacks.find((ac) => ac.value === attack).baseOutput;
+  return utils.randomValueFromVarianceInt(baseValue, 1);
 };
 
 export const GetHPValue = (level, HP, con) => {

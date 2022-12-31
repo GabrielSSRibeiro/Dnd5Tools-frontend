@@ -166,16 +166,19 @@ export const GetValueAsDiceString = (value, keepRemainder = false, dicedPercenta
     dd.result = Math.floor(valueToTransform / dd.average);
     dd.remainder = valueToTransform - Math.ceil(dd.result * dd.average);
   });
-  const selectedRemainder = Math.max(...diceDetails.map((dd) => dd.remainder));
+  const selectedRemainder = Math.max(...diceDetails.filter((dd) => dd.remainder !== valueToTransform).map((dd) => dd.remainder));
 
   const selectedDie = diceDetails.find((dd) => dd.remainder === selectedRemainder);
   if (keepRemainder) {
-    remainingValue += selectedDie.remainder;
+    remainingValue += selectedDie ? selectedDie.remainder : valueToTransform;
   }
 
-  let diceString = selectedDie.result > 0 ? `${selectedDie.result}d${selectedDie.sides}` : "0";
+  let diceString = selectedDie?.result > 0 ? `${selectedDie.result}d${selectedDie.sides}` : "";
   if (remainingValue > 0) {
-    diceString += `+${remainingValue}`;
+    if (diceString) {
+      diceString += "+";
+    }
+    diceString += `${remainingValue}`;
   }
 
   return diceString;

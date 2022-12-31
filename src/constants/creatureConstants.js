@@ -75,12 +75,12 @@ export const CREATURE_SIZES = {
   GARGANTUAN: 60,
 };
 export const creatureSizes = [
-  { display: "Miúdo", value: CREATURE_SIZES.TINY, weight: 1, foundryExport: "tiny" },
-  { display: "Pequeno", value: CREATURE_SIZES.SMALL, weight: 2, foundryExport: "sm" },
-  { display: "Médio", value: CREATURE_SIZES.MEDIUM, weight: 3, foundryExport: "med" },
-  { display: "Grande", value: CREATURE_SIZES.LARGE, weight: 4, foundryExport: "lg" },
-  { display: "Enorme", value: CREATURE_SIZES.HUGE, weight: 5, foundryExport: "huge" },
-  { display: "Imenso", value: CREATURE_SIZES.GARGANTUAN, weight: 6, foundryExport: "grg" },
+  { display: "Miúdo", value: CREATURE_SIZES.TINY, weight: 1, foundryExport: "tiny", foundryTokenExport: 0.5 },
+  { display: "Pequeno", value: CREATURE_SIZES.SMALL, weight: 2, foundryExport: "sm", foundryTokenExport: 1 },
+  { display: "Médio", value: CREATURE_SIZES.MEDIUM, weight: 3, foundryExport: "med", foundryTokenExport: 1 },
+  { display: "Grande", value: CREATURE_SIZES.LARGE, weight: 4, foundryExport: "lg", foundryTokenExport: 2 },
+  { display: "Enorme", value: CREATURE_SIZES.HUGE, weight: 5, foundryExport: "huge", foundryTokenExport: 3 },
+  { display: "Imenso", value: CREATURE_SIZES.GARGANTUAN, weight: 6, foundryExport: "grg", foundryTokenExport: 4 },
 ];
 
 export const CREATURE_TYPES = {
@@ -563,10 +563,10 @@ export const CREATURE_ATTACKS = {
   EXTREME: 40,
 };
 export const creatureAttacks = [
-  { display: "Baixo", value: CREATURE_ATTACKS.LOW, weight: 1 },
-  { display: "Médio", value: CREATURE_ATTACKS.MEDIUM, weight: 2 },
-  { display: "Alto", value: CREATURE_ATTACKS.HIGH, weight: 3 },
-  { display: "Extremo", value: CREATURE_ATTACKS.EXTREME, weight: 4 },
+  { display: "Baixo", value: CREATURE_ATTACKS.LOW, weight: 1, baseOutput: 2 },
+  { display: "Médio", value: CREATURE_ATTACKS.MEDIUM, weight: 2, baseOutput: 4 },
+  { display: "Alto", value: CREATURE_ATTACKS.HIGH, weight: 3, baseOutput: 6 },
+  { display: "Extremo", value: CREATURE_ATTACKS.EXTREME, weight: 4, baseOutput: 8 },
 ];
 
 export const CREATURE_ARMOR_CLASSES = {
@@ -576,10 +576,10 @@ export const CREATURE_ARMOR_CLASSES = {
   EXTREME: 40,
 };
 export const creatureArmorClasses = [
-  { display: "Baixa", value: CREATURE_ARMOR_CLASSES.LOW, weight: 1, baseOutput: 11 },
-  { display: "Média", value: CREATURE_ARMOR_CLASSES.MEDIUM, weight: 2, baseOutput: 15 },
+  { display: "Baixa", value: CREATURE_ARMOR_CLASSES.LOW, weight: 1, baseOutput: 12 },
+  { display: "Média", value: CREATURE_ARMOR_CLASSES.MEDIUM, weight: 2, baseOutput: 16 },
   { display: "Alta", value: CREATURE_ARMOR_CLASSES.HIGH, weight: 3, baseOutput: 20 },
-  { display: "Extrema", value: CREATURE_ARMOR_CLASSES.EXTREME, weight: 4, baseOutput: 25 },
+  { display: "Extrema", value: CREATURE_ARMOR_CLASSES.EXTREME, weight: 4, baseOutput: 24 },
 ];
 
 export const CREATURE_INITIATIVES = {
@@ -630,19 +630,25 @@ export const DAMAGE_TYPES = {
   THUNDER: 130,
 };
 export const damageTypes = [
-  { display: "Cortante", value: DAMAGE_TYPES.SLASHING, damageEffectiveness: physicalDamagesEffectiveness, weight: 1 },
-  { display: "Perfurante", value: DAMAGE_TYPES.BLUDGEONING, damageEffectiveness: physicalDamagesEffectiveness, weight: 1 },
-  { display: "Concussao", value: DAMAGE_TYPES.PIERCING, damageEffectiveness: physicalDamagesEffectiveness, weight: 1 },
-  { display: "Ácido", value: DAMAGE_TYPES.ACID, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
-  { display: "Elétrico", value: DAMAGE_TYPES.LIGHTNING, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
-  { display: "Energia", value: DAMAGE_TYPES.FORCE, damageEffectiveness: magicalDamagesEffectiveness, weight: 3 },
-  { display: "Fogo", value: DAMAGE_TYPES.FIRE, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
-  { display: "Frio", value: DAMAGE_TYPES.COLD, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
-  { display: "Necrótico", value: DAMAGE_TYPES.NECROTIC, damageEffectiveness: magicalDamagesEffectiveness, weight: 3 },
-  { display: "Psíquico", value: DAMAGE_TYPES.PSYCHIC, damageEffectiveness: magicalDamagesEffectiveness, weight: 3 },
-  { display: "Radiante", value: DAMAGE_TYPES.RADIANT, damageEffectiveness: magicalDamagesEffectiveness, weight: 3 },
-  { display: "Trovejante", value: DAMAGE_TYPES.THUNDER, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
-  { display: "Veneno", value: DAMAGE_TYPES.POISON, damageEffectiveness: magicalDamagesEffectiveness, weight: 2 },
+  { display: "Cortante", value: DAMAGE_TYPES.SLASHING, damageEffectiveness: physicalDamagesEffectiveness, weight: 1, foundryDisplay: "slashing" },
+  {
+    display: "Perfurante",
+    value: DAMAGE_TYPES.BLUDGEONING,
+    damageEffectiveness: physicalDamagesEffectiveness,
+    weight: 1,
+    foundryDisplay: "piercing",
+  },
+  { display: "Concussao", value: DAMAGE_TYPES.PIERCING, damageEffectiveness: physicalDamagesEffectiveness, weight: 1, foundryDisplay: "bludgeoning" },
+  { display: "Ácido", value: DAMAGE_TYPES.ACID, damageEffectiveness: magicalDamagesEffectiveness, weight: 2, foundryDisplay: "acid" },
+  { display: "Elétrico", value: DAMAGE_TYPES.LIGHTNING, damageEffectiveness: magicalDamagesEffectiveness, weight: 2, foundryDisplay: "lightning" },
+  { display: "Energia", value: DAMAGE_TYPES.FORCE, damageEffectiveness: magicalDamagesEffectiveness, weight: 3, foundryDisplay: "force" },
+  { display: "Fogo", value: DAMAGE_TYPES.FIRE, damageEffectiveness: magicalDamagesEffectiveness, weight: 2, foundryDisplay: "fire" },
+  { display: "Frio", value: DAMAGE_TYPES.COLD, damageEffectiveness: magicalDamagesEffectiveness, weight: 2, foundryDisplay: "cold" },
+  { display: "Necrótico", value: DAMAGE_TYPES.NECROTIC, damageEffectiveness: magicalDamagesEffectiveness, weight: 3, foundryDisplay: "necrotic" },
+  { display: "Psíquico", value: DAMAGE_TYPES.PSYCHIC, damageEffectiveness: magicalDamagesEffectiveness, weight: 3, foundryDisplay: "psychic" },
+  { display: "Radiante", value: DAMAGE_TYPES.RADIANT, damageEffectiveness: magicalDamagesEffectiveness, weight: 3, foundryDisplay: "radiant" },
+  { display: "Trovejante", value: DAMAGE_TYPES.THUNDER, damageEffectiveness: magicalDamagesEffectiveness, weight: 2, foundryDisplay: "thunder" },
+  { display: "Veneno", value: DAMAGE_TYPES.POISON, damageEffectiveness: magicalDamagesEffectiveness, weight: 2, foundryDisplay: "poison" },
 ];
 
 export const CONDITIONS = {
@@ -806,12 +812,12 @@ export const CREATURE_ACTION_ATTACK_REACHES = {
   RANGED_FAR: 60,
 };
 export const creatureActionAttackReaches = [
-  { display: "Corpo a Corpo (1,5m)", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE, weight: 1 },
-  { display: "Corpo a Corpo (3m)", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_EXTRA, weight: 2 },
-  { display: "Corpo a Corpo (4,5m)", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_FAR, weight: 3 },
-  { display: "Distância (9m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_CLOSE, weight: 4 },
-  { display: "Distância (18m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_EXTRA, weight: 5 },
-  { display: "Distância (36-90m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_FAR, weight: 6 },
+  { display: "Corpo a Corpo (1,5m)", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE, weight: 1, isMelee: true },
+  { display: "Corpo a Corpo (3m)", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_EXTRA, weight: 2, isMelee: true },
+  { display: "Corpo a Corpo (4,5m)", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_FAR, weight: 3, isMelee: true },
+  { display: "Distância (9m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_CLOSE, weight: 4, isMelee: false },
+  { display: "Distância (18m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_EXTRA, weight: 5, isMelee: false },
+  { display: "Distância (36-90m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_FAR, weight: 6, isMelee: false },
 ];
 
 export const CREATURE_ACTION_SAVING_THROW_REACHES = {

@@ -6,12 +6,14 @@ import * as cc from "../constants/creatureConstants";
 import * as tc from "../constants/treasureConstants";
 
 export const GetFoundryFormattedCreature = (creature) => {
+  const str = ch.GetAttributeValue(creature.attributes.strength);
+
   let foundryJson = {
     name: creature.name,
     type: "npc",
     img: creature.image,
     data: {
-      abilities: GetAbilities(creature),
+      abilities: GetAbilities(creature, str),
       attributes: GetAttributes(creature),
       details: GetDetails(creature),
       traits: GetTraits(creature),
@@ -22,15 +24,14 @@ export const GetFoundryFormattedCreature = (creature) => {
       resources: GetResources(creature),
     },
     token: GetToken(creature),
-    items: GetItems(creature),
+    items: GetItems(creature, str),
     effects: GetEffects(creature),
     flags: GetFlags(creature),
   };
   return foundryJson;
 };
 
-const GetAbilities = (creature) => {
-  const str = ch.GetAttributeValue(creature.attributes.strength);
+const GetAbilities = (creature, str) => {
   const dex = ch.GetAttributeValue(creature.attributes.dexterity);
   const con = ch.GetAttributeValue(creature.attributes.constitution);
   const int = ch.GetAttributeValue(creature.attributes.intelligence);
@@ -107,9 +108,9 @@ const GetAttributes = (creature) => {
 
   const attributes = {
     ac: {
-      flat: ch.GetACValue(creature.armorClass),
-      calc: "flat",
-      formula: "@attributes.ac.armor + @attributes.ac.dex +1",
+      flat: null,
+      calc: "custom",
+      formula: `${ch.GetACValue(creature.armorClass)}`,
       min: 0,
       value: null,
     },
@@ -510,8 +511,8 @@ const GetResources = (creature) => {
 
   const resources = {
     legact: {
-      value: rpr - 1,
-      max: rpr - 1,
+      value: rpr,
+      max: rpr,
     },
     legres: {
       value: lr,
@@ -526,13 +527,15 @@ const GetResources = (creature) => {
 };
 
 const GetToken = (creature) => {
+  const size = cc.creatureSizes.find((s) => s.value === creature.size).foundryTokenExport;
+
   const token = {
     name: creature.name,
     img: "icons/creatures/mammals/beast-horned-scaled-glowing-orange.webp",
     displayName: 20,
     actorLink: false,
-    width: 1,
-    height: 1,
+    width: size,
+    height: size,
     scale: 1,
     mirrorX: false,
     mirrorY: false,
@@ -582,7 +585,7 @@ const GetToken = (creature) => {
   return token;
 };
 
-const GetItems = (creature) => {
+const GetItems = (creature, str) => {
   const level = ch.GetAverageLevel(creature.rarity);
   let items = [];
 
@@ -597,18 +600,18 @@ const GetItems = (creature) => {
   }
 
   if (creature.aura) {
-    items.push(GetFoundryExportAura(creature.aura, level));
+    items.push(GetFoundryExportAura(creature.aura, creature.attack, str, level));
   }
 
   if (creature.actions.length > 0) {
     creature.actions.forEach((a) => {
-      items.push(GetFoundryExportAction(a, level));
+      items.push(GetFoundryExportAction(a, creature.attack, str, level));
     });
   }
 
   if (creature.reactions.length > 0) {
     creature.reactions.forEach((r) => {
-      items.push(GetFoundryExportReaction(r, level));
+      items.push(GetFoundryExportReaction(r, creature.attack, str, level));
     });
   }
 
@@ -644,8 +647,12 @@ const GetActionName = (name, repetitions, frequency, weakSpot) => {
 const GetActionDamangeAndConditionString = (action, level) => {
   let pieces = [];
 
+  if (action.difficultyClass != null) {
+    pieces.push(`<strong>CD ${ch.GetDCValue(action.difficultyClass)}</strong>`);
+  }
+
   if (action.condition != null) {
-    let condtion = `<strong>CD ${ch.GetDCValue(action.difficultyClass)}</strong> ou <strong>${ch.GetConditionValue(action.condition)}</strong>`;
+    let condtion = ` ou <strong>${ch.GetConditionValue(action.condition)}</strong>`;
     if (action.conditionDuration != null) {
       condtion += ` por ${ch.GetConditionDurationValue(action.conditionDuration)}`;
     }
@@ -654,7 +661,10 @@ const GetActionDamangeAndConditionString = (action, level) => {
 
   if (action.damageIntensity != null) {
     const damage = sch.getDamage(level, action.damageIntensity);
-    const damageString = `<strong>${utils.GetValueAsDiceString(damage, true)}</strong> ${ch.GetDamageTypeValue(action.damageType)}`;
+    let damageString = `<strong>${utils.GetValueAsDiceString(damage, true)}</strong>`;
+    if (action.type !== cc.CREATURE_ACTION_TYPES.HEALING) {
+      damageString += ` ${ch.GetDamageTypeValue(action.damageType)}`;
+    }
 
     if (action.type === cc.CREATURE_ACTION_TYPES.ATTACK) {
       pieces.splice(1, 0, damageString);
@@ -669,6 +679,60 @@ const GetActionDamangeAndConditionString = (action, level) => {
   }
 
   return fianlString;
+};
+const GetActionTypeAndIcon = (type, reach, isSpell = false) => {
+  let actionType = "other";
+  let icon = "modules/plutonium/media/icon/mighty-force.svg";
+
+  if (type === cc.CREATURE_ACTION_TYPES.ATTACK) {
+    const isMelee = cc.creatureActionAttackReaches.find((t) => t.value === reach).isMelee;
+    if (isMelee && !isSpell) {
+      actionType = "mwak";
+      icon = "modules/plutonium/media/icon/sword-brandish.svg";
+    } else if (!isMelee && !isSpell) {
+      actionType = "rwak";
+      icon = "modules/plutonium/media/icon/pocket-bow.svg";
+    } else if (isMelee && isSpell) {
+      actionType = "msak";
+      icon = "modules/plutonium/media/icon/crystal-wand.svg";
+    } else if (!isMelee && isSpell) {
+      actionType = "rsak";
+      icon = "modules/plutonium/media/icon/spell-book.svg";
+    }
+  } else if (type === cc.CREATURE_ACTION_TYPES.SAVING_THROW) {
+    actionType = "save";
+    icon = "modules/plutonium/media/icon/dragon-breath.svg";
+  } else if (type === cc.CREATURE_ACTION_TYPES.HEALING) {
+    actionType = "heal";
+    icon = "modules/plutonium/media/icon/parmecia.svg";
+  }
+
+  return { actionType, icon };
+};
+const GetActionDamageParts = (action, level) => {
+  let damageParts = [];
+  if (action.damageIntensity != null) {
+    let part = [];
+
+    const damage = sch.getDamage(level, action.damageIntensity);
+    part.push(utils.GetValueAsDiceString(damage, true));
+
+    if (action.type !== cc.CREATURE_ACTION_TYPES.HEALING) {
+      part.push(cc.damageTypes.find((dt) => dt.value === action.damageType).foundryDisplay);
+    }
+
+    damageParts.push(part);
+  }
+
+  return damageParts;
+};
+const GetActionAttackBonus = (action, attack, str) => {
+  let attackBonus = 0;
+  if (action.type === cc.CREATURE_ACTION_TYPES.ATTACK) {
+    attackBonus = attackBonus - ch.GetAttributeMod(str) + ch.GetAttackBonusValue(attack);
+  }
+
+  return attackBonus;
 };
 const GetFoundryExportRegeneration = (regeneration) => {
   return {
@@ -826,14 +890,15 @@ const GetFoundryExportCustomSpecial = (customSpecial) => {
     flags: {},
   };
 };
-const GetFoundryExportAura = (aura, level) => {
+const GetFoundryExportAura = (aura, attack, str, level) => {
   const description = `Alcance ${ch.GetAuraReachValue(aura.reach)}${GetActionDamangeAndConditionString(aura, level)}`;
+  const actionTypeAndIcon = GetActionTypeAndIcon(aura.type);
 
   return {
     _id: "custom",
     name: GetActionName(aura.name, null, null, null, aura.associatedWeakSpot),
     type: "feat",
-    img: "modules/plutonium/media/icon/mighty-force.svg",
+    img: actionTypeAndIcon.icon,
     data: {
       description: {
         value: `<div class="rd__b  rd__b--3"><p>${description}</p><p>${aura.description ?? ""}</p></div></div>`,
@@ -872,21 +937,21 @@ const GetFoundryExportAura = (aura, level) => {
         amount: null,
       },
       ability: null,
-      actionType: "other",
-      attackBonus: 0,
-      chatFlavor: "",
+      actionType: actionTypeAndIcon.actionType,
+      attackBonus: GetActionAttackBonus(aura, attack, str),
+      chatFlavor: aura.description ?? "",
       critical: {
         threshold: null,
         damage: "",
       },
       damage: {
-        parts: [],
+        parts: GetActionDamageParts(aura, level),
         versatile: "",
       },
       formula: "",
       save: {
         ability: "",
-        dc: null,
+        dc: aura.difficultyClass ? ch.GetDCValue(aura.difficultyClass) : null,
         scaling: "flat",
       },
       requirements: "",
@@ -904,20 +969,20 @@ const GetFoundryExportAura = (aura, level) => {
     flags: {},
   };
 };
-const GetFoundryExportAction = (action, level) => {
+const GetFoundryExportAction = (action, attack, str, level) => {
   let description = "";
-
   if (action.isSpell) {
     description += `(Magia de Nível ${ch.GetActionSpellValue(action.frequency, level)})<br />`;
   }
-
   description += `${ch.GetActionReachValue(action.reach, action.type)}${GetActionDamangeAndConditionString(action, level)}`;
+
+  const actionTypeAndIcon = GetActionTypeAndIcon(action.type, action.reach, action.isSpell);
 
   return {
     _id: "custom",
     name: GetActionName(action.name, action.repetitions, ch.GetActionFrequencyValue(action.frequency), action.associatedWeakSpot),
     type: "feat",
-    img: "modules/plutonium/media/icon/mighty-force.svg",
+    img: actionTypeAndIcon.icon,
     data: {
       description: {
         value: `<div class="rd__b  rd__b--3"><p>${description}</p><p>${action.description ?? ""}</p></div></div>`,
@@ -926,7 +991,7 @@ const GetFoundryExportAction = (action, level) => {
       },
       source: "dnd5Tools",
       activation: {
-        type: "",
+        type: "action",
         cost: 0,
         condition: "",
       },
@@ -956,21 +1021,21 @@ const GetFoundryExportAction = (action, level) => {
         amount: null,
       },
       ability: null,
-      actionType: "other",
-      attackBonus: 0,
-      chatFlavor: "",
+      actionType: actionTypeAndIcon.actionType,
+      attackBonus: GetActionAttackBonus(action, attack, str),
+      chatFlavor: action.description ?? "",
       critical: {
         threshold: null,
         damage: "",
       },
       damage: {
-        parts: [],
+        parts: GetActionDamageParts(action, level),
         versatile: "",
       },
       formula: "",
       save: {
         ability: "",
-        dc: null,
+        dc: action.difficultyClass ? ch.GetDCValue(action.difficultyClass) : null,
         scaling: "flat",
       },
       requirements: "",
@@ -988,23 +1053,23 @@ const GetFoundryExportAction = (action, level) => {
     flags: {},
   };
 };
-const GetFoundryExportReaction = (reaction, level) => {
+const GetFoundryExportReaction = (reaction, attack, str, level) => {
   let description = "";
-
   if (reaction.isSpell) {
     description += `(Magia de Nível ${ch.GetActionSpellValue(reaction.frequency, level)})<br />`;
   }
-
   description += `${reaction.triggerDescription ?? ch.GetReactionTriggerValue(reaction.trigger)}, ${ch.GetActionReachValue(
     reaction.reach,
     reaction.type
   )}${GetActionDamangeAndConditionString(reaction, level)}`;
 
+  const actionTypeAndIcon = GetActionTypeAndIcon(reaction.type, reaction.reach, reaction.isSpell);
+
   return {
     _id: "custom",
     name: GetActionName(reaction.name, reaction.repetitions, ch.GetActionFrequencyValue(reaction.frequency), reaction.associatedWeakSpot),
     type: "feat",
-    img: "modules/plutonium/media/icon/mighty-force.svg",
+    img: actionTypeAndIcon.icon,
     data: {
       description: {
         value: `<div class="rd__b  rd__b--3"><p>${description}</p><p>${reaction.description ?? ""}</p></div></div>`,
@@ -1013,7 +1078,7 @@ const GetFoundryExportReaction = (reaction, level) => {
       },
       source: "dnd5Tools",
       activation: {
-        type: "",
+        type: "reaction",
         cost: 0,
         condition: "",
       },
@@ -1038,26 +1103,26 @@ const GetFoundryExportReaction = (reaction, level) => {
         per: null,
       },
       consume: {
-        type: null,
-        target: null,
-        amount: null,
+        type: "attribute",
+        target: "resources.legact.value",
+        amount: 1,
       },
       ability: null,
-      actionType: "other",
-      attackBonus: 0,
-      chatFlavor: "",
+      actionType: actionTypeAndIcon.actionType,
+      attackBonus: GetActionAttackBonus(reaction, attack, str),
+      chatFlavor: reaction.description ?? "",
       critical: {
         threshold: null,
         damage: "",
       },
       damage: {
-        parts: [],
+        parts: GetActionDamageParts(reaction, level),
         versatile: "",
       },
       formula: "",
       save: {
         ability: "",
-        dc: null,
+        dc: reaction.difficultyClass ? ch.GetDCValue(reaction.difficultyClass) : null,
         scaling: "flat",
       },
       requirements: "",
@@ -1190,7 +1255,86 @@ const GetFoundryExportTreasure = (treasure, actions, level) => {
 };
 
 const GetEffects = (creature) => {
-  const effects = [];
+  const effects = [
+    {
+      _id: "Comportamento Agressivo",
+      changes: [
+        {
+          key: "data.bonuses.All-Attacks",
+          mode: 2,
+          value: "floor(@prof / 2)",
+          priority: "20",
+        },
+        {
+          key: "data.attributes.ac.formula",
+          mode: 2,
+          value: "- floor(@prof / 2)",
+          priority: "20",
+        },
+      ],
+      disabled: true,
+      duration: {
+        startTime: 0,
+        startRound: 0,
+        startTurn: 0,
+      },
+      icon: "icons/svg/sword.svg",
+      label: "Comportamento Agressivo",
+      origin: "Actor.vBv8R7NQcWlOKtN6",
+      transfer: false,
+      flags: {
+        dae: {
+          transfer: true,
+          macroRepeat: "none",
+          specialDuration: [],
+        },
+        core: {
+          statusId: "",
+        },
+      },
+      tint: "",
+      selectedKey: ["data.bonuses.All-Attacks", "data.attributes.ac.formula"],
+    },
+    {
+      _id: "Comportamento Defensivo",
+      changes: [
+        {
+          key: "data.bonuses.All-Attacks",
+          mode: 2,
+          value: "- floor(@prof / 2)",
+          priority: "20",
+        },
+        {
+          key: "data.attributes.ac.formula",
+          mode: 2,
+          value: "+ floor(@prof / 2)",
+          priority: "20",
+        },
+      ],
+      disabled: true,
+      duration: {
+        startTime: 0,
+        startRound: 0,
+        startTurn: 0,
+      },
+      icon: "icons/svg/shield.svg",
+      label: "Comportamento Defensivo",
+      origin: "Actor.vBv8R7NQcWlOKtN6",
+      transfer: false,
+      flags: {
+        dae: {
+          transfer: true,
+          macroRepeat: "none",
+          specialDuration: [],
+        },
+        core: {
+          statusId: "",
+        },
+      },
+      tint: "",
+      selectedKey: ["data.bonuses.All-Attacks", "data.attributes.ac.formula"],
+    },
+  ];
 
   return effects;
 };
