@@ -4,12 +4,14 @@ import {
   UNCOMMON_ITEM_MIN_PRICE,
   MATERIAL_PRICE_INFLATIONS,
   materialPriceInflations,
+  materialWeigths,
+  materialQuantities,
   EQUIPMENT_TYPES,
   equipmentTypes,
   equipmentAttributes,
   CURSE_AFIX_PROB,
 } from "../constants/treasureConstants";
-import { creatureRarities, damageTypes, conditions } from "../constants/creatureConstants";
+import { creatureRarities, damageTypes, conditions, creatureActionFrequencies } from "../constants/creatureConstants";
 
 const rand = utils.randomIntFromInterval;
 const avg = utils.averageOfArray;
@@ -102,6 +104,21 @@ export const getMaterialSellPrices = () =>
   getMaterialBuyPrices(MATERIAL_PRICE_INFLATIONS.AVERAGE).map((materialSellPrice) => () => Math.round(materialSellPrice() * sellRate));
 
 const materialPriceInflationRatios = [0.5, 1, 1.5, 2];
+
+export const GetTreasureRarityValue = (rarity) => {
+  const baseOutput = creatureRarities.find((er) => er.value === rarity).treasureDisplay;
+  return baseOutput;
+};
+
+export const GetMaterialWeightValue = (weight) => {
+  const baseOutput = materialWeigths.find((mw) => mw.value === weight).resultDisplay;
+  return baseOutput;
+};
+
+export const GetMaterialQuantityValue = (quantity) => {
+  const baseOutput = materialQuantities.find((mq) => mq.value === quantity).resultDisplay;
+  return baseOutput;
+};
 
 //Equipamento ------------------------------------
 
@@ -367,4 +384,10 @@ const getItemName = (type, rarity, itemAfixes) => {
   }
 
   return name;
+};
+
+export const GetEquipAbilityDailyCharges = (frequency) => {
+  const maxPossibleCharges = creatureActionFrequencies.length;
+  const reducer = creatureActionFrequencies.findIndex((crpr) => crpr.value === frequency);
+  return maxPossibleCharges - reducer;
 };

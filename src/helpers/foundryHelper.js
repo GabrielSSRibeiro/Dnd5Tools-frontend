@@ -1,7 +1,9 @@
 import * as utils from "../utils";
 import * as sch from "./skillCheckHelper";
 import * as ch from "./creatureHelper";
+import * as th from "./treasureHelper";
 import * as cc from "../constants/creatureConstants";
+import * as tc from "../constants/treasureConstants";
 
 export const GetFoundryFormattedCreature = (creature) => {
   let foundryJson = {
@@ -98,6 +100,10 @@ const GetAbilities = (creature) => {
 const GetAttributes = (creature) => {
   const level = ch.GetAverageLevel(creature.rarity);
   const hp = ch.GetHPValue(level, creature.hitPoints, creature.attributes.constitution);
+  const weakSpots =
+    creature.weakSpots.length > 0
+      ? `${creature.weakSpots.map((ws) => `${ws}(${Math.round(hp / (creature.weakSpots.length + 2))})`).join(", ")}`
+      : null;
 
   const attributes = {
     ac: {
@@ -113,7 +119,7 @@ const GetAttributes = (creature) => {
       max: hp,
       temp: 0,
       tempmax: 0,
-      formula: utils.GetValueAsDiceString(hp, true, 0.5),
+      formula: weakSpots ?? utils.GetValueAsDiceString(hp, true, 0.5),
     },
     init: {
       value: 0,
@@ -159,16 +165,16 @@ const GetDetails = (creature) => {
 
   const details = {
     biography: {
-      value: '<div class="rd__b  rd__b--1"><div class="rd__b  rd__b--2"><p>' + creature.description + "</p></div></div>",
+      value: `<div class="rd__b  rd__b--1"><div class="rd__b  rd__b--2"><p>${creature.description ?? ""}</p></div></div>`,
       public: "",
     },
     alignment: `${ch.GetPrimaryAlignmentValue(creature.primaryAlignment)} ${ch.GetSecondaryAlignmentValue(creature.secondaryAlignment)}`,
     race: "",
     type: {
       value: "custom",
-      subtype: "",
+      subtype: `${raceAndClasses.filter((i) => i).join(", ")}`,
       swarm: null,
-      custom: `${ch.GetTypeValue(creature.type)} (${raceAndClasses.filter((i) => i).join(", ")})`,
+      custom: `${ch.GetTypeValue(creature.type)}`,
     },
     environment: ch.GetEnviromentValue(creature.environment),
     cr: level,
@@ -608,37 +614,29 @@ const GetItems = (creature) => {
 
   if (creature.treasures.length > 0) {
     creature.treasures.forEach((t) => {
-      items.push(GetFoundryExportTreasure(t));
+      items.push(GetFoundryExportTreasure(t, creature.actions, level));
     });
   }
 
   return items;
 };
-const GetActionName = (name, repetitions, frequency, spell, weakSpot) => {
+const GetActionName = (name, repetitions, frequency, weakSpot) => {
   let actionName = name;
 
-  if (repetitions != null) {
+  if (repetitions > 1) {
     actionName += ` x${repetitions}`;
   }
 
-  if (frequency || spell || weakSpot) {
-    actionName += " - ";
+  if (frequency || weakSpot) {
+    actionName += " -";
   }
 
   if (frequency != null) {
-    actionName += `${frequency}`;
-  }
-
-  if (frequency && spell) {
-    actionName += "/";
-  }
-
-  if (spell) {
-    actionName += `Magia ${spell}N`;
+    actionName += ` ${frequency}`;
   }
 
   if (weakSpot) {
-    actionName += `(${weakSpot})`;
+    actionName += ` (${weakSpot})`;
   }
 
   return actionName;
@@ -907,17 +905,17 @@ const GetFoundryExportAura = (aura, level) => {
   };
 };
 const GetFoundryExportAction = (action, level) => {
-  const description = `${ch.GetActionReachValue(action.reach, action.type)}${GetActionDamangeAndConditionString(action, level)}`;
+  let description = "";
+
+  if (action.isSpell) {
+    description += `(Magia de Nível ${ch.GetActionSpellValue(action.frequency, level)})<br />`;
+  }
+
+  description += `${ch.GetActionReachValue(action.reach, action.type)}${GetActionDamangeAndConditionString(action, level)}`;
 
   return {
     _id: "custom",
-    name: GetActionName(
-      action.name,
-      action.repetitions,
-      ch.GetActionFrequencyValue(action.frequency),
-      ch.GetActionSpellValue(action.frequency, level),
-      action.associatedWeakSpot
-    ),
+    name: GetActionName(action.name, action.repetitions, ch.GetActionFrequencyValue(action.frequency), action.associatedWeakSpot),
     type: "feat",
     img: "modules/plutonium/media/icon/mighty-force.svg",
     data: {
@@ -991,20 +989,20 @@ const GetFoundryExportAction = (action, level) => {
   };
 };
 const GetFoundryExportReaction = (reaction, level) => {
-  const description = `${reaction.triggerDescription ?? ch.GetReactionTriggerValue(reaction.trigger)}, ${ch.GetActionReachValue(
+  let description = "";
+
+  if (reaction.isSpell) {
+    description += `(Magia de Nível ${ch.GetActionSpellValue(reaction.frequency, level)})<br />`;
+  }
+
+  description += `${reaction.triggerDescription ?? ch.GetReactionTriggerValue(reaction.trigger)}, ${ch.GetActionReachValue(
     reaction.reach,
     reaction.type
   )}${GetActionDamangeAndConditionString(reaction, level)}`;
 
   return {
     _id: "custom",
-    name: GetActionName(
-      reaction.name,
-      reaction.repetitions,
-      ch.GetActionFrequencyValue(reaction.frequency),
-      ch.GetActionSpellValue(reaction.frequency, level),
-      reaction.associatedWeakSpot
-    ),
+    name: GetActionName(reaction.name, reaction.repetitions, ch.GetActionFrequencyValue(reaction.frequency), reaction.associatedWeakSpot),
     type: "feat",
     img: "modules/plutonium/media/icon/mighty-force.svg",
     data: {
@@ -1077,14 +1075,49 @@ const GetFoundryExportReaction = (reaction, level) => {
     flags: {},
   };
 };
-const GetFoundryExportTreasure = (treasure) => {
-  const description = `${""}`;
+const GetFoundryExportTreasure = (treasure, actions, level) => {
+  let name = treasure.name;
+  let description = "";
+  let img = "";
+
+  if (treasure.type === tc.TREASURE_TYPES.GOLD_PIECES) {
+    description = `${th.getGoldPiecesAmount(treasure.goldPieces.quantity)} PO`;
+    img = "modules/plutonium/media/icon/cash.svg";
+  } else if (treasure.type === tc.TREASURE_TYPES.MATERIAL) {
+    name += ` (${th.GetTreasureRarityValue(treasure.material.rarity)})`;
+    description = `Peso: ${th.GetMaterialWeightValue(treasure.material.weight)}, Forja: ${th.GetMaterialQuantityValue(treasure.material.quantity)}`;
+    img = "modules/plutonium/media/icon/diablo-skull.svg";
+  } else if (treasure.type === tc.TREASURE_TYPES.EQUIPMENT) {
+    if (!treasure.equipment.ability || treasure.equipment.rarity === cc.CREATURE_RARITIES.LEGENDARY) {
+      const generatedItem = th.getItemAfixes(
+        treasure.equipment.type,
+        treasure.equipment.rarity,
+        treasure.equipment.damageType,
+        treasure.equipment.attribute
+      );
+      console.log("generatedItem", generatedItem);
+      description += `<p><strong>${generatedItem.name.join(" ")}</strong></p>`;
+      description += `<p>${generatedItem.afixes.map((a) => `${a.name}: ${a.bonus}`).join(", ")}</p><br />`;
+    }
+
+    if (treasure.equipment.ability) {
+      const action = actions.find((a) => a.name === treasure.equipment.ability);
+
+      description += `<p><strong>${action.name}</strong>`;
+      if (action.repetitions > 1) {
+        description += ` <strong>x${action.repetitions}</strong>`;
+      }
+      description += ` (Ação, ${th.GetEquipAbilityDailyCharges(action.frequency)} carga(s) por dia)</p>`;
+      description += `<p>${ch.GetActionReachValue(action.reach, action.type)}${GetActionDamangeAndConditionString(action, level)}</p>`;
+    }
+    img = "modules/plutonium/media/icon/breastplate.svg";
+  }
 
   return {
     _id: "custom",
-    name: treasure.name,
+    name: name,
     type: "equipment",
-    img: "modules/plutonium/media/icon/mighty-force.svg",
+    img: img,
     data: {
       description: {
         value: `<div class="rd__b  rd__b--3"><p>${description}</p><p>${treasure.description ?? ""}</p></div></div>`,

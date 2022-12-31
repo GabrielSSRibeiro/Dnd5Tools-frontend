@@ -9,6 +9,8 @@ import {
   getItemCraftSellPrices,
   getMaterialBuyPrices,
   getMaterialSellPrices,
+  GetMaterialWeightValue,
+  GetMaterialQuantityValue,
   getItemAfixes,
   getWeaponAfixes,
   getArmorAfixes,
@@ -331,8 +333,7 @@ function Treasure({ resultText, level }) {
               </div>
               <footer>
                 <p>
-                  Peso: {materialWeigths.find((mw) => mw.value === materialWeigth).resultDisplay}, Forja:{" "}
-                  {materialQuantities.find((mq) => mq.value === materialQuantity).resultDisplay}
+                  Peso: {GetMaterialWeightValue(materialWeigth)}, Forja: {GetMaterialQuantityValue(materialQuantity)}
                 </p>
                 <div className="crafting-tools">
                   <span>
