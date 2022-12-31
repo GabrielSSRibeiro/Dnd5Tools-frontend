@@ -30,7 +30,7 @@ export const creatureRarities = [
     baseOutputMax: 20,
   },
   {
-    display: "Lendária (Nível 20+)",
+    display: "Lendária (Nível 21+)",
     treasureDisplay: "Lendário",
     value: CREATURE_RARITIES.LEGENDARY,
     weight: 5,
@@ -678,10 +678,10 @@ export const CONDITION_DURATIONS = {
   EXTREME: 40,
 };
 export const conditionDurations = [
-  { display: "Baixa (1 turno)", value: CONDITION_DURATIONS.SHORT, weight: 1 },
-  { display: "Média (1 minuto)", value: CONDITION_DURATIONS.MEDIUM, weight: 2 },
-  { display: "Alta (1 hora)", value: CONDITION_DURATIONS.LONG, weight: 3 },
-  { display: "Extrema (1 dia)", value: CONDITION_DURATIONS.EXTREME, weight: 4 },
+  { display: "Baixa (1 turno)", value: CONDITION_DURATIONS.SHORT, weight: 1, baseOutput: "1 turno" },
+  { display: "Média (1 minuto)", value: CONDITION_DURATIONS.MEDIUM, weight: 2, baseOutput: "1 minuto" },
+  { display: "Alta (1 hora)", value: CONDITION_DURATIONS.LONG, weight: 3, baseOutput: "1 hora" },
+  { display: "Extrema (1 dia)", value: CONDITION_DURATIONS.EXTREME, weight: 4, baseOutput: "1 dia" },
 ];
 
 export const LANGUAGES = {
@@ -784,19 +784,6 @@ export const creatureReactionsPerRound = [
   { display: "Extra Extrema (5 usos)", value: CREATURE_REACTIONS_PER_ROUND.EXTRA_EXTREME, weight: 5, number: 5 },
 ];
 
-export const CREATURE_ACTION_TYPES = {
-  ATTACK: 10,
-  SAVING_THROW: 20,
-  HEALING: 30,
-  EFFECT: 40,
-};
-export const creatureActionTypes = [
-  { display: "Ataque", value: CREATURE_ACTION_TYPES.ATTACK, weight: 0 },
-  { display: "Teste de Resistência", value: CREATURE_ACTION_TYPES.SAVING_THROW, weight: 0 },
-  { display: "Cura", value: CREATURE_ACTION_TYPES.HEALING, weight: 0 },
-  { display: "Efeito", value: CREATURE_ACTION_TYPES.EFFECT, weight: 0 },
-];
-
 export const CREATURE_ACTION_POWER_TOTAL_PERCENTAGES = {
   SMALL: 10,
   MEDIUM: 20,
@@ -852,6 +839,19 @@ export const creatureActionSavingThrowReaches = [
 
 export const creatureActionHealingReaches = [...creatureActionAttackReaches, ...creatureActionSavingThrowReaches];
 
+export const CREATURE_ACTION_TYPES = {
+  ATTACK: 10,
+  SAVING_THROW: 20,
+  HEALING: 30,
+  EFFECT: 40,
+};
+export const creatureActionTypes = [
+  { display: "Ataque", value: CREATURE_ACTION_TYPES.ATTACK, weight: 0, reaches: creatureActionAttackReaches },
+  { display: "Teste de Resistência", value: CREATURE_ACTION_TYPES.SAVING_THROW, weight: 0, reaches: creatureActionSavingThrowReaches },
+  { display: "Cura", value: CREATURE_ACTION_TYPES.HEALING, weight: 0, reaches: creatureActionHealingReaches },
+  { display: "Efeito", value: CREATURE_ACTION_TYPES.EFFECT, weight: 0, reaches: creatureActionHealingReaches },
+];
+
 export const CREATURE_ACTION_FREQUENCIES = {
   COMMON: 10,
   UNCOMMON: 20,
@@ -885,10 +885,10 @@ export const DIFFICULTY_CLASSES = {
   EXTREME: 40,
 };
 export const difficultyClasses = [
-  { display: "Baixa", value: DIFFICULTY_CLASSES.LOW, weight: 1 },
-  { display: "Média", value: DIFFICULTY_CLASSES.MEDIUM, weight: 2 },
-  { display: "Alta", value: DIFFICULTY_CLASSES.HIGH, weight: 3 },
-  { display: "Extrema", value: DIFFICULTY_CLASSES.EXTREME, weight: 4 },
+  { display: "Baixa", value: DIFFICULTY_CLASSES.LOW, weight: 1, baseOutput: 12 },
+  { display: "Média", value: DIFFICULTY_CLASSES.MEDIUM, weight: 2, baseOutput: 16 },
+  { display: "Alta", value: DIFFICULTY_CLASSES.HIGH, weight: 3, baseOutput: 20 },
+  { display: "Extrema", value: DIFFICULTY_CLASSES.EXTREME, weight: 4, baseOutput: 24 },
 ];
 
 export const CREATURE_REACTION_TRIGGERS = {
@@ -911,8 +911,8 @@ export const CREATURE_AURA_REACHES = {
   EXTREME: 40,
 };
 export const creatureAuraReaches = [
-  { display: "Curto (1,5m)", value: CREATURE_AURA_REACHES.SHORT, weight: 1 },
-  { display: "Médio (3m)", value: CREATURE_AURA_REACHES.MEDIUM, weight: 2 },
-  { display: "Alto (4,5m)", value: CREATURE_AURA_REACHES.LONG, weight: 3 },
-  { display: "Extremo (6m)", value: CREATURE_AURA_REACHES.EXTREME, weight: 4 },
+  { display: "Curto (1,5m)", value: CREATURE_AURA_REACHES.SHORT, weight: 1, baseOutput: "1,5m" },
+  { display: "Médio (3m)", value: CREATURE_AURA_REACHES.MEDIUM, weight: 2, baseOutput: "3m" },
+  { display: "Alto (4,5m)", value: CREATURE_AURA_REACHES.LONG, weight: 3, baseOutput: "4,5m" },
+  { display: "Extremo (6m)", value: CREATURE_AURA_REACHES.EXTREME, weight: 4, baseOutput: "6m" },
 ];

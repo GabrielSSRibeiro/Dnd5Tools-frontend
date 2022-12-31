@@ -6,10 +6,7 @@ import {
   creatureActionTypes,
   creatureActionPowerTotalPercentages,
   CREATURE_ACTION_FREQUENCIES,
-  creatureActionAttackReaches,
-  creatureActionSavingThrowReaches,
   CREATURE_ACTION_ATTACK_REACHES,
-  creatureActionHealingReaches,
   creatureActionFrequencies,
   damageIntensities,
   damageTypes,
@@ -100,11 +97,15 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
       return false;
     }
 
-    if (tempAction.type === CREATURE_ACTION_TYPES.EFFECT && !tempAction.creatureActionPowerTotalPercentage) {
+    if (tempAction.type === CREATURE_ACTION_TYPES.EFFECT && (!tempAction.creatureActionPowerTotalPercentage || !tempAction.description)) {
       return false;
     }
 
     if (tempAction.damageIntensity && !tempAction.damageType) {
+      return false;
+    }
+
+    if (tempAction.difficultyClass && !tempAction.damageIntensity && !tempAction.condition) {
       return false;
     }
 
@@ -174,13 +175,7 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
                   value={tempAction}
                   valuePropertyPath="reach"
                   onSelect={setTempAction}
-                  options={
-                    tempAction.type === CREATURE_ACTION_TYPES.ATTACK
-                      ? creatureActionAttackReaches
-                      : tempAction.type === CREATURE_ACTION_TYPES.SAVING_THROW
-                      ? creatureActionSavingThrowReaches
-                      : creatureActionHealingReaches
-                  }
+                  options={creatureActionTypes.find((t) => t.value === tempAction.type).reaches}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
                 />

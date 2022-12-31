@@ -251,7 +251,7 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
             </div>
           </aside>
           <aside className="creature-details">
-            <TextInput label="Nome" className="creature-name" value={creature} valuePropertyPath="name" onChange={setCreature} maxlength="26" />
+            <TextInput label="Nome" className="creature-name" value={creature} valuePropertyPath="name" onChange={setCreature} maxLength="26" />
             <TextInput
               isMultiLine={true}
               label="Descrição (opcional)"

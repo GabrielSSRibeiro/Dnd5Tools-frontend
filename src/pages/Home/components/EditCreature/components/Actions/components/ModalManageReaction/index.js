@@ -6,10 +6,7 @@ import {
   creatureActionTypes,
   creatureActionPowerTotalPercentages,
   CREATURE_ACTION_FREQUENCIES,
-  creatureActionAttackReaches,
-  creatureActionSavingThrowReaches,
   CREATURE_ACTION_ATTACK_REACHES,
-  creatureActionHealingReaches,
   creatureActionFrequencies,
   damageIntensities,
   damageTypes,
@@ -102,11 +99,15 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
       return false;
     }
 
-    if (tempReaction.type === CREATURE_ACTION_TYPES.EFFECT && !tempReaction.creatureActionPowerTotalPercentage) {
+    if (tempReaction.type === CREATURE_ACTION_TYPES.EFFECT && (!tempReaction.creatureActionPowerTotalPercentage || !tempReaction.description)) {
       return false;
     }
 
     if (tempReaction.damageIntensity && !tempReaction.damageType) {
+      return false;
+    }
+
+    if (tempReaction.difficultyClass && !tempReaction.damageIntensity && !tempReaction.condition) {
       return false;
     }
 
@@ -176,13 +177,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
                   value={tempReaction}
                   valuePropertyPath="reach"
                   onSelect={setTempReaction}
-                  options={
-                    tempReaction.type === CREATURE_ACTION_TYPES.ATTACK
-                      ? creatureActionAttackReaches
-                      : tempReaction.type === CREATURE_ACTION_TYPES.SAVING_THROW
-                      ? creatureActionSavingThrowReaches
-                      : creatureActionHealingReaches
-                  }
+                  options={creatureActionTypes.find((t) => t.value === tempReaction.type).reaches}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
                 />

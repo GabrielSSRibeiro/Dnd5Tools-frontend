@@ -45,14 +45,6 @@ export function randomIndexFromArrayOfProbs(probArray) {
   return pickedIndex ?? probArray.length - 1;
 }
 
-export function GetProfByLevel(level) {
-  return Math.floor(2 + (level - 1) / 4);
-}
-
-export function GetAttributeMod(attribute) {
-  return Math.floor((attribute - 10) / 2);
-}
-
 export function TrimDecimalPlaces(value) {
   return Math.round(value * 100) / 100;
 }
@@ -183,7 +175,7 @@ export const GetValueAsDiceString = (value, keepRemainder = false, dicedPercenta
 
   let diceString = selectedDie.result > 0 ? `${selectedDie.result}d${selectedDie.sides}` : "0";
   if (remainingValue > 0) {
-    diceString += ` + ${remainingValue}`;
+    diceString += `+${remainingValue}`;
   }
 
   return diceString;

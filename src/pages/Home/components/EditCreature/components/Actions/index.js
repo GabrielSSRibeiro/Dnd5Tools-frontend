@@ -69,6 +69,7 @@ function Actions({ creature, setCreature }) {
       <ModalManageReaction
         reaction={reaction}
         invalidNames={invalidNames}
+        weakSpots={creature.weakSpots}
         onClose={(tempReaction) => HandleCloseModalManageReaction(reaction, tempReaction)}
       />
     );
@@ -93,7 +94,7 @@ function Actions({ creature, setCreature }) {
   }
 
   function OpenModalManageAura() {
-    setModal(<ModalManageAura aura={creature.aura} onClose={(newAura) => HandleCloseModalManageAura(newAura)} />);
+    setModal(<ModalManageAura aura={creature.aura} weakSpots={creature.weakSpots} onClose={(newAura) => HandleCloseModalManageAura(newAura)} />);
   }
   function HandleCloseModalManageAura(newAura) {
     if (newAura) {

@@ -1,12 +1,13 @@
 import * as utils from "../utils";
 import { MIN_DIFICULTY } from "../constants/skillCheckConstants";
-import { conditions, conditionDurations, damageIntensities, difficultyClasses } from "../constants/creatureConstants";
+import { damageIntensities, difficultyClasses } from "../constants/creatureConstants";
+import { GetProfByLevel, GetConditionValue, GetConditionDurationValue } from "../helpers/creatureHelper";
 
 const rand = utils.randomIntFromInterval;
 const variance = utils.randomValueFromVariancePercentage;
 
 export const getDifficulty = (level, checkDifficulty) => {
-  const prof = utils.GetProfByLevel(level);
+  const prof = GetProfByLevel(level);
   const difficultyIndex = difficultyClasses.findIndex((dc) => dc.value === checkDifficulty);
   const difficultyFactor = 5;
 
@@ -41,13 +42,11 @@ export const getSkillCheck = (level, checkDifficulty, damageIntensity, condition
   }
 
   if (condition !== null) {
-    skillCheck.push({ value: conditions.find((c) => c.value === condition).display, name: "Condição" });
+    skillCheck.push({ value: GetConditionValue(condition), name: "Condição" });
   }
 
   if (conditionDuration) {
-    const conditionDurationTimes = conditionDurations.filter((cd) => cd.value).map((cd) => cd.display.split(")")[0].split("(").reverse()[0]);
-
-    skillCheck.push({ value: conditionDurationTimes[conditionDurations.findIndex((cd) => cd.value === conditionDuration)], name: "Duração" });
+    skillCheck.push({ value: GetConditionDurationValue(conditionDuration), name: "Duração" });
   }
 
   return skillCheck;

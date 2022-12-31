@@ -1,4 +1,5 @@
 import * as utils from "../utils";
+import * as sch from "./skillCheckHelper";
 import * as ch from "./creatureHelper";
 import * as cc from "../constants/creatureConstants";
 
@@ -42,7 +43,7 @@ const GetAbilities = (creature) => {
         check: 0,
         save: "",
       },
-      mod: utils.GetAttributeMod(str),
+      mod: ch.GetAttributeMod(str),
     },
     dex: {
       value: dex,
@@ -51,7 +52,7 @@ const GetAbilities = (creature) => {
         check: 0,
         save: "",
       },
-      mod: utils.GetAttributeMod(dex),
+      mod: ch.GetAttributeMod(dex),
     },
     con: {
       value: con,
@@ -60,7 +61,7 @@ const GetAbilities = (creature) => {
         check: 0,
         save: "",
       },
-      mod: utils.GetAttributeMod(con),
+      mod: ch.GetAttributeMod(con),
     },
     int: {
       value: int,
@@ -69,7 +70,7 @@ const GetAbilities = (creature) => {
         check: 0,
         save: "",
       },
-      mod: utils.GetAttributeMod(int),
+      mod: ch.GetAttributeMod(int),
     },
     wis: {
       value: wis,
@@ -78,7 +79,7 @@ const GetAbilities = (creature) => {
         check: 0,
         save: "",
       },
-      mod: utils.GetAttributeMod(wis),
+      mod: ch.GetAttributeMod(wis),
     },
     cha: {
       value: cha,
@@ -87,7 +88,7 @@ const GetAbilities = (creature) => {
         check: 0,
         save: "",
       },
-      mod: utils.GetAttributeMod(cha),
+      mod: ch.GetAttributeMod(cha),
     },
   };
 
@@ -139,7 +140,7 @@ const GetAttributes = (creature) => {
       special: "",
     },
     spellcasting: "",
-    prof: utils.GetProfByLevel(level),
+    prof: ch.GetProfByLevel(level),
     spelldc: 8,
   };
 
@@ -576,238 +577,583 @@ const GetToken = (creature) => {
 };
 
 const GetItems = (creature) => {
-  const items = [
-    {
-      _id: "Ir3bijTXUagbxUHf",
-      name: "Shortsword",
-      type: "weapon",
-      img: "icons/weapons/swords/sword-guard-brown.webp",
-      data: {
-        description: {
-          value:
-            '<div class="rd__b  rd__b--3"><p><i>Melee Weapon Attack:</i> [[/r 1d20+4]] (+4) to hit, reach 5 ft., one target. <i>Hit:</i> 5 ([[/r 1d6 + 2]]) piercing damage.</p><div class="rd__spc-inline-post"></div></div>',
-          chat: "",
-          unidentified: "",
-        },
-        source: "MM",
-        quantity: 1,
-        weight: 2,
-        price: 10,
-        attunement: 0,
-        equipped: true,
-        rarity: "",
-        identified: false,
-        activation: {
-          type: "action",
-          cost: 1,
-          condition: "",
-        },
-        duration: {
-          value: null,
-          units: "",
-        },
-        target: {
-          value: null,
-          width: null,
-          units: "",
-          type: "",
-        },
-        range: {
-          value: 5,
-          long: 0,
-          units: "ft",
-        },
-        uses: {
-          value: null,
-          max: "",
-          per: "",
-        },
-        consume: {
-          type: "",
-          target: "",
-          amount: null,
-        },
-        ability: "dex",
-        actionType: "mwak",
-        attackBonus: 0,
-        chatFlavor: "",
-        critical: {
-          threshold: null,
-          damage: "",
-        },
-        damage: {
-          parts: [["1d6  + @mod", "piercing"]],
-          versatile: "",
-        },
-        formula: "",
-        save: {
-          ability: "",
-          dc: null,
-          scaling: "spell",
-        },
-        armor: {
-          value: null,
-          dex: null,
-        },
-        hp: {
-          value: 0,
-          max: 0,
-          dt: null,
-          conditions: "",
-        },
-        weaponType: "martialM",
-        baseItem: "shortsword",
-        properties: {
-          fin: true,
-          lgt: true,
-          amm: false,
-          hvy: false,
-          fir: false,
-          foc: false,
-          lod: false,
-          rch: false,
-          rel: false,
-          ret: false,
-          spc: false,
-          thr: false,
-          two: false,
-          ver: false,
-        },
-        proficient: true,
-        attuned: false,
-      },
-      effects: [],
-      folder: null,
-      sort: 0,
-      permission: {
-        default: 0,
-        "5QqNlUujvxsRbwxm": 3,
-      },
-      flags: {
-        srd5e: {
-          page: "items.html",
-          source: "PHB",
-          hash: "shortsword_phb",
-        },
-      },
-    },
-    {
-      _id: "1UP8RDBx4bXX3E0K",
-      name: "Shortbow",
-      type: "weapon",
-      img: "icons/weapons/bows/shortbow-recurve.webp",
-      data: {
-        description: {
-          value:
-            '<div class="rd__b  rd__b--3"><p><i>Ranged Weapon Attack:</i> [[/r 1d20+4]] (+4) to hit, range 80/320 ft., one target. <i>Hit:</i> 5 ([[/r 1d6 + 2]]) piercing damage.</p><div class="rd__spc-inline-post"></div></div>',
-          chat: "",
-          unidentified: "",
-        },
-        source: "MM",
-        quantity: 1,
-        weight: 2,
-        price: 25,
-        attunement: 0,
-        equipped: true,
-        rarity: "",
-        identified: false,
-        activation: {
-          type: "action",
-          cost: 1,
-          condition: "",
-        },
-        duration: {
-          value: 0,
-          units: "",
-        },
-        target: {
-          value: 0,
-          width: null,
-          units: "",
-          type: "",
-        },
-        range: {
-          value: 80,
-          long: 320,
-          units: "ft",
-        },
-        uses: {
-          value: null,
-          max: "",
-          per: "",
-        },
-        consume: {
-          type: "",
-          target: "",
-          amount: null,
-        },
-        ability: "dex",
-        actionType: "rwak",
-        attackBonus: 0,
-        chatFlavor: "",
-        critical: {
-          threshold: null,
-          damage: "",
-        },
-        damage: {
-          parts: [["1d6  + @mod", "piercing"]],
-          versatile: "",
-        },
-        formula: "",
-        save: {
-          ability: "",
-          dc: null,
-          scaling: "spell",
-        },
-        armor: {
-          value: null,
-          dex: null,
-        },
-        hp: {
-          value: 0,
-          max: 0,
-          dt: null,
-          conditions: "",
-        },
-        weaponType: "simpleR",
-        baseItem: "shortbow",
-        properties: {
-          two: true,
-          amm: true,
-          hvy: false,
-          fin: false,
-          fir: false,
-          foc: false,
-          lgt: false,
-          rch: false,
-          rel: false,
-          ret: false,
-          spc: false,
-          thr: false,
-          ver: false,
-          lod: false,
-        },
-        proficient: true,
-        attuned: false,
-      },
-      effects: [],
-      folder: null,
-      sort: 0,
-      permission: {
-        default: 0,
-        "5QqNlUujvxsRbwxm": 3,
-      },
-      flags: {
-        srd5e: {
-          page: "items.html",
-          source: "PHB",
-          hash: "shortbow_phb",
-        },
-      },
-    },
-  ];
+  const level = ch.GetAverageLevel(creature.rarity);
+  let items = [];
+
+  if (creature.regeneration.amount != null) {
+    items.push(GetFoundryExportRegeneration(creature.regeneration));
+  }
+
+  if (creature.customSpecials.length > 0) {
+    creature.customSpecials.forEach((cs) => {
+      items.push(GetFoundryExportCustomSpecial(cs));
+    });
+  }
+
+  if (creature.aura) {
+    items.push(GetFoundryExportAura(creature.aura, level));
+  }
+
+  if (creature.actions.length > 0) {
+    creature.actions.forEach((a) => {
+      items.push(GetFoundryExportAction(a, level));
+    });
+  }
+
+  if (creature.reactions.length > 0) {
+    creature.reactions.forEach((r) => {
+      items.push(GetFoundryExportReaction(r, level));
+    });
+  }
+
+  if (creature.treasures.length > 0) {
+    creature.treasures.forEach((t) => {
+      items.push(GetFoundryExportTreasure(t));
+    });
+  }
 
   return items;
+};
+const GetActionName = (name, repetitions, frequency, spell, weakSpot) => {
+  let actionName = name;
+
+  if (repetitions != null) {
+    actionName += ` x${repetitions}`;
+  }
+
+  if (frequency || spell || weakSpot) {
+    actionName += " - ";
+  }
+
+  if (frequency != null) {
+    actionName += `${frequency}`;
+  }
+
+  if (frequency && spell) {
+    actionName += "/";
+  }
+
+  if (spell) {
+    actionName += `Magia ${spell}N`;
+  }
+
+  if (weakSpot) {
+    actionName += `(${weakSpot})`;
+  }
+
+  return actionName;
+};
+const GetActionDamangeAndConditionString = (action, level) => {
+  let pieces = [];
+
+  if (action.condition != null) {
+    let condtion = `<strong>CD ${ch.GetDCValue(action.difficultyClass)}</strong> ou <strong>${ch.GetConditionValue(action.condition)}</strong>`;
+    if (action.conditionDuration != null) {
+      condtion += ` por ${ch.GetConditionDurationValue(action.conditionDuration)}`;
+    }
+    pieces.push(condtion);
+  }
+
+  if (action.damageIntensity != null) {
+    const damage = sch.getDamage(level, action.damageIntensity);
+    const damageString = `<strong>${utils.GetValueAsDiceString(damage, true)}</strong> ${ch.GetDamageTypeValue(action.damageType)}`;
+
+    if (action.type === cc.CREATURE_ACTION_TYPES.ATTACK) {
+      pieces.splice(1, 0, damageString);
+    } else {
+      pieces.push(damageString);
+    }
+  }
+
+  let fianlString = pieces.join(", ");
+  if (fianlString) {
+    fianlString = `, ${fianlString}`;
+  }
+
+  return fianlString;
+};
+const GetFoundryExportRegeneration = (regeneration) => {
+  return {
+    _id: "custom",
+    name: "Regeneração",
+    type: "feat",
+    img: "modules/plutonium/media/icon/mighty-force.svg",
+    data: {
+      description: {
+        value: `<div class="rd__b  rd__b--3"><p>Regenera <strong>${ch.GetRegenerationAmountValue(
+          regeneration.amount
+        )}</strong> no começo do turno. Esse efeito não acontece no turno se a criatura sofrer dano de <strong>${ch.GetDamageTypeValue(
+          regeneration.breakDamage
+        )}</strong></p></div></div>`,
+        chat: "",
+        unidentified: "",
+      },
+      source: "dnd5Tools",
+      activation: {
+        type: "",
+        cost: 0,
+        condition: "",
+      },
+      duration: {
+        value: null,
+        units: "",
+      },
+      target: {
+        value: null,
+        width: null,
+        units: "",
+        type: "",
+      },
+      range: {
+        value: null,
+        long: null,
+        units: "",
+      },
+      uses: {
+        value: null,
+        max: "",
+        per: null,
+      },
+      consume: {
+        type: null,
+        target: null,
+        amount: null,
+      },
+      ability: null,
+      actionType: "other",
+      attackBonus: 0,
+      chatFlavor: "",
+      critical: {
+        threshold: null,
+        damage: "",
+      },
+      damage: {
+        parts: [],
+        versatile: "",
+      },
+      formula: "",
+      save: {
+        ability: "",
+        dc: null,
+        scaling: "flat",
+      },
+      requirements: "",
+      recharge: {
+        value: null,
+        charged: false,
+      },
+    },
+    effects: [],
+    folder: null,
+    sort: 0,
+    permission: {
+      default: 0,
+    },
+    flags: {},
+  };
+};
+const GetFoundryExportCustomSpecial = (customSpecial) => {
+  return {
+    _id: "custom",
+    name: customSpecial,
+    type: "feat",
+    img: "modules/plutonium/media/icon/mighty-force.svg",
+    data: {
+      description: {
+        value: `<div class="rd__b  rd__b--3"><p>${customSpecial}</p></div></div>`,
+        chat: "",
+        unidentified: "",
+      },
+      source: "dnd5Tools",
+      activation: {
+        type: "",
+        cost: 0,
+        condition: "",
+      },
+      duration: {
+        value: null,
+        units: "",
+      },
+      target: {
+        value: null,
+        width: null,
+        units: "",
+        type: "",
+      },
+      range: {
+        value: null,
+        long: null,
+        units: "",
+      },
+      uses: {
+        value: null,
+        max: "",
+        per: null,
+      },
+      consume: {
+        type: null,
+        target: null,
+        amount: null,
+      },
+      ability: null,
+      actionType: "other",
+      attackBonus: 0,
+      chatFlavor: "",
+      critical: {
+        threshold: null,
+        damage: "",
+      },
+      damage: {
+        parts: [],
+        versatile: "",
+      },
+      formula: "",
+      save: {
+        ability: "",
+        dc: null,
+        scaling: "flat",
+      },
+      requirements: "",
+      recharge: {
+        value: null,
+        charged: false,
+      },
+    },
+    effects: [],
+    folder: null,
+    sort: 0,
+    permission: {
+      default: 0,
+    },
+    flags: {},
+  };
+};
+const GetFoundryExportAura = (aura, level) => {
+  const description = `Alcance ${ch.GetAuraReachValue(aura.reach)}${GetActionDamangeAndConditionString(aura, level)}`;
+
+  return {
+    _id: "custom",
+    name: GetActionName(aura.name, null, null, null, aura.associatedWeakSpot),
+    type: "feat",
+    img: "modules/plutonium/media/icon/mighty-force.svg",
+    data: {
+      description: {
+        value: `<div class="rd__b  rd__b--3"><p>${description}</p><p>${aura.description ?? ""}</p></div></div>`,
+        chat: "",
+        unidentified: "",
+      },
+      source: "dnd5Tools",
+      activation: {
+        type: "",
+        cost: 0,
+        condition: "",
+      },
+      duration: {
+        value: null,
+        units: "",
+      },
+      target: {
+        value: null,
+        width: null,
+        units: "",
+        type: "",
+      },
+      range: {
+        value: null,
+        long: null,
+        units: "",
+      },
+      uses: {
+        value: null,
+        max: "",
+        per: null,
+      },
+      consume: {
+        type: null,
+        target: null,
+        amount: null,
+      },
+      ability: null,
+      actionType: "other",
+      attackBonus: 0,
+      chatFlavor: "",
+      critical: {
+        threshold: null,
+        damage: "",
+      },
+      damage: {
+        parts: [],
+        versatile: "",
+      },
+      formula: "",
+      save: {
+        ability: "",
+        dc: null,
+        scaling: "flat",
+      },
+      requirements: "",
+      recharge: {
+        value: null,
+        charged: false,
+      },
+    },
+    effects: [],
+    folder: null,
+    sort: 0,
+    permission: {
+      default: 0,
+    },
+    flags: {},
+  };
+};
+const GetFoundryExportAction = (action, level) => {
+  const description = `${ch.GetActionReachValue(action.reach, action.type)}${GetActionDamangeAndConditionString(action, level)}`;
+
+  return {
+    _id: "custom",
+    name: GetActionName(
+      action.name,
+      action.repetitions,
+      ch.GetActionFrequencyValue(action.frequency),
+      ch.GetActionSpellValue(action.frequency, level),
+      action.associatedWeakSpot
+    ),
+    type: "feat",
+    img: "modules/plutonium/media/icon/mighty-force.svg",
+    data: {
+      description: {
+        value: `<div class="rd__b  rd__b--3"><p>${description}</p><p>${action.description ?? ""}</p></div></div>`,
+        chat: "",
+        unidentified: "",
+      },
+      source: "dnd5Tools",
+      activation: {
+        type: "",
+        cost: 0,
+        condition: "",
+      },
+      duration: {
+        value: null,
+        units: "",
+      },
+      target: {
+        value: null,
+        width: null,
+        units: "",
+        type: "",
+      },
+      range: {
+        value: null,
+        long: null,
+        units: "",
+      },
+      uses: {
+        value: null,
+        max: "",
+        per: null,
+      },
+      consume: {
+        type: null,
+        target: null,
+        amount: null,
+      },
+      ability: null,
+      actionType: "other",
+      attackBonus: 0,
+      chatFlavor: "",
+      critical: {
+        threshold: null,
+        damage: "",
+      },
+      damage: {
+        parts: [],
+        versatile: "",
+      },
+      formula: "",
+      save: {
+        ability: "",
+        dc: null,
+        scaling: "flat",
+      },
+      requirements: "",
+      recharge: {
+        value: null,
+        charged: false,
+      },
+    },
+    effects: [],
+    folder: null,
+    sort: 0,
+    permission: {
+      default: 0,
+    },
+    flags: {},
+  };
+};
+const GetFoundryExportReaction = (reaction, level) => {
+  const description = `${reaction.triggerDescription ?? ch.GetReactionTriggerValue(reaction.trigger)}, ${ch.GetActionReachValue(
+    reaction.reach,
+    reaction.type
+  )}${GetActionDamangeAndConditionString(reaction, level)}`;
+
+  return {
+    _id: "custom",
+    name: GetActionName(
+      reaction.name,
+      reaction.repetitions,
+      ch.GetActionFrequencyValue(reaction.frequency),
+      ch.GetActionSpellValue(reaction.frequency, level),
+      reaction.associatedWeakSpot
+    ),
+    type: "feat",
+    img: "modules/plutonium/media/icon/mighty-force.svg",
+    data: {
+      description: {
+        value: `<div class="rd__b  rd__b--3"><p>${description}</p><p>${reaction.description ?? ""}</p></div></div>`,
+        chat: "",
+        unidentified: "",
+      },
+      source: "dnd5Tools",
+      activation: {
+        type: "",
+        cost: 0,
+        condition: "",
+      },
+      duration: {
+        value: null,
+        units: "",
+      },
+      target: {
+        value: null,
+        width: null,
+        units: "",
+        type: "",
+      },
+      range: {
+        value: null,
+        long: null,
+        units: "",
+      },
+      uses: {
+        value: null,
+        max: "",
+        per: null,
+      },
+      consume: {
+        type: null,
+        target: null,
+        amount: null,
+      },
+      ability: null,
+      actionType: "other",
+      attackBonus: 0,
+      chatFlavor: "",
+      critical: {
+        threshold: null,
+        damage: "",
+      },
+      damage: {
+        parts: [],
+        versatile: "",
+      },
+      formula: "",
+      save: {
+        ability: "",
+        dc: null,
+        scaling: "flat",
+      },
+      requirements: "",
+      recharge: {
+        value: null,
+        charged: false,
+      },
+    },
+    effects: [],
+    folder: null,
+    sort: 0,
+    permission: {
+      default: 0,
+    },
+    flags: {},
+  };
+};
+const GetFoundryExportTreasure = (treasure) => {
+  const description = `${""}`;
+
+  return {
+    _id: "custom",
+    name: treasure.name,
+    type: "equipment",
+    img: "modules/plutonium/media/icon/mighty-force.svg",
+    data: {
+      description: {
+        value: `<div class="rd__b  rd__b--3"><p>${description}</p><p>${treasure.description ?? ""}</p></div></div>`,
+        chat: "",
+        unidentified: "",
+      },
+      source: "dnd5Tools",
+      activation: {
+        type: "",
+        cost: 0,
+        condition: "",
+      },
+      duration: {
+        value: null,
+        units: "",
+      },
+      target: {
+        value: null,
+        width: null,
+        units: "",
+        type: "",
+      },
+      range: {
+        value: null,
+        long: null,
+        units: "",
+      },
+      uses: {
+        value: null,
+        max: "",
+        per: null,
+      },
+      consume: {
+        type: null,
+        target: null,
+        amount: null,
+      },
+      ability: null,
+      actionType: "other",
+      attackBonus: 0,
+      chatFlavor: "",
+      critical: {
+        threshold: null,
+        damage: "",
+      },
+      damage: {
+        parts: [],
+        versatile: "",
+      },
+      formula: "",
+      save: {
+        ability: "",
+        dc: null,
+        scaling: "flat",
+      },
+      requirements: "",
+      recharge: {
+        value: null,
+        charged: false,
+      },
+    },
+    effects: [],
+    folder: null,
+    sort: 0,
+    permission: {
+      default: 0,
+    },
+    flags: {},
+  };
 };
 
 const GetEffects = (creature) => {

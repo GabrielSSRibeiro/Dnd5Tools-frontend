@@ -85,11 +85,15 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
       return false;
     }
 
-    if (tempAura.type === CREATURE_ACTION_TYPES.EFFECT && !tempAura.creatureActionPowerTotalPercentage) {
+    if (tempAura.type === CREATURE_ACTION_TYPES.EFFECT && (!tempAura.creatureActionPowerTotalPercentage || !tempAura.description)) {
       return false;
     }
 
     if (tempAura.damageIntensity && !tempAura.damageType) {
+      return false;
+    }
+
+    if (tempAura.difficultyClass && !tempAura.damageIntensity && !tempAura.condition) {
       return false;
     }
 
