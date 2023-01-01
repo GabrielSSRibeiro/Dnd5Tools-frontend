@@ -81,9 +81,7 @@ function Home() {
   }
 
   function HandleSave(creatureToSave) {
-    // if (!creatureToEdit) {
     creatureToSave.owner = currentUser.uid;
-    // }
 
     (creatureToEdit ? api.put("UpdateCreature", creatureToSave) : api.post("SaveCreature", creatureToSave))
       .then((response) => {
@@ -121,99 +119,102 @@ function Home() {
       });
   }
 
-  return (
-    creatures && (
-      <div className="Home-container">
-        <NaviBar
-          combats={combats}
-          selectedCharacters={selectedCharacters}
-          setSelectedCharacters={setSelectedCharacters}
-          selectedCreatures={selectedCreatures}
-          setSelectedCreatures={setSelectedCreatures}
-          isSelectingParty={isSelectingParty}
-          isSelectingBestiary={isSelectingBestiary}
-          setIsSelectingParty={setIsSelectingParty}
-          setIsSelectingBestiary={setIsSelectingBestiary}
-          isPartyOpen={isPartyOpen}
-          setIsPartyOpen={setIsPartyOpen}
-          isBestiaryOpen={isBestiaryOpen}
-          setIsBestiaryOpen={setIsBestiaryOpen}
-          level={level}
-          setLevel={setLevel}
-          groups={groups}
-          setGroups={setGroups}
-          creatures={creatures}
-          setCreatures={setCreatures}
-          tabOptions={MAIN_TABS}
-          openTab={openTab}
-          setOpenTab={setOpenTab}
-          isEditCreatureOpen={isEditCreatureOpen}
-          setCreatureToEdit={setCreatureToEdit}
-          setIsEditCreatureOpen={setIsEditCreatureOpen}
-          HandleEndCombat={HandleEndCombat}
-        />
-        <img src={background} alt="Created by liuzishan - www.freepik.com" />
+  return !creatures ? (
+    <div className="backend-loading">
+      <h2>Por favor aguarde enquanto tiramos o site de inativade. Isso pode lever até 30 segundos...</h2>
+    </div>
+  ) : (
+    <div className="Home-container">
+      <NaviBar
+        combats={combats}
+        selectedCharacters={selectedCharacters}
+        setSelectedCharacters={setSelectedCharacters}
+        selectedCreatures={selectedCreatures}
+        setSelectedCreatures={setSelectedCreatures}
+        isSelectingParty={isSelectingParty}
+        isSelectingBestiary={isSelectingBestiary}
+        setIsSelectingParty={setIsSelectingParty}
+        setIsSelectingBestiary={setIsSelectingBestiary}
+        isPartyOpen={isPartyOpen}
+        setIsPartyOpen={setIsPartyOpen}
+        isBestiaryOpen={isBestiaryOpen}
+        setIsBestiaryOpen={setIsBestiaryOpen}
+        level={level}
+        setLevel={setLevel}
+        groups={groups}
+        setGroups={setGroups}
+        creatures={creatures}
+        setCreatures={setCreatures}
+        tabOptions={MAIN_TABS}
+        openTab={openTab}
+        setOpenTab={setOpenTab}
+        isEditCreatureOpen={isEditCreatureOpen}
+        setCreatureToEdit={setCreatureToEdit}
+        setIsEditCreatureOpen={setIsEditCreatureOpen}
+        HandleEndCombat={HandleEndCombat}
+      />
+      <img src={background} alt="Created by liuzishan - www.freepik.com" />
 
-        <div className={`section-wrapper ${isEditCreatureOpen ? "hidden" : ""}`}>
-          <div className={`section-wrapper ${openTab !== MAIN_TABS.SKILL_CHECK ? "hidden" : ""}`}>
-            <SkillCheck resultText={openTab} level={level} />
-          </div>
-          <div style={{ marginTop: 100, height: "fit-content" }} className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
-            <Panel title="Versao 1.0">
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <p>Motivaçoes</p>
-                <span>Abstrair o processo de criacao de criaturas, o tornando subjetivo e simples</span>
-                <span>
-                  A ficha de uma criatura é, e deveria ser, desconhecida pelos jogadores, logo algumas liberdades podem ser tomadas durante a criaçao
-                </span>
-                <span>Descriçoes excessivas, recargas, ações lendárias, e outros foram simplificados para facilitar o controle de criaturas</span>
-                <span>Ter um sistema de forja de items</span>
-                <span>Acrescentar novas opcoes ao combate como Pontos Fracos, Comportamentos, e raridade de açoes</span>
-                <p>-</p>
-                <p>Notas</p>
-                <span>Barras de Poder ofensiva e defensiva de criatura ainda nao estao funcionando(fixas em 50%)</span>
-                <span>No Foundry, ficha de criatura recomendada: "Monster Blocks"</span>
-                <span>No Foundry, módulo de controle de criatura recomendado: "Token Action HUD"</span>
-                <span>No Foundry, Pontos Fracos estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>
-                <span>No Foundry, tokens sao genericos, por enquanto</span>
-              </div>
-            </Panel>
-          </div>
-          <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
-            <CombatSetup
-              selectedCharacters={selectedCharacters}
-              selectedCreatures={selectedCreatures}
-              setSelectedCreatures={setSelectedCreatures}
-              HandleSelectFromParty={HandleSelectFromParty}
-              HandleSelectFromBestiary={HandleSelectFromBestiary}
-              HandleGenerateCombat={HandleGenerateCombat}
-              resultText={openTab}
-              level={level}
-            />
-          </div>
-          {combats.map((combat, index) => (
-            <div key={index} className={`section-wrapper ${openTab !== index + 1 ? "hidden" : ""}`}>
-              <Combat combat={combat} />
-            </div>
-          ))}
-
-          <div className={`section-wrapper ${openTab !== MAIN_TABS.TREASURE ? "hidden" : ""}`}>
-            <Treasure resultText={openTab} level={level} />
-          </div>
+      <div className={`section-wrapper ${isEditCreatureOpen ? "hidden" : ""}`}>
+        <div className={`section-wrapper ${openTab !== MAIN_TABS.SKILL_CHECK ? "hidden" : ""}`}>
+          <SkillCheck resultText={openTab} level={level} />
         </div>
-
-        {isEditCreatureOpen && (
-          <div className={"section-wrapper"}>
-            <EditCreature
-              creatureToEdit={creatureToEdit}
-              HandleSave={HandleSave}
-              HandleDelete={HandleDelete}
-              FinishEditing={() => setIsEditCreatureOpen(false)}
-            />
+        <div style={{ marginTop: 100, height: "fit-content" }} className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
+          <Panel title="Versao 1.0">
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <p>Motivaçoes</p>
+              <span>Abstrair o processo de criacao de criaturas, o tornando subjetivo e simples</span>
+              <span>
+                A ficha de uma criatura é, e deveria ser, desconhecida pelos jogadores, logo algumas liberdades podem ser tomadas durante a criaçao
+              </span>
+              <span>Descriçoes excessivas, recargas, ações lendárias, e outros foram simplificados para facilitar o controle de criaturas</span>
+              <span>Ter um sistema de forja de items</span>
+              <span>Acrescentar novas opcoes ao combate como Pontos Fracos, Comportamentos, e raridade de açoes</span>
+              <p>-</p>
+              <p>Notas</p>
+              <span>Nao existe version mobile ainda</span>
+              <span>Barras de Poder ofensiva e defensiva de criatura ainda nao estao funcionando(fixas em 50%)</span>
+              <span>No Foundry, ficha de criatura recomendada: "Monster Blocks"</span>
+              <span>No Foundry, módulo de controle de criatura recomendado: "Token Action HUD"</span>
+              <span>No Foundry, Pontos Fracos estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>
+              <span>No Foundry, tokens sao genericos, por enquanto</span>
+            </div>
+          </Panel>
+        </div>
+        <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
+          <CombatSetup
+            selectedCharacters={selectedCharacters}
+            selectedCreatures={selectedCreatures}
+            setSelectedCreatures={setSelectedCreatures}
+            HandleSelectFromParty={HandleSelectFromParty}
+            HandleSelectFromBestiary={HandleSelectFromBestiary}
+            HandleGenerateCombat={HandleGenerateCombat}
+            resultText={openTab}
+            level={level}
+          />
+        </div>
+        {combats.map((combat, index) => (
+          <div key={index} className={`section-wrapper ${openTab !== index + 1 ? "hidden" : ""}`}>
+            <Combat combat={combat} />
           </div>
-        )}
+        ))}
+
+        <div className={`section-wrapper ${openTab !== MAIN_TABS.TREASURE ? "hidden" : ""}`}>
+          <Treasure resultText={openTab} level={level} />
+        </div>
       </div>
-    )
+
+      {isEditCreatureOpen && (
+        <div className={"section-wrapper"}>
+          <EditCreature
+            creatureToEdit={creatureToEdit}
+            HandleSave={HandleSave}
+            HandleDelete={HandleDelete}
+            FinishEditing={() => setIsEditCreatureOpen(false)}
+          />
+        </div>
+      )}
+    </div>
   );
 }
 
