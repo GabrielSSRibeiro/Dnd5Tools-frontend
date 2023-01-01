@@ -543,6 +543,23 @@ export const creatureAttributes = [
   { display: "Extremo", value: CREATURE_ATTRIBUTES.EXTREME, weight: 4, baseOutput: 26 },
 ];
 
+export const CREATURE_ATTRIBUTE_NAMES = {
+  STRENGTH: 10,
+  DEXTERITY: 20,
+  CONSTITUTION: 30,
+  INTELLIGENCE: 40,
+  WISDOM: 50,
+  CHARISMA: 60,
+};
+export const creatureAttributeNames = [
+  { display: "Força", value: CREATURE_ATTRIBUTE_NAMES.STRENGTH, weight: 0, foundryDisplay: "str" },
+  { display: "Destreza", value: CREATURE_ATTRIBUTE_NAMES.DEXTERITY, weight: 0, foundryDisplay: "dex" },
+  { display: "Constituiçao", value: CREATURE_ATTRIBUTE_NAMES.CONSTITUTION, weight: 0, foundryDisplay: "con" },
+  { display: "Inteligencia", value: CREATURE_ATTRIBUTE_NAMES.INTELLIGENCE, weight: 0, foundryDisplay: "int" },
+  { display: "Sabedoria", value: CREATURE_ATTRIBUTE_NAMES.WISDOM, weight: 0, foundryDisplay: "wis" },
+  { display: "Carisma", value: CREATURE_ATTRIBUTE_NAMES.CHARISMA, weight: 0, foundryDisplay: "cha" },
+];
+
 export const CREATURE_HIT_POINTS = {
   LOW: 10,
   MEDIUM: 20,

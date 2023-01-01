@@ -950,7 +950,7 @@ const GetFoundryExportAura = (aura, attack, str, level) => {
       },
       formula: "",
       save: {
-        ability: "",
+        ability: aura.savingThrowAttribute ? cc.creatureAttributeNames.find((an) => an.value === aura.savingThrowAttribute).foundryDisplay : "",
         dc: aura.difficultyClass ? ch.GetDCValue(aura.difficultyClass) : null,
         scaling: "flat",
       },
@@ -1034,7 +1034,7 @@ const GetFoundryExportAction = (action, attack, str, level) => {
       },
       formula: "",
       save: {
-        ability: "",
+        ability: action.savingThrowAttribute ? cc.creatureAttributeNames.find((an) => an.value === action.savingThrowAttribute).foundryDisplay : "",
         dc: action.difficultyClass ? ch.GetDCValue(action.difficultyClass) : null,
         scaling: "flat",
       },
@@ -1121,7 +1121,9 @@ const GetFoundryExportReaction = (reaction, attack, str, level) => {
       },
       formula: "",
       save: {
-        ability: "",
+        ability: reaction.savingThrowAttribute
+          ? cc.creatureAttributeNames.find((an) => an.value === reaction.savingThrowAttribute).foundryDisplay
+          : "",
         dc: reaction.difficultyClass ? ch.GetDCValue(reaction.difficultyClass) : null,
         scaling: "flat",
       },

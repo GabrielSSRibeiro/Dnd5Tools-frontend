@@ -163,13 +163,16 @@ function Home() {
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <p>Motivaçoes</p>
                 <span>Abstrair o processo de criacao de criaturas, o tornando subjetivo e simples</span>
-                <span>Descriçoes excessivas, recargas, ações lendárias, e outros foram simplificados para melhorar o controle de criaturas </span>
+                <span>
+                  A ficha de uma criatura é, e deveria ser, desconhecida pelos jogadores, logo algumas liberdades podem ser tomadas durante a criaçao
+                </span>
+                <span>Descriçoes excessivas, recargas, ações lendárias, e outros foram simplificados para facilitar o controle de criaturas</span>
                 <span>Ter um sistema de forja de items</span>
                 <span>Acrescentar novas opcoes ao combate como Pontos Fracos, Comportamentos, e raridade de açoes</span>
                 <p>-</p>
                 <p>Foundry</p>
                 <span>Ficha de criatura recomendada: "Monster Blocks"</span>
-                <span>Módulo de controle de criatura recomendado: "Menu preto flutuante"</span>
+                <span>Módulo de controle de criatura recomendado: "Token Action HUD"</span>
                 <span>Pontos Fracos estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>
                 <span>Tokens sao genericos, por enquanto</span>
               </div>

@@ -12,6 +12,7 @@ import {
   conditions,
   conditionDurations,
   difficultyClasses,
+  creatureAttributeNames,
 } from "../../../../../../../../constants/creatureConstants";
 
 import Button from "../../../../../../../../components/Button";
@@ -36,6 +37,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
           condition: null,
           conditionDuration: null,
           difficultyClass: null,
+          savingThrowAttribute: null,
           associatedWeakSpot: null,
         }
   );
@@ -49,6 +51,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
       updatedValue.condition = null;
       updatedValue.conditionDuration = null;
       updatedValue.difficultyClass = null;
+      updatedValue.savingThrowAttribute = null;
     } else {
       updatedValue.effectPowerTotalPercentage = null;
     }
@@ -58,6 +61,7 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
       updatedValue.condition = null;
       updatedValue.conditionDuration = null;
       updatedValue.difficultyClass = null;
+      updatedValue.savingThrowAttribute = null;
     }
 
     setTempAura(updatedValue);
@@ -96,6 +100,10 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
       return false;
     }
 
+    if (tempAura.type === CREATURE_ACTION_TYPES.SAVING_THROW && !tempAura.difficultyClass) {
+      return false;
+    }
+
     if (tempAura.type === CREATURE_ACTION_TYPES.HEALING) {
       if (!tempAura.damageIntensity) {
         return false;
@@ -104,6 +112,10 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
       if (tempAura.damageIntensity && !tempAura.damageType) {
         return false;
       }
+    }
+
+    if (tempAura.difficultyClass && !tempAura.savingThrowAttribute) {
+      return false;
     }
 
     if (tempAura.difficultyClass && !tempAura.damageIntensity && !tempAura.condition) {
@@ -131,20 +143,35 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
             />
-            {tempAura.type === CREATURE_ACTION_TYPES.EFFECT && (
-              <Select
-                label={"Multiplicador (Efeito)"}
-                info={[{ text: "Porcetagem do Poder Total da ação que esse Efeito representa" }]}
-                extraWidth={100}
-                isLarge={true}
-                value={tempAura}
-                valuePropertyPath="creatureActionPowerTotalPercentage"
-                onSelect={setTempAura}
-                options={creatureActionPowerTotalPercentages}
-                optionDisplay={(o) => o.display}
-                optionValue={(o) => o.value}
-              />
-            )}
+            <Select
+              label={"Intensidade"}
+              extraWidth={100}
+              isLarge={true}
+              nothingSelected="Nenhuma"
+              value={tempAura}
+              valuePropertyPath="damageIntensity"
+              onSelect={HandleSelectDamageIntensity}
+              options={damageIntensities}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+              className={tempAura.type === CREATURE_ACTION_TYPES.EFFECT ? "invisible" : ""}
+            />
+            <Select
+              label={"Tipo de Dano"}
+              extraWidth={100}
+              isLarge={true}
+              value={tempAura}
+              valuePropertyPath="damageType"
+              onSelect={setTempAura}
+              options={damageTypes}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+              className={
+                !tempAura.damageIntensity || tempAura.type === CREATURE_ACTION_TYPES.EFFECT || tempAura.type === CREATURE_ACTION_TYPES.HEALING
+                  ? "invisible"
+                  : ""
+              }
+            />
           </section>
           <section className="action-row">
             <TextInput
@@ -158,90 +185,93 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
             <aside>
               <section className="action-row">
                 <Select
-                  label={"Alcance"}
+                  label={"Multiplicador (Efeito)"}
+                  info={[{ text: "Porcetagem do Poder Total da ação que esse Efeito representa" }]}
                   extraWidth={100}
                   isLarge={true}
                   value={tempAura}
-                  valuePropertyPath="reach"
+                  valuePropertyPath="creatureActionPowerTotalPercentage"
                   onSelect={setTempAura}
-                  options={creatureAuraReaches}
+                  options={creatureActionPowerTotalPercentages}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
+                  className={tempAura.type !== CREATURE_ACTION_TYPES.EFFECT ? "invisible" : ""}
+                />
+                <Select
+                  label={"Dificuldade"}
+                  extraWidth={100}
+                  isLarge={true}
+                  nothingSelected="Nenhuma"
+                  value={tempAura}
+                  valuePropertyPath="difficultyClass"
+                  onSelect={setTempAura}
+                  options={difficultyClasses}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
+                  className={tempAura.type === CREATURE_ACTION_TYPES.EFFECT || tempAura.type === CREATURE_ACTION_TYPES.HEALING ? "invisible" : ""}
+                />
+                <Select
+                  label={"Atributo"}
+                  extraWidth={100}
+                  isLarge={true}
+                  nothingSelected="Nenhuma"
+                  value={tempAura}
+                  valuePropertyPath="savingThrowAttribute"
+                  onSelect={setTempAura}
+                  options={creatureAttributeNames}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
+                  className={!tempAura.difficultyClass ? "invisible" : ""}
+                />
+              </section>
+              <section className="action-row">
+                <Select label={"Gatilho"} extraWidth={100} isLarge={true} className={"invisible"} />
+                <Select
+                  label={"Condição"}
+                  extraWidth={100}
+                  isLarge={true}
+                  nothingSelected="Nenhuma"
+                  value={tempAura}
+                  valuePropertyPath="condition"
+                  onSelect={HandleSelectCondition}
+                  options={conditions}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
+                  optionsAtATime={4}
+                  className={tempAura.type === CREATURE_ACTION_TYPES.EFFECT || tempAura.type === CREATURE_ACTION_TYPES.HEALING ? "invisible" : ""}
+                />
+                <Select
+                  label={"Duração"}
+                  extraWidth={100}
+                  isLarge={true}
+                  value={tempAura}
+                  valuePropertyPath="conditionDuration"
+                  onSelect={setTempAura}
+                  options={conditionDurations}
+                  nothingSelected="Nenhuma"
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
+                  className={
+                    !tempAura.condition || tempAura.type === CREATURE_ACTION_TYPES.EFFECT || tempAura.type === CREATURE_ACTION_TYPES.HEALING
+                      ? "invisible"
+                      : ""
+                  }
                 />
               </section>
             </aside>
           </section>
           <section className="action-row">
             <Select
-              label={"Intensidade"}
-              extraWidth={100}
-              isLarge={true}
-              nothingSelected="Nenhuma"
-              value={tempAura}
-              valuePropertyPath="damageIntensity"
-              onSelect={HandleSelectDamageIntensity}
-              options={damageIntensities}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-              optionsAtATime={4}
-              isDisabled={tempAura.type === CREATURE_ACTION_TYPES.EFFECT}
-            />
-            <Select
-              label={"Tipo de Dano"}
+              label={"Alcance"}
               extraWidth={100}
               isLarge={true}
               value={tempAura}
-              valuePropertyPath="damageType"
+              valuePropertyPath="reach"
               onSelect={setTempAura}
-              options={damageTypes}
+              options={creatureAuraReaches}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               optionsAtATime={4}
-              isDisabled={
-                !tempAura.damageIntensity || tempAura.type === CREATURE_ACTION_TYPES.EFFECT || tempAura.type === CREATURE_ACTION_TYPES.HEALING
-              }
-            />
-            <Select
-              label={"Dificuldade"}
-              extraWidth={100}
-              isLarge={true}
-              nothingSelected="Nenhuma"
-              value={tempAura}
-              valuePropertyPath="difficultyClass"
-              onSelect={setTempAura}
-              options={difficultyClasses}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-              optionsAtATime={4}
-              isDisabled={tempAura.type === CREATURE_ACTION_TYPES.EFFECT || tempAura.type === CREATURE_ACTION_TYPES.HEALING}
-            />
-            <Select
-              label={"Condição"}
-              extraWidth={100}
-              isLarge={true}
-              nothingSelected="Nenhuma"
-              value={tempAura}
-              valuePropertyPath="condition"
-              onSelect={HandleSelectCondition}
-              options={conditions}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-              optionsAtATime={4}
-              isDisabled={tempAura.type === CREATURE_ACTION_TYPES.EFFECT || tempAura.type === CREATURE_ACTION_TYPES.HEALING}
-            />
-            <Select
-              label={"Duração"}
-              extraWidth={100}
-              isLarge={true}
-              value={tempAura}
-              valuePropertyPath="conditionDuration"
-              onSelect={setTempAura}
-              options={conditionDurations}
-              nothingSelected="Nenhuma"
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-              optionsAtATime={4}
-              isDisabled={!tempAura.condition || tempAura.type === CREATURE_ACTION_TYPES.EFFECT || tempAura.type === CREATURE_ACTION_TYPES.HEALING}
             />
           </section>
           <footer>

@@ -193,6 +193,10 @@ export const GetDCValue = (difficultyClass) => {
   const baseValue = cc.difficultyClasses.find((dc) => dc.value === difficultyClass).baseOutput;
   return Math.max(10, utils.randomValueFromVarianceInt(baseValue, 2));
 };
+export const GetSavingThrowAttributeValue = (attribute) => {
+  const baseOutput = cc.creatureAttributeNames.find((dt) => dt.value === attribute).display;
+  return baseOutput;
+};
 
 export const GetConditionValue = (condition) => {
   const baseOutput = cc.conditions.find((dt) => dt.value === condition).display;

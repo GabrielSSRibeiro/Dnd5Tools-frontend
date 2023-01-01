@@ -22,6 +22,14 @@
   column-gap: 15px;
 }
 
+.ModalManageAction-container .modal-action .new-action-wrapper .action-row aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  row-gap: 10px;
+}
+
 .ModalManageAction-container .modal-action .new-action-wrapper .action-row .shorter-input input {
   width: 200px;
 }
