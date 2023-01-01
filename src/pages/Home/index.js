@@ -162,14 +162,16 @@ function Home() {
             <Panel title="Notas - v1.0">
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <p>Motivaçoes</p>
-                <span>Abstrair o processo de criacao de criaturas, testes e tesouros</span>
-                <span>Simplificar o controle de criaturas</span>
+                <span>Abstrair o processo de criacao de criaturas, o tornando subjetivo e simples</span>
+                <span>Descriçoes excessivas, recargas, ações lendárias, e outros foram simplificados para melhorar o controle de criaturas </span>
                 <span>Ter um sistema de forja de items</span>
+                <span>Acrescentar novas opcoes ao combate como Pontos Fracos, Comportamentos, e raridade de açoes</span>
                 <p>-</p>
-                <p>Dicas</p>
-                <span>Ficha de criatura recomendada para Foundry: "Monster Blocks"</span>
-                <span>Todas as açoes de criaturas sao de facil etendimento e uso</span>
-                <span>Criaturas exportadas tem efeitos de "Comportamento" pre-pronto. Quando ativos, afetam o ataque e a CA</span>
+                <p>Foundry</p>
+                <span>Ficha de criatura recomendada: "Monster Blocks"</span>
+                <span>Módulo de controle de criatura recomendado: "Menu preto flutuante"</span>
+                <span>Pontos Fracos estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>
+                <span>Tokens sao genericos, por enquanto</span>
               </div>
             </Panel>
           </div>

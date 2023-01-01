@@ -102,7 +102,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
   }
 
   function CheckFinalButtonValid() {
-    if (!tempReaction.name || invalidNames.includes(tempReaction.name) || !tempReaction.reach) {
+    if (!tempReaction.name || invalidNames.includes(tempReaction.name) || !tempReaction.reach || !tempReaction.trigger) {
       return false;
     }
 
@@ -121,6 +121,10 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
     }
 
     if (tempReaction.difficultyClass && !tempReaction.damageIntensity && !tempReaction.condition) {
+      return false;
+    }
+
+    if (tempReaction.trigger === CREATURE_REACTION_TRIGGERS.OTHER && !tempReaction.triggerDescription) {
       return false;
     }
 
@@ -207,7 +211,7 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
                 />
-                {tempReaction.trigger === CREATURE_ACTION_TYPES.OTHER && (
+                {tempReaction.trigger === CREATURE_REACTION_TRIGGERS.OTHER && (
                   <TextInput
                     label="Descrição (Gatilho)"
                     value={tempReaction}
