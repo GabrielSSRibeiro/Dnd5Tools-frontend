@@ -972,7 +972,7 @@ const GetFoundryExportAura = (aura, attack, str, level) => {
 const GetFoundryExportAction = (action, attack, str, level) => {
   let description = "";
   if (action.isSpell) {
-    description += `(Magia de Nível ${ch.GetActionSpellValue(action.frequency, level)})<br />`;
+    description += `(Magia de Nível ${ch.GetActionSpellValue(action.frequency, level)} - V,S)<br />`;
   }
   description += `${ch.GetActionReachValue(action.reach, action.type)}${GetActionDamangeAndConditionString(action, level)}`;
 
@@ -1056,7 +1056,7 @@ const GetFoundryExportAction = (action, attack, str, level) => {
 const GetFoundryExportReaction = (reaction, attack, str, level) => {
   let description = "";
   if (reaction.isSpell) {
-    description += `(Magia de Nível ${ch.GetActionSpellValue(reaction.frequency, level)})<br />`;
+    description += `(Magia de Nível ${ch.GetActionSpellValue(reaction.frequency, level)} - V,S)<br />`;
   }
   description += `${reaction.triggerDescription ?? ch.GetReactionTriggerValue(reaction.trigger)}, ${ch.GetActionReachValue(
     reaction.reach,

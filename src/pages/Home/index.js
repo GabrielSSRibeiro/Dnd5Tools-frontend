@@ -167,7 +167,10 @@ function Home() {
               <span>
                 A ficha de uma criatura é, e deveria ser, desconhecida pelos jogadores, logo algumas liberdades podem ser tomadas durante a criaçao
               </span>
-              <span>Descriçoes excessivas, recargas, ações lendárias, e outros foram simplificados para facilitar o controle de criaturas</span>
+              <span>
+                Descriçoes excessivas, recargas, magias, ações bonus, ações lendárias, e outros foram simplificados para facilitar o controle de
+                criaturas
+              </span>
               <span>Ter um sistema de forja de items</span>
               <span>Acrescentar novas opcoes ao combate como Pontos Fracos, Comportamentos, e raridade de açoes</span>
               <p>-</p>
