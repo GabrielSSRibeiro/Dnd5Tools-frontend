@@ -160,7 +160,14 @@ function Treasure({ resultText, level }) {
           <section className="treasure-panels">
             <Panel
               title="Qunatidade e Peso"
-              info={[{ text: "Quantifade é o número de vezes que uma unidade desse material pode ser usado para tentar transformar em equipamento" }]}
+              info={[
+                {
+                  text: "Quantifade é o número de vezes que uma unidade do material adquirido pode ser usado para tentar transformar em equipamento",
+                },
+                {
+                  text: "Todos os usos sao consumidos em um sucesso",
+                },
+              ]}
             >
               <main className="panel-select details">
                 <Select

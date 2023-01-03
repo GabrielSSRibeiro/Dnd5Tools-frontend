@@ -142,7 +142,7 @@ function Actions({ creature, setCreature }) {
             <Button text="Adicionar" onClick={() => OpenModalManageReaction()} isDisabled={creature.reactions.length >= maxNumberOfActions} />
             <Select
               label={"Reações / Rodada"}
-              extraWidth={75}
+              extraWidth={120}
               value={creature}
               valuePropertyPath="reactionsPerRound"
               onSelect={setCreature}

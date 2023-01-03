@@ -8,9 +8,11 @@
   gap: 25px;
 }
 
-.Summary-container .modal-export {
-  width: 500px;
-  height: fit-content;
+.Summary-container .details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10px;
 }
 
 .Summary-container .summary-header > h2 {

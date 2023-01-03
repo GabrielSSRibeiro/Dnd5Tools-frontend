@@ -152,7 +152,10 @@ function Attributes({ creature, setCreature }) {
       </div>
       <CheckInput
         label="Pontos Fracos"
-        info={[{ text: "Recomendado apenas para criaturas grandes ou maiores" }]}
+        info={[
+          { text: "Algo que pode ser quebrado ou destruído, como: Perna, causa, asa, armadura" },
+          { text: "Recomendado apenas para criaturas grandes ou maiores" },
+        ]}
         onClick={HandleToggleWeakSpots}
         isSelected={hasWeakSpots}
       />

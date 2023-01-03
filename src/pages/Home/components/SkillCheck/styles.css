@@ -11,6 +11,10 @@
   height: fit-content;
 }
 
+.SkillCheck-container .result-tables .result-footer {
+  margin-top: 15px;
+}
+
 .SkillCheck-container > section {
   margin-top: 5%;
   width: 1000px;

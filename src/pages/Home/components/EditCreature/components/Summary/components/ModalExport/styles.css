@@ -1,0 +1,8 @@
+.ModalExport-container.modal-body {
+  width: 500px;
+  height: fit-content;
+}
+
+.ModalExport-container .version {
+  margin-bottom: 25px;
+}

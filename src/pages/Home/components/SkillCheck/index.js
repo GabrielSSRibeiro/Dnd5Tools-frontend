@@ -32,7 +32,7 @@ function SkillCheck({ resultText, level }) {
   return (
     <div className="SkillCheck-container">
       <section>
-        <Panel title="Dificuldade" info={[{ text: `Dificuldade mínima: ${MIN_DIFICULTY}` }]}>
+        <Panel title="Dificuldade" info={[{ text: `Dificuldade é baseada em Nível e mínima é: ${MIN_DIFICULTY}` }]}>
           <main className="panel-select">
             {difficultyClasses.map((option) => (
               <SelectButton
@@ -73,7 +73,7 @@ function SkillCheck({ resultText, level }) {
         </Panel>
       </section>
       <section>
-        <Panel title="Intensidade do Dano">
+        <Panel title="Intensidade do Dano" info={[{ text: "Intensidade é baseada em Nível" }]}>
           <main className="panel-select">
             {[{ display: "Nenhuma", value: null }, ...damageIntensities].map((option) => (
               <SelectButton
@@ -89,7 +89,7 @@ function SkillCheck({ resultText, level }) {
         </Panel>
       </section>
       {hasResult && (
-        <Modal title="Teste" onClickToClose={() => setHasResult(!hasResult)} className="result-tables">
+        <Modal title="Teste de Perícia" onClickToClose={() => setHasResult(!hasResult)} className="result-tables">
           <ResultBox
             highlightTopRow={true}
             values={generatedSkillCheck.map((skillCheck) => ({
@@ -98,6 +98,9 @@ function SkillCheck({ resultText, level }) {
               bottom: skillCheck.name,
             }))}
           />
+          <footer className="result-footer">
+            <p>Teste de Perícia para Nível {level}</p>
+          </footer>
         </Modal>
       )}
       <footer>

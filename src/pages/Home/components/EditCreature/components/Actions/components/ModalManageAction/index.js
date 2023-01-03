@@ -156,7 +156,7 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
               optionValue={(o) => o.value}
             />
             <Select
-              label={"Intensidade"}
+              label={"Intensidade do Dano"}
               extraWidth={100}
               isLarge={true}
               nothingSelected="Nenhuma"
@@ -210,7 +210,7 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
                   className={tempAction.type !== CREATURE_ACTION_TYPES.EFFECT ? "invisible" : ""}
                 />
                 <Select
-                  label={"Dificuldade"}
+                  label={"Classe de Dificuldade (CD)"}
                   extraWidth={100}
                   isLarge={true}
                   nothingSelected="Nenhuma"
@@ -312,6 +312,14 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
           <footer>
             <Select
               label={"Ponto Fraco associado"}
+              info={[
+                {
+                  text: "Selecione um dos Pontos Fracos da criatura para associar a essa açao",
+                },
+                {
+                  text: "Uma açao só pode ser realizada se o Ponto Fraco nao foi destruído",
+                },
+              ]}
               extraWidth={100}
               isLarge={true}
               nothingSelected="Nenhum"
@@ -320,6 +328,7 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
               onSelect={setTempAction}
               options={weakSpots}
               dropUp={true}
+              isDisabled={weakSpots.length === 0}
             />
             <div className="extra-details">
               <CheckInput

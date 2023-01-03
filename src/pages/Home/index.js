@@ -15,8 +15,8 @@ import "./styles.css";
 
 function Home() {
   const MAIN_TABS = {
-    SKILL_CHECK: "Teste",
-    GENERAL: "Início",
+    SKILL_CHECK: "Teste de Perícia",
+    GENERAL: "Geral",
     COMBAT: "Combate",
     TREASURE: "Tesouro",
   };
@@ -80,10 +80,10 @@ function Home() {
     setOpenTab(MAIN_TABS.COMBAT);
   }
 
-  function HandleSave(creatureToSave) {
+  async function HandleSave(creatureToSave) {
     creatureToSave.owner = currentUser.uid;
 
-    (creatureToEdit ? api.put("UpdateCreature", creatureToSave) : api.post("SaveCreature", creatureToSave))
+    await (creatureToEdit ? api.put("UpdateCreature", creatureToSave) : api.post("SaveCreature", creatureToSave))
       .then((response) => {
         if (response.data) {
           let creatureIndex = creatures.findIndex((c) => c._id === response.data._id);
@@ -160,7 +160,7 @@ function Home() {
           <SkillCheck resultText={openTab} level={level} />
         </div>
         <div style={{ marginTop: 100, height: "fit-content" }} className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
-          <Panel title="Versao 1.0">
+          <Panel title="Versao 1.1">
             <div style={{ display: "flex", flexDirection: "column" }}>
               <p>Motivaçoes</p>
               <span>Abstrair o processo de criacao de criaturas, o tornando subjetivo e simples</span>
@@ -168,15 +168,15 @@ function Home() {
                 A ficha de uma criatura é, e deveria ser, desconhecida pelos jogadores, logo algumas liberdades podem ser tomadas durante a criaçao
               </span>
               <span>
-                Descriçoes excessivas, recargas, magias, ações bonus, ações lendárias, e outros foram simplificados para facilitar o controle de
-                criaturas
+                Descriçoes excessivas, recargas, multiataque, magias, ações bonus, ações lendárias, e outros foram simplificados para facilitar o
+                controle de criaturas
               </span>
               <span>Ter um sistema de forja de items</span>
               <span>Acrescentar novas opcoes ao combate como Pontos Fracos, Comportamentos, e raridade de açoes</span>
               <p>-</p>
               <p>Notas</p>
               <span>Nao existe version mobile ainda</span>
-              <span>Barras de Poder ofensiva e defensiva de criatura ainda nao estao funcionando(fixas em 50%)</span>
+              <span>Escalas de Poder ofensiva e defensiva de criatura ainda nao estao funcionando(fixas em 50%)</span>
               <span>No Foundry, ficha de criatura recomendada: "Monster Blocks"</span>
               <span>No Foundry, módulo de controle de criatura recomendado: "Token Action HUD"</span>
               <span>No Foundry, Pontos Fracos estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>

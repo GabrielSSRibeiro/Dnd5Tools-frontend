@@ -35,7 +35,7 @@ export const creatureRarities = [
     value: CREATURE_RARITIES.LEGENDARY,
     weight: 5,
     baseOutputMin: 21,
-    baseOutputMax: 25,
+    baseOutputMax: 40,
   },
 ];
 
@@ -484,28 +484,28 @@ export const CREATURE_MOVEMENTS = {
   EXTREME: 40,
 };
 export const creatureSpeedMovements = [
-  { display: "Baixo", value: CREATURE_MOVEMENTS.LOW, weight: 1, baseOutput: 20 },
-  { display: "Médio", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2, baseOutput: 30 },
-  { display: "Alto", value: CREATURE_MOVEMENTS.HIGH, weight: 3, baseOutput: 40 },
-  { display: "Extremo", value: CREATURE_MOVEMENTS.EXTREME, weight: 4, baseOutput: 60 },
+  { display: "Baixo (6m)", value: CREATURE_MOVEMENTS.LOW, weight: 1, baseOutput: 20 },
+  { display: "Médio (9m)", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2, baseOutput: 30 },
+  { display: "Alto (12m)", value: CREATURE_MOVEMENTS.HIGH, weight: 3, baseOutput: 40 },
+  { display: "Extremo (18m)", value: CREATURE_MOVEMENTS.EXTREME, weight: 4, baseOutput: 60 },
 ];
 export const creatureFlyingMovements = [
-  { display: "Baixo", value: CREATURE_MOVEMENTS.LOW, weight: 1, baseOutput: 20 },
-  { display: "Médio", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2, baseOutput: 30 },
-  { display: "Alto", value: CREATURE_MOVEMENTS.HIGH, weight: 3, baseOutput: 40 },
-  { display: "Extremo", value: CREATURE_MOVEMENTS.EXTREME, weight: 4, baseOutput: 60 },
+  { display: "Baixo (6m)", value: CREATURE_MOVEMENTS.LOW, weight: 1, baseOutput: 20 },
+  { display: "Médio (9m)", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2, baseOutput: 30 },
+  { display: "Alto (12m)", value: CREATURE_MOVEMENTS.HIGH, weight: 3, baseOutput: 40 },
+  { display: "Extremo (18m)", value: CREATURE_MOVEMENTS.EXTREME, weight: 4, baseOutput: 60 },
 ];
 export const creatureSwimmingMovements = [
-  { display: "Baixo", value: CREATURE_MOVEMENTS.LOW, weight: 1, baseOutput: 20 },
-  { display: "Médio", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2, baseOutput: 30 },
-  { display: "Alto", value: CREATURE_MOVEMENTS.HIGH, weight: 3, baseOutput: 40 },
-  { display: "Extremo", value: CREATURE_MOVEMENTS.EXTREME, weight: 4, baseOutput: 60 },
+  { display: "Baixo (6m)", value: CREATURE_MOVEMENTS.LOW, weight: 1, baseOutput: 20 },
+  { display: "Médio (9m)", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2, baseOutput: 30 },
+  { display: "Alto (12m)", value: CREATURE_MOVEMENTS.HIGH, weight: 3, baseOutput: 40 },
+  { display: "Extremo (18m)", value: CREATURE_MOVEMENTS.EXTREME, weight: 4, baseOutput: 60 },
 ];
 export const creatureBurrowingMovements = [
-  { display: "Baixo", value: CREATURE_MOVEMENTS.LOW, weight: 1, baseOutput: 20 },
-  { display: "Médio", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2, baseOutput: 30 },
-  { display: "Alto", value: CREATURE_MOVEMENTS.HIGH, weight: 3, baseOutput: 40 },
-  { display: "Extremo", value: CREATURE_MOVEMENTS.EXTREME, weight: 4, baseOutput: 60 },
+  { display: "Baixo (6m)", value: CREATURE_MOVEMENTS.LOW, weight: 1, baseOutput: 20 },
+  { display: "Médio (9m)", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2, baseOutput: 30 },
+  { display: "Alto (12m)", value: CREATURE_MOVEMENTS.HIGH, weight: 3, baseOutput: 40 },
+  { display: "Extremo (18m)", value: CREATURE_MOVEMENTS.EXTREME, weight: 4, baseOutput: 60 },
 ];
 
 export const CREATURE_PRIMARY_ALIGNMENTS = {

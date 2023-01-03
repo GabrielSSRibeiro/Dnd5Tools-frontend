@@ -142,7 +142,7 @@ export function clone(obj) {
 }
 
 export function createArrayFromInt(int) {
-  return Array.from(Array(int));
+  return Array.from(Array(int).keys());
 }
 
 export function downloadObjectAsJson(exportObj, exportName) {

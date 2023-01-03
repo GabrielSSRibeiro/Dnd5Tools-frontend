@@ -10,12 +10,6 @@ export function GetAttributeMod(attribute) {
   return Math.floor((attribute - 10) / 2);
 }
 
-export const GetAverageLevel = (creatureRarity) => {
-  const rarityObj = cc.creatureRarities.find((r) => r.value === creatureRarity);
-
-  return Math.round((rarityObj.baseOutputMin + rarityObj.baseOutputMax) / 2);
-};
-
 export const GetXpValue = (level) => {
   const baseOutput = cc.creatureXps[level - 1];
   return baseOutput;

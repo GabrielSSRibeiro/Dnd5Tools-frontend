@@ -5,7 +5,7 @@ import * as th from "./treasureHelper";
 import * as cc from "../constants/creatureConstants";
 import * as tc from "../constants/treasureConstants";
 
-export const GetFoundryFormattedCreature = (creature) => {
+export const GetFoundryFormattedCreature = (creature, level) => {
   const str = ch.GetAttributeValue(creature.attributes.strength);
 
   let foundryJson = {
@@ -14,8 +14,8 @@ export const GetFoundryFormattedCreature = (creature) => {
     img: creature.image,
     data: {
       abilities: GetAbilities(creature, str),
-      attributes: GetAttributes(creature),
-      details: GetDetails(creature),
+      attributes: GetAttributes(creature, level),
+      details: GetDetails(creature, level),
       traits: GetTraits(creature),
       currency: GetCurrency(creature),
       skills: GetSkills(creature),
@@ -24,7 +24,7 @@ export const GetFoundryFormattedCreature = (creature) => {
       resources: GetResources(creature),
     },
     token: GetToken(creature),
-    items: GetItems(creature, str),
+    items: GetItems(creature, level, str),
     effects: GetEffects(creature),
     flags: GetFlags(creature),
   };
@@ -98,8 +98,7 @@ const GetAbilities = (creature, str) => {
   return abilities;
 };
 
-const GetAttributes = (creature) => {
-  const level = ch.GetAverageLevel(creature.rarity);
+const GetAttributes = (creature, level) => {
   const hp = ch.GetHPValue(level, creature.hitPoints, creature.attributes.constitution);
   const weakSpots =
     creature.weakSpots.length > 0
@@ -154,8 +153,7 @@ const GetAttributes = (creature) => {
   return attributes;
 };
 
-const GetDetails = (creature) => {
-  const level = ch.GetAverageLevel(creature.rarity);
+const GetDetails = (creature, level) => {
   const raceAndClasses = [
     ch.GetRaceValue(creature.race),
     ch.GetClassValue(creature.class),
@@ -585,8 +583,7 @@ const GetToken = (creature) => {
   return token;
 };
 
-const GetItems = (creature, str) => {
-  const level = ch.GetAverageLevel(creature.rarity);
+const GetItems = (creature, level, str) => {
   let items = [];
 
   if (creature.regeneration.amount != null) {
@@ -627,7 +624,7 @@ const GetActionName = (name, repetitions, frequency, weakSpot) => {
   let actionName = name;
 
   if (repetitions > 1) {
-    actionName += ` x${repetitions}`;
+    actionName += ` (Multiaçao x${repetitions})`;
   }
 
   if (frequency || weakSpot) {
