@@ -185,7 +185,7 @@ export const GetActionReachValue = (reach, type) => {
 
 export const GetDCValue = (difficultyClass) => {
   const baseValue = cc.difficultyClasses.find((dc) => dc.value === difficultyClass).baseOutput;
-  return Math.max(10, utils.randomValueFromVarianceInt(baseValue, 2));
+  return Math.max(10, utils.randomValueFromVarianceInt(baseValue, 1));
 };
 export const GetSavingThrowAttributeValue = (attribute) => {
   const baseOutput = cc.creatureAttributeNames.find((dt) => dt.value === attribute).display;

@@ -1,20 +1,17 @@
 import * as utils from "../utils";
 import { MIN_DIFICULTY } from "../constants/skillCheckConstants";
-import { damageIntensities, difficultyClasses } from "../constants/creatureConstants";
-import { GetProfByLevel, GetConditionValue, GetConditionDurationValue } from "../helpers/creatureHelper";
+import { damageIntensities } from "../constants/creatureConstants";
+import { GetProfByLevel, GetConditionValue, GetConditionDurationValue, GetDCValue } from "../helpers/creatureHelper";
 
 const rand = utils.randomIntFromInterval;
 const variance = utils.randomValueFromVariancePercentage;
 
 export const getDifficulty = (level, checkDifficulty) => {
-  const prof = GetProfByLevel(level);
-  const difficultyIndex = difficultyClasses.findIndex((dc) => dc.value === checkDifficulty);
-  const difficultyFactor = 5;
+  const maxProf = 6;
+  const profFactor = maxProf - GetProfByLevel(level);
+  const dc = GetDCValue(checkDifficulty);
 
-  let difficulty = (difficultyIndex + 1) * difficultyFactor + prof;
-  // const difficultyVariance = 0.1;
-  // difficulty = variance(difficulty, difficultyVariance);
-  difficulty = utils.randomIntFromInterval(difficulty - 1, difficulty + 1);
+  let difficulty = dc - profFactor;
 
   return Math.max(difficulty, MIN_DIFICULTY);
 };
