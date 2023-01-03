@@ -314,6 +314,10 @@
   background-color: var(--gray3);
 }
 
+.EditCreature-container .edit-process-details .progess-bar .progess-bar-step .step-border .step-arrow .next-step {
+  background: var(--secondaryBlue1);
+}
+
 .EditCreature-container .edit-process-details > main {
   height: calc(100% - 46px);
   width: 100%;

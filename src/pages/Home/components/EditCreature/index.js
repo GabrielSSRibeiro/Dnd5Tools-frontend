@@ -159,7 +159,7 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
 
     return progessBarSteps;
   }, [creature]);
-
+  console.log("aaaa", progessBarSteps);
   const [isFirstStep, setIsFirstStep] = useState(!!!creature.type);
   const [imgUrl, setImgUrl] = useState(creature.image ?? "");
   const [tempCreatureAvatar, setTempCreatureAvatar] = useState(creature.image);
@@ -275,7 +275,11 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
               <section className="step-border">
                 <div className="step-description"></div>
                 <aside className="step-arrow">
-                  <div></div>
+                  <div
+                    className={`${
+                      progessBarSteps[index].isValid && progessBarSteps[index + 1] && !progessBarSteps[index + 1].isValid ? " next-step" : ""
+                    }`}
+                  ></div>
                 </aside>
               </section>
               <section>
