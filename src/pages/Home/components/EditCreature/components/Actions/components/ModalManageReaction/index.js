@@ -360,7 +360,6 @@ function ModalManageReaction({ reaction, invalidNames, weakSpots, onClose }) {
                 onClick={() => setTempReaction({ ...tempReaction, isSpell: !tempReaction.isSpell })}
                 isSelected={tempReaction.isSpell}
               />
-              {/* <span>Ação com poder X/X</span> */}
               <aside>
                 <button className="button-simple" onClick={HandleCancel}>
                   Cancelar

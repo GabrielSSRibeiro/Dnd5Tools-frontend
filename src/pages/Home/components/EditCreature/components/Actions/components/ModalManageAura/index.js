@@ -297,7 +297,6 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
             />
             <div className="extra-details">
               <div></div>
-              {/* <span>Ação com poder X/X</span> */}
               <aside>
                 <button className="button-simple" onClick={HandleCancel}>
                   Cancelar

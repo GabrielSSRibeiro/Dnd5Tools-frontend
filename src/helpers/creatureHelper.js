@@ -12,7 +12,7 @@ export function GetAttributeMod(attribute) {
 
 export const GetXpValue = (level) => {
   const baseOutput = cc.creatureXps[level - 1];
-  return baseOutput;
+  return baseOutput ?? 999999;
 };
 
 export const GetAttributeValue = (attribute) => {

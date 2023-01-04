@@ -159,7 +159,7 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
 
     return progessBarSteps;
   }, [creature]);
-  console.log("aaaa", progessBarSteps);
+
   const [isFirstStep, setIsFirstStep] = useState(!!!creature.type);
   const [imgUrl, setImgUrl] = useState(creature.image ?? "");
   const [tempCreatureAvatar, setTempCreatureAvatar] = useState(creature.image);

@@ -341,7 +341,6 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
                 onClick={() => setTempAction({ ...tempAction, isSpell: !tempAction.isSpell })}
                 isSelected={tempAction.isSpell}
               />
-              {/* <span>Ação com poder X/X</span> */}
               <aside>
                 <button className="button-simple" onClick={HandleCancel}>
                   Cancelar

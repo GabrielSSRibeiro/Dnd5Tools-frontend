@@ -263,7 +263,6 @@ function Passives({ creature, setCreature }) {
                   valuePropertyPath={`customSpecials[${index}].description`}
                   onChange={(value) => HandleCustomSpecialChange(value, index)}
                   className="creature-custom-specials"
-                  maxLength="40"
                 />
                 <Select
                   label={"Multiplicador"}

@@ -10,7 +10,8 @@ import Modal from "../../../../../../../../components/Modal";
 import "./styles.css";
 
 function ModalExport({ creature, onClose }) {
-  const [exportLevel, setExportLevel] = useState(null);
+  const rarity = creatureRarities.find((r) => r.value === creature.rarity);
+  const [exportLevel, setExportLevel] = useState(Math.ceil((rarity.baseOutputMin + rarity.baseOutputMax) / 2));
 
   function GetExportVersions() {
     const rarity = creatureRarities.find((r) => r.value === creature.rarity);

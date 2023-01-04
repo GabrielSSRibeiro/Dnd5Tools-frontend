@@ -176,7 +176,7 @@ const GetDetails = (creature, level) => {
       custom: `${ch.GetTypeValue(creature.type)}`,
     },
     environment: ch.GetEnviromentValue(creature.environment),
-    cr: level,
+    cr: level > 30 ? 30 : level,
     spellLevel: 0,
     xp: {
       value: ch.GetXpValue(level),
@@ -591,9 +591,11 @@ const GetItems = (creature, level, str) => {
   }
 
   if (creature.customSpecials.length > 0) {
-    creature.customSpecials.forEach((cs) => {
-      items.push(GetFoundryExportCustomSpecial(cs));
-    });
+    creature.customSpecials
+      .filter((cs) => cs.description)
+      .forEach((cs) => {
+        items.push(GetFoundryExportCustomSpecial(cs));
+      });
   }
 
   if (creature.aura) {
@@ -812,14 +814,15 @@ const GetFoundryExportRegeneration = (regeneration) => {
   };
 };
 const GetFoundryExportCustomSpecial = (customSpecial) => {
+  console.log("customSpecial", customSpecial);
   return {
     _id: "custom",
-    name: customSpecial,
+    name: customSpecial.description,
     type: "feat",
     img: "modules/plutonium/media/icon/mighty-force.svg",
     data: {
       description: {
-        value: `<div class="rd__b  rd__b--3"><p>${customSpecial}</p></div></div>`,
+        value: "",
         chat: "",
         unidentified: "",
       },
