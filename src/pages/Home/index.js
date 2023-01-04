@@ -160,7 +160,7 @@ function Home() {
           <SkillCheck resultText={openTab} level={level} />
         </div>
         <div style={{ marginTop: 100, height: "fit-content" }} className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
-          <Panel title="Versao 1.1">
+          <Panel title="Versao 1.2">
             <div style={{ display: "flex", flexDirection: "column" }}>
               <p>Motivaçoes</p>
               <span>Abstrair o processo de criacao de criaturas, o tornando subjetivo e simples</span>
@@ -175,7 +175,7 @@ function Home() {
               <span>Acrescentar novas opcoes ao combate como Pontos Fracos, Comportamentos, e raridade de açoes</span>
               <p>-</p>
               <p>Notas</p>
-              <span>Nao existe version mobile ainda</span>
+              <span>Em version mobile, use a posiçao paisagem</span>
               <span>Escalas de Poder ofensiva e defensiva de criatura ainda nao estao funcionando(fixas em 50%)</span>
               <span>No Foundry, ficha de criatura recomendada: "Monster Blocks"</span>
               <span>No Foundry, módulo de controle de criatura recomendado: "Token Action HUD"</span>

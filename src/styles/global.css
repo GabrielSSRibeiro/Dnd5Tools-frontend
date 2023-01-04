@@ -42,19 +42,6 @@ body,
   height: 100%;
 }
 
-@media screen and (orientation: portrait) {
-  #root {
-    /* transform: rotate(-90deg);
-    transform-origin: left top;
-    width: 100vh;
-    overflow-x: hidden;
-    position: absolute;
-    top: 100%;
-    left: 0; */
-    height: 100vw !important;
-  }
-}
-
 h1 {
   font-size: 30px;
   font-family: var(--primaryFont);
