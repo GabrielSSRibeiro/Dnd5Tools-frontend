@@ -15,16 +15,29 @@ export const GetXpValue = (level) => {
   return baseOutput ?? 999999;
 };
 
+export const GetRarityDisplay = (value) => {
+  return cc.creatureRarities.find((a) => a.value === value).display;
+};
+
+export const GetAttributeDisplay = (value) => {
+  return cc.creatureAttributes.find((a) => a.value === value).display;
+};
 export const GetAttributeValue = (attribute) => {
   const baseValue = cc.creatureAttributes.find((a) => a.value === attribute).baseOutput;
   return utils.randomValueFromVarianceInt(baseValue, 2);
 };
 
+export const GetACDisplay = (value) => {
+  return cc.creatureArmorClasses.find((a) => a.value === value).display;
+};
 export const GetACValue = (armorClass) => {
   const baseValue = cc.creatureArmorClasses.find((ac) => ac.value === armorClass).baseOutput;
   return Math.max(10, utils.randomValueFromVarianceInt(baseValue, 1));
 };
 
+export const GetAttackBonusisplay = (value) => {
+  return cc.creatureAttacks.find((a) => a.value === value).display;
+};
 export const GetAttackBonusValue = (attack) => {
   const baseValue = cc.creatureAttacks.find((ac) => ac.value === attack).baseOutput;
   return utils.randomValueFromVarianceInt(baseValue, 1);
@@ -48,11 +61,21 @@ export const GetHPValue = (level, HP, con) => {
   // });
 };
 
+export const GetInitiativeDisplay = (value) => {
+  return cc.creatureInitiatives.find((a) => a.value === value).display;
+};
 export const GetInitiativeValue = (initiative) => {
   const baseValue = cc.creatureInitiatives.find((i) => i.value === initiative).baseOutput;
   return utils.randomValueFromVarianceInt(baseValue, 2);
 };
 
+export const GetSpeedDisplay = (value) => {
+  if (value == null) {
+    return null;
+  }
+
+  return cc.creatureSpeedMovements.find((a) => a.value === value).display;
+};
 export const GetSpeedValue = (speed) => {
   if (speed == null) {
     return null;
@@ -60,6 +83,14 @@ export const GetSpeedValue = (speed) => {
 
   const baseValue = cc.creatureSpeedMovements.find((m) => m.value === speed).baseOutput;
   return utils.randomValueFromVarianceInt(baseValue, 0);
+};
+
+export const GetFlyingDisplay = (value) => {
+  if (value == null) {
+    return null;
+  }
+
+  return cc.creatureFlyingMovements.find((a) => a.value === value).display;
 };
 export const GetFlyingValue = (flying) => {
   if (flying == null) {
@@ -69,6 +100,14 @@ export const GetFlyingValue = (flying) => {
   const baseValue = cc.creatureFlyingMovements.find((m) => m.value === flying).baseOutput;
   return utils.randomValueFromVarianceInt(baseValue, 0);
 };
+
+export const GetSwimmingDisplay = (value) => {
+  if (value == null) {
+    return null;
+  }
+
+  return cc.creatureSwimmingMovements.find((a) => a.value === value).display;
+};
 export const GetSwimmingValue = (swimming) => {
   if (swimming == null) {
     return null;
@@ -76,6 +115,14 @@ export const GetSwimmingValue = (swimming) => {
 
   const baseValue = cc.creatureSwimmingMovements.find((m) => m.value === swimming).baseOutput;
   return utils.randomValueFromVarianceInt(baseValue, 0);
+};
+
+export const GetBurrowingDisplay = (value) => {
+  if (value == null) {
+    return null;
+  }
+
+  return cc.creatureBurrowingMovements.find((a) => a.value === value).display;
 };
 export const GetBurrowingValue = (burrowing) => {
   if (burrowing == null) {
@@ -86,6 +133,13 @@ export const GetBurrowingValue = (burrowing) => {
   return utils.randomValueFromVarianceInt(baseValue, 0);
 };
 
+export const GetSenseDisplay = (value) => {
+  if (value == null) {
+    return null;
+  }
+
+  return cc.creatureSenseReaches.find((a) => a.value === value).display;
+};
 export const GetSenseValue = (sense) => {
   if (sense == null) {
     return null;
@@ -95,55 +149,47 @@ export const GetSenseValue = (sense) => {
   return utils.randomValueFromVarianceInt(baseValue, 0);
 };
 
-export const GetPrimaryAlignmentValue = (alignment) => {
-  const baseOutput = cc.creaturePrimaryAlignments.find((a) => a.value === alignment).display;
-  return baseOutput;
+export const GetPrimaryAlignmentDisplay = (value) => {
+  return cc.creaturePrimaryAlignments.find((a) => a.value === value).display;
 };
-export const GetSecondaryAlignmentValue = (alignment) => {
-  const baseOutput = cc.creatureSecondaryAlignments.find((a) => a.value === alignment).display;
-  return baseOutput;
+export const GetSecondaryAlignmentDisplay = (value) => {
+  return cc.creatureSecondaryAlignments.find((a) => a.value === value).display;
 };
 
-export const GetRaceValue = (race) => {
-  if (race == null) {
+export const GetRaceDisplay = (value) => {
+  if (value == null) {
     return null;
   }
 
-  const baseOutput = cc.creatureRaces.find((r) => r.value === race).display;
-  return baseOutput;
+  return cc.creatureRaces.find((r) => r.value === value).display;
 };
 
-export const GetClassValue = (cClass) => {
-  if (cClass == null) {
+export const GetClassDisplay = (value) => {
+  if (value == null) {
     return null;
   }
 
-  const baseOutput = cc.creatureClasses.find((c) => c.value === cClass).display;
-  return baseOutput;
+  return cc.creatureClasses.find((c) => c.value === value).display;
 };
 
-export const GetSubClassValue = (cClass, subClass) => {
+export const GetSubClassDisplay = (cClass, subClass) => {
   if (cClass == null || subClass == null) {
     return null;
   }
 
-  const baseOutput = cc.creatureClasses.find((c) => c.value === cClass).subClasses.find((sc) => sc.value === subClass).display;
-  return baseOutput;
+  return cc.creatureClasses.find((c) => c.value === cClass).subClasses.find((sc) => sc.value === subClass).display;
 };
 
-export const GetTypeValue = (type) => {
-  const baseOutput = cc.creatureTypes.find((t) => t.value === type).display;
-  return baseOutput;
+export const GetTypeDisplay = (value) => {
+  return cc.creatureTypes.find((t) => t.value === value).display;
 };
 
-export const GetEnviromentValue = (environment) => {
-  const baseOutput = cc.creatureEnvironments.find((e) => e.value === environment).display;
-  return baseOutput;
+export const GetEnviromentDisplay = (value) => {
+  return cc.creatureEnvironments.find((e) => e.value === value).display;
 };
 
-export const GetSizeValue = (size) => {
-  const baseOutput = cc.creatureSizes.find((s) => s.value === size).display;
-  return baseOutput;
+export const GetSizeDisplay = (value) => {
+  return cc.creatureSizes.find((s) => s.value === value).display;
 };
 
 export const GetLegendaryResistenciesValue = (lLegendaryResistency) => {
@@ -164,11 +210,13 @@ export const GetRegenerationAmountValue = (amount) => {
   return baseOutput;
 };
 
-export const GetDamageTypeValue = (damageType) => {
-  const baseOutput = cc.damageTypes.find((dt) => dt.value === damageType).display;
-  return baseOutput;
+export const GetDamageTypeDisplay = (damageType) => {
+  return cc.damageTypes.find((dt) => dt.value === damageType).display;
 };
 
+export const GetReactionsPerRoundDisplay = (rpr) => {
+  return cc.creatureReactionsPerRound.find((crpr) => crpr.value === rpr).display;
+};
 export const GetReactionsPerRoundValue = (rpr) => {
   const baseOutput = cc.creatureReactionsPerRound.find((crpr) => crpr.value === rpr).number;
   return baseOutput;
@@ -187,28 +235,26 @@ export const GetDCValue = (difficultyClass) => {
   const baseValue = cc.difficultyClasses.find((dc) => dc.value === difficultyClass).baseOutput;
   return Math.max(10, utils.randomValueFromVarianceInt(baseValue, 1));
 };
-export const GetSavingThrowAttributeValue = (attribute) => {
-  const baseOutput = cc.creatureAttributeNames.find((dt) => dt.value === attribute).display;
-  return baseOutput;
+
+export const GetSavingThrowAttributeDisplay = (attribute) => {
+  return cc.creatureAttributeNames.find((dt) => dt.value === attribute).display;
 };
 
-export const GetConditionValue = (condition) => {
-  const baseOutput = cc.conditions.find((dt) => dt.value === condition).display;
-  return baseOutput;
+export const GetConditionDisplay = (condition) => {
+  return cc.conditions.find((dt) => dt.value === condition).display;
 };
+
 export const GetConditionDurationValue = (conditionDuration) => {
   const baseOutput = cc.conditionDurations.find((dt) => dt.value === conditionDuration).baseOutput;
   return baseOutput;
 };
 
-export const GetReactionTriggerValue = (trigger) => {
-  const baseOutput = cc.creatureReactionTriggers.find((dt) => dt.value === trigger).display;
-  return baseOutput;
+export const GetReactionTriggerDisplay = (trigger) => {
+  return cc.creatureReactionTriggers.find((dt) => dt.value === trigger).display;
 };
 
-export const GetActionFrequencyValue = (frequency) => {
-  const baseOutput = cc.creatureActionFrequencies.find((dt) => dt.value === frequency).display;
-  return baseOutput;
+export const GetActionFrequencyDisplay = (frequency) => {
+  return cc.creatureActionFrequencies.find((dt) => dt.value === frequency).display;
 };
 
 export const GetActionSpellValue = (frequency, level) => {

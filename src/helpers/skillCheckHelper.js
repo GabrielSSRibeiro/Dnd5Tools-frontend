@@ -1,7 +1,7 @@
 import * as utils from "../utils";
 import { MIN_DIFICULTY } from "../constants/skillCheckConstants";
 import { damageIntensities } from "../constants/creatureConstants";
-import { GetProfByLevel, GetConditionValue, GetConditionDurationValue, GetDCValue } from "../helpers/creatureHelper";
+import { GetProfByLevel, GetConditionDisplay, GetConditionDurationValue, GetDCValue } from "../helpers/creatureHelper";
 
 const rand = utils.randomIntFromInterval;
 const variance = utils.randomValueFromVariancePercentage;
@@ -39,7 +39,7 @@ export const getSkillCheck = (level, checkDifficulty, damageIntensity, condition
   }
 
   if (condition !== null) {
-    skillCheck.push({ value: GetConditionValue(condition), name: "Condição" });
+    skillCheck.push({ value: GetConditionDisplay(condition), name: "Condição" });
   }
 
   if (conditionDuration) {

@@ -1,5 +1,6 @@
 .backend-loading {
   height: 100%;
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,5 +31,5 @@
 }
 
 .Home-container .section-wrapper {
-  height: 100%;
+  height: calc(100% - 60px);
 }

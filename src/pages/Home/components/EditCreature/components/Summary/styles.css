@@ -5,7 +5,7 @@
   justify-content: flex-start;
   padding: 25px;
   height: 100%;
-  gap: 25px;
+  gap: 35px;
 }
 
 .Summary-container .details {
@@ -75,4 +75,63 @@
 .Summary-container .summary-header .actions .creature-export {
   background-color: transparent;
   border: none;
+}
+
+.Summary-container .summary-fields {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  row-gap: 10px;
+}
+
+.Summary-container .summary-fields .summary-row {
+  width: 100%;
+  display: grid;
+  row-gap: 10px;
+  column-gap: 10px;
+}
+
+.Summary-container .summary-row.single {
+  grid-template-columns: 1fr;
+}
+
+.Summary-container .summary-row.double {
+  grid-template-columns: 1fr 1fr;
+}
+
+.Summary-container .summary-fields .summary-row .summary-item {
+  background-color: var(--white);
+  padding: 10px;
+}
+
+.Summary-container .summary-item header {
+  width: 100%;
+  height: 25px;
+  border-bottom: 1px solid var(--gray2);
+  margin-bottom: 10px;
+}
+.Summary-container .summary-item header h5 {
+  color: var(--primaryPurple1);
+}
+
+.Summary-container .summary-item main {
+  width: 100%;
+  height: 35px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  row-gap: 5px;
+}
+
+.Summary-container .summary-item main .title {
+  font-weight: 600;
+}
+
+.Summary-container .summary-item footer {
 }

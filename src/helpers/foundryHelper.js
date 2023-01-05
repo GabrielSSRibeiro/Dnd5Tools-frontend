@@ -155,11 +155,11 @@ const GetAttributes = (creature, level) => {
 
 const GetDetails = (creature, level) => {
   const raceAndClasses = [
-    ch.GetRaceValue(creature.race),
-    ch.GetClassValue(creature.class),
-    ch.GetSubClassValue(creature.class, creature.subClass),
-    ch.GetClassValue(creature.secondaryClass),
-    ch.GetSubClassValue(creature.secondaryClass, creature.secondarySubClass),
+    ch.GetRaceDisplay(creature.race),
+    ch.GetClassDisplay(creature.class),
+    ch.GetSubClassDisplay(creature.class, creature.subClass),
+    ch.GetClassDisplay(creature.secondaryClass),
+    ch.GetSubClassDisplay(creature.secondaryClass, creature.secondarySubClass),
   ];
 
   const details = {
@@ -167,15 +167,15 @@ const GetDetails = (creature, level) => {
       value: `<div class="rd__b  rd__b--1"><div class="rd__b  rd__b--2"><p>${creature.description ?? ""}</p></div></div>`,
       public: "",
     },
-    alignment: `${ch.GetPrimaryAlignmentValue(creature.primaryAlignment)} ${ch.GetSecondaryAlignmentValue(creature.secondaryAlignment)}`,
+    alignment: `${ch.GetPrimaryAlignmentDisplay(creature.primaryAlignment)} ${ch.GetSecondaryAlignmentDisplay(creature.secondaryAlignment)}`,
     race: "",
     type: {
       value: "custom",
       subtype: `${raceAndClasses.filter((i) => i).join(", ")}`,
       swarm: null,
-      custom: `${ch.GetTypeValue(creature.type)}`,
+      custom: `${ch.GetTypeDisplay(creature.type)}`,
     },
-    environment: ch.GetEnviromentValue(creature.environment),
+    environment: ch.GetEnviromentDisplay(creature.environment),
     cr: level > 30 ? 30 : level,
     spellLevel: 0,
     xp: {
@@ -651,7 +651,7 @@ const GetActionDamangeAndConditionString = (action, level) => {
   }
 
   if (action.condition != null) {
-    let condtion = ` ou <strong>${ch.GetConditionValue(action.condition)}</strong>`;
+    let condtion = ` ou <strong>${ch.GetConditionDisplay(action.condition)}</strong>`;
     if (action.conditionDuration != null) {
       condtion += ` por ${ch.GetConditionDurationValue(action.conditionDuration)}`;
     }
@@ -662,7 +662,7 @@ const GetActionDamangeAndConditionString = (action, level) => {
     const damage = sch.getDamage(level, action.damageIntensity);
     let damageString = `<strong>${utils.GetValueAsDiceString(damage, true)}</strong>`;
     if (action.type !== cc.CREATURE_ACTION_TYPES.HEALING) {
-      damageString += ` ${ch.GetDamageTypeValue(action.damageType)}`;
+      damageString += ` ${ch.GetDamageTypeDisplay(action.damageType)}`;
     }
 
     if (action.type === cc.CREATURE_ACTION_TYPES.ATTACK) {
@@ -743,7 +743,7 @@ const GetFoundryExportRegeneration = (regeneration) => {
       description: {
         value: `<div class="rd__b  rd__b--3"><p>Regenera <strong>${ch.GetRegenerationAmountValue(
           regeneration.amount
-        )}</strong> no começo do turno. Esse efeito não acontece no turno se a criatura sofrer dano de <strong>${ch.GetDamageTypeValue(
+        )}</strong> no começo do turno. Esse efeito não acontece no turno se a criatura sofrer dano de <strong>${ch.GetDamageTypeDisplay(
           regeneration.breakDamage
         )}</strong></p></div></div>`,
         chat: "",
@@ -980,7 +980,7 @@ const GetFoundryExportAction = (action, attack, str, level) => {
 
   return {
     _id: "custom",
-    name: GetActionName(action.name, action.repetitions, ch.GetActionFrequencyValue(action.frequency), action.associatedWeakSpot),
+    name: GetActionName(action.name, action.repetitions, ch.GetActionFrequencyDisplay(action.frequency), action.associatedWeakSpot),
     type: "feat",
     img: actionTypeAndIcon.icon,
     data: {
@@ -1058,7 +1058,7 @@ const GetFoundryExportReaction = (reaction, attack, str, level) => {
   if (reaction.isSpell) {
     description += `(Magia de Nível ${ch.GetActionSpellValue(reaction.frequency, level)} - V,S)<br />`;
   }
-  description += `${reaction.triggerDescription ?? ch.GetReactionTriggerValue(reaction.trigger)}, ${ch.GetActionReachValue(
+  description += `${reaction.triggerDescription ?? ch.GetReactionTriggerDisplay(reaction.trigger)}, ${ch.GetActionReachValue(
     reaction.reach,
     reaction.type
   )}${GetActionDamangeAndConditionString(reaction, level)}`;
@@ -1067,7 +1067,7 @@ const GetFoundryExportReaction = (reaction, attack, str, level) => {
 
   return {
     _id: "custom",
-    name: GetActionName(reaction.name, reaction.repetitions, ch.GetActionFrequencyValue(reaction.frequency), reaction.associatedWeakSpot),
+    name: GetActionName(reaction.name, reaction.repetitions, ch.GetActionFrequencyDisplay(reaction.frequency), reaction.associatedWeakSpot),
     type: "feat",
     img: actionTypeAndIcon.icon,
     data: {

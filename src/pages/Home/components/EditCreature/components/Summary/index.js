@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+// import * as ch from "../../../../../../helpers/creatureHelper";
 
 import Button from "../../../../../../components/Button";
 import Info from "../../../../../../components/Info";
@@ -74,7 +75,32 @@ function Summary({ creature, onSave, onDelete }) {
           <Button text={isBusy ? "Salvando" : "Salvar"} onClick={HandleSaveCreature} isDisabled={isBusy} />
         </div>
       </div>
-      <div></div>
+      <div className="summary-fields">
+        {/* <div className="summary-row single">
+          <div className="summary-item">
+            <header>
+              <h5>Definição</h5>
+            </header>
+            <main>
+              <span className="title">Raridade</span>
+              <span>{ch.GetRarityDisplay(creature.rarity)}</span>
+            </main>
+            <footer></footer>
+          </div>
+        </div>
+        <div className="summary-row double">
+          <div className="summary-item">
+            <header></header>
+            <main></main>
+            <footer></footer>
+          </div>
+          <div className="summary-item">
+            <header></header>
+            <main></main>
+            <footer></footer>
+          </div>
+        </div> */}
+      </div>
     </div>
   );
 }
