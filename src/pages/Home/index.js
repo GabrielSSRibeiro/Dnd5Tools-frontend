@@ -26,7 +26,6 @@ function Home() {
   const [isSelectingParty, setIsSelectingParty] = useState(false);
   const [isBestiaryOpen, setIsBestiaryOpen] = useState(false);
   const [isSelectingBestiary, setIsSelectingBestiary] = useState(false);
-  const [isEditCreatureOpen, setIsEditCreatureOpen] = useState(false);
   const [creatureToEdit, setCreatureToEdit] = useState(null);
   const [level, setLevel] = useState(null);
   const [groups, setGroups] = useState([]);
@@ -36,18 +35,6 @@ function Home() {
   const [combats, setCombats] = useState([]);
 
   const { currentUser } = useAuth();
-
-  useEffect(() => {
-    api.get("GetCreaturesByOwner", { params: { owner: currentUser.uid } }).then((response) => {
-      setCreatures(response.data);
-    });
-
-    setLevel(1);
-    // setGroups([
-    //   ["Foux", "Isaac", "Zeth", "Adler", "Motonui", "Elros"],
-    //   ["Soiaz", "Yaisyl"],
-    // ]);
-  }, [setCreatures, currentUser.uid]);
 
   function HandleSelectFromParty() {
     if (groups.length === 1) {
@@ -80,10 +67,15 @@ function Home() {
     setOpenTab(MAIN_TABS.COMBAT);
   }
 
+  function HandleCancel() {
+    localStorage.removeItem("creatureToEdit");
+    setCreatureToEdit(null);
+  }
+
   async function HandleSave(creatureToSave) {
     creatureToSave.owner = currentUser.uid;
 
-    await (creatureToEdit ? api.put("UpdateCreature", creatureToSave) : api.post("SaveCreature", creatureToSave))
+    await (creatureToEdit._id ? api.put("UpdateCreature", creatureToSave) : api.post("SaveCreature", creatureToSave))
       .then((response) => {
         if (response.data) {
           let creatureIndex = creatures.findIndex((c) => c._id === response.data._id);
@@ -93,7 +85,8 @@ function Home() {
             creatures.push(creatureToSave);
           }
 
-          setIsEditCreatureOpen(false);
+          localStorage.removeItem("creatureToEdit");
+          setCreatureToEdit(null);
         }
       })
       .catch((err) => {
@@ -110,14 +103,34 @@ function Home() {
 
           creatures.splice(creatureIndex, 1);
 
+          localStorage.removeItem("creatureToEdit");
           setCreatures(creatures);
-          setIsEditCreatureOpen(false);
+          setCreatureToEdit(null);
         }
       })
       .catch((err) => {
         console.log("error in DeleteCreature", err);
       });
   }
+
+  useEffect(() => {
+    const savedCreatureToEdit = localStorage.getItem("creatureToEdit");
+    if (savedCreatureToEdit) {
+      setCreatureToEdit(JSON.parse(savedCreatureToEdit));
+    }
+  }, []);
+
+  useEffect(() => {
+    api.get("GetCreaturesByOwner", { params: { owner: currentUser.uid } }).then((response) => {
+      setCreatures(response.data);
+    });
+
+    setLevel(1);
+    // setGroups([
+    //   ["Foux", "Isaac", "Zeth", "Adler", "Motonui", "Elros"],
+    //   ["Soiaz", "Yaisyl"],
+    // ]);
+  }, [setCreatures, currentUser.uid]);
 
   return !creatures ? (
     <div className="backend-loading">
@@ -148,14 +161,13 @@ function Home() {
         tabOptions={MAIN_TABS}
         openTab={openTab}
         setOpenTab={setOpenTab}
-        isEditCreatureOpen={isEditCreatureOpen}
+        creatureToEdit={creatureToEdit}
         setCreatureToEdit={setCreatureToEdit}
-        setIsEditCreatureOpen={setIsEditCreatureOpen}
         HandleEndCombat={HandleEndCombat}
       />
       <img src={background} alt="Created by liuzishan - www.freepik.com" />
 
-      <div className={`section-wrapper ${isEditCreatureOpen ? "hidden" : ""}`}>
+      <div className={`section-wrapper ${creatureToEdit ? "hidden" : ""}`}>
         <div className={`section-wrapper ${openTab !== MAIN_TABS.SKILL_CHECK ? "hidden" : ""}`}>
           <SkillCheck resultText={openTab} level={level} />
         </div>
@@ -212,14 +224,9 @@ function Home() {
         </div>
       </div>
 
-      {isEditCreatureOpen && (
+      {creatureToEdit && (
         <div className={"section-wrapper"}>
-          <EditCreature
-            creatureToEdit={creatureToEdit}
-            HandleSave={HandleSave}
-            HandleDelete={HandleDelete}
-            FinishEditing={() => setIsEditCreatureOpen(false)}
-          />
+          <EditCreature creatureToEdit={creatureToEdit} HandleSave={HandleSave} HandleDelete={HandleDelete} FinishEditing={HandleCancel} />
         </div>
       )}
     </div>

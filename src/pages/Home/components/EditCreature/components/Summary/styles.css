@@ -77,6 +77,11 @@
   border: none;
 }
 
+.Summary-container .summary-header .actions .creature-save h5 {
+  min-width: 72px;
+  text-align: center;
+}
+
 .Summary-container .summary-fields {
   width: 100%;
   height: 100%;

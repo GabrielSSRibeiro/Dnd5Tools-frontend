@@ -34,8 +34,7 @@ function NaviBar({
   tabOptions,
   openTab,
   setOpenTab,
-  isEditCreatureOpen,
-  setIsEditCreatureOpen,
+  creatureToEdit,
   setCreatureToEdit,
   HandleEndCombat,
 }) {
@@ -78,7 +77,7 @@ function NaviBar({
           Menu
         </button>
       </section>
-      {!isEditCreatureOpen && (
+      {!creatureToEdit && (
         <section>
           <Party
             selectedCharacters={selectedCharacters}
@@ -145,7 +144,6 @@ function NaviBar({
             setIsSelecting={setIsSelectingBestiary}
             isBestiaryOpen={isBestiaryOpen}
             setIsBestiaryOpen={setIsBestiaryOpen}
-            setIsEditCreatureOpen={setIsEditCreatureOpen}
             setCreatureToEdit={setCreatureToEdit}
             creatures={creatures}
           />

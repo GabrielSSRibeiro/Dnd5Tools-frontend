@@ -1,6 +1,24 @@
 import React, { useState, useEffect, useMemo } from "react";
 import * as utils from "../../../../utils";
-import { CREATURE_RARITIES, creatureRarities, creatureEnvironments, creatureSizes, creatureTypes } from "../../../../constants/creatureConstants";
+import {
+  CREATURE_RARITIES,
+  creatureRarities,
+  CREATURE_MOVEMENTS,
+  CREATURE_PRIMARY_ALIGNMENTS,
+  CREATURE_SECONDARY_ALIGNMENTS,
+  CREATURE_HIT_POINTS,
+  CREATURE_ATTACKS,
+  CREATURE_ARMOR_CLASSES,
+  CREATURE_INITIATIVES,
+  DAMAGES_EFFECTIVENESS,
+  DAMAGE_TYPES,
+  LANGUAGES,
+  CREATURE_REACTIONS_PER_ROUND,
+  creatureEnvironments,
+  creatureSizes,
+  creatureTypes,
+} from "../../../../constants/creatureConstants";
+
 import { MAX_CREATURES_ALLOWED } from "../../../../constants/combatConstants";
 
 import Button from "../../../Button";
@@ -23,7 +41,6 @@ function Bestiary({
   setIsSelecting,
   isBestiaryOpen,
   setIsBestiaryOpen,
-  setIsEditCreatureOpen,
   setCreatureToEdit,
   creatures,
 }) {
@@ -45,13 +62,78 @@ function Bestiary({
   let filteredCreatures = [];
 
   function HandleEditNewCreature() {
-    setCreatureToEdit(null);
-    setIsEditCreatureOpen(true);
+    const newCreature = {
+      name: null,
+      description: null,
+      image: null,
+      rarity: null,
+      environment: null,
+      size: null,
+      type: null,
+      race: null,
+      class: null,
+      subClass: null,
+      secondaryClass: null,
+      secondarySubClass: null,
+      movements: {
+        speed: CREATURE_MOVEMENTS.MEDIUM,
+        flying: null,
+        swimming: null,
+        burrowing: null,
+      },
+      primaryAlignment: CREATURE_PRIMARY_ALIGNMENTS.NEUTRAL,
+      secondaryAlignment: CREATURE_SECONDARY_ALIGNMENTS.NEUTRAL,
+      attributes: {
+        strength: null,
+        dexterity: null,
+        constitution: null,
+        intelligence: null,
+        wisdom: null,
+        charisma: null,
+      },
+      hitPoints: CREATURE_HIT_POINTS.MEDIUM,
+      attack: CREATURE_ATTACKS.MEDIUM,
+      armorClass: CREATURE_ARMOR_CLASSES.MEDIUM,
+      initiative: CREATURE_INITIATIVES.MEDIUM,
+      weakSpots: [],
+      damagesEffectiveness: [
+        { type: DAMAGE_TYPES.SLASHING, value: DAMAGES_EFFECTIVENESS.NORMAL },
+        { type: DAMAGE_TYPES.PIERCING, value: DAMAGES_EFFECTIVENESS.NORMAL },
+        { type: DAMAGE_TYPES.BLUDGEONING, value: DAMAGES_EFFECTIVENESS.NORMAL },
+        { type: DAMAGE_TYPES.ACID, value: DAMAGES_EFFECTIVENESS.NORMAL },
+        { type: DAMAGE_TYPES.COLD, value: DAMAGES_EFFECTIVENESS.NORMAL },
+        { type: DAMAGE_TYPES.FIRE, value: DAMAGES_EFFECTIVENESS.NORMAL },
+        { type: DAMAGE_TYPES.FORCE, value: DAMAGES_EFFECTIVENESS.NORMAL },
+        { type: DAMAGE_TYPES.LIGHTNING, value: DAMAGES_EFFECTIVENESS.NORMAL },
+        { type: DAMAGE_TYPES.NECROTIC, value: DAMAGES_EFFECTIVENESS.NORMAL },
+        { type: DAMAGE_TYPES.POISON, value: DAMAGES_EFFECTIVENESS.NORMAL },
+        { type: DAMAGE_TYPES.PSYCHIC, value: DAMAGES_EFFECTIVENESS.NORMAL },
+        { type: DAMAGE_TYPES.RADIANT, value: DAMAGES_EFFECTIVENESS.NORMAL },
+        { type: DAMAGE_TYPES.THUNDER, value: DAMAGES_EFFECTIVENESS.NORMAL },
+      ],
+      conditionImmunities: [],
+      languages: [LANGUAGES.COMMON],
+      senses: {
+        darkVision: null,
+        tremorsense: null,
+        blindSight: null,
+        trueSight: null,
+      },
+      legendaryResistences: null,
+      regeneration: { amount: null, breakDamage: null },
+      customSpecials: [],
+      actions: [],
+      reactions: [],
+      reactionsPerRound: CREATURE_REACTIONS_PER_ROUND.NORMAL,
+      aura: null,
+      treasures: [],
+    };
+
+    setCreatureToEdit(newCreature);
   }
 
   function HandleEditCreature(creature) {
-    setCreatureToEdit(creature);
-    setIsEditCreatureOpen(true);
+    setCreatureToEdit(utils.clone(creature));
   }
 
   function HandleSelectCreature(creature) {

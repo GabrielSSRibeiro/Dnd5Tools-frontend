@@ -72,7 +72,7 @@ function Summary({ creature, onSave, onDelete }) {
               Deletar
             </button>
           )}
-          <Button text={isBusy ? "Salvando" : "Salvar"} onClick={HandleSaveCreature} isDisabled={isBusy} />
+          <Button text={isBusy ? "Salvando" : "Salvar"} onClick={HandleSaveCreature} isDisabled={isBusy} className="creature-save" />
         </div>
       </div>
       <div className="summary-fields">
