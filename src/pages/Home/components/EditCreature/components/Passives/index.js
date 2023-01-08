@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import * as utils from "../../../../../../utils";
 import {
   languages,
   creatureSenseReaches,
@@ -11,6 +10,7 @@ import {
 
 import CheckInput from "../../../../../../components/CheckInput";
 import Select from "../../../../../../components/Select";
+import Button from "../../../../../../components/Button";
 import TextInput from "../../../../../../components/TextInput";
 
 import "./styles.css";
@@ -22,10 +22,7 @@ function Passives({ creature, setCreature }) {
   const [hasTrueSight, setHasTrueSight] = useState(!!creature.senses.trueSight);
   const [hasLegendaryResistences, setHasLegendaryResistences] = useState(!!creature.legendaryResistences);
   const [hasRegeneration, setHasRegeneration] = useState(!!creature.regeneration.amount);
-  const [hasCustomSpecials, setHasCustomSpecials] = useState(creature.customSpecials.some((cs) => cs.description));
-
-  const numberOfCustomSpecials = 3;
-  const customSpecialsArray = utils.createArrayFromInt(numberOfCustomSpecials);
+  const [hasCustomSpecials, setHasCustomSpecials] = useState(creature.customSpecials.length > 0);
 
   function setCreatureLanguages(value) {
     let language = creature.languages.find((l) => l === value);
@@ -95,7 +92,11 @@ function Passives({ creature, setCreature }) {
   }
 
   function HandleToggleCustomSpecials() {
-    creature.customSpecials = customSpecialsArray.map((cs) => ({ description: null, multiplier: null }));
+    if (hasCustomSpecials) {
+      creature.customSpecials = [];
+    } else {
+      creature.customSpecials = [{ description: null, multiplier: null }];
+    }
     setCreature(creature);
 
     setHasCustomSpecials(!hasCustomSpecials);
@@ -107,6 +108,22 @@ function Passives({ creature, setCreature }) {
     }
 
     setCreature(value);
+  }
+
+  function AddCustomSpecial() {
+    creature.customSpecials.push({ description: null, multiplier: null });
+
+    setCreature({ ...creature });
+  }
+
+  function DeleteCustomSpecial(index) {
+    creature.customSpecials.splice(index, 1);
+
+    if (creature.customSpecials.length === 0) {
+      setHasCustomSpecials(false);
+    }
+
+    setCreature({ ...creature });
   }
 
   return (
@@ -254,31 +271,41 @@ function Passives({ creature, setCreature }) {
             onClick={HandleToggleCustomSpecials}
             isSelected={hasCustomSpecials}
           />
-          {hasCustomSpecials &&
-            customSpecialsArray.map((os, index) => (
-              <div className="specials-row" key={index}>
-                <TextInput
-                  label={`Descrição`}
-                  value={creature}
-                  valuePropertyPath={`customSpecials[${index}].description`}
-                  onChange={(value) => HandleCustomSpecialChange(value, index)}
-                  className="creature-custom-specials"
-                />
-                <Select
-                  label={"Multiplicador"}
-                  optionsAtATime={3}
-                  extraWidth={100}
-                  value={creature}
-                  valuePropertyPath={`customSpecials[${index}].multiplier`}
-                  onSelect={setCreature}
-                  options={creatureCustomSpecialMultipliers}
-                  nothingSelected="Nenhum"
-                  optionDisplay={(o) => o.display}
-                  optionValue={(o) => o.value}
-                  isDisabled={!creature.customSpecials[index].description}
-                />
+          <div className="custom-specials-wrapper">
+            {hasCustomSpecials &&
+              creature.customSpecials.map((cs, index) => (
+                <div className="specials-row" key={index}>
+                  <TextInput
+                    label={`Descrição`}
+                    value={creature}
+                    valuePropertyPath={`customSpecials[${index}].description`}
+                    onChange={(value) => HandleCustomSpecialChange(value, index)}
+                    className="creature-custom-specials"
+                  />
+                  <Select
+                    label={"Multiplicador"}
+                    optionsAtATime={3}
+                    extraWidth={100}
+                    value={creature}
+                    valuePropertyPath={`customSpecials[${index}].multiplier`}
+                    onSelect={setCreature}
+                    options={creatureCustomSpecialMultipliers}
+                    nothingSelected="Nenhum"
+                    optionDisplay={(o) => o.display}
+                    optionValue={(o) => o.value}
+                    isDisabled={!creature.customSpecials[index].description}
+                  />
+                  <button className="button-simple delete-custom" onClick={() => DeleteCustomSpecial(index)}>
+                    Deletar
+                  </button>
+                </div>
+              ))}
+            {hasCustomSpecials && (
+              <div className="specials-row">
+                <Button text="Adicionar" onClick={AddCustomSpecial} />
               </div>
-            ))}
+            )}
+          </div>
         </div>
       </div>
     </div>

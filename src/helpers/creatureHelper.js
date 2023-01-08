@@ -211,6 +211,18 @@ export const GetRegenerationAmountValue = (amount) => {
   return baseOutput;
 };
 
+export const GetCustomSpecialsForDisplay = (customSpecials) => {
+  let customSpecialsForDisplay = customSpecials.filter((cs) => cs.description).map((cs) => cs.description);
+
+  while (customSpecialsForDisplay.length > 3) {
+    let shorterDescIndex = customSpecialsForDisplay.indexOf(customSpecialsForDisplay.reduce((a, b) => (a.length <= b.length ? a : b)));
+    customSpecialsForDisplay[shorterDescIndex] += `, ${customSpecialsForDisplay[3]}`;
+    customSpecialsForDisplay.splice(3, 1);
+  }
+
+  return customSpecialsForDisplay;
+};
+
 export const GetDamageTypeDisplay = (damageType) => {
   return cc.damageTypes.find((dt) => dt.value === damageType).display;
 };

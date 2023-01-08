@@ -172,7 +172,7 @@ function Home() {
           <SkillCheck resultText={openTab} level={level} />
         </div>
         <div style={{ marginTop: 75, height: "fit-content" }} className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
-          <Panel title="Versao 1.2">
+          <Panel title="Versao 1.3">
             <div style={{ display: "flex", flexDirection: "column" }}>
               <p>Motivaçoes</p>
               <span>Abstrair o processo de criacao de criaturas, o tornando subjetivo e simples</span>

@@ -591,11 +591,9 @@ const GetItems = (creature, level, str) => {
   }
 
   if (creature.customSpecials.length > 0) {
-    creature.customSpecials
-      .filter((cs) => cs.description)
-      .forEach((cs) => {
-        items.push(GetFoundryExportCustomSpecial(cs));
-      });
+    ch.GetCustomSpecialsForDisplay(creature.customSpecials).forEach((cs) => {
+      items.push(GetFoundryExportCustomSpecial(cs));
+    });
   }
 
   if (creature.aura) {
@@ -814,10 +812,9 @@ const GetFoundryExportRegeneration = (regeneration) => {
   };
 };
 const GetFoundryExportCustomSpecial = (customSpecial) => {
-  console.log("customSpecial", customSpecial);
   return {
     _id: "custom",
-    name: customSpecial.description,
+    name: customSpecial,
     type: "feat",
     img: "modules/plutonium/media/icon/mighty-force.svg",
     data: {
