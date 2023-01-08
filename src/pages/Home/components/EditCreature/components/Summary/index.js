@@ -8,7 +8,7 @@ import ModalWarning from "../../../../../../components/ModalWarning";
 
 import "./styles.css";
 
-function Summary({ creature, onSave, onDelete }) {
+function Summary({ creature, onSave, onDelete, isBasicPack }) {
   const [isBusy, setIsBusy] = useState(false);
   const [modal, setModal] = useState(null);
 
@@ -17,16 +17,18 @@ function Summary({ creature, onSave, onDelete }) {
   }
 
   async function OpenDeleteConfirmation() {
-    setModal(
-      <ModalWarning
-        title="Deletar Criatura"
-        message="Tem certeza que deseja deletar essa criatura?"
-        cancelText="Cancelar"
-        onCancel={setModal}
-        confirmText="Deletar"
-        onConfirm={HandleDeleteCreature}
-      />
-    );
+    if (!isBasicPack) {
+      setModal(
+        <ModalWarning
+          title="Deletar Criatura"
+          message="Tem certeza que deseja deletar essa criatura?"
+          cancelText="Cancelar"
+          onCancel={setModal}
+          confirmText="Deletar"
+          onConfirm={HandleDeleteCreature}
+        />
+      );
+    }
   }
   function HandleDeleteCreature() {
     onDelete();
@@ -34,9 +36,11 @@ function Summary({ creature, onSave, onDelete }) {
   }
 
   async function HandleSaveCreature() {
-    setIsBusy(true);
-    await onSave();
-    setIsBusy(false);
+    if (!isBasicPack) {
+      setIsBusy(true);
+      await onSave();
+      setIsBusy(false);
+    }
   }
 
   return (
@@ -68,11 +72,11 @@ function Summary({ creature, onSave, onDelete }) {
             <i className="fas fa-download"></i>
           </button>
           {onDelete && (
-            <button className="button-simple" onClick={OpenDeleteConfirmation}>
+            <button className="button-simple" onClick={OpenDeleteConfirmation} disabled={isBasicPack}>
               Deletar
             </button>
           )}
-          <Button text={isBusy ? "Salvando" : "Salvar"} onClick={HandleSaveCreature} isDisabled={isBusy} className="creature-save" />
+          <Button text={isBusy ? "Salvando" : "Salvar"} onClick={HandleSaveCreature} isDisabled={isBusy || isBasicPack} className="creature-save" />
         </div>
       </div>
       <div className="summary-fields">

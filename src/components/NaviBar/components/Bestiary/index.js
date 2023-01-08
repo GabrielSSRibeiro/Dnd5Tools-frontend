@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import * as utils from "../../../../utils";
+import { useAuth } from "../../../../contexts/Auth";
 import {
   CREATURE_RARITIES,
   creatureRarities,
@@ -49,8 +50,10 @@ function Bestiary({
   const [selectedEnv, setSelectedEnv] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedSource, setSelectedSource] = useState(null);
   const [tempSelectedCreatures, setTempSelectedCreatures] = useState(selectedCreatures);
 
+  const { currentUser } = useAuth();
   const maxNumberOfCreatures = 20;
   const rarityGems = [
     { rarity: CREATURE_RARITIES.COMMON, gem: commonGem },
@@ -58,6 +61,10 @@ function Bestiary({
     { rarity: CREATURE_RARITIES.RARE, gem: rareGem },
     { rarity: CREATURE_RARITIES.VERY_RARE, gem: veryRareGem },
     { rarity: CREATURE_RARITIES.LEGENDARY, gem: LegendaryGem },
+  ];
+  const creatureSources = [
+    { display: "Pacote Básico", value: "basicPack" },
+    { display: "Minhas", value: currentUser.uid },
   ];
   let filteredCreatures = [];
 
@@ -187,6 +194,10 @@ function Bestiary({
         temp = temp.filter((creature) => creature.size === selectedSize);
       }
 
+      if (selectedSource) {
+        temp = temp.filter((creature) => creature.owner === selectedSource);
+      }
+
       if (temp.length > 0) {
         utils.SortArrayOfObjByProperty(temp, "name");
       }
@@ -195,7 +206,7 @@ function Bestiary({
     }
 
     return filterCreatures();
-  }, [creatures, nameFilter, selectedRarity, selectedEnv, selectedType, selectedSize]);
+  }, [creatures, nameFilter, selectedRarity, selectedEnv, selectedType, selectedSize, selectedSource]);
 
   useEffect(() => {
     setTempSelectedCreatures(selectedCreatures);
@@ -281,15 +292,17 @@ function Bestiary({
                   options={creatureRarities}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
+                  optionsAtATime={8}
                 />
                 <Select
-                  extraWidth={80}
+                  extraWidth={35}
                   value={selectedEnv}
                   onSelect={(value) => handleFilter(setSelectedEnv, value)}
                   nothingSelected="Ambiente"
                   options={creatureEnvironments}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
+                  optionsAtATime={8}
                 />
                 <Select
                   extraWidth={60}
@@ -299,15 +312,27 @@ function Bestiary({
                   options={creatureTypes}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
+                  optionsAtATime={8}
                 />
                 <Select
-                  extraWidth={20}
+                  extraWidth={15}
                   value={selectedSize}
                   onSelect={(value) => handleFilter(setSelectedSize, value)}
                   nothingSelected="Tamanho"
                   options={creatureSizes}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
+                  optionsAtATime={8}
+                />
+                <Select
+                  extraWidth={-5}
+                  value={selectedSource}
+                  onSelect={(value) => handleFilter(setSelectedSource, value)}
+                  nothingSelected="Fonte"
+                  options={creatureSources}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
+                  optionsAtATime={8}
                 />
               </main>
             </div>

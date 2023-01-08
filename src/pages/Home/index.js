@@ -134,7 +134,7 @@ function Home() {
 
   return !creatures ? (
     <div className="backend-loading">
-      <h2>Por favor aguarde enquanto tiramos o site de inativade. Isso pode lever até 30 segundos...</h2>
+      <h2>Por favor aguarde enquanto tiramos o site de inativade. Isso pode lever até 20 segundos...</h2>
     </div>
   ) : (
     <div className="Home-container">

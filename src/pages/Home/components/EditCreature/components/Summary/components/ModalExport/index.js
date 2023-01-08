@@ -21,14 +21,14 @@ function ModalExport({ creature, onClose }) {
     const exportVersions = utils
       .createArrayFromInt(rarity.baseOutputMax + 1)
       .slice(rarity.baseOutputMin)
-      .map((l, index) => ({ display: `${versionText[index] ?? extremeVersion} (Nível ${l})`, value: l }));
+      .map((level, index) => ({ display: `${versionText[index] ?? extremeVersion} (Nível ${level})`, value: level }));
 
     return exportVersions;
   }
 
   function HandleFoundryExport() {
     const foundryFormattedCreature = GetFoundryFormattedCreature(creature, exportLevel);
-    utils.downloadObjectAsJson(foundryFormattedCreature, `${creature.name}.json`);
+    utils.downloadObjectAsJson(foundryFormattedCreature, `Foundry Export - ${creature.name}.json`);
   }
 
   return (

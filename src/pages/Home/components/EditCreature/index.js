@@ -92,6 +92,8 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
       .find((s) => s.isValid).name
   );
 
+  const isBasicPack = useMemo(() => creature.owner === "basicPack", [creature.owner]);
+
   function UpdateAvatar() {
     if (imgUrl === null) {
       setImgUrl(tempCreatureAvatar);
@@ -133,8 +135,10 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
   }
 
   useEffect(() => {
-    localStorage.setItem("creatureToEdit", JSON.stringify(creature));
-  }, [creature, activeProgessBarStep]);
+    if (!isBasicPack) {
+      localStorage.setItem("creatureToEdit", JSON.stringify(creature));
+    }
+  }, [isBasicPack, creature, activeProgessBarStep]);
 
   return (
     <div className={`EditCreature-container ${!isFirstStep ? "main-edit-process" : ""}`}>
@@ -230,7 +234,12 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
           {activeProgessBarStep === "Açoes" && <Actions creature={creature} setCreature={setCreature} />}
           {activeProgessBarStep === "Tesouro" && <TreasureReward creature={creature} setCreature={setCreature} />}
           {activeProgessBarStep === "Sumário" && (
-            <Summary creature={creature} onSave={() => HandleSave(creature)} onDelete={creatureToEdit ? () => HandleDelete(creature) : null} />
+            <Summary
+              creature={creature}
+              onSave={() => HandleSave(creature)}
+              onDelete={creatureToEdit ? () => HandleDelete(creature) : null}
+              isBasicPack={isBasicPack}
+            />
           )}
         </main>
       </div>
