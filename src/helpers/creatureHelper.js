@@ -1,5 +1,6 @@
 import * as utils from "../utils";
 import * as cc from "../constants/creatureConstants";
+import { MIN_DIFICULTY } from "../constants/skillCheckConstants";
 import * as sch from "./skillCheckHelper";
 
 export function GetProfByLevel(level) {
@@ -38,9 +39,9 @@ export const GetACValue = (armorClass) => {
 export const GetAttackBonusisplay = (value) => {
   return cc.creatureAttacks.find((a) => a.value === value).display;
 };
-export const GetAttackBonusValue = (attack) => {
+export const GetAttackBonusValue = (attack, level) => {
   const baseValue = cc.creatureAttacks.find((ac) => ac.value === attack).baseOutput;
-  return utils.randomValueFromVarianceInt(baseValue, 1);
+  return utils.randomValueFromVarianceInt(baseValue, 1) + GetProfByLevel(level);
 };
 
 export const GetHPValue = (level, HP, con) => {
@@ -231,9 +232,9 @@ export const GetActionReachValue = (reach, type) => {
   return baseOutput;
 };
 
-export const GetDCValue = (difficultyClass) => {
+export const GetDCValue = (difficultyClass, level) => {
   const baseValue = cc.difficultyClasses.find((dc) => dc.value === difficultyClass).baseOutput;
-  return Math.max(10, utils.randomValueFromVarianceInt(baseValue, 1));
+  return Math.max(MIN_DIFICULTY, utils.randomValueFromVarianceInt(baseValue, 1) + GetProfByLevel(level));
 };
 
 export const GetSavingThrowAttributeDisplay = (attribute) => {

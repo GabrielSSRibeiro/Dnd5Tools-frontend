@@ -647,7 +647,7 @@ const GetActionDamangeAndConditionString = (action, level) => {
   let pieces = [];
 
   if (action.difficultyClass != null) {
-    pieces.push(`<strong>CD ${ch.GetDCValue(action.difficultyClass)}</strong>`);
+    pieces.push(`<strong>CD ${ch.GetDCValue(action.difficultyClass, level)}</strong>`);
   }
 
   if (action.condition != null) {
@@ -725,10 +725,10 @@ const GetActionDamageParts = (action, level) => {
 
   return damageParts;
 };
-const GetActionAttackBonus = (action, attack, str) => {
+const GetActionAttackBonus = (action, attack, level, str) => {
   let attackBonus = 0;
   if (action.type === cc.CREATURE_ACTION_TYPES.ATTACK) {
-    attackBonus = attackBonus - ch.GetAttributeMod(str) + ch.GetAttackBonusValue(attack);
+    attackBonus = ch.GetAttackBonusValue(attack, level) - ch.GetProfByLevel(level) - ch.GetAttributeMod(str);
   }
 
   return attackBonus;
@@ -938,7 +938,7 @@ const GetFoundryExportAura = (aura, attack, str, level) => {
       },
       ability: null,
       actionType: actionTypeAndIcon.actionType,
-      attackBonus: GetActionAttackBonus(aura, attack, str),
+      attackBonus: GetActionAttackBonus(aura, attack, level, str),
       chatFlavor: aura.description ?? "",
       critical: {
         threshold: null,
@@ -951,7 +951,7 @@ const GetFoundryExportAura = (aura, attack, str, level) => {
       formula: "",
       save: {
         ability: aura.savingThrowAttribute ? cc.creatureAttributeNames.find((an) => an.value === aura.savingThrowAttribute).foundryDisplay : "",
-        dc: aura.difficultyClass ? ch.GetDCValue(aura.difficultyClass) : null,
+        dc: aura.difficultyClass ? ch.GetDCValue(aura.difficultyClass, level) : null,
         scaling: "flat",
       },
       requirements: "",
@@ -1022,7 +1022,7 @@ const GetFoundryExportAction = (action, attack, str, level) => {
       },
       ability: null,
       actionType: actionTypeAndIcon.actionType,
-      attackBonus: GetActionAttackBonus(action, attack, str),
+      attackBonus: GetActionAttackBonus(action, attack, level, str),
       chatFlavor: action.description ?? "",
       critical: {
         threshold: null,
@@ -1035,7 +1035,7 @@ const GetFoundryExportAction = (action, attack, str, level) => {
       formula: "",
       save: {
         ability: action.savingThrowAttribute ? cc.creatureAttributeNames.find((an) => an.value === action.savingThrowAttribute).foundryDisplay : "",
-        dc: action.difficultyClass ? ch.GetDCValue(action.difficultyClass) : null,
+        dc: action.difficultyClass ? ch.GetDCValue(action.difficultyClass, level) : null,
         scaling: "flat",
       },
       requirements: "",
@@ -1109,7 +1109,7 @@ const GetFoundryExportReaction = (reaction, attack, str, level) => {
       },
       ability: null,
       actionType: actionTypeAndIcon.actionType,
-      attackBonus: GetActionAttackBonus(reaction, attack, str),
+      attackBonus: GetActionAttackBonus(reaction, attack, level, str),
       chatFlavor: reaction.description ?? "",
       critical: {
         threshold: null,
@@ -1124,7 +1124,7 @@ const GetFoundryExportReaction = (reaction, attack, str, level) => {
         ability: reaction.savingThrowAttribute
           ? cc.creatureAttributeNames.find((an) => an.value === reaction.savingThrowAttribute).foundryDisplay
           : "",
-        dc: reaction.difficultyClass ? ch.GetDCValue(reaction.difficultyClass) : null,
+        dc: reaction.difficultyClass ? ch.GetDCValue(reaction.difficultyClass, level) : null,
         scaling: "flat",
       },
       requirements: "",

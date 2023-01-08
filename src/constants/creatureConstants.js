@@ -908,10 +908,10 @@ export const DIFFICULTY_CLASSES = {
   EXTREME: 40,
 };
 export const difficultyClasses = [
-  { display: "Baixa", value: DIFFICULTY_CLASSES.LOW, weight: 1, baseOutput: 12 },
-  { display: "Média", value: DIFFICULTY_CLASSES.MEDIUM, weight: 2, baseOutput: 16 },
-  { display: "Alta", value: DIFFICULTY_CLASSES.HIGH, weight: 3, baseOutput: 20 },
-  { display: "Extrema", value: DIFFICULTY_CLASSES.EXTREME, weight: 4, baseOutput: 24 },
+  { display: "Baixa", value: DIFFICULTY_CLASSES.LOW, weight: 1, baseOutput: 10 },
+  { display: "Média", value: DIFFICULTY_CLASSES.MEDIUM, weight: 2, baseOutput: 12 },
+  { display: "Alta", value: DIFFICULTY_CLASSES.HIGH, weight: 3, baseOutput: 14 },
+  { display: "Extrema", value: DIFFICULTY_CLASSES.EXTREME, weight: 4, baseOutput: 16 },
 ];
 
 export const CREATURE_REACTION_TRIGGERS = {

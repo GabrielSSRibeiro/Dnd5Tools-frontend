@@ -159,7 +159,7 @@ function Home() {
         <div className={`section-wrapper ${openTab !== MAIN_TABS.SKILL_CHECK ? "hidden" : ""}`}>
           <SkillCheck resultText={openTab} level={level} />
         </div>
-        <div style={{ marginTop: 100, height: "fit-content" }} className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
+        <div style={{ marginTop: 75, height: "fit-content" }} className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
           <Panel title="Versao 1.2">
             <div style={{ display: "flex", flexDirection: "column" }}>
               <p>Motivaçoes</p>
@@ -181,6 +181,11 @@ function Home() {
               <span>No Foundry, módulo de controle de criatura recomendado: "Token Action HUD"</span>
               <span>No Foundry, Pontos Fracos estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>
               <span>No Foundry, tokens sao genericos, por enquanto</span>
+              <p>-</p>
+              <p>Próximas Funcionalidades</p>
+              <span>Escalas de Poder</span>
+              <span>Simulador de Encontro</span>
+              <span>Gerenciador de Combates</span>
             </div>
           </Panel>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getDifficulty } from "../../../../helpers/skillCheckHelper";
+import { GetDCValue } from "../../../../helpers/creatureHelper";
 import {
   getGoldPiecesAmount,
   ITEMS_CRAFT_TIMES,
@@ -315,11 +315,11 @@ function Treasure({ resultText, level }) {
                   resultBackgroundColumn={true}
                   values={getItemCraftBuyPrices(materialPriceInflation).map((item, index) => ({
                     label: null,
-                    top: item() + " PO / " + getDifficulty(level, creatureRarities[index].value) + " / " + ITEMS_CRAFT_TIMES[index]() + " d",
+                    top: item() + " PO / " + GetDCValue(creatureRarities[index].value, 10) + " / " + ITEMS_CRAFT_TIMES[index]() + " d",
                     bottom:
                       getItemCraftSellPrices()[index]() +
                       " PO / " +
-                      getDifficulty(level, creatureRarities[index].value) +
+                      GetDCValue(creatureRarities[index].value, 10) +
                       " / " +
                       ITEMS_CRAFT_TIMES[index]() +
                       " d",
