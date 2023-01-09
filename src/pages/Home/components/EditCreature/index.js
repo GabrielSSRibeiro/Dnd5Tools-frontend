@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import * as utils from "../../../../utils";
 import { CREATURE_ACTION_FREQUENCIES } from "../../../../constants/creatureConstants";
 
+import ModalDescription from "./ModalDescription";
 import Definition from "./components/Definition";
 import Atributes from "./components/Attributes";
 import Resistencies from "./components/Resistencies";
@@ -16,6 +17,7 @@ import "./styles.css";
 
 function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishEditing }) {
   const [creature, setCreature] = useState(creatureToEdit);
+  const [modal, setModal] = useState(null);
 
   const progessBarSteps = useMemo(() => {
     function AreAllPreviousStepsValid() {
@@ -130,6 +132,18 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
     setIsImgValid(false);
   }
 
+  async function OpenModalDescription() {
+    setModal(<ModalDescription description={creature.description} onClose={HandleCloseModalManageDescription} />);
+  }
+  function HandleCloseModalManageDescription(tempDescription) {
+    if (tempDescription != null) {
+      creature.description = tempDescription;
+      setCreature({ ...creature });
+    }
+
+    setModal(null);
+  }
+
   function HandleStepClick(step) {
     setActiveProgessBarStep(step);
   }
@@ -142,6 +156,7 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
 
   return (
     <div className={`EditCreature-container ${!isFirstStep ? "main-edit-process" : ""}`}>
+      {modal}
       <button className="button-simple end-editing" onClick={FinishEditing}>
         Cancelar
       </button>
@@ -185,14 +200,19 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
           </aside>
           <aside className="creature-details">
             <TextInput label="Nome" className="creature-name" value={creature} valuePropertyPath="name" onChange={setCreature} maxLength="26" />
-            <TextInput
-              isMultiLine={true}
-              label="Descrição (opcional)"
-              className="creature-description"
-              value={creature}
-              valuePropertyPath="description"
-              onChange={setCreature}
-            />
+            <div className="description-wrapper">
+              <button className="description-blocker" onClick={OpenModalDescription}>
+                <i className="fas fa-pencil-alt edit"></i>
+              </button>
+              <TextInput
+                isMultiLine={true}
+                label="Descrição (opcional)"
+                className="creature-description"
+                value={creature}
+                valuePropertyPath="description"
+                onChange={setCreature}
+              />
+            </div>
           </aside>
         </main>
         {isFirstStep && <Button text="Continuar" onClick={() => setIsFirstStep(false)} isDisabled={!creature.image || !creature.name} />}

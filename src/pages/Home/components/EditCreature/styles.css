@@ -120,6 +120,35 @@
   width: 450px;
 }
 
+.EditCreature-container .first-step-wrapper .creature-details .description-wrapper {
+  flex: 1;
+  display: flex;
+  position: relative;
+}
+
+.EditCreature-container .description-wrapper .description-blocker {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 23px);
+  bottom: 0;
+  z-index: 1;
+  border: none;
+  transition: all 0.1s;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.EditCreature-container .description-wrapper .description-blocker:hover {
+  opacity: 0.1;
+}
+
+.EditCreature-container .description-wrapper .description-blocker .edit {
+  font-size: 40px;
+}
+
 .EditCreature-container .first-step-wrapper .creature-details .creature-description {
   flex: 1;
 }

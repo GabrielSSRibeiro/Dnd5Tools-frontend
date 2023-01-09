@@ -29,10 +29,12 @@ function TextInput({
 
   return (
     <div className={`TextInput-container ${className}`}>
-      <div className={`label-wrapper ${label && info ? "label-and-info" : !info ? "label" : "info"}`}>
-        {label && <label>{label}</label>}
-        {info && <Info contents={info} />}
-      </div>
+      {(label || info) && (
+        <div className={`label-wrapper ${label && info ? "label-and-info" : !info ? "label" : "info"}`}>
+          {label && <label>{label}</label>}
+          {info && <Info contents={info} />}
+        </div>
+      )}
       {isMultiLine ? (
         <textarea
           onChange={HandleOnChange}
