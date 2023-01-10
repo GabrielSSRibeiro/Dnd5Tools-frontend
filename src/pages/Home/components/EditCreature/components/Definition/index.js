@@ -181,7 +181,7 @@ function Definition({ creature, setCreature }) {
         </>
       )}
 
-      <h2>Deslocamento</h2>
+      <h2>Deslocamentos</h2>
       <div className="movement">
         <Select
           label={"Terrestre"}

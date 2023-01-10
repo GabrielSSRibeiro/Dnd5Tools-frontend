@@ -40,7 +40,7 @@ export const GetACValue = (armorClass) => {
   return Math.max(10, utils.randomValueFromVarianceInt(baseValue, 1));
 };
 
-export const GetAttackBonusisplay = (value) => {
+export const GetAttackBonusDisplay = (value) => {
   return cc.creatureAttacks.find((a) => a.value === value).display;
 };
 export const GetAttackBonusValue = (attack, level) => {
@@ -48,6 +48,9 @@ export const GetAttackBonusValue = (attack, level) => {
   return utils.randomValueFromVarianceInt(baseValue, 1) + GetProfByLevel(level);
 };
 
+export const GetHPDisplay = (value) => {
+  return cc.creatureHitPoints.find((a) => a.value === value).display;
+};
 export const GetHPValue = (level, HP, con) => {
   const conValue = cc.creatureAttributes.find((a) => a.value === con).baseOutput;
 

@@ -95,36 +95,37 @@
 
 .Summary-container .summary-fields .summary-row {
   width: 100%;
-  display: grid;
+  display: flex;
   row-gap: 10px;
   column-gap: 10px;
 }
 
-.Summary-container .summary-row.single {
-  grid-template-columns: 1fr;
-}
-
-.Summary-container .summary-row.double {
-  grid-template-columns: 1fr 1fr;
-}
-
-.Summary-container .summary-fields .summary-row .summary-item {
+.Summary-container .summary-fields .summary-row .summary-box {
   background-color: var(--white);
+  flex: 1;
   padding: 10px;
 }
 
-.Summary-container .summary-item header {
+.Summary-container .summary-box header {
   width: 100%;
   height: 25px;
   border-bottom: 1px solid var(--gray2);
   margin-bottom: 10px;
 }
-.Summary-container .summary-item header h5 {
+.Summary-container .summary-box header h5 {
   color: var(--primaryPurple1);
 }
 
-.Summary-container .summary-item main {
-  width: 100%;
+.Summary-container .summary-box .summary-items {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  column-gap: 75px;
+  row-gap: 15px;
+}
+
+.Summary-container .summary-box .summary-item {
   height: 35px;
 
   display: flex;
@@ -134,9 +135,9 @@
   row-gap: 5px;
 }
 
-.Summary-container .summary-item main .title {
+.Summary-container .summary-box .summary-item .title {
   font-weight: 600;
 }
 
-.Summary-container .summary-item footer {
+.Summary-container .summary-box footer {
 }
