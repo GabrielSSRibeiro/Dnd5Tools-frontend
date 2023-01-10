@@ -19,8 +19,8 @@ import {
   creatureSizes,
   creatureTypes,
 } from "../../../../constants/creatureConstants";
-
 import { MAX_CREATURES_ALLOWED } from "../../../../constants/combatConstants";
+import { IsBasicPack } from "../../../../helpers/creatureHelper";
 
 import Button from "../../../Button";
 import CheckInput from "../../../CheckInput";
@@ -54,7 +54,7 @@ function Bestiary({
   const [tempSelectedCreatures, setTempSelectedCreatures] = useState(selectedCreatures);
 
   const { currentUser } = useAuth();
-  const maxNumberOfCreatures = 20;
+  const maxNumberOfCreatures = GetMaxNumberOfCreatures();
   const rarityGems = [
     { rarity: CREATURE_RARITIES.COMMON, gem: commonGem },
     { rarity: CREATURE_RARITIES.UNCOMMON, gem: uncommonGem },
@@ -67,6 +67,19 @@ function Bestiary({
     { display: "Minhas", value: currentUser.uid },
   ];
   let filteredCreatures = [];
+
+  function GetMaxNumberOfCreatures() {
+    let maxNumberOfCreatures = 20;
+
+    const basicPackLength = creatures.filter((c) => IsBasicPack(c.owner)).length;
+    if (basicPackLength > 0) {
+      maxNumberOfCreatures += basicPackLength;
+    } else {
+      maxNumberOfCreatures = 100;
+    }
+
+    return maxNumberOfCreatures;
+  }
 
   function HandleEditNewCreature() {
     const newCreature = {

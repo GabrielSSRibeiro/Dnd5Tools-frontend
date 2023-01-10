@@ -6,3 +6,10 @@
 .ModalExport-container .version {
   margin-bottom: 25px;
 }
+
+.ModalExport-container .divider {
+  border-top: 1px solid var(--gray1);
+  width: calc(100% + 50px);
+  margin-top: 25px;
+  margin-bottom: 25px;
+}

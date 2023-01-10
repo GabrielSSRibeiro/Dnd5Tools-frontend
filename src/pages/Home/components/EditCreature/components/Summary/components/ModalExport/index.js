@@ -31,6 +31,14 @@ function ModalExport({ creature, onClose }) {
     utils.downloadObjectAsJson(foundryFormattedCreature, `Foundry Export - ${creature.name}.json`);
   }
 
+  function HandleAscendanceExport() {
+    let exportCreature = utils.clone(creature);
+    exportCreature._id = null;
+    exportCreature.owner = null;
+
+    utils.downloadObjectAsJson(exportCreature, `${exportCreature.name}.json`);
+  }
+
   return (
     <Modal className="ModalExport-container" title="Exportar Criatura" onClickToClose={onClose}>
       <Select
@@ -46,6 +54,8 @@ function ModalExport({ creature, onClose }) {
         className="version"
       />
       <Button text="Foundry VTT" onClick={HandleFoundryExport} isDisabled={!exportLevel} />
+      <div className="divider"></div>
+      <Button text="Ascendance" onClick={HandleAscendanceExport} />
     </Modal>
   );
 }

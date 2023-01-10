@@ -75,13 +75,14 @@ function Home() {
   async function HandleSave(creatureToSave) {
     creatureToSave.owner = currentUser.uid;
 
-    await (creatureToEdit._id ? api.put("UpdateCreature", creatureToSave) : api.post("SaveCreature", creatureToSave))
+    await (creatureToSave._id ? api.put("UpdateCreature", creatureToSave) : api.post("SaveCreature", creatureToSave))
       .then((response) => {
         if (response.data) {
           let creatureIndex = creatures.findIndex((c) => c._id === response.data._id);
           if (creatureIndex >= 0) {
             creatures.splice(creatureIndex, 1, creatureToSave);
           } else {
+            creatureToSave._id = response.data._id;
             creatures.push(creatureToSave);
           }
 

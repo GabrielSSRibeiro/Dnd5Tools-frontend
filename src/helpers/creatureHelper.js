@@ -3,6 +3,10 @@ import * as cc from "../constants/creatureConstants";
 import { MIN_DIFICULTY } from "../constants/skillCheckConstants";
 import * as sch from "./skillCheckHelper";
 
+export function IsBasicPack(owner) {
+  return owner === "basicPack";
+}
+
 export function GetProfByLevel(level) {
   return Math.floor(2 + (level - 1) / 4);
 }

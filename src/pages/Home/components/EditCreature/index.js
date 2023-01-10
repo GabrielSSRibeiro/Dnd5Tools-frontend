@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import * as utils from "../../../../utils";
 import { CREATURE_ACTION_FREQUENCIES } from "../../../../constants/creatureConstants";
+import { IsBasicPack } from "../.../../../../../helpers/creatureHelper";
 
 import ModalDescription from "./ModalDescription";
 import Definition from "./components/Definition";
@@ -19,6 +20,7 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
   const [creature, setCreature] = useState(creatureToEdit);
   const [modal, setModal] = useState(null);
 
+  let inputRef = useRef(null);
   const progessBarSteps = useMemo(() => {
     function AreAllPreviousStepsValid() {
       return progessBarSteps.every((s) => s.isValid);
@@ -94,7 +96,7 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
       .find((s) => s.isValid).name
   );
 
-  const isBasicPack = useMemo(() => creature.owner === "basicPack", [creature.owner]);
+  const isBasicPack = useMemo(() => IsBasicPack(creature.owner), [creature.owner]);
 
   function UpdateAvatar() {
     if (imgUrl === null) {
@@ -148,6 +150,24 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
     setActiveProgessBarStep(step);
   }
 
+  function ImportAscendance(event) {
+    let file = event.target.files[0];
+
+    if (file) {
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        let uploadedCreature = JSON.parse(e.target.result);
+        setCreature(uploadedCreature);
+        setTempCreatureAvatar(uploadedCreature.image);
+        setImgUrl(null);
+        setIsImgValid(true);
+        setIsFirstStep(false);
+        setActiveProgessBarStep("Sumário");
+      };
+      reader.readAsText(file);
+    }
+  }
+
   useEffect(() => {
     if (!isBasicPack) {
       localStorage.setItem("creatureToEdit", JSON.stringify(creature));
@@ -161,7 +181,13 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
         Cancelar
       </button>
       <div className={`first-step-wrapper ${!isFirstStep ? "edit-process-basic" : ""}`}>
-        <h2>{creatureToEdit ? "Editar" : "Criar"} Criatura</h2>
+        <div className="header-wrapper">
+          <h2>{creatureToEdit.owner ? "Editar" : "Criar"} Criatura</h2>
+          <button onClick={() => inputRef.current.click()} className="creature-import">
+            <i className="fas fa-download import"></i>
+            <input type="file" onChange={ImportAscendance} ref={inputRef} hidden={true} accept="application/JSON" />
+          </button>
+        </div>
         <main>
           <aside className="creature-avatar">
             {tempCreatureAvatar ? (
@@ -257,7 +283,7 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
             <Summary
               creature={creature}
               onSave={() => HandleSave(creature)}
-              onDelete={creatureToEdit ? () => HandleDelete(creature) : null}
+              onDelete={creatureToEdit.owner ? () => HandleDelete(creature) : null}
               isBasicPack={isBasicPack}
             />
           )}

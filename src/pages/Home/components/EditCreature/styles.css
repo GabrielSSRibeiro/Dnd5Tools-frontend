@@ -31,9 +31,30 @@
   justify-content: flex-start;
 }
 
+.EditCreature-container .first-step-wrapper .header-wrapper {
+  margin-bottom: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 15px;
+}
+
+.EditCreature-container .first-step-wrapper .header-wrapper .creature-import {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  background-color: transparent;
+}
+
+.EditCreature-container .first-step-wrapper .header-wrapper .creature-import .import {
+  color: var(--white);
+}
+
 .EditCreature-container .first-step-wrapper h2 {
   color: var(--white);
-  margin-bottom: 30px;
 }
 
 .EditCreature-container .first-step-wrapper > main {
@@ -178,6 +199,10 @@
 
   display: flex;
   align-items: flex-start;
+}
+
+.EditCreature-container .edit-process-basic .header-wrapper {
+  margin-bottom: 0;
 }
 
 .EditCreature-container .edit-process-basic h2 {

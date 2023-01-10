@@ -69,7 +69,7 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
         </div>
         <div className="actions">
           <button onClick={OpenModalExport} className="creature-export">
-            <i className="fas fa-download"></i>
+            <i className="fas fa-upload"></i>
           </button>
           {onDelete && (
             <button className="button-simple" onClick={OpenDeleteConfirmation} disabled={isBasicPack}>
