@@ -1,5 +1,6 @@
 import * as utils from "../utils";
 import * as cc from "../constants/creatureConstants";
+import * as tc from "../constants/treasureConstants";
 import { MIN_DIFICULTY } from "../constants/skillCheckConstants";
 import * as sch from "./skillCheckHelper";
 
@@ -200,6 +201,13 @@ export const GetSizeDisplay = (value) => {
   return cc.creatureSizes.find((s) => s.value === value).display;
 };
 
+export const GetLegendaryResistenciesDisplay = (value) => {
+  if (value == null) {
+    return null;
+  }
+
+  return cc.creatureLegendaryResistences.find((lr) => lr.value === value).display;
+};
 export const GetLegendaryResistenciesValue = (lLegendaryResistency) => {
   if (lLegendaryResistency == null) {
     return null;
@@ -209,6 +217,17 @@ export const GetLegendaryResistenciesValue = (lLegendaryResistency) => {
   return baseOutput;
 };
 
+export const GetLanguageDisplay = (value) => {
+  return cc.languages.find((s) => s.value === value).display;
+};
+
+export const GetRegenerationAmountDisplay = (value) => {
+  if (value == null) {
+    return null;
+  }
+
+  return cc.creatureRegenerations.find((r) => r.value === value).display;
+};
 export const GetRegenerationAmountValue = (amount) => {
   if (amount == null) {
     return null;
@@ -218,6 +237,13 @@ export const GetRegenerationAmountValue = (amount) => {
   return baseOutput;
 };
 
+export const GetCustomSpecialMultiplierDisplay = (value) => {
+  if (value == null) {
+    return null;
+  }
+
+  return cc.creatureCustomSpecialMultipliers.find((s) => s.value === value).display;
+};
 export const GetCustomSpecialsForDisplay = (customSpecials) => {
   let customSpecialsForDisplay = customSpecials.filter((cs) => cs.description).map((cs) => cs.description);
 
@@ -242,6 +268,9 @@ export const GetReactionsPerRoundValue = (rpr) => {
   return baseOutput;
 };
 
+export const GetAuraReachDisplay = (value) => {
+  return cc.creatureAuraReaches.find((s) => s.value === value).display;
+};
 export const GetAuraReachValue = (reach) => {
   const baseOutput = cc.creatureAuraReaches.find((r) => r.value === reach).baseOutput;
   return baseOutput;
@@ -281,4 +310,8 @@ export const GetActionSpellValue = (frequency, level) => {
   const highestSpellSlotLevelAvailable = Math.min(9, Math.ceil(level / 2));
   const reducer = cc.creatureActionFrequencies.length - 1 - cc.creatureActionFrequencies.findIndex((f) => f.value === frequency);
   return Math.min(1, highestSpellSlotLevelAvailable - reducer);
+};
+
+export const GetTreasureTypeDisplay = (value) => {
+  return tc.treasureTypes.find((s) => s.value === value).display;
 };

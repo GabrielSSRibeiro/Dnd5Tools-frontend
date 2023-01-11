@@ -108,18 +108,66 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
         },
       ],
     },
-    // {
-    //   boxes: [
-    //     {
-    //       header: "Idiomas",
-    //       items: [],
-    //     },
-    //     {
-    //       header: "Sentidos",
-    //       items: [],
-    //     },
-    //   ],
-    // },
+    {
+      boxes: [
+        {
+          header: "Idiomas",
+          items: [{ title: null, value: creature.languages.map((l) => ch.GetLanguageDisplay(l)).join(", ") }].filter((item) => item.value !== ""),
+        },
+        {
+          header: "Sentidos",
+          items: [
+            { title: "Visao no Escuro", value: ch.GetSenseDisplay(creature.senses.darkVision) },
+            { title: "Sentido Sísmico", value: ch.GetSenseDisplay(creature.senses.tremorsense) },
+            { title: "Visao Cega", value: ch.GetSenseDisplay(creature.senses.blindSight) },
+            { title: "Visao Verdadeira", value: ch.GetSenseDisplay(creature.senses.trueSight) },
+          ].filter((item) => item.value),
+        },
+      ],
+    },
+    {
+      boxes: [
+        {
+          header: "Especiais",
+          items: [
+            { title: "Resistência Lendária", value: ch.GetLegendaryResistenciesDisplay(creature.legendaryResistences) },
+            { title: "Regeneraçao (intensidade)", value: ch.GetRegenerationAmountDisplay(creature.regeneration.amount) },
+            ...creature.customSpecials.map((cs) => ({
+              title: cs.description,
+              value: ch.GetCustomSpecialMultiplierDisplay(cs.multiplier) ?? "Nenhum",
+            })),
+          ],
+        },
+      ],
+    },
+    {
+      boxes: [
+        {
+          header: "Açoes",
+          items: creature.actions.map((a) => ({ title: a.name, value: ch.GetActionFrequencyDisplay(a.frequency) })),
+        },
+      ],
+    },
+    {
+      boxes: [
+        {
+          header: "Reaçoes",
+          items: creature.reactions.map((a) => ({ title: a.name, value: ch.GetActionFrequencyDisplay(a.frequency) })),
+        },
+        {
+          header: "Aura",
+          items: [{ title: creature.aura.name, value: ch.GetAuraReachDisplay(creature.aura.reach) }],
+        },
+      ],
+    },
+    {
+      boxes: [
+        {
+          header: "Tesouros",
+          items: creature.treasures.map((t) => ({ title: t.name, value: ch.GetTreasureTypeDisplay(t.type) })),
+        },
+      ],
+    },
   ];
 
   async function OpenModalExport() {
