@@ -157,7 +157,7 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
         },
         {
           header: "Aura",
-          items: [{ title: creature.aura.name, value: cc.GetAuraReach(creature.aura.reach).display }],
+          items: creature.aura ? [{ title: creature.aura.name, value: cc.GetAuraReach(creature.aura.reach).display }] : [],
         },
       ],
     },
