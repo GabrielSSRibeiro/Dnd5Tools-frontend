@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as utils from "../../../../../../utils";
-import * as ch from "../../../../../../helpers/creatureHelper";
+import * as tc from "../../../../../../constants/treasureConstants";
 import * as cc from "../../../../../../constants/creatureConstants";
 
 import Button from "../../../../../../components/Button";
@@ -20,14 +20,15 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
         {
           header: "Definições Básicas",
           items: [
-            { title: "Raridade", value: ch.GetRarityDisplay(creature.rarity) },
-            { title: "Ambiente", value: ch.GetEnviromentDisplay(creature.environment) },
-            { title: "Tamanho", value: ch.GetSizeDisplay(creature.size) },
-            { title: "Tipo", value: ch.GetTypeDisplay(creature.type) },
-            { title: "Classe", value: ch.GetClassDisplay(creature.class) },
-            { title: "Subclasse", value: ch.GetSubClassDisplay(creature.class, creature.subClass) },
-            { title: "Classe", value: ch.GetClassDisplay(creature.secondaryClass) },
-            { title: "Subclasse", value: ch.GetSubClassDisplay(creature.secondaryClass, creature.secondarySubClass) },
+            { title: "Raridade", value: cc.GetRarity(creature.rarity).display },
+            { title: "Ambiente", value: cc.GetEnviromentDisplay(creature.environment).display },
+            { title: "Tamanho", value: cc.GetSizeDisplay(creature.size).display },
+            { title: "Tipo", value: cc.GetType(creature.type).display },
+            { title: "Raça", value: cc.GetRace(creature.race)?.display },
+            { title: "Classe", value: cc.GetClass(creature.class)?.display },
+            { title: "Subclasse", value: cc.GetSubClass(creature.class, creature.subClass)?.display },
+            { title: "Classe", value: cc.GetClass(creature.secondaryClass)?.display },
+            { title: "Subclasse", value: cc.GetSubClass(creature.secondaryClass, creature.secondarySubClass)?.display },
           ],
         },
       ],
@@ -37,17 +38,17 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
         {
           header: "Deslocamentos",
           items: [
-            { title: "Terrestre", value: ch.GetSpeedDisplay(creature.movements.speed) },
-            { title: "Vôo / Planar", value: ch.GetFlyingDisplay(creature.movements.flying) },
-            { title: "Natação", value: ch.GetSwimmingDisplay(creature.movements.swimming) },
-            { title: "Escavação / Escalada", value: ch.GetBurrowingDisplay(creature.movements.burrowing) },
+            { title: "Terrestre", value: cc.GetSpeed(creature.movements.speed)?.display },
+            { title: "Vôo / Planar", value: cc.GetFlying(creature.movements.flying)?.display },
+            { title: "Natação", value: cc.GetSwimming(creature.movements.swimming)?.display },
+            { title: "Escavação / Escalada", value: cc.GetBurrowing(creature.movements.burrowing)?.display },
           ],
         },
         {
           header: "Tendências",
           items: [
-            { title: "Primária", value: ch.GetPrimaryAlignmentDisplay(creature.primaryAlignment) },
-            { title: "Secundária", value: ch.GetSecondaryAlignmentDisplay(creature.secondaryAlignment) },
+            { title: "Primária", value: cc.GetPrimaryAlignment(creature.primaryAlignment).display },
+            { title: "Secundária", value: cc.GetSecondaryAlignment(creature.secondaryAlignment).display },
           ],
         },
       ],
@@ -57,12 +58,12 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
         {
           header: "Atributos",
           items: [
-            { title: "Força", value: ch.GetAttributeDisplay(creature.attributes.strength) },
-            { title: "Destreza", value: ch.GetAttributeDisplay(creature.attributes.dexterity) },
-            { title: "Constituiçao", value: ch.GetAttributeDisplay(creature.attributes.constitution) },
-            { title: "Inteligência", value: ch.GetAttributeDisplay(creature.attributes.intelligence) },
-            { title: "Sabedoria", value: ch.GetAttributeDisplay(creature.attributes.wisdom) },
-            { title: "Carisma", value: ch.GetAttributeDisplay(creature.attributes.charisma) },
+            { title: "Força", value: cc.GetAttribute(creature.attributes.strength).display },
+            { title: "Destreza", value: cc.GetAttribute(creature.attributes.dexterity).display },
+            { title: "Constituiçao", value: cc.GetAttribute(creature.attributes.constitution).display },
+            { title: "Inteligência", value: cc.GetAttribute(creature.attributes.intelligence).display },
+            { title: "Sabedoria", value: cc.GetAttribute(creature.attributes.wisdom).display },
+            { title: "Carisma", value: cc.GetAttribute(creature.attributes.charisma).display },
           ],
         },
       ],
@@ -72,10 +73,10 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
         {
           header: "Valores Básicos",
           items: [
-            { title: "Vida (PV)", value: ch.GetHPDisplay(creature.hitPoints) },
-            { title: "Ataque", value: ch.GetAttackBonusDisplay(creature.attack) },
-            { title: "CA", value: ch.GetACDisplay(creature.armorClass) },
-            { title: "Iniciativa", value: ch.GetInitiativeDisplay(creature.initiative) },
+            { title: "Vida (PV)", value: cc.GetHitPoints(creature.hitPoints).display },
+            { title: "Ataque", value: cc.GetAttackBonus(creature.attack).display },
+            { title: "CA", value: cc.GetArmorClass(creature.armorClass).display },
+            { title: "Iniciativa", value: cc.GetInitiative(creature.initiative).display },
           ],
         },
         {
@@ -96,13 +97,13 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
 
               return {
                 title: cc.damageTypes.find((dt) => dt.value === types[0].type).damageEffectiveness.find((de) => de.value === value).display,
-                value: types.map((de) => ch.GetDamageTypeDisplay(de.type)).join(", "),
+                value: types.map((de) => cc.GetDamageType(de.type).display).join(", "),
               };
             }),
         },
         {
           header: "Imune a Condições",
-          items: [{ title: null, value: creature.conditionImmunities.map((ci) => ch.GetConditionDisplay(ci)).join(", ") }].filter(
+          items: [{ title: null, value: creature.conditionImmunities.map((ci) => cc.GetCondition(ci).display).join(", ") }].filter(
             (item) => item.value !== ""
           ),
         },
@@ -112,15 +113,15 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
       boxes: [
         {
           header: "Idiomas",
-          items: [{ title: null, value: creature.languages.map((l) => ch.GetLanguageDisplay(l)).join(", ") }].filter((item) => item.value !== ""),
+          items: [{ title: null, value: creature.languages.map((l) => cc.GetLanguage(l)?.display).join(", ") }].filter((item) => item.value !== ""),
         },
         {
           header: "Sentidos",
           items: [
-            { title: "Visao no Escuro", value: ch.GetSenseDisplay(creature.senses.darkVision) },
-            { title: "Sentido Sísmico", value: ch.GetSenseDisplay(creature.senses.tremorsense) },
-            { title: "Visao Cega", value: ch.GetSenseDisplay(creature.senses.blindSight) },
-            { title: "Visao Verdadeira", value: ch.GetSenseDisplay(creature.senses.trueSight) },
+            { title: "Visao no Escuro", value: cc.GetSense(creature.senses.darkVision)?.display },
+            { title: "Sentido Sísmico", value: cc.GetSense(creature.senses.tremorsense)?.display },
+            { title: "Visao Cega", value: cc.GetSense(creature.senses.blindSight)?.display },
+            { title: "Visao Verdadeira", value: cc.GetSense(creature.senses.trueSight)?.display },
           ].filter((item) => item.value),
         },
       ],
@@ -130,11 +131,11 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
         {
           header: "Especiais",
           items: [
-            { title: "Resistência Lendária", value: ch.GetLegendaryResistenciesDisplay(creature.legendaryResistences) },
-            { title: "Regeneraçao (intensidade)", value: ch.GetRegenerationAmountDisplay(creature.regeneration.amount) },
+            { title: "Resistência Lendária", value: cc.GetLegendaryResistency(creature.legendaryResistences)?.display },
+            { title: "Regeneraçao (intensidade)", value: cc.GetRegenerationAmount(creature.regeneration.amount)?.display },
             ...creature.customSpecials.map((cs) => ({
               title: cs.description,
-              value: ch.GetCustomSpecialMultiplierDisplay(cs.multiplier) ?? "Nenhum",
+              value: cc.GetCustomSpecialMultiplier(cs.multiplier)?.display ?? "Nenhum",
             })),
           ],
         },
@@ -144,7 +145,7 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
       boxes: [
         {
           header: "Açoes",
-          items: creature.actions.map((a) => ({ title: a.name, value: ch.GetActionFrequencyDisplay(a.frequency) })),
+          items: creature.actions.map((a) => ({ title: a.name, value: cc.GetActionFrequency(a.frequency).display })),
         },
       ],
     },
@@ -152,11 +153,11 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
       boxes: [
         {
           header: "Reaçoes",
-          items: creature.reactions.map((a) => ({ title: a.name, value: ch.GetActionFrequencyDisplay(a.frequency) })),
+          items: creature.reactions.map((a) => ({ title: a.name, value: cc.GetActionFrequency(a.frequency).display })),
         },
         {
           header: "Aura",
-          items: [{ title: creature.aura.name, value: ch.GetAuraReachDisplay(creature.aura.reach) }],
+          items: [{ title: creature.aura.name, value: cc.GetAuraReach(creature.aura.reach).display }],
         },
       ],
     },
@@ -164,7 +165,7 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
       boxes: [
         {
           header: "Tesouros",
-          items: creature.treasures.map((t) => ({ title: t.name, value: ch.GetTreasureTypeDisplay(t.type) })),
+          items: creature.treasures.map((t) => ({ title: t.name, value: tc.GetTreasureType(t.type).display })),
         },
       ],
     },

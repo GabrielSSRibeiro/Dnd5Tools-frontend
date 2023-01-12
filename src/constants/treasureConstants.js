@@ -8,6 +8,7 @@ export const treasureTypes = [
   { display: "Material", value: TREASURE_TYPES.MATERIAL },
   { display: "Equipamento", value: TREASURE_TYPES.EQUIPMENT },
 ];
+export const GetTreasureType = (value) => treasureTypes.find((s) => s.value === value);
 
 export const GOLD_PIECES_QUANTITIES = {
   FEW: 10,
@@ -21,6 +22,7 @@ export const goldPiecesQuantities = [
   { display: "Muito", value: GOLD_PIECES_QUANTITIES.SEVERAL },
   { display: "Bastante", value: GOLD_PIECES_QUANTITIES.MANY },
 ];
+export const GetGoldPiecesQuantity = (value) => goldPiecesQuantities.find((s) => s.value === value);
 
 export const UNCOMMON_ITEM_MIN_PRICE = 300;
 
@@ -36,6 +38,7 @@ export const materialPriceInflations = [
   { display: "Caro", value: MATERIAL_PRICE_INFLATIONS.EXPENSIVE },
   { display: "Abusivo", value: MATERIAL_PRICE_INFLATIONS.ABUSIVE },
 ];
+export const GetMaterialPriceInflation = (value) => materialPriceInflations.find((s) => s.value === value);
 
 export const MATERIAL_QUANTITIES = {
   FEW: 10,
@@ -49,6 +52,7 @@ export const materialQuantities = [
   { display: "Muito (3 tentativas)", resultDisplay: "3 tentativas", value: MATERIAL_QUANTITIES.SEVERAL },
   { display: "Bastante (4 tentativas)", resultDisplay: "4 tentativas", value: MATERIAL_QUANTITIES.MANY },
 ];
+export const GetMaterialQuantity = (value) => materialQuantities.find((s) => s.value === value);
 
 export const MATERIAL_WEIGHTS = {
   IRRELEVANT: 10,
@@ -64,6 +68,7 @@ export const materialWeigths = [
   { display: "Pesado (30kg)", resultDisplay: "30 kg", value: MATERIAL_WEIGHTS.HEAVY },
   { display: "Extremo (70kg)", resultDisplay: "70 kg", value: MATERIAL_WEIGHTS.EXTREME },
 ];
+export const GetMaterialWeigth = (value) => materialWeigths.find((s) => s.value === value);
 
 export const EQUIPMENT_TYPES = {
   WEAPON: 10,
@@ -77,6 +82,7 @@ export const equipmentTypes = [
   { display: "Acessório", value: EQUIPMENT_TYPES.JEWELRY },
   { display: "Poçao", value: EQUIPMENT_TYPES.POTION },
 ];
+export const GetEquipmentType = (value) => equipmentTypes.find((s) => s.value === value);
 
 export const EQUIPMENT_ATTRIBUTES = {
   STRENGTH: 10,
@@ -94,5 +100,6 @@ export const equipmentAttributes = [
   { display: "Sabedoria", resultDisplay: "Habilidades de Sabedoria", value: EQUIPMENT_ATTRIBUTES.WISDOM },
   { display: "Carisma", resultDisplay: "Habilidades de Carisma", value: EQUIPMENT_ATTRIBUTES.CHARISMA },
 ];
+export const GetEquipmentAttribute = (value) => equipmentAttributes.find((s) => s.value === value);
 
 export const CURSE_AFIX_PROB = 0.1;

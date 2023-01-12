@@ -38,6 +38,7 @@ export const creatureRarities = [
     baseOutputMax: 40,
   },
 ];
+export const GetRarity = (value) => creatureRarities.find((a) => a.value === value);
 
 export const CREATURE_ENVIRONMENTS = {
   COSMIC: 10,
@@ -65,6 +66,7 @@ export const creatureEnvironments = [
   { display: "Subterrâneo", value: CREATURE_ENVIRONMENTS.SUBTERRANEAN, weight: 0 },
   { display: "Abissal", value: CREATURE_ENVIRONMENTS.ABISSAL, weight: 0 },
 ];
+export const GetEnviromentDisplay = (value) => creatureEnvironments.find((e) => e.value === value);
 
 export const CREATURE_SIZES = {
   TINY: 10,
@@ -82,6 +84,7 @@ export const creatureSizes = [
   { display: "Enorme", value: CREATURE_SIZES.HUGE, weight: 5, foundryExport: "huge", foundryTokenExport: 3 },
   { display: "Imenso", value: CREATURE_SIZES.GARGANTUAN, weight: 6, foundryExport: "grg", foundryTokenExport: 4 },
 ];
+export const GetSizeDisplay = (value) => creatureSizes.find((s) => s.value === value);
 
 export const CREATURE_TYPES = {
   ABERRATION: 10,
@@ -115,6 +118,7 @@ export const creatureTypes = [
   { display: "Morto-vivo", value: CREATURE_TYPES.UNDEAD, weight: 0 },
   { display: "Planta", value: CREATURE_TYPES.PLANT, weight: 0 },
 ];
+export const GetType = (value) => creatureTypes.find((t) => t.value === value);
 
 export const CREATURE_RACES = {
   DWARF: 10,
@@ -138,6 +142,7 @@ export const creatureRaces = [
   { display: "Meio-orc", value: CREATURE_RACES.HALF_ORC, weight: 0 },
   { display: "Tiefling", value: CREATURE_RACES.TIEFLING, weight: 0 },
 ];
+export const GetRace = (value) => creatureRaces.find((r) => r.value === value);
 
 export const CREATURE_CLASSES = {
   ARTIFICER: 10,
@@ -476,6 +481,8 @@ export const creatureClasses = [
     ],
   },
 ];
+export const GetClass = (value) => creatureClasses.find((c) => c.value === value);
+export const GetSubClass = (cClass, subClass) => GetClass(cClass)?.subClasses.find((sc) => sc.value === subClass);
 
 export const CREATURE_MOVEMENTS = {
   LOW: 10,
@@ -483,30 +490,38 @@ export const CREATURE_MOVEMENTS = {
   HIGH: 30,
   EXTREME: 40,
 };
+
 export const creatureSpeedMovements = [
   { display: "Baixo (6m)", value: CREATURE_MOVEMENTS.LOW, weight: 1, baseOutput: 20 },
   { display: "Médio (9m)", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2, baseOutput: 30 },
   { display: "Alto (12m)", value: CREATURE_MOVEMENTS.HIGH, weight: 3, baseOutput: 40 },
   { display: "Extremo (18m)", value: CREATURE_MOVEMENTS.EXTREME, weight: 4, baseOutput: 60 },
 ];
+export const GetSpeed = (value) => creatureSpeedMovements.find((a) => a.value === value);
+
 export const creatureFlyingMovements = [
   { display: "Baixo (6m)", value: CREATURE_MOVEMENTS.LOW, weight: 1, baseOutput: 20 },
   { display: "Médio (9m)", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2, baseOutput: 30 },
   { display: "Alto (12m)", value: CREATURE_MOVEMENTS.HIGH, weight: 3, baseOutput: 40 },
   { display: "Extremo (18m)", value: CREATURE_MOVEMENTS.EXTREME, weight: 4, baseOutput: 60 },
 ];
+export const GetFlying = (value) => creatureFlyingMovements.find((a) => a.value === value);
+
 export const creatureSwimmingMovements = [
   { display: "Baixo (6m)", value: CREATURE_MOVEMENTS.LOW, weight: 1, baseOutput: 20 },
   { display: "Médio (9m)", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2, baseOutput: 30 },
   { display: "Alto (12m)", value: CREATURE_MOVEMENTS.HIGH, weight: 3, baseOutput: 40 },
   { display: "Extremo (18m)", value: CREATURE_MOVEMENTS.EXTREME, weight: 4, baseOutput: 60 },
 ];
+export const GetSwimming = (value) => creatureSwimmingMovements.find((a) => a.value === value);
+
 export const creatureBurrowingMovements = [
   { display: "Baixo (6m)", value: CREATURE_MOVEMENTS.LOW, weight: 1, baseOutput: 20 },
   { display: "Médio (9m)", value: CREATURE_MOVEMENTS.MEDIUM, weight: 2, baseOutput: 30 },
   { display: "Alto (12m)", value: CREATURE_MOVEMENTS.HIGH, weight: 3, baseOutput: 40 },
   { display: "Extremo (18m)", value: CREATURE_MOVEMENTS.EXTREME, weight: 4, baseOutput: 60 },
 ];
+export const GetBurrowing = (value) => creatureBurrowingMovements.find((a) => a.value === value);
 
 export const CREATURE_PRIMARY_ALIGNMENTS = {
   CHAOTIC: 10,
@@ -518,6 +533,7 @@ export const creaturePrimaryAlignments = [
   { display: "Neutro", value: CREATURE_PRIMARY_ALIGNMENTS.NEUTRAL, weight: 0 },
   { display: "Leal", value: CREATURE_PRIMARY_ALIGNMENTS.LAWFUL, weight: 0 },
 ];
+export const GetPrimaryAlignment = (value) => creaturePrimaryAlignments.find((a) => a.value === value);
 
 export const CREATURE_SECONDARY_ALIGNMENTS = {
   EVIL: 10,
@@ -529,6 +545,7 @@ export const creatureSecondaryAlignments = [
   { display: "Neutro", value: CREATURE_SECONDARY_ALIGNMENTS.NEUTRAL, weight: 0 },
   { display: "Bom", value: CREATURE_SECONDARY_ALIGNMENTS.GOOD, weight: 0 },
 ];
+export const GetSecondaryAlignment = (value) => creatureSecondaryAlignments.find((a) => a.value === value);
 
 export const CREATURE_ATTRIBUTES = {
   LOW: 10,
@@ -542,6 +559,7 @@ export const creatureAttributes = [
   { display: "Alto", value: CREATURE_ATTRIBUTES.HIGH, weight: 3, baseOutput: 20 },
   { display: "Extremo", value: CREATURE_ATTRIBUTES.EXTREME, weight: 4, baseOutput: 26 },
 ];
+export const GetAttribute = (value) => creatureAttributes.find((a) => a.value === value);
 
 export const CREATURE_ATTRIBUTE_NAMES = {
   STRENGTH: 10,
@@ -559,6 +577,7 @@ export const creatureAttributeNames = [
   { display: "Sabedoria", value: CREATURE_ATTRIBUTE_NAMES.WISDOM, weight: 0, foundryDisplay: "wis" },
   { display: "Carisma", value: CREATURE_ATTRIBUTE_NAMES.CHARISMA, weight: 0, foundryDisplay: "cha" },
 ];
+export const GetSavingThrowAttribute = (value) => creatureAttributeNames.find((i) => i.value === value);
 
 export const CREATURE_HIT_POINTS = {
   LOW: 10,
@@ -572,6 +591,7 @@ export const creatureHitPoints = [
   { display: "Alto", value: CREATURE_HIT_POINTS.HIGH, weight: 3 },
   { display: "Extremo", value: CREATURE_HIT_POINTS.EXTREME, weight: 4 },
 ];
+export const GetHitPoints = (value) => creatureHitPoints.find((a) => a.value === value);
 
 export const CREATURE_ATTACKS = {
   LOW: 10,
@@ -585,6 +605,7 @@ export const creatureAttacks = [
   { display: "Alto", value: CREATURE_ATTACKS.HIGH, weight: 3, baseOutput: 6 },
   { display: "Extremo", value: CREATURE_ATTACKS.EXTREME, weight: 4, baseOutput: 8 },
 ];
+export const GetAttackBonus = (value) => creatureAttacks.find((a) => a.value === value);
 
 export const CREATURE_ARMOR_CLASSES = {
   LOW: 10,
@@ -598,6 +619,7 @@ export const creatureArmorClasses = [
   { display: "Alta", value: CREATURE_ARMOR_CLASSES.HIGH, weight: 3, baseOutput: 20 },
   { display: "Extrema", value: CREATURE_ARMOR_CLASSES.EXTREME, weight: 4, baseOutput: 24 },
 ];
+export const GetArmorClass = (value) => creatureArmorClasses.find((a) => a.value === value);
 
 export const CREATURE_INITIATIVES = {
   LOW: 10,
@@ -611,6 +633,7 @@ export const creatureInitiatives = [
   { display: "Alta", value: CREATURE_INITIATIVES.HIGH, weight: 3, baseOutput: 6 },
   { display: "Extrema", value: CREATURE_INITIATIVES.EXTREME, weight: 4, baseOutput: 10 },
 ];
+export const GetInitiative = (value) => creatureInitiatives.find((a) => a.value === value);
 
 export const DAMAGES_EFFECTIVENESS = {
   VULNERABLE: 10,
@@ -667,6 +690,7 @@ export const damageTypes = [
   { display: "Trovejante", value: DAMAGE_TYPES.THUNDER, damageEffectiveness: magicalDamagesEffectiveness, weight: 2, foundryDisplay: "thunder" },
   { display: "Veneno", value: DAMAGE_TYPES.POISON, damageEffectiveness: magicalDamagesEffectiveness, weight: 2, foundryDisplay: "poison" },
 ];
+export const GetDamageType = (value) => damageTypes.find((i) => i.value === value);
 
 export const CONDITIONS = {
   GRAPPLED: 10,
@@ -693,6 +717,7 @@ export const conditions = [
   { display: "Petrificado", value: CONDITIONS.PETRIFIED, weight: 9 },
   { display: "Exaustao", value: CONDITIONS.EXHAUSTION, weight: 10 },
 ];
+export const GetCondition = (value) => conditions.find((i) => i.value === value);
 
 export const CONDITION_DURATIONS = {
   SHORT: 10,
@@ -706,6 +731,7 @@ export const conditionDurations = [
   { display: "Alta (1 hora)", value: CONDITION_DURATIONS.LONG, weight: 3, baseOutput: "1 hora" },
   { display: "Extrema (1 dia)", value: CONDITION_DURATIONS.EXTREME, weight: 4, baseOutput: "1 dia" },
 ];
+export const GetConditionDuration = (value) => conditionDurations.find((i) => i.value === value);
 
 export const LANGUAGES = {
   COMMON: 10,
@@ -741,6 +767,7 @@ export const languages = [
   { display: "Silvestre", value: LANGUAGES.SYLVAN, weight: 0 },
   { display: "Subterrâneo", value: LANGUAGES.DEEP_SPEECH, weight: 0 },
 ];
+export const GetLanguage = (value) => languages.find((s) => s.value === value);
 
 export const CREATURE_SENSE_REACHES = {
   SHORT: 10,
@@ -754,6 +781,7 @@ export const creatureSenseReaches = [
   { display: "Longo (9m)", value: CREATURE_SENSE_REACHES.LONG, weight: 3, baseOutput: 30 },
   { display: "Extremo (18m)", value: CREATURE_SENSE_REACHES.EXTREME, weight: 4, baseOutput: 60 },
 ];
+export const GetSense = (value) => creatureSenseReaches.find((a) => a.value === value);
 
 export const CREATURE_LEGENDARY_RESISTENCES = {
   LOW: 10,
@@ -767,6 +795,7 @@ export const creatureLegendaryResistences = [
   { display: "Alta (3 uso)", value: CREATURE_LEGENDARY_RESISTENCES.HIGH, weight: 3, totalNumber: 3 },
   { display: "Extrema (4 uso)", value: CREATURE_LEGENDARY_RESISTENCES.EXTREME, weight: 4, totalNumber: 4 },
 ];
+export const GetLegendaryResistency = (value) => creatureLegendaryResistences.find((lr) => lr.value === value);
 
 export const CREATURE_REGENERATIONS = {
   WEAK: 10,
@@ -780,6 +809,7 @@ export const creatureRegenerations = [
   { display: "Forte (15 PV)", value: CREATURE_REGENERATIONS.STRONG, weight: 3, amount: 15 },
   { display: "Extrema (20 PV)", value: CREATURE_REGENERATIONS.EXTREME, weight: 4, amount: 20 },
 ];
+export const GetRegenerationAmount = (value) => creatureRegenerations.find((r) => r.value === value);
 
 export const CREATURE_CUSTOM_SPECIAL_MULTIPLIERS = {
   SMALL: 10,
@@ -793,6 +823,7 @@ export const creatureCustomSpecialMultipliers = [
   { display: "Grande (Extra 50%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.LARGE, weight: 3, multiplier: 1.5 },
   { display: "Extrema (Extra 100%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.EXTREME, weight: 4, multiplier: 2 },
 ];
+export const GetCustomSpecialMultiplier = (value) => creatureCustomSpecialMultipliers.find((s) => s.value === value);
 
 export const CREATURE_REACTIONS_PER_ROUND = {
   NORMAL: 10,
@@ -806,6 +837,7 @@ export const creatureReactionsPerRound = [
   { display: "Extra Muita (3 usos)", value: CREATURE_REACTIONS_PER_ROUND.EXTRA_HIGH, weight: 3, number: 3 },
   { display: "Extra Extrema (5 usos)", value: CREATURE_REACTIONS_PER_ROUND.EXTRA_EXTREME, weight: 5, number: 5 },
 ];
+export const GetReactionsPerRound = (value) => creatureReactionsPerRound.find((i) => i.value === value);
 
 export const CREATURE_ACTION_POWER_TOTAL_PERCENTAGES = {
   SMALL: 10,
@@ -819,6 +851,7 @@ export const creatureActionPowerTotalPercentages = [
   { display: "50% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.LARGE, weight: 3, powerTotal: 0.5 },
   { display: "100% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.EXTREME, weight: 4, powerTotal: 1 },
 ];
+export const GetCreatureActionPowerTotalPercentage = (value) => creatureActionPowerTotalPercentages.find((i) => i.value === value);
 
 export const CREATURE_ACTION_ATTACK_REACHES = {
   MELEE_CLOSE: 10,
@@ -836,6 +869,7 @@ export const creatureActionAttackReaches = [
   { display: "Distância (18m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_EXTRA, weight: 5, isMelee: false },
   { display: "Distância (36-90m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_FAR, weight: 6, isMelee: false },
 ];
+export const GetCreatureActionAttackReache = (value) => creatureActionAttackReaches.find((i) => i.value === value);
 
 export const CREATURE_ACTION_SAVING_THROW_REACHES = {
   LINE_CLOSE: 10,
@@ -859,6 +893,7 @@ export const creatureActionSavingThrowReaches = [
   { display: "Esfera (3m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.SPHERE_MEDIUM, weight: 3 },
   { display: "Esfera (6m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.SHEPRE_BIG, weight: 4 },
 ];
+export const GetCreatureActionSavingThrowReache = (value) => creatureActionSavingThrowReaches.find((i) => i.value === value);
 
 export const creatureActionHealingReaches = [...creatureActionAttackReaches, ...creatureActionSavingThrowReaches];
 
@@ -874,6 +909,7 @@ export const creatureActionTypes = [
   { display: "Cura", value: CREATURE_ACTION_TYPES.HEALING, weight: 0, reaches: creatureActionHealingReaches },
   { display: "Efeito", value: CREATURE_ACTION_TYPES.EFFECT, weight: 0, reaches: creatureActionHealingReaches },
 ];
+export const GetCreatureActionType = (value) => creatureActionTypes.find((i) => i.value === value);
 
 export const CREATURE_ACTION_FREQUENCIES = {
   COMMON: 10,
@@ -887,6 +923,7 @@ export const creatureActionFrequencies = [
   { display: "Raro", value: CREATURE_ACTION_FREQUENCIES.RARE, weight: 3, cooldown: 2 },
   { display: "Muito Raro", value: CREATURE_ACTION_FREQUENCIES.VERY_RARE, weight: 4, cooldown: 3 },
 ];
+export const GetActionFrequency = (value) => creatureActionFrequencies.find((i) => i.value === value);
 
 export const DAMAGE_INTENSITIES = {
   LOW: 10,
@@ -900,6 +937,7 @@ export const damageIntensities = [
   { display: "Alta", value: DAMAGE_INTENSITIES.HIGH, weight: 3 },
   { display: "Extrema", value: DAMAGE_INTENSITIES.EXTREME, weight: 4 },
 ];
+export const GetDamageIntensity = (value) => damageIntensities.find((i) => i.value === value);
 
 export const DIFFICULTY_CLASSES = {
   LOW: 10,
@@ -913,6 +951,7 @@ export const difficultyClasses = [
   { display: "Alta", value: DIFFICULTY_CLASSES.HIGH, weight: 3, baseOutput: 14 },
   { display: "Extrema", value: DIFFICULTY_CLASSES.EXTREME, weight: 4, baseOutput: 16 },
 ];
+export const GetDifficultyClass = (value) => difficultyClasses.find((i) => i.value === value);
 
 export const CREATURE_REACTION_TRIGGERS = {
   ON_DAMAGE_TAKEN: 10,
@@ -926,6 +965,7 @@ export const creatureReactionTriggers = [
   { display: "Ao final do turno de jogador", value: CREATURE_REACTION_TRIGGERS.ON_END_OF_PLAYER_TURN, weight: 3 },
   { display: "Outro", value: CREATURE_REACTION_TRIGGERS.OTHER, weight: 0 },
 ];
+export const GetReactionTrigger = (value) => creatureReactionTriggers.find((i) => i.value === value);
 
 export const CREATURE_AURA_REACHES = {
   SHORT: 10,
@@ -939,3 +979,4 @@ export const creatureAuraReaches = [
   { display: "Alto (4,5m)", value: CREATURE_AURA_REACHES.LONG, weight: 3, baseOutput: "4,5m" },
   { display: "Extremo (6m)", value: CREATURE_AURA_REACHES.EXTREME, weight: 4, baseOutput: "6m" },
 ];
+export const GetAuraReach = (value) => creatureAuraReaches.find((s) => s.value === value);
