@@ -40,8 +40,8 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
           items: [
             { title: "Terrestre", value: cc.GetSpeed(creature.movements.speed)?.display },
             { title: "Vôo / Planar", value: cc.GetFlying(creature.movements.flying)?.display },
-            { title: "Natação", value: cc.GetSwimming(creature.movements.swimming)?.display },
-            { title: "Escavação / Escalada", value: cc.GetBurrowing(creature.movements.burrowing)?.display },
+            { title: "Nataçao", value: cc.GetSwimming(creature.movements.swimming)?.display },
+            { title: "Escavaçao / Escalada", value: cc.GetBurrowing(creature.movements.burrowing)?.display },
           ],
         },
         {
