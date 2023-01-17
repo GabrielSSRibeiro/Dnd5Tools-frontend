@@ -183,10 +183,12 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
       <div className={`first-step-wrapper ${!isFirstStep ? "edit-process-basic" : ""}`}>
         <div className="header-wrapper">
           <h2>{creatureToEdit.owner ? "Editar" : "Criar"} Criatura</h2>
-          <button onClick={() => inputRef.current.click()} className="creature-import">
-            <i className="fas fa-download import"></i>
-            <input type="file" onChange={ImportAscendance} ref={inputRef} hidden={true} accept="application/JSON" />
-          </button>
+          {!isBasicPack && (
+            <button onClick={() => inputRef.current.click()} className="creature-import">
+              <i className="fas fa-download import"></i>
+              <input type="file" onChange={ImportAscendance} ref={inputRef} hidden={true} accept="application/JSON" />
+            </button>
+          )}
         </div>
         <main>
           <aside className="creature-avatar">

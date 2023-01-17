@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import * as utils from "../../../../../../utils";
 import * as tc from "../../../../../../constants/treasureConstants";
 import * as cc from "../../../../../../constants/creatureConstants";
+import { GetCreatureOffensiveRatio, GetCreatureDefensiveRatio } from "../../../../../../helpers/powerScaleHelper";
 
 import Button from "../../../../../../components/Button";
 import Info from "../../../../../../components/Info";
@@ -219,11 +220,17 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
         <div className="power-scale-wrapper">
           <i className="fas fa-khanda power-scale-icon"></i>
           <aside className="power-scale-bar">
-            <div className="power-scale-fill offensive"></div>
+            <div
+              className="power-scale-fill offensive"
+              style={{ width: utils.turnValueIntoPercentageString(GetCreatureOffensiveRatio(creature)) }}
+            ></div>
           </aside>
           <i className="fas fa-shield-alt power-scale-icon"></i>
           <aside className="power-scale-bar">
-            <div className="power-scale-fill defensive"></div>
+            <div
+              className="power-scale-fill defensive"
+              style={{ width: utils.turnValueIntoPercentageString(GetCreatureDefensiveRatio(creature)) }}
+            ></div>
           </aside>
         </div>
         <div className="actions">

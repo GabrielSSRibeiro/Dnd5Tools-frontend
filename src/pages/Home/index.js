@@ -185,10 +185,10 @@ function Home() {
                 controle de criaturas
               </span>
               <span>Ter um sistema de forja de items</span>
-              <span>Acrescentar novas opcoes ao combate como Pontos Fracos, Comportamentos, e raridade de açoes</span>
+              <span>Acrescentar novas opcoes táticas ao combate como Pontos Fracos, Comportamentos, e raridade de açoes</span>
               <p>-</p>
               <p>Notas</p>
-              <span>Em version mobile, use a posiçao paisagem</span>
+              <span>Em versao de celular, use a posiçao paisagem</span>
               <span>Escalas de Poder ofensiva e defensiva de criatura ainda nao estao funcionando(fixas em 50%)</span>
               <span>No Foundry, ficha de criatura recomendada: "Monster Blocks"</span>
               <span>No Foundry, módulo de controle de criatura recomendado: "Token Action HUD"</span>

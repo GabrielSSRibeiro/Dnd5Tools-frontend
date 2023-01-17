@@ -21,6 +21,7 @@ import {
 } from "../../../../constants/creatureConstants";
 import { MAX_CREATURES_ALLOWED } from "../../../../constants/combatConstants";
 import { IsBasicPack } from "../../../../helpers/creatureHelper";
+import { GetCreatureOffensiveRatio, GetCreatureDefensiveRatio } from "../../../../helpers/powerScaleHelper";
 
 import Button from "../../../Button";
 import CheckInput from "../../../CheckInput";
@@ -381,13 +382,19 @@ function Bestiary({
                     <div className="wrapper-with-icon">
                       <i className="fas fa-khanda power-scale-icon"></i>
                       <aside className="power-scale-bar">
-                        <div className="power-scale-fill offensive"></div>
+                        <div
+                          className="power-scale-fill offensive"
+                          style={{ width: utils.turnValueIntoPercentageString(GetCreatureOffensiveRatio(creature)) }}
+                        ></div>
                       </aside>
                     </div>
                     <div className="wrapper-with-icon">
                       <i className="fas fa-shield-alt power-scale-icon"></i>
                       <aside className="power-scale-bar">
-                        <div className="power-scale-fill defensive"></div>
+                        <div
+                          className="power-scale-fill defensive"
+                          style={{ width: utils.turnValueIntoPercentageString(GetCreatureDefensiveRatio(creature)) }}
+                        ></div>
                       </aside>
                     </div>
                   </div>
