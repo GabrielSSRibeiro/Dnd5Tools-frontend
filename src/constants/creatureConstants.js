@@ -84,7 +84,7 @@ export const creatureSizes = [
   { display: "Enorme", value: CREATURE_SIZES.HUGE, weight: 5, foundryExport: "huge", foundryTokenExport: 3 },
   { display: "Imenso", value: CREATURE_SIZES.GARGANTUAN, weight: 6, foundryExport: "grg", foundryTokenExport: 4 },
 ];
-export const GetSizeDisplay = (value) => creatureSizes.find((s) => s.value === value);
+export const GetSize = (value) => creatureSizes.find((s) => s.value === value);
 
 export const CREATURE_TYPES = {
   ABERRATION: 10,
@@ -690,6 +690,7 @@ export const damageTypes = [
   { display: "Trovejante", value: DAMAGE_TYPES.THUNDER, damageEffectiveness: magicalDamagesEffectiveness, weight: 2, foundryDisplay: "thunder" },
   { display: "Veneno", value: DAMAGE_TYPES.POISON, damageEffectiveness: magicalDamagesEffectiveness, weight: 2, foundryDisplay: "poison" },
 ];
+export const regenerationNoBreakDamange = { value: null, weight: 4 };
 export const GetDamageType = (value) => damageTypes.find((i) => i.value === value);
 
 export const CONDITIONS = {
@@ -818,10 +819,10 @@ export const CREATURE_CUSTOM_SPECIAL_MULTIPLIERS = {
   EXTREME: 40,
 };
 export const creatureCustomSpecialMultipliers = [
-  { display: "Pequeno (Extra 10%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.SMALL, weight: 1, multiplier: 1.1 },
-  { display: "Média (Extra 20%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.MEDIUM, weight: 2, multiplier: 1.2 },
-  { display: "Grande (Extra 50%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.LARGE, weight: 3, multiplier: 1.5 },
-  { display: "Extrema (Extra 100%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.EXTREME, weight: 4, multiplier: 2 },
+  { display: "Pequeno (Extra 10%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.SMALL, weight: 0, multiplier: 0.1 },
+  { display: "Média (Extra 20%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.MEDIUM, weight: 0, multiplier: 0.2 },
+  { display: "Grande (Extra 50%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.LARGE, weight: 0, multiplier: 0.5 },
+  { display: "Extrema (Extra 100%)", value: CREATURE_CUSTOM_SPECIAL_MULTIPLIERS.EXTREME, weight: 0, multiplier: 1 },
 ];
 export const GetCustomSpecialMultiplier = (value) => creatureCustomSpecialMultipliers.find((s) => s.value === value);
 
@@ -846,10 +847,10 @@ export const CREATURE_ACTION_POWER_TOTAL_PERCENTAGES = {
   EXTREME: 40,
 };
 export const creatureActionPowerTotalPercentages = [
-  { display: "10% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.SMALL, weight: 1, powerTotal: 0.1 },
-  { display: "20% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.MEDIUM, weight: 2, powerTotal: 0.2 },
-  { display: "50% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.LARGE, weight: 3, powerTotal: 0.5 },
-  { display: "100% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.EXTREME, weight: 4, powerTotal: 1 },
+  { display: "10% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.SMALL, weight: 0, powerTotal: 0.1 },
+  { display: "20% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.MEDIUM, weight: 0, powerTotal: 0.2 },
+  { display: "50% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.LARGE, weight: 0, powerTotal: 0.5 },
+  { display: "100% do Máximo", value: CREATURE_ACTION_POWER_TOTAL_PERCENTAGES.EXTREME, weight: 0, powerTotal: 1 },
 ];
 export const GetCreatureActionPowerTotalPercentage = (value) => creatureActionPowerTotalPercentages.find((i) => i.value === value);
 
@@ -869,7 +870,7 @@ export const creatureActionAttackReaches = [
   { display: "Distância (18m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_EXTRA, weight: 5, isMelee: false },
   { display: "Distância (36-90m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_FAR, weight: 6, isMelee: false },
 ];
-export const GetCreatureActionAttackReache = (value) => creatureActionAttackReaches.find((i) => i.value === value);
+export const GetCreatureActionAttackReaches = (value) => creatureActionAttackReaches.find((i) => i.value === value);
 
 export const CREATURE_ACTION_SAVING_THROW_REACHES = {
   LINE_CLOSE: 10,
@@ -918,10 +919,10 @@ export const CREATURE_ACTION_FREQUENCIES = {
   VERY_RARE: 40,
 };
 export const creatureActionFrequencies = [
-  { display: "Comum", value: CREATURE_ACTION_FREQUENCIES.COMMON, weight: 1, cooldown: 0 },
-  { display: "Incomum", value: CREATURE_ACTION_FREQUENCIES.UNCOMMON, weight: 2, cooldown: 1 },
-  { display: "Raro", value: CREATURE_ACTION_FREQUENCIES.RARE, weight: 3, cooldown: 2 },
-  { display: "Muito Raro", value: CREATURE_ACTION_FREQUENCIES.VERY_RARE, weight: 4, cooldown: 3 },
+  { display: "Comum", value: CREATURE_ACTION_FREQUENCIES.COMMON, weight: 0, cooldown: 0 },
+  { display: "Incomum", value: CREATURE_ACTION_FREQUENCIES.UNCOMMON, weight: 0, cooldown: 1 },
+  { display: "Raro", value: CREATURE_ACTION_FREQUENCIES.RARE, weight: 0, cooldown: 2 },
+  { display: "Muito Raro", value: CREATURE_ACTION_FREQUENCIES.VERY_RARE, weight: 0, cooldown: 3 },
 ];
 export const GetActionFrequency = (value) => creatureActionFrequencies.find((i) => i.value === value);
 
@@ -963,7 +964,7 @@ export const creatureReactionTriggers = [
   { display: "Ao sofrer dano", value: CREATURE_REACTION_TRIGGERS.ON_DAMAGE_TAKEN, weight: 1 },
   { display: "Quando um aliado morre", value: CREATURE_REACTION_TRIGGERS.ON_ALLY_DEATH, weight: 1 },
   { display: "Ao final do turno de jogador", value: CREATURE_REACTION_TRIGGERS.ON_END_OF_PLAYER_TURN, weight: 3 },
-  { display: "Outro", value: CREATURE_REACTION_TRIGGERS.OTHER, weight: 0 },
+  { display: "Outro", value: CREATURE_REACTION_TRIGGERS.OTHER, weight: 1 },
 ];
 export const GetReactionTrigger = (value) => creatureReactionTriggers.find((i) => i.value === value);
 
@@ -980,3 +981,17 @@ export const creatureAuraReaches = [
   { display: "Extremo (6m)", value: CREATURE_AURA_REACHES.EXTREME, weight: 4, baseOutput: "6m" },
 ];
 export const GetAuraReach = (value) => creatureAuraReaches.find((s) => s.value === value);
+
+export const CREATURE_ACTION_REPETITIONS = {
+  NORMAL: 10,
+  MULTIACTION_COMMOM: 20,
+  MULTIACTION_EXTRA: 30,
+  MULTIACTION_EXTREME: 40,
+};
+export const creatureActionRepetitions = [
+  { display: "Normal (x1)", value: CREATURE_ACTION_REPETITIONS.NORMAL, weight: 0, multiplier: 1 },
+  { display: "Multiação comum (x2)", value: CREATURE_ACTION_REPETITIONS.MULTIACTION_COMMOM, weight: 0, multiplier: 2 },
+  { display: "Multiação extra (x3)", value: CREATURE_ACTION_REPETITIONS.MULTIACTION_EXTRA, weight: 0, multiplier: 3 },
+  { display: "Multiação extrema (x4)", value: CREATURE_ACTION_REPETITIONS.MULTIACTION_EXTREME, weight: 0, multiplier: 4 },
+];
+export const GetActionRepetitions = (value) => creatureActionRepetitions.find((s) => s.value === value);

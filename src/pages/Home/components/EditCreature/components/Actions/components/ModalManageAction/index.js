@@ -14,6 +14,8 @@ import {
   conditionDurations,
   difficultyClasses,
   creatureAttributeNames,
+  CREATURE_ACTION_REPETITIONS,
+  creatureActionRepetitions,
 } from "../../../../../../../../constants/creatureConstants";
 
 import Button from "../../../../../../../../components/Button";
@@ -43,16 +45,9 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
           savingThrowAttribute: null,
           associatedWeakSpot: null,
           isSpell: false,
-          repetitions: 1,
+          repetitions: CREATURE_ACTION_REPETITIONS.NORMAL,
         }
   );
-
-  const actionRepetitions = [
-    { display: "Normal (x1)", multiplier: 1 },
-    { display: "Multiação comum (x2)", multiplier: 2 },
-    { display: "Multiação extra (x3)", multiplier: 3 },
-    { display: "Multiação extrema (x4)", multiplier: 4 },
-  ];
 
   function HandleSelectType(updatedValue) {
     updatedValue.reach = null;
@@ -244,9 +239,9 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
                   value={tempAction}
                   valuePropertyPath="repetitions"
                   onSelect={setTempAction}
-                  options={actionRepetitions}
+                  options={creatureActionRepetitions}
                   optionDisplay={(o) => o.display}
-                  optionValue={(o) => o.multiplier}
+                  optionValue={(o) => o.value}
                   className={tempAction.type === CREATURE_ACTION_TYPES.EFFECT ? "invisible" : ""}
                 />
                 <Select

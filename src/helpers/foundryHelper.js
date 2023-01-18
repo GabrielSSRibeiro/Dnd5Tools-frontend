@@ -977,7 +977,12 @@ const GetFoundryExportAction = (action, attack, str, level) => {
 
   return {
     _id: "custom",
-    name: GetActionName(action.name, action.repetitions, cc.GetActionFrequency(action.frequency).display, action.associatedWeakSpot),
+    name: GetActionName(
+      action.name,
+      cc.GetActionRepetitions(action.repetitions).multiplier,
+      cc.GetActionFrequency(action.frequency).display,
+      action.associatedWeakSpot
+    ),
     type: "feat",
     img: actionTypeAndIcon.icon,
     data: {
@@ -1064,7 +1069,7 @@ const GetFoundryExportReaction = (reaction, attack, str, level) => {
 
   return {
     _id: "custom",
-    name: GetActionName(reaction.name, reaction.repetitions, cc.GetActionFrequency(reaction.frequency).display, reaction.associatedWeakSpot),
+    name: GetActionName(reaction.name, 1, cc.GetActionFrequency(reaction.frequency).display, reaction.associatedWeakSpot),
     type: "feat",
     img: actionTypeAndIcon.icon,
     data: {
@@ -1168,8 +1173,9 @@ const GetFoundryExportTreasure = (treasure, actions, level) => {
       const action = actions.find((a) => a.name === treasure.equipment.ability);
 
       description += `<p><strong>${action.name}</strong>`;
-      if (action.repetitions > 1) {
-        description += ` <strong>x${action.repetitions}</strong>`;
+      let repetitions = cc.GetActionRepetitions(action.repetitions).multiplier;
+      if (repetitions > 1) {
+        description += ` <strong>(Multiaçao x${repetitions})</strong>`;
       }
       description += ` (Ação, ${th.GetEquipAbilityDailyCharges(action.frequency)} carga(s) por dia)</p>`;
       description += `<p>${ch.GetActionReachValue(action.reach, action.type)}${GetActionDamangeAndConditionString(action, level)}</p>`;

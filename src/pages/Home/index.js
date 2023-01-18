@@ -189,7 +189,7 @@ function Home() {
               <p>-</p>
               <p>Notas</p>
               <span>Em versao de celular, use a posiçao paisagem</span>
-              <span>Escalas de Poder ofensiva e defensiva de criatura ainda nao estao funcionando(fixas em 50%)</span>
+              <span>Escalas de Poder ofensiva e defensiva de criatura ainda nao estao funcionando corretamente</span>
               <span>No Foundry, ficha de criatura recomendada: "Monster Blocks"</span>
               <span>No Foundry, módulo de controle de criatura recomendado: "Token Action HUD"</span>
               <span>No Foundry, Pontos Fracos estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>

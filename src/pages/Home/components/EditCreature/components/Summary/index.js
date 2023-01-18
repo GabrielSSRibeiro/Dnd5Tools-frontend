@@ -23,7 +23,7 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
           items: [
             { title: "Raridade", value: cc.GetRarity(creature.rarity).display },
             { title: "Ambiente", value: cc.GetEnviromentDisplay(creature.environment).display },
-            { title: "Tamanho", value: cc.GetSizeDisplay(creature.size).display },
+            { title: "Tamanho", value: cc.GetSize(creature.size).display },
             { title: "Tipo", value: cc.GetType(creature.type).display },
             { title: "Raça", value: cc.GetRace(creature.race)?.display },
             { title: "Classe", value: cc.GetClass(creature.class)?.display },
@@ -222,14 +222,14 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
           <aside className="power-scale-bar">
             <div
               className="power-scale-fill offensive"
-              style={{ width: utils.turnValueIntoPercentageString(GetCreatureOffensiveRatio(creature)) }}
+              style={{ width: utils.turnValueIntoPercentageString(Math.min(1, GetCreatureOffensiveRatio(creature))) }}
             ></div>
           </aside>
           <i className="fas fa-shield-alt power-scale-icon"></i>
           <aside className="power-scale-bar">
             <div
               className="power-scale-fill defensive"
-              style={{ width: utils.turnValueIntoPercentageString(GetCreatureDefensiveRatio(creature)) }}
+              style={{ width: utils.turnValueIntoPercentageString(Math.min(1, GetCreatureDefensiveRatio(creature))) }}
             ></div>
           </aside>
         </div>

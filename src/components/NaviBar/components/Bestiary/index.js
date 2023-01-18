@@ -212,8 +212,15 @@ function Bestiary({
         temp = temp.filter((creature) => creature.owner === selectedSource);
       }
 
+      //sort by rarity and name
       if (temp.length > 0) {
-        utils.SortArrayOfObjByProperty(temp, "name");
+        let rarityGroups = Object.values(utils.GroupArrayBy(temp, "rarity"));
+
+        temp = [];
+        rarityGroups.forEach((group) => {
+          utils.SortArrayOfObjByProperty(group, "name");
+          temp.push(...group);
+        });
       }
 
       return temp;
@@ -384,7 +391,7 @@ function Bestiary({
                       <aside className="power-scale-bar">
                         <div
                           className="power-scale-fill offensive"
-                          style={{ width: utils.turnValueIntoPercentageString(GetCreatureOffensiveRatio(creature)) }}
+                          style={{ width: utils.turnValueIntoPercentageString(Math.min(1, GetCreatureOffensiveRatio(creature))) }}
                         ></div>
                       </aside>
                     </div>
@@ -393,7 +400,7 @@ function Bestiary({
                       <aside className="power-scale-bar">
                         <div
                           className="power-scale-fill defensive"
-                          style={{ width: utils.turnValueIntoPercentageString(GetCreatureDefensiveRatio(creature)) }}
+                          style={{ width: utils.turnValueIntoPercentageString(Math.min(1, GetCreatureDefensiveRatio(creature))) }}
                         ></div>
                       </aside>
                     </div>
