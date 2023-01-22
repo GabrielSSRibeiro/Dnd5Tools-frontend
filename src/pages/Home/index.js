@@ -73,7 +73,9 @@ function Home() {
   }
 
   async function HandleSave(creatureToSave) {
-    creatureToSave.owner = currentUser.uid;
+    if (!creatureToSave.owner) {
+      creatureToSave.owner = currentUser.uid;
+    }
 
     await (creatureToSave._id ? api.put("UpdateCreature", creatureToSave) : api.post("SaveCreature", creatureToSave))
       .then((response) => {
@@ -173,7 +175,7 @@ function Home() {
           <SkillCheck resultText={openTab} level={level} />
         </div>
         <div style={{ marginTop: 75, height: "fit-content" }} className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
-          <Panel title="Versao 1.3">
+          <Panel title="Versao 1.4">
             <div style={{ display: "flex", flexDirection: "column" }}>
               <p>Motivaçoes</p>
               <span>Abstrair o processo de criacao de criaturas, o tornando subjetivo e simples</span>
@@ -189,14 +191,12 @@ function Home() {
               <p>-</p>
               <p>Notas</p>
               <span>Em versao de celular, use a posiçao paisagem</span>
-              <span>Escalas de Poder ofensiva e defensiva de criatura ainda nao estao funcionando corretamente</span>
               <span>No Foundry, ficha de criatura recomendada: "Monster Blocks"</span>
               <span>No Foundry, módulo de controle de criatura recomendado: "Token Action HUD"</span>
               <span>No Foundry, Pontos Fracos estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>
               <span>No Foundry, tokens sao genericos, por enquanto</span>
               <p>-</p>
               <p>Próximas Funcionalidades</p>
-              <span>Escalas de Poder</span>
               <span>Simulador de Encontro</span>
               <span>Gerenciador de Combates</span>
             </div>

@@ -11,6 +11,11 @@ export function GetProfByLevel(level) {
   return Math.floor(2 + (level - 1) / 4);
 }
 
+export function GetAverageLevel(rarity) {
+  const { baseOutputMin, baseOutputMax } = cc.GetRarity(rarity);
+  return Math.ceil((baseOutputMin + baseOutputMax) / 2);
+}
+
 export function GetAttributeMod(attribute) {
   return Math.floor((attribute - 10) / 2);
 }

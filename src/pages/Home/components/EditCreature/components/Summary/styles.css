@@ -31,10 +31,40 @@
 }
 
 .Summary-container .power-scale-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  column-gap: 50px;
+  column-gap: 40px;
+  cursor: pointer;
+  height: calc(100% + 30px);
+  padding: 0 20px 0 15px;
+}
+
+.Summary-container .power-scale-blocker {
+  background-color: var(--white);
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  border: none;
+  transition: all 0.1s;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Summary-container .power-scale-blocker:hover {
+  opacity: 0.9;
+  border-right: 1px solid var(--gray1);
+  border-left: 1px solid var(--gray1);
+}
+
+.Summary-container .power-scale-blocker h3 {
+  color: var(--primaryPurple1);
+  font-weight: 600;
 }
 
 .Summary-container .power-scale-wrapper .power-scale-bar {

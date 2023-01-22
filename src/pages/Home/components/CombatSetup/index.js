@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import * as utils from "../../../../utils";
-import { MAX_CREATURES_ALLOWED, COMBAT_DIFFICULTIES } from "../../../../constants/combatConstants";
+import { MAX_CREATURES_ALLOWED } from "../../../../constants/combatConstants";
 
 import Panel from "../../../../components/Panel";
 import Button from "../../../../components/Button";
@@ -107,10 +107,6 @@ function CombatSetup({
     setCombatDificulty(null);
   }
 
-  function GetCombatDifficultyNames() {
-    return COMBAT_DIFFICULTIES.map((cd) => `Dificuldade ${cd}`);
-  }
-
   useEffect(() => {
     function handleResize() {
       setWindowHeight(window.innerHeight);
@@ -183,7 +179,7 @@ function CombatSetup({
           value={combatDificulty ?? "DIficuldade do Combate"}
           onSelect={setCombatDificulty}
           dropUp={true}
-          options={GetCombatDifficultyNames()}
+          options={[]}
           isDisabled={selectedCharacters.length === 0 || selectedCreatures.length === 0 || selectedCreatures.every((sl) => sl.isNPC)}
         />
 

@@ -1,0 +1,68 @@
+.ModalDifficultySimulator-container.modal-body {
+  width: fit-content;
+  height: fit-content;
+}
+
+.ModalDifficultySimulator-container .table {
+  margin-bottom: 25px;
+}
+
+.ModalDifficultySimulator-container .table .row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ModalDifficultySimulator-container .table .row:first-of-type .column:hover {
+  background-color: transparent;
+  font-weight: 600;
+}
+
+.ModalDifficultySimulator-container .row-divider {
+  border-top: 1px solid var(--gray1);
+  width: 100%;
+}
+
+.ModalDifficultySimulator-container .table .row .row-label {
+  width: 25px;
+  text-align: right;
+  margin-right: 5px;
+  font-weight: 600;
+}
+
+.ModalDifficultySimulator-container .table .column {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  padding: 0 3px;
+}
+
+.ModalDifficultySimulator-container .table .column:hover {
+  background-color: var(--gray3);
+}
+
+.ModalDifficultySimulator-container .table .column .column-label {
+  font-weight: 600;
+}
+
+.ModalDifficultySimulator-container .column-divider {
+  border-left: 1px solid var(--gray1);
+  height: 25px;
+}
+
+.ModalDifficultySimulator-container .table .cell-item {
+  width: 15px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+  pointer-events: none;
+}
+
+.ModalDifficultySimulator-container .table .cell-item span {
+  font-weight: 600;
+}

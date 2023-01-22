@@ -1,4 +1,7 @@
+import * as utils from "../utils";
 import * as cc from "../constants/creatureConstants";
+import * as ch from "./creatureHelper";
+import { combatDifficulties } from "../constants/combatConstants";
 
 const GetHighestWeight = (options) => Math.max(...options.map((o) => o.weight));
 
@@ -22,7 +25,7 @@ const GetActionMaxPower = () => {
   actionWeightTotal += GetHighestWeight(cc.difficultyClasses);
   actionWeightTotal += GetHighestWeight(cc.conditions);
   actionWeightTotal += GetHighestWeight(cc.conditionDurations);
-  return actionWeightTotal * Math.max(...cc.creatureActionRepetitions.map((o) => o.multiplier));
+  return actionWeightTotal; //* Math.max(...cc.creatureActionRepetitions.map((o) => o.multiplier));
 };
 
 const GetReactionMaxPower = () => {
@@ -45,7 +48,7 @@ const GetMaxOffensivePower = () => {
   offensiveWeightTotal += GetHighestWeight(cc.creatureInitiatives);
   offensiveWeightTotal += GetAuraMaxPower();
   offensiveWeightTotal += GetActionMaxPower();
-  offensiveWeightTotal += GetReactionMaxPower() * Math.max(...cc.creatureReactionsPerRound.map((o) => o.number));
+  offensiveWeightTotal += GetReactionMaxPower(); //* Math.max(...cc.creatureReactionsPerRound.map((o) => o.number));
 
   return offensiveWeightTotal;
 };
@@ -79,18 +82,20 @@ const GetCreatureOffensivePower = (creature) => {
   creatureOffensiveWeightTotal += cc.GetAttackBonus(creature.attack).weight;
   creatureOffensiveWeightTotal += cc.GetInitiative(creature.initiative).weight;
 
-  let auraWeightTotal = 0;
-  if (creature.aura.creatureActionPowerTotalPercentage) {
-    auraWeightTotal = cc.GetCreatureActionPowerTotalPercentage(creature.aura.creatureActionPowerTotalPercentage).powerTotal * GetAuraMaxPower();
-  } else {
-    auraWeightTotal += cc.GetAuraReach(creature.aura.reach).weight;
-    auraWeightTotal += cc.GetDamageIntensity(creature.aura.damageIntensity)?.weight ?? 0;
-    auraWeightTotal += cc.GetDamageType(creature.aura.damageType)?.weight ?? 0;
-    auraWeightTotal += cc.GetDifficultyClass(creature.aura.difficultyClass)?.weight ?? 0;
-    auraWeightTotal += cc.GetCondition(creature.aura.condition)?.weight ?? 0;
-    auraWeightTotal += cc.GetConditionDuration(creature.aura.conditionDuration)?.weight ?? 0;
+  if (creature.aura) {
+    let auraWeightTotal = 0;
+    if (creature.aura.creatureActionPowerTotalPercentage) {
+      auraWeightTotal = cc.GetCreatureActionPowerTotalPercentage(creature.aura.creatureActionPowerTotalPercentage).powerTotal * GetAuraMaxPower();
+    } else {
+      auraWeightTotal += cc.GetAuraReach(creature.aura.reach).weight;
+      auraWeightTotal += cc.GetDamageIntensity(creature.aura.damageIntensity)?.weight ?? 0;
+      auraWeightTotal += cc.GetDamageType(creature.aura.damageType)?.weight ?? 0;
+      auraWeightTotal += cc.GetDifficultyClass(creature.aura.difficultyClass)?.weight ?? 0;
+      auraWeightTotal += cc.GetCondition(creature.aura.condition)?.weight ?? 0;
+      auraWeightTotal += cc.GetConditionDuration(creature.aura.conditionDuration)?.weight ?? 0;
+    }
+    creatureOffensiveWeightTotal += auraWeightTotal;
   }
-  creatureOffensiveWeightTotal += auraWeightTotal;
 
   if (creature.actions.length > 0) {
     let actionsWeightTotal = 0;
@@ -177,19 +182,47 @@ const GetCreatureExtraMultiplier = (customSpecials) => {
   return 1 + extraMultiplier;
 };
 
-const GetCreatureRarityFactor = (creature) => {
-  let rarityFactor = 1;
-  return rarityFactor;
-};
-
 export const GetCreatureOffensiveRatio = (creature) => {
   const extraMultiplier = GetCreatureExtraMultiplier(creature.customSpecials);
-  const rarityFactor = GetCreatureRarityFactor(creature);
-  return (GetCreatureOffensivePower(creature) * extraMultiplier * rarityFactor) / GetMaxOffensivePower();
+  return (GetCreatureOffensivePower(creature) * extraMultiplier) / GetMaxOffensivePower();
 };
 
 export const GetCreatureDefensiveRatio = (creature) => {
   const extraMultiplier = GetCreatureExtraMultiplier(creature.customSpecials);
-  const rarityFactor = GetCreatureRarityFactor(creature);
-  return (GetCreatureDefensivePower(creature) * extraMultiplier * rarityFactor) / GetMaxDefensivePower();
+  return (GetCreatureDefensivePower(creature) * extraMultiplier) / GetMaxDefensivePower();
 };
+
+export const GetCreatureDifficultyRatio = (offensiveRatio, defensiveRatio) => {
+  let creatureDifficulty = (offensiveRatio + defensiveRatio) / 2;
+  return creatureDifficulty;
+};
+
+export const GetCreaturePowerScale = (difficultyRatio, rarity) => {
+  const creatureLevel = ch.GetAverageLevel(rarity);
+  const legendaryLowBound = cc.creatureRarities[cc.creatureRarities.length - 1].baseOutputMin;
+  const matchDifficultyFactor = Math.min(1, GetCreatureMatchDifficultyFactor(creatureLevel, legendaryLowBound, 1));
+
+  return utils.turnValueIntoPercentageString(difficultyRatio * matchDifficultyFactor);
+};
+
+export const GetCreatureMatchDifficultyFactor = (creatureLevel, referenceLevel, numberOfCharacters) => {
+  return creatureLevel / referenceLevel / numberOfCharacters;
+};
+
+export const GetCreatureDifficulty = (difficultyRatio, creatureLevel, referenceLevel, numberOfCharacters) => {
+  const updatedRatio = Math.min(1, difficultyRatio * GetCreatureMatchDifficultyFactor(creatureLevel, referenceLevel, numberOfCharacters));
+
+  return combatDifficulties.find((d) => updatedRatio >= d.minThreshold && updatedRatio <= d.maxThreshold).value;
+};
+
+// export const GetCreatureMatchLevel = (charactersLevel, rarity) => {
+//   const { baseOutputMin, baseOutputMax } = cc.GetRarity(rarity);
+
+//   if (charactersLevel <= baseOutputMin) {
+//     return baseOutputMin;
+//   } else if (charactersLevel >= baseOutputMax) {
+//     return baseOutputMax;
+//   } else {
+//     return charactersLevel;
+//   }
+// };

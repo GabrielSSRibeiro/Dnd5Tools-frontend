@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import * as utils from "../../../../../../utils";
 import * as tc from "../../../../../../constants/treasureConstants";
 import * as cc from "../../../../../../constants/creatureConstants";
-import { GetCreatureOffensiveRatio, GetCreatureDefensiveRatio } from "../../../../../../helpers/powerScaleHelper";
+import {
+  GetCreatureOffensiveRatio,
+  GetCreatureDefensiveRatio,
+  GetCreatureDifficultyRatio,
+  GetCreaturePowerScale,
+} from "../../../../../../helpers/powerScaleHelper";
 
 import Button from "../../../../../../components/Button";
 import Info from "../../../../../../components/Info";
 import ModalExport from "./components/ModalExport";
+import ModalDifficultySimulator from "./components/ModalDifficultySimulator";
 import ModalWarning from "../../../../../../components/ModalWarning";
 
 import "./styles.css";
@@ -14,6 +20,9 @@ import "./styles.css";
 function Summary({ creature, onSave, onDelete, isBasicPack }) {
   const [isBusy, setIsBusy] = useState(false);
   const [modal, setModal] = useState(null);
+
+  const creatureOffensiveRatio = useMemo(() => Math.min(1, GetCreatureOffensiveRatio(creature)), [creature]);
+  const creatureDefensiveRatio = useMemo(() => Math.min(1, GetCreatureDefensiveRatio(creature)), [creature]);
 
   const summaryRows = [
     {
@@ -176,6 +185,16 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
     setModal(<ModalExport creature={creature} onClose={setModal} />);
   }
 
+  async function OpenModalDifficultySimulator() {
+    setModal(
+      <ModalDifficultySimulator
+        creature={creature}
+        difficultyRatio={GetCreatureDifficultyRatio(creatureOffensiveRatio, creatureDefensiveRatio)}
+        onClose={setModal}
+      />
+    );
+  }
+
   async function OpenDeleteConfirmation() {
     if (!isBasicPack) {
       setModal(
@@ -218,19 +237,16 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
           />
         </div>
         <div className="power-scale-wrapper">
+          <button className="power-scale-blocker" onClick={OpenModalDifficultySimulator}>
+            <h3>Simular Dificuldade</h3>
+          </button>
           <i className="fas fa-khanda power-scale-icon"></i>
           <aside className="power-scale-bar">
-            <div
-              className="power-scale-fill offensive"
-              style={{ width: utils.turnValueIntoPercentageString(Math.min(1, GetCreatureOffensiveRatio(creature))) }}
-            ></div>
+            <div className="power-scale-fill offensive" style={{ width: GetCreaturePowerScale(creatureOffensiveRatio, creature.rarity) }}></div>
           </aside>
           <i className="fas fa-shield-alt power-scale-icon"></i>
           <aside className="power-scale-bar">
-            <div
-              className="power-scale-fill defensive"
-              style={{ width: utils.turnValueIntoPercentageString(Math.min(1, GetCreatureDefensiveRatio(creature))) }}
-            ></div>
+            <div className="power-scale-fill defensive" style={{ width: GetCreaturePowerScale(creatureDefensiveRatio, creature.rarity) }}></div>
           </aside>
         </div>
         <div className="actions">

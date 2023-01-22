@@ -1164,7 +1164,6 @@ const GetFoundryExportTreasure = (treasure, actions, level) => {
         treasure.equipment.damageType,
         treasure.equipment.attribute
       );
-      console.log("generatedItem", generatedItem);
       description += `<p><strong>${generatedItem.name.join(" ")}</strong></p>`;
       description += `<p>${generatedItem.afixes.map((a) => `${a.name}: ${a.bonus}`).join(", ")}</p><br />`;
     }
