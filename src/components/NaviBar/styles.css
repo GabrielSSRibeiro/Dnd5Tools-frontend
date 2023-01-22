@@ -12,8 +12,14 @@
 }
 
 .NaviBar-container .menu-modal-body {
-  width: 500px;
   height: fit-content;
+}
+
+.NaviBar-container .menu-modal-body .divider {
+  border-top: 1px solid var(--gray1);
+  width: calc(100% + 50px);
+  margin-top: 25px;
+  margin-bottom: 25px;
 }
 
 .NaviBar-container > section:first-of-type {

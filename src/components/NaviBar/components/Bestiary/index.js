@@ -3,6 +3,7 @@ import * as utils from "../../../../utils";
 import { useAuth } from "../../../../contexts/Auth";
 import {
   CREATURE_RARITIES,
+  GetRarity,
   creatureRarities,
   CREATURE_MOVEMENTS,
   CREATURE_PRIMARY_ALIGNMENTS,
@@ -20,11 +21,15 @@ import {
   creatureTypes,
 } from "../../../../constants/creatureConstants";
 import { MAX_CREATURES_ALLOWED } from "../../../../constants/combatConstants";
-import { IsBasicPack } from "../../../../helpers/creatureHelper";
-import { GetCreatureOffensiveRatio, GetCreatureDefensiveRatio } from "../../../../helpers/powerScaleHelper";
+import { IsBasicPack, GetAverageLevel } from "../../../../helpers/creatureHelper";
+import {
+  GetCreatureOffensiveRatio,
+  GetCreatureDefensiveRatio,
+  GetCreatureDifficultyRatio,
+  GetCreaturePowerScale,
+} from "../../../../helpers/combatHelper";
 
 import Button from "../../../Button";
-import CheckInput from "../../../CheckInput";
 import Select from "../../../Select";
 
 import commonGem from "../../../../assets/Common-gem.png";
@@ -158,8 +163,8 @@ function Bestiary({
   }
 
   function HandleSelectCreature(creature) {
-    const isAlreadySelected = tempSelectedCreatures.some((selectedCreature) => selectedCreature.name.includes(creature.name));
-    let newSelection = tempSelectedCreatures.filter((selectedCreature) => !selectedCreature.name.includes(creature.name));
+    const isAlreadySelected = tempSelectedCreatures.some((selectedCreature) => selectedCreature._id === creature._id);
+    let newSelection = tempSelectedCreatures.filter((selectedCreature) => selectedCreature._id !== creature._id);
 
     if (!isAlreadySelected && tempSelectedCreatures.length + 1 <= MAX_CREATURES_ALLOWED) {
       newSelection.push(creature);
@@ -171,6 +176,10 @@ function Bestiary({
     utils.SortArrayOfObjByProperty(tempSelectedCreatures, "name");
 
     HandleClose();
+    tempSelectedCreatures.forEach((c) => {
+      c.difficultyRatio = GetCreatureDifficultyRatio(GetCreatureOffensiveRatio(c), GetCreatureDefensiveRatio(c));
+      c.level = c.rarity === CREATURE_RARITIES.LEGENDARY ? GetRarity(c.rarity).baseOutputMin : GetAverageLevel(c.rarity);
+    });
     setSelectedCreatures(tempSelectedCreatures);
   }
 
@@ -361,16 +370,14 @@ function Bestiary({
               {filteredCreatures.map((creature, index) => (
                 <div
                   className={`list-creature ${
-                    isSelecting && tempSelectedCreatures.some((selectedCreature) => selectedCreature.name === creature.name)
-                      ? "selected-creature"
-                      : ""
+                    isSelecting && tempSelectedCreatures.some((selectedCreature) => selectedCreature._id === creature._id) ? "selected-creature" : ""
                   }`}
                   key={index}
                   onClick={() => (isSelecting ? HandleSelectCreature(creature) : HandleEditCreature(creature))}
                 >
-                  {isSelecting && (
+                  {isSelecting && tempSelectedCreatures.some((selectedCreature) => selectedCreature._id === creature._id) && (
                     <div className="select-creature">
-                      <CheckInput isSelected={tempSelectedCreatures.some((selectedCreature) => selectedCreature.name === creature.name)} />
+                      <i className="fas fa-check "></i>
                     </div>
                   )}
                   <h6>{creature.name}</h6>
@@ -391,7 +398,7 @@ function Bestiary({
                       <aside className="power-scale-bar">
                         <div
                           className="power-scale-fill offensive"
-                          style={{ width: utils.turnValueIntoPercentageString(Math.min(1, GetCreatureOffensiveRatio(creature))) }}
+                          style={{ width: GetCreaturePowerScale(GetCreatureOffensiveRatio(creature), creature.rarity) }}
                         ></div>
                       </aside>
                     </div>
@@ -400,7 +407,7 @@ function Bestiary({
                       <aside className="power-scale-bar">
                         <div
                           className="power-scale-fill defensive"
-                          style={{ width: utils.turnValueIntoPercentageString(Math.min(1, GetCreatureDefensiveRatio(creature))) }}
+                          style={{ width: GetCreaturePowerScale(GetCreatureDefensiveRatio(creature), creature.rarity) }}
                         ></div>
                       </aside>
                     </div>
@@ -411,9 +418,6 @@ function Bestiary({
           </main>
           {isSelecting && (
             <div className={`selecting-footer ${filteredCreatures.length <= 3 ? "filtered" : ""}`}>
-              <h5>
-                Dificuldade <strong>X</strong> para {selectedCharacters.length} personagens de nível {level}
-              </h5>
               <Button text="Confirmar" onClick={HandleSelectedFromBestiary} />
             </div>
           )}

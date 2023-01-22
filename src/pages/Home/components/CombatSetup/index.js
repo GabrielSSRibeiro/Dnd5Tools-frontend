@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 import * as utils from "../../../../utils";
-import { MAX_CREATURES_ALLOWED } from "../../../../constants/combatConstants";
+import { MAX_CREATURES_ALLOWED, MAX_DIFFICULTY_LEVEL_VARIANCE, combatDifficulties } from "../../../../constants/combatConstants";
+import { CREATURE_RARITIES, creatureRarities } from "../../../../constants/creatureConstants";
+import { GetCreatureAdjustedDifficultyRatio, GetCombatDifficulty } from "../../../../helpers/combatHelper";
 
 import Panel from "../../../../components/Panel";
 import Button from "../../../../components/Button";
-import Select from "../../../../components/Select";
 
 import "./styles.css";
 
@@ -19,8 +20,54 @@ function CombatSetup({
   resultText,
   level,
 }) {
-  const [combatDificulty, setCombatDificulty] = useState(null);
   const [windowHeight, setWindowHeight] = useState(null);
+  const combatDifficultyOptions = useMemo(() => {
+    function GetAdjustedCombatDifficulty(factor) {
+      let combatDifficultyRatio = 0;
+
+      const creaturesToUpdate = selectedCreatures.map((c) => {
+        let adjustedLevel = c.isNPC ? c.level : Math.max(1, c.level + factor);
+        const adjustedDifficultyRatio = GetCreatureAdjustedDifficultyRatio(c.difficultyRatio, adjustedLevel, level);
+        combatDifficultyRatio += c.isNPC ? adjustedDifficultyRatio * -1 : adjustedDifficultyRatio;
+
+        return { name: c.name, level: adjustedLevel };
+      });
+
+      return { value: GetCombatDifficulty(Math.max(0, combatDifficultyRatio), selectedCharacters.length), creaturesToUpdate };
+    }
+
+    let options = [];
+
+    if (selectedCharacters.length === 0 || selectedCreatures.length === 0 || selectedCreatures.every((c) => c.isNPC)) {
+      return options;
+    }
+
+    utils.createArrayFromInt(MAX_DIFFICULTY_LEVEL_VARIANCE).forEach((item) => {
+      const factor = item + 1;
+
+      options.push(GetAdjustedCombatDifficulty(factor * -1));
+      options.push(GetAdjustedCombatDifficulty(factor));
+    });
+
+    return options;
+  }, [selectedCreatures, level, selectedCharacters]);
+
+  function GenerateCombat(foundDifficulty) {
+    foundDifficulty.creaturesToUpdate.forEach((c) => {
+      let creature = selectedCreatures.find((sc) => sc.name === c.name);
+      creature.level = c.level;
+    });
+
+    // HandleGenerateCombat();
+  }
+
+  function AdjustLevel(creature, factor) {
+    selectedCreatures = selectedCreatures.filter((sc) => sc.name !== creature.name);
+    creature.level += factor;
+
+    selectedCreatures.push(creature);
+    setSelectedCreatures(selectedCreatures);
+  }
 
   function getPanelsScroll(count) {
     const scrollAfter = 7;
@@ -45,12 +92,10 @@ function CombatSetup({
 
   function SelectFromParty() {
     HandleSelectFromParty();
-    setCombatDificulty(null);
   }
 
   function SelectFromBestiary() {
     HandleSelectFromBestiary();
-    setCombatDificulty(null);
   }
 
   function HandleAddExtraOne(index) {
@@ -69,7 +114,6 @@ function CombatSetup({
       .pop()
       .name.split(" ");
     const creatureNumber = parseInt(latestCreatureNameArray[latestCreatureNameArray.length - 1]);
-
     if (creatureNumber) {
       latestCreatureNameArray.pop();
       latestCreatureNameArray.push(creatureNumber + 1);
@@ -79,17 +123,15 @@ function CombatSetup({
     creature.name = latestCreatureNameArray.join(" ");
 
     let creatures = [...selectedCreatures, creature];
-    utils.SortArrayOfObjByProperty(creatures, "name");
+    utils.SortArrayOfObjByProperty(creatures, "_id");
 
     setSelectedCreatures(creatures);
-    setCombatDificulty(null);
   }
 
   function HandleDelete(creature) {
     const creatures = selectedCreatures.filter((selectedCreature) => selectedCreature.name !== creature.name);
 
     setSelectedCreatures(creatures);
-    setCombatDificulty(null);
   }
 
   function HandleNPC(creature) {
@@ -104,7 +146,6 @@ function CombatSetup({
     utils.SortArrayOfObjByProperty(creatures, "name");
 
     setSelectedCreatures(creatures);
-    setCombatDificulty(null);
   }
 
   useEffect(() => {
@@ -147,20 +188,39 @@ function CombatSetup({
                   <div key={index} className="creature-details">
                     <button
                       onClick={() => HandleAddExtraOne(index)}
-                      className={selectedCreatures.length === MAX_CREATURES_ALLOWED ? "element-disabled" : ""}
+                      className={`details-button${selectedCreatures.length === MAX_CREATURES_ALLOWED ? " element-disabled" : ""}`}
                     >
                       +1
                     </button>
-                    <button className={creature.isNPC ? "toggle-npc" : "toggle-creature"} onClick={() => HandleNPC(creature)}>
+                    <button className={`details-button ${creature.isNPC ? "toggle-npc" : "toggle-creature"}`} onClick={() => HandleNPC(creature)}>
                       {creature.isNPC ? <i className="fas fa-heart"></i> : <i className="fas fa-skull"></i>}
                     </button>
-                    <div className="creature-name">
+                    <div className={`creature-name${creature.rarity === CREATURE_RARITIES.LEGENDARY ? " shorter-name" : ""}`}>
                       <h4>{creature.name}</h4>
                     </div>
-                    <div className="creature-stats">
-                      <h4>86 PV</h4>
-                    </div>
-                    <button onClick={() => HandleDelete(creature)}>
+                    {creature.rarity === CREATURE_RARITIES.LEGENDARY && (
+                      <div className="creature-stats">
+                        <h6>Nível</h6>
+                        <h4>{creature.level}</h4>
+                        <div className="level-adjuster-wrapper">
+                          <button
+                            onClick={() => AdjustLevel(creature, 1)}
+                            className="level-adjuster"
+                            disabled={creature.level === creatureRarities.find((r) => r.value === CREATURE_RARITIES.LEGENDARY).baseOutputMax}
+                          >
+                            <i class="fas fa-caret-up"></i>
+                          </button>
+                          <button
+                            onClick={() => AdjustLevel(creature, -1)}
+                            className="level-adjuster"
+                            disabled={creature.level === creatureRarities.find((r) => r.value === CREATURE_RARITIES.LEGENDARY).baseOutputMin}
+                          >
+                            <i class="fas fa-caret-down"></i>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    <button className="details-button" onClick={() => HandleDelete(creature)}>
                       <i className="fas fa-times"></i>
                     </button>
                   </div>
@@ -172,23 +232,16 @@ function CombatSetup({
           </Panel>
         </section>
       </div>
-      <footer>
-        <Select
-          isLarge={true}
-          extraWidth={225}
-          value={combatDificulty ?? "DIficuldade do Combate"}
-          onSelect={setCombatDificulty}
-          dropUp={true}
-          options={[]}
-          isDisabled={selectedCharacters.length === 0 || selectedCreatures.length === 0 || selectedCreatures.every((sl) => sl.isNPC)}
-        />
-
-        <Button
-          text={`Rodar ${resultText}`}
-          onClick={HandleGenerateCombat}
-          isDisabled={selectedCharacters.length === 0 || selectedCreatures.length === 0 || !combatDificulty}
-        />
-      </footer>
+      {selectedCharacters.length > 0 && selectedCreatures.length > 0 && (
+        <footer>
+          {combatDifficulties.map((d) => {
+            const foundDifficulty = combatDifficultyOptions.find((o) => o.value === d.value);
+            return (
+              <Button key={d.value} text={`Combate ${d.display}`} onClick={() => GenerateCombat(foundDifficulty)} isDisabled={!foundDifficulty} />
+            );
+          })}
+        </footer>
+      )}
     </div>
   );
 }

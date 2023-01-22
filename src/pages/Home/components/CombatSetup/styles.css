@@ -14,12 +14,14 @@
 }
 
 .CombatSetup-container > div > section:first-of-type {
-  margin-top: calc(5% - 20px);
-  width: 660px;
+  /* margin-top: calc(5% - 20px); */
+  margin-top: 5%;
+  width: 460px;
 }
 
 .CombatSetup-container > div > section:last-of-type {
-  margin-top: calc(5% - 20px);
+  /* margin-top: calc(5% - 20px); */
+  margin-top: 5%;
   width: 660px;
 }
 
@@ -65,7 +67,12 @@
 }
 
 .panel-content .creature-details .creature-name {
-  padding-left: 15px;
+  padding-right: 37px;
+}
+
+.panel-content .creature-details .creature-name.shorter-name {
+  padding-left: 46px;
+  padding-right: 0px;
 }
 
 .panel-content .character-details .character-name {
@@ -77,13 +84,32 @@
 
 .creature-details .creature-stats {
   background-color: var(--white);
-  width: 75px;
+  width: 83px;
   height: 37px;
 
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   text-align: center;
+  column-gap: 5px;
+}
+
+.creature-details .creature-stats h4 {
+  font-weight: 600;
+}
+
+.creature-details .creature-stats .level-adjuster-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.creature-details .creature-stats .level-adjuster-wrapper .level-adjuster {
+  width: calc(37px / 2);
+  height: calc(37px / 2);
+  background-color: var(--white);
+  border: 1px solid var(--black);
 }
 
 .creature-details .toggle-npc {
@@ -100,7 +126,7 @@
   color: var(--errorColor);
 }
 
-.panel-content .creature-details button {
+.panel-content .creature-details .details-button {
   width: 37px;
   height: 37px;
   background-color: var(--white);
@@ -109,7 +135,7 @@
 }
 
 .CombatSetup-container > footer {
-  margin-top: calc(5% - 40px);
+  margin-top: calc(5% - 20px);
 
   display: flex;
   align-items: center;

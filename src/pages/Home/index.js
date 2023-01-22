@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import api from "../../services/api";
 import { useAuth } from "../../contexts/Auth";
 
-import Panel from "../../components/Panel";
 import NaviBar from "../../components/NaviBar";
 import SkillCheck from "./components/SkillCheck";
 import CombatSetup from "./components/CombatSetup";
@@ -16,19 +15,20 @@ import "./styles.css";
 function Home() {
   const MAIN_TABS = {
     SKILL_CHECK: "Teste de Perícia",
-    GENERAL: "Geral",
     COMBAT: "Combate",
     TREASURE: "Tesouro",
   };
 
-  const [openTab, setOpenTab] = useState(MAIN_TABS.GENERAL);
+  const [openTab, setOpenTab] = useState(MAIN_TABS.COMBAT);
   const [isPartyOpen, setIsPartyOpen] = useState(false);
   const [isSelectingParty, setIsSelectingParty] = useState(false);
   const [isBestiaryOpen, setIsBestiaryOpen] = useState(false);
   const [isSelectingBestiary, setIsSelectingBestiary] = useState(false);
   const [creatureToEdit, setCreatureToEdit] = useState(null);
+  const [combatConfig, setCombatConfig] = useState(null);
   const [level, setLevel] = useState(null);
   const [groups, setGroups] = useState([]);
+  const [inactiveGroup, setInactiveGroup] = useState([]);
   const [creatures, setCreatures] = useState(null);
   const [selectedCharacters, setSelectedCharacters] = useState([]);
   const [selectedCreatures, setSelectedCreatures] = useState([]);
@@ -37,12 +37,8 @@ function Home() {
   const { currentUser } = useAuth();
 
   function HandleSelectFromParty() {
-    if (groups.length === 1) {
-      setSelectedCharacters(...groups);
-    } else {
-      setIsSelectingParty(true);
-      setIsPartyOpen(true);
-    }
+    setIsSelectingParty(true);
+    setIsPartyOpen(true);
     setIsBestiaryOpen(false);
   }
 
@@ -72,7 +68,7 @@ function Home() {
     setCreatureToEdit(null);
   }
 
-  async function HandleSave(creatureToSave) {
+  async function HandleSaveCreature(creatureToSave) {
     if (!creatureToSave.owner) {
       creatureToSave.owner = currentUser.uid;
     }
@@ -97,7 +93,7 @@ function Home() {
       });
   }
 
-  function HandleDelete(creatureToDelete) {
+  function HandleDeleteCreature(creatureToDelete) {
     api
       .delete("DeleteCreature", { params: { id: creatureToDelete._id } })
       .then((response) => {
@@ -116,6 +112,27 @@ function Home() {
       });
   }
 
+  async function HandleSaveCombatConfig() {
+    const combatConfigToSave = { _id: combatConfig._id, owner: combatConfig.owner, level, characterGroups: groups, inactiveGroup };
+
+    await (combatConfigToSave._id ? api.put("UpdateCombatConfig", combatConfigToSave) : api.post("SaveCombatConfig", combatConfigToSave))
+      .then((response) => {
+        if (response.data) {
+          setCombatConfig(response.data);
+        }
+      })
+      .catch((err) => {
+        console.log("error in SaveCombatConfig", err);
+      });
+  }
+
+  useEffect(() => {
+    const savedCreatureToEdit = localStorage.getItem("creatureToEdit");
+    if (savedCreatureToEdit) {
+      setCreatureToEdit(JSON.parse(savedCreatureToEdit));
+    }
+  }, []);
+
   useEffect(() => {
     const savedCreatureToEdit = localStorage.getItem("creatureToEdit");
     if (savedCreatureToEdit) {
@@ -125,17 +142,25 @@ function Home() {
 
   useEffect(() => {
     api.get("GetCreaturesByOwner", { params: { owner: currentUser.uid } }).then((response) => {
-      setCreatures(response.data);
+      if (response.data) {
+        setCreatures(response.data);
+      }
     });
 
-    setLevel(1);
-    // setGroups([
-    //   ["Foux", "Isaac", "Zeth", "Adler", "Motonui", "Elros"],
-    //   ["Soiaz", "Yaisyl"],
-    // ]);
+    api.get("GetCombatConfigByOwner", { params: { owner: currentUser.uid } }).then((response) => {
+      if (response.data) {
+        setCombatConfig(response.data);
+        setLevel(response.data.level);
+        setGroups(response.data.characterGroups);
+        setInactiveGroup(response.data.inactiveGroup);
+      } else {
+        setCombatConfig({ owner: currentUser.uid, level: 1, characterGroups: [], inactiveGroup: [] });
+        setLevel(1);
+      }
+    });
   }, [setCreatures, currentUser.uid]);
 
-  return !creatures ? (
+  return !combatConfig || !creatures ? (
     <div className="backend-loading">
       <h2>Por favor aguarde enquanto tiramos o site de inativade. Isso pode lever até 20 segundos...</h2>
     </div>
@@ -155,10 +180,13 @@ function Home() {
         setIsPartyOpen={setIsPartyOpen}
         isBestiaryOpen={isBestiaryOpen}
         setIsBestiaryOpen={setIsBestiaryOpen}
+        HandleSaveCombatConfig={HandleSaveCombatConfig}
         level={level}
         setLevel={setLevel}
         groups={groups}
         setGroups={setGroups}
+        inactiveGroup={inactiveGroup}
+        setInactiveGroup={setInactiveGroup}
         creatures={creatures}
         setCreatures={setCreatures}
         tabOptions={MAIN_TABS}
@@ -173,34 +201,6 @@ function Home() {
       <div className={`section-wrapper ${creatureToEdit ? "hidden" : ""}`}>
         <div className={`section-wrapper ${openTab !== MAIN_TABS.SKILL_CHECK ? "hidden" : ""}`}>
           <SkillCheck resultText={openTab} level={level} />
-        </div>
-        <div style={{ marginTop: 75, height: "fit-content" }} className={`section-wrapper ${openTab !== MAIN_TABS.GENERAL ? "hidden" : ""}`}>
-          <Panel title="Versao 1.4">
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <p>Motivaçoes</p>
-              <span>Abstrair o processo de criacao de criaturas, o tornando subjetivo e simples</span>
-              <span>
-                A ficha de uma criatura é, e deveria ser, desconhecida pelos jogadores, logo algumas liberdades podem ser tomadas durante a criaçao
-              </span>
-              <span>
-                Descriçoes excessivas, recargas, multiataque, magias, ações bonus, ações lendárias, e outros foram simplificados para facilitar o
-                controle de criaturas
-              </span>
-              <span>Ter um sistema de forja de items</span>
-              <span>Acrescentar novas opcoes táticas ao combate como Pontos Fracos, Comportamentos, e raridade de açoes</span>
-              <p>-</p>
-              <p>Notas</p>
-              <span>Em versao de celular, use a posiçao paisagem</span>
-              <span>No Foundry, ficha de criatura recomendada: "Monster Blocks"</span>
-              <span>No Foundry, módulo de controle de criatura recomendado: "Token Action HUD"</span>
-              <span>No Foundry, Pontos Fracos estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>
-              <span>No Foundry, tokens sao genericos, por enquanto</span>
-              <p>-</p>
-              <p>Próximas Funcionalidades</p>
-              <span>Simulador de Encontro</span>
-              <span>Gerenciador de Combates</span>
-            </div>
-          </Panel>
         </div>
         <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
           <CombatSetup
@@ -227,7 +227,12 @@ function Home() {
 
       {creatureToEdit && (
         <div className={"section-wrapper"}>
-          <EditCreature creatureToEdit={creatureToEdit} HandleSave={HandleSave} HandleDelete={HandleDelete} FinishEditing={HandleCancel} />
+          <EditCreature
+            creatureToEdit={creatureToEdit}
+            HandleSave={HandleSaveCreature}
+            HandleDelete={HandleDeleteCreature}
+            FinishEditing={HandleCancel}
+          />
         </div>
       )}
     </div>

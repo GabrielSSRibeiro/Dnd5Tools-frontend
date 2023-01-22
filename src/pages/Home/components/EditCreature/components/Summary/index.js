@@ -7,7 +7,7 @@ import {
   GetCreatureDefensiveRatio,
   GetCreatureDifficultyRatio,
   GetCreaturePowerScale,
-} from "../../../../../../helpers/powerScaleHelper";
+} from "../../../../../../helpers/combatHelper";
 
 import Button from "../../../../../../components/Button";
 import Info from "../../../../../../components/Info";
@@ -21,8 +21,8 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
   const [isBusy, setIsBusy] = useState(false);
   const [modal, setModal] = useState(null);
 
-  const creatureOffensiveRatio = useMemo(() => Math.min(1, GetCreatureOffensiveRatio(creature)), [creature]);
-  const creatureDefensiveRatio = useMemo(() => Math.min(1, GetCreatureDefensiveRatio(creature)), [creature]);
+  const creatureOffensiveRatio = useMemo(() => GetCreatureOffensiveRatio(creature), [creature]);
+  const creatureDefensiveRatio = useMemo(() => GetCreatureDefensiveRatio(creature), [creature]);
 
   const summaryRows = [
     {

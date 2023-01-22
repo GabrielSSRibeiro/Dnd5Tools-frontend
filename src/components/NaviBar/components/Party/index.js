@@ -17,12 +17,14 @@ function Party({
   setIsSelecting,
   isPartyOpen,
   setIsPartyOpen,
+  HandleSaveCombatConfig,
   level,
   setLevel,
   groups,
   setGroups,
+  inactiveGroup,
+  setInactiveGroup,
 }) {
-  const [inactiveGroup, setInactiveGroup] = useState([]);
   const [isNewCharacterOpen, setIsNewCharacterOpen] = useState(false);
   const [newCharacterName, setNewCharacterName] = useState(null);
   const [newCharacterGroup, setNewCharacterGroup] = useState(null);
@@ -53,7 +55,12 @@ function Party({
     setTempSelectedCharacters(selectedCharacters);
     setSelectedCharactersInGroup([]);
     setIsSelecting(false);
+    setIsNewCharacterOpen(false);
     setIsPartyOpen(false);
+
+    if (!isSelecting) {
+      HandleSaveCombatConfig();
+    }
   }
 
   function GetGroupSelectionOptions() {
@@ -100,8 +107,6 @@ function Party({
       setInactiveGroup(updatedGroup);
     }
 
-    //save in db
-
     setCharacterBeenEdited(null);
     setSelectedCharacters([]);
   }
@@ -147,8 +152,6 @@ function Party({
       setInactiveGroup(updatedGroup);
     }
 
-    //save in db
-
     setSelectedCharactersInGroup([]);
     setSelectedCharacters([]);
   }
@@ -180,8 +183,6 @@ function Party({
     } else {
       updatedGroups[groupIndex].push(...selectedCharactersInGroup);
     }
-
-    //save in db
 
     setGroups(updatedGroups);
     setSelectedCharactersInGroup([]);
@@ -261,7 +262,7 @@ function Party({
             {!isSelecting &&
               (!isNewCharacterOpen ? (
                 <aside>
-                  <Button text="Adicionar Personagem" onClick={() => setIsNewCharacterOpen(true)} isDisabled={true} />
+                  <Button text="Adicionar Personagem" onClick={() => setIsNewCharacterOpen(true)} />
                 </aside>
               ) : (
                 <div className="add-new-container">

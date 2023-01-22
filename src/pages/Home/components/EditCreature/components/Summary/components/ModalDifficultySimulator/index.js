@@ -1,7 +1,7 @@
 import React from "react";
 import * as utils from "../../../../../../../../utils";
 import { combatDifficulties } from "../../../../../../../../constants/combatConstants";
-import { GetCreatureMatchDifficultyFactor, GetCreatureDifficulty } from "../../../../../../../../helpers/powerScaleHelper";
+import { GetCreatureAdjustedDifficultyRatio, GetCombatDifficulty } from "../../../../../../../../helpers/combatHelper";
 import { GetAverageLevel } from "../../../../../../../../helpers/creatureHelper";
 
 import Button from "../../../../../../../../components/Button";
@@ -12,7 +12,7 @@ import "./styles.css";
 function ModalDifficultySimulator({ creature, difficultyRatio, onClose }) {
   const totalCharacters = [null, ...utils.createArrayFromInt(10)];
   const totalLevels = utils.createArrayFromInt(20);
-  console.log("aaaaa", GetCreatureMatchDifficultyFactor(1, creature.rarity));
+
   return (
     <Modal
       className="ModalDifficultySimulator-container"
@@ -39,7 +39,10 @@ function ModalDifficultySimulator({ creature, difficultyRatio, onClose }) {
                       combatDifficulties.map((d) => (
                         <button
                           className="cell-item"
-                          disabled={d.value !== GetCreatureDifficulty(difficultyRatio, GetAverageLevel(creature.rarity), l, c + 1)}
+                          disabled={
+                            d.value !==
+                            GetCombatDifficulty(GetCreatureAdjustedDifficultyRatio(difficultyRatio, GetAverageLevel(creature.rarity), l), c + 1)
+                          }
                         >
                           <span>{d.shortDisplay}</span>
                         </button>
