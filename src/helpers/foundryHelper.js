@@ -175,7 +175,7 @@ const GetDetails = (creature, level) => {
       swarm: null,
       custom: `${cc.GetType(creature.type).display}`,
     },
-    environment: cc.GetEnviromentDisplay(creature.environment).display,
+    environment: cc.GetEnviroment(creature.environment).display,
     cr: level > 30 ? 30 : level,
     spellLevel: 0,
     xp: {

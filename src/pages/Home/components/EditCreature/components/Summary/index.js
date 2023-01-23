@@ -31,7 +31,7 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
           header: "Definições Básicas",
           items: [
             { title: "Raridade", value: cc.GetRarity(creature.rarity).display },
-            { title: "Ambiente", value: cc.GetEnviromentDisplay(creature.environment).display },
+            { title: "Ambiente", value: cc.GetEnviroment(creature.environment).display },
             { title: "Tamanho", value: cc.GetSize(creature.size).display },
             { title: "Tipo", value: cc.GetType(creature.type).display },
             { title: "Raça", value: cc.GetRace(creature.race)?.display },

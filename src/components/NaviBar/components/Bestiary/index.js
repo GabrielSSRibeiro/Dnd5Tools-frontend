@@ -16,6 +16,7 @@ import {
   DAMAGE_TYPES,
   LANGUAGES,
   CREATURE_REACTIONS_PER_ROUND,
+  CREATURE_ENVIRONMENTS,
   creatureEnvironments,
   creatureSizes,
   creatureTypes,
@@ -206,7 +207,7 @@ function Bestiary({
       }
 
       if (selectedEnv) {
-        temp = temp.filter((creature) => creature.environment === selectedEnv);
+        temp = temp.filter((creature) => creature.environment === CREATURE_ENVIRONMENTS.ALL || creature.environment === selectedEnv);
       }
 
       if (selectedType) {
