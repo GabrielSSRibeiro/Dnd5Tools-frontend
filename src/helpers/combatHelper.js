@@ -163,7 +163,7 @@ const GetCreatureDefensivePower = (creature) => {
     creatureDefensiveWeightTotal += cc.GetDamageType(de.type).damageEffectiveness.find((d) => d.value === de.value).weight;
   });
   creature.conditionImmunities.forEach((c) => {
-    creatureDefensiveWeightTotal += cc.GetCondition(c);
+    creatureDefensiveWeightTotal += cc.GetCondition(c).weight;
   });
   creatureDefensiveWeightTotal += cc.GetSense(creature.senses.darkVision)?.weight ?? 0;
   creatureDefensiveWeightTotal += cc.GetSense(creature.senses.tremorsense)?.weight ?? 0;
@@ -174,6 +174,7 @@ const GetCreatureDefensivePower = (creature) => {
   creatureDefensiveWeightTotal +=
     [cc.regenerationNoBreakDamange, ...cc.damageTypes].find((dt) => dt.value === creature.regeneration.breakDamage)?.weight ?? 0;
 
+  console.log("AAA", creatureDefensiveWeightTotal);
   return creatureDefensiveWeightTotal;
 };
 

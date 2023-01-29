@@ -41,7 +41,7 @@ const GetAbilities = (creature, str) => {
   const abilities = {
     str: {
       value: str,
-      proficient: 0,
+      proficient: 1,
       bonuses: {
         check: 0,
         save: "",
@@ -50,7 +50,7 @@ const GetAbilities = (creature, str) => {
     },
     dex: {
       value: dex,
-      proficient: 0,
+      proficient: 1,
       bonuses: {
         check: 0,
         save: "",
@@ -59,7 +59,7 @@ const GetAbilities = (creature, str) => {
     },
     con: {
       value: con,
-      proficient: 0,
+      proficient: 1,
       bonuses: {
         check: 0,
         save: "",
@@ -68,7 +68,7 @@ const GetAbilities = (creature, str) => {
     },
     int: {
       value: int,
-      proficient: 0,
+      proficient: 1,
       bonuses: {
         check: 0,
         save: "",
@@ -77,7 +77,7 @@ const GetAbilities = (creature, str) => {
     },
     wis: {
       value: wis,
-      proficient: 0,
+      proficient: 1,
       bonuses: {
         check: 0,
         save: "",
@@ -86,7 +86,7 @@ const GetAbilities = (creature, str) => {
     },
     cha: {
       value: cha,
-      proficient: 0,
+      proficient: 1,
       bonuses: {
         check: 0,
         save: "",
