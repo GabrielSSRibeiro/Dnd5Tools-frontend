@@ -103,7 +103,7 @@
   align-items: flex-end;
   justify-content: center;
   column-gap: 15px;
-  z-index: 1;
+  z-index: 0;
 }
 
 .EditCreature-container .first-step-wrapper .creature-avatar .update-avatar-wrapper .update-button {
