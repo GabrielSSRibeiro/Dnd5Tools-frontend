@@ -324,6 +324,7 @@
   white-space: nowrap;
   width: 100%;
   text-align: center;
+  overflow: hidden;
 }
 
 .Bestiary-container .list-creature .creature-portrait {
