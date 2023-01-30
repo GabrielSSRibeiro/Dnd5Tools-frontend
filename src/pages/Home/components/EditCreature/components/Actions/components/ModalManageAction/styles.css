@@ -22,6 +22,11 @@
   column-gap: 15px;
 }
 
+.ModalManageAction-container .modal-action .new-action-wrapper .action-row .row-check-box {
+  margin-left: 430px;
+  align-self: flex-end;
+}
+
 .ModalManageAction-container .modal-action .new-action-wrapper .action-row aside {
   display: flex;
   flex-direction: column;
@@ -51,12 +56,18 @@
 }
 
 .ModalManageAction-container .modal-action footer .extra-details {
-  padding-left: 45px;
+  padding-left: 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   column-gap: 15px;
   flex: 1;
+}
+
+.ModalManageAction-container .modal-action footer .extra-details .action-preview {
+  font-weight: 600;
+  width: 100%;
+  text-align: center;
 }
 
 .ModalManageAction-container .modal-action footer .extra-details aside {

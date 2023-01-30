@@ -644,8 +644,10 @@ const GetActionName = (name, repetitions, frequency, weakSpot) => {
 const GetActionDamangeAndConditionString = (action, level) => {
   let pieces = [];
 
-  if (action.difficultyClass != null) {
-    pieces.push(`<strong>CD ${ch.GetDCValue(action.difficultyClass, level)}</strong>`);
+  if (action.difficultyClass != null && action.savingThrowAttribute != null) {
+    pieces.push(
+      `<strong>CD ${ch.GetDCValue(action.difficultyClass, level)}</strong> ${cc.GetSavingThrowAttribute(action.savingThrowAttribute).display}`
+    );
   }
 
   if (action.condition != null) {

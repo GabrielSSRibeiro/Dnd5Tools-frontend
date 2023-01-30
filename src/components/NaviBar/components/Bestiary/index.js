@@ -316,7 +316,7 @@ function Bestiary({
               </div>
               <main>
                 <Select
-                  extraWidth={40}
+                  extraWidth={35}
                   value={selectedRarity}
                   onSelect={(value) => handleFilter(setSelectedRarity, value)}
                   nothingSelected="Raridade"

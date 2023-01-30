@@ -321,6 +321,9 @@
   color: var(--white);
   margin-top: 3px;
   margin-bottom: 9px;
+  white-space: nowrap;
+  width: 100%;
+  text-align: center;
 }
 
 .Bestiary-container .list-creature .creature-portrait {

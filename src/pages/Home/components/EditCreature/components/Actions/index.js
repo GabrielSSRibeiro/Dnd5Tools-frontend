@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 
 import { TREASURE_TYPES } from "../../../../../../constants/treasureConstants";
-import { creatureReactionsPerRound, creatureActionFrequencies, creatureAuraReaches } from "../../../../../../constants/creatureConstants";
+import {
+  CREATURE_RARITIES,
+  GetRarity,
+  creatureReactionsPerRound,
+  creatureActionFrequencies,
+  creatureAuraReaches,
+} from "../../../../../../constants/creatureConstants";
+import { GetAverageLevel } from "../../../../../../helpers/creatureHelper";
 
 import Button from "../../../../../../components/Button";
 import Select from "../../../../../../components/Select";
@@ -22,6 +29,7 @@ function Actions({ creature, setCreature }) {
 
     setModal(
       <ModalManageAction
+        level={creature.rarity === CREATURE_RARITIES.LEGENDARY ? GetRarity(creature.rarity).baseOutputMin : GetAverageLevel(creature.rarity)}
         action={action}
         invalidNames={invalidNames}
         weakSpots={creature.weakSpots}
@@ -67,6 +75,7 @@ function Actions({ creature, setCreature }) {
 
     setModal(
       <ModalManageReaction
+        level={creature.rarity === CREATURE_RARITIES.LEGENDARY ? GetRarity(creature.rarity).baseOutputMin : GetAverageLevel(creature.rarity)}
         reaction={reaction}
         invalidNames={invalidNames}
         weakSpots={creature.weakSpots}
@@ -94,7 +103,14 @@ function Actions({ creature, setCreature }) {
   }
 
   function OpenModalManageAura() {
-    setModal(<ModalManageAura aura={creature.aura} weakSpots={creature.weakSpots} onClose={(newAura) => HandleCloseModalManageAura(newAura)} />);
+    setModal(
+      <ModalManageAura
+        level={creature.rarity === CREATURE_RARITIES.LEGENDARY ? GetRarity(creature.rarity).baseOutputMin : GetAverageLevel(creature.rarity)}
+        aura={creature.aura}
+        weakSpots={creature.weakSpots}
+        onClose={(newAura) => HandleCloseModalManageAura(newAura)}
+      />
+    );
   }
   function HandleCloseModalManageAura(newAura) {
     if (newAura) {

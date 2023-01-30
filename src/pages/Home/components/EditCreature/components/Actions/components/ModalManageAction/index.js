@@ -17,6 +17,8 @@ import {
   CREATURE_ACTION_REPETITIONS,
   creatureActionRepetitions,
 } from "../../../../../../../../constants/creatureConstants";
+import { GetActionDamangeAndConditionString } from "../../../../../../../../helpers/combatHelper";
+import { GetActionReachValue } from "../../../../../../../../helpers/creatureHelper";
 
 import Button from "../../../../../../../../components/Button";
 import TextInput from "../../../../../../../../components/TextInput";
@@ -26,7 +28,7 @@ import Modal from "../../../../../../../../components/Modal";
 
 import "./styles.css";
 
-function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
+function ModalManageAction({ level, action, invalidNames, weakSpots, onClose }) {
   const [tempAction, setTempAction] = useState(
     action
       ? utils.clone(action)
@@ -103,8 +105,14 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
       return false;
     }
 
-    if (tempAction.type === CREATURE_ACTION_TYPES.EFFECT && (!tempAction.creatureActionPowerTotalPercentage || !tempAction.description)) {
-      return false;
+    if (tempAction.type === CREATURE_ACTION_TYPES.EFFECT) {
+      if (!tempAction.creatureActionPowerTotalPercentage || !tempAction.description) {
+        return false;
+      }
+    } else {
+      if (!tempAction.damageIntensity && !tempAction.difficultyClass) {
+        return false;
+      }
     }
 
     if (tempAction.type === CREATURE_ACTION_TYPES.SAVING_THROW && !tempAction.difficultyClass) {
@@ -303,6 +311,17 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
               optionValue={(o) => o.value}
               optionsAtATime={4}
             />
+            <CheckInput
+              label="Origem Mágica"
+              info={[
+                { text: "Essa ação é equivalente a uma magia com componentes(V,S) e nível proporcional a raridade da criatura" },
+                { text: "" },
+                { text: "Efeitos relacionados/que interagem com magias afetam essa ação" },
+              ]}
+              onClick={() => setTempAction({ ...tempAction, isSpell: !tempAction.isSpell })}
+              isSelected={tempAction.isSpell}
+              className="row-check-box"
+            />
           </section>
           <footer>
             <Select
@@ -326,16 +345,11 @@ function ModalManageAction({ action, invalidNames, weakSpots, onClose }) {
               isDisabled={weakSpots.length === 0}
             />
             <div className="extra-details">
-              <CheckInput
-                label="Origem Mágica"
-                info={[
-                  { text: "Essa ação é equivalente a uma magia com componentes(V,S) e nível proporcional a raridade da criatura" },
-                  { text: "" },
-                  { text: "Efeitos relacionados/que interagem com magias afetam essa ação" },
-                ]}
-                onClick={() => setTempAction({ ...tempAction, isSpell: !tempAction.isSpell })}
-                isSelected={tempAction.isSpell}
-              />
+              <span className="action-preview">
+                {CheckFinalButtonValid()
+                  ? GetActionReachValue(tempAction.reach, tempAction.type) + GetActionDamangeAndConditionString(tempAction, level)
+                  : ""}
+              </span>
               <aside>
                 <button className="button-simple" onClick={HandleCancel}>
                   Cancelar

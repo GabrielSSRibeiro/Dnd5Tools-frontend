@@ -1,6 +1,7 @@
 import * as utils from "../utils";
 import * as cc from "../constants/creatureConstants";
 import * as ch from "./creatureHelper";
+import * as sch from "./skillCheckHelper";
 import { combatDifficulties } from "../constants/combatConstants";
 
 const GetHighestWeight = (options) => Math.max(...options.map((o) => o.weight));
@@ -174,7 +175,6 @@ const GetCreatureDefensivePower = (creature) => {
   creatureDefensiveWeightTotal +=
     [cc.regenerationNoBreakDamange, ...cc.damageTypes].find((dt) => dt.value === creature.regeneration.breakDamage)?.weight ?? 0;
 
-  console.log("AAA", creatureDefensiveWeightTotal);
   return creatureDefensiveWeightTotal;
 };
 
@@ -232,3 +232,39 @@ export const GetCombatDifficulty = (difficultyRatio, numberOfCharacters) => {
 //     return charactersLevel;
 //   }
 // };
+
+export const GetActionDamangeAndConditionString = (action, level) => {
+  let pieces = [];
+  if (action.difficultyClass != null && action.savingThrowAttribute != null) {
+    pieces.push(`CD ${ch.GetDCValue(action.difficultyClass, level)} ${cc.GetSavingThrowAttribute(action.savingThrowAttribute).display}`);
+  }
+
+  if (action.condition != null) {
+    let condtion = ` ou ${cc.GetCondition(action.condition).display}`;
+    if (action.conditionDuration != null) {
+      condtion += ` por ${ch.GetConditionDurationValue(action.conditionDuration)}`;
+    }
+    pieces.push(condtion);
+  }
+
+  if (action.damageIntensity != null) {
+    const damage = sch.getDamage(level, action.damageIntensity);
+    let damageString = `${utils.GetValueAsDiceString(damage, true)}`;
+    if (action.type !== cc.CREATURE_ACTION_TYPES.HEALING) {
+      damageString += ` ${cc.GetDamageType(action.damageType)?.display}`;
+    }
+
+    if (action.type === cc.CREATURE_ACTION_TYPES.ATTACK) {
+      pieces.splice(1, 0, damageString);
+    } else {
+      pieces.push(damageString);
+    }
+  }
+
+  let fianlString = pieces.join(", ");
+  if (fianlString) {
+    fianlString = `, ${fianlString}`;
+  }
+
+  return fianlString;
+};

@@ -14,6 +14,8 @@ import {
   difficultyClasses,
   creatureAttributeNames,
 } from "../../../../../../../../constants/creatureConstants";
+import { GetActionDamangeAndConditionString } from "../../../../../../../../helpers/combatHelper";
+import { GetActionReachValue } from "../../../../../../../../helpers/creatureHelper";
 
 import Button from "../../../../../../../../components/Button";
 import TextInput from "../../../../../../../../components/TextInput";
@@ -22,7 +24,7 @@ import Modal from "../../../../../../../../components/Modal";
 
 import "./styles.css";
 
-function ModalManageAura({ aura, weakSpots, onClose }) {
+function ModalManageAura({ level, aura, weakSpots, onClose }) {
   const [tempAura, setTempAura] = useState(
     aura
       ? utils.clone(aura)
@@ -96,8 +98,14 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
       return false;
     }
 
-    if (tempAura.type === CREATURE_ACTION_TYPES.EFFECT && (!tempAura.creatureActionPowerTotalPercentage || !tempAura.description)) {
-      return false;
+    if (tempAura.type === CREATURE_ACTION_TYPES.EFFECT) {
+      if (!tempAura.creatureActionPowerTotalPercentage || !tempAura.description) {
+        return false;
+      }
+    } else {
+      if (!tempAura.damageIntensity && !tempAura.difficultyClass) {
+        return false;
+      }
     }
 
     if (tempAura.type === CREATURE_ACTION_TYPES.SAVING_THROW && !tempAura.difficultyClass) {
@@ -296,7 +304,11 @@ function ModalManageAura({ aura, weakSpots, onClose }) {
               isDisabled={weakSpots.length === 0}
             />
             <div className="extra-details">
-              <div></div>
+              <span className="action-preview">
+                {CheckFinalButtonValid()
+                  ? GetActionReachValue(tempAura.reach, tempAura.type) + GetActionDamangeAndConditionString(tempAura, level)
+                  : ""}
+              </span>
               <aside>
                 <button className="button-simple" onClick={HandleCancel}>
                   Cancelar
