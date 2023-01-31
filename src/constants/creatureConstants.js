@@ -865,12 +865,12 @@ export const CREATURE_ACTION_ATTACK_REACHES = {
   RANGED_FAR: 60,
 };
 export const creatureActionAttackReaches = [
-  { display: "Corpo a Corpo (1,5m)", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE, weight: 1, isMelee: true },
-  { display: "Corpo a Corpo (3m)", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_EXTRA, weight: 2, isMelee: true },
-  { display: "Corpo a Corpo (4,5m)", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_FAR, weight: 3, isMelee: true },
-  { display: "Distância (9m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_CLOSE, weight: 4, isMelee: false },
-  { display: "Distância (18m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_EXTRA, weight: 5, isMelee: false },
-  { display: "Distância (36-90m)", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_FAR, weight: 6, isMelee: false },
+  { display: "Corpo a Corpo, 1,5m", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE, weight: 1, isMelee: true },
+  { display: "Corpo a Corpo, 3m", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_EXTRA, weight: 2, isMelee: true },
+  { display: "Corpo a Corpo, 4,5m", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_FAR, weight: 3, isMelee: true },
+  { display: "Distância, 9m", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_CLOSE, weight: 4, isMelee: false },
+  { display: "Distância, 18m", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_EXTRA, weight: 5, isMelee: false },
+  { display: "Distância, 36-90m", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_FAR, weight: 6, isMelee: false },
 ];
 export const GetCreatureActionAttackReaches = (value) => creatureActionAttackReaches.find((i) => i.value === value);
 
@@ -886,15 +886,15 @@ export const CREATURE_ACTION_SAVING_THROW_REACHES = {
   SHEPRE_BIG: 90,
 };
 export const creatureActionSavingThrowReaches = [
-  { display: "Linha (3m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_CLOSE, weight: 1 },
-  { display: "Linha (9m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_MEDIUM, weight: 2 },
-  { display: "Linha (18m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_FAR, weight: 3 },
-  { display: "Cone (1,5m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_SHORT, weight: 1 },
-  { display: "Cone (4,5m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_MEDIUM, weight: 2 },
-  { display: "Cone (9m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_LARGE, weight: 3 },
-  { display: "Esfera (1,5m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.SPHERE_SMALL, weight: 2 },
-  { display: "Esfera (3m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.SPHERE_MEDIUM, weight: 3 },
-  { display: "Esfera (6m)", value: CREATURE_ACTION_SAVING_THROW_REACHES.SHEPRE_BIG, weight: 4 },
+  { display: "Linha, 3m", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_CLOSE, weight: 1 },
+  { display: "Linha, 9m", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_MEDIUM, weight: 2 },
+  { display: "Linha, 18m", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_FAR, weight: 3 },
+  { display: "Cone, 1,5m", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_SHORT, weight: 1 },
+  { display: "Cone, 4,5m", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_MEDIUM, weight: 2 },
+  { display: "Cone, 9m", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_LARGE, weight: 3 },
+  { display: "Esfera, 1,5m", value: CREATURE_ACTION_SAVING_THROW_REACHES.SPHERE_SMALL, weight: 2 },
+  { display: "Esfera, 3m", value: CREATURE_ACTION_SAVING_THROW_REACHES.SPHERE_MEDIUM, weight: 3 },
+  { display: "Esfera, 6m", value: CREATURE_ACTION_SAVING_THROW_REACHES.SHEPRE_BIG, weight: 4 },
 ];
 export const GetCreatureActionSavingThrowReache = (value) => creatureActionSavingThrowReaches.find((i) => i.value === value);
 

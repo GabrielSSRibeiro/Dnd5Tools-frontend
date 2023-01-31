@@ -620,11 +620,13 @@ const GetItems = (creature, level, str) => {
 
   return items;
 };
-const GetActionName = (name, repetitions, frequency, weakSpot) => {
+const GetActionName = (name, reach, repetitions, frequency, weakSpot) => {
   let actionName = name;
 
   if (repetitions > 1) {
-    actionName += ` (Multiaçao x${repetitions})`;
+    actionName += ` (${reach}, Multiaçao x${repetitions})`;
+  } else {
+    actionName += ` (${reach})`;
   }
 
   if (frequency || weakSpot) {
@@ -895,7 +897,7 @@ const GetFoundryExportAura = (aura, attack, str, level) => {
 
   return {
     _id: "custom",
-    name: GetActionName(aura.name, null, null, null, aura.associatedWeakSpot),
+    name: GetActionName(aura.name, ch.GetAuraReachValue(aura.reach), null, null, null, aura.associatedWeakSpot),
     type: "feat",
     img: actionTypeAndIcon.icon,
     data: {
@@ -981,6 +983,7 @@ const GetFoundryExportAction = (action, attack, str, level) => {
     _id: "custom",
     name: GetActionName(
       action.name,
+      ch.GetActionReachValue(action.reach, action.type),
       cc.GetActionRepetitions(action.repetitions).multiplier,
       cc.GetActionFrequency(action.frequency).display,
       action.associatedWeakSpot
@@ -1071,7 +1074,13 @@ const GetFoundryExportReaction = (reaction, attack, str, level) => {
 
   return {
     _id: "custom",
-    name: GetActionName(reaction.name, 1, cc.GetActionFrequency(reaction.frequency).display, reaction.associatedWeakSpot),
+    name: GetActionName(
+      reaction.name,
+      `${cc.GetReactionTrigger(reaction.trigger).display}, ${ch.GetActionReachValue(reaction.reach, reaction.type)}`,
+      1,
+      cc.GetActionFrequency(reaction.frequency).display,
+      reaction.associatedWeakSpot
+    ),
     type: "feat",
     img: actionTypeAndIcon.icon,
     data: {
