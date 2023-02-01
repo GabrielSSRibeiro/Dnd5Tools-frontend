@@ -556,10 +556,10 @@ export const CREATURE_ATTRIBUTES = {
   EXTREME: 40,
 };
 export const creatureAttributes = [
-  { display: "Baixo", value: CREATURE_ATTRIBUTES.LOW, weight: 1, baseOutput: 8 },
-  { display: "Médio", value: CREATURE_ATTRIBUTES.MEDIUM, weight: 2, baseOutput: 14 },
-  { display: "Alto", value: CREATURE_ATTRIBUTES.HIGH, weight: 3, baseOutput: 20 },
-  { display: "Extremo", value: CREATURE_ATTRIBUTES.EXTREME, weight: 4, baseOutput: 26 },
+  { display: "Baixo (6-10)", value: CREATURE_ATTRIBUTES.LOW, weight: 1, baseOutput: 8 },
+  { display: "Médio (12-16)", value: CREATURE_ATTRIBUTES.MEDIUM, weight: 2, baseOutput: 14 },
+  { display: "Alto (18-22)", value: CREATURE_ATTRIBUTES.HIGH, weight: 3, baseOutput: 20 },
+  { display: "Extremo (24-28)", value: CREATURE_ATTRIBUTES.EXTREME, weight: 4, baseOutput: 26 },
 ];
 export const GetAttribute = (value) => creatureAttributes.find((a) => a.value === value);
 
@@ -616,10 +616,10 @@ export const CREATURE_ARMOR_CLASSES = {
   EXTREME: 40,
 };
 export const creatureArmorClasses = [
-  { display: "Baixa", value: CREATURE_ARMOR_CLASSES.LOW, weight: 1, baseOutput: 12 },
-  { display: "Média", value: CREATURE_ARMOR_CLASSES.MEDIUM, weight: 2, baseOutput: 16 },
-  { display: "Alta", value: CREATURE_ARMOR_CLASSES.HIGH, weight: 3, baseOutput: 20 },
-  { display: "Extrema", value: CREATURE_ARMOR_CLASSES.EXTREME, weight: 4, baseOutput: 24 },
+  { display: "Baixa (11-13)", value: CREATURE_ARMOR_CLASSES.LOW, weight: 1, baseOutput: 12 },
+  { display: "Média (15-17)", value: CREATURE_ARMOR_CLASSES.MEDIUM, weight: 2, baseOutput: 16 },
+  { display: "Alta (19-21)", value: CREATURE_ARMOR_CLASSES.HIGH, weight: 3, baseOutput: 20 },
+  { display: "Extrema (23-25)", value: CREATURE_ARMOR_CLASSES.EXTREME, weight: 4, baseOutput: 24 },
 ];
 export const GetArmorClass = (value) => creatureArmorClasses.find((a) => a.value === value);
 

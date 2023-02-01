@@ -136,20 +136,24 @@ function Actions({ creature, setCreature }) {
           </div>
           <Button text="Adicionar" onClick={() => OpenModalManageAction()} isDisabled={creature.actions.length >= maxNumberOfActions} />
           <div className="actions-wrapper">
-            {creature.actions.map((action) => (
-              <div className="creature-action" key={action.name}>
-                <span>{action.name}</span>
-                <div>
-                  <span>{creatureActionFrequencies.find((af) => af.value === action.frequency).display}</span>
-                  <button onClick={() => OpenModalManageAction(action)} className="edit-row">
-                    <i className="fas fa-pencil-alt"></i>
-                  </button>
-                  <button onClick={() => DeleteAction(action)} className="delete-row">
-                    Deletar
-                  </button>
+            {creature.actions.length > 0 ? (
+              creature.actions.map((action) => (
+                <div className="creature-action" key={action.name}>
+                  <span>{action.name}</span>
+                  <div>
+                    <span>{creatureActionFrequencies.find((af) => af.value === action.frequency).display}</span>
+                    <button onClick={() => OpenModalManageAction(action)} className="edit-row">
+                      <i className="fas fa-pencil-alt"></i>
+                    </button>
+                    <button onClick={() => DeleteAction(action)} className="delete-row">
+                      Deletar
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <span className="no-common-actions">Pelo menos uma ação comum é necessária</span>
+            )}
           </div>
         </div>
         <div className="reactions">
