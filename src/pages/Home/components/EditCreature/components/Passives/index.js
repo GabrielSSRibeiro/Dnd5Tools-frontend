@@ -281,7 +281,11 @@ function Passives({ creature, setCreature }) {
                   />
                   <Select
                     label={"Multiplicador"}
-                    info={[{ text: "O quanto esse especial multiplica o poder final da criatura" }]}
+                    info={[
+                      { text: "O quanto esse especial multiplica o poder final da criatura" },
+                      { text: "" },
+                      { text: "Usado para calcular a dificuldade da criatura" },
+                    ]}
                     optionsAtATime={3}
                     extraWidth={100}
                     value={creature}

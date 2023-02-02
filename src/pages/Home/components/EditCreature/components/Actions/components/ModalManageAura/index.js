@@ -198,7 +198,11 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
               <section className="action-row">
                 <Select
                   label={"Multiplicador (Efeito)"}
-                  info={[{ text: "Porcetagem que esse efeito representa de uma açao com Poder Total" }]}
+                  info={[
+                    { text: "Porcetagem que esse efeito representa de uma açao com Poder Total" },
+                    { text: "" },
+                    { text: "Usado para calcular a dificuldade da criatura" },
+                  ]}
                   extraWidth={100}
                   isLarge={true}
                   value={tempAura}
@@ -254,6 +258,7 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
                 />
                 <Select
                   label={"Duração"}
+                  info={[{ text: "Alvo pode repetir teste ao final de cada um de seus turnos" }]}
                   extraWidth={100}
                   isLarge={true}
                   value={tempAura}

@@ -218,7 +218,11 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
               <section className="action-row">
                 <Select
                   label={"Multiplicador (Efeito)"}
-                  info={[{ text: "Porcetagem que esse efeito representa de uma açao com Poder Total" }]}
+                  info={[
+                    { text: "Porcetagem que esse efeito representa de uma açao com Poder Total" },
+                    { text: "" },
+                    { text: "Usado para calcular a dificuldade da criatura" },
+                  ]}
                   extraWidth={100}
                   isLarge={true}
                   value={tempReaction}
@@ -287,6 +291,7 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
                 />
                 <Select
                   label={"Duração"}
+                  info={[{ text: "Alvo pode repetir teste ao final de cada um de seus turnos" }]}
                   extraWidth={100}
                   isLarge={true}
                   value={tempReaction}
@@ -310,7 +315,16 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
           <section className="action-row">
             <Select
               label={"Frequência"}
-              info={[{ text: "Corresponde a quantidade de rodadas entre os usos dessa habilidade" }]}
+              info={[
+                { text: "Corresponde a quantidade de rodadas entre os usos dessa habilidade" },
+                { text: "" },
+                { text: "Isso representa a limitação física ou mental da criatura usar essa ação" },
+                { text: "" },
+                {
+                  text: "Isso é uma recomendação, mas pode ser ignorado em momentos onde",
+                },
+                { text: "a criatura está passando do seu limite por motivos narrativos ou de quase morte" },
+              ]}
               extraWidth={100}
               isLarge={true}
               value={tempReaction}
