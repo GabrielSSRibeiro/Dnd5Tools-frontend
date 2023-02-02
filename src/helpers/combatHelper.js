@@ -233,14 +233,19 @@ export const GetCombatDifficulty = (difficultyRatio, numberOfCharacters) => {
 //   }
 // };
 
-export const GetActionDamangeAndConditionString = (action, level) => {
+export const GetActionDamangeAndConditionString = (action, level, htmlTag) => {
   let pieces = [];
+  const open = htmlTag ? `<${htmlTag}>` : "";
+  const close = htmlTag ? `</${htmlTag}>` : "";
+
   if (action.difficultyClass != null && action.savingThrowAttribute != null) {
-    pieces.push(`CD ${ch.GetDCValue(action.difficultyClass, level)} ${cc.GetSavingThrowAttribute(action.savingThrowAttribute).display}`);
+    pieces.push(
+      `${open}CD ${ch.GetDCValue(action.difficultyClass, level)}${close} ${cc.GetSavingThrowAttribute(action.savingThrowAttribute).display}`
+    );
   }
 
   if (action.condition != null) {
-    let condtion = ` ou ${cc.GetCondition(action.condition).display}`;
+    let condtion = ` ou ${open}${cc.GetCondition(action.condition).display}${close}`;
     if (action.conditionDuration != null) {
       condtion += ` por ${ch.GetConditionDurationValue(action.conditionDuration)}`;
     }
@@ -249,13 +254,13 @@ export const GetActionDamangeAndConditionString = (action, level) => {
 
   if (action.damageIntensity != null) {
     const damage = sch.getDamage(level, action.damageIntensity);
-    let damageString = `${utils.GetValueAsDiceString(damage, true)}`;
+    let damageString = `${open}${utils.GetValueAsDiceString(damage, true)}${close}`;
     if (action.type !== cc.CREATURE_ACTION_TYPES.HEALING) {
       damageString += ` ${cc.GetDamageType(action.damageType)?.display}`;
     }
 
     if (action.type === cc.CREATURE_ACTION_TYPES.ATTACK) {
-      pieces.splice(1, 0, damageString);
+      pieces.splice(0, 0, damageString);
     } else {
       pieces.push(damageString);
     }

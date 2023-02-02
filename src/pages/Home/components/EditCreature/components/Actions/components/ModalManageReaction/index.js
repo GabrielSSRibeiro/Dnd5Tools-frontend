@@ -112,6 +112,10 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
       return false;
     }
 
+    if (tempReaction.type === CREATURE_ACTION_TYPES.ATTACK && tempReaction.difficultyClass && !tempReaction.condition) {
+      return false;
+    }
+
     if (tempReaction.type === CREATURE_ACTION_TYPES.EFFECT) {
       if (!tempReaction.creatureActionPowerTotalPercentage || !tempReaction.description) {
         return false;
@@ -214,7 +218,7 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
               <section className="action-row">
                 <Select
                   label={"Multiplicador (Efeito)"}
-                  info={[{ text: "Porcetagem do Poder Total da ação que esse Efeito representa" }]}
+                  info={[{ text: "Porcetagem que esse efeito representa de uma açao com Poder Total" }]}
                   extraWidth={100}
                   isLarge={true}
                   value={tempReaction}

@@ -1,5 +1,6 @@
 import * as utils from "../utils";
 import * as sch from "./skillCheckHelper";
+import { GetActionDamangeAndConditionString } from "./combatHelper";
 import * as ch from "./creatureHelper";
 import * as th from "./treasureHelper";
 import * as cc from "../constants/creatureConstants";
@@ -643,44 +644,6 @@ const GetActionName = (name, reach, repetitions, frequency, weakSpot) => {
 
   return actionName;
 };
-const GetActionDamangeAndConditionString = (action, level) => {
-  let pieces = [];
-
-  if (action.difficultyClass != null && action.savingThrowAttribute != null) {
-    pieces.push(
-      `<strong>CD ${ch.GetDCValue(action.difficultyClass, level)}</strong> ${cc.GetSavingThrowAttribute(action.savingThrowAttribute).display}`
-    );
-  }
-
-  if (action.condition != null) {
-    let condtion = ` ou <strong>${cc.GetCondition(action.condition).display}</strong>`;
-    if (action.conditionDuration != null) {
-      condtion += ` por ${ch.GetConditionDurationValue(action.conditionDuration)}`;
-    }
-    pieces.push(condtion);
-  }
-
-  if (action.damageIntensity != null) {
-    const damage = sch.getDamage(level, action.damageIntensity);
-    let damageString = `<strong>${utils.GetValueAsDiceString(damage, true)}</strong>`;
-    if (action.type !== cc.CREATURE_ACTION_TYPES.HEALING) {
-      damageString += ` ${cc.GetDamageType(action.damageType)?.display}`;
-    }
-
-    if (action.type === cc.CREATURE_ACTION_TYPES.ATTACK) {
-      pieces.splice(1, 0, damageString);
-    } else {
-      pieces.push(damageString);
-    }
-  }
-
-  let fianlString = pieces.join(", ");
-  if (fianlString) {
-    fianlString = `, ${fianlString}`;
-  }
-
-  return fianlString;
-};
 const GetActionTypeAndIcon = (type, reach, isSpell = false) => {
   let actionType = "other";
   let icon = "modules/plutonium/media/icon/mighty-force.svg";
@@ -892,7 +855,7 @@ const GetFoundryExportCustomSpecial = (customSpecial) => {
   };
 };
 const GetFoundryExportAura = (aura, attack, str, level) => {
-  const description = `Alcance ${ch.GetAuraReachValue(aura.reach)}${GetActionDamangeAndConditionString(aura, level)}`;
+  const description = `Alcance ${ch.GetAuraReachValue(aura.reach)}${GetActionDamangeAndConditionString(aura, level, "strong")}`;
   const actionTypeAndIcon = GetActionTypeAndIcon(aura.type);
 
   return {
@@ -975,7 +938,7 @@ const GetFoundryExportAction = (action, attack, str, level) => {
   if (action.isSpell) {
     description += `(Magia de Nível ${ch.GetActionSpellValue(action.frequency, level)} - V,S)<br />`;
   }
-  description += `${ch.GetActionReachValue(action.reach, action.type)}${GetActionDamangeAndConditionString(action, level)}`;
+  description += `${ch.GetActionReachValue(action.reach, action.type)}${GetActionDamangeAndConditionString(action, level, "strong")}`;
 
   const actionTypeAndIcon = GetActionTypeAndIcon(action.type, action.reach, action.isSpell);
 
@@ -1068,7 +1031,7 @@ const GetFoundryExportReaction = (reaction, attack, str, level) => {
   description += `${reaction.triggerDescription ?? cc.GetReactionTrigger(reaction.trigger).display}, ${ch.GetActionReachValue(
     reaction.reach,
     reaction.type
-  )}${GetActionDamangeAndConditionString(reaction, level)}`;
+  )}${GetActionDamangeAndConditionString(reaction, level, "strong")}`;
 
   const actionTypeAndIcon = GetActionTypeAndIcon(reaction.type, reaction.reach, reaction.isSpell);
 
@@ -1188,7 +1151,7 @@ const GetFoundryExportTreasure = (treasure, actions, level) => {
         description += ` <strong>(Multiaçao x${repetitions})</strong>`;
       }
       description += ` (Ação, ${th.GetEquipAbilityDailyCharges(action.frequency)} carga(s) por dia)</p>`;
-      description += `<p>${ch.GetActionReachValue(action.reach, action.type)}${GetActionDamangeAndConditionString(action, level)}</p>`;
+      description += `<p>${ch.GetActionReachValue(action.reach, action.type)}${GetActionDamangeAndConditionString(action, level, "strong")}</p>`;
     }
     img = "modules/plutonium/media/icon/breastplate.svg";
   }

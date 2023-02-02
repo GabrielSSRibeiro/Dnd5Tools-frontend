@@ -264,10 +264,7 @@ function Passives({ creature, setCreature }) {
           <div className="specials-divider"></div>
           <CheckInput
             label="Personalizado"
-            info={[
-              { text: "Opções simples como sobrevoo, anfíbio e natureza anormal" },
-              { text: "Ou habilidades poderosas que multiplicam o poder final da criatura" },
-            ]}
+            info={[{ text: "Opções simples como sobrevoo, anfíbio e natureza anormal" }, { text: "Ou habilidades poderosas personalizadas" }]}
             onClick={HandleToggleCustomSpecials}
             isSelected={hasCustomSpecials}
           />
@@ -284,6 +281,7 @@ function Passives({ creature, setCreature }) {
                   />
                   <Select
                     label={"Multiplicador"}
+                    info={[{ text: "O quanto esse especial multiplica o poder final da criatura" }]}
                     optionsAtATime={3}
                     extraWidth={100}
                     value={creature}

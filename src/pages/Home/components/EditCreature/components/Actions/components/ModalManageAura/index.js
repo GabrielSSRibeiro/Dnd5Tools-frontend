@@ -98,6 +98,10 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
       return false;
     }
 
+    if (tempAura.type === CREATURE_ACTION_TYPES.ATTACK && tempAura.difficultyClass && !tempAura.condition) {
+      return false;
+    }
+
     if (tempAura.type === CREATURE_ACTION_TYPES.EFFECT) {
       if (!tempAura.creatureActionPowerTotalPercentage || !tempAura.description) {
         return false;
@@ -194,7 +198,7 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
               <section className="action-row">
                 <Select
                   label={"Multiplicador (Efeito)"}
-                  info={[{ text: "Porcetagem do Poder Total da ação que esse Efeito representa" }]}
+                  info={[{ text: "Porcetagem que esse efeito representa de uma açao com Poder Total" }]}
                   extraWidth={100}
                   isLarge={true}
                   value={tempAura}
