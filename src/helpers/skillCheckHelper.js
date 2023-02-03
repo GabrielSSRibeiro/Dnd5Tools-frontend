@@ -6,6 +6,12 @@ const rand = utils.randomIntFromInterval;
 const variance = utils.randomValueFromVariancePercentage;
 
 export const getDamage = (level, damageIntensity) => {
+  const numberOfIteractions = 5;
+  const iteractionsList = utils.createArrayFromInt(numberOfIteractions).map((item) => getDamageValue(level, damageIntensity));
+  return Math.round(utils.averageOfArray(iteractionsList));
+};
+
+const getDamageValue = (level, damageIntensity) => {
   const damageIndex = damageIntensities.findIndex((di) => di.value === damageIntensity);
   const intensityFactor = 2;
   const damageMultiplier = Math.pow(intensityFactor, damageIndex + 1 - intensityFactor); // 2^-1, 2^0, 2^1, 2^2

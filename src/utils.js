@@ -181,7 +181,7 @@ export const GetValueAsDiceString = (value, keepRemainder = false, dicedPercenta
     diceString += `${remainingValue}`;
   }
 
-  return diceString;
+  return `${diceString}(${value})`;
 };
 
 export const GroupArrayBy = (arr, property) => {
