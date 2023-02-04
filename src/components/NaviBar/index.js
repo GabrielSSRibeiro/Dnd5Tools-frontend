@@ -70,7 +70,7 @@ function NaviBar({
           <p>Notas</p>
           <span>Em versao de celular, use a posiçao paisagem</span>
           <span>No Foundry, ficha de criatura recomendada: "Monster Blocks"</span>
-          <span>No Foundry, módulo de controle de criatura recomendado: "Token Action HUD"</span>
+          <span>No Foundry, módulo de controle de criatura recomendado: "Argon Combat HUD"</span>
           <span>No Foundry, Pontos Fracos estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>
           <span>No Foundry, tokens sao genericos, por enquanto</span>
           <p>-</p>

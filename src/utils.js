@@ -155,7 +155,7 @@ export function downloadObjectAsJson(exportObj, exportName) {
   downloadAnchorNode.remove();
 }
 
-export const GetValueAsDiceString = (value, keepRemainder = false, dicedPercentage = 1) => {
+export const GetValueAsDiceString = (value, keepRemainder = false, dicedPercentage = 1, includeAverage = false) => {
   const valueToTransform = Math.round(value * dicedPercentage);
   let remainingValue = value - valueToTransform;
 
@@ -181,7 +181,11 @@ export const GetValueAsDiceString = (value, keepRemainder = false, dicedPercenta
     diceString += `${remainingValue}`;
   }
 
-  return `${diceString}(${value})`;
+  if (includeAverage) {
+    diceString += `(${value})`;
+  }
+
+  return diceString;
 };
 
 export const GroupArrayBy = (arr, property) => {

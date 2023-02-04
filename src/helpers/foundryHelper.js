@@ -574,7 +574,30 @@ const GetToken = (creature) => {
     bar2: {
       attribute: null,
     },
-    flags: {},
+    flags: {
+      "token-z": {
+        zIndex: 0,
+      },
+      "image-hover": {
+        hideArt: false,
+      },
+      "token-auras": {
+        aura1: {
+          permission: "all",
+          colour: "#ffffff",
+          opacity: 0.5,
+          distance: creature.aura ? cc.GetAuraReach(creature.aura.reach).foundryExport : null,
+          square: false,
+        },
+        aura2: {
+          permission: "all",
+          colour: "#ffffff",
+          opacity: 0.5,
+          distance: null,
+          square: false,
+        },
+      },
+    },
     randomImg: false,
     elevation: 0,
     actorData: {},
@@ -624,10 +647,13 @@ const GetItems = (creature, level, str) => {
 const GetActionName = (name, reach, repetitions, frequency, weakSpot) => {
   let actionName = name;
 
+  // if (repetitions > 1) {
+  //   actionName += ` (${reach}, Multiaçao x${repetitions})`;
+  // } else {
+  //   actionName += ` (${reach})`;
+  // }
   if (repetitions > 1) {
-    actionName += ` (${reach}, Multiaçao x${repetitions})`;
-  } else {
-    actionName += ` (${reach})`;
+    actionName += ` (Multiaçao x${repetitions})`;
   }
 
   if (frequency || weakSpot) {

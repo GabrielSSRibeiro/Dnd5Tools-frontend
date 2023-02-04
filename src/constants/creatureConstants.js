@@ -979,10 +979,10 @@ export const CREATURE_AURA_REACHES = {
   EXTREME: 40,
 };
 export const creatureAuraReaches = [
-  { display: "Curto (1,5m)", value: CREATURE_AURA_REACHES.SHORT, weight: 1, baseOutput: "1,5m" },
-  { display: "Médio (3m)", value: CREATURE_AURA_REACHES.MEDIUM, weight: 2, baseOutput: "3m" },
-  { display: "Alto (4,5m)", value: CREATURE_AURA_REACHES.LONG, weight: 3, baseOutput: "4,5m" },
-  { display: "Extremo (6m)", value: CREATURE_AURA_REACHES.EXTREME, weight: 4, baseOutput: "6m" },
+  { display: "Curto (1,5m)", value: CREATURE_AURA_REACHES.SHORT, weight: 1, baseOutput: "1,5m", foundryExport: 5 },
+  { display: "Médio (3m)", value: CREATURE_AURA_REACHES.MEDIUM, weight: 2, baseOutput: "3m", foundryExport: 10 },
+  { display: "Alto (4,5m)", value: CREATURE_AURA_REACHES.LONG, weight: 3, baseOutput: "4,5m", foundryExport: 15 },
+  { display: "Extremo (6m)", value: CREATURE_AURA_REACHES.EXTREME, weight: 4, baseOutput: "6m", foundryExport: 20 },
 ];
 export const GetAuraReach = (value) => creatureAuraReaches.find((s) => s.value === value);
 
