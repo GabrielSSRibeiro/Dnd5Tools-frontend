@@ -155,6 +155,11 @@ function Attributes({ creature, setCreature }) {
         info={[
           { text: "Algo que pode ser quebrado ou destruído, como: Perna, causa, asa, armadura" },
           { text: "Recomendado apenas para criaturas grandes ou maiores" },
+          { text: "Esses pontos podem ser descritos pelo mestre, encontrados com testes, ou pela intuiçao dos personagens" },
+          { text: "" },
+          {
+            text: "Pontos Fracos naturalmente possuem Meia Cobertura, pois a criatura o protege com o resto do corpo ou ele se encontra em difícil acesso. Isso por ser ignorado dependendo do posicionamento dos personagens",
+          },
         ]}
         onClick={HandleToggleWeakSpots}
         isSelected={hasWeakSpots}
