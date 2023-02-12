@@ -129,7 +129,7 @@ export const getItemAfixes = (type, rarity, damageType, attribute) => {
     { type: EQUIPMENT_TYPES.JEWELRY, getAfixes: () => getJewelryAfixes(attribute) },
     {
       type: EQUIPMENT_TYPES.POTION,
-      getAfixes: () => [...getWeaponAfixes(damageType), ...getArmorAfixes(damageType), ...getJewelryAfixes(attribute)],
+      getAfixes: () => utils.randomItemFromArray([getWeaponAfixes(damageType), getArmorAfixes(damageType), getJewelryAfixes(attribute)]),
     },
   ];
 

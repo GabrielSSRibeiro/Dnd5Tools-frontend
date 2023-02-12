@@ -44,7 +44,8 @@ export const GetHPValue = (level, HP, con) => {
   const conValue = cc.creatureAttributes.find((a) => a.value === con).baseOutput;
 
   const baseHp = sch.getDamage(level, HP);
-  let hp = (baseHp * conValue) / 2;
+  const balanceFactor = 3;
+  let hp = (baseHp * conValue) / balanceFactor;
   const hpVariance = 0.1;
   return utils.randomValueFromVariancePercentage(hp, hpVariance);
 
