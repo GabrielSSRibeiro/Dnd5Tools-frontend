@@ -614,6 +614,11 @@ const GetItems = (creature, level, str) => {
     items.push(GetFoundryExportRegeneration(creature.regeneration));
   }
 
+  const lr = ch.GetLegendaryResistenciesValue(creature.legendaryResistences);
+  if (lr > 0) {
+    items.push(GetFoundryExportCustomSpecial(`Resistência Lendária (${lr}/Dia)`));
+  }
+
   if (creature.customSpecials.length > 0) {
     ch.GetCustomSpecialsForDisplay(creature.customSpecials).forEach((cs) => {
       items.push(GetFoundryExportCustomSpecial(cs));
