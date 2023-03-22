@@ -379,6 +379,10 @@
   height: 180px;
 }
 
+.Bestiary-container .list-creature .creature-avatar.basic-pack {
+  border: 1px solid var(--gray3);
+}
+
 .Bestiary-container .list-creature .power-scale {
   display: flex;
   align-items: center;

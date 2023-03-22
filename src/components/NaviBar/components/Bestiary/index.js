@@ -392,7 +392,11 @@ function Bestiary({
                       </div>
                       <img src={rarityGems.find((rg) => rg.rarity === creature.rarity).gem} alt="creature-gem" />
                     </div>
-                    <img className="creature-avatar" src={creature.image} alt="creature-avatar" />
+                    <img
+                      className={`creature-avatar${IsBasicPack(creature.owner) ? " basic-pack" : ""}`}
+                      src={creature.image}
+                      alt="creature-avatar"
+                    />
                   </div>
                   <div className="power-scale">
                     <div className="wrapper-with-icon">
