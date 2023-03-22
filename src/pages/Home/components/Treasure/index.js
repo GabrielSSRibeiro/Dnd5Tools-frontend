@@ -167,6 +167,9 @@ function Treasure({ resultText, level }) {
                 {
                   text: "Todos os usos sao consumidos em um sucesso",
                 },
+                {
+                  text: "Múltiplas tentativas de forja podem ser feitas mesmo após sucesso. O sucesso só é mantido se todos forem sucesso e aí são múltiplos itens gerados pra a escolha de uma versão",
+                },
               ]}
             >
               <main className="panel-select details">

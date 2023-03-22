@@ -86,7 +86,7 @@ const GetCreatureOffensivePower = (creature) => {
   if (creature.aura) {
     let auraWeightTotal = 0;
     if (creature.aura.creatureActionPowerTotalPercentage) {
-      auraWeightTotal = cc.GetCreatureActionPowerTotalPercentage(creature.aura.creatureActionPowerTotalPercentage).powerTotal * GetAuraMaxPower();
+      auraWeightTotal = 0.25 * GetAuraMaxPower();
     } else {
       auraWeightTotal += cc.GetAuraReach(creature.aura.reach).weight;
       auraWeightTotal += cc.GetDamageIntensity(creature.aura.damageIntensity)?.weight ?? 0;
@@ -103,7 +103,7 @@ const GetCreatureOffensivePower = (creature) => {
     creature.actions.forEach((action) => {
       let actionWeightTotal = 0;
       if (action.creatureActionPowerTotalPercentage) {
-        actionWeightTotal = cc.GetCreatureActionPowerTotalPercentage(action.creatureActionPowerTotalPercentage).powerTotal * GetActionMaxPower();
+        actionWeightTotal = 0.25 * GetActionMaxPower();
       } else {
         actionWeightTotal += cc.GetCreatureActionType(action.type).reaches.find((r) => r.value === action.reach).weight;
         actionWeightTotal += cc.GetDamageIntensity(action.damageIntensity)?.weight ?? 0;
@@ -124,8 +124,7 @@ const GetCreatureOffensivePower = (creature) => {
     creature.reactions.forEach((reaction) => {
       let reactionWeightTotal = 0;
       if (reaction.creatureActionPowerTotalPercentage) {
-        reactionWeightTotal =
-          cc.GetCreatureActionPowerTotalPercentage(reaction.creatureActionPowerTotalPercentage).powerTotal * GetReactionMaxPower();
+        reactionWeightTotal = 0.25 * GetReactionMaxPower();
       } else {
         reactionWeightTotal += cc.GetCreatureActionType(reaction.type).reaches.find((r) => r.value === reaction.reach).weight;
         reactionWeightTotal += cc.GetDamageIntensity(reaction.damageIntensity)?.weight ?? 0;

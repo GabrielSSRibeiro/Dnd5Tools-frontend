@@ -32,7 +32,7 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
           name: null,
           description: null,
           type: CREATURE_ACTION_TYPES.SAVING_THROW,
-          creatureActionPowerTotalPercentage: null,
+          // creatureActionPowerTotalPercentage: null,
           reach: CREATURE_AURA_REACHES.MEDIUM,
           damageIntensity: null,
           damageType: null,
@@ -103,9 +103,9 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
     }
 
     if (tempAura.type === CREATURE_ACTION_TYPES.EFFECT) {
-      if (!tempAura.creatureActionPowerTotalPercentage || !tempAura.description) {
-        return false;
-      }
+      // if (!tempAura.creatureActionPowerTotalPercentage || !tempAura.description) {
+      //   return false;
+      // }
     } else {
       if (!tempAura.damageIntensity && !tempAura.difficultyClass) {
         return false;
@@ -211,7 +211,7 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
                   options={creatureActionPowerTotalPercentages}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
-                  className={tempAura.type !== CREATURE_ACTION_TYPES.EFFECT ? "invisible" : ""}
+                  className="invisible"
                 />
                 <Select
                   label={"Classe de Dificuldade (CD)"}

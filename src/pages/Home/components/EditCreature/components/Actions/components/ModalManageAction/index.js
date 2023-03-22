@@ -36,7 +36,7 @@ function ModalManageAction({ level, action, invalidNames, weakSpots, onClose }) 
           name: null,
           description: null,
           type: CREATURE_ACTION_TYPES.ATTACK,
-          creatureActionPowerTotalPercentage: null,
+          // creatureActionPowerTotalPercentage: null,
           reach: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
           frequency: CREATURE_ACTION_FREQUENCIES.COMMON,
           damageIntensity: null,
@@ -62,7 +62,7 @@ function ModalManageAction({ level, action, invalidNames, weakSpots, onClose }) 
       updatedValue.difficultyClass = null;
       updatedValue.savingThrowAttribute = null;
     } else {
-      updatedValue.creatureActionPowerTotalPercentage = null;
+      // updatedValue.creatureActionPowerTotalPercentage = null;
     }
 
     if (updatedValue.type === CREATURE_ACTION_TYPES.HEALING) {
@@ -110,9 +110,9 @@ function ModalManageAction({ level, action, invalidNames, weakSpots, onClose }) 
     }
 
     if (tempAction.type === CREATURE_ACTION_TYPES.EFFECT) {
-      if (!tempAction.creatureActionPowerTotalPercentage || !tempAction.description) {
-        return false;
-      }
+      // if (!tempAction.creatureActionPowerTotalPercentage || !tempAction.description) {
+      //   return false;
+      // }
     } else {
       if (!tempAction.damageIntensity && !tempAction.difficultyClass) {
         return false;
@@ -218,7 +218,7 @@ function ModalManageAction({ level, action, invalidNames, weakSpots, onClose }) 
                   options={creatureActionPowerTotalPercentages}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
-                  className={tempAction.type !== CREATURE_ACTION_TYPES.EFFECT ? "invisible" : ""}
+                  className="invisible"
                 />
                 <Select
                   label={"Classe de Dificuldade (CD)"}

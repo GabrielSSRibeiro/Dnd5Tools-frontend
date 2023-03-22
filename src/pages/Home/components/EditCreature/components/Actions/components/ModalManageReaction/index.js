@@ -36,7 +36,7 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
           name: null,
           description: null,
           type: CREATURE_ACTION_TYPES.ATTACK,
-          creatureActionPowerTotalPercentage: null,
+          // creatureActionPowerTotalPercentage: null,
           reach: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
           trigger: CREATURE_REACTION_TRIGGERS.ON_DAMAGE_TAKEN,
           triggerDescription: null,
@@ -117,9 +117,9 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
     }
 
     if (tempReaction.type === CREATURE_ACTION_TYPES.EFFECT) {
-      if (!tempReaction.creatureActionPowerTotalPercentage || !tempReaction.description) {
-        return false;
-      }
+      // if (!tempReaction.creatureActionPowerTotalPercentage || !tempReaction.description) {
+      //   return false;
+      // }
     } else {
       if (!tempReaction.damageIntensity && !tempReaction.difficultyClass) {
         return false;
@@ -231,7 +231,7 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
                   options={creatureActionPowerTotalPercentages}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
-                  className={tempReaction.type !== CREATURE_ACTION_TYPES.EFFECT ? "invisible" : ""}
+                  className="invisible"
                 />
                 <Select
                   label={"Classe de Dificuldade (CD)"}

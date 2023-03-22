@@ -56,6 +56,7 @@ function NaviBar({
       <Modal title="Versao 1.5" onClickToClose={() => setModal(null)} className="menu-modal-body">
         <div style={{ display: "flex", flexDirection: "column" }}>
           <p>Motivaçoes</p>
+          <span>Subir o piso de mestrar uma sessao. Rapido de criar, facil de editar</span>
           <span>Abstrair o processo de criacao de criaturas, o tornando subjetivo e simples</span>
           <span>
             A ficha de uma criatura é, e deveria ser, desconhecida pelos jogadores, logo algumas liberdades podem ser tomadas durante a criaçao
