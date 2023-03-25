@@ -153,8 +153,9 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
   function HandleCloseModalFastBuild(tempCreature) {
     if (tempCreature != null) {
       HandleSave(tempCreature);
-      setModal(null);
     }
+
+    setModal(null);
   }
 
   function HandleStepClick(step) {

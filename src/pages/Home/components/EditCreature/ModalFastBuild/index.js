@@ -87,6 +87,14 @@ function ModalFastBuild({ creature, onClose }) {
     onClose();
   }
 
+  function CheckFinalButtonValid() {
+    if (!tempCreature.rarity || !tempCreature.size || !tempCreature.type || (!hasMeleeAction && !hasRangedAction)) {
+      return false;
+    }
+
+    return true;
+  }
+
   function HandleConfirm() {
     const repetitions = REPETITIONS.find((r) => r.rarity === tempCreature.rarity).value;
     const reach = REACHES.find((r) => r.size === tempCreature.size);
@@ -176,7 +184,7 @@ function ModalFastBuild({ creature, onClose }) {
         <button className="button-simple" onClick={HandleCancel}>
           Cancelar
         </button>
-        <Button text="Salvar" onClick={HandleConfirm} />
+        <Button text="Salvar" onClick={HandleConfirm} isDisabled={!CheckFinalButtonValid()} />
       </footer>
     </Modal>
   );
