@@ -4,6 +4,7 @@ import { CREATURE_ACTION_FREQUENCIES } from "../../../../constants/creatureConst
 import { IsBasicPack } from "../.../../../../../helpers/creatureHelper";
 
 import ModalDescription from "./ModalDescription";
+import ModalFastBuild from "./ModalFastBuild";
 import Definition from "./components/Definition";
 import Atributes from "./components/Attributes";
 import Resistencies from "./components/Resistencies";
@@ -146,6 +147,16 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
     setModal(null);
   }
 
+  async function OpenModalFastBuild() {
+    setModal(<ModalFastBuild creature={creature} onClose={HandleCloseModalFastBuild} />);
+  }
+  function HandleCloseModalFastBuild(tempCreature) {
+    if (tempCreature != null) {
+      HandleSave(tempCreature);
+      setModal(null);
+    }
+  }
+
   function HandleStepClick(step) {
     setActiveProgessBarStep(step);
   }
@@ -243,7 +254,12 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
             </div>
           </aside>
         </main>
-        {isFirstStep && <Button text="Continuar" onClick={() => setIsFirstStep(false)} isDisabled={!creature.image || !creature.name} />}
+        {isFirstStep && (
+          <div className="first-step-options">
+            <Button text="Continuar" onClick={() => setIsFirstStep(false)} isDisabled={!creature.image || !creature.name} />
+            <Button text="Criação Rápida" onClick={OpenModalFastBuild} isDisabled={!creature.image || !creature.name} />
+          </div>
+        )}
       </div>
       <div className={`${isFirstStep ? "hidden" : "edit-process-details"}`}>
         <header className="progess-bar">

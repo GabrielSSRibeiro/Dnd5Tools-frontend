@@ -179,6 +179,10 @@
   flex: 1;
 }
 
+.EditCreature-container .first-step-wrapper .first-step-options {
+  display: flex;
+  column-gap: 10px;
+}
 /* --------------------------------- */
 
 .EditCreature-container.main-edit-process {

@@ -616,10 +616,10 @@ export const CREATURE_ARMOR_CLASSES = {
   EXTREME: 40,
 };
 export const creatureArmorClasses = [
-  { display: "Baixa (11-13)", value: CREATURE_ARMOR_CLASSES.LOW, weight: 1, baseOutput: 12 },
-  { display: "Média (15-17)", value: CREATURE_ARMOR_CLASSES.MEDIUM, weight: 2, baseOutput: 16 },
-  { display: "Alta (19-21)", value: CREATURE_ARMOR_CLASSES.HIGH, weight: 3, baseOutput: 20 },
-  { display: "Extrema (23-25)", value: CREATURE_ARMOR_CLASSES.EXTREME, weight: 4, baseOutput: 24 },
+  { display: "Baixa (10-12)", value: CREATURE_ARMOR_CLASSES.LOW, weight: 1, baseOutput: 11 },
+  { display: "Média (14-16)", value: CREATURE_ARMOR_CLASSES.MEDIUM, weight: 2, baseOutput: 15 },
+  { display: "Alta (18-20)", value: CREATURE_ARMOR_CLASSES.HIGH, weight: 3, baseOutput: 19 },
+  { display: "Extrema (22-24)", value: CREATURE_ARMOR_CLASSES.EXTREME, weight: 4, baseOutput: 23 },
 ];
 export const GetArmorClass = (value) => creatureArmorClasses.find((a) => a.value === value);
 

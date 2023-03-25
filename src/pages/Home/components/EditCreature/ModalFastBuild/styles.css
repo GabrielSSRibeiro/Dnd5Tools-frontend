@@ -1,0 +1,27 @@
+.ModalFastBuild-container.modal-body {
+  width: 725px;
+  height: fit-content;
+}
+
+.ModalFastBuild-container .definitions {
+  width: 100%;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ModalFastBuild-container .actions {
+  width: 100%;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: center;
+  column-gap: 15px;
+}
+
+.ModalFastBuild-container footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 15px;
+}
