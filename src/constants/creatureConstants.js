@@ -41,7 +41,6 @@ export const creatureRarities = [
 export const GetRarity = (value) => creatureRarities.find((a) => a.value === value);
 
 export const CREATURE_ENVIRONMENTS = {
-  ALL: 1,
   COSMIC: 10,
   CELESTIAL: 20,
   ARTIC: 30,
@@ -53,9 +52,9 @@ export const CREATURE_ENVIRONMENTS = {
   AQUATIC: 90,
   SUBTERRANEAN: 100,
   ABISSAL: 110,
+  ALL: 1,
 };
 export const creatureEnvironments = [
-  { display: "Todos", value: CREATURE_ENVIRONMENTS.ALL, weight: 0 },
   { display: "Cósmico", value: CREATURE_ENVIRONMENTS.COSMIC, weight: 0 },
   { display: "Celestial", value: CREATURE_ENVIRONMENTS.CELESTIAL, weight: 0 },
   { display: "Ártico", value: CREATURE_ENVIRONMENTS.ARTIC, weight: 0 },
@@ -67,6 +66,7 @@ export const creatureEnvironments = [
   { display: "Aquático", value: CREATURE_ENVIRONMENTS.AQUATIC, weight: 0 },
   { display: "Subterrâneo", value: CREATURE_ENVIRONMENTS.SUBTERRANEAN, weight: 0 },
   { display: "Abissal", value: CREATURE_ENVIRONMENTS.ABISSAL, weight: 0 },
+  { display: "Todos", value: CREATURE_ENVIRONMENTS.ALL, weight: 0 },
 ];
 export const GetEnviroment = (value) => creatureEnvironments.find((e) => e.value === value);
 

@@ -77,6 +77,7 @@ function Definition({ creature, setCreature }) {
           value={creature}
           valuePropertyPath="environment"
           onSelect={setCreature}
+          nothingSelected="Nenhum Específico"
           options={creatureEnvironments}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}

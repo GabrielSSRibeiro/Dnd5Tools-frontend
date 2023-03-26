@@ -35,7 +35,7 @@ function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishE
     let progessBarSteps = [{ name: "Definiçao", isValid: IsDefinitionStepValid() }];
 
     function IsAtributesStepValid() {
-      let areBasicsDefinitionsValid = [creature.rarity, creature.environment, creature.size, creature.type].every((i) => i !== null);
+      let areBasicsDefinitionsValid = [creature.rarity, creature.size, creature.type].every((i) => i !== null);
       let areMovimentsValid = [creature.movements.speed, creature.movements.flying, creature.movements.swimming, creature.movements.burrowing].some(
         (i) => i !== null
       );
