@@ -105,8 +105,6 @@ function Treasure({ resultText, level }) {
             {
               text: "Depedendo do tipo de equipamento desejado para o material, a ferramenta necessaria para sua forja será diferente. a CD e tempo necessário são determinados pela raridade. Esse tempo de ser dividido iqualmente entre o número de pessoas que estão forjando, mas todos tem que passar no teste para ter sucesso",
             },
-            { text: "" },
-            { text: "" },
           ]}
         >
           <main className="panel-select">
