@@ -17,6 +17,10 @@
   margin-top: 5%;
 }
 
+.Treasure-container .treasure-panels .equipment-type .Tooltip-container {
+  width: 1150px;
+}
+
 .Treasure-container .modal-materials-wrapper {
   height: 100%;
   width: 100%;

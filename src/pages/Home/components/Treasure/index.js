@@ -105,6 +105,8 @@ function Treasure({ resultText, level }) {
             {
               text: "Depedendo do tipo de equipamento desejado para o material, a ferramenta necessaria para sua forja será diferente. a CD e tempo necessário são determinados pela raridade. Esse tempo de ser dividido iqualmente entre o número de pessoas que estão forjando, mas todos tem que passar no teste para ter sucesso",
             },
+            { text: "" },
+            { text: "" },
           ]}
         >
           <main className="panel-select">
@@ -201,8 +203,12 @@ function Treasure({ resultText, level }) {
           <section className="treasure-panels">
             <Panel
               title="Tipo e Raridade"
+              className="equipment-type"
               info={[
-                { text: "todos os itens não poções gerados são mágicos e precisam de sintonização" },
+                { text: "Todos os itens não poções gerados são mágicos e precisam de sintonização" },
+                {
+                  text: "1 vez por descanso longo, pode re-sincronizar um item com cargas, tornando o total atual o resultado de 1d(x + total de habilidades) - total de habilidades, mínimo 0",
+                },
                 { text: "" },
                 { text: "Poções tem bônus de afixos dobrado, mas so duram até o final do próximo turno de quem a consumir" },
                 { text: "" },

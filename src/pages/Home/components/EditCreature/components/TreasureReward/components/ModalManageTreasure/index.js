@@ -263,7 +263,10 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                   <Select
                     label={"Tipo do Equipamento"}
                     info={[
-                      { text: "todos os itens gerados não poções são mágicos e precisam de sintonização" },
+                      { text: "Todos os itens gerados não poções são mágicos e precisam de sincronização" },
+                      {
+                        text: "1 vez por descanso longo, pode re-sincronizar um item com cargas, tornando o total atual o resultado de 1d(x + total de habilidades) - total de habilidades, mínimo 0",
+                      },
                       { text: "" },
                       { text: "Poções tem bônus de afixos dobrado, mas só duram até o final do próximo turno de quem a consumir" },
                     ]}
@@ -284,11 +287,18 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                         text: "Transforme uma das ações não comuns da criatura em uma abilidade que número de usos diários de acordo com a frequência",
                       },
                       { text: "" },
+                      { text: "Um equipamento pode ter afixos OU uma habilidade. Lendários tem ambos" },
+                      { text: "" },
                       {
                         text: "Essa habilidade também pode ser usada uma vez adicional, fazendo a habilidade não ser mais recuperada diariamente. É apenas possível recuperar uma habilidade usada assim através de forja com uma material da mesma raridade do equipamento",
                       },
                       { text: "" },
-                      { text: "Um equipamento pode ter afixos OU uma habilidade. Lendários tem ambos" },
+                      {
+                        text: "Itens com cargas podem ser aprimorados com outro item com cargas. O novo total de cargas é igual ao maior dos dois menos o total de cargas máximas já consumidas do item base. O item apromorado ganha a habilidade de carga do segundo item, o destruindo. A proporção do uso de cargas é mantida",
+                      },
+                      {
+                        text: "Ex: Item 1 tem 2 cargas e habilidade consome 1. Item 2 tem 4 cargas e habilidade consome 1. O item aprimorado terá 4 cargas com a habilidade original que consome 1 e a nova que agora consome 2",
+                      },
                     ]}
                     extraWidth={100}
                     isLarge={true}

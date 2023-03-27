@@ -215,7 +215,7 @@ function Passives({ creature, setCreature }) {
             />
             <CheckInput
               label="Regeneração"
-              info={[{ text: "Recupera PV no começo do turno" }, { text: "Pode ser desativada por 1 turno ao sobrer o tipo de dano selecionado" }]}
+              info={[{ text: "Recupera PV no começo do turno" }, { text: "Pode ser desativada por 1 turno ao sofrer o tipo de dano selecionado" }]}
               onClick={HandleToggleRegeneration}
               isSelected={hasRegeneration}
               className="specials-row-item"

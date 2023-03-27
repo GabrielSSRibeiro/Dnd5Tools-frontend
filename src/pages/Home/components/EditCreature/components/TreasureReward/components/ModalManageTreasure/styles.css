@@ -2,7 +2,7 @@
   justify-content: flex-start;
   width: fit-content;
   height: fit-content;
-  margin-top: 80px;
+  margin-top: 150px;
 }
 
 .ModalManageTreasure-container .modal-action .new-action-wrapper {
@@ -71,5 +71,5 @@
 }
 
 .ModalManageTreasure-container .equipment-ability .Tooltip-container {
-  width: 500px;
+  width: 750px;
 }
