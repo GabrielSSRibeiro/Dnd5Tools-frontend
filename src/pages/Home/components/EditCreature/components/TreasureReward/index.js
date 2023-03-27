@@ -51,7 +51,7 @@ function TreasureReward({ creature, setCreature }) {
         <div className="treasures">
           <div className="section-label">
             <h2>Tesouros</h2>
-            <Info contents={[{ text: "Opcional" }]} />
+            <Info contents={[{ text: "Opcional" }, { text: "" }, { text: "Recomendado 1 de cada tipo, com frequências diferentes" }]} />
           </div>
           <Button text="Adicionar" onClick={() => OpenModalManageTreasure()} isDisabled={creature.treasures.length >= maxNumberOfTreasures} />
           <div className="treasure-wrapper">

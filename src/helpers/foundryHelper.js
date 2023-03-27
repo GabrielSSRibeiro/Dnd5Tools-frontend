@@ -642,9 +642,11 @@ const GetItems = (creature, level, str) => {
   }
 
   if (creature.treasures.length > 0) {
-    creature.treasures.forEach((t) => {
-      items.push(GetFoundryExportTreasure(t, creature.actions, level));
-    });
+    creature.treasures
+      .filter((t) => utils.ProbabilityCheck(cc.creatureActionFrequencies.find((f) => f.value === t.frequency).probability))
+      .forEach((t) => {
+        items.push(GetFoundryExportTreasure(t, creature.actions, level));
+      });
   }
 
   return items;

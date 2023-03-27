@@ -42,7 +42,6 @@ export function randomIndexFromArrayOfProbs(probArray) {
     return randValue <= probSum;
   });
 
-  console.log("FFFFFF", pickedIndex);
   return pickedIndex ?? probArray.length - 1;
 }
 

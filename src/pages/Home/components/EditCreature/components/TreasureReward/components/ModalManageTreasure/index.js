@@ -11,7 +11,13 @@ import {
   equipmentAttributes,
   equipmentTypes,
 } from "../../../../../../../../constants/treasureConstants";
-import { CREATURE_RARITIES, creatureRarities, damageTypes } from "../../../../../../../../constants/creatureConstants";
+import {
+  CREATURE_RARITIES,
+  creatureRarities,
+  damageTypes,
+  CREATURE_ACTION_FREQUENCIES,
+  creatureActionFrequencies,
+} from "../../../../../../../../constants/creatureConstants";
 
 import Button from "../../../../../../../../components/Button";
 import TextInput from "../../../../../../../../components/TextInput";
@@ -28,6 +34,7 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
           name: null,
           description: null,
           type: TREASURE_TYPES.GOLD_PIECES,
+          frequency: CREATURE_ACTION_FREQUENCIES.COMMON,
           goldPieces: {
             quantity: GOLD_PIECES_QUANTITIES.FEW,
           },
@@ -95,7 +102,7 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
   }
 
   function IsModalValid() {
-    if (!tempTreasure.name || invalidNames.includes(tempTreasure.name)) {
+    if (!tempTreasure.name || invalidNames.includes(tempTreasure.name) || !tempTreasure.frequency) {
       return false;
     }
 
@@ -199,6 +206,17 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                 optionValue={(o) => o.value}
               />
             )}
+            <Select
+              label={"Frequência"}
+              extraWidth={100}
+              isLarge={true}
+              value={tempTreasure}
+              valuePropertyPath="frequency"
+              onSelect={setTempTreasure}
+              options={creatureActionFrequencies}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
           </section>
           <section className="action-row">
             <TextInput

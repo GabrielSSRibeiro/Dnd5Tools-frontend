@@ -923,10 +923,10 @@ export const CREATURE_ACTION_FREQUENCIES = {
   VERY_RARE: 40,
 };
 export const creatureActionFrequencies = [
-  { display: "Comum", value: CREATURE_ACTION_FREQUENCIES.COMMON, weight: 0, cooldown: 0 },
-  { display: "Incomum", value: CREATURE_ACTION_FREQUENCIES.UNCOMMON, weight: 0, cooldown: 1 },
-  { display: "Raro", value: CREATURE_ACTION_FREQUENCIES.RARE, weight: 0, cooldown: 2 },
-  { display: "Muito Raro", value: CREATURE_ACTION_FREQUENCIES.VERY_RARE, weight: 0, cooldown: 3 },
+  { display: "Comum", value: CREATURE_ACTION_FREQUENCIES.COMMON, weight: 0, cooldown: 0, probability: 1 },
+  { display: "Incomum", value: CREATURE_ACTION_FREQUENCIES.UNCOMMON, weight: 0, cooldown: 1, probability: 0.5 },
+  { display: "Raro", value: CREATURE_ACTION_FREQUENCIES.RARE, weight: 0, cooldown: 2, probability: 0.25 },
+  { display: "Muito Raro", value: CREATURE_ACTION_FREQUENCIES.VERY_RARE, weight: 0, cooldown: 3, probability: 0.1 },
 ];
 export const GetActionFrequency = (value) => creatureActionFrequencies.find((i) => i.value === value);
 
