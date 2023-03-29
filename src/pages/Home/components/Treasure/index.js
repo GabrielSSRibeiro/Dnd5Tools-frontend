@@ -208,14 +208,16 @@ function Treasure({ resultText, level }) {
                   text: "1 vez por descanso longo, pode re-sincronizar um item com cargas, tornando o total atual o resultado de 1d(x + total de habilidades) - total de habilidades, mínimo 0",
                 },
                 { text: "" },
-                { text: "Poções tem bônus de afixos dobrado, mas so duram até o final do próximo turno de quem a consumir" },
+                {
+                  text: "Poções tem bônus de afixos dobrado, mas so duram até o final do próximo turno de quem a consumir. Poções com cargas, tem cargas usos.",
+                },
                 { text: "" },
                 {
                   text: "Equipamentos lendários só podem ser criados como tesouro de criaturas lendárias e possuem ambos 5 afixos e habilidade bônus",
                 },
                 { text: "" },
                 {
-                  text: `Probabilidade de afixo amaldiçoado: ${utils.turnValueIntoPercentageString(CURSE_AFIX_PROB)}`,
+                  text: `Probabilidade de afixo instável: ${utils.turnValueIntoPercentageString(CURSE_AFIX_PROB)}`,
                 },
                 {
                   text:

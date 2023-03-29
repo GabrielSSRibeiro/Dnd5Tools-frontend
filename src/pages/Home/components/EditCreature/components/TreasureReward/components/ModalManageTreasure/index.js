@@ -268,7 +268,9 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                         text: "1 vez por descanso longo, pode re-sincronizar um item com cargas, tornando o total atual o resultado de 1d(x + total de habilidades) - total de habilidades, mínimo 0",
                       },
                       { text: "" },
-                      { text: "Poções tem bônus de afixos dobrado, mas só duram até o final do próximo turno de quem a consumir" },
+                      {
+                        text: "Poções tem bônus de afixos dobrado, mas só duram até o final do próximo turno de quem a consumir. Poções com cargas, tem cargas usos.",
+                      },
                     ]}
                     extraWidth={100}
                     isLarge={true}

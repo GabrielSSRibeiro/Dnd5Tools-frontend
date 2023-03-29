@@ -380,7 +380,7 @@ const getItemName = (type, rarity, itemAfixes) => {
 
   const isCursed = itemAfixes.some((afix) => afix.bonus < 0);
   if (isCursed) {
-    name.push("Amaldiçoado");
+    name.push("Instável");
   }
 
   return name;
