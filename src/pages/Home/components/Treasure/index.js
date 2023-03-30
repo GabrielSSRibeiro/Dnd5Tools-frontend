@@ -217,6 +217,13 @@ function Treasure({ resultText, level }) {
                 },
                 { text: "" },
                 {
+                  text: "Itens podem ser aprimorados com outro item. Escolha um afixo para ser removido em troca de um bônus que varia com o tipo de equipamento",
+                },
+                {
+                  text: "Arma: Ganha ambos os tipos de dano da armas e ambas propriedades. Armadura: Causa 2 de dano ao atacante se sofrer dano corpo a corpo. Acessório: +1 em teste de concentração e de resistência contra morte. Poção: Escolhe um dos afixos do item consumido para subistituir o perdido",
+                },
+                { text: "" },
+                {
                   text: `Probabilidade de afixo instável: ${utils.turnValueIntoPercentageString(CURSE_AFIX_PROB)}`,
                 },
                 {
