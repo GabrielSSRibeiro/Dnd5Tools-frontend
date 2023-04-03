@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../../contexts/Auth";
 import { useHistory } from "react-router-dom";
 
-import { MAX_COMBATS } from "../../constants/combatConstants";
+// import { MAX_COMBATS } from "../../constants/combatConstants";
 
 import SelectButton from "../SelectButton";
 import Modal from "../../components/Modal";
@@ -132,12 +132,19 @@ function NaviBar({
           <div className="combat-section">
             <SelectButton
               isLarge={true}
+              isSelected={openTab === tabOptions.MAP}
+              isLong={true}
+              text={tabOptions.MAP}
+              onClick={() => setOpenTab(tabOptions.MAP)}
+            />
+            {/* <SelectButton
+              isLarge={true}
               isSelected={openTab === tabOptions.COMBAT}
               isLong={true}
               text={tabOptions.COMBAT}
               onClick={() => setOpenTab(tabOptions.COMBAT)}
               isDisabled={combats.length >= MAX_COMBATS}
-            />
+            /> */}
             {/* <div className="combat-buttons-container">
               {combats.map((combat, index) => (
                 <div key={index} className="combat-buttons" style={{ zIndex: -1 - index }}>

@@ -643,7 +643,7 @@ const GetItems = (creature, level, str) => {
 
   if (creature.treasures.length > 0) {
     creature.treasures
-      .filter((t) => utils.ProbabilityCheck(cc.creatureActionFrequencies.find((f) => f.value === t.frequency).probability))
+      // .filter((t) => utils.ProbabilityCheck(cc.creatureActionFrequencies.find((f) => f.value === t.frequency).probability))
       .forEach((t) => {
         items.push(GetFoundryExportTreasure(t, creature.actions, level));
       });
@@ -1152,7 +1152,7 @@ const GetFoundryExportReaction = (reaction, attack, str, level) => {
   };
 };
 const GetFoundryExportTreasure = (treasure, actions, level) => {
-  let name = treasure.name;
+  let name = `${treasure.name} (${cc.GetActionFrequency(treasure.frequency).display})`;
   let description = "";
   let img = "";
 

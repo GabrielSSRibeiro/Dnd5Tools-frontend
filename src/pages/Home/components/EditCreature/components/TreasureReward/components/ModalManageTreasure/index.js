@@ -296,7 +296,7 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                       },
                       { text: "" },
                       {
-                        text: "Itens com cargas podem ser aprimorados com outro item com cargas. Preço e tempo sao os mesmos de forja para a raridade. O novo total de cargas é igual ao maior dos dois menos o total de cargas máximas já consumidas do item base. O item apromorado ganha a habilidade de carga do segundo item, o destruindo. A proporção do uso de cargas é mantida",
+                        text: "Itens com cargas podem ser combinados com outro item com cargas. Preço e tempo sao os mesmos de forja para a raridade. O novo total de cargas é igual ao maior dos dois menos o total de cargas máximas já consumidas do item base. O item apromorado ganha a habilidade de carga do segundo item, o destruindo. A proporção do uso de cargas é mantida",
                       },
                       {
                         text: "Ex: Item 1 tem 2 cargas e habilidade consome 1. Item 2 tem 4 cargas e habilidade consome 1. O item aprimorado terá 4 cargas com a habilidade original que consome 1 e a nova que agora consome 2",

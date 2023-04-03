@@ -30,6 +30,10 @@
   min-height: 700px;
 }
 
+.Home-container .section-container {
+  flex: 1;
+}
+
 .Home-container .section-wrapper {
   height: calc(100% - 60px);
 }
