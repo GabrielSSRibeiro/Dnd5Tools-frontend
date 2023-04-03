@@ -9,14 +9,70 @@
 }
 
 .Map-container .world-map {
-  margin-top: 5;
+  position: relative;
   width: 95%;
   height: 90%;
   background-color: aqua;
   border: solid 1px var(--gray2);
+  /* overflow: hidden; */
 
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Map-container .world-map .map-stats {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
+  background-color: var(--white);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10px;
+}
+
+.Map-container .world-map .map-zoom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 10px;
+  background-color: var(--white);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10px;
+}
+
+.Map-container .world-map .map-zoom .move-zoom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 3px;
+}
+
+.Map-container .world-map .new-encounter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Map-container .world-map .world-details {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 10px;
+
+  display: flex;
   align-items: center;
   justify-content: center;
 }

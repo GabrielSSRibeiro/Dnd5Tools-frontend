@@ -1,0 +1,12 @@
+.ModalEditLocation-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ModalEditLocation-container footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 25px;
+}
