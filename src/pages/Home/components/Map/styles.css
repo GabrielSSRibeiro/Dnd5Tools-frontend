@@ -76,3 +76,11 @@
   align-items: center;
   justify-content: center;
 }
+
+.Map-container .world-map .edit-location {
+  position: absolute;
+  height: 100%;
+  width: 30%;
+  top: 0;
+  right: 0;
+}

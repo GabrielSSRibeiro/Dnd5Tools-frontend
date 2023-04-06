@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Button from "../../../../components/Button";
 import Select from "../../../../components/Select";
 import LocationSummary from "./components/LocationSummary";
+import EditLocation from "./components/EditLocation";
 
 import "./styles.css";
 
 function Map() {
+  const [locationToEdit, setLocationToEdit] = useState(null);
+
+  function HandleCancel() {
+    setLocationToEdit(null);
+  }
+
+  async function HandleSaveCreature(locationToSave) {}
+
+  function HandleDeleteCreature(locationToDelete) {}
+
   return (
     <div className="Map-container">
       <div className="world-map">
@@ -41,8 +52,18 @@ function Map() {
           <Button text="Novo Encontro" />
         </aside>
         <div className="world-details">
-          <LocationSummary location={"Mundo"} />
+          <LocationSummary location={"Mundo"} locationToEdit={locationToEdit} setLocationToEdit={setLocationToEdit} />
         </div>
+        {locationToEdit && (
+          <div className="edit-location">
+            <EditLocation
+              locationToEdit={locationToEdit}
+              HandleSave={HandleSaveCreature}
+              HandleDelete={locationToEdit.owner ? HandleDeleteCreature : null}
+              FinishEditing={HandleCancel}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

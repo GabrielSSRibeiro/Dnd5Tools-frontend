@@ -17,7 +17,7 @@ import TextInput from "../../../../components/TextInput";
 
 import "./styles.css";
 
-function EditCreature({ creatureToEdit = null, HandleSave, HandleDelete, FinishEditing }) {
+function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing }) {
   const [creature, setCreature] = useState(creatureToEdit);
   const [modal, setModal] = useState(null);
 

@@ -1,20 +1,27 @@
 import React, { useState } from "react";
 
+import * as utils from "../../../../../../utils";
+
 import "./styles.css";
 
-import ModalEditLocation from "../ModalEditLocation";
+import ModalLocationDetails from "../ModalLocationDetails";
 
-function LocationSummary({ location }) {
+function LocationSummary({ location, locationToEdit, setLocationToEdit }) {
   const [modal, setModal] = useState(null);
 
-  function OpenModalEditLocation(location) {
-    setModal(<ModalEditLocation location={location} onClose={(tempLocation) => HandleCloseModalEditLocation(location, tempLocation)} />);
+  function OpenModalLocationDetails(location) {
+    setModal(<ModalLocationDetails location={location} onClose={setModal} HandleEditLocation={HandleEditLocation} />);
   }
-  function HandleCloseModalEditLocation(location, tempLocation) {
-    if (tempLocation) {
-    }
 
+  function HandleEditLocation() {
+    setLocationToEdit(utils.clone(location));
     setModal(null);
+  }
+
+  function HandleEditNewLocation() {
+    const newLocation = {};
+
+    setLocationToEdit(newLocation);
   }
 
   return (
@@ -22,13 +29,13 @@ function LocationSummary({ location }) {
       {modal}
       <header className="header">
         <aside className="header-action">
-          <button onClick={() => OpenModalEditLocation()}>
+          <button onClick={HandleEditNewLocation}>
             <i class="fas fa-plus"></i>
           </button>
         </aside>
         <span className="name">Nome</span>
         <aside className="header-details">
-          <button>
+          <button onClick={() => OpenModalLocationDetails()}>
             <i class="fas fa-book"></i>
           </button>
         </aside>
