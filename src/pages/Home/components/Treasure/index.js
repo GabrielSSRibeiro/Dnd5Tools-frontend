@@ -100,7 +100,7 @@ function Treasure({ resultText, level }) {
         <Panel
           title="Tipo"
           info={[
-            { text: "Material pode ser usado para forja de equipamentos ou para recuperar abilidade perdida de equipamento" },
+            { text: "Material pode ser usado para forja de equipamentos ou para recuperar habilidade perdida de equipamento" },
             { text: "" },
             {
               text: "Depedendo do tipo de equipamento desejado para o material, a ferramenta necessaria para sua forja será diferente. a CD e tempo necessário são determinados pela raridade. Esse tempo de ser dividido iqualmente entre o número de pessoas que estão forjando, mas todos tem que passar no teste para ter sucesso",
@@ -217,7 +217,7 @@ function Treasure({ resultText, level }) {
                 },
                 { text: "" },
                 {
-                  text: "Itens podem ser re-forjados usando pelo preço equivalente a sua raridade. Escolha um afixo para ser removido em troca de um bônus que varia com o tipo de equipamento",
+                  text: "Itens podem ser re-forjados pelo preço equivalente a sua raridade. Escolha um afixo para ser removido em troca de um bônus que varia com o tipo de equipamento ou um personalizado se feito por um mestre",
                 },
                 {
                   text: "Arma: Reduz o dado de dano em 1 e ganha +1 dano. Armadura: Causa 2 de dano ao atacante se sofrer dano corpo a corpo. Acessório: +1 em teste de concentração e de resistência contra morte. Poção: Ganha +1 turno duração",

@@ -140,7 +140,7 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
             <Select
               label={"Tipo"}
               info={[
-                { text: "Material pode ser usado para forja de equipamentos ou para recuperar abilidade perdida de equipamento" },
+                { text: "Material pode ser usado para forja de equipamentos ou para recuperar habilidade perdida de equipamento" },
                 { text: "" },
                 {
                   text: "Depedendo do tipo de equipamento desejado para o material, a ferramenta necessaria para sua forja será diferente. a CD e tempo necessário são determinados pela raridade da criatura. Esse tempo de ser dividido iqualmente entre o número de pessoas que estão forjando, mas todos tem que passar no teste para ter sucesso",
@@ -286,7 +286,7 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                     className="equipment-ability"
                     info={[
                       {
-                        text: "Transforme uma das ações não comuns da criatura em uma abilidade que número de usos diários de acordo com a frequência",
+                        text: "Transforme uma das ações não comuns da criatura em uma habilidade que número de usos diários de acordo com a frequência",
                       },
                       { text: "" },
                       { text: "Um equipamento pode ter afixos OU uma habilidade. Lendários tem ambos" },

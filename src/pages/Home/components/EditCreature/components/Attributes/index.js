@@ -160,6 +160,9 @@ function Attributes({ creature, setCreature }) {
           {
             text: "Pontos Fracos naturalmente possuem Meia Cobertura, pois a criatura o protege com o resto do corpo ou ele se encontra em difícil acesso. Isso por ser ignorado dependendo do posicionamento dos personagens",
           },
+          {
+            text: "Se alvo de um efeito com CD, um Ponto Fraco não pode ser protegido por Resistência Lendária, mas apenas ele e não a criatura como um todo é afetado pelo efeito da falha",
+          },
         ]}
         onClick={HandleToggleWeakSpots}
         isSelected={hasWeakSpots}

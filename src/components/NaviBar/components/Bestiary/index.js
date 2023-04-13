@@ -91,6 +91,7 @@ function Bestiary({
 
   function HandleEditNewCreature() {
     const newCreature = {
+      owner: null,
       name: null,
       description: null,
       image: null,

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import * as utils from "../../../../../../utils";
+import * as lc from "../../../../../../constants/locationConstants";
 
 import "./styles.css";
 
@@ -19,7 +20,45 @@ function LocationSummary({ location, locationToEdit, setLocationToEdit }) {
   }
 
   function HandleEditNewLocation() {
-    const newLocation = {};
+    const newLocation = {
+      owner: false,
+      isCurrent: false,
+      name: null,
+      details: null,
+      size: lc.LOCATION_SIZES.POINT_OF_INTEREST,
+      type: null,
+      irregularTerrainFrequency: lc.IRREGULAR_TERRAIN_FREQUENCIES.LOW,
+      precipitationFrequency: lc.PRECIPITATION_FREQUENCIES.LOW,
+      intenseTemperatureFrequency: lc.IRREGULAR_TERRAIN_FREQUENCIES.LOW,
+      panoramicVision: lc.PANORAMIC_VISIONS.LOW,
+      reference: {
+        distance: null,
+        direction: null,
+        connection: null,
+      },
+      partitions: [],
+      contexts: [
+        {
+          isCurrent: true,
+          name: "Normal",
+          firstImpressions: null,
+          details: null,
+          hazardousness: lc.HAZARDOUSNESS.MEDIUM,
+        },
+      ],
+      creatures: [],
+      pointsOfInterest: [],
+      pointOfInterest: {
+        type: null,
+        frequency: null,
+        hazardousness: null,
+        packSize: null,
+        material: {
+          Probability: null,
+          rarity: null,
+        },
+      },
+    };
 
     setLocationToEdit(newLocation);
   }
