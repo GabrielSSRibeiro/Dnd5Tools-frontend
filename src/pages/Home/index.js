@@ -34,6 +34,7 @@ function Home() {
   const [selectedCharacters, setSelectedCharacters] = useState([]);
   const [selectedCreatures, setSelectedCreatures] = useState([]);
   const [combats, setCombats] = useState([]);
+  const [locations, setLocations] = useState(null);
 
   const { currentUser } = useAuth();
 
@@ -69,6 +70,27 @@ function Home() {
     setCreatureToEdit(null);
   }
 
+  async function HandleSaveLocation(locationToSave) {
+    if (!locationToSave.owner) {
+      locationToSave.owner = currentUser.uid;
+    }
+
+    // let index = creatures.findIndex((c) => c._id === response.data._id);
+    // if (index >= 0) {
+    //   creatures.splice(index, 1, creatureToSave);
+    // } else {
+    //   creatureToSave._id = response.data._id;
+    locations.push(locationToSave);
+    // }
+  }
+
+  function HandleDeleteLocation(locationToDelete) {
+    // let index = creatures.findIndex((c) => c._id === response.data._id);
+    // creatures.splice(index, 1);
+
+    setLocations(locations);
+  }
+
   async function HandleSaveCreature(creatureToSave) {
     if (!creatureToSave.owner) {
       creatureToSave.owner = currentUser.uid;
@@ -77,9 +99,9 @@ function Home() {
     await (creatureToSave._id ? api.put("UpdateCreature", creatureToSave) : api.post("SaveCreature", creatureToSave))
       .then((response) => {
         if (response.data) {
-          let creatureIndex = creatures.findIndex((c) => c._id === response.data._id);
-          if (creatureIndex >= 0) {
-            creatures.splice(creatureIndex, 1, creatureToSave);
+          let index = creatures.findIndex((c) => c._id === response.data._id);
+          if (index >= 0) {
+            creatures.splice(index, 1, creatureToSave);
           } else {
             creatureToSave._id = response.data._id;
             creatures.push(creatureToSave);
@@ -99,9 +121,8 @@ function Home() {
       .delete("DeleteCreature", { params: { id: creatureToDelete._id } })
       .then((response) => {
         if (response.data) {
-          let creatureIndex = creatures.findIndex((c) => c._id === response.data._id);
-
-          creatures.splice(creatureIndex, 1);
+          let index = creatures.findIndex((c) => c._id === response.data._id);
+          creatures.splice(index, 1);
 
           localStorage.removeItem("creatureToEdit");
           setCreatures(creatures);
@@ -147,6 +168,8 @@ function Home() {
         setCreatures(response.data);
       }
     });
+
+    setLocations([]);
 
     api.get("GetCombatConfigByOwner", { params: { owner: currentUser.uid } }).then((response) => {
       if (response.data) {
@@ -204,7 +227,7 @@ function Home() {
           <SkillCheck resultText={openTab} level={level} />
         </div>
         <div className={`section-wrapper map ${openTab !== MAIN_TABS.MAP ? "hidden" : ""}`}>
-          <Map />
+          <Map HandleSaveLocation={HandleSaveLocation} HandleDeleteLocation={HandleDeleteLocation} />
         </div>
         {/* <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
           <CombatSetup

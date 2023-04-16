@@ -6,7 +6,6 @@ export const LOCATION_SIZES = {
   EXTREME: 50,
 };
 export const locationSizes = [
-  { display: "Ponto de Interesse", value: LOCATION_SIZES.POINT_OF_INTEREST },
   { display: "Pequena", value: LOCATION_SIZES.SMALL },
   { display: "Média", value: LOCATION_SIZES.MEDIUM },
   { display: "Grande", value: LOCATION_SIZES.LARGE },
@@ -84,15 +83,15 @@ export const referenceDistances = [
 ];
 export const GetReferenceDistance = (value) => referenceDistances.find((a) => a.value === value);
 
-export const LOCATION_CONNECTIONS = {
+export const LOCATION_CONNECTION_TYPES = {
   ROAD: 10,
   RIVER: 20,
 };
-export const locationConnections = [
-  { display: "Estrada", value: LOCATION_CONNECTIONS.ROAD },
-  { display: "Rio", value: LOCATION_CONNECTIONS.RIVER },
+export const locationConnectionTypes = [
+  { display: "Estrada", value: LOCATION_CONNECTION_TYPES.ROAD },
+  { display: "Rio", value: LOCATION_CONNECTION_TYPES.RIVER },
 ];
-export const GetLocationConnection = (value) => locationConnections.find((a) => a.value === value);
+export const GetLocationConnectionType = (value) => locationConnectionTypes.find((a) => a.value === value);
 
 export const DIRECTIONS = {
   NORTH: 10,
@@ -178,19 +177,19 @@ export const routineSchedules = [
 ];
 export const GetRoutineSchedule = (value) => routineSchedules.find((a) => a.value === value);
 
-export const PACK_SIZES = {
+export const GROUP_SIZES = {
   SMALL: 10,
   MEDIUM: 20,
   LARGE: 30,
   EXTREME: 40,
 };
-export const packSizes = [
-  { display: "Pequena", value: PACK_SIZES.SMALL },
-  { display: "Média", value: PACK_SIZES.MEDIUM },
-  { display: "Grande", value: PACK_SIZES.LARGE },
-  { display: "Extrema", value: PACK_SIZES.EXTREME },
+export const groupSizes = [
+  { display: "Pequeno (1-2)", value: GROUP_SIZES.SMALL },
+  { display: "Médio (2-3)", value: GROUP_SIZES.MEDIUM },
+  { display: "Grande (3-4)", value: GROUP_SIZES.LARGE },
+  { display: "Extremo (4-5)", value: GROUP_SIZES.EXTREME },
 ];
-export const GetPackSize = (value) => packSizes.find((a) => a.value === value);
+export const GetGroupSize = (value) => groupSizes.find((a) => a.value === value);
 
 export const ENCOUNTER_FREQUENCIES = {
   LOW: 10,
@@ -206,7 +205,7 @@ export const encounterFrequencies = [
 ];
 export const GetEncounterFrequency = (value) => encounterFrequencies.find((a) => a.value === value);
 
-export const POINT_OF_INTEREST_TYPES = {
+export const ELEMENT_TYPES = {
   RAVINE: 10,
   LAKE: 20,
   STRUCTURE: 30,
@@ -214,29 +213,29 @@ export const POINT_OF_INTEREST_TYPES = {
   PLANT: 50,
   OBJECT: 60,
 };
-export const pointOfInterestTypes = [
-  { display: "Ravina", value: POINT_OF_INTEREST_TYPES.RAVINE },
-  { display: "Lago", value: POINT_OF_INTEREST_TYPES.LAKE },
-  { display: "Estrutura", value: POINT_OF_INTEREST_TYPES.STRUCTURE },
-  { display: "Rocha", value: POINT_OF_INTEREST_TYPES.ROCK },
-  { display: "Planta", value: POINT_OF_INTEREST_TYPES.PLANT },
-  { display: "Objeto", value: POINT_OF_INTEREST_TYPES.OBJECT },
+export const elementTypes = [
+  { display: "Ravina", value: ELEMENT_TYPES.RAVINE },
+  { display: "Lago", value: ELEMENT_TYPES.LAKE },
+  { display: "Estrutura", value: ELEMENT_TYPES.STRUCTURE },
+  { display: "Rocha", value: ELEMENT_TYPES.ROCK, canBeMaterial: true },
+  { display: "Planta", value: ELEMENT_TYPES.PLANT, canBeMaterial: true },
+  { display: "Objeto", value: ELEMENT_TYPES.OBJECT, canBeMaterial: true },
 ];
-export const GetPointOfInterestType = (value) => pointOfInterestTypes.find((a) => a.value === value);
+export const GetElementType = (value) => elementTypes.find((a) => a.value === value);
 
-export const POINT_OF_INTEREST_MATERIAL_FREQUENCIES = {
+export const ELEMENT_MATERIAL_FREQUENCIES = {
   LOW: 10,
   MEDIUM: 20,
   HIGH: 30,
   EXTREME: 40,
 };
-export const pointOfInterestMaterialFrequencies = [
-  { display: "Baixa", value: POINT_OF_INTEREST_MATERIAL_FREQUENCIES.LOW },
-  { display: "Média", value: POINT_OF_INTEREST_MATERIAL_FREQUENCIES.MEDIUM },
-  { display: "Alta", value: POINT_OF_INTEREST_MATERIAL_FREQUENCIES.HIGH },
-  { display: "Extrema", value: POINT_OF_INTEREST_MATERIAL_FREQUENCIES.EXTREME },
+export const elementMaterialFrequencies = [
+  { display: "Baixa", value: ELEMENT_MATERIAL_FREQUENCIES.LOW },
+  { display: "Média", value: ELEMENT_MATERIAL_FREQUENCIES.MEDIUM },
+  { display: "Alta", value: ELEMENT_MATERIAL_FREQUENCIES.HIGH },
+  { display: "Extrema", value: ELEMENT_MATERIAL_FREQUENCIES.EXTREME },
 ];
-export const GetPointOfInterestMaterialFrequency = (value) => pointOfInterestMaterialFrequencies.find((a) => a.value === value);
+export const GetElementMaterialFrequency = (value) => elementMaterialFrequencies.find((a) => a.value === value);
 
 export const MATERIAL_EXTRACTION_DIFFICULTIES = {
   LOW: 10,

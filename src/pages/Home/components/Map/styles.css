@@ -78,9 +78,13 @@
 }
 
 .Map-container .world-map .edit-location {
+  border-left: 1px solid var(--gray2);
+  padding-top: 10px;
   position: absolute;
   height: 100%;
-  width: 30%;
+  background-color: var(--white);
+  width: 380px;
+  /* width: 30%; */
   top: 0;
   right: 0;
 }

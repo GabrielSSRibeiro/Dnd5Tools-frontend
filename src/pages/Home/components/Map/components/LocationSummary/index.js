@@ -22,42 +22,39 @@ function LocationSummary({ location, locationToEdit, setLocationToEdit }) {
   function HandleEditNewLocation() {
     const newLocation = {
       owner: false,
-      isCurrent: false,
       name: null,
-      details: null,
-      size: lc.LOCATION_SIZES.POINT_OF_INTEREST,
-      type: null,
-      irregularTerrainFrequency: lc.IRREGULAR_TERRAIN_FREQUENCIES.LOW,
-      precipitationFrequency: lc.PRECIPITATION_FREQUENCIES.LOW,
-      intenseTemperatureFrequency: lc.IRREGULAR_TERRAIN_FREQUENCIES.LOW,
-      panoramicVision: lc.PANORAMIC_VISIONS.LOW,
+      size: null,
+      traversal: {
+        type: null,
+        irregularTerrainFrequency: lc.IRREGULAR_TERRAIN_FREQUENCIES.LOW,
+        partitions: [],
+        elements: [],
+      },
+      interaction: {
+        isCurrent: false,
+        type: null,
+        isHazardous: false,
+        rarity: null,
+      },
       reference: {
         distance: null,
         direction: null,
-        connection: null,
+        location: null,
+        connectionType: null,
       },
-      partitions: [],
       contexts: [
         {
           isCurrent: true,
           name: "Normal",
           firstImpressions: null,
           details: null,
+          precipitationFrequency: null,
+          intenseTemperatureFrequency: null,
+          panoramicVision: lc.PANORAMIC_VISIONS.MEDIUM,
           hazardousness: lc.HAZARDOUSNESS.MEDIUM,
         },
       ],
       creatures: [],
-      pointsOfInterest: [],
-      pointOfInterest: {
-        type: null,
-        frequency: null,
-        hazardousness: null,
-        packSize: null,
-        material: {
-          Probability: null,
-          rarity: null,
-        },
-      },
     };
 
     setLocationToEdit(newLocation);

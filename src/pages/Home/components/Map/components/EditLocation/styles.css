@@ -5,14 +5,70 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-
-  background-color: white;
+  justify-content: space-between;
 }
 
-.EditLocation-container footer {
+.EditLocation-container .location-fields {
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  row-gap: 10px;
+}
+
+.EditLocation-container h3 {
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.EditLocation-container .divider {
+  border-top: 1px solid var(--gray2);
+  width: 100%;
+  margin: 5px 0;
+}
+
+.EditLocation-container .location-detail-group {
+  width: 100%;
+  padding: 0 10px;
+  margin-bottom: 10px;
+
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+}
+
+.EditLocation-container .location-detail-group-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 20px;
+}
+
+.EditLocation-container .group-item-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 5px;
+}
+
+.EditLocation-container .action-buttons {
+  border-top: 1px solid var(--gray2);
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 25px;
+}
+
+.EditLocation-container .action-buttons .basic-actions {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   column-gap: 25px;
 }

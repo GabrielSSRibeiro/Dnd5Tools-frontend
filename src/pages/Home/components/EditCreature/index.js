@@ -3,7 +3,7 @@ import * as utils from "../../../../utils";
 import { CREATURE_ACTION_FREQUENCIES } from "../../../../constants/creatureConstants";
 import { IsBasicPack } from "../.../../../../../helpers/creatureHelper";
 
-import ModalDescription from "./ModalDescription";
+import ModalTextArea from "../../../../components/ModalTextArea";
 import ModalFastBuild from "./ModalFastBuild";
 import Definition from "./components/Definition";
 import Atributes from "./components/Attributes";
@@ -136,9 +136,9 @@ function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing 
   }
 
   async function OpenModalDescription() {
-    setModal(<ModalDescription description={creature.description} onClose={HandleCloseModalManageDescription} />);
+    setModal(<ModalTextArea title="Descrição" text={creature.description} onClose={HandleCloseModalTextArea} />);
   }
-  function HandleCloseModalManageDescription(tempDescription) {
+  function HandleCloseModalTextArea(tempDescription) {
     if (tempDescription != null) {
       creature.description = tempDescription;
       setCreature({ ...creature });

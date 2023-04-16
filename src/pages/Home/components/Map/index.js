@@ -7,16 +7,22 @@ import EditLocation from "./components/EditLocation";
 
 import "./styles.css";
 
-function Map() {
+function Map({ HandleSaveLocation, HandleDeleteLocation }) {
   const [locationToEdit, setLocationToEdit] = useState(null);
 
   function HandleCancel() {
     setLocationToEdit(null);
   }
 
-  async function HandleSaveCreature(locationToSave) {}
+  function HandleSave(location) {
+    HandleSaveLocation(location);
+    setLocationToEdit(null);
+  }
 
-  function HandleDeleteCreature(locationToDelete) {}
+  function HandleDelete(location) {
+    HandleDeleteLocation(location);
+    setLocationToEdit(null);
+  }
 
   return (
     <div className="Map-container">
@@ -58,8 +64,8 @@ function Map() {
           <div className="edit-location">
             <EditLocation
               locationToEdit={locationToEdit}
-              HandleSave={HandleSaveCreature}
-              HandleDelete={locationToEdit.owner ? HandleDeleteCreature : null}
+              HandleSave={HandleSave}
+              HandleDelete={locationToEdit.owner ? HandleDelete : null}
               FinishEditing={HandleCancel}
             />
           </div>

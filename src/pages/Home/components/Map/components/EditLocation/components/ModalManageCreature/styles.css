@@ -1,0 +1,21 @@
+.ModalManageCreature-container.modal-body {
+  width: fit-content;
+  height: fit-content;
+}
+
+.ModalManageCreature-container .new-creature-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  row-gap: 10px;
+  margin-bottom: 25px;
+}
+
+.ModalManageCreature-container footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 15px;
+}

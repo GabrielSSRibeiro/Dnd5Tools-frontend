@@ -1,20 +1,20 @@
-.ModalDescription-container.modal-body {
+.ModalTextArea-container.modal-body {
   width: 1200px;
   height: fit-content;
 }
 
-.ModalDescription-container .description {
+.ModalTextArea-container .description {
   width: 100%;
   height: 350px;
   margin-bottom: 25px;
 }
 
-.ModalDescription-container .description textarea {
+.ModalTextArea-container .description textarea {
   width: 100%;
   height: 100%;
 }
 
-.ModalDescription-container footer {
+.ModalTextArea-container footer {
   width: 100%;
   display: flex;
   align-items: center;
