@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as lc from "../../../../../../constants/locationConstants";
 import { creatureRarities, creatureEnvironments } from "../../../../../../constants/creatureConstants";
 
@@ -14,7 +14,7 @@ import ModalManageCreature from "./components/ModalManageCreature";
 
 import "./styles.css";
 
-function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing }) {
+function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing, HandleSelectFromBestiary, setSelectedCreatures, creatures }) {
   const [location, setLocation] = useState(locationToEdit);
   const [modal, setModal] = useState(null);
 
@@ -104,7 +104,13 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing 
   }
 
   function OpenModalManageCreature(creature) {
-    setModal(<ModalManageCreature creature={creature} onClose={(tempCreature) => HandleCloseModalManageCreature(creature, tempCreature)} />);
+    setModal(
+      <ModalManageCreature
+        creature={creature}
+        contexts={location.contexts.map((c) => c.name)}
+        onClose={(tempCreature) => HandleCloseModalManageCreature(creature, tempCreature)}
+      />
+    );
   }
   function HandleCloseModalManageCreature(creature, tempCreature) {
     if (tempCreature) {
@@ -124,6 +130,35 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing 
     location.creatures = location.creatures.filter((p) => p.creatureId !== creature.creatureId);
     setLocation({ ...location });
   }
+
+  function HandleSelectCreatures() {
+    setSelectedCreatures(creatures.filter((c) => location.creatures.some((lc) => lc.creatureId === c._id)));
+    HandleSelectFromBestiary(HandleSelectedCreatures);
+  }
+
+  function HandleSelectedCreatures(tempSelectedCreatures) {
+    //remove removed creatures
+    location.creatures = location.creatures.filter((lc) => tempSelectedCreatures.some((sc) => sc._id === lc.creatureId));
+
+    //Add new creatures
+    tempSelectedCreatures
+      .filter((sc) => !location.creatures.some((lc) => lc.creatureId === sc._id))
+      .forEach((sc) => {
+        location.creatures.push({
+          creatureId: sc._id,
+          routines: [
+            {
+              encounterFrequency: lc.ENCOUNTER_FREQUENCIES.MEDIUM,
+            },
+          ],
+        });
+      });
+    setLocation({ ...location });
+  }
+
+  useEffect(() => {
+    location.creatures = location.creatures.filter((lc) => creatures.some((c) => c._id === lc.creatureId));
+  }, [location, creatures]);
 
   return (
     <div className="EditLocation-container">
@@ -175,7 +210,7 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing 
               </button>
             </div>
             {location.traversal.partitions.map((p) => (
-              <div className="location-detail-group-item">
+              <div className="location-detail-group-item" key={p.type}>
                 <span>{lc.GetPartitionType(p.type).display}</span>
                 <div className="group-item-actions">
                   <button onClick={() => OpenModalManagePartition(p)}>
@@ -194,7 +229,7 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing 
               </button>
             </div>
             {location.traversal.elements.map((e) => (
-              <div className="location-detail-group-item">
+              <div className="location-detail-group-item" key={e.type}>
                 <span>{lc.GetPartitionType(e.type).display}</span>
                 <div className="group-item-actions">
                   <button onClick={() => OpenModalManageElement(e)}>
@@ -293,7 +328,7 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing 
           </button>
         </div>
         {location.contexts.map((c) => (
-          <div className="location-detail-group-item">
+          <div className="location-detail-group-item" key={c.name}>
             <span>{c.name}</span>
             <div className="group-item-actions">
               <button onClick={() => OpenModalManageContext(c)}>
@@ -310,18 +345,18 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing 
 
         <div className="location-detail-group">
           <span>Criaturas</span>
-          <button onClick={() => OpenModalManageCreature()}>
+          <button onClick={() => HandleSelectCreatures()}>
             <i class="fas fa-plus"></i>
           </button>
         </div>
-        {location.creatures.map((c) => (
-          <div className="location-detail-group-item">
-            <span>{c.creatureId}</span>
+        {location.creatures.map((lc) => (
+          <div className="location-detail-group-item" key={lc.creatureId}>
+            <span>{creatures.find((c) => c._id === lc.creatureId).name}</span>
             <div className="group-item-actions">
-              <button onClick={() => OpenModalManageCreature(c)}>
+              <button onClick={() => OpenModalManageCreature(lc)}>
                 <i className="fas fa-pencil-alt"></i>
               </button>
-              <button onClick={() => DeleteCreature(c)}>
+              <button onClick={() => DeleteCreature(lc)}>
                 <i class="fas fa-trash"></i>
               </button>
             </div>

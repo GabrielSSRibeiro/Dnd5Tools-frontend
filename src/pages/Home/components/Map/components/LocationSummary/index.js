@@ -52,6 +52,7 @@ function LocationSummary({ location, locationToEdit, setLocationToEdit }) {
           intenseTemperatureFrequency: null,
           panoramicVision: lc.PANORAMIC_VISIONS.MEDIUM,
           hazardousness: lc.HAZARDOUSNESS.MEDIUM,
+          resourceEasiness: lc.RESOURCE_EASINESS.NORMAL,
         },
       ],
       creatures: [],

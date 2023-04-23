@@ -130,6 +130,35 @@ button {
   visibility: hidden;
 }
 
+.df {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.df-fd-c {
+  flex-direction: column;
+}
+.df-f1 {
+  flex: 1;
+}
+.df-fw {
+  flex-wrap: wrap;
+}
+
+.df-jc-fs {
+  justify-content: flex-start;
+}
+.df-jc-fe {
+  justify-content: flex-end;
+}
+
+.df-ai-fs {
+  align-items: flex-start;
+}
+.df-ai-fe {
+  align-items: flex-end;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   border-radius: 999px;

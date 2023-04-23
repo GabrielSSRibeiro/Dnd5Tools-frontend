@@ -45,7 +45,7 @@ function Bestiary({
   selectedCreatures,
   selectedCharacters,
   level,
-  setSelectedCreatures,
+  HandleSelectedFromBestiary,
   isSelecting,
   setIsSelecting,
   isBestiaryOpen,
@@ -175,7 +175,7 @@ function Bestiary({
     setTempSelectedCreatures(newSelection);
   }
 
-  function HandleSelectedFromBestiary() {
+  function HandleSelected() {
     utils.SortArrayOfObjByProperty(tempSelectedCreatures, "name");
 
     HandleClose();
@@ -183,7 +183,7 @@ function Bestiary({
       c.difficultyRatio = GetCreatureDifficultyRatio(GetCreatureOffensiveRatio(c), GetCreatureDefensiveRatio(c));
       c.level = c.rarity === CREATURE_RARITIES.LEGENDARY ? GetRarity(c.rarity).baseOutputMin : GetAverageLevel(c.rarity);
     });
-    setSelectedCreatures(tempSelectedCreatures);
+    HandleSelectedFromBestiary.onSelect(tempSelectedCreatures);
   }
 
   function HandleClose() {
@@ -425,7 +425,7 @@ function Bestiary({
           </main>
           {isSelecting && (
             <div className={`selecting-footer ${filteredCreatures.length <= 3 ? "filtered" : ""}`}>
-              <Button text="Confirmar" onClick={HandleSelectedFromBestiary} />
+              <Button text="Confirmar" onClick={HandleSelected} />
             </div>
           )}
         </div>

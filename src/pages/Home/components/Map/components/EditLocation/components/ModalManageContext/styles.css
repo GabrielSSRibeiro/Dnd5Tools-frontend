@@ -4,12 +4,10 @@
 }
 
 .ModalManageContext-container .new-context-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
   row-gap: 10px;
   margin-bottom: 25px;
+  overflow-y: auto;
+  height: 350px;
 }
 
 .ModalManageContext-container .details-wrapper {

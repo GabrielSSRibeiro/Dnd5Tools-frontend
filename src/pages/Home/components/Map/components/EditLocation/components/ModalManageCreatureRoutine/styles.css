@@ -1,21 +1,18 @@
-.ModalManageElement-container.modal-body {
+.ModalManageCreatureRoutine-container.modal-body {
   width: fit-content;
   height: fit-content;
 }
 
-.ModalManageElement-container .new-element-wrapper {
+.ModalManageCreatureRoutine-container .new-creature-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   row-gap: 10px;
   margin-bottom: 25px;
-
-  overflow-y: auto;
-  height: 350px;
 }
 
-.ModalManageElement-container footer {
+.ModalManageCreatureRoutine-container footer {
   width: 100%;
   display: flex;
   align-items: center;

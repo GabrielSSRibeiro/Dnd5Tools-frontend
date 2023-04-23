@@ -167,6 +167,20 @@ export const hazardousness = [
 ];
 export const GetHazardousness = (value) => hazardousness.find((a) => a.value === value);
 
+export const RESOURCE_EASINESS = {
+  ABUNDANT: 10,
+  NORMAL: 20,
+  LIMITED: 30,
+  SCARCE: 40,
+};
+export const resourceEasiness = [
+  { display: "Abundante", value: RESOURCE_EASINESS.ABUNDANT },
+  { display: "Normal", value: RESOURCE_EASINESS.NORMAL },
+  { display: "Limitado", value: RESOURCE_EASINESS.LIMITED },
+  { display: "Escasso", value: RESOURCE_EASINESS.SCARCE },
+];
+export const GetResourceEasiness = (value) => resourceEasiness.find((a) => a.value === value);
+
 export const ROUTINE_SCHEDULES = {
   DAY: 10,
   NIGHT: 20,

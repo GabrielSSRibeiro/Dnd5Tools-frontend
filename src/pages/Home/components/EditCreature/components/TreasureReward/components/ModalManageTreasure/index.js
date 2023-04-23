@@ -140,10 +140,12 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
             <Select
               label={"Tipo"}
               info={[
-                { text: "Material pode ser usado para forja de equipamentos ou para recuperar habilidade perdida de equipamento" },
+                {
+                  text: "Material pode ser usado para forja de equipamentos ou para recuperar habilidade perdida de equipamento. Na Forja, primeiro se dedica o tempo e depois se faz o teste.",
+                },
                 { text: "" },
                 {
-                  text: "Depedendo do tipo de equipamento desejado para o material, a ferramenta necessaria para sua forja será diferente. a CD e tempo necessário são determinados pela raridade da criatura. Esse tempo de ser dividido iqualmente entre o número de pessoas que estão forjando, mas todos tem que passar no teste para ter sucesso",
+                  text: "Depedendo do tipo de equipamento desejado para o material, a ferramenta necessaria para sua forja será diferente. a CD e tempo necessário são determinados pela raridade da criatura. Esse tempo pode ser dividido iqualmente entre o número de pessoas que estão forjando, mas todos tem que passar no teste para ter sucesso",
                 },
               ]}
               className="treasure-type"

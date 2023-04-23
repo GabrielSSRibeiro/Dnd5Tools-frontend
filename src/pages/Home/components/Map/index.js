@@ -7,7 +7,15 @@ import EditLocation from "./components/EditLocation";
 
 import "./styles.css";
 
-function Map({ HandleSaveLocation, HandleDeleteLocation }) {
+function Map({
+  HandleSaveLocation,
+  HandleDeleteLocation,
+  HandleSelectFromBestiary,
+  selectedCreatures,
+  setSelectedCreatures,
+  isBestiaryOpen,
+  creatures,
+}) {
   const [locationToEdit, setLocationToEdit] = useState(null);
 
   function HandleCancel() {
@@ -67,6 +75,9 @@ function Map({ HandleSaveLocation, HandleDeleteLocation }) {
               HandleSave={HandleSave}
               HandleDelete={locationToEdit.owner ? HandleDelete : null}
               FinishEditing={HandleCancel}
+              HandleSelectFromBestiary={HandleSelectFromBestiary}
+              setSelectedCreatures={setSelectedCreatures}
+              creatures={creatures}
             />
           </div>
         )}

@@ -25,6 +25,7 @@ function Home() {
   const [isSelectingParty, setIsSelectingParty] = useState(false);
   const [isBestiaryOpen, setIsBestiaryOpen] = useState(false);
   const [isSelectingBestiary, setIsSelectingBestiary] = useState(false);
+  const [HandleSelectedFromBestiary, setHandleSelectedFromBestiary] = useState({ onSelect: () => {} });
   const [creatureToEdit, setCreatureToEdit] = useState(null);
   const [combatConfig, setCombatConfig] = useState(null);
   const [level, setLevel] = useState(null);
@@ -44,11 +45,12 @@ function Home() {
   //   setIsBestiaryOpen(false);
   // }
 
-  // function HandleSelectFromBestiary() {
-  //   setIsSelectingBestiary(true);
-  //   setIsBestiaryOpen(true);
-  //   setIsPartyOpen(false);
-  // }
+  function HandleSelectFromBestiary(onSelect = () => {}) {
+    setIsSelectingBestiary(true);
+    setIsBestiaryOpen(true);
+    setIsPartyOpen(false);
+    setHandleSelectedFromBestiary({ onSelect });
+  }
 
   // function HandleGenerateCombat() {
   //   const newCombatTab = combats.length + 1;
@@ -195,7 +197,7 @@ function Home() {
         selectedCharacters={selectedCharacters}
         setSelectedCharacters={setSelectedCharacters}
         selectedCreatures={selectedCreatures}
-        setSelectedCreatures={setSelectedCreatures}
+        HandleSelectedFromBestiary={HandleSelectedFromBestiary}
         isSelectingParty={isSelectingParty}
         isSelectingBestiary={isSelectingBestiary}
         setIsSelectingParty={setIsSelectingParty}
@@ -227,7 +229,13 @@ function Home() {
           <SkillCheck resultText={openTab} level={level} />
         </div>
         <div className={`section-wrapper map ${openTab !== MAIN_TABS.MAP ? "hidden" : ""}`}>
-          <Map HandleSaveLocation={HandleSaveLocation} HandleDeleteLocation={HandleDeleteLocation} />
+          <Map
+            HandleSaveLocation={HandleSaveLocation}
+            HandleDeleteLocation={HandleDeleteLocation}
+            HandleSelectFromBestiary={HandleSelectFromBestiary}
+            setSelectedCreatures={setSelectedCreatures}
+            creatures={creatures}
+          />
         </div>
         {/* <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
           <CombatSetup

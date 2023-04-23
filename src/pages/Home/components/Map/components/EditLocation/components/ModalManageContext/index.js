@@ -16,14 +16,15 @@ function ModalManageContext({ context, onClose }) {
     context
       ? utils.clone(context)
       : {
-          name: null,
           isCurrent: false,
+          name: null,
           firstImpressions: null,
           details: null,
           precipitationFrequency: null,
           intenseTemperatureFrequency: null,
           panoramicVision: lc.PANORAMIC_VISIONS.MEDIUM,
           hazardousness: lc.HAZARDOUSNESS.LOW,
+          resourceEasiness: lc.RESOURCE_EASINESS.NORMAL,
         }
   );
 
@@ -50,19 +51,9 @@ function ModalManageContext({ context, onClose }) {
   return (
     <Modal title="Contexto" className="ModalManageContext-container" onClickToClose={onClose}>
       {modal}
-      <div className="new-context-wrapper">
+      <div className="new-context-wrapper df df-fd-c df-jc-fs">
         <TextInput label="Nome" value={tempContext} valuePropertyPath="name" onChange={setTempContext} />
         <TextInput label="Primeiras Impressões" value={tempContext} valuePropertyPath="firstImpressions" onChange={setTempContext} />
-        <Select
-          label={"Tipo"}
-          extraWidth={250}
-          value={tempContext}
-          valuePropertyPath="name"
-          onSelect={setTempContext}
-          options={lc.partitionTypes}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
         <div className="details-wrapper">
           <button className="details-blocker" onClick={OpenModalDetails}>
             <i className="fas fa-pencil-alt"></i>
@@ -106,6 +97,16 @@ function ModalManageContext({ context, onClose }) {
           valuePropertyPath="hazardousness"
           onSelect={setTempContext}
           options={lc.hazardousness}
+          optionDisplay={(o) => o.display}
+          optionValue={(o) => o.value}
+        />
+        <Select
+          label={"Facilidade de Recursos"}
+          extraWidth={250}
+          value={tempContext}
+          valuePropertyPath="resourceEasiness"
+          onSelect={setTempContext}
+          options={lc.resourceEasiness}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />

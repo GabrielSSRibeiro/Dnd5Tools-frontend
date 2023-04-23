@@ -10,6 +10,33 @@
   justify-content: flex-start;
   row-gap: 10px;
   margin-bottom: 25px;
+
+  overflow-y: auto;
+  height: 350px;
+}
+
+.ModalManageCreature-container .creature-detail-group {
+  width: 100%;
+  padding: 0 10px;
+  margin-bottom: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ModalManageCreature-container .creature-detail-group-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 20px;
+}
+
+.ModalManageCreature-container .group-item-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 5px;
 }
 
 .ModalManageCreature-container footer {

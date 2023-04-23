@@ -17,7 +17,7 @@ function NaviBar({
   selectedCharacters,
   setSelectedCharacters,
   selectedCreatures,
-  setSelectedCreatures,
+  HandleSelectedFromBestiary,
   isSelectingParty,
   setIsSelectingParty,
   isSelectingBestiary,
@@ -170,7 +170,7 @@ function NaviBar({
             selectedCreatures={selectedCreatures}
             selectedCharacters={selectedCharacters}
             level={level}
-            setSelectedCreatures={setSelectedCreatures}
+            HandleSelectedFromBestiary={HandleSelectedFromBestiary}
             isSelecting={isSelectingBestiary}
             setIsSelecting={setIsSelectingBestiary}
             isBestiaryOpen={isBestiaryOpen}
