@@ -66,6 +66,7 @@ function ModalManageContext({ context, onClose }) {
           value={tempContext}
           valuePropertyPath="precipitationFrequency"
           onSelect={setTempContext}
+          nothingSelected="Nenhuma"
           options={lc.precipitationFrequencies}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
@@ -76,6 +77,7 @@ function ModalManageContext({ context, onClose }) {
           value={tempContext}
           valuePropertyPath="intenseTemperatureFrequency"
           onSelect={setTempContext}
+          nothingSelected="Nenhuma"
           options={lc.intenseTemperatureFrequencies}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}

@@ -61,6 +61,7 @@ function Map({
               <i class="fas fa-caret-down"></i>
             </button>
           </div>
+          <div className="compass">N</div>
         </aside>
         <aside className="new-encounter">
           <Button text="Novo Encontro" />

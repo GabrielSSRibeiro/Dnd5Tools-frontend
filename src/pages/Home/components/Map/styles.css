@@ -14,7 +14,7 @@
   height: 90%;
   background-color: aqua;
   border: solid 1px var(--gray2);
-  /* overflow: hidden; */
+  overflow: hidden;
 
   display: flex;
   flex-direction: column;

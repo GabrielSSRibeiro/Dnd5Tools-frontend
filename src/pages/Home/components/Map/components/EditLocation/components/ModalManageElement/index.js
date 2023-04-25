@@ -52,8 +52,8 @@ function ModalManageElement({ element, onClose }) {
           value={tempElement}
           valuePropertyPath="frequency"
           onSelect={setTempElement}
-          options={cc.creatureRarities}
-          optionDisplay={(o) => o.treasureDisplay}
+          options={lc.encounterFrequencies}
+          optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />
         <Select
@@ -62,7 +62,7 @@ function ModalManageElement({ element, onClose }) {
           value={tempElement}
           valuePropertyPath="groupSize"
           onSelect={setTempElement}
-          nothingSelected="Nenhum"
+          nothingSelected="Solitário"
           options={lc.groupSizes}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}

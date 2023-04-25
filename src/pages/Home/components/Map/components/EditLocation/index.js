@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as lc from "../../../../../../constants/locationConstants";
 import { creatureRarities, creatureEnvironments } from "../../../../../../constants/creatureConstants";
+import * as lh from "../../../../../../helpers/locationHelper";
 
 import Button from "../../../../../../components/Button";
 import TextInput from "../../../../../../components/TextInput";
@@ -24,6 +25,13 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
     return isLocationValid;
   }
 
+  function HandleSaveLocation() {
+    //valores reais
+    location.radiusMultiplier = lh.GetRadius(location.size);
+
+    HandleSave(location);
+  }
+
   function OpenDeleteConfirmation() {
     setModal(
       <ModalWarning
@@ -35,6 +43,11 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
         onConfirm={() => HandleDelete(location)}
       />
     );
+  }
+
+  function HandleSelectContext(context) {
+    context.isCurrent = !context.isCurrent;
+    setLocation({ ...location });
   }
 
   function OpenModalManagePartition(partition) {
@@ -329,6 +342,7 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
         </div>
         {location.contexts.map((c) => (
           <div className="location-detail-group-item" key={c.name}>
+            <CheckInput isSelected={c.isCurrent} onClick={() => HandleSelectContext(c)} />
             <span>{c.name}</span>
             <div className="group-item-actions">
               <button onClick={() => OpenModalManageContext(c)}>
@@ -373,7 +387,7 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
           <button className="button-simple" onClick={FinishEditing}>
             Cancelar
           </button>
-          <Button text="Salvar" onClick={() => HandleSave(location)} isDisabled={!IsLocationValid()} />
+          <Button text="Salvar" onClick={HandleSaveLocation} isDisabled={!IsLocationValid()} />
         </div>
       </footer>
     </div>

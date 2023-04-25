@@ -1,3 +1,8 @@
+export const BASE_VISION_IN_M = 5000;
+export const BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M = 5000;
+export const MAXIMUM_SEQUENTIAL_EXPLORATION_HOURS = 8;
+export const PX_IN_M_SCALE = 100;
+
 export const LOCATION_SIZES = {
   POINT_OF_INTEREST: 10,
   SMALL: 20,
@@ -6,10 +11,10 @@ export const LOCATION_SIZES = {
   EXTREME: 50,
 };
 export const locationSizes = [
-  { display: "Pequena", value: LOCATION_SIZES.SMALL },
-  { display: "Média", value: LOCATION_SIZES.MEDIUM },
-  { display: "Grande", value: LOCATION_SIZES.LARGE },
-  { display: "Extrema", value: LOCATION_SIZES.EXTREME },
+  { display: "Pequeno", value: LOCATION_SIZES.SMALL, baseRadiusMultiplier: 2 },
+  { display: "Médio", value: LOCATION_SIZES.MEDIUM, baseRadiusMultiplier: 3 },
+  { display: "Grande", value: LOCATION_SIZES.LARGE, baseRadiusMultiplier: 4 },
+  { display: "Extremo", value: LOCATION_SIZES.EXTREME, baseRadiusMultiplier: 10 },
 ];
 export const GetLocationSize = (value) => locationSizes.find((a) => a.value === value);
 
