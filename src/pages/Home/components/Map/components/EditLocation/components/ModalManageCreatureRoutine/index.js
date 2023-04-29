@@ -17,7 +17,6 @@ function ModalManageCreatureRoutine({ routine, contexts, onClose }) {
           precipitation: null,
           temperature: null,
           context: null,
-          groupSize: null,
           encounterFrequency: lc.ENCOUNTER_FREQUENCIES.MEDIUM,
         }
   );
@@ -74,17 +73,6 @@ function ModalManageCreatureRoutine({ routine, contexts, onClose }) {
           nothingSelected="Todos"
           onSelect={setTempRoutine}
           options={contexts}
-        />
-        <Select
-          label={"Tamanho do Grupo"}
-          extraWidth={250}
-          value={tempRoutine}
-          valuePropertyPath="groupSize"
-          nothingSelected="Solitário"
-          onSelect={setTempRoutine}
-          options={lc.groupSizes}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
         />
         <Select
           label={"Frequência de Encontro"}

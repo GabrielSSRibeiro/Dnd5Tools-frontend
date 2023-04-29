@@ -10,7 +10,7 @@ import Select from "../../../../../../../../components/Select";
 
 import "./styles.css";
 
-function ModalManageContext({ context, onClose }) {
+function ModalManageContext({ context, isDefault, onClose }) {
   const [modal, setModal] = useState(null);
   const [tempContext, setTempContext] = useState(
     context
@@ -48,17 +48,25 @@ function ModalManageContext({ context, onClose }) {
     setModal(null);
   }
 
+  function CheckFinalButtonValid() {
+    if (!tempContext.name || !tempContext.firstImpressions) {
+      return false;
+    }
+
+    return true;
+  }
+
   return (
     <Modal title="Contexto" className="ModalManageContext-container" onClickToClose={onClose}>
       {modal}
       <div className="new-context-wrapper df df-fd-c df-jc-fs">
-        <TextInput label="Nome" value={tempContext} valuePropertyPath="name" onChange={setTempContext} />
+        <TextInput label="Nome" value={tempContext} valuePropertyPath="name" onChange={setTempContext} disabled={isDefault} />
         <TextInput label="Primeiras Impressões" value={tempContext} valuePropertyPath="firstImpressions" onChange={setTempContext} />
         <div className="details-wrapper">
           <button className="details-blocker" onClick={OpenModalDetails}>
             <i className="fas fa-pencil-alt"></i>
           </button>
-          <TextInput label="Detalhes" isMultiLine={true} value={tempContext} valuePropertyPath="details" onChange={setTempContext} />
+          <TextInput label="Detalhes (opcional)" isMultiLine={true} value={tempContext} valuePropertyPath="details" onChange={setTempContext} />
         </div>
         <Select
           label={"Chance de Precipitação"}
@@ -117,7 +125,7 @@ function ModalManageContext({ context, onClose }) {
         <button className="button-simple" onClick={HandleCancel}>
           Cancelar
         </button>
-        <Button text="Salvar" onClick={HandleConfirm} />
+        <Button text="Salvar" onClick={HandleConfirm} isDisabled={!CheckFinalButtonValid()} />
       </footer>
     </Modal>
   );

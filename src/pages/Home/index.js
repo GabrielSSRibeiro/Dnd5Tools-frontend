@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import * as lc from "../../constants/locationConstants";
+import * as cc from "../../constants/creatureConstants";
 import api from "../../services/api";
 import { useAuth } from "../../contexts/Auth";
 
@@ -137,7 +139,7 @@ function Home() {
   }
 
   async function HandleSaveCombatConfig() {
-    const combatConfigToSave = { _id: combatConfig._id, owner: combatConfig.owner, level, characterGroups: groups, inactiveGroup };
+    const combatConfigToSave = { ...combatConfig, level, characterGroups: groups, inactiveGroup };
 
     await (combatConfigToSave._id ? api.put("UpdateCombatConfig", combatConfigToSave) : api.post("SaveCombatConfig", combatConfigToSave))
       .then((response) => {
@@ -180,7 +182,26 @@ function Home() {
         setGroups(response.data.characterGroups);
         setInactiveGroup(response.data.inactiveGroup);
       } else {
-        setCombatConfig({ owner: currentUser.uid, level: 1, characterGroups: [], inactiveGroup: [] });
+        setCombatConfig({
+          owner: currentUser.uid,
+          level: 1,
+          characterGroups: [],
+          inactiveGroup: [],
+          world: {
+            name: "Cenário",
+            traversal: { type: cc.CREATURE_ENVIRONMENTS.AQUATIC, irregularTerrainFrequency: lc.IRREGULAR_TERRAIN_FREQUENCIES.LOW },
+            contexts: [
+              {
+                isCurrent: true,
+                name: "Normal",
+                panoramicVision: lc.PANORAMIC_VISIONS.MEDIUM,
+                hazardousness: lc.HAZARDOUSNESS.MEDIUM,
+                resourceEasiness: lc.RESOURCE_EASINESS.NORMAL,
+              },
+            ],
+            creatures: [],
+          },
+        });
         setLevel(1);
       }
     });
@@ -235,6 +256,8 @@ function Home() {
             HandleSelectFromBestiary={HandleSelectFromBestiary}
             setSelectedCreatures={setSelectedCreatures}
             creatures={creatures}
+            combatConfig={combatConfig}
+            locations={locations}
           />
         </div>
         {/* <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>

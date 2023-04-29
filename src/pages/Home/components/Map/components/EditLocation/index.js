@@ -95,7 +95,13 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
   }
 
   function OpenModalManageContext(context) {
-    setModal(<ModalManageContext context={context} onClose={(tempContext) => HandleCloseModalManageContext(context, tempContext)} />);
+    setModal(
+      <ModalManageContext
+        context={context}
+        isDefault={context && location.contexts.some((c, i) => c.name === context.name && i === 0)}
+        onClose={(tempContext) => HandleCloseModalManageContext(context, tempContext)}
+      />
+    );
   }
   function HandleCloseModalManageContext(context, tempContext) {
     if (tempContext) {
@@ -340,7 +346,7 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
             <i class="fas fa-plus"></i>
           </button>
         </div>
-        {location.contexts.map((c) => (
+        {location.contexts.map((c, index) => (
           <div className="location-detail-group-item" key={c.name}>
             <CheckInput isSelected={c.isCurrent} onClick={() => HandleSelectContext(c)} />
             <span>{c.name}</span>
@@ -348,7 +354,7 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
               <button onClick={() => OpenModalManageContext(c)}>
                 <i className="fas fa-pencil-alt"></i>
               </button>
-              <button onClick={() => DeleteContext(c)}>
+              <button onClick={() => DeleteContext(c)} disabled={index === 0}>
                 <i class="fas fa-trash"></i>
               </button>
             </div>

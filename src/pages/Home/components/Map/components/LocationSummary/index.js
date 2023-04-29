@@ -7,7 +7,7 @@ import "./styles.css";
 
 import ModalLocationDetails from "../ModalLocationDetails";
 
-function LocationSummary({ location, locationToEdit, setLocationToEdit }) {
+function LocationSummary({ location, setLocationToEdit }) {
   const [modal, setModal] = useState(null);
 
   function OpenModalLocationDetails(location) {
@@ -23,6 +23,7 @@ function LocationSummary({ location, locationToEdit, setLocationToEdit }) {
     const newLocation = {
       owner: false,
       name: null,
+      exteriorLocationId: null,
       size: null,
       traversal: {
         type: null,

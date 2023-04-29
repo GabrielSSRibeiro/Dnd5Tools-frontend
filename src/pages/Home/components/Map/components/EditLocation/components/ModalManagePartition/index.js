@@ -27,6 +27,14 @@ function ModalManagePartition({ partition, onClose }) {
     onClose(tempPartition);
   }
 
+  function CheckFinalButtonValid() {
+    if (!tempPartition.type || !tempPartition.magnitude || !tempPartition.quantity) {
+      return false;
+    }
+
+    return true;
+  }
+
   return (
     <Modal title="Partição" className="ModalManagePartition-container" onClickToClose={onClose}>
       <div className="new-partition-wrapper">
@@ -65,7 +73,7 @@ function ModalManagePartition({ partition, onClose }) {
         <button className="button-simple" onClick={HandleCancel}>
           Cancelar
         </button>
-        <Button text="Salvar" onClick={HandleConfirm} />
+        <Button text="Salvar" onClick={HandleConfirm} isDisabled={!CheckFinalButtonValid()} />
       </footer>
     </Modal>
   );

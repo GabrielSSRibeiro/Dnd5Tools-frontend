@@ -7,15 +7,7 @@ import EditLocation from "./components/EditLocation";
 
 import "./styles.css";
 
-function Map({
-  HandleSaveLocation,
-  HandleDeleteLocation,
-  HandleSelectFromBestiary,
-  selectedCreatures,
-  setSelectedCreatures,
-  isBestiaryOpen,
-  creatures,
-}) {
+function Map({ HandleSaveLocation, HandleDeleteLocation, HandleSelectFromBestiary, setSelectedCreatures, creatures, combatConfig, locations }) {
   const [locationToEdit, setLocationToEdit] = useState(null);
 
   function HandleCancel() {
@@ -67,7 +59,7 @@ function Map({
           <Button text="Novo Encontro" />
         </aside>
         <div className="world-details">
-          <LocationSummary location={"Mundo"} locationToEdit={locationToEdit} setLocationToEdit={setLocationToEdit} />
+          <LocationSummary location={combatConfig.world} setLocationToEdit={setLocationToEdit} />
         </div>
         {locationToEdit && (
           <div className="edit-location">

@@ -5,6 +5,7 @@ import * as utils from "../../../../../../../../utils";
 import ModalManageCreatureRoutine from "../ModalManageCreatureRoutine";
 import Modal from "../../../../../../../../components/Modal";
 import Button from "../../../../../../../../components/Button";
+import Select from "../../../../../../../../components/Select";
 
 import "./styles.css";
 
@@ -15,6 +16,7 @@ function ModalManageCreature({ creature, contexts, onClose }) {
       ? utils.clone(creature)
       : {
           creatureId: null,
+          groupSize: null,
           routines: [],
         }
   );
@@ -55,17 +57,32 @@ function ModalManageCreature({ creature, contexts, onClose }) {
     onClose(tempCreature);
   }
 
+  function CheckFinalButtonValid() {
+    return true;
+  }
+
   return (
     <Modal title="Criatura" className="ModalManageCreature-container" onClickToClose={onClose}>
       {modal}
       <div className="new-creature-wrapper">
+        <Select
+          label={"Tamanho do Grupo"}
+          extraWidth={250}
+          value={tempCreature}
+          valuePropertyPath="groupSize"
+          nothingSelected="Solitário"
+          onSelect={setTempCreature}
+          options={lc.groupSizes}
+          optionDisplay={(o) => o.display}
+          optionValue={(o) => o.value}
+        />
         <div className="creature-detail-group">
           <span>Rotinas</span>
           <button onClick={() => OpenModalManageRoutine()}>
             <i class="fas fa-plus"></i>
           </button>
         </div>
-        {tempCreature.routines.map((r) => (
+        {tempCreature.routines.map((r, index) => (
           <div className="creature-detail-group-item" key={r.encounterFrequency}>
             <span>{lc.GetRoutineSchedule(r.schedule)?.display ?? "-"}</span>
             <span>{lc.GetPrecipitationFrequency(r.precipitation)?.display ?? "-"}</span>
@@ -77,7 +94,7 @@ function ModalManageCreature({ creature, contexts, onClose }) {
               <button onClick={() => OpenModalManageRoutine(r)}>
                 <i className="fas fa-pencil-alt"></i>
               </button>
-              <button onClick={() => DeleteRoutine(r)}>
+              <button onClick={() => DeleteRoutine(r)} disabled={index === 0}>
                 <i class="fas fa-trash"></i>
               </button>
             </div>
@@ -88,7 +105,7 @@ function ModalManageCreature({ creature, contexts, onClose }) {
         <button className="button-simple" onClick={HandleCancel}>
           Cancelar
         </button>
-        <Button text="Salvar" onClick={HandleConfirm} />
+        <Button text="Salvar" onClick={HandleConfirm} isDisabled={!CheckFinalButtonValid()} />
       </footer>
     </Modal>
   );

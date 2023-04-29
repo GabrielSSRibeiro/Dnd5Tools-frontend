@@ -33,6 +33,14 @@ function ModalManageElement({ element, onClose }) {
     onClose(tempElement);
   }
 
+  function CheckFinalButtonValid() {
+    if (!tempElement.type || !tempElement.frequency) {
+      return false;
+    }
+
+    return true;
+  }
+
   return (
     <Modal title="Elemento" className="ModalManageElement-container" onClickToClose={onClose}>
       <div className="new-element-wrapper">
@@ -106,7 +114,7 @@ function ModalManageElement({ element, onClose }) {
         <button className="button-simple" onClick={HandleCancel}>
           Cancelar
         </button>
-        <Button text="Salvar" onClick={HandleConfirm} />
+        <Button text="Salvar" onClick={HandleConfirm} isDisabled={!CheckFinalButtonValid()} />
       </footer>
     </Modal>
   );
