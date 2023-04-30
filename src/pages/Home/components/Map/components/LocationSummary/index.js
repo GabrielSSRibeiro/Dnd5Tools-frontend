@@ -1,21 +1,31 @@
-import React, { useState } from "react";
-
+import React, { useState, useMemo } from "react";
 import * as utils from "../../../../../../utils";
+import * as cc from "../../../../../../constants/creatureConstants";
 import * as lc from "../../../../../../constants/locationConstants";
+import * as lh from "../../../../../../helpers/locationHelper";
 
 import "./styles.css";
 
 import ModalLocationDetails from "../ModalLocationDetails";
 
-function LocationSummary({ location, setLocationToEdit }) {
+function LocationSummary({ location, id, setLocationToEdit, locations, creatures, schedule, precipitation, temperature }) {
   const [modal, setModal] = useState(null);
 
-  function OpenModalLocationDetails(location) {
-    setModal(<ModalLocationDetails location={location} onClose={setModal} HandleEditLocation={HandleEditLocation} />);
+  function OpenModalLocationDetails() {
+    setLocationToEdit(null);
+    setModal(
+      <ModalLocationDetails
+        location={location}
+        locations={locations}
+        onClose={setModal}
+        HandleEditLocation={HandleEditLocation}
+        creatures={creatures}
+      />
+    );
   }
 
-  function HandleEditLocation() {
-    setLocationToEdit(utils.clone(location));
+  function HandleEditLocation(loc) {
+    setLocationToEdit(utils.clone(loc));
     setModal(null);
   }
 
@@ -23,7 +33,7 @@ function LocationSummary({ location, setLocationToEdit }) {
     const newLocation = {
       owner: false,
       name: null,
-      exteriorLocationId: null,
+      exteriorLocationId: id,
       size: null,
       traversal: {
         type: null,
@@ -62,6 +72,43 @@ function LocationSummary({ location, setLocationToEdit }) {
     setLocationToEdit(newLocation);
   }
 
+  const creaturesForDisplay = useMemo(() => {
+    let creaturesForDisplay = location.creatures
+      .map((locationCreature) => ({
+        creature: creatures.find((c) => c._id === locationCreature.creatureId),
+        routine: lh.GetCreatureCurrentRoutine(
+          locationCreature,
+          schedule,
+          precipitation,
+          temperature,
+          location.contexts.find((c) => c.isCurrent)?.name
+        ),
+      }))
+      .filter((c) => c.routine)
+      .map((c) => {
+        const rarity = cc.GetRarity(c.creature.rarity);
+
+        return {
+          creatureId: c.creature._id,
+          color: rarity.color,
+          opacity: `${lc.GetEncounterFrequency(parseInt(c.routine.encounterFrequency)).opacity}`,
+          image: c.creature.image,
+          baseOutputMax: rarity.baseOutputMax,
+        };
+      });
+
+    creaturesForDisplay.sort((a, b) => b.opacity - a.opacity);
+
+    //group and sort by rarity
+    let sortedCreaturesForDisplay = [];
+    Object.values(utils.GroupArrayBy(creaturesForDisplay, "opacity")).forEach((g) => {
+      g.sort((a, b) => b.baseOutputMax - a.baseOutputMax);
+      sortedCreaturesForDisplay.push(...g);
+    });
+
+    return sortedCreaturesForDisplay;
+  }, [location, schedule, precipitation, temperature, creatures]);
+
   return (
     <div className="LocationSummary-container">
       {modal}
@@ -71,7 +118,7 @@ function LocationSummary({ location, setLocationToEdit }) {
             <i class="fas fa-plus"></i>
           </button>
         </aside>
-        <span className="name">Nome</span>
+        <span className="name">{location.name}</span>
         <aside className="header-details">
           <button onClick={() => OpenModalLocationDetails()}>
             <i class="fas fa-book"></i>
@@ -79,12 +126,22 @@ function LocationSummary({ location, setLocationToEdit }) {
         </aside>
       </header>
       <footer className="details">
-        <span className="first-impressions">Primeiras Impressoes</span>
+        <div className="divider"></div>
+        <span className="first-impressions">{location.contexts.find((c) => c.isCurrent).firstImpressions}</span>
         <div className="divider"></div>
         <div className="creature-list">
-          <div className="creature-avatar">C1</div>
-          <div className="creature-avatar">C2</div>
-          <div className="creature-avatar">C3</div>
+          {creaturesForDisplay.map((c) => (
+            <img
+              key={c.creatureId}
+              className="creature-avatar"
+              style={{
+                borderColor: c.color,
+                opacity: c.opacity,
+              }}
+              src={c.image}
+              alt="creature-avatar"
+            />
+          ))}
         </div>
       </footer>
     </div>

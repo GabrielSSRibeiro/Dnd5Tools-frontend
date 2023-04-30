@@ -33,8 +33,13 @@
 
 .EditLocation-container .location-detail-group {
   width: 100%;
+  margin-bottom: 5px;
+}
+
+.EditLocation-container .location-detail-group-title {
+  width: 100%;
   padding: 0 10px;
-  margin-bottom: 10px;
+  margin-bottom: 2px;
 
   display: flex;
   align-items: center;
@@ -45,7 +50,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: var(--white);
   column-gap: 20px;
+  width: 100%;
+  padding: 0 10px;
 }
 
 .EditLocation-container .group-item-actions {

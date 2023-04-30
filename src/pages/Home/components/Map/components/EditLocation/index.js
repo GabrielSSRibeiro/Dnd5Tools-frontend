@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as lc from "../../../../../../constants/locationConstants";
 import { creatureRarities, creatureEnvironments } from "../../../../../../constants/creatureConstants";
 import * as lh from "../../../../../../helpers/locationHelper";
@@ -19,12 +19,6 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
   const [location, setLocation] = useState(locationToEdit);
   const [modal, setModal] = useState(null);
 
-  function IsLocationValid() {
-    let isLocationValid = true;
-
-    return isLocationValid;
-  }
-
   function HandleSaveLocation() {
     //valores reais
     location.radiusMultiplier = lh.GetRadius(location.size);
@@ -35,8 +29,8 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
   function OpenDeleteConfirmation() {
     setModal(
       <ModalWarning
-        title="Deletar Criatura"
-        message="Tem certeza que deseja deletar essa criatura?"
+        title="Deletar Localização"
+        message="Tem certeza que deseja deletar essa localização?"
         cancelText="Cancelar"
         onCancel={setModal}
         confirmText="Deletar"
@@ -46,12 +40,20 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
   }
 
   function HandleSelectContext(context) {
-    context.isCurrent = !context.isCurrent;
+    location.contexts.forEach((c) => {
+      c.isCurrent = c.name === context.name && !c.isCurrent;
+    });
     setLocation({ ...location });
   }
 
   function OpenModalManagePartition(partition) {
-    setModal(<ModalManagePartition partition={partition} onClose={(tempPartition) => HandleCloseModalManagePartition(partition, tempPartition)} />);
+    setModal(
+      <ModalManagePartition
+        partition={partition}
+        partitions={location.traversal.partitions}
+        onClose={(tempPartition) => HandleCloseModalManagePartition(partition, tempPartition)}
+      />
+    );
   }
   function HandleCloseModalManagePartition(partition, tempPartition) {
     if (tempPartition) {
@@ -73,7 +75,13 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
   }
 
   function OpenModalManageElement(element) {
-    setModal(<ModalManageElement element={element} onClose={(tempElement) => HandleCloseModalManageElement(element, tempElement)} />);
+    setModal(
+      <ModalManageElement
+        element={element}
+        elements={location.traversal.elements}
+        onClose={(tempElement) => HandleCloseModalManageElement(element, tempElement)}
+      />
+    );
   }
   function HandleCloseModalManageElement(element, tempElement) {
     if (tempElement) {
@@ -95,10 +103,13 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
   }
 
   function OpenModalManageContext(context) {
+    let invalidNames = location.contexts.filter((c) => c.name !== context?.name).map((c) => c.name);
+
     setModal(
       <ModalManageContext
         context={context}
         isDefault={context && location.contexts.some((c, i) => c.name === context.name && i === 0)}
+        invalidNames={invalidNames}
         onClose={(tempContext) => HandleCloseModalManageContext(context, tempContext)}
       />
     );
@@ -106,6 +117,16 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
   function HandleCloseModalManageContext(context, tempContext) {
     if (tempContext) {
       if (context) {
+        if (context.name !== tempContext.name) {
+          location.creatures.forEach((c) => {
+            c.routines
+              .filter((r) => r.context === context.name)
+              .forEach((r) => {
+                r.context = tempContext.name;
+              });
+          });
+        }
+
         let index = location.contexts.findIndex((p) => p.name === context.name);
         location.contexts.splice(index, 1, tempContext);
       } else {
@@ -175,9 +196,13 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
     setLocation({ ...location });
   }
 
-  useEffect(() => {
-    location.creatures = location.creatures.filter((lc) => creatures.some((c) => c._id === lc.creatureId));
-  }, [location, creatures]);
+  function IsLocationValid() {
+    if (!location.name) {
+      return false;
+    }
+
+    return true;
+  }
 
   return (
     <div className="EditLocation-container">
@@ -186,27 +211,29 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
       <main className="location-fields">
         <TextInput label="Nome" value={location} valuePropertyPath="name" onChange={setLocation} />
 
-        <Select
-          label={"Tamanho"}
-          extraWidth={250}
-          value={location}
-          valuePropertyPath="size"
-          onSelect={setLocation}
-          nothingSelected="Ponto de Interesse"
-          options={lc.locationSizes}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
+        {location.exteriorLocationId != null && (
+          <Select
+            label={"Tamanho"}
+            extraWidth={250}
+            value={location}
+            valuePropertyPath="size"
+            onSelect={setLocation}
+            nothingSelected="Ponto de Interesse"
+            options={lc.locationSizes}
+            optionDisplay={(o) => o.display}
+            optionValue={(o) => o.value}
+          />
+        )}
 
         <div className="divider"></div>
 
-        {location.size ? (
+        {location.size || location.exteriorLocationId == null ? (
           <>
             <Select
               label={"Tipo"}
               extraWidth={250}
               value={location}
-              valuePropertyPath="type"
+              valuePropertyPath="traversal.type"
               onSelect={setLocation}
               options={creatureEnvironments}
               optionDisplay={(o) => o.display}
@@ -222,44 +249,52 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
             />
-            <div className="location-detail-group">
-              <span>Partições</span>
-              <button onClick={() => OpenModalManagePartition()}>
-                <i class="fas fa-plus"></i>
-              </button>
-            </div>
-            {location.traversal.partitions.map((p) => (
-              <div className="location-detail-group-item" key={p.type}>
-                <span>{lc.GetPartitionType(p.type).display}</span>
-                <div className="group-item-actions">
-                  <button onClick={() => OpenModalManagePartition(p)}>
-                    <i className="fas fa-pencil-alt"></i>
-                  </button>
-                  <button onClick={() => DeletePartition(p)}>
-                    <i class="fas fa-trash"></i>
+            {location.exteriorLocationId != null && (
+              <div className="location-detail-group">
+                <div className="location-detail-group-title">
+                  <span>Partições</span>
+                  <button onClick={() => OpenModalManagePartition()} disabled={location.traversal.partitions.length === 2}>
+                    <i class="fas fa-plus"></i>
                   </button>
                 </div>
+                {location.traversal.partitions.map((p) => (
+                  <div className="location-detail-group-item" key={p.type}>
+                    <span>{lc.GetPartitionType(p.type).display}</span>
+                    <div className="group-item-actions">
+                      <button onClick={() => OpenModalManagePartition(p)}>
+                        <i className="fas fa-pencil-alt"></i>
+                      </button>
+                      <button onClick={() => DeletePartition(p)}>
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-            <div className="location-detail-group">
-              <span>Elementos</span>
-              <button onClick={() => OpenModalManageElement()}>
-                <i class="fas fa-plus"></i>
-              </button>
-            </div>
-            {location.traversal.elements.map((e) => (
-              <div className="location-detail-group-item" key={e.type}>
-                <span>{lc.GetPartitionType(e.type).display}</span>
-                <div className="group-item-actions">
-                  <button onClick={() => OpenModalManageElement(e)}>
-                    <i className="fas fa-pencil-alt"></i>
-                  </button>
-                  <button onClick={() => DeleteElement(e)}>
-                    <i class="fas fa-trash"></i>
+            )}
+            {location.exteriorLocationId != null && (
+              <div className="location-detail-group">
+                <div className="location-detail-group-title">
+                  <span>Elementos</span>
+                  <button onClick={() => OpenModalManageElement()} disabled={location.traversal.elements.length === 6}>
+                    <i class="fas fa-plus"></i>
                   </button>
                 </div>
+                {location.traversal.elements.map((e) => (
+                  <div className="location-detail-group-item" key={e.type}>
+                    <span>{lc.GetPartitionType(e.type).display}</span>
+                    <div className="group-item-actions">
+                      <button onClick={() => OpenModalManageElement(e)}>
+                        <i className="fas fa-pencil-alt"></i>
+                      </button>
+                      <button onClick={() => DeleteElement(e)}>
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </>
         ) : (
           <>
@@ -294,94 +329,102 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
           </>
         )}
 
+        {location.exteriorLocationId && (
+          <>
+            <div className="divider"></div>
+            <Select
+              label={"Distância"}
+              extraWidth={250}
+              value={location}
+              valuePropertyPath="reference.distance"
+              onSelect={setLocation}
+              options={lc.referenceDistances}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+            <Select
+              label={"Direção"}
+              extraWidth={250}
+              value={location}
+              valuePropertyPath="reference.direction"
+              onSelect={setLocation}
+              options={lc.directions}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+            <Select
+              label={"Localização"}
+              extraWidth={250}
+              value={location}
+              valuePropertyPath="reference.location"
+              onSelect={setLocation}
+              options={[]}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+            <Select
+              label={"Conectado Por"}
+              extraWidth={250}
+              value={location}
+              valuePropertyPath="reference.connectionType"
+              onSelect={setLocation}
+              nothingSelected="Nada"
+              options={lc.locationConnectionTypes}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+          </>
+        )}
         <div className="divider"></div>
 
-        <Select
-          label={"Distância"}
-          extraWidth={250}
-          value={location}
-          valuePropertyPath="reference.distance"
-          onSelect={setLocation}
-          options={lc.referenceDistances}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
-        <Select
-          label={"Direção"}
-          extraWidth={250}
-          value={location}
-          valuePropertyPath="reference.direction"
-          onSelect={setLocation}
-          options={lc.directions}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
-        <Select
-          label={"Localização"}
-          extraWidth={250}
-          value={location}
-          valuePropertyPath="reference.location"
-          onSelect={setLocation}
-          options={[]}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
-        <Select
-          label={"Conectado Por"}
-          extraWidth={250}
-          value={location}
-          valuePropertyPath="reference.connectionType"
-          onSelect={setLocation}
-          nothingSelected="Nada"
-          options={lc.locationConnectionTypes}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
+        <div className="location-detail-group">
+          <div className="location-detail-group-title">
+            <span>Contextos</span>
+            <button onClick={() => OpenModalManageContext()}>
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          {location.contexts.map((c, index) => (
+            <div className="location-detail-group-item" key={c.name}>
+              <div className="df df-cg-10">
+                <CheckInput isSelected={c.isCurrent} onClick={() => HandleSelectContext(c)} />
+                <span>{c.name}</span>
+              </div>
+              <div className="group-item-actions">
+                <button onClick={() => OpenModalManageContext(c)}>
+                  <i className="fas fa-pencil-alt"></i>
+                </button>
+                <button onClick={() => DeleteContext(c)} disabled={index === 0}>
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
 
         <div className="divider"></div>
 
         <div className="location-detail-group">
-          <span>Contextos</span>
-          <button onClick={() => OpenModalManageContext()}>
-            <i class="fas fa-plus"></i>
-          </button>
-        </div>
-        {location.contexts.map((c, index) => (
-          <div className="location-detail-group-item" key={c.name}>
-            <CheckInput isSelected={c.isCurrent} onClick={() => HandleSelectContext(c)} />
-            <span>{c.name}</span>
-            <div className="group-item-actions">
-              <button onClick={() => OpenModalManageContext(c)}>
-                <i className="fas fa-pencil-alt"></i>
-              </button>
-              <button onClick={() => DeleteContext(c)} disabled={index === 0}>
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
+          <div className="location-detail-group-title">
+            <span>Criaturas</span>
+            <button onClick={() => HandleSelectCreatures()}>
+              <i class="fas fa-plus"></i>
+            </button>
           </div>
-        ))}
-
-        <div className="divider"></div>
-
-        <div className="location-detail-group">
-          <span>Criaturas</span>
-          <button onClick={() => HandleSelectCreatures()}>
-            <i class="fas fa-plus"></i>
-          </button>
-        </div>
-        {location.creatures.map((lc) => (
-          <div className="location-detail-group-item" key={lc.creatureId}>
-            <span>{creatures.find((c) => c._id === lc.creatureId).name}</span>
-            <div className="group-item-actions">
-              <button onClick={() => OpenModalManageCreature(lc)}>
-                <i className="fas fa-pencil-alt"></i>
-              </button>
-              <button onClick={() => DeleteCreature(lc)}>
-                <i class="fas fa-trash"></i>
-              </button>
+          {location.creatures.map((lc) => (
+            <div className="location-detail-group-item" key={lc.creatureId}>
+              <span>{creatures.find((c) => c._id === lc.creatureId).name}</span>
+              <div className="group-item-actions">
+                <button onClick={() => OpenModalManageCreature(lc)}>
+                  <i className="fas fa-pencil-alt"></i>
+                </button>
+                <button onClick={() => DeleteCreature(lc)}>
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </main>
       <footer className="action-buttons">
         {HandleDelete && (

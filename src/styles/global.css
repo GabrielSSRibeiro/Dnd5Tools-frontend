@@ -135,8 +135,14 @@ button {
   justify-content: center;
   align-items: center;
 }
+.df-rg-10 {
+  row-gap: 10px;
+}
 .df-fd-c {
   flex-direction: column;
+}
+.df-cg-10 {
+  column-gap: 10px;
 }
 .df-f1 {
   flex: 1;
@@ -147,6 +153,9 @@ button {
 
 .df-jc-fs {
   justify-content: flex-start;
+}
+.df-jc-sb {
+  justify-content: space-between;
 }
 .df-jc-fe {
   justify-content: flex-end;

@@ -123,7 +123,7 @@ function CombatSetup({
     creature.name = latestCreatureNameArray.join(" ");
 
     let creatures = [...selectedCreatures, creature];
-    utils.SortArrayOfObjByProperty(creatures, "_id");
+    utils.SortArrayOfObjByStringProperty(creatures, "_id");
 
     setSelectedCreatures(creatures);
   }
@@ -143,7 +143,7 @@ function CombatSetup({
 
     const creatures = selectedCreatures.filter((selectedCreature) => selectedCreature.name !== creature.name);
     creatures.push(creature);
-    utils.SortArrayOfObjByProperty(creatures, "name");
+    utils.SortArrayOfObjByStringProperty(creatures, "name");
 
     setSelectedCreatures(creatures);
   }

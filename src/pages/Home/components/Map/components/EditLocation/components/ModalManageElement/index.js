@@ -9,7 +9,7 @@ import Select from "../../../../../../../../components/Select";
 
 import "./styles.css";
 
-function ModalManageElement({ element, onClose }) {
+function ModalManageElement({ element, elements, onClose }) {
   const [tempElement, setTempElement] = useState(
     element
       ? utils.clone(element)
@@ -50,7 +50,7 @@ function ModalManageElement({ element, onClose }) {
           value={tempElement}
           valuePropertyPath="type"
           onSelect={setTempElement}
-          options={lc.elementTypes}
+          options={lc.elementTypes.filter((f) => f.value === element?.type || !elements.some((r) => r.type === f.value))}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />

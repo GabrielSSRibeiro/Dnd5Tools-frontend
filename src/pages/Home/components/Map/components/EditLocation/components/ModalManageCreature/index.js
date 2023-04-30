@@ -25,6 +25,7 @@ function ModalManageCreature({ creature, contexts, onClose }) {
     setModal(
       <ModalManageCreatureRoutine
         routine={routine}
+        routines={tempCreature.routines}
         contexts={contexts}
         onClose={(tempRoutine) => HandleCloseModalManageRoutine(routine, tempRoutine)}
       />
@@ -77,29 +78,31 @@ function ModalManageCreature({ creature, contexts, onClose }) {
           optionValue={(o) => o.value}
         />
         <div className="creature-detail-group">
-          <span>Rotinas</span>
-          <button onClick={() => OpenModalManageRoutine()}>
-            <i class="fas fa-plus"></i>
-          </button>
-        </div>
-        {tempCreature.routines.map((r, index) => (
-          <div className="creature-detail-group-item" key={r.encounterFrequency}>
-            <span>{lc.GetRoutineSchedule(r.schedule)?.display ?? "-"}</span>
-            <span>{lc.GetPrecipitationFrequency(r.precipitation)?.display ?? "-"}</span>
-            <span>{lc.GetIntenseTemperatureFrequency(r.temperature)?.display ?? "-"}</span>
-            <span>{contexts.find((c) => c === r.context) ?? "-"}</span>
-            <span>{lc.GetGroupSize(r.groupSize)?.display ?? "-"}</span>
-            <span>{lc.GetEncounterFrequency(r.encounterFrequency)?.display ?? "-"}</span>
-            <div className="group-item-actions">
-              <button onClick={() => OpenModalManageRoutine(r)}>
-                <i className="fas fa-pencil-alt"></i>
-              </button>
-              <button onClick={() => DeleteRoutine(r)} disabled={index === 0}>
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
+          <div className="creature-detail-group-title">
+            <span>Rotinas</span>
+            <button onClick={() => OpenModalManageRoutine()}>
+              <i class="fas fa-plus"></i>
+            </button>
           </div>
-        ))}
+          {tempCreature.routines.map((r) => (
+            <div className="creature-detail-group-item" key={r.encounterFrequency}>
+              <span>{lc.GetRoutineSchedule(r.schedule)?.display ?? "-"}</span>
+              <span>{lc.GetPrecipitationFrequency(r.precipitation)?.display ?? "-"}</span>
+              <span>{lc.GetIntenseTemperatureFrequency(r.temperature)?.display ?? "-"}</span>
+              <span>{contexts.find((c) => c === r.context) ?? "-"}</span>
+              <span>{lc.GetGroupSize(r.groupSize)?.display ?? "-"}</span>
+              <span>{lc.GetEncounterFrequency(r.encounterFrequency)?.display ?? "-"}</span>
+              <div className="group-item-actions">
+                <button onClick={() => OpenModalManageRoutine(r)}>
+                  <i className="fas fa-pencil-alt"></i>
+                </button>
+                <button onClick={() => DeleteRoutine(r)} disabled={tempCreature.routines.length === 1}>
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       <footer>
         <button className="button-simple" onClick={HandleCancel}>

@@ -8,7 +8,7 @@ import Select from "../../../../../../../../components/Select";
 
 import "./styles.css";
 
-function ModalManagePartition({ partition, onClose }) {
+function ModalManagePartition({ partition, partitions, onClose }) {
   const [tempPartition, setTempPartition] = useState(
     partition
       ? utils.clone(partition)
@@ -44,7 +44,7 @@ function ModalManagePartition({ partition, onClose }) {
           value={tempPartition}
           valuePropertyPath="type"
           onSelect={setTempPartition}
-          options={lc.partitionTypes}
+          options={lc.partitionTypes.filter((f) => f.value === partition?.type || !partitions.some((r) => r.type === f.value))}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />

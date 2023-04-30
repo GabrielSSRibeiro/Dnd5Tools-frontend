@@ -217,10 +217,10 @@ export const ENCOUNTER_FREQUENCIES = {
   EXTREME: 40,
 };
 export const encounterFrequencies = [
-  { display: "Baixa", value: ENCOUNTER_FREQUENCIES.LOW },
-  { display: "Média", value: ENCOUNTER_FREQUENCIES.MEDIUM },
-  { display: "Alta", value: ENCOUNTER_FREQUENCIES.HIGH },
-  { display: "Extrema", value: ENCOUNTER_FREQUENCIES.EXTREME },
+  { display: "Baixa", value: ENCOUNTER_FREQUENCIES.LOW, opacity: 0.5 },
+  { display: "Média", value: ENCOUNTER_FREQUENCIES.MEDIUM, opacity: 0.67 },
+  { display: "Alta", value: ENCOUNTER_FREQUENCIES.HIGH, opacity: 0.83 },
+  { display: "Extrema", value: ENCOUNTER_FREQUENCIES.EXTREME, opacity: 1 },
 ];
 export const GetEncounterFrequency = (value) => encounterFrequencies.find((a) => a.value === value);
 

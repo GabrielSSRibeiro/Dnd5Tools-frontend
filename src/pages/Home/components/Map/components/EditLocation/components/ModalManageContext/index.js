@@ -10,7 +10,7 @@ import Select from "../../../../../../../../components/Select";
 
 import "./styles.css";
 
-function ModalManageContext({ context, isDefault, onClose }) {
+function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
   const [modal, setModal] = useState(null);
   const [tempContext, setTempContext] = useState(
     context
@@ -49,7 +49,7 @@ function ModalManageContext({ context, isDefault, onClose }) {
   }
 
   function CheckFinalButtonValid() {
-    if (!tempContext.name || !tempContext.firstImpressions) {
+    if (!tempContext.name || invalidNames.includes(tempContext.name) || !tempContext.firstImpressions) {
       return false;
     }
 

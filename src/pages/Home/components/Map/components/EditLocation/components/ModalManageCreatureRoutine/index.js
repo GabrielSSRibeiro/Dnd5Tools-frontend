@@ -8,7 +8,7 @@ import Select from "../../../../../../../../components/Select";
 
 import "./styles.css";
 
-function ModalManageCreatureRoutine({ routine, contexts, onClose }) {
+function ModalManageCreatureRoutine({ routine, routines, contexts, onClose }) {
   const [tempRoutine, setTempRoutine] = useState(
     routine
       ? utils.clone(routine)
@@ -17,7 +17,7 @@ function ModalManageCreatureRoutine({ routine, contexts, onClose }) {
           precipitation: null,
           temperature: null,
           context: null,
-          encounterFrequency: lc.ENCOUNTER_FREQUENCIES.MEDIUM,
+          encounterFrequency: null,
         }
   );
 
@@ -80,7 +80,9 @@ function ModalManageCreatureRoutine({ routine, contexts, onClose }) {
           value={tempRoutine}
           valuePropertyPath="encounterFrequency"
           onSelect={setTempRoutine}
-          options={lc.encounterFrequencies}
+          options={lc.encounterFrequencies.filter(
+            (f) => f.value === routine?.encounterFrequency || !routines.some((r) => r.encounterFrequency === f.value)
+          )}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />

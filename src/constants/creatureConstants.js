@@ -11,7 +11,15 @@ export const CREATURE_RARITIES = {
   LEGENDARY: 50,
 };
 export const creatureRarities = [
-  { display: "Comum (Nível 1 - 5)", treasureDisplay: "Comum", value: CREATURE_RARITIES.COMMON, weight: 0, baseOutputMin: 1, baseOutputMax: 5 },
+  {
+    display: "Comum (Nível 1 - 5)",
+    treasureDisplay: "Comum",
+    value: CREATURE_RARITIES.COMMON,
+    weight: 0,
+    baseOutputMin: 1,
+    baseOutputMax: 5,
+    color: "#D3D3D3",
+  },
   {
     display: "Incomum (Nível 6 - 10)",
     treasureDisplay: "Incomum",
@@ -19,8 +27,17 @@ export const creatureRarities = [
     weight: 0,
     baseOutputMin: 6,
     baseOutputMax: 10,
+    color: "#E9BA41",
   },
-  { display: "Rara (Nível 11 - 15)", treasureDisplay: "Raro", value: CREATURE_RARITIES.RARE, weight: 0, baseOutputMin: 11, baseOutputMax: 15 },
+  {
+    display: "Rara (Nível 11 - 15)",
+    treasureDisplay: "Raro",
+    value: CREATURE_RARITIES.RARE,
+    weight: 0,
+    baseOutputMin: 11,
+    baseOutputMax: 15,
+    color: "#E78C25",
+  },
   {
     display: "Muito Rara (Nível 16 - 20)",
     treasureDisplay: "Muito Raro",
@@ -28,6 +45,7 @@ export const creatureRarities = [
     weight: 0,
     baseOutputMin: 16,
     baseOutputMax: 20,
+    color: "#B93217",
   },
   {
     display: "Lendária (Nível 21+)",
@@ -36,6 +54,7 @@ export const creatureRarities = [
     weight: 0,
     baseOutputMin: 21,
     baseOutputMax: 40,
+    color: "#5C2280",
   },
 ];
 export const GetRarity = (value) => creatureRarities.find((a) => a.value === value);

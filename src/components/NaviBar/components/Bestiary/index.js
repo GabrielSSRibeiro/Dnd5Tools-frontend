@@ -176,7 +176,7 @@ function Bestiary({
   }
 
   function HandleSelected() {
-    utils.SortArrayOfObjByProperty(tempSelectedCreatures, "name");
+    utils.SortArrayOfObjByStringProperty(tempSelectedCreatures, "name");
 
     HandleClose();
     tempSelectedCreatures.forEach((c) => {
@@ -230,7 +230,7 @@ function Bestiary({
 
         temp = [];
         rarityGroups.forEach((group) => {
-          utils.SortArrayOfObjByProperty(group, "name");
+          utils.SortArrayOfObjByStringProperty(group, "name");
           temp.push(...group);
         });
       }

@@ -53,16 +53,16 @@ export function ProbabilityCheck(prob) {
   return Math.random() <= prob;
 }
 
-export function SortArrayOfObjByProperty(arrayOfObj, property) {
+export function SortArrayOfObjByStringProperty(arrayOfObj, property, isDescending = false) {
   function compare(a, b) {
     const bandA = a[property].toUpperCase();
     const bandB = b[property].toUpperCase();
 
     let comparison = 0;
     if (bandA > bandB) {
-      comparison = 1;
+      comparison = isDescending ? -1 : 1;
     } else if (bandA < bandB) {
-      comparison = -1;
+      comparison = isDescending ? 1 : -1;
     }
     return comparison;
   }

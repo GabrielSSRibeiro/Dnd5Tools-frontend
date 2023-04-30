@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as lc from "../../../../constants/locationConstants";
 
 import Button from "../../../../components/Button";
 import Select from "../../../../components/Select";
@@ -9,6 +10,9 @@ import "./styles.css";
 
 function Map({ HandleSaveLocation, HandleDeleteLocation, HandleSelectFromBestiary, setSelectedCreatures, creatures, combatConfig, locations }) {
   const [locationToEdit, setLocationToEdit] = useState(null);
+  const [schedule, setSchedule] = useState(null);
+  const [precipitation, setPrecipitation] = useState(null);
+  const [temperature, setTemperature] = useState(null);
 
   function HandleCancel() {
     setLocationToEdit(null);
@@ -28,51 +32,101 @@ function Map({ HandleSaveLocation, HandleDeleteLocation, HandleSelectFromBestiar
     <div className="Map-container">
       <div className="world-map">
         <aside className="map-stats">
-          <Select label="Horário" />
-          <Select label="Viagem" />
-          <Select label="Precipitação" />
-          <Select label="Temperatura" />
+          <Select
+            label="Horário"
+            isDisabled={true}
+            value={schedule}
+            onSelect={setSchedule}
+            options={lc.routineSchedules}
+            optionDisplay={(o) => o.display}
+            optionValue={(o) => o.value}
+          />
+          <Select label="Viagem" isDisabled={true} />
+          <Select
+            label="Precipitação"
+            isDisabled={true}
+            value={precipitation}
+            onSelect={setPrecipitation}
+            options={lc.precipitationFrequencies}
+            optionDisplay={(o) => o.display}
+            optionValue={(o) => o.value}
+          />
+          <Select
+            label="Temperatura"
+            isDisabled={true}
+            value={temperature}
+            onSelect={setTemperature}
+            options={lc.intenseTemperatureFrequencies}
+            optionDisplay={(o) => o.display}
+            optionValue={(o) => o.value}
+          />
         </aside>
         <aside className="map-zoom">
           <i class="fas fa-search"></i>
-          <Select />
+          <Select isDisabled={true} />
           <div className="move-zoom">
-            <button>
+            <button disabled>
               <i class="fas fa-caret-up"></i>
             </button>
-            <button>
+            <button disabled>
               <i class="fas fa-caret-left"></i>
             </button>
-            <button>
+            <button disabled>
               <i class="fas fa-circle"></i>
             </button>
-            <button>
+            <button disabled>
               <i class="fas fa-caret-right"></i>
             </button>
-            <button>
+            <button disabled>
               <i class="fas fa-caret-down"></i>
             </button>
           </div>
           <div className="compass">N</div>
         </aside>
         <aside className="new-encounter">
-          <Button text="Novo Encontro" />
+          <Button text="Novo Encontro" isDisabled={true} />
         </aside>
         <div className="world-details">
-          <LocationSummary location={combatConfig.world} setLocationToEdit={setLocationToEdit} />
+          <LocationSummary
+            location={combatConfig.world}
+            id=""
+            setLocationToEdit={setLocationToEdit}
+            locations={locations}
+            creatures={creatures}
+            schedule={schedule}
+            precipitation={precipitation}
+            temperature={temperature}
+          />
         </div>
-        {locationToEdit && (
-          <div className="edit-location">
-            <EditLocation
-              locationToEdit={locationToEdit}
-              HandleSave={HandleSave}
-              HandleDelete={locationToEdit.owner ? HandleDelete : null}
-              FinishEditing={HandleCancel}
-              HandleSelectFromBestiary={HandleSelectFromBestiary}
-              setSelectedCreatures={setSelectedCreatures}
+        {locations.map((location, index) => (
+          <div className="location" key={index}>
+            <LocationSummary
+              location={location}
+              id={location._id}
+              setLocationToEdit={setLocationToEdit}
+              locations={locations}
               creatures={creatures}
+              schedule={schedule}
+              precipitation={precipitation}
+              temperature={temperature}
             />
           </div>
+        ))}
+        {locationToEdit && (
+          <>
+            <div className="edit-blocker"></div>
+            <div className="edit-location">
+              <EditLocation
+                locationToEdit={locationToEdit}
+                HandleSave={HandleSave}
+                HandleDelete={locationToEdit.owner ? HandleDelete : null}
+                FinishEditing={HandleCancel}
+                HandleSelectFromBestiary={HandleSelectFromBestiary}
+                setSelectedCreatures={setSelectedCreatures}
+                creatures={creatures}
+              />
+            </div>
+          </>
         )}
       </div>
     </div>
