@@ -222,7 +222,7 @@ function Treasure({ resultText, level }) {
                   text: "Itens podem ser re-forjados pelo preço equivalente a sua raridade. Escolha um afixo para ser removido em troca de um bônus que varia com o tipo de equipamento ou um personalizado se feito por um mestre",
                 },
                 {
-                  text: "Arma: Reduz o dado de dano em 1 e ganha +1 dano. Armadura: Causa 2 de dano ao atacante se sofrer dano corpo a corpo. Acessório: +1 em teste de concentração e de resistência contra morte. Poção: Ganha +1 turno duração",
+                  text: "Arma: Dano mínimo +1, mesmo ao errar. Armadura: Causa 2 de dano ao atacante se sofrer dano corpo a corpo. Acessório: +1 em teste de concentração e de resistência contra morte. Poção: Ganha +1 turno duração",
                 },
                 { text: "" },
                 {

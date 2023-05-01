@@ -197,14 +197,14 @@ export const getWeaponAfixes = (damageType) => {
       infoDisplay: "Dado Crítico Extra",
     },
     {
-      name: "Alcance/Empurra",
-      bonus: 1.5,
+      name: "Chance de Crítico",
+      bonus: 1,
       bonusNames: null,
       ignoreBonusNameIfCursed: false,
       probability: 0.2,
       isMutable: false,
       isAggregatable: true,
-      infoDisplay: "Alcance Corpo a Corpo/Empurra a distância",
+      infoDisplay: "Chance de Crítico",
     },
   ];
 
@@ -235,7 +235,7 @@ export const getArmorAfixes = (damageType) => {
     },
     {
       name: "Deslocamento Base",
-      bonus: 3,
+      bonus: 1.5,
       bonusNames: ["m"],
       ignoreBonusNameIfCursed: false,
       probability: 0.25,
