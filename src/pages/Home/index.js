@@ -80,12 +80,23 @@ function Home() {
         locationToSave.owner = currentUser.uid;
       }
 
-      let index = locations.findIndex((c) => c._id === locationToSave._id);
-      if (index >= 0) {
-        locations.splice(index, 1, locationToSave);
-      } else {
-        locations.push(locationToSave);
-      }
+      await (locationToSave._id ? api.put("UpdateLocation", locationToSave) : api.post("SaveLocation", locationToSave))
+        .then((response) => {
+          if (response.data) {
+            let index = locations.findIndex((c) => c._id === locationToSave._id);
+            if (index >= 0) {
+              locations.splice(index, 1, locationToSave);
+            } else {
+              locationToSave._id = response.data._id;
+              locations.push(locationToSave);
+            }
+
+            setLocations([...locations]);
+          }
+        })
+        .catch((err) => {
+          console.log("error in SaveLocation", err);
+        });
     } else {
       combatConfig.world = locationToSave;
       HandleSaveCombatConfig();
@@ -93,10 +104,19 @@ function Home() {
   }
 
   function HandleDeleteLocation(locationToDelete) {
-    let index = locations.findIndex((c) => c._id === locationToDelete._id);
-    locations.splice(index, 1);
+    api
+      .delete("DeleteLocation", { params: { id: locationToDelete._id } })
+      .then((response) => {
+        if (response.data) {
+          let index = locations.findIndex((c) => c._id === locationToDelete._id);
+          locations.splice(index, 1);
 
-    setLocations(locations);
+          setLocations([...locations]);
+        }
+      })
+      .catch((err) => {
+        console.log("error in DeleteLocation", err);
+      });
   }
 
   async function HandleSaveCreature(creatureToSave) {
@@ -178,23 +198,11 @@ function Home() {
       }
     });
 
-    let response = {
-      data: [
-        // { creatures: [], contexts: [{ isCurrent: true }], _id: "1", name: "1" },
-        // { creatures: [], contexts: [{ isCurrent: true }], _id: "2", name: "2" },
-        // { creatures: [], contexts: [{ isCurrent: true }], _id: "3", name: "3" },
-        // { creatures: [], contexts: [{ isCurrent: true }], _id: "4", name: "4" },
-        // { creatures: [], contexts: [{ isCurrent: true }], _id: "5", name: "5" },
-        // { creatures: [], contexts: [{ isCurrent: true }], _id: "6", name: "6" },
-        // { creatures: [], contexts: [{ isCurrent: true }], _id: "7", name: "7" },
-        // { creatures: [], contexts: [{ isCurrent: true }], _id: "8", name: "8" },
-        // { creatures: [], contexts: [{ isCurrent: true }], _id: "9", name: "9" },
-        // { creatures: [], contexts: [{ isCurrent: true }], _id: "10", name: "10" },
-        // { creatures: [], contexts: [{ isCurrent: true }], _id: "11", name: "11" },
-        // { creatures: [], contexts: [{ isCurrent: true }], _id: "12", name: "12" },
-      ],
-    };
-    setLocations(response.data);
+    api.get("GetLocationsByOwner", { params: { owner: currentUser.uid } }).then((response) => {
+      if (response.data) {
+        setLocations(response.data);
+      }
+    });
 
     api.get("GetCombatConfigByOwner", { params: { owner: currentUser.uid } }).then((response) => {
       if (response.data) {
@@ -279,6 +287,7 @@ function Home() {
             creatures={creatures}
             combatConfig={combatConfig}
             locations={locations}
+            userId={currentUser.uid}
           />
         </div>
         {/* <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>

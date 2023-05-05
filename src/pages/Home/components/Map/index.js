@@ -8,7 +8,16 @@ import EditLocation from "./components/EditLocation";
 
 import "./styles.css";
 
-function Map({ HandleSaveLocation, HandleDeleteLocation, HandleSelectFromBestiary, setSelectedCreatures, creatures, combatConfig, locations }) {
+function Map({
+  HandleSaveLocation,
+  HandleDeleteLocation,
+  HandleSelectFromBestiary,
+  setSelectedCreatures,
+  creatures,
+  combatConfig,
+  locations,
+  userId,
+}) {
   const [locationToEdit, setLocationToEdit] = useState(null);
   const [schedule, setSchedule] = useState(null);
   const [precipitation, setPrecipitation] = useState(null);
@@ -89,7 +98,7 @@ function Map({ HandleSaveLocation, HandleDeleteLocation, HandleSelectFromBestiar
         <div className="world-details">
           <LocationSummary
             location={combatConfig.world}
-            id=""
+            id={userId}
             setLocationToEdit={setLocationToEdit}
             locations={locations}
             creatures={creatures}
@@ -99,7 +108,7 @@ function Map({ HandleSaveLocation, HandleDeleteLocation, HandleSelectFromBestiar
           />
         </div>
         {locations.map((location, index) => (
-          <div className="location" key={index}>
+          <div className="location" key={location._id}>
             <LocationSummary
               location={location}
               id={location._id}
@@ -124,6 +133,7 @@ function Map({ HandleSaveLocation, HandleDeleteLocation, HandleSelectFromBestiar
                 HandleSelectFromBestiary={HandleSelectFromBestiary}
                 setSelectedCreatures={setSelectedCreatures}
                 creatures={creatures}
+                locations={locations}
               />
             </div>
           </>

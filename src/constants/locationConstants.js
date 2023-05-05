@@ -11,6 +11,7 @@ export const LOCATION_SIZES = {
   EXTREME: 50,
 };
 export const locationSizes = [
+  { display: "Ponto de Interesse", value: LOCATION_SIZES.POINT_OF_INTEREST, baseRadiusMultiplier: 1 },
   { display: "Pequeno", value: LOCATION_SIZES.SMALL, baseRadiusMultiplier: 2 },
   { display: "Médio", value: LOCATION_SIZES.MEDIUM, baseRadiusMultiplier: 3 },
   { display: "Grande", value: LOCATION_SIZES.LARGE, baseRadiusMultiplier: 4 },

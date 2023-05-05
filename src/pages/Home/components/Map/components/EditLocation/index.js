@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import * as lc from "../../../../../../constants/locationConstants";
 import { creatureRarities, creatureEnvironments } from "../../../../../../constants/creatureConstants";
 import * as lh from "../../../../../../helpers/locationHelper";
@@ -15,9 +15,28 @@ import ModalManageCreature from "./components/ModalManageCreature";
 
 import "./styles.css";
 
-function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing, HandleSelectFromBestiary, setSelectedCreatures, creatures }) {
+function EditLocation({
+  locationToEdit,
+  HandleSave,
+  HandleDelete,
+  FinishEditing,
+  HandleSelectFromBestiary,
+  setSelectedCreatures,
+  creatures,
+  locations,
+}) {
   const [location, setLocation] = useState(locationToEdit);
   const [modal, setModal] = useState(null);
+
+  const referenceLocations = useMemo(
+    () => locations.filter((l) => l._id !== location._id && l.exteriorLocationId === location.exteriorLocationId),
+    [location, locations]
+  );
+  const isWorld = useMemo(() => !location.exteriorLocationId, [location]);
+  const isFirstOfArea = useMemo(
+    () => referenceLocations.length === 0 || !referenceLocations.some((l) => !l.reference.location),
+    [referenceLocations]
+  );
 
   function HandleSaveLocation() {
     //valores reais
@@ -201,6 +220,17 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
       return false;
     }
 
+    if (
+      (location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && !location.interaction.type) ||
+      (location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST && !location.traversal.type)
+    ) {
+      return false;
+    }
+
+    if (!isWorld && !isFirstOfArea && (!location.reference.distance || !location.reference.direction || !location.reference.location)) {
+      return false;
+    }
+
     return true;
   }
 
@@ -218,7 +248,6 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
             value={location}
             valuePropertyPath="size"
             onSelect={setLocation}
-            nothingSelected="Ponto de Interesse"
             options={lc.locationSizes}
             optionDisplay={(o) => o.display}
             optionValue={(o) => o.value}
@@ -227,38 +256,40 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
 
         <div className="divider"></div>
 
-        {location.size || location.exteriorLocationId == null ? (
+        {(location.size && location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST) || location.exteriorLocationId == null ? (
           <>
-            <Select
-              label={"Tipo"}
-              extraWidth={250}
-              value={location}
-              valuePropertyPath="traversal.type"
-              onSelect={setLocation}
-              options={creatureEnvironments}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-            />
-            <Select
-              label={"Chance de Terreno Irregular"}
-              extraWidth={250}
-              value={location}
-              valuePropertyPath="traversal.irregularTerrainFrequency"
-              onSelect={setLocation}
-              options={lc.irregularTerrainFrequencies}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-            />
+            <div className="location-row df df-jc-sb">
+              <Select
+                label={"Tipo"}
+                extraWidth={60}
+                value={location}
+                valuePropertyPath="traversal.type"
+                onSelect={setLocation}
+                options={creatureEnvironments}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+              <Select
+                label={"Prob. Terreno Irregular"}
+                extraWidth={85}
+                value={location}
+                valuePropertyPath="traversal.irregularTerrainFrequency"
+                onSelect={setLocation}
+                options={lc.irregularTerrainFrequencies}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+            </div>
             {location.exteriorLocationId != null && (
               <div className="location-detail-group">
-                <div className="location-detail-group-title">
+                <div className="location-row location-detail-group-title">
                   <span>Partições</span>
                   <button onClick={() => OpenModalManagePartition()} disabled={location.traversal.partitions.length === 2}>
                     <i class="fas fa-plus"></i>
                   </button>
                 </div>
                 {location.traversal.partitions.map((p) => (
-                  <div className="location-detail-group-item" key={p.type}>
+                  <div className="location-row location-detail-group-item" key={p.type}>
                     <span>{lc.GetPartitionType(p.type).display}</span>
                     <div className="group-item-actions">
                       <button onClick={() => OpenModalManagePartition(p)}>
@@ -274,14 +305,14 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
             )}
             {location.exteriorLocationId != null && (
               <div className="location-detail-group">
-                <div className="location-detail-group-title">
+                <div className="location-row location-detail-group-title">
                   <span>Elementos</span>
                   <button onClick={() => OpenModalManageElement()} disabled={location.traversal.elements.length === 6}>
                     <i class="fas fa-plus"></i>
                   </button>
                 </div>
                 {location.traversal.elements.map((e) => (
-                  <div className="location-detail-group-item" key={e.type}>
+                  <div className="location-row location-detail-group-item" key={e.type}>
                     <span>{lc.GetPartitionType(e.type).display}</span>
                     <div className="group-item-actions">
                       <button onClick={() => OpenModalManageElement(e)}>
@@ -298,21 +329,24 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
           </>
         ) : (
           <>
-            <Select
-              label={"Tipo"}
-              extraWidth={250}
-              value={location}
-              valuePropertyPath="interaction.type"
-              onSelect={setLocation}
-              options={lc.elementTypes}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-            />
-            <CheckInput
-              label="Perigoso"
-              onClick={() => setLocation({ ...location, interaction: { ...location.interaction, isHazardous: !location.interaction.isHazardous } })}
-              isSelected={location.interaction.isHazardous}
-            />
+            <div className="location-row df df-jc-sb df-ai-fs">
+              <Select
+                label={"Tipo"}
+                extraWidth={60}
+                value={location}
+                valuePropertyPath="interaction.type"
+                onSelect={setLocation}
+                options={lc.elementTypes}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+              <CheckInput
+                label="Contato Perigoso"
+                onClick={() => setLocation({ ...location, interaction: { ...location.interaction, isHazardous: !location.interaction.isHazardous } })}
+                isSelected={location.interaction.isHazardous}
+                className="interaction"
+              />
+            </div>
             {lc.GetElementType(location.interaction.type)?.canBeMaterial && (
               <Select
                 label={"Raridade de Material"}
@@ -329,63 +363,65 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
           </>
         )}
 
-        {location.exteriorLocationId && (
+        {!isWorld && !isFirstOfArea && (
           <>
             <div className="divider"></div>
-            <Select
-              label={"Distância"}
-              extraWidth={250}
-              value={location}
-              valuePropertyPath="reference.distance"
-              onSelect={setLocation}
-              options={lc.referenceDistances}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-            />
-            <Select
-              label={"Direção"}
-              extraWidth={250}
-              value={location}
-              valuePropertyPath="reference.direction"
-              onSelect={setLocation}
-              options={lc.directions}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-            />
+            <div className="location-row df df-jc-sb">
+              <Select
+                label={"Distância"}
+                extraWidth={12}
+                value={location}
+                valuePropertyPath="reference.distance"
+                onSelect={setLocation}
+                options={lc.referenceDistances}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+              <Select
+                label={"Direção"}
+                extraWidth={12}
+                value={location}
+                valuePropertyPath="reference.direction"
+                onSelect={setLocation}
+                options={lc.directions}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+              <Select
+                label={"Conectado Por"}
+                extraWidth={12}
+                value={location}
+                valuePropertyPath="reference.connectionType"
+                onSelect={setLocation}
+                nothingSelected="Nada"
+                options={lc.locationConnectionTypes}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+            </div>
             <Select
               label={"Localização"}
               extraWidth={250}
               value={location}
               valuePropertyPath="reference.location"
               onSelect={setLocation}
-              options={[]}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-            />
-            <Select
-              label={"Conectado Por"}
-              extraWidth={250}
-              value={location}
-              valuePropertyPath="reference.connectionType"
-              onSelect={setLocation}
-              nothingSelected="Nada"
-              options={lc.locationConnectionTypes}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
+              options={referenceLocations}
+              optionDisplay={(o) => o.name}
+              optionValue={(o) => o._id}
             />
           </>
         )}
         <div className="divider"></div>
 
         <div className="location-detail-group">
-          <div className="location-detail-group-title">
+          <div className="location-row location-detail-group-title">
             <span>Contextos</span>
             <button onClick={() => OpenModalManageContext()}>
               <i class="fas fa-plus"></i>
             </button>
           </div>
           {location.contexts.map((c, index) => (
-            <div className="location-detail-group-item" key={c.name}>
+            <div className="location-row location-detail-group-item" key={c.name}>
               <div className="df df-cg-10">
                 <CheckInput isSelected={c.isCurrent} onClick={() => HandleSelectContext(c)} />
                 <span>{c.name}</span>
@@ -405,14 +441,14 @@ function EditLocation({ locationToEdit, HandleSave, HandleDelete, FinishEditing,
         <div className="divider"></div>
 
         <div className="location-detail-group">
-          <div className="location-detail-group-title">
+          <div className="location-row location-detail-group-title">
             <span>Criaturas</span>
             <button onClick={() => HandleSelectCreatures()}>
               <i class="fas fa-plus"></i>
             </button>
           </div>
           {location.creatures.map((lc) => (
-            <div className="location-detail-group-item" key={lc.creatureId}>
+            <div className="location-row location-detail-group-item" key={lc.creatureId}>
               <span>{creatures.find((c) => c._id === lc.creatureId).name}</span>
               <div className="group-item-actions">
                 <button onClick={() => OpenModalManageCreature(lc)}>

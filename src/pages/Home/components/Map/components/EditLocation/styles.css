@@ -17,12 +17,21 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  row-gap: 10px;
+  row-gap: 5px;
 }
 
 .EditLocation-container h3 {
   line-height: 1;
   margin-bottom: 10px;
+}
+
+.EditLocation-container .location-row {
+  width: 100%;
+  padding: 0 10px;
+}
+
+.EditLocation-container .location-row .interaction {
+  margin-top: 23px;
 }
 
 .EditLocation-container .divider {
@@ -37,8 +46,6 @@
 }
 
 .EditLocation-container .location-detail-group-title {
-  width: 100%;
-  padding: 0 10px;
   margin-bottom: 2px;
 
   display: flex;
@@ -52,8 +59,6 @@
   justify-content: space-between;
   background-color: var(--white);
   column-gap: 20px;
-  width: 100%;
-  padding: 0 10px;
 }
 
 .EditLocation-container .group-item-actions {

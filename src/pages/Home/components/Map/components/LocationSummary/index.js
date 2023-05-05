@@ -16,6 +16,7 @@ function LocationSummary({ location, id, setLocationToEdit, locations, creatures
     setModal(
       <ModalLocationDetails
         location={location}
+        id={id}
         locations={locations}
         onClose={setModal}
         HandleEditLocation={HandleEditLocation}
@@ -34,7 +35,7 @@ function LocationSummary({ location, id, setLocationToEdit, locations, creatures
       owner: false,
       name: null,
       exteriorLocationId: id,
-      size: null,
+      size: lc.LOCATION_SIZES.POINT_OF_INTEREST,
       traversal: {
         type: null,
         irregularTerrainFrequency: lc.IRREGULAR_TERRAIN_FREQUENCIES.LOW,
@@ -114,9 +115,15 @@ function LocationSummary({ location, id, setLocationToEdit, locations, creatures
       {modal}
       <header className="header">
         <aside className="header-action">
-          <button onClick={HandleEditNewLocation}>
-            <i class="fas fa-plus"></i>
-          </button>
+          {location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
+            <button onClick={() => {}}>
+              <i class="fas fa-route"></i>
+            </button>
+          ) : (
+            <button onClick={HandleEditNewLocation}>
+              <i class="fas fa-plus"></i>
+            </button>
+          )}
         </aside>
         <span className="name">{location.name}</span>
         <aside className="header-details">
@@ -129,20 +136,22 @@ function LocationSummary({ location, id, setLocationToEdit, locations, creatures
         <div className="divider"></div>
         <span className="first-impressions">{location.contexts.find((c) => c.isCurrent).firstImpressions}</span>
         <div className="divider"></div>
-        <div className="creature-list">
-          {creaturesForDisplay.map((c) => (
-            <img
-              key={c.creatureId}
-              className="creature-avatar"
-              style={{
-                borderColor: c.color,
-                opacity: c.opacity,
-              }}
-              src={c.image}
-              alt="creature-avatar"
-            />
-          ))}
-        </div>
+        {creaturesForDisplay.length > 0 && (
+          <div className="creature-list">
+            {creaturesForDisplay.map((c) => (
+              <img
+                key={c.creatureId}
+                className="creature-avatar"
+                style={{
+                  borderColor: c.color,
+                  opacity: c.opacity,
+                }}
+                src={c.image}
+                alt="creature-avatar"
+              />
+            ))}
+          </div>
+        )}
       </footer>
     </div>
   );

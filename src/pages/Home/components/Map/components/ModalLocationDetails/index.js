@@ -9,13 +9,13 @@ import Select from "../../../../../../components/Select";
 
 import "./styles.css";
 
-function ModalLocationDetails({ location, locations, onClose, HandleEditLocation, creatures }) {
+function ModalLocationDetails({ location, id, locations, onClose, HandleEditLocation, creatures }) {
   const [nameFilter, setNameFilter] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
-  const [selectedLevel, setSelectedLevel] = useState(location.exteriorLocationId);
+  const [selectedLevel, setSelectedLevel] = useState(id);
 
-  const locationLevels = [{ display: "Internas", value: location.exteriorLocationId }];
+  const locationLevels = [{ display: "Internas", value: id }];
 
   const context = useMemo(() => {
     return location.contexts.find((c) => c.isCurrent);
@@ -62,6 +62,17 @@ function ModalLocationDetails({ location, locations, onClose, HandleEditLocation
     return filter();
   }, [locations, nameFilter, selectedSize, selectedType, selectedLevel, creatures]);
 
+  function HandleSelectSize(value) {
+    if (
+      value == null ||
+      (selectedSize !== value && (selectedSize === lc.LOCATION_SIZES.POINT_OF_INTEREST || value === lc.LOCATION_SIZES.POINT_OF_INTEREST))
+    ) {
+      setSelectedType(null);
+    }
+
+    setSelectedSize(value);
+  }
+
   return (
     <Modal title={location.name} className="ModalLocationDetails-container df" onClickToClose={onClose}>
       <main className="content df df-ai-fs df-jc-sb df-f1">
@@ -83,32 +94,30 @@ function ModalLocationDetails({ location, locations, onClose, HandleEditLocation
               <Select
                 extraWidth={40}
                 value={selectedSize}
-                onSelect={(value) => setSelectedSize(value)}
+                onSelect={(value) => HandleSelectSize(value)}
                 nothingSelected="Tamanho"
                 options={lc.locationSizes}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                optionsAtATime={8}
               />
               <Select
                 extraWidth={40}
                 value={selectedType}
                 onSelect={(value) => setSelectedType(value)}
                 nothingSelected="Tipo"
-                options={selectedSize ? cc.creatureEnvironments : lc.elementTypes}
+                options={selectedSize === lc.LOCATION_SIZES.POINT_OF_INTEREST ? lc.elementTypes : cc.creatureEnvironments}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                optionsAtATime={8}
+                isDisabled={!selectedSize}
               />
               <Select
                 extraWidth={40}
                 value={selectedLevel}
                 onSelect={(value) => setSelectedLevel(value)}
-                nothingSelected="Nível"
+                nothingSelected="Categoria"
                 options={locationLevels}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                optionsAtATime={8}
               />
             </main>
           </div>
