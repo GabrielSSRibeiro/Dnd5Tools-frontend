@@ -74,18 +74,18 @@ export const CREATURE_ENVIRONMENTS = {
   ALL: 1,
 };
 export const creatureEnvironments = [
-  { display: "Cósmico", value: CREATURE_ENVIRONMENTS.COSMIC, weight: 0 },
-  { display: "Celestial", value: CREATURE_ENVIRONMENTS.CELESTIAL, weight: 0 },
-  { display: "Ártico", value: CREATURE_ENVIRONMENTS.ARTIC, weight: 0 },
-  { display: "Montanha", value: CREATURE_ENVIRONMENTS.MOUNTAIN, weight: 0 },
-  { display: "Floresta", value: CREATURE_ENVIRONMENTS.FOREST, weight: 0 },
-  { display: "Pântano", value: CREATURE_ENVIRONMENTS.SWAMP, weight: 0 },
-  { display: "Urbano", value: CREATURE_ENVIRONMENTS.URBAN, weight: 0 },
-  { display: "Deserto", value: CREATURE_ENVIRONMENTS.DESERT, weight: 0 },
-  { display: "Aquático", value: CREATURE_ENVIRONMENTS.AQUATIC, weight: 0 },
-  { display: "Subterrâneo", value: CREATURE_ENVIRONMENTS.SUBTERRANEAN, weight: 0 },
-  { display: "Abissal", value: CREATURE_ENVIRONMENTS.ABISSAL, weight: 0 },
-  { display: "Todos", value: CREATURE_ENVIRONMENTS.ALL, weight: 0 },
+  { display: "Cósmico", value: CREATURE_ENVIRONMENTS.COSMIC, weight: 0, color: "#4B0082" },
+  { display: "Celestial", value: CREATURE_ENVIRONMENTS.CELESTIAL, weight: 0, color: "#B8860B" },
+  { display: "Ártico", value: CREATURE_ENVIRONMENTS.ARTIC, weight: 0, color: "#FFFAFA" },
+  { display: "Montanha", value: CREATURE_ENVIRONMENTS.MOUNTAIN, weight: 0, color: "#A9A9A9" },
+  { display: "Floresta", value: CREATURE_ENVIRONMENTS.FOREST, weight: 0, color: "#228B22" },
+  { display: "Pântano", value: CREATURE_ENVIRONMENTS.SWAMP, weight: 0, color: "#556B2F" },
+  { display: "Urbano", value: CREATURE_ENVIRONMENTS.URBAN, weight: 0, color: "#708090" },
+  { display: "Deserto", value: CREATURE_ENVIRONMENTS.DESERT, weight: 0, color: "#F4A460" },
+  { display: "Aquático", value: CREATURE_ENVIRONMENTS.AQUATIC, weight: 0, color: "#6CD7D7" },
+  { display: "Subterrâneo", value: CREATURE_ENVIRONMENTS.SUBTERRANEAN, weight: 0, color: "#808080" },
+  { display: "Abissal", value: CREATURE_ENVIRONMENTS.ABISSAL, weight: 0, color: "#8B0000" },
+  { display: "Todos", value: CREATURE_ENVIRONMENTS.ALL, weight: 0, color: "#000000" },
 ];
 export const GetEnviroment = (value) => creatureEnvironments.find((e) => e.value === value);
 

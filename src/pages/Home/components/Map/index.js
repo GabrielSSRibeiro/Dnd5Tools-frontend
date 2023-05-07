@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
+import * as lh from "../../../../helpers/locationHelper";
 import * as lc from "../../../../constants/locationConstants";
+import * as cc from "../../../../constants/creatureConstants";
 
 import Button from "../../../../components/Button";
 import Select from "../../../../components/Select";
@@ -19,9 +21,12 @@ function Map({
   userId,
 }) {
   const [locationToEdit, setLocationToEdit] = useState(null);
+  const [zoomLevel, setZoomLevel] = useState(lc.ZOOM_LEVELS.DAY);
   const [schedule, setSchedule] = useState(null);
   const [precipitation, setPrecipitation] = useState(null);
   const [temperature, setTemperature] = useState(null);
+
+  const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * lc.GetZoomLevel(zoomLevel).scaleMultiplier, [zoomLevel]);
 
   function HandleCancel() {
     setLocationToEdit(null);
@@ -37,10 +42,16 @@ function Map({
     setLocationToEdit(null);
   }
 
+  function SetAsCurrent(location, isPointOfInterest) {
+    if (isPointOfInterest && !location.interaction.isCurrent) {
+      location.interaction.isCurrent = true;
+    }
+  }
+
   return (
     <div className="Map-container">
-      <div className="world-map">
-        <aside className="map-stats">
+      <div className="world-map" style={{ backgroundColor: cc.GetEnviroment(combatConfig.world.traversal.type).color }}>
+        <aside className="map-stats floating-details">
           <Select
             label="Horário"
             isDisabled={true}
@@ -70,9 +81,16 @@ function Map({
             optionValue={(o) => o.value}
           />
         </aside>
-        <aside className="map-zoom">
+        <aside className="map-zoom floating-details">
           <i class="fas fa-search"></i>
-          <Select isDisabled={true} />
+          <Select
+            isDisabled={true}
+            value={zoomLevel}
+            onSelect={setZoomLevel}
+            options={lc.zoomLevels}
+            optionDisplay={(o) => o.display}
+            optionValue={(o) => o.value}
+          />
           <div className="move-zoom">
             <button disabled>
               <i class="fas fa-caret-up"></i>
@@ -92,10 +110,10 @@ function Map({
           </div>
           <div className="compass">N</div>
         </aside>
-        <aside className="new-encounter">
+        <aside className="new-encounter floating-details">
           <Button text="Novo Encontro" isDisabled={true} />
         </aside>
-        <div className="world-details">
+        <div className="world-details floating-details">
           <LocationSummary
             location={combatConfig.world}
             id={userId}
@@ -107,20 +125,44 @@ function Map({
             temperature={temperature}
           />
         </div>
-        {locations.map((location, index) => (
-          <div className="location" key={location._id}>
-            <LocationSummary
-              location={location}
-              id={location._id}
-              setLocationToEdit={setLocationToEdit}
-              locations={locations}
-              creatures={creatures}
-              schedule={schedule}
-              precipitation={precipitation}
-              temperature={temperature}
-            />
-          </div>
-        ))}
+        {locations.map((location) => {
+          const radius = lh.GetRadius(location, pxInMScale);
+          const visionRadius = lc.BASE_VISION_IN_M / pxInMScale;
+          const isPointOfInterest = location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
+
+          let areaStyle = {
+            width: radius,
+            height: radius,
+            backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type).color : cc.GetEnviroment(location.traversal.type).color,
+          };
+
+          return (
+            <div className="location" key={location._id}>
+              <div className="location-details">
+                <div style={{ marginTop: radius }}>
+                  <LocationSummary
+                    location={location}
+                    id={location._id}
+                    setLocationToEdit={setLocationToEdit}
+                    locations={locations}
+                    creatures={creatures}
+                    schedule={schedule}
+                    precipitation={precipitation}
+                    temperature={temperature}
+                  />
+                </div>
+              </div>
+              <div
+                className={`area${isPointOfInterest && !location.interaction.isCurrent ? " not-current" : ""}${
+                  isPointOfInterest ? " point-of-interest" : ""
+                }`}
+                style={areaStyle}
+                onClick={() => SetAsCurrent(location, isPointOfInterest)}
+              ></div>
+              {location.interaction.isCurrent && <div className="vision" style={{ width: visionRadius, height: visionRadius }}></div>}
+            </div>
+          );
+        })}
         {locationToEdit && (
           <>
             <div className="edit-blocker"></div>

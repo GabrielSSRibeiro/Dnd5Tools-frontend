@@ -1,15 +1,21 @@
 import * as utils from "../utils";
 import * as lc from "../constants/locationConstants";
 
-export const GetRadius = (size) => {
-  if (size == null) {
-    return null;
-  }
+export const GetRadius = (location, pxInMScale) => {
+  const baseRaius = lc.BASE_VISION_IN_M;
 
+  return location.radiusMultiplier ? (baseRaius * location.radiusMultiplier) / pxInMScale : lc.POINT_OF_INTEREST_RADIUS;
+};
+
+export const GetRadiusMultiplier = (size) => {
   const baseValue = lc.GetLocationSize(size).baseRadiusMultiplier;
   const variance = 0.1;
 
   return utils.randomValueFromVariancePercentage(baseValue * 100, variance) / 100;
+};
+
+export const GetCurrentContext = (location) => {
+  return location.contexts.find((c) => c.isCurrent);
 };
 
 export const GetCreatureCurrentRoutine = (creature, schedule, precipitation, temperature, context) => {

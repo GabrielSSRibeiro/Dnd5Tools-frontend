@@ -40,7 +40,7 @@ function EditLocation({
 
   function HandleSaveLocation() {
     //valores reais
-    location.radiusMultiplier = lh.GetRadius(location.size);
+    location.radiusMultiplier = lh.GetRadiusMultiplier(location.size);
 
     HandleSave(location);
   }
@@ -227,7 +227,12 @@ function EditLocation({
       return false;
     }
 
-    if (!isWorld && !isFirstOfArea && (!location.reference.distance || !location.reference.direction || !location.reference.location)) {
+    if (
+      !isWorld &&
+      !isFirstOfArea &&
+      (location.reference.distance || location.reference.direction || location.reference.location) &&
+      (!location.reference.distance || !location.reference.direction || !location.reference.location)
+    ) {
       return false;
     }
 

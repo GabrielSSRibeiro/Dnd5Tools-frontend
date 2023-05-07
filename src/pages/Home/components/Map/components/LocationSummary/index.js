@@ -73,17 +73,13 @@ function LocationSummary({ location, id, setLocationToEdit, locations, creatures
     setLocationToEdit(newLocation);
   }
 
+  const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
+
   const creaturesForDisplay = useMemo(() => {
     let creaturesForDisplay = location.creatures
       .map((locationCreature) => ({
         creature: creatures.find((c) => c._id === locationCreature.creatureId),
-        routine: lh.GetCreatureCurrentRoutine(
-          locationCreature,
-          schedule,
-          precipitation,
-          temperature,
-          location.contexts.find((c) => c.isCurrent)?.name
-        ),
+        routine: lh.GetCreatureCurrentRoutine(locationCreature, schedule, precipitation, temperature, currentContext?.name),
       }))
       .filter((c) => c.routine)
       .map((c) => {
@@ -108,51 +104,59 @@ function LocationSummary({ location, id, setLocationToEdit, locations, creatures
     });
 
     return sortedCreaturesForDisplay;
-  }, [location, schedule, precipitation, temperature, creatures]);
+  }, [location, currentContext, schedule, precipitation, temperature, creatures]);
 
   return (
     <div className="LocationSummary-container">
       {modal}
-      <header className="header">
-        <aside className="header-action">
-          {location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
-            <button onClick={() => {}}>
-              <i class="fas fa-route"></i>
+      <div className="body-container" style={{ borderColor: lc.GetHazardousness(currentContext.hazardousness).color }}>
+        <header className="header">
+          <aside className="header-action">
+            {location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
+              <button onClick={() => {}}>
+                <i class="fas fa-route"></i>
+              </button>
+            ) : (
+              <button onClick={HandleEditNewLocation}>
+                <i class="fas fa-plus"></i>
+              </button>
+            )}
+          </aside>
+          <span className="name">{location.name}</span>
+          <aside className="header-details">
+            <button onClick={() => OpenModalLocationDetails()}>
+              <i class="fas fa-book"></i>
             </button>
-          ) : (
-            <button onClick={HandleEditNewLocation}>
-              <i class="fas fa-plus"></i>
-            </button>
+          </aside>
+        </header>
+        <footer className="details">
+          {lh.GetCurrentContext(location)?.firstImpressions && (
+            <>
+              <div className="divider"></div>
+              <span className="first-impressions">{location.contexts.find((c) => c.isCurrent).firstImpressions}</span>
+            </>
           )}
-        </aside>
-        <span className="name">{location.name}</span>
-        <aside className="header-details">
-          <button onClick={() => OpenModalLocationDetails()}>
-            <i class="fas fa-book"></i>
-          </button>
-        </aside>
-      </header>
-      <footer className="details">
-        <div className="divider"></div>
-        <span className="first-impressions">{location.contexts.find((c) => c.isCurrent).firstImpressions}</span>
-        <div className="divider"></div>
-        {creaturesForDisplay.length > 0 && (
-          <div className="creature-list">
-            {creaturesForDisplay.map((c) => (
-              <img
-                key={c.creatureId}
-                className="creature-avatar"
-                style={{
-                  borderColor: c.color,
-                  opacity: c.opacity,
-                }}
-                src={c.image}
-                alt="creature-avatar"
-              />
-            ))}
-          </div>
-        )}
-      </footer>
+          {creaturesForDisplay.length > 0 && (
+            <>
+              <div className="divider"></div>
+              <div className="creature-list">
+                {creaturesForDisplay.map((c) => (
+                  <img
+                    key={c.creatureId}
+                    className="creature-avatar"
+                    style={{
+                      borderColor: c.color,
+                      opacity: c.opacity,
+                    }}
+                    src={c.image}
+                    alt="creature-avatar"
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </footer>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,22 @@
+import * as cc from "./creatureConstants";
+
+export const POINT_OF_INTEREST_RADIUS = 10;
 export const BASE_VISION_IN_M = 5000;
 export const BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M = 5000;
 export const MAXIMUM_SEQUENTIAL_EXPLORATION_HOURS = 8;
-export const PX_IN_M_SCALE = 100;
+export const BASE_PX_IN_M_SCALE = 25;
+
+export const ZOOM_LEVELS = {
+  DAY: 10,
+  WEEK: 20,
+  MONTH: 30,
+};
+export const zoomLevels = [
+  { display: "1 Dia", value: ZOOM_LEVELS.DAY, scaleMultiplier: 1 },
+  { display: "1 Semana", value: ZOOM_LEVELS.WEEK, scaleMultiplier: 7 },
+  { display: "1 Mês", value: ZOOM_LEVELS.MONTH, scaleMultiplier: 30 },
+];
+export const GetZoomLevel = (value) => zoomLevels.find((a) => a.value === value);
 
 export const LOCATION_SIZES = {
   POINT_OF_INTEREST: 10,
@@ -11,11 +26,11 @@ export const LOCATION_SIZES = {
   EXTREME: 50,
 };
 export const locationSizes = [
-  { display: "Ponto de Interesse", value: LOCATION_SIZES.POINT_OF_INTEREST, baseRadiusMultiplier: 1 },
-  { display: "Pequeno", value: LOCATION_SIZES.SMALL, baseRadiusMultiplier: 2 },
-  { display: "Médio", value: LOCATION_SIZES.MEDIUM, baseRadiusMultiplier: 3 },
-  { display: "Grande", value: LOCATION_SIZES.LARGE, baseRadiusMultiplier: 4 },
-  { display: "Extremo", value: LOCATION_SIZES.EXTREME, baseRadiusMultiplier: 10 },
+  { display: "Ponto de Interesse", value: LOCATION_SIZES.POINT_OF_INTEREST, baseRadiusMultiplier: 0 },
+  { display: "Pequeno", value: LOCATION_SIZES.SMALL, baseRadiusMultiplier: 1 },
+  { display: "Médio", value: LOCATION_SIZES.MEDIUM, baseRadiusMultiplier: 2 },
+  { display: "Grande", value: LOCATION_SIZES.LARGE, baseRadiusMultiplier: 3 },
+  { display: "Extremo", value: LOCATION_SIZES.EXTREME, baseRadiusMultiplier: 5 },
 ];
 export const GetLocationSize = (value) => locationSizes.find((a) => a.value === value);
 
@@ -166,10 +181,10 @@ export const HAZARDOUSNESS = {
   EXTREME: 40,
 };
 export const hazardousness = [
-  { display: "Baixa", value: HAZARDOUSNESS.LOW },
-  { display: "Média", value: HAZARDOUSNESS.MEDIUM },
-  { display: "Alta", value: HAZARDOUSNESS.HIGH },
-  { display: "Extrema", value: HAZARDOUSNESS.EXTREME },
+  { display: "Baixa", value: HAZARDOUSNESS.LOW, color: cc.GetRarity(HAZARDOUSNESS.LOW).color },
+  { display: "Média", value: HAZARDOUSNESS.MEDIUM, color: cc.GetRarity(HAZARDOUSNESS.MEDIUM).color },
+  { display: "Alta", value: HAZARDOUSNESS.HIGH, color: cc.GetRarity(HAZARDOUSNESS.HIGH).color },
+  { display: "Extrema", value: HAZARDOUSNESS.EXTREME, color: cc.GetRarity(HAZARDOUSNESS.EXTREME).color },
 ];
 export const GetHazardousness = (value) => hazardousness.find((a) => a.value === value);
 
@@ -234,12 +249,12 @@ export const ELEMENT_TYPES = {
   OBJECT: 60,
 };
 export const elementTypes = [
-  { display: "Ravina", value: ELEMENT_TYPES.RAVINE },
-  { display: "Lago", value: ELEMENT_TYPES.LAKE },
-  { display: "Estrutura", value: ELEMENT_TYPES.STRUCTURE },
-  { display: "Rocha", value: ELEMENT_TYPES.ROCK, canBeMaterial: true },
-  { display: "Planta", value: ELEMENT_TYPES.PLANT, canBeMaterial: true },
-  { display: "Objeto", value: ELEMENT_TYPES.OBJECT, canBeMaterial: true },
+  { display: "Ravina", value: ELEMENT_TYPES.RAVINE, color: "#006400" },
+  { display: "Lago", value: ELEMENT_TYPES.LAKE, color: "#00CED1" },
+  { display: "Estrutura", value: ELEMENT_TYPES.STRUCTURE, color: "#D3D3D3" },
+  { display: "Rocha", value: ELEMENT_TYPES.ROCK, color: "#696969", canBeMaterial: true },
+  { display: "Planta", value: ELEMENT_TYPES.PLANT, color: "#008000", canBeMaterial: true },
+  { display: "Objeto", value: ELEMENT_TYPES.OBJECT, color: "#C0C0C0", canBeMaterial: true },
 ];
 export const GetElementType = (value) => elementTypes.find((a) => a.value === value);
 

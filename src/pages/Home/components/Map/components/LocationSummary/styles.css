@@ -3,7 +3,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.LocationSummary-container .body-container {
   width: 200px;
+  border: 1px solid;
 }
 
 .LocationSummary-container .header {
@@ -11,12 +15,6 @@
   width: 100%;
 
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.LocationSummary-container .header:hover + .details {
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -29,7 +27,11 @@
 .LocationSummary-container footer.details {
   background-color: rgba(249, 249, 249, 0.85);
   width: 100%;
-  display: none;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .LocationSummary-container footer .first-impressions {
