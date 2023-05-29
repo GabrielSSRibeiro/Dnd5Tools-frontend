@@ -1,10 +1,14 @@
 import * as utils from "../utils";
 import * as lc from "../constants/locationConstants";
 
-export const GetRadius = (location, pxInMScale) => {
+export const GetNormalizedValue = (value, pxInMScale) => {
   const baseRaius = lc.BASE_VISION_IN_M;
 
-  return location.radiusMultiplier ? (baseRaius * location.radiusMultiplier) / pxInMScale : lc.POINT_OF_INTEREST_RADIUS;
+  return Math.round((baseRaius * value) / pxInMScale);
+};
+
+export const GetRadius = (location, pxInMScale) => {
+  return location.radiusMultiplier ? GetNormalizedValue(location.radiusMultiplier, pxInMScale) : lc.POINT_OF_INTEREST_RADIUS;
 };
 
 export const GetRadiusMultiplier = (size) => {
@@ -12,6 +16,27 @@ export const GetRadiusMultiplier = (size) => {
   const variance = 0.1;
 
   return utils.randomValueFromVariancePercentage(baseValue * 100, variance) / 100;
+};
+
+export const GetDistanceMultiplier = (distance) => {
+  const baseValue = lc.GetReferenceDistance(distance).baseDistanceMultiplier;
+  const variance = 0.1;
+  return utils.randomValueFromVariancePercentage(baseValue * 100, variance) / 100;
+};
+
+export const GetDistanceAngle = (direction) => {
+  const baseValue = lc.GetDirection(direction).baseAngle;
+  const variance = 5;
+  return utils.randomValueFromVarianceInt(baseValue, variance);
+};
+
+export const GetRefOffset = (location, refCenterOffset, refRadius, pxInMScale) => {
+  if (!location.reference.distance) {
+    return { bottom: 0, left: 0 };
+  }
+
+  const distance = GetNormalizedValue(location.distanceMultiplier, pxInMScale) + refRadius;
+  return utils.GetCoordinatesByDistance(refCenterOffset, distance, location.distanceAngle);
 };
 
 export const GetCurrentContext = (location) => {

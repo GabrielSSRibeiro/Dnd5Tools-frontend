@@ -34,6 +34,7 @@ function LocationSummary({ location, id, setLocationToEdit, locations, creatures
     const newLocation = {
       owner: false,
       name: null,
+      isHidden: false,
       exteriorLocationId: id,
       size: lc.LOCATION_SIZES.POINT_OF_INTEREST,
       traversal: {

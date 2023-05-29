@@ -194,3 +194,18 @@ export const GroupArrayBy = (arr, property) => {
     return group;
   }, {});
 };
+
+export const GetCoordinatesByDistance = (pA, distance, angle) => {
+  // Convert angle to radians
+  const radians = (angle * Math.PI) / 180;
+
+  // Calculate change in x and y coordinates
+  const deltaX = distance * Math.cos(radians);
+  const deltaY = distance * Math.sin(radians);
+
+  // Calculate coordinates of point B
+  const x2 = Math.round(pA.left + deltaX);
+  const y2 = Math.round(pA.bottom + deltaY);
+
+  return { bottom: y2, left: x2 };
+};

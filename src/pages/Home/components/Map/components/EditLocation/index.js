@@ -29,7 +29,7 @@ function EditLocation({
   const [modal, setModal] = useState(null);
 
   const referenceLocations = useMemo(
-    () => locations.filter((l) => l._id !== location._id && l.exteriorLocationId === location.exteriorLocationId),
+    () => locations.filter((l) => l._id !== location._id && l.exteriorLocationId === location.exteriorLocationId && !l.isHidden),
     [location, locations]
   );
   const isWorld = useMemo(() => !location.exteriorLocationId, [location]);
@@ -39,8 +39,8 @@ function EditLocation({
   );
 
   function HandleSaveLocation() {
-    //valores reais
-    location.radiusMultiplier = lh.GetRadiusMultiplier(location.size);
+    //if ref is possible, but not selected, flag as hidden loc
+    location.isHidden = !isWorld && !isFirstOfArea && !location.reference.distance && !location.reference.direction && !location.reference.location;
 
     HandleSave(location);
   }
@@ -56,6 +56,23 @@ function EditLocation({
         onConfirm={() => HandleDelete(location)}
       />
     );
+  }
+
+  function HandleSelectSize(updatedValue) {
+    location.radiusMultiplier = lh.GetRadiusMultiplier(updatedValue.size);
+    setLocation({ ...location });
+  }
+
+  function HandleSelectRefDistance(updatedValue) {
+    location.distanceMultiplier = updatedValue.reference.distance ? lh.GetDistanceMultiplier(updatedValue.reference.distance) : null;
+
+    setLocation({ ...location });
+  }
+
+  function HandleSelectRefDirection(updatedValue) {
+    location.distanceAngle = updatedValue.reference.direction ? lh.GetDistanceAngle(updatedValue.reference.direction) : null;
+
+    setLocation({ ...location });
   }
 
   function HandleSelectContext(context) {
@@ -252,7 +269,7 @@ function EditLocation({
             extraWidth={250}
             value={location}
             valuePropertyPath="size"
-            onSelect={setLocation}
+            onSelect={HandleSelectSize}
             options={lc.locationSizes}
             optionDisplay={(o) => o.display}
             optionValue={(o) => o.value}
@@ -377,7 +394,8 @@ function EditLocation({
                 extraWidth={12}
                 value={location}
                 valuePropertyPath="reference.distance"
-                onSelect={setLocation}
+                onSelect={HandleSelectRefDistance}
+                nothingSelected="-"
                 options={lc.referenceDistances}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
@@ -387,7 +405,8 @@ function EditLocation({
                 extraWidth={12}
                 value={location}
                 valuePropertyPath="reference.direction"
-                onSelect={setLocation}
+                onSelect={HandleSelectRefDirection}
+                nothingSelected="-"
                 options={lc.directions}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
@@ -410,6 +429,7 @@ function EditLocation({
               value={location}
               valuePropertyPath="reference.location"
               onSelect={setLocation}
+              nothingSelected="-"
               options={referenceLocations}
               optionDisplay={(o) => o.name}
               optionValue={(o) => o._id}

@@ -50,6 +50,8 @@ function ModalLocationDetails({ location, id, locations, onClose, HandleEditLoca
 
       if (selectedLevel) {
         temp = temp.filter((l) => l.exteriorLocationId === selectedLevel);
+      } else {
+        temp = temp.filter((l) => l._id !== id);
       }
 
       if (temp.length > 0) {
@@ -60,7 +62,7 @@ function ModalLocationDetails({ location, id, locations, onClose, HandleEditLoca
     }
 
     return filter();
-  }, [locations, nameFilter, selectedSize, selectedType, selectedLevel, creatures]);
+  }, [id, locations, nameFilter, selectedSize, selectedType, selectedLevel, creatures]);
 
   function HandleSelectSize(value) {
     if (

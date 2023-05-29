@@ -7,6 +7,7 @@ import Button from "../../../../components/Button";
 import Select from "../../../../components/Select";
 import LocationSummary from "./components/LocationSummary";
 import EditLocation from "./components/EditLocation";
+import Location from "./components/Location";
 
 import "./styles.css";
 
@@ -25,8 +26,32 @@ function Map({
   const [schedule, setSchedule] = useState(null);
   const [precipitation, setPrecipitation] = useState(null);
   const [temperature, setTemperature] = useState(null);
+  const [locHoverData, setLocHoverData] = useState(null);
+  const [locationsRefs, setLocationsRefs] = useState([]);
 
   const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * lc.GetZoomLevel(zoomLevel).scaleMultiplier, [zoomLevel]);
+  // const visionRadius = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale, [pxInMScale]);
+
+  const map = useMemo(() => {
+    let map = {};
+    locations
+      .filter((l) => !l.isHidden)
+      .map((location) => {
+        //populate de obj in a flatten way
+        map[location._id] = { data: location, interiorLocs: {} };
+        return location;
+      })
+      .forEach((location, i) => {
+        location.radius = lh.GetRadius(location, pxInMScale);
+
+        //for locs that are interior to others, add their ref
+        if (map[location.exteriorLocationId]) {
+          map[location.exteriorLocationId].interiorLocs[location._id] = map[location._id];
+        }
+      });
+
+    return map;
+  }, [locations, pxInMScale]);
 
   function HandleCancel() {
     setLocationToEdit(null);
@@ -42,10 +67,14 @@ function Map({
     setLocationToEdit(null);
   }
 
-  function SetAsCurrent(location, isPointOfInterest) {
-    if (isPointOfInterest && !location.interaction.isCurrent) {
-      location.interaction.isCurrent = true;
-    }
+  let timer = null;
+  function HandleLocHover(e, location) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      if (location) {
+        setLocHoverData({ top: e.clientY, left: e.clientX, location });
+      }
+    }, 500);
   }
 
   return (
@@ -125,44 +154,43 @@ function Map({
             temperature={temperature}
           />
         </div>
-        {locations.map((location) => {
-          const radius = lh.GetRadius(location, pxInMScale);
-          const visionRadius = lc.BASE_VISION_IN_M / pxInMScale;
-          const isPointOfInterest = location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
-
-          let areaStyle = {
-            width: radius,
-            height: radius,
-            backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type).color : cc.GetEnviroment(location.traversal.type).color,
-          };
-
-          return (
-            <div className="location" key={location._id}>
-              <div className="location-details">
-                <div style={{ marginTop: radius }}>
-                  <LocationSummary
-                    location={location}
-                    id={location._id}
-                    setLocationToEdit={setLocationToEdit}
-                    locations={locations}
-                    creatures={creatures}
-                    schedule={schedule}
-                    precipitation={precipitation}
-                    temperature={temperature}
-                  />
-                </div>
-              </div>
-              <div
-                className={`area${isPointOfInterest && !location.interaction.isCurrent ? " not-current" : ""}${
-                  isPointOfInterest ? " point-of-interest" : ""
-                }`}
-                style={areaStyle}
-                onClick={() => SetAsCurrent(location, isPointOfInterest)}
-              ></div>
-              {location.interaction.isCurrent && <div className="vision" style={{ width: visionRadius, height: visionRadius }}></div>}
+        {locHoverData && (
+          <div
+            className="location-details floating-details"
+            style={{ top: locHoverData.top, left: locHoverData.left }}
+            onMouseLeave={() => setLocHoverData(null)}
+          >
+            <div className="wrapper">
+              <LocationSummary
+                location={locHoverData.location}
+                id={locHoverData.location._id}
+                setLocationToEdit={setLocationToEdit}
+                locations={locations}
+                creatures={creatures}
+                schedule={schedule}
+                precipitation={precipitation}
+                temperature={temperature}
+              />
             </div>
-          );
-        })}
+          </div>
+        )}
+        <div className="locations">
+          {Object.keys(map)
+            //only keep the exterior locs
+            .filter((locationId) => !map[map[locationId].data.exteriorLocationId])
+            .map((locationId) => {
+              return (
+                <Location
+                  loc={map[locationId]}
+                  map={map}
+                  locationsRefs={locationsRefs}
+                  setLocationsRefs={setLocationsRefs}
+                  HandleHover={HandleLocHover}
+                  key={locationId}
+                />
+              );
+            })}
+        </div>
         {locationToEdit && (
           <>
             <div className="edit-blocker"></div>

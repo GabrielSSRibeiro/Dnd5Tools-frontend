@@ -12,7 +12,7 @@ export const ZOOM_LEVELS = {
   MONTH: 30,
 };
 export const zoomLevels = [
-  { display: "1 Dia", value: ZOOM_LEVELS.DAY, scaleMultiplier: 1 },
+  { display: "1 Dia", value: ZOOM_LEVELS.DAY, scaleMultiplier: 7 }, //1
   { display: "1 Semana", value: ZOOM_LEVELS.WEEK, scaleMultiplier: 7 },
   { display: "1 Mês", value: ZOOM_LEVELS.MONTH, scaleMultiplier: 30 },
 ];
@@ -97,10 +97,10 @@ export const REFERENCE_DISTANCES = {
   EXTREME: 40,
 };
 export const referenceDistances = [
-  { display: "Pequena", value: REFERENCE_DISTANCES.SMALL },
-  { display: "Média", value: REFERENCE_DISTANCES.MEDIUM },
-  { display: "Grande", value: REFERENCE_DISTANCES.LARGE },
-  { display: "Extrema", value: REFERENCE_DISTANCES.EXTREME },
+  { display: "Pequena", value: REFERENCE_DISTANCES.SMALL, baseDistanceMultiplier: 1 },
+  { display: "Média", value: REFERENCE_DISTANCES.MEDIUM, baseDistanceMultiplier: 2 },
+  { display: "Grande", value: REFERENCE_DISTANCES.LARGE, baseDistanceMultiplier: 3 },
+  { display: "Extrema", value: REFERENCE_DISTANCES.EXTREME, baseDistanceMultiplier: 5 },
 ];
 export const GetReferenceDistance = (value) => referenceDistances.find((a) => a.value === value);
 
@@ -125,14 +125,14 @@ export const DIRECTIONS = {
   NORTH_WEST: 80,
 };
 export const directions = [
-  { display: "Norte", value: DIRECTIONS.NORTH },
-  { display: "Nordeste", value: DIRECTIONS.NORTH_EAST },
-  { display: "Leste", value: DIRECTIONS.EAST },
-  { display: "Sudeste", value: DIRECTIONS.SOUTH_EAST },
-  { display: "Sul", value: DIRECTIONS.SOUTH },
-  { display: "Sudoeste", value: DIRECTIONS.SOUTH_WEST },
-  { display: "Oeste", value: DIRECTIONS.WEST },
-  { display: "Noroeste", value: DIRECTIONS.NORTH_WEST },
+  { display: "Norte", value: DIRECTIONS.NORTH, baseAngle: 90 },
+  { display: "Nordeste", value: DIRECTIONS.NORTH_EAST, baseAngle: 45 },
+  { display: "Leste", value: DIRECTIONS.EAST, baseAngle: 0 },
+  { display: "Sudeste", value: DIRECTIONS.SOUTH_EAST, baseAngle: 315 },
+  { display: "Sul", value: DIRECTIONS.SOUTH, baseAngle: 270 },
+  { display: "Sudoeste", value: DIRECTIONS.SOUTH_WEST, baseAngle: 225 },
+  { display: "Oeste", value: DIRECTIONS.WEST, baseAngle: 180 },
+  { display: "Noroeste", value: DIRECTIONS.NORTH_WEST, baseAngle: 135 },
 ];
 export const GetDirection = (value) => directions.find((a) => a.value === value);
 

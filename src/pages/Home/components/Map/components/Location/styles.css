@@ -1,0 +1,73 @@
+.Location-container {
+  /* position: absolute;
+  bottom: 50%;
+  left: 50%;
+  translate: -50% 50%; */
+  translate: 0% 0%;
+
+  width: fit-content;
+  height: fit-content;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Location-container .area-wrapper {
+  width: fit-content;
+  height: fit-content;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Location-container .area {
+  border-radius: 100%;
+  position: absolute;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Location-container .point-of-interest {
+  border: 1px solid var(--black);
+}
+
+.Location-container .not-current {
+  cursor: pointer;
+}
+.Location-container .not-current:hover {
+  border: 1px solid var(--white);
+}
+
+.Location-container .vision {
+  position: absolute;
+  pointer-events: none;
+
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px dashed var(--black);
+  border-radius: 100%;
+}
+
+.Location-container .location-details {
+  position: absolute;
+  top: 0;
+  padding-top: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.Location-container .LocationSummary-container .body-container {
+  z-index: 1000000;
+}
+.Location-container:not(:hover) .LocationSummary-container .body-container {
+  display: none;
+}
