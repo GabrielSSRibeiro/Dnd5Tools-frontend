@@ -150,6 +150,7 @@ function Map({
             location={combatConfig.world}
             id={userId}
             setLocationToEdit={setLocationToEdit}
+            setLocHoverData={setLocHoverData}
             locations={locations}
             creatures={creatures}
             schedule={schedule}
@@ -168,6 +169,7 @@ function Map({
                 location={locHoverData.location}
                 id={locHoverData.location._id}
                 setLocationToEdit={setLocationToEdit}
+                setLocHoverData={setLocHoverData}
                 locations={locations}
                 creatures={creatures}
                 schedule={schedule}
@@ -186,6 +188,7 @@ function Map({
                 <Location
                   loc={map[locationId]}
                   map={map}
+                  locations={locations}
                   pxInMScale={pxInMScale}
                   locationsRefs={locationsRefs}
                   setLocationsRefs={setLocationsRefs}

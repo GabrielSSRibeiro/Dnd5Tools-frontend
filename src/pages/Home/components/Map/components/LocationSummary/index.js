@@ -8,7 +8,7 @@ import "./styles.css";
 
 import ModalLocationDetails from "../ModalLocationDetails";
 
-function LocationSummary({ location, id, setLocationToEdit, locations, creatures, schedule, precipitation, temperature }) {
+function LocationSummary({ location, id, setLocationToEdit, setLocHoverData, locations, creatures, schedule, precipitation, temperature }) {
   const [modal, setModal] = useState(null);
 
   function OpenModalLocationDetails() {
@@ -27,6 +27,7 @@ function LocationSummary({ location, id, setLocationToEdit, locations, creatures
 
   function HandleEditLocation(loc) {
     setLocationToEdit(utils.clone(loc));
+    setLocHoverData(null);
     setModal(null);
   }
 

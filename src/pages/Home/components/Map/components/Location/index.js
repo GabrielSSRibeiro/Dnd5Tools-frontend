@@ -9,6 +9,7 @@ import "./styles.css";
 function Location({
   loc,
   map,
+  locations,
   pxInMScale,
   locationsRefs,
   setLocationsRefs,
@@ -57,18 +58,20 @@ function Location({
       let resetOffset = 0;
 
       const index = locationsRefs.findIndex((r) => r === ref.current);
-      locationsRefs.forEach((r, i) => {
-        r.style.marginLeft = `${map[r.id].data.offset.x}px`;
-        r.style.marginBottom = `${map[r.id].data.offset.y}px`;
+      locationsRefs
+        .filter((r) => map[r.id].data.offset)
+        .forEach((r, i) => {
+          //position ref
+          r.style.marginLeft = `${map[r.id].data.offset.x}px`;
+          r.style.marginBottom = `${map[r.id].data.offset.y}px`;
 
-        const modifier = r.style.marginBottom ? parseInt(r.style.marginBottom) : 0;
-
-        if (i < index) {
-          resetOffset -= r.offsetHeight + modifier;
-        } else if (i > index) {
-          resetOffset += r.offsetHeight + modifier;
-        }
-      });
+          //use y modifier in the calcs
+          if (i < index) {
+            resetOffset -= r.offsetHeight + map[r.id].data.offset.y;
+          } else if (i > index) {
+            resetOffset += r.offsetHeight + map[r.id].data.offset.y;
+          }
+        });
       return resetOffset / 2;
     }
 
@@ -77,10 +80,14 @@ function Location({
       return { opacity: 0 };
     }
 
-    let wrapperStyle = {};
-    wrapperStyle.translate = `0 ${GetResetOffset()}px`;
-    wrapperStyle.marginLeft = `${map[ref.current.id].data.offset.x}px`;
-    wrapperStyle.marginBottom = `${map[ref.current.id].data.offset.y}px`;
+    let wrapperStyle = {
+      translate: `0 ${GetResetOffset()}px`,
+    };
+
+    if (map[ref.current.id].data.offset) {
+      wrapperStyle.marginLeft = `${map[ref.current.id].data.offset.x}px`;
+      wrapperStyle.marginBottom = `${map[ref.current.id].data.offset.y}px`;
+    }
 
     return wrapperStyle;
   }, [canInteriorLocsBePositioned, isMapRendered, locationsRefs, map]);
@@ -140,14 +147,14 @@ function Location({
   }, [isMapRendered, loc.data, locationsRefs, map, pxInMScale, refs]);
 
   useEffect(() => {
-    if (!locationsRefs.some((r) => r === ref.current)) {
+    if (!allLocationsRefs.some((r) => r === ref.current)) {
       locationsRefs.push(ref.current);
       setLocationsRefs([...locationsRefs]);
 
       allLocationsRefs.push(ref.current);
       setAllLocationsRefs([...allLocationsRefs]);
     }
-  }, [allLocationsRefs, locationsRefs, setAllLocationsRefs, setLocationsRefs]);
+  }, [allLocationsRefs, locationsRefs, setAllLocationsRefs, setLocationsRefs, isMapRendered]);
 
   return (
     <div name={loc.data.name} ref={ref} id={loc.data._id} className={`Location-container ${className}`} style={wrapperStyle} key={rest.key}>
@@ -156,6 +163,7 @@ function Location({
           <Location
             loc={loc.interiorLocs[locationId]}
             map={map}
+            locations={locations}
             pxInMScale={pxInMScale}
             locationsRefs={refs}
             setLocationsRefs={setRefs}
