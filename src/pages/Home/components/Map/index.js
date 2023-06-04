@@ -28,8 +28,10 @@ function Map({
   const [temperature, setTemperature] = useState(null);
   const [locHoverData, setLocHoverData] = useState(null);
   const [locationsRefs, setLocationsRefs] = useState([]);
+  const [allLocationsRefs, setAllLocationsRefs] = useState([]);
 
   const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * lc.GetZoomLevel(zoomLevel).scaleMultiplier, [zoomLevel]);
+  const isMapRendered = useMemo(() => allLocationsRefs.length === locations.filter((l) => !l.isHidden).length, [allLocationsRefs.length, locations]);
   // const visionRadius = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale, [pxInMScale]);
 
   const map = useMemo(() => {
@@ -43,6 +45,7 @@ function Map({
       })
       .forEach((location, i) => {
         location.radius = lh.GetRadius(location, pxInMScale);
+        location.offset = null;
 
         //for locs that are interior to others, add their ref
         if (map[location.exteriorLocationId]) {
@@ -183,8 +186,12 @@ function Map({
                 <Location
                   loc={map[locationId]}
                   map={map}
+                  pxInMScale={pxInMScale}
                   locationsRefs={locationsRefs}
                   setLocationsRefs={setLocationsRefs}
+                  allLocationsRefs={allLocationsRefs}
+                  setAllLocationsRefs={setAllLocationsRefs}
+                  isMapRendered={isMapRendered}
                   HandleHover={HandleLocHover}
                   key={locationId}
                 />

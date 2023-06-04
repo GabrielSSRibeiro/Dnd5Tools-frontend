@@ -22,6 +22,7 @@ function Home() {
     TREASURE: "Tesouro",
   };
 
+  const [showLoadingText, setShowLoadingText] = useState(false);
   const [openTab, setOpenTab] = useState(MAIN_TABS.MAP);
   const [isPartyOpen, setIsPartyOpen] = useState(false);
   const [isSelectingParty, setIsSelectingParty] = useState(false);
@@ -63,7 +64,7 @@ function Home() {
   // }
 
   function HandleEndCombat() {
-    const NewCombats = combats.filter((combat, index) => openTab !== index + 1);
+    const NewCombats = combats.filter((_, index) => openTab !== index + 1);
 
     setCombats(NewCombats);
     setOpenTab(MAIN_TABS.COMBAT);
@@ -236,9 +237,16 @@ function Home() {
     });
   }, [currentUser.uid]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShowLoadingText(true);
+    }, 3000);
+  }, []);
+
   return !combatConfig || !creatures ? (
     <div className="backend-loading">
-      <h2>Por favor aguarde enquanto tiramos o site de inativade. Isso pode lever até 20 segundos...</h2>
+      <i class="fas fa-spinner fa-spin"></i>
+      <h2 style={{ opacity: showLoadingText ? 1 : 0 }}>Por favor aguarde enquanto tiramos o site de inativade. Isso pode lever até 20 segundos...</h2>
     </div>
   ) : (
     <div className="Home-container">

@@ -204,8 +204,8 @@ export const GetCoordinatesByDistance = (pA, distance, angle) => {
   const deltaY = distance * Math.sin(radians);
 
   // Calculate coordinates of point B
-  const x2 = Math.round(pA.left + deltaX);
-  const y2 = Math.round(pA.bottom + deltaY);
+  const x2 = Math.round(pA.x + deltaX);
+  const y2 = Math.round(pA.y + deltaY);
 
-  return { bottom: y2, left: x2 };
+  return { x: x2, y: y2 };
 };

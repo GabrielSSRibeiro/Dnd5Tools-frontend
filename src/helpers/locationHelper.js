@@ -30,15 +30,6 @@ export const GetDistanceAngle = (direction) => {
   return utils.randomValueFromVarianceInt(baseValue, variance);
 };
 
-export const GetRefOffset = (location, refCenterOffset, refRadius, pxInMScale) => {
-  if (!location.reference.distance) {
-    return { bottom: 0, left: 0 };
-  }
-
-  const distance = GetNormalizedValue(location.distanceMultiplier, pxInMScale) + refRadius;
-  return utils.GetCoordinatesByDistance(refCenterOffset, distance, location.distanceAngle);
-};
-
 export const GetCurrentContext = (location) => {
   return location.contexts.find((c) => c.isCurrent);
 };
