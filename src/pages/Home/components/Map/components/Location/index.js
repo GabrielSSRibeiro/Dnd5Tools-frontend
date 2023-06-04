@@ -58,10 +58,15 @@ function Location({
 
       const index = locationsRefs.findIndex((r) => r === ref.current);
       locationsRefs.forEach((r, i) => {
+        r.style.marginLeft = `${map[r.id].data.offset.x}px`;
+        r.style.marginBottom = `${map[r.id].data.offset.y}px`;
+
+        const modifier = r.style.marginBottom ? parseInt(r.style.marginBottom) : 0;
+
         if (i < index) {
-          resetOffset -= r.offsetHeight;
+          resetOffset -= r.offsetHeight + modifier;
         } else if (i > index) {
-          resetOffset += r.offsetHeight;
+          resetOffset += r.offsetHeight + modifier;
         }
       });
       return resetOffset / 2;
@@ -72,25 +77,13 @@ function Location({
       return { opacity: 0 };
     }
 
-    //position interiorLocs if any
-    refs
-      .filter((r) => map[r.id].data.offset)
-      .forEach((r) => {
-        r.style.marginLeft = `${map[r.id].data.offset.x}px`;
-        r.style.marginBottom = `${map[r.id].data.offset.y}px`;
-      });
-
-    //position this loc
-    ref.current.style.marginLeft = `${map[ref.current.id].data.offset.x}px`;
-    ref.current.style.marginBottom = `${map[ref.current.id].data.offset.y}px`;
-
     let wrapperStyle = {};
     wrapperStyle.translate = `0 ${GetResetOffset()}px`;
     wrapperStyle.marginLeft = `${map[ref.current.id].data.offset.x}px`;
     wrapperStyle.marginBottom = `${map[ref.current.id].data.offset.y}px`;
 
     return wrapperStyle;
-  }, [canInteriorLocsBePositioned, isMapRendered, locationsRefs, map, refs]);
+  }, [canInteriorLocsBePositioned, isMapRendered, locationsRefs, map]);
 
   function GetAreaStyles(location, isPointOfInterest, index) {
     let radius = location.radius;
@@ -126,7 +119,7 @@ function Location({
           Math.sqrt(refLoc.offsetWidth * refLoc.offsetWidth + refLoc.offsetHeight * refLoc.offsetHeight);
         const coordinatesByDistance = utils.GetCoordinatesByDistance(refOffset, distance, location.distanceAngle);
 
-        console.log("GetOffset", location.name, "->", coordinatesByDistance, "->", refLoc.getAttribute("name"));
+        // console.log("GetOffset", location.name, "->", coordinatesByDistance, "->", refLoc.getAttribute("name"));
         return { x: 0, y: 100 }; //coordinatesByDistance;
       }
     }
