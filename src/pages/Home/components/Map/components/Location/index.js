@@ -148,11 +148,13 @@ function Location({
 
   useEffect(() => {
     if (!allLocationsRefs.some((r) => r === ref.current)) {
-      locationsRefs.push(ref.current);
-      setLocationsRefs([...locationsRefs]);
-
       allLocationsRefs.push(ref.current);
       setAllLocationsRefs([...allLocationsRefs]);
+    }
+
+    if (!locationsRefs.some((r) => r === ref.current)) {
+      locationsRefs.push(ref.current);
+      setLocationsRefs([...locationsRefs]);
     }
   }, [allLocationsRefs, locationsRefs, setAllLocationsRefs, setLocationsRefs, isMapRendered]);
 

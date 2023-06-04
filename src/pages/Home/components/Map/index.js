@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import * as lh from "../../../../helpers/locationHelper";
 import * as lc from "../../../../constants/locationConstants";
 import * as cc from "../../../../constants/creatureConstants";
@@ -61,11 +61,21 @@ function Map({
   }
 
   function HandleSave(location) {
+    if (map[location._id]) {
+      allLocationsRefs.forEach((r) => {
+        r.style.opacity = 0;
+      });
+    }
+
     HandleSaveLocation(location);
     setLocationToEdit(null);
   }
 
   function HandleDelete(location) {
+    allLocationsRefs.forEach((r) => {
+      r.style.opacity = 0;
+    });
+
     HandleDeleteLocation(location);
     setLocationToEdit(null);
   }
@@ -79,6 +89,10 @@ function Map({
       }
     }, 500);
   }
+
+  useEffect(() => {
+    setAllLocationsRefs([]);
+  }, [locations]);
 
   return (
     <div className="Map-container">
