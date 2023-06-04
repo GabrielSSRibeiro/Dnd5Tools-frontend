@@ -22,7 +22,6 @@ function Location({
 }) {
   const ref = useRef(null);
   const [refs, setRefs] = useState([]);
-  const [canInteriorLocsBePositioned, setCanInteriorLocsBePositioned] = useState(false);
   const interiorLocs = useMemo(() => Object.keys(loc.interiorLocs), [loc]);
   const areaLocs = useMemo(() => {
     function AddAreaLoc(loc, areaLocs) {
@@ -61,10 +60,6 @@ function Location({
       locationsRefs
         .filter((r) => map[r.id].data.offset)
         .forEach((r, i) => {
-          //position ref
-          r.style.marginLeft = `${map[r.id].data.offset.x}px`;
-          r.style.marginBottom = `${map[r.id].data.offset.y}px`;
-
           //use y modifier in the calcs
           if (i < index) {
             resetOffset -= r.offsetHeight + map[r.id].data.offset.y;
@@ -75,22 +70,18 @@ function Location({
       return resetOffset / 2;
     }
 
+    let wrapperStyle = {};
+
     //hide render positioning
-    if (!isMapRendered || !canInteriorLocsBePositioned) {
-      return { opacity: 0 };
+    if (!isMapRendered) {
+      wrapperStyle.opacity = 0;
+      return wrapperStyle;
     }
 
-    let wrapperStyle = {
-      translate: `0 ${GetResetOffset()}px`,
-    };
-
-    if (map[ref.current.id].data.offset) {
-      wrapperStyle.marginLeft = `${map[ref.current.id].data.offset.x}px`;
-      wrapperStyle.marginBottom = `${map[ref.current.id].data.offset.y}px`;
-    }
+    wrapperStyle.translate = `0 ${GetResetOffset()}px`;
 
     return wrapperStyle;
-  }, [canInteriorLocsBePositioned, isMapRendered, locationsRefs, map]);
+  }, [isMapRendered, locationsRefs, map]);
 
   function GetAreaStyles(location, isPointOfInterest, index) {
     let radius = location.radius;
@@ -127,26 +118,19 @@ function Location({
         const coordinatesByDistance = utils.GetCoordinatesByDistance(refOffset, distance, location.distanceAngle);
 
         // console.log("GetOffset", location.name, "->", coordinatesByDistance, "->", refLoc.getAttribute("name"));
-        return { x: 0, y: 100 }; //coordinatesByDistance;
+        return coordinatesByDistance;
       }
     }
 
-    function CanInteriorLocsBePositioned() {
-      if (refs.length === 0) {
-        return true;
-      }
-
-      const canInteriorLocsBePositioned = refs.every((r) => map[r.id].data.offset);
-      return canInteriorLocsBePositioned;
+    if (refs.length !== interiorLocs.length) {
+      return null;
     }
 
-    if (isMapRendered) {
-      map[loc.data._id].data.offset = GetOffset(loc.data);
-      setCanInteriorLocsBePositioned(CanInteriorLocsBePositioned());
-    }
-  }, [isMapRendered, loc.data, locationsRefs, map, pxInMScale, refs]);
+    //get offset and position self
+    map[loc.data._id].data.offset = GetOffset(loc.data);
+    ref.current.style.marginLeft = `${map[ref.current.id].data.offset.x}px`;
+    ref.current.style.marginBottom = `${map[ref.current.id].data.offset.y}px`;
 
-  useEffect(() => {
     if (!allLocationsRefs.some((r) => r === ref.current)) {
       allLocationsRefs.push(ref.current);
       setAllLocationsRefs([...allLocationsRefs]);
@@ -156,7 +140,7 @@ function Location({
       locationsRefs.push(ref.current);
       setLocationsRefs([...locationsRefs]);
     }
-  }, [allLocationsRefs, locationsRefs, setAllLocationsRefs, setLocationsRefs, isMapRendered]);
+  }, [allLocationsRefs, interiorLocs.length, loc.data, locationsRefs, map, pxInMScale, refs.length, setAllLocationsRefs, setLocationsRefs]);
 
   return (
     <div name={loc.data.name} ref={ref} id={loc.data._id} className={`Location-container ${className}`} style={wrapperStyle} key={rest.key}>
