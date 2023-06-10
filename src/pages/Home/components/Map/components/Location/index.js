@@ -61,12 +61,15 @@ function Location({
         .filter((r) => map[r.id].data.offset)
         .forEach((r, i) => {
           //use y modifier in the calcs
+          const value = r.offsetHeight + Math.abs(map[r.id].data.offset.y) * -1;
+
           if (i < index) {
-            resetOffset -= r.offsetHeight + map[r.id].data.offset.y;
+            resetOffset -= value;
           } else if (i > index) {
-            resetOffset += r.offsetHeight + map[r.id].data.offset.y;
+            resetOffset += value;
           }
         });
+
       return resetOffset / 2;
     }
 
@@ -111,14 +114,20 @@ function Location({
       } else {
         const refLoc = locationsRefs.find((r) => r.id === location.reference.location);
         const refOffset = GetOffset(map[refLoc.id].data);
-        //offset is ref loc offsetWidth/height + dist + this loc offsetWidth/height
-        const distance =
-          lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale) +
-          Math.sqrt(refLoc.offsetWidth * refLoc.offsetWidth + refLoc.offsetHeight * refLoc.offsetHeight);
-        const coordinatesByDistance = utils.GetCoordinatesByDistance(refOffset, distance, location.distanceAngle);
+        //if refLoc has interiorLocs, offset, otherwise radius
+        const refLocRadius = 10000 / pxInMScale;
+
+        const distance = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
+
+        //if loc has interiorLocs, offset, otherwise radius
+        const locRadius = 10000 / pxInMScale;
+
+        //offset is locRadius + distance + refLocRadius
+        const coordinatesByDistance = utils.GetCoordinatesByDistance(refOffset, locRadius + distance + refLocRadius, location.distanceAngle);
 
         // console.log("GetOffset", location.name, "->", coordinatesByDistance, "->", refLoc.getAttribute("name"));
         return coordinatesByDistance;
+        // return { x: 0, y: 50 };
       }
     }
 
@@ -126,10 +135,21 @@ function Location({
       return null;
     }
 
-    //get offset and position self
-    map[loc.data._id].data.offset = GetOffset(loc.data);
-    ref.current.style.marginLeft = `${map[ref.current.id].data.offset.x}px`;
-    ref.current.style.marginBottom = `${map[ref.current.id].data.offset.y}px`;
+    //set offset and position self
+    if (!map[loc.data._id].data.offset) {
+      map[loc.data._id].data.offset = GetOffset(loc.data);
+      if (map[ref.current.id].data.offset.x > 0) {
+        ref.current.style.marginRight = `${map[ref.current.id].data.offset.x * -1}px`;
+      } else {
+        ref.current.style.marginLeft = `${map[ref.current.id].data.offset.x}px`;
+      }
+
+      if (map[ref.current.id].data.offset.y > 0) {
+        ref.current.style.marginTop = `${map[ref.current.id].data.offset.y * -1}px`;
+      } else {
+        ref.current.style.marginBottom = `${map[ref.current.id].data.offset.y}px`;
+      }
+    }
 
     if (!allLocationsRefs.some((r) => r === ref.current)) {
       allLocationsRefs.push(ref.current);

@@ -32,8 +32,8 @@ function Map({
 
   const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * lc.GetZoomLevel(zoomLevel).scaleMultiplier, [zoomLevel]);
   const isMapRendered = useMemo(() => allLocationsRefs.length === locations.filter((l) => !l.isHidden).length, [allLocationsRefs.length, locations]);
+  const locationsContainerId = useMemo(() => `all-${userId}-locations`, [userId]);
   // const visionRadius = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale, [pxInMScale]);
-
   const map = useMemo(() => {
     let map = {};
     locations
@@ -46,6 +46,7 @@ function Map({
       .forEach((location, i) => {
         location.radius = lh.GetRadius(location, pxInMScale);
         location.offset = null;
+        location.resetOffset = null;
 
         //for locs that are interior to others, add their ref
         if (map[location.exteriorLocationId]) {
@@ -55,6 +56,13 @@ function Map({
 
     return map;
   }, [locations, pxInMScale]);
+  const rootLocs = useMemo(
+    () =>
+      Object.keys(map)
+        //only keep the exterior locs
+        .filter((locationId) => !map[map[locationId].data.exteriorLocationId]),
+    [map]
+  );
 
   function HandleCancel() {
     setLocationToEdit(null);
@@ -193,27 +201,25 @@ function Map({
             </div>
           </div>
         )}
-        <div className="locations">
-          {Object.keys(map)
-            //only keep the exterior locs
-            .filter((locationId) => !map[map[locationId].data.exteriorLocationId])
-            .map((locationId) => {
-              return (
-                <Location
-                  loc={map[locationId]}
-                  map={map}
-                  locations={locations}
-                  pxInMScale={pxInMScale}
-                  locationsRefs={locationsRefs}
-                  setLocationsRefs={setLocationsRefs}
-                  allLocationsRefs={allLocationsRefs}
-                  setAllLocationsRefs={setAllLocationsRefs}
-                  isMapRendered={isMapRendered}
-                  HandleHover={HandleLocHover}
-                  key={locationId}
-                />
-              );
-            })}
+        {/* <hr className="test-center"></hr> */}
+        <div id={locationsContainerId} className="locations">
+          {rootLocs.map((locationId) => {
+            return (
+              <Location
+                loc={map[locationId]}
+                map={map}
+                locations={locations}
+                pxInMScale={pxInMScale}
+                locationsRefs={locationsRefs}
+                setLocationsRefs={setLocationsRefs}
+                allLocationsRefs={allLocationsRefs}
+                setAllLocationsRefs={setAllLocationsRefs}
+                isMapRendered={isMapRendered}
+                HandleHover={HandleLocHover}
+                key={locationId}
+              />
+            );
+          })}
         </div>
         {locationToEdit && (
           <>

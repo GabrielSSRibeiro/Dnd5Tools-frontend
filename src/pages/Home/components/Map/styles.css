@@ -135,3 +135,10 @@
   top: 0;
   right: 0;
 }
+
+.test-center {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+}
