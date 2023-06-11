@@ -11,14 +11,16 @@ import ModalLocationDetails from "../ModalLocationDetails";
 function LocationSummary({ location, id, setLocationToEdit, setLocHoverData, locations, creatures, schedule, precipitation, temperature }) {
   const [modal, setModal] = useState(null);
 
-  function OpenModalLocationDetails() {
+  function OpenModalLocationDetails(loc, locId) {
     setLocationToEdit(null);
     setModal(
       <ModalLocationDetails
-        location={location}
-        id={id}
+        location={loc}
+        id={locId}
         locations={locations}
         onClose={setModal}
+        HandleEditNewLocation={HandleEditNewLocation}
+        OpenModalLocationDetails={OpenModalLocationDetails}
         HandleEditLocation={HandleEditLocation}
         creatures={creatures}
       />
@@ -31,12 +33,12 @@ function LocationSummary({ location, id, setLocationToEdit, setLocHoverData, loc
     setModal(null);
   }
 
-  function HandleEditNewLocation() {
+  function HandleEditNewLocation(newLocId) {
     const newLocation = {
       owner: false,
       name: null,
       isHidden: false,
-      exteriorLocationId: id,
+      exteriorLocationId: newLocId,
       size: lc.LOCATION_SIZES.POINT_OF_INTEREST,
       traversal: {
         type: null,
@@ -115,18 +117,18 @@ function LocationSummary({ location, id, setLocationToEdit, setLocHoverData, loc
         <header className="header">
           <aside className="header-action">
             {location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
-              <button onClick={() => {}}>
+              <button onClick={() => {}} disabled>
                 <i class="fas fa-route"></i>
               </button>
             ) : (
-              <button onClick={HandleEditNewLocation}>
+              <button onClick={() => HandleEditNewLocation(id)} disabled={locations.length >= 100}>
                 <i class="fas fa-plus"></i>
               </button>
             )}
           </aside>
           <span className="name">{location.name}</span>
           <aside className="header-details">
-            <button onClick={() => OpenModalLocationDetails()}>
+            <button onClick={() => OpenModalLocationDetails(location, id)}>
               <i class="fas fa-book"></i>
             </button>
           </aside>

@@ -1,6 +1,6 @@
 import * as cc from "./creatureConstants";
 
-export const POINT_OF_INTEREST_RADIUS = 10;
+export const POINT_OF_INTEREST_RADIUS = 20;
 export const BASE_VISION_IN_M = 5000;
 export const BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M = 5000;
 export const MAXIMUM_SEQUENTIAL_EXPLORATION_HOURS = 8;
@@ -12,7 +12,7 @@ export const ZOOM_LEVELS = {
   MONTH: 30,
 };
 export const zoomLevels = [
-  { display: "1 Dia", value: ZOOM_LEVELS.DAY, scaleMultiplier: 7 }, //1
+  { display: "1 Dia", value: ZOOM_LEVELS.DAY, scaleMultiplier: 3 }, //1
   { display: "1 Semana", value: ZOOM_LEVELS.WEEK, scaleMultiplier: 7 },
   { display: "1 Mês", value: ZOOM_LEVELS.MONTH, scaleMultiplier: 30 },
 ];

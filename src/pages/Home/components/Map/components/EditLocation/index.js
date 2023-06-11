@@ -5,9 +5,10 @@ import * as lh from "../../../../../../helpers/locationHelper";
 
 import Button from "../../../../../../components/Button";
 import TextInput from "../../../../../../components/TextInput";
-import ModalWarning from "../../../../../../components/ModalWarning";
 import Select from "../../../../../../components/Select";
 import CheckInput from "../../../../../../components/CheckInput";
+import ModalDeleteLocation from "./components/ModalDeleteLocation";
+import ModalMoveLocation from "./components/ModalMoveLocation";
 import ModalManagePartition from "./components/ModalManagePartition";
 import ModalManageElement from "./components/ModalManageElement";
 import ModalManageContext from "./components/ModalManageContext";
@@ -18,20 +19,43 @@ import "./styles.css";
 function EditLocation({
   locationToEdit,
   HandleSave,
+  HandleMove,
   HandleDelete,
   FinishEditing,
   HandleSelectFromBestiary,
   setSelectedCreatures,
   creatures,
   locations,
+  world,
+  map,
 }) {
   const [location, setLocation] = useState(locationToEdit);
   const [modal, setModal] = useState(null);
 
-  const referenceLocations = useMemo(
-    () => locations.filter((l) => l._id !== location._id && l.exteriorLocationId === location.exteriorLocationId && !l.isHidden),
-    [location, locations]
-  );
+  const locationSizes = useMemo(() => {
+    let locationSizes = lc.locationSizes;
+
+    if (map[location._id] && Object.values(map[location._id].interiorLocs).length > 0) {
+      locationSizes = locationSizes.filter((ls) => ls.value !== lc.LOCATION_SIZES.POINT_OF_INTEREST);
+    }
+
+    return locationSizes;
+  }, [location._id, map]);
+  const referenceLocations = useMemo(() => {
+    let refLocations = [];
+
+    locations
+      .filter((l) => l._id !== location._id && l.exteriorLocationId === location.exteriorLocationId && !l.isHidden)
+      .forEach((rl) => {
+        const interiorLocs = Object.values(map[rl._id].interiorLocs);
+        if (interiorLocs.length > 0) {
+          rl.displayName = interiorLocs.find((il) => !il.data.reference.location && !il.isHidden).data.name;
+          refLocations.push(rl);
+        }
+      });
+
+    return refLocations;
+  }, [location._id, location.exteriorLocationId, locations, map]);
   const isWorld = useMemo(() => !location.exteriorLocationId, [location]);
   const isFirstOfArea = useMemo(
     () => referenceLocations.length === 0 || !referenceLocations.some((l) => !l.reference.location),
@@ -45,15 +69,32 @@ function EditLocation({
     HandleSave(location);
   }
 
-  function OpenDeleteConfirmation() {
+  function OpenModalDeleteLocation() {
     setModal(
-      <ModalWarning
+      <ModalDeleteLocation
         title="Deletar Localização"
         message="Tem certeza que deseja deletar essa localização?"
         cancelText="Cancelar"
         onCancel={setModal}
         confirmText="Deletar"
-        onConfirm={() => HandleDelete(location)}
+        onConfirm={(deleteInteriorLocs) => HandleDelete(location, deleteInteriorLocs)}
+      />
+    );
+  }
+
+  function OpenModalMoveLocation() {
+    function IsInternalTo(location, possibleExteriorLocId) {}
+
+    //using map, list should be only locs that are not interior to this one
+    // n pode ser pont ode interesse
+    let validLocs = locations.filter((l) => !IsInternalTo(l, location._id));
+
+    setModal(
+      <ModalMoveLocation
+        world={world}
+        locations={validLocs}
+        onClose={setModal}
+        onSelect={(newExteriorLocId, moveInteriorLocs) => HandleMove(locationToEdit, newExteriorLocId, moveInteriorLocs)}
       />
     );
   }
@@ -270,7 +311,7 @@ function EditLocation({
             value={location}
             valuePropertyPath="size"
             onSelect={HandleSelectSize}
-            options={lc.locationSizes}
+            options={locationSizes}
             optionDisplay={(o) => o.display}
             optionValue={(o) => o.value}
           />
@@ -431,7 +472,7 @@ function EditLocation({
               onSelect={setLocation}
               nothingSelected="-"
               options={referenceLocations}
-              optionDisplay={(o) => o.name}
+              optionDisplay={(o) => o.displayName}
               optionValue={(o) => o._id}
             />
           </>
@@ -489,9 +530,14 @@ function EditLocation({
       </main>
       <footer className="action-buttons">
         {HandleDelete && (
-          <button className="button-simple" onClick={OpenDeleteConfirmation}>
-            Deletar
-          </button>
+          <>
+            <button className="button-simple" onClick={OpenModalDeleteLocation}>
+              <i class="fas fa-trash"></i>
+            </button>
+            <button className="button-simple" onClick={OpenModalMoveLocation}>
+              <i class="fas fa-exchange-alt"></i>
+            </button>
+          </>
         )}
         <div className="basic-actions">
           <button className="button-simple" onClick={FinishEditing}>

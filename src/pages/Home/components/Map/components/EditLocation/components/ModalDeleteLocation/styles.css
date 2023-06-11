@@ -1,0 +1,16 @@
+.ModalDeleteLocation-container.modal-body {
+  width: fit-content;
+  height: fit-content;
+}
+
+.ModalDeleteLocation-container .warning-message {
+  margin-bottom: 25px;
+}
+
+.ModalDeleteLocation-container .warning-actions-wrapper {
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 25px;
+}

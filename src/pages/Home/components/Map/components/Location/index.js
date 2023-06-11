@@ -22,7 +22,7 @@ function Location({
 }) {
   const ref = useRef(null);
   const [refs, setRefs] = useState([]);
-  const interiorLocs = useMemo(() => Object.keys(loc.interiorLocs), [loc]);
+  const interiorLocs = useMemo(() => Object.keys(loc.interiorLocs).filter((locId) => !map[locId].data.isHidden), [loc.interiorLocs, map]);
   const areaLocs = useMemo(() => {
     function AddAreaLoc(loc, areaLocs) {
       areaLocs.push(loc.data);
@@ -42,7 +42,7 @@ function Location({
   const areaWrapperStyle = useMemo(() => {
     let radius = 0;
     areaLocs.forEach((l) => {
-      radius += l.radius;
+      radius += l.radius / 2;
     });
 
     let areaWrapperStyle = {
@@ -58,7 +58,7 @@ function Location({
 
       const index = locationsRefs.findIndex((r) => r === ref.current);
       locationsRefs
-        .filter((r) => map[r.id].data.offset)
+        .filter((r) => map[r.id]?.data.offset)
         .forEach((r, i) => {
           //use y modifier in the calcs
           const value = r.offsetHeight + Math.abs(map[r.id].data.offset.y) * -1;
@@ -93,8 +93,8 @@ function Location({
     });
 
     let areaStyles = {
-      width: radius,
-      height: radius,
+      width: radius / 2,
+      height: radius / 2,
       backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type).color : cc.GetEnviroment(location.traversal.type).color,
     };
 
@@ -108,31 +108,38 @@ function Location({
   }
 
   useEffect(() => {
+    function GetLocDistFromCenterForCalc(loc) {
+      const locEl = document.getElementById(
+        loc.interiorLocs.length > 0 ? loc.interiorLocs.find((l) => !l.data.reference.location).data._id : loc.data._id
+      );
+
+      return locEl.offsetHeight / 2;
+    }
+
     function GetOffset(location) {
       if (!location.reference.location) {
         return { x: 0, y: 0 };
       } else {
         const refLoc = locationsRefs.find((r) => r.id === location.reference.location);
         const refOffset = GetOffset(map[refLoc.id].data);
-        //if refLoc has interiorLocs, offset, otherwise radius
-        const refLocRadius = 10000 / pxInMScale;
+        //if refLoc has interiorLocs get radius(offsetHeight /2) from interiorLocs 1, otherwise from ref
+        const refLocDistFromCenter = GetLocDistFromCenterForCalc(map[refLoc.id]);
 
         const distance = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
 
-        //if loc has interiorLocs, offset, otherwise radius
-        const locRadius = 10000 / pxInMScale;
+        //if loc has interiorLocs get radius(offsetHeight /2) from interiorLocs 1, otherwise from ref
+        const locDistFromCenter = GetLocDistFromCenterForCalc(map[ref.current.id]);
 
-        //offset is locRadius + distance + refLocRadius
-        const coordinatesByDistance = utils.GetCoordinatesByDistance(refOffset, locRadius + distance + refLocRadius, location.distanceAngle);
+        //offset is refLocDistFromCenter + distance + locDistFromCenter
+        const coordinatesByDistance = utils.GetCoordinatesByDistance(
+          refOffset,
+          refLocDistFromCenter + distance + locDistFromCenter,
+          location.distanceAngle
+        );
 
         // console.log("GetOffset", location.name, "->", coordinatesByDistance, "->", refLoc.getAttribute("name"));
         return coordinatesByDistance;
-        // return { x: 0, y: 50 };
       }
-    }
-
-    if (refs.length !== interiorLocs.length) {
-      return null;
     }
 
     //set offset and position self
@@ -161,6 +168,11 @@ function Location({
       setLocationsRefs([...locationsRefs]);
     }
   }, [allLocationsRefs, interiorLocs.length, loc.data, locationsRefs, map, pxInMScale, refs.length, setAllLocationsRefs, setLocationsRefs]);
+
+  useEffect(() => {
+    setAllLocationsRefs([]);
+    setRefs([]);
+  }, [locations, setAllLocationsRefs]);
 
   return (
     <div name={loc.data.name} ref={ref} id={loc.data._id} className={`Location-container ${className}`} style={wrapperStyle} key={rest.key}>

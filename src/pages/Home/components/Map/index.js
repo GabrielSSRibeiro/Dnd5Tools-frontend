@@ -13,7 +13,8 @@ import "./styles.css";
 
 function Map({
   HandleSaveLocation,
-  HandleDeleteLocation,
+  HandleMoveLocations,
+  HandleDeleteLocations,
   HandleSelectFromBestiary,
   setSelectedCreatures,
   creatures,
@@ -31,15 +32,13 @@ function Map({
   const [allLocationsRefs, setAllLocationsRefs] = useState([]);
 
   const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * lc.GetZoomLevel(zoomLevel).scaleMultiplier, [zoomLevel]);
-  const isMapRendered = useMemo(() => allLocationsRefs.length === locations.filter((l) => !l.isHidden).length, [allLocationsRefs.length, locations]);
   const locationsContainerId = useMemo(() => `all-${userId}-locations`, [userId]);
   // const visionRadius = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale, [pxInMScale]);
   const map = useMemo(() => {
     let map = {};
     locations
-      .filter((l) => !l.isHidden)
       .map((location) => {
-        //populate de obj in a flatten way
+        //populate the obj in a flatten way
         map[location._id] = { data: location, interiorLocs: {} };
         return location;
       })
@@ -60,9 +59,27 @@ function Map({
     () =>
       Object.keys(map)
         //only keep the exterior locs
-        .filter((locationId) => !map[map[locationId].data.exteriorLocationId]),
+        .filter((locationId) => !map[locationId].data.isHidden && !map[map[locationId].data.exteriorLocationId]),
     [map]
   );
+  const isMapRendered = useMemo(() => {
+    let totalLocsToRender = 0;
+
+    const countLocsToRender = (loc) => {
+      totalLocsToRender++;
+      Object.values(loc.interiorLocs)
+        .filter((l) => !l.data.isHidden)
+        .forEach((il) => {
+          countLocsToRender(il);
+        });
+    };
+
+    rootLocs.forEach((locId) => {
+      countLocsToRender(map[locId]);
+    });
+
+    return allLocationsRefs.length === totalLocsToRender;
+  }, [allLocationsRefs.length, map, rootLocs]);
 
   function HandleCancel() {
     setLocationToEdit(null);
@@ -79,12 +96,71 @@ function Map({
     setLocationToEdit(null);
   }
 
-  function HandleDelete(location) {
-    allLocationsRefs.forEach((r) => {
-      r.style.opacity = 0;
-    });
+  function HandleMove(location, newExteriorLocId, moveInteriorLocs) {
+    if (map[location._id]) {
+      allLocationsRefs.forEach((r) => {
+        r.style.opacity = 0;
+      });
+    }
 
-    HandleDeleteLocation(location);
+    //clear any possible ref
+    location.reference = {
+      distance: null,
+      direction: null,
+      location: null,
+      connectionType: null,
+    };
+
+    // function AddInteriorLocsIdsToList(locId, list) {
+    //   locations
+    //     .filter((l) => l.exteriorLocationId === locId)
+    //     .forEach((l) => {
+    //       list.push(l._id);
+    //       AddInteriorLocsIdsToList(l._id, list);
+    //     });
+    // }
+
+    // let idsToDelete = [location._id];
+    // if (deleteInteriorLocs) {
+    //   AddInteriorLocsIdsToList(location._id, idsToDelete);
+    // } else {
+    //   //get a list of all interiors and chance their exteriorLocationId to the delete loc exteriorLocationId
+    //   // let locsToUpdate = [];
+    //   // HandleMoveLocations(); param?
+    // }
+
+    // HandleDeleteLocations(idsToDelete);
+
+    setLocationToEdit(null);
+  }
+
+  function HandleDelete(location, deleteInteriorLocs) {
+    if (map[location._id]) {
+      allLocationsRefs.forEach((r) => {
+        r.style.opacity = 0;
+      });
+    }
+
+    function AddInteriorLocsIdsToList(locId, list) {
+      locations
+        .filter((l) => l.exteriorLocationId === locId)
+        .forEach((l) => {
+          list.push(l._id);
+          AddInteriorLocsIdsToList(l._id, list);
+        });
+    }
+
+    let idsToDelete = [location._id];
+    if (deleteInteriorLocs) {
+      AddInteriorLocsIdsToList(location._id, idsToDelete);
+    } else {
+      //get a list of all interiors and chance their exteriorLocationId to the delete loc exteriorLocationId
+      // let locsToUpdate = [];
+      // HandleMoveLocations(); param?
+    }
+
+    HandleDeleteLocations(idsToDelete);
+
     setLocationToEdit(null);
   }
 
@@ -100,11 +176,23 @@ function Map({
 
   useEffect(() => {
     setAllLocationsRefs([]);
+    setLocationsRefs([]);
   }, [locations]);
 
   return (
     <div className="Map-container">
       <div className="world-map" style={{ backgroundColor: cc.GetEnviroment(combatConfig.world.traversal.type).color }}>
+        {locations.length === 0 ? (
+          <aside className="info-msg floating-details">
+            <h4>Adicione uma nova localização para vê-la no mapa</h4>
+          </aside>
+        ) : (
+          !locations.some((l) => l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST) && (
+            <aside className="info-msg floating-details">
+              <h4>Adicione pelo menos uma localização ponto de interesse para fazer jornadas</h4>
+            </aside>
+          )
+        )}
         <aside className="map-stats floating-details">
           <Select
             label="Horário"
@@ -228,12 +316,15 @@ function Map({
               <EditLocation
                 locationToEdit={locationToEdit}
                 HandleSave={HandleSave}
+                HandleMove={HandleMove}
                 HandleDelete={locationToEdit.owner ? HandleDelete : null}
                 FinishEditing={HandleCancel}
                 HandleSelectFromBestiary={HandleSelectFromBestiary}
                 setSelectedCreatures={setSelectedCreatures}
                 creatures={creatures}
                 locations={locations}
+                world={combatConfig.world}
+                map={map}
               />
             </div>
           </>

@@ -84,7 +84,7 @@ function Home() {
       await (locationToSave._id ? api.put("UpdateLocation", locationToSave) : api.post("SaveLocation", locationToSave))
         .then((response) => {
           if (response.data) {
-            let index = locations.findIndex((c) => c._id === locationToSave._id);
+            let index = locations.findIndex((l) => l._id === locationToSave._id);
             if (index >= 0) {
               locations.splice(index, 1, locationToSave);
             } else {
@@ -104,19 +104,38 @@ function Home() {
     }
   }
 
-  function HandleDeleteLocation(locationToDelete) {
+  async function HandleMoveLocations(moveLocsReq) {
     api
-      .delete("DeleteLocation", { params: { id: locationToDelete._id } })
+      .put("MoveLocations", moveLocsReq)
       .then((response) => {
         if (response.data) {
-          let index = locations.findIndex((c) => c._id === locationToDelete._id);
-          locations.splice(index, 1);
-
-          setLocations([...locations]);
+          // let index = locations.findIndex((c) => c._id === locationToSave._id);
+          // if (index >= 0) {
+          //   locations.splice(index, 1, locationToSave);
+          // } else {
+          //   locationToSave._id = response.data._id;
+          //   locations.push(locationToSave);
+          // }
+          // setLocations([...locations]);
         }
       })
       .catch((err) => {
-        console.log("error in DeleteLocation", err);
+        console.log("error in MoveLocations", err);
+      });
+  }
+
+  function HandleDeleteLocations(ids) {
+    api
+      .delete("DeleteLocations", { params: { ids } })
+      .then((response) => {
+        if (response.data) {
+          let filteredLocs = locations.filter((l) => !ids.includes(l._id));
+
+          setLocations(filteredLocs);
+        }
+      })
+      .catch((err) => {
+        console.log("error in DeleteLocations", err);
       });
   }
 
@@ -289,7 +308,8 @@ function Home() {
         <div className={`section-wrapper ${openTab !== MAIN_TABS.MAP ? "hidden" : ""}`}>
           <Map
             HandleSaveLocation={HandleSaveLocation}
-            HandleDeleteLocation={HandleDeleteLocation}
+            HandleMoveLocations={HandleMoveLocations}
+            HandleDeleteLocations={HandleDeleteLocations}
             HandleSelectFromBestiary={HandleSelectFromBestiary}
             setSelectedCreatures={setSelectedCreatures}
             creatures={creatures}

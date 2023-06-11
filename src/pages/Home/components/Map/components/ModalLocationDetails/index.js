@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import * as cc from "../../../../../../constants/creatureConstants";
 import * as lc from "../../../../../../constants/locationConstants";
 import * as utils from "../../../../../../utils";
@@ -9,7 +9,7 @@ import Select from "../../../../../../components/Select";
 
 import "./styles.css";
 
-function ModalLocationDetails({ location, id, locations, onClose, HandleEditLocation, creatures }) {
+function ModalLocationDetails({ location, id, locations, onClose, HandleEditNewLocation, OpenModalLocationDetails, HandleEditLocation, creatures }) {
   const [nameFilter, setNameFilter] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
@@ -75,6 +75,22 @@ function ModalLocationDetails({ location, id, locations, onClose, HandleEditLoca
     setSelectedSize(value);
   }
 
+  function HandleNewLocation(locId) {
+    HandleEditNewLocation(locId);
+    onClose();
+  }
+
+  useEffect(() => {
+    function resetFilters() {
+      setNameFilter(null);
+      setSelectedSize(null);
+      setSelectedType(null);
+      setSelectedLevel(id);
+    }
+
+    resetFilters();
+  }, [id, location]);
+
   return (
     <Modal title={location.name} className="ModalLocationDetails-container df" onClickToClose={onClose}>
       <main className="content df df-ai-fs df-jc-sb df-f1">
@@ -126,9 +142,18 @@ function ModalLocationDetails({ location, id, locations, onClose, HandleEditLoca
           <div className="location-list df df-fd-c df-jc-fs">
             {filteredLocations.map((loc) => (
               <div className="list-location df df-jc-sb" key={loc._id}>
+                {loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
+                  <button disabled>
+                    <i class="fas fa-route"></i>
+                  </button>
+                ) : (
+                  <button onClick={() => HandleNewLocation(loc._id)} disabled={locations.length >= 100}>
+                    <i class="fas fa-plus"></i>
+                  </button>
+                )}
                 <span>{loc.name}</span>
-                <button onClick={() => HandleEditLocation(loc)}>
-                  <i className="fas fa-pencil-alt"></i>
+                <button onClick={() => OpenModalLocationDetails(loc, loc._id)}>
+                  <i class="fas fa-book"></i>
                 </button>
               </div>
             ))}
