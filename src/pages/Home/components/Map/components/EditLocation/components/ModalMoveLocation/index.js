@@ -64,7 +64,12 @@ function ModalMoveLocation({ world, locations, onClose, onSelect }) {
     <Modal title="Mover Localização" className="ModalMoveLocation-container" onClickToClose={onClose}>
       <main className="content details-wrapper df df-fd-c df-jc-fs">
         <span className="warning-message">Mudanças não salvas na localização serão descartadas</span>
-        <CheckInput label="Também mover localizações internas" onClick={() => setMoveInteriorLocs(!moveInteriorLocs)} isSelected={moveInteriorLocs} />
+        <CheckInput
+          label="Também mover localizações internas"
+          onClick={() => setMoveInteriorLocs(!moveInteriorLocs)}
+          isSelected={moveInteriorLocs}
+          isDisabled={true}
+        />
 
         <div className="location-filters">
           <div className="filter-text">

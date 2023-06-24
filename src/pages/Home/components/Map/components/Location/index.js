@@ -117,13 +117,12 @@ function Location({
     }
 
     function GetOffset(location) {
-      if (!location.reference.location) {
+      if (!location.reference.location || !map[location.reference.location]) {
         return { x: 0, y: 0 };
       } else {
-        const refLoc = locationsRefs.find((r) => r.id === location.reference.location);
-        const refOffset = GetOffset(map[refLoc.id].data);
+        const refOffset = GetOffset(map[location.reference.location].data);
         //if refLoc has interiorLocs get radius(offsetHeight /2) from interiorLocs 1, otherwise from ref
-        const refLocDistFromCenter = GetLocDistFromCenterForCalc(map[refLoc.id]);
+        const refLocDistFromCenter = GetLocDistFromCenterForCalc(map[location.reference.location]);
 
         const distance = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
 

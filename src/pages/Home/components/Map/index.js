@@ -134,7 +134,7 @@ function Map({
     setLocationToEdit(null);
   }
 
-  function HandleDelete(location, deleteInteriorLocs) {
+  async function HandleDelete(location, deleteInteriorLocs) {
     if (map[location._id]) {
       allLocationsRefs.forEach((r) => {
         r.style.opacity = 0;
@@ -187,8 +187,8 @@ function Map({
       }
     });
 
-    HandleUpdateLocations(updateLocationsReq);
-    HandleDeleteLocations(idsToDelete);
+    await HandleUpdateLocations(updateLocationsReq);
+    await HandleDeleteLocations(idsToDelete);
     setLocationToEdit(null);
   }
 
