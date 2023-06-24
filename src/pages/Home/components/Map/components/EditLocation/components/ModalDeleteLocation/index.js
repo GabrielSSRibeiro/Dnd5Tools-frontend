@@ -7,7 +7,7 @@ import Button from "../../../../../../../../components/Button";
 import "./styles.css";
 
 function ModalDeleteLocation({ title = "", message = "", confirmText, onConfirm, cancelText, onCancel }) {
-  const [deleteInteriorLocs, setDeleteInteriorLocs] = useState(false);
+  const [deleteInteriorLocs, setDeleteInteriorLocs] = useState(true);
 
   function HandleCancel() {
     onCancel();
@@ -24,6 +24,7 @@ function ModalDeleteLocation({ title = "", message = "", confirmText, onConfirm,
         label="Também deletar localizações internas"
         onClick={() => setDeleteInteriorLocs(!deleteInteriorLocs)}
         isSelected={deleteInteriorLocs}
+        isDisabled={true}
       />
       <footer className="warning-actions-wrapper">
         {cancelText && (

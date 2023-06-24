@@ -128,7 +128,7 @@ export const getItemAfixes = (type, rarity, damageType, attribute) => {
     { type: EQUIPMENT_TYPES.ARMOR, getAfixes: () => getArmorAfixes(damageType) },
     { type: EQUIPMENT_TYPES.JEWELRY, getAfixes: () => getJewelryAfixes(attribute) },
     {
-      type: EQUIPMENT_TYPES.POTION,
+      type: EQUIPMENT_TYPES.CONSUMABLE,
       getAfixes: () => utils.randomItemFromArray([getWeaponAfixes(damageType), getArmorAfixes(damageType), getJewelryAfixes(attribute)]),
     },
   ];
@@ -337,7 +337,7 @@ const getFormedItemAfixes = (pulledAfixes, type) => {
   });
 
   formedItemAfixes = sortAndTrimItemAfixes(formedItemAfixes);
-  applyPotionBonusIfNeeded(formedItemAfixes, type);
+  applyConsumableBonusIfNeeded(formedItemAfixes, type);
 
   updateBonusIfNeeded(formedItemAfixes);
 
@@ -350,8 +350,8 @@ const sortAndTrimItemAfixes = (itemAfixes) => {
   return itemAfixes.filter((itemAfix) => itemAfix.bonus !== 0);
 };
 
-const applyPotionBonusIfNeeded = (itemAfixes, type) => {
-  if (type === EQUIPMENT_TYPES.POTION) {
+const applyConsumableBonusIfNeeded = (itemAfixes, type) => {
+  if (type === EQUIPMENT_TYPES.CONSUMABLE) {
     itemAfixes.forEach((afix) => (afix.bonus = afix.bonus * 2));
   }
 };

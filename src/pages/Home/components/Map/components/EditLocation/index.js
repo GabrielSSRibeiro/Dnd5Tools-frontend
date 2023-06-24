@@ -49,15 +49,19 @@ function EditLocation({
       .forEach((rl) => {
         const interiorLocs = Object.values(map[rl._id].interiorLocs);
         if (interiorLocs.length > 0) {
-          rl.displayName = interiorLocs.find((il) => !il.data.reference.location && !il.isHidden).data.name;
-          refLocations.push(rl);
+          rl.refListName = interiorLocs.find((il) => !il.data.reference.location && !il.isHidden).data.name;
+        } else {
+          rl.refListName = rl.name;
         }
+
+        refLocations.push(rl);
       });
 
     return refLocations;
   }, [location._id, location.exteriorLocationId, locations, map]);
   const isWorld = useMemo(() => !location.exteriorLocationId, [location]);
   const isFirstOfArea = useMemo(
+    //if there is no option or there isn't any loc that doesn't have a ref loc
     () => referenceLocations.length === 0 || !referenceLocations.some((l) => !l.reference.location),
     [referenceLocations]
   );
@@ -86,7 +90,7 @@ function EditLocation({
     function IsInternalTo(location, possibleExteriorLocId) {}
 
     //using map, list should be only locs that are not interior to this one
-    // n pode ser pont ode interesse
+    // n pode ser ponto de interesse
     let validLocs = locations.filter((l) => !IsInternalTo(l, location._id));
 
     setModal(
@@ -472,7 +476,7 @@ function EditLocation({
               onSelect={setLocation}
               nothingSelected="-"
               options={referenceLocations}
-              optionDisplay={(o) => o.displayName}
+              optionDisplay={(o) => o.refListName}
               optionValue={(o) => o._id}
             />
           </>

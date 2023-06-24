@@ -101,7 +101,7 @@ function Treasure({ resultText, level }) {
           title="Tipo"
           info={[
             {
-              text: "Material pode ser usado para forja de equipamentos ou para recuperar habilidade perdida de equipamento. Na Forja, primeiro se dedica o tempo e depois se faz o teste.",
+              text: "Material pode ser usado para forja de equipamentos ou para recuperar habilidade perdida de equipamento. Na Forja, primeiro se dedica o tempo e depois se faz o teste. Para identificar a raridade de um material, é recomendado um teste de dificuldade média(natureza ou outro)",
             },
             { text: "" },
             {
@@ -205,13 +205,13 @@ function Treasure({ resultText, level }) {
               title="Tipo e Raridade"
               className="equipment-type"
               info={[
-                { text: "Todos os itens não poções gerados são mágicos e precisam de sintonização" },
+                { text: "Todos os itens não consumíveis gerados são mágicos e precisam de sintonização" },
                 {
                   text: "1 vez por descanso longo, pode re-sincronizar um item com cargas, tornando o total atual o resultado de 1d(x + total de habilidades) - total de habilidades, mínimo 0",
                 },
                 { text: "" },
                 {
-                  text: "Poções tem bônus de afixos dobrado, mas so duram até o final do próximo turno de quem a consumir. Poções com cargas, tem cargas usos.",
+                  text: "Consumíveis tem bônus de afixos dobrado, mas so duram até o final do próximo turno de quem o usa. Estes normalmente são poçōes, mas podem ser munições ou itens de arremesso(um ataque em ação Arremessar). Para esses casos, os bônus aplicam efeito inverso no alvo que atingem. Consumíveis com cargas, tem cargas usos.",
                 },
                 { text: "" },
                 {
@@ -222,7 +222,7 @@ function Treasure({ resultText, level }) {
                   text: "Itens podem ser re-forjados pelo preço equivalente a sua raridade. Escolha um afixo para ser removido em troca de um bônus que varia com o tipo de equipamento ou um personalizado se feito por um mestre",
                 },
                 {
-                  text: "Arma: Dano mínimo +2, mesmo ao errar. Armadura: Causa 2 de dano ao atacante se sofrer dano corpo a corpo. Acessório: +1 em teste de concentração e de resistência contra morte. Poção: Ganha +1 turno duração",
+                  text: "Arma: Dano mínimo +2, mesmo ao errar. Armadura: Causa 2 de dano ao atacante se sofrer dano corpo a corpo. Acessório: +1 em teste de concentração e de resistência contra morte. Consumível: Cura 4d4+4",
                 },
                 { text: "" },
                 {
@@ -372,7 +372,7 @@ function Treasure({ resultText, level }) {
                     <span className="label">Acessórios: </span>Ferramentas de joalheiro
                   </span>
                   <span>
-                    <span className="label">Poçoes: </span>Suprimentos de Alquimista
+                    <span className="label">Consumíveis: </span>Suprimentos de Alquimista
                   </span>
                 </div>
               </footer>

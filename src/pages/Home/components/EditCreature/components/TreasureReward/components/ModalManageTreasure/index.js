@@ -141,7 +141,7 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
               label={"Tipo"}
               info={[
                 {
-                  text: "Material pode ser usado para forja de equipamentos ou para recuperar habilidade perdida de equipamento. Na Forja, primeiro se dedica o tempo e depois se faz o teste.",
+                  text: "Material pode ser usado para forja de equipamentos ou para recuperar habilidade perdida de equipamento. Na Forja, primeiro se dedica o tempo e depois se faz o teste. Para identificar a raridade de um material, é recomendado um teste de dificuldade média(natureza ou outro)",
                 },
                 { text: "" },
                 {
@@ -265,13 +265,13 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                   <Select
                     label={"Tipo do Equipamento"}
                     info={[
-                      { text: "Todos os itens gerados não poções são mágicos e precisam de sincronização" },
+                      { text: "Todos os itens gerados não consumíveis são mágicos e precisam de sincronização" },
                       {
                         text: "1 vez por descanso longo, pode re-sincronizar um item com cargas, tornando o total atual o resultado de 1d(x + total de habilidades) - total de habilidades, mínimo 0",
                       },
                       { text: "" },
                       {
-                        text: "Poções tem bônus de afixos dobrado, mas só duram até o final do próximo turno de quem a consumir. Poções com cargas, tem cargas usos.",
+                        text: "Consumíveis tem bônus de afixos dobrado, mas só duram até o final do próximo turno de quem o usa. Estes normalmente são poçōes, mas podem ser munições ou itens de arremesso(um ataque em ação Arremessar). Para esses casos, os bônus aplicam efeito inverso no alvo que atingem. Consumíveis com cargas, tem cargas usos.",
                       },
                     ]}
                     extraWidth={100}

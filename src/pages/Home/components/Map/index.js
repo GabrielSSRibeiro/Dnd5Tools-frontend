@@ -13,7 +13,7 @@ import "./styles.css";
 
 function Map({
   HandleSaveLocation,
-  HandleMoveLocations,
+  HandleUpdateLocations,
   HandleDeleteLocations,
   HandleSelectFromBestiary,
   setSelectedCreatures,
@@ -104,12 +104,12 @@ function Map({
     }
 
     //clear any possible ref
-    location.reference = {
-      distance: null,
-      direction: null,
-      location: null,
-      connectionType: null,
-    };
+    // location.reference = {
+    //   distance: null,
+    //   direction: null,
+    //   location: null,
+    //   connectionType: null,
+    // };
 
     // function AddInteriorLocsIdsToList(locId, list) {
     //   locations
@@ -141,26 +141,54 @@ function Map({
       });
     }
 
-    function AddInteriorLocsIdsToList(locId, list) {
-      locations
-        .filter((l) => l.exteriorLocationId === locId)
-        .forEach((l) => {
-          list.push(l._id);
-          AddInteriorLocsIdsToList(l._id, list);
-        });
-    }
-
+    let updateLocationsReq = { ids: [], updates: [] };
     let idsToDelete = [location._id];
+
+    let interiorLocs = GetAllInteriorLocs(location);
     if (deleteInteriorLocs) {
-      AddInteriorLocsIdsToList(location._id, idsToDelete);
+      idsToDelete = [...idsToDelete, ...interiorLocs.map((l) => l.data._id)];
     } else {
-      //get a list of all interiors and chance their exteriorLocationId to the delete loc exteriorLocationId
-      // let locsToUpdate = [];
-      // HandleMoveLocations(); param?
+      //this still needs work, like making then hidden since the first of area would be a problem
+      interiorLocs.forEach((il) => {
+        updateLocationsReq.ids.push(il.data._id);
+        updateLocationsReq.updates.push({ field: "exteriorLocationId", value: location.exteriorLocationId });
+      });
     }
 
-    HandleDeleteLocations(idsToDelete);
+    let refLocs = GetAllRefLocs(location);
+    refLocs.forEach((rl) => {
+      //if loc to delete has a ref, update its refs to have that ref instead, otherwize, clear it
+      if (location.reference.location) {
+        updateLocationsReq.ids.push(rl.data._id);
+        updateLocationsReq.updates.push([
+          {
+            field: "reference.location",
+            value: location.reference.location,
+          },
+        ]);
+      } else {
+        updateLocationsReq.ids.push(rl.data._id);
+        let update = [
+          {
+            field: "reference",
+            value: { distance: null, direction: null, location: null, connectionType: null },
+          },
+        ];
 
+        //sice they all won't have a ref, they need to be hidden if more than one
+        if (refLocs.length > 1) {
+          update.push({
+            field: "isHidden",
+            value: true,
+          });
+        }
+
+        updateLocationsReq.updates.push(update);
+      }
+    });
+
+    HandleUpdateLocations(updateLocationsReq);
+    HandleDeleteLocations(idsToDelete);
     setLocationToEdit(null);
   }
 
@@ -172,6 +200,28 @@ function Map({
         setLocHoverData({ top: e.clientY, left: e.clientX, location });
       }
     }, 500);
+  }
+
+  function GetAllInteriorLocs(location) {
+    function AddInteriorLocsToList(loc, list) {
+      Object.values(loc.interiorLocs).forEach((l) => {
+        list.push(l);
+        AddInteriorLocsToList(l, list);
+      });
+    }
+
+    let interiorLocs = [];
+    AddInteriorLocsToList(map[location._id], interiorLocs);
+
+    return interiorLocs;
+  }
+
+  function GetAllRefLocs(location) {
+    const refLocs = (map[location.exteriorLocationId] ? Object.values(map[location.exteriorLocationId].interiorLocs) : Object.values(map)).filter(
+      (l) => l.data.reference.location === location._id
+    );
+
+    return refLocs;
   }
 
   useEffect(() => {

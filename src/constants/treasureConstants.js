@@ -74,13 +74,13 @@ export const EQUIPMENT_TYPES = {
   WEAPON: 10,
   ARMOR: 20,
   JEWELRY: 30,
-  POTION: 40,
+  CONSUMABLE: 40,
 };
 export const equipmentTypes = [
   { display: "Arma", value: EQUIPMENT_TYPES.WEAPON },
   { display: "Armadura", value: EQUIPMENT_TYPES.ARMOR },
   { display: "Acessório", value: EQUIPMENT_TYPES.JEWELRY },
-  { display: "Poçao", value: EQUIPMENT_TYPES.POTION },
+  { display: "Consumível", value: EQUIPMENT_TYPES.CONSUMABLE },
 ];
 export const GetEquipmentType = (value) => equipmentTypes.find((s) => s.value === value);
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import * as util from "../../utils";
 import * as lc from "../../constants/locationConstants";
 import * as cc from "../../constants/creatureConstants";
 import api from "../../services/api";
@@ -104,34 +105,36 @@ function Home() {
     }
   }
 
-  async function HandleMoveLocations(moveLocsReq) {
-    api
-      .put("MoveLocations", moveLocsReq)
+  async function HandleUpdateLocations(updateLocsReq) {
+    await api
+      .put("UpdateLocations", updateLocsReq)
       .then((response) => {
         if (response.data) {
-          // let index = locations.findIndex((c) => c._id === locationToSave._id);
-          // if (index >= 0) {
-          //   locations.splice(index, 1, locationToSave);
-          // } else {
-          //   locationToSave._id = response.data._id;
-          //   locations.push(locationToSave);
-          // }
-          // setLocations([...locations]);
+          let tempLocations = util.clone(locations);
+
+          updateLocsReq.ids.forEach((id, i) => {
+            let location = tempLocations.find((l) => l._id === id);
+            updateLocsReq.updates[i].forEach((u) => {
+              util.setObjPropertyValue(location, u.field, u.value);
+            });
+          });
+
+          setLocations([...tempLocations]);
         }
       })
       .catch((err) => {
-        console.log("error in MoveLocations", err);
+        console.log("error in UpdateLocations", err);
       });
   }
 
-  function HandleDeleteLocations(ids) {
-    api
+  async function HandleDeleteLocations(ids) {
+    await api
       .delete("DeleteLocations", { params: { ids } })
       .then((response) => {
         if (response.data) {
           let filteredLocs = locations.filter((l) => !ids.includes(l._id));
 
-          setLocations(filteredLocs);
+          setLocations([...filteredLocs]);
         }
       })
       .catch((err) => {
@@ -308,7 +311,7 @@ function Home() {
         <div className={`section-wrapper ${openTab !== MAIN_TABS.MAP ? "hidden" : ""}`}>
           <Map
             HandleSaveLocation={HandleSaveLocation}
-            HandleMoveLocations={HandleMoveLocations}
+            HandleUpdateLocations={HandleUpdateLocations}
             HandleDeleteLocations={HandleDeleteLocations}
             HandleSelectFromBestiary={HandleSelectFromBestiary}
             setSelectedCreatures={setSelectedCreatures}
