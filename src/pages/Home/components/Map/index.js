@@ -96,41 +96,84 @@ function Map({
     setLocationToEdit(null);
   }
 
-  function HandleMove(location, newExteriorLocId, moveInteriorLocs) {
+  async function HandleMove(location, newExteriorLocId, moveInteriorLocs) {
     if (map[location._id]) {
       allLocationsRefs.forEach((r) => {
         r.style.opacity = 0;
       });
     }
 
-    //clear any possible ref
-    // location.reference = {
-    //   distance: null,
-    //   direction: null,
-    //   location: null,
-    //   connectionType: null,
-    // };
+    let locToMoveUpdate = [
+      {
+        field: "exteriorLocationId",
+        value: newExteriorLocId,
+      },
+      {
+        field: "reference",
+        value: { distance: null, direction: null, location: null, connectionType: null },
+      },
+    ];
 
-    // function AddInteriorLocsIdsToList(locId, list) {
-    //   locations
-    //     .filter((l) => l.exteriorLocationId === locId)
-    //     .forEach((l) => {
-    //       list.push(l._id);
-    //       AddInteriorLocsIdsToList(l._id, list);
-    //     });
-    // }
+    //is the new is in the root or is it has at least one not hidden loc, make the loc to move hidden
+    if (!map[newExteriorLocId] || Object.keys(map[newExteriorLocId].interiorLocs).filter((il) => !il.isHidden).length > 0) {
+      locToMoveUpdate.push({
+        field: "isHidden",
+        value: true,
+      });
+    } else {
+      locToMoveUpdate.push({
+        field: "isHidden",
+        value: false,
+      });
+    }
 
-    // let idsToDelete = [location._id];
-    // if (deleteInteriorLocs) {
-    //   AddInteriorLocsIdsToList(location._id, idsToDelete);
-    // } else {
-    //   //get a list of all interiors and chance their exteriorLocationId to the delete loc exteriorLocationId
-    //   // let locsToUpdate = [];
-    //   // HandleMoveLocations(); param?
-    // }
+    let updateLocationsReq = {
+      ids: [location._id],
+      updates: [locToMoveUpdate],
+    };
 
-    // HandleDeleteLocations(idsToDelete);
+    if (!moveInteriorLocs) {
+      //this still needs work, like making then hidden since the first of area would be a problem
+      // let interiorLocs = GetAllInteriorLocs(location);
+      // interiorLocs.forEach((il) => {
+      //   updateLocationsReq.ids.push(il.data._id);
+      //   updateLocationsReq.updates.push({ field: "exteriorLocationId", value: location.exteriorLocationId });
+      // });
+    }
 
+    let refLocs = GetAllRefLocs(location);
+    refLocs.forEach((rl) => {
+      //if loc to move has a ref, update its refs to have that ref instead, otherwize, clear it
+      if (location.reference.location) {
+        updateLocationsReq.ids.push(rl.data._id);
+        updateLocationsReq.updates.push([
+          {
+            field: "reference.location",
+            value: location.reference.location,
+          },
+        ]);
+      } else {
+        updateLocationsReq.ids.push(rl.data._id);
+        let update = [
+          {
+            field: "reference",
+            value: { distance: null, direction: null, location: null, connectionType: null },
+          },
+        ];
+
+        //sice they all won't have a ref, they need to be hidden if more than one
+        if (refLocs.length > 1) {
+          update.push({
+            field: "isHidden",
+            value: true,
+          });
+        }
+
+        updateLocationsReq.updates.push(update);
+      }
+    });
+
+    await HandleUpdateLocations(updateLocationsReq);
     setLocationToEdit(null);
   }
 
@@ -149,10 +192,10 @@ function Map({
       idsToDelete = [...idsToDelete, ...interiorLocs.map((l) => l.data._id)];
     } else {
       //this still needs work, like making then hidden since the first of area would be a problem
-      interiorLocs.forEach((il) => {
-        updateLocationsReq.ids.push(il.data._id);
-        updateLocationsReq.updates.push({ field: "exteriorLocationId", value: location.exteriorLocationId });
-      });
+      // interiorLocs.forEach((il) => {
+      //   updateLocationsReq.ids.push(il.data._id);
+      //   updateLocationsReq.updates.push({ field: "exteriorLocationId", value: location.exteriorLocationId });
+      // });
     }
 
     let refLocs = GetAllRefLocs(location);

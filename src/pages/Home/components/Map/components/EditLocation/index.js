@@ -87,11 +87,24 @@ function EditLocation({
   }
 
   function OpenModalMoveLocation() {
-    function IsInternalTo(location, possibleExteriorLocId) {}
+    function IsLocInteriorTo(location, possibleExteriorLocId) {
+      if (location.exteriorLocationId === possibleExteriorLocId) {
+        return true;
+      } else if (!map[location.exteriorLocationId]) {
+        return false;
+      } else {
+        return IsLocInteriorTo(map[location.exteriorLocationId].data, possibleExteriorLocId);
+      }
+    }
 
-    //using map, list should be only locs that are not interior to this one
-    // n pode ser ponto de interesse
-    let validLocs = locations.filter((l) => !IsInternalTo(l, location._id));
+    //list should be only locs that are not point of interest, this exterior, this loc, or interior to this one
+    let validLocs = locations.filter(
+      (l) =>
+        l.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST &&
+        l._id !== location._id &&
+        l._id !== location.exteriorLocationId &&
+        !IsLocInteriorTo(l, location._id)
+    );
 
     setModal(
       <ModalMoveLocation

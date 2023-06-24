@@ -85,15 +85,16 @@ function Home() {
       await (locationToSave._id ? api.put("UpdateLocation", locationToSave) : api.post("SaveLocation", locationToSave))
         .then((response) => {
           if (response.data) {
-            let index = locations.findIndex((l) => l._id === locationToSave._id);
-            if (index >= 0) {
-              locations.splice(index, 1, locationToSave);
-            } else {
-              locationToSave._id = response.data._id;
-              locations.push(locationToSave);
-            }
+            window.location.reload(false);
+            // let index = locations.findIndex((l) => l._id === locationToSave._id);
+            // if (index >= 0) {
+            //   locations.splice(index, 1, locationToSave);
+            // } else {
+            //   locationToSave._id = response.data._id;
+            //   locations.push(locationToSave);
+            // }
 
-            setLocations([...locations]);
+            // setLocations([...locations]);
           }
         })
         .catch((err) => {
@@ -110,16 +111,17 @@ function Home() {
       .put("UpdateLocations", updateLocsReq)
       .then((response) => {
         if (response.data) {
-          let tempLocations = util.clone(locations);
+          window.location.reload(false);
+          // let tempLocations = util.clone(locations);
 
-          updateLocsReq.ids.forEach((id, i) => {
-            let location = tempLocations.find((l) => l._id === id);
-            updateLocsReq.updates[i].forEach((u) => {
-              util.setObjPropertyValue(location, u.field, u.value);
-            });
-          });
+          // updateLocsReq.ids.forEach((id, i) => {
+          //   let location = tempLocations.find((l) => l._id === id);
+          //   updateLocsReq.updates[i].forEach((u) => {
+          //     util.setObjPropertyValue(location, u.field, u.value);
+          //   });
+          // });
 
-          setLocations([...tempLocations]);
+          // setLocations([...tempLocations]);
         }
       })
       .catch((err) => {
@@ -132,9 +134,10 @@ function Home() {
       .delete("DeleteLocations", { params: { ids } })
       .then((response) => {
         if (response.data) {
-          let filteredLocs = locations.filter((l) => !ids.includes(l._id));
+          window.location.reload(false);
+          // let filteredLocs = locations.filter((l) => !ids.includes(l._id));
 
-          setLocations([...filteredLocs]);
+          // setLocations([...filteredLocs]);
         }
       })
       .catch((err) => {
