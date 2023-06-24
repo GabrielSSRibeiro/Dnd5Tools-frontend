@@ -108,7 +108,7 @@ function EditLocation({
 
     setModal(
       <ModalMoveLocation
-        world={world}
+        world={map[location.exteriorLocationId] ? world : null}
         locations={validLocs}
         onClose={setModal}
         onSelect={(newExteriorLocId, moveInteriorLocs) => HandleMove(locationToEdit, newExteriorLocId, moveInteriorLocs)}

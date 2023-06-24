@@ -99,12 +99,14 @@ function ModalMoveLocation({ world, locations, onClose, onSelect }) {
           </main>
         </div>
         <div className="location-list df df-fd-c df-jc-fs">
-          <div className="list-location df df-jc-sb">
-            <span>{world.name}</span>
-            <button onClick={HandleSelect}>
-              <i class="fas fa-check"></i>
-            </button>
-          </div>
+          {world && (
+            <div className="list-location df df-jc-sb">
+              <span>{world.name}</span>
+              <button onClick={() => HandleSelect()}>
+                <i class="fas fa-check"></i>
+              </button>
+            </div>
+          )}
           {filteredLocations.map((loc) => (
             <div className="list-location df df-jc-sb" key={loc._id}>
               <span>{loc.name}</span>

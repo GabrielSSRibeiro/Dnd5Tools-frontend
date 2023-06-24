@@ -103,6 +103,12 @@ function Map({
       });
     }
 
+    console.log("AAAA", newExteriorLocId);
+    if (!newExteriorLocId) {
+      newExteriorLocId = userId;
+    }
+    console.log("AAAA", newExteriorLocId);
+
     let locToMoveUpdate = [
       {
         field: "exteriorLocationId",
@@ -113,7 +119,6 @@ function Map({
         value: { distance: null, direction: null, location: null, connectionType: null },
       },
     ];
-
     //is the new is in the root or is it has at least one not hidden loc, make the loc to move hidden
     if (!map[newExteriorLocId] || Object.keys(map[newExteriorLocId].interiorLocs).filter((il) => !il.isHidden).length > 0) {
       locToMoveUpdate.push({
