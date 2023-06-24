@@ -8,6 +8,27 @@
   justify-content: space-between;
 }
 
+.EditLocation-container .title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10px;
+  margin-bottom: 10px;
+}
+
+.EditLocation-container .location-import {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  background-color: transparent;
+}
+
+.EditLocation-container h3 {
+  line-height: 1;
+}
+
 .EditLocation-container .location-fields {
   flex: 1;
   width: 100%;
@@ -18,11 +39,6 @@
   align-items: center;
   justify-content: flex-start;
   row-gap: 5px;
-}
-
-.EditLocation-container h3 {
-  line-height: 1;
-  margin-bottom: 10px;
 }
 
 .EditLocation-container .location-row {

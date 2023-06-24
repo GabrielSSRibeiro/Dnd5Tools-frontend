@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
+import * as utils from "../../../../../../utils";
 import * as lc from "../../../../../../constants/locationConstants";
 import { creatureRarities, creatureEnvironments } from "../../../../../../constants/creatureConstants";
 import * as lh from "../../../../../../helpers/locationHelper";
@@ -29,6 +30,7 @@ function EditLocation({
   world,
   map,
 }) {
+  let inputRef = useRef(null);
   const [location, setLocation] = useState(locationToEdit);
   const [modal, setModal] = useState(null);
 
@@ -314,10 +316,41 @@ function EditLocation({
     return true;
   }
 
+  function ImportAscendance(event) {
+    let file = event.target.files[0];
+
+    if (file) {
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        let uploadedLocation = JSON.parse(e.target.result);
+        uploadedLocation._id = location._id;
+        uploadedLocation.exteriorLocationId = location.exteriorLocationId;
+        uploadedLocation.owner = location.owner;
+        setLocation(uploadedLocation);
+      };
+      reader.readAsText(file);
+    }
+  }
+
+  function HandleAscendanceExport() {
+    let exportLocation = utils.clone(location);
+    exportLocation._id = null;
+    exportLocation.exteriorLocationId = null;
+    exportLocation.owner = null;
+
+    utils.downloadObjectAsJson(exportLocation, `${exportLocation.name}`);
+  }
+
   return (
     <div className="EditLocation-container">
       {modal}
-      <h3>Localização</h3>
+      <div className="title-wrapper">
+        <h3>Localização</h3>
+        <button onClick={() => inputRef.current.click()} className="location-import">
+          <i className="fas fa-download"></i>
+          <input type="file" onChange={ImportAscendance} ref={inputRef} hidden={true} accept="application/JSON" />
+        </button>
+      </div>
       <main className="location-fields">
         <TextInput label="Nome" value={location} valuePropertyPath="name" onChange={setLocation} />
 
@@ -553,6 +586,9 @@ function EditLocation({
             </button>
             <button className="button-simple" onClick={OpenModalMoveLocation}>
               <i class="fas fa-exchange-alt"></i>
+            </button>
+            <button className="button-simple" onClick={HandleAscendanceExport}>
+              <i className="fas fa-upload"></i>
             </button>
           </>
         )}
