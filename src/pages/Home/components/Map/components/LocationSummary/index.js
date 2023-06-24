@@ -134,6 +134,12 @@ function LocationSummary({ location, id, setLocationToEdit, setLocHoverData, loc
           </aside>
         </header>
         <footer className="details">
+          <div className="divider"></div>
+          <span className="env-type">
+            {location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST
+              ? lc.GetElementType(location.interaction.type).display
+              : cc.GetEnviroment(location.traversal.type).display}
+          </span>
           {lh.GetCurrentContext(location)?.firstImpressions && (
             <>
               <div className="divider"></div>

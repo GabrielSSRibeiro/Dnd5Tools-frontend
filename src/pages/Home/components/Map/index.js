@@ -103,11 +103,9 @@ function Map({
       });
     }
 
-    console.log("AAAA", newExteriorLocId);
     if (!newExteriorLocId) {
       newExteriorLocId = userId;
     }
-    console.log("AAAA", newExteriorLocId);
 
     let locToMoveUpdate = [
       {
@@ -242,10 +240,12 @@ function Map({
 
   let timer = null;
   function HandleLocHover(e, location) {
+    // setLocHoverData({ top: e.clientY, left: e.clientX, location: null, distance: "15km / 1 dia" });
+
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (location) {
-        setLocHoverData({ top: e.clientY, left: e.clientX, location });
+        setLocHoverData({ top: e.clientY, left: e.clientX, location, distance: null });
       }
     }, 500);
   }
@@ -366,27 +366,32 @@ function Map({
             temperature={temperature}
           />
         </div>
-        {locHoverData && (
-          <div
-            className="location-details floating-details"
-            style={{ top: locHoverData.top, left: locHoverData.left }}
-            onMouseLeave={() => setLocHoverData(null)}
-          >
-            <div className="wrapper">
-              <LocationSummary
-                location={locHoverData.location}
-                id={locHoverData.location._id}
-                setLocationToEdit={setLocationToEdit}
-                setLocHoverData={setLocHoverData}
-                locations={locations}
-                creatures={creatures}
-                schedule={schedule}
-                precipitation={precipitation}
-                temperature={temperature}
-              />
+        {locHoverData &&
+          (locHoverData.location ? (
+            <div
+              className="location-details floating-details"
+              style={{ top: locHoverData.top, left: locHoverData.left }}
+              onMouseLeave={() => setLocHoverData(null)}
+            >
+              <div className="wrapper">
+                <LocationSummary
+                  location={locHoverData.location}
+                  id={locHoverData.location._id}
+                  setLocationToEdit={setLocationToEdit}
+                  setLocHoverData={setLocHoverData}
+                  locations={locations}
+                  creatures={creatures}
+                  schedule={schedule}
+                  precipitation={precipitation}
+                  temperature={temperature}
+                />
+              </div>
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="location-details floating-details" style={{ top: locHoverData.top, left: locHoverData.left, pointerEvents: "none" }}>
+              <div className="wrapper">{locHoverData.distance}</div>
+            </div>
+          ))}
         {/* <hr className="test-center"></hr> */}
         <div id={locationsContainerId} className="locations">
           {rootLocs.map((locationId) => {
