@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import * as lh from "../../../../helpers/locationHelper";
 import * as lc from "../../../../constants/locationConstants";
 import * as cc from "../../../../constants/creatureConstants";
@@ -238,12 +238,14 @@ function Map({
     setLocationToEdit(null);
   }
 
-  let timer = null;
+  let timer = useRef(null);
   function HandleLocHover(e, location) {
-    // setLocHoverData({ top: e.clientY, left: e.clientX, location: null, distance: "15km / 1 dia" });
+    if (!locHoverData || !locHoverData.location) {
+      setLocHoverData({ top: e.clientY, left: e.clientX, location: null, distance: location ? "15km / 1 dia" : null });
+    }
 
-    clearTimeout(timer);
-    timer = setTimeout(() => {
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
       if (location) {
         setLocHoverData({ top: e.clientY, left: e.clientX, location, distance: null });
       }
