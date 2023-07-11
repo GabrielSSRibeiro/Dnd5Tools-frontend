@@ -240,9 +240,11 @@ function Map({
 
   let timer = useRef(null);
   function HandleLocHover(e, location) {
-    if (!locHoverData || !locHoverData.location) {
-      setLocHoverData({ top: e.clientY, left: e.clientX, location: null, distance: location ? "15km / 1 dia" : null });
-    }
+    // if (!locHoverData || !locHoverData.location) {
+    //   //calc distance and travel time
+
+    //   setLocHoverData({ top: e.clientY, left: e.clientX, location: null, distance: null, style: { pointerEvents: "none" }, disabled: true });
+    // }
 
     clearTimeout(timer.current);
     timer.current = setTimeout(() => {
@@ -372,10 +374,10 @@ function Map({
           (locHoverData.location ? (
             <div
               className="location-details floating-details"
-              style={{ top: locHoverData.top, left: locHoverData.left }}
+              style={{ ...locHoverData.style, top: locHoverData.top, left: locHoverData.left }}
               onMouseLeave={() => setLocHoverData(null)}
             >
-              <div className="wrapper">
+              <fieldset className="wrapper" disabled={locHoverData.disabled}>
                 <LocationSummary
                   location={locHoverData.location}
                   id={locHoverData.location._id}
@@ -387,7 +389,7 @@ function Map({
                   precipitation={precipitation}
                   temperature={temperature}
                 />
-              </div>
+              </fieldset>
             </div>
           ) : (
             <div className="location-details floating-details" style={{ top: locHoverData.top, left: locHoverData.left, pointerEvents: "none" }}>

@@ -393,7 +393,7 @@ function EditLocation({
                 optionValue={(o) => o.value}
               />
             </div>
-            {location.exteriorLocationId != null && (
+            {/* {location.exteriorLocationId != null && (
               <div className="location-detail-group">
                 <div className="location-row location-detail-group-title">
                   <span>Partições</span>
@@ -415,7 +415,7 @@ function EditLocation({
                   </div>
                 ))}
               </div>
-            )}
+            )} */}
             {location.exteriorLocationId != null && (
               <div className="location-detail-group">
                 <div className="location-row location-detail-group-title">

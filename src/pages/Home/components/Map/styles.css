@@ -110,6 +110,7 @@
 
 .Map-container .world-map .location-details .wrapper {
   margin-top: 25px;
+  border: none;
 }
 
 .Map-container .world-details .LocationSummary-container .header:hover + .details {
