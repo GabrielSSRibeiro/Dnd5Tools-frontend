@@ -6,18 +6,6 @@ export const BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M = 5000;
 export const MAXIMUM_SEQUENTIAL_EXPLORATION_HOURS = 8;
 export const BASE_PX_IN_M_SCALE = 25;
 
-export const ZOOM_LEVELS = {
-  DAY: 10,
-  WEEK: 20,
-  MONTH: 30,
-};
-export const zoomLevels = [
-  { display: "1 Dia", value: ZOOM_LEVELS.DAY, scaleMultiplier: 3 }, //1
-  { display: "1 Semana", value: ZOOM_LEVELS.WEEK, scaleMultiplier: 7 },
-  { display: "1 Mês", value: ZOOM_LEVELS.MONTH, scaleMultiplier: 30 },
-];
-export const GetZoomLevel = (value) => zoomLevels.find((a) => a.value === value);
-
 export const LOCATION_SIZES = {
   POINT_OF_INTEREST: 10,
   SMALL: 20,

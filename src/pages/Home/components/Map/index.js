@@ -22,8 +22,13 @@ function Map({
   locations,
   userId,
 }) {
+  const defaultZoom = useRef(3);
+  const defaultCenter = useRef({ X: 0, Y: 0 });
+  const centerMoveRatio = useRef(50);
   const [locationToEdit, setLocationToEdit] = useState(null);
-  const [zoomLevel, setZoomLevel] = useState(lc.ZOOM_LEVELS.DAY);
+  const [zoomLevel, setZoomLevel] = useState(defaultZoom.current);
+  const [mapLoading, setMapLoading] = useState(false);
+  const [centerOffset, setCenterOffset] = useState(defaultCenter.current);
   const [schedule, setSchedule] = useState(null);
   const [precipitation, setPrecipitation] = useState(null);
   const [temperature, setTemperature] = useState(null);
@@ -31,7 +36,7 @@ function Map({
   const [locationsRefs, setLocationsRefs] = useState([]);
   const [allLocationsRefs, setAllLocationsRefs] = useState([]);
 
-  const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * lc.GetZoomLevel(zoomLevel).scaleMultiplier, [zoomLevel]);
+  const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * zoomLevel, [zoomLevel]);
   const locationsContainerId = useMemo(() => `all-${userId}-locations`, [userId]);
   // const visionRadius = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale, [pxInMScale]);
   const map = useMemo(() => {
@@ -276,10 +281,19 @@ function Map({
     return refLocs;
   }
 
+  function MapLoadingWrapper(func) {
+    setMapLoading(true);
+    func();
+
+    setTimeout(() => {
+      setMapLoading(false);
+    }, 100);
+  }
+
   useEffect(() => {
     setAllLocationsRefs([]);
     setLocationsRefs([]);
-  }, [locations]);
+  }, [locations, zoomLevel]);
 
   return (
     <div className="Map-container">
@@ -326,29 +340,29 @@ function Map({
           />
         </aside>
         <aside className="map-zoom floating-details">
-          <i class="fas fa-search"></i>
-          <Select
-            isDisabled={true}
-            value={zoomLevel}
-            onSelect={setZoomLevel}
-            options={lc.zoomLevels}
-            optionDisplay={(o) => o.display}
-            optionValue={(o) => o.value}
-          />
+          <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 1.1))}>
+            <i class="fas fa-minus"></i>
+          </button>
+          <button onClick={() => MapLoadingWrapper(() => setZoomLevel(defaultZoom.current))}>
+            <i class="fas fa-search"></i>
+          </button>
+          <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 0.9))}>
+            <i class="fas fa-plus"></i>
+          </button>
           <div className="move-zoom">
-            <button disabled>
+            <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y + centerMoveRatio.current * 3 })}>
               <i class="fas fa-caret-up"></i>
             </button>
-            <button disabled>
+            <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X + centerMoveRatio.current })}>
               <i class="fas fa-caret-left"></i>
             </button>
-            <button disabled>
+            <button onClick={() => setCenterOffset(defaultCenter.current)}>
               <i class="fas fa-circle"></i>
             </button>
-            <button disabled>
+            <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X - centerMoveRatio.current })}>
               <i class="fas fa-caret-right"></i>
             </button>
-            <button disabled>
+            <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y - centerMoveRatio.current * 3 })}>
               <i class="fas fa-caret-down"></i>
             </button>
           </div>
@@ -397,7 +411,14 @@ function Map({
             </div>
           ))}
         {/* <hr className="test-center"></hr> */}
-        <div id={locationsContainerId} className="locations">
+        <div
+          id={locationsContainerId}
+          className="locations"
+          style={{
+            translate: `${centerOffset.X}% ${centerOffset.Y}%`,
+            opacity: !mapLoading ? 1 : 0,
+          }}
+        >
           {rootLocs.map((locationId) => {
             return (
               <Location
