@@ -30,6 +30,13 @@
   justify-content: center;
 }
 
+.Location-container .connection {
+  position: absolute;
+  height: 2px;
+  background-color: black;
+  z-index: 1;
+}
+
 .Location-container .point-of-interest {
   border: 1px solid var(--black);
 }

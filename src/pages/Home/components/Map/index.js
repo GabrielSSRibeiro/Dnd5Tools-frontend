@@ -22,7 +22,7 @@ function Map({
   locations,
   userId,
 }) {
-  const defaultZoom = useRef(3);
+  const defaultZoom = useRef(1);
   const defaultCenter = useRef({ X: 0, Y: 0 });
   const centerMoveRatio = useRef(50);
   const [locationToEdit, setLocationToEdit] = useState(null);
@@ -60,13 +60,12 @@ function Map({
 
     return map;
   }, [locations, pxInMScale]);
-  const rootLocs = useMemo(
-    () =>
-      Object.keys(map)
-        //only keep the exterior locs
-        .filter((locationId) => !map[locationId].data.isHidden && !map[map[locationId].data.exteriorLocationId]),
-    [map]
-  );
+  const rootLocs = useMemo(() => {
+    //only keep the exterior locs
+    const rootLocs = Object.keys(map).filter((locationId) => !map[locationId].data.isHidden && !map[map[locationId].data.exteriorLocationId]);
+    const sortedRootLocs = lh.sortLocsByRef(rootLocs.map((locId) => map[locId].data)).map((l) => l._id);
+    return sortedRootLocs;
+  }, [map]);
   const isMapRendered = useMemo(() => {
     let totalLocsToRender = 0;
 

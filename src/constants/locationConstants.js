@@ -78,6 +78,24 @@ export const panoramicVisions = [
 ];
 export const GetPanoramicVision = (value) => panoramicVisions.find((a) => a.value === value);
 
+export const ELEMENT_TYPES = {
+  PIT: 10,
+  LAKE: 20,
+  STRUCTURE: 30,
+  ROCK: 40,
+  PLANT: 50,
+  OBJECT: 60,
+};
+export const elementTypes = [
+  { display: "Escavação", value: ELEMENT_TYPES.PIT, color: "#202021" }, //#1b1b1c
+  { display: "Lago", value: ELEMENT_TYPES.LAKE, color: "#00CED1" },
+  { display: "Estrutura", value: ELEMENT_TYPES.STRUCTURE, color: "#D3D3D3" },
+  { display: "Rocha", value: ELEMENT_TYPES.ROCK, color: "#696969", canBeMaterial: true },
+  { display: "Planta", value: ELEMENT_TYPES.PLANT, color: "#008000", canBeMaterial: true },
+  { display: "Objeto", value: ELEMENT_TYPES.OBJECT, color: "#C0C0C0", canBeMaterial: true },
+];
+export const GetElementType = (value) => elementTypes.find((a) => a.value === value);
+
 export const REFERENCE_DISTANCES = {
   SMALL: 10,
   MEDIUM: 20,
@@ -97,8 +115,8 @@ export const LOCATION_CONNECTION_TYPES = {
   RIVER: 20,
 };
 export const locationConnectionTypes = [
-  { display: "Estrada", value: LOCATION_CONNECTION_TYPES.ROAD },
-  { display: "Rio", value: LOCATION_CONNECTION_TYPES.RIVER },
+  { display: "Estrada", value: LOCATION_CONNECTION_TYPES.ROAD, elementType: ELEMENT_TYPES.STRUCTURE },
+  { display: "Rio", value: LOCATION_CONNECTION_TYPES.RIVER, elementType: ELEMENT_TYPES.LAKE },
 ];
 export const GetLocationConnectionType = (value) => locationConnectionTypes.find((a) => a.value === value);
 
@@ -227,24 +245,6 @@ export const encounterFrequencies = [
   { display: "Extrema", value: ENCOUNTER_FREQUENCIES.EXTREME, opacity: 1 },
 ];
 export const GetEncounterFrequency = (value) => encounterFrequencies.find((a) => a.value === value);
-
-export const ELEMENT_TYPES = {
-  PIT: 10,
-  LAKE: 20,
-  STRUCTURE: 30,
-  ROCK: 40,
-  PLANT: 50,
-  OBJECT: 60,
-};
-export const elementTypes = [
-  { display: "Escavação", value: ELEMENT_TYPES.PIT, color: "#202021" }, //#1b1b1c
-  { display: "Lago", value: ELEMENT_TYPES.LAKE, color: "#00CED1" },
-  { display: "Estrutura", value: ELEMENT_TYPES.STRUCTURE, color: "#D3D3D3" },
-  { display: "Rocha", value: ELEMENT_TYPES.ROCK, color: "#696969", canBeMaterial: true },
-  { display: "Planta", value: ELEMENT_TYPES.PLANT, color: "#008000", canBeMaterial: true },
-  { display: "Objeto", value: ELEMENT_TYPES.OBJECT, color: "#C0C0C0", canBeMaterial: true },
-];
-export const GetElementType = (value) => elementTypes.find((a) => a.value === value);
 
 export const ELEMENT_MATERIAL_FREQUENCIES = {
   LOW: 10,

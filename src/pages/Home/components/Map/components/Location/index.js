@@ -22,7 +22,11 @@ function Location({
 }) {
   const ref = useRef(null);
   const [refs, setRefs] = useState([]);
-  const interiorLocs = useMemo(() => Object.keys(loc.interiorLocs).filter((locId) => !map[locId].data.isHidden), [loc.interiorLocs, map]);
+  const interiorLocs = useMemo(() => {
+    const interiorLocs = Object.keys(loc.interiorLocs).filter((locId) => !map[locId].data.isHidden);
+    const sortedRootLocs = lh.sortLocsByRef(interiorLocs.map((locId) => map[locId].data)).map((l) => l._id);
+    return sortedRootLocs;
+  }, [loc.interiorLocs, map]);
   const areaLocs = useMemo(() => {
     function AddAreaLoc(loc, areaLocs) {
       areaLocs.push(loc.data);
@@ -39,6 +43,18 @@ function Location({
 
     return areaLocs;
   }, [loc, map]);
+  const connectionStyle = useMemo(() => {
+    if (!loc.data.reference.connectionType) {
+      return null;
+    }
+
+    let connectionStyle = {
+      rotate: `${loc.data.distanceAngle * -1}deg`,
+      backgroundColor: lc.GetElementType(lc.GetLocationConnectionType(loc.data.reference.connectionType).elementType).color,
+    };
+
+    return connectionStyle;
+  }, [loc.data]);
   const areaWrapperStyle = useMemo(() => {
     let radius = 0;
     areaLocs.forEach((l) => {
@@ -144,19 +160,45 @@ function Location({
     //set offset and position self
     if (!map[loc.data._id].data.offset) {
       map[loc.data._id].data.offset = GetOffset(loc.data);
-      if (map[ref.current.id].data.offset.x > 0) {
-        ref.current.style.marginRight = `${map[ref.current.id].data.offset.x * -1}px`;
+      const offset = map[ref.current.id].data.offset;
+      let connection = document.getElementById(`${loc.data._id}-connection`);
+
+      //horizontal
+      if (offset.x > 0) {
+        ref.current.style.marginRight = `${offset.x * -1}px`;
+        if (connection) {
+          connection.style.marginLeft = `${(offset.x / 2) * -1}px`;
+          // connection.style.width = `${offset.x / 2}px`;
+        }
       } else {
-        ref.current.style.marginLeft = `${map[ref.current.id].data.offset.x}px`;
+        ref.current.style.marginLeft = `${offset.x}px`;
+        if (connection) {
+          connection.style.marginRight = `${offset.x / 2}px`;
+          // connection.style.width = `${offset.x / 2}px`;
+        }
       }
 
-      if (map[ref.current.id].data.offset.y > 0) {
-        ref.current.style.marginTop = `${map[ref.current.id].data.offset.y * -1}px`;
+      //vertical
+      if (offset.y > 0) {
+        ref.current.style.marginTop = `${offset.y * -1}px`;
+        if (connection) {
+          connection.style.marginBottom = `${(offset.y / 2) * -1}px`;
+          // connection.style.width = `${offset.y / 2}px`;
+        }
       } else {
-        ref.current.style.marginBottom = `${map[ref.current.id].data.offset.y}px`;
+        ref.current.style.marginBottom = `${offset.y}px`;
+        if (connection) {
+          connection.style.marginTop = `${offset.y / 2}px`;
+          // connection.style.width = `${offset.y / 2}px`;
+        }
+      }
+
+      if (connection) {
+        connection.style.width = `${Math.sqrt(offset.x * offset.x + offset.y * offset.y) / 2}px`;
       }
     }
 
+    //update refs
     if (!allLocationsRefs.some((r) => r === ref.current)) {
       allLocationsRefs.push(ref.current);
       setAllLocationsRefs([...allLocationsRefs]);
@@ -175,6 +217,7 @@ function Location({
 
   return (
     <div name={loc.data.name} ref={ref} id={loc.data._id} className={`Location-container ${className}`} style={wrapperStyle} key={rest.key}>
+      {connectionStyle && <div id={`${loc.data._id}-connection`} className="connection" style={connectionStyle}></div>}
       {interiorLocs.length > 0 ? (
         interiorLocs.map((locationId) => (
           <Location

@@ -75,3 +75,28 @@ export const GetCreatureCurrentRoutine = (creature, schedule, precipitation, tem
 
   return currentRoutinesWithPriority[0]?.routine;
 };
+
+export const sortLocsByRef = (locations) => {
+  const visited = new Set(); // Keep track of visited objects
+  const result = [];
+
+  function visit(location) {
+    if (visited.has(location)) return; // Avoid infinite loops
+
+    visited.add(location);
+    const ref = location.reference.location;
+
+    if (ref !== undefined && ref !== null) {
+      const refObj = locations.find((l) => l._id === ref); // Assuming 'id' is the unique identifier property
+      if (refObj) {
+        visit(refObj); // Recursively visit referenced object first
+      }
+    }
+
+    result.push(location);
+  }
+
+  locations.forEach(visit);
+
+  return result;
+};
