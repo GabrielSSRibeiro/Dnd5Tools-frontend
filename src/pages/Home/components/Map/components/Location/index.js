@@ -214,16 +214,19 @@ function Location({
     }
 
     function GetConnectionOffsetStyles(cLoc, widthReductor, areaLocHeight, heightAdditor) {
+      const offsetStyles = [];
       const { x, y } = cLoc.offset;
-      let refAreaDiameter = document.getElementById(`${cLoc.reference.location}-area`).offsetWidth;
+      const refAreaDiameter = document.getElementById(`${cLoc.reference.location}-area`).offsetWidth;
+      const ignoreWidthAlterHeight = areaLocHeight > refAreaDiameter + heightAdditor;
+
+      if (ignoreWidthAlterHeight) {
+        widthReductor = 0;
+        offsetStyles.push({ key: "height", value: `${refAreaDiameter + heightAdditor}px` });
+      }
 
       const widthValue = Math.sqrt(x * x + y * y);
       const connectionRatio = (widthValue - (refAreaDiameter + widthReductor)) / widthValue;
-      const offsetStyles = [{ key: "width", value: `${(widthValue - (refAreaDiameter + widthReductor)) / 2}px` }];
-
-      if (areaLocHeight > refAreaDiameter + heightAdditor) {
-        offsetStyles.push({ key: "height", value: `${refAreaDiameter + heightAdditor}px` });
-      }
+      offsetStyles.push({ key: "width", value: `${(widthValue - (refAreaDiameter + widthReductor)) / 2}px` });
 
       //horizontal
       if (x > 0) {
