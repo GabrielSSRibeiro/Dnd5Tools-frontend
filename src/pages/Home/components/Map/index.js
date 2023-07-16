@@ -23,12 +23,12 @@ function Map({
   userId,
 }) {
   const defaultZoom = useRef(1);
-  const defaultCenter = useRef({ X: 0, Y: 0 });
+  const [currentCenter, setCurrentCenter] = useState({ X: 0, Y: 0 });
   const centerMoveRatio = useRef(50);
   const [locationToEdit, setLocationToEdit] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(defaultZoom.current);
   const [mapLoading, setMapLoading] = useState(false);
-  const [centerOffset, setCenterOffset] = useState(defaultCenter.current);
+  const [centerOffset, setCenterOffset] = useState(currentCenter);
   const [schedule, setSchedule] = useState(null);
   const [precipitation, setPrecipitation] = useState(null);
   const [temperature, setTemperature] = useState(null);
@@ -355,7 +355,7 @@ function Map({
             <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X + centerMoveRatio.current })}>
               <i class="fas fa-caret-left"></i>
             </button>
-            <button onClick={() => setCenterOffset(defaultCenter.current)}>
+            <button onClick={() => setCenterOffset(currentCenter)}>
               <i class="fas fa-circle"></i>
             </button>
             <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X - centerMoveRatio.current })}>

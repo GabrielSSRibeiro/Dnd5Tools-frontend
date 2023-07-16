@@ -10,7 +10,7 @@ import Select from "../../../../../../components/Select";
 import CheckInput from "../../../../../../components/CheckInput";
 import ModalDeleteLocation from "./components/ModalDeleteLocation";
 import ModalMoveLocation from "./components/ModalMoveLocation";
-import ModalManagePartition from "./components/ModalManagePartition";
+// import ModalManagePartition from "./components/ModalManagePartition";
 import ModalManageElement from "./components/ModalManageElement";
 import ModalManageContext from "./components/ModalManageContext";
 import ModalManageCreature from "./components/ModalManageCreature";
@@ -142,33 +142,33 @@ function EditLocation({
     setLocation({ ...location });
   }
 
-  function OpenModalManagePartition(partition) {
-    setModal(
-      <ModalManagePartition
-        partition={partition}
-        partitions={location.traversal.partitions}
-        onClose={(tempPartition) => HandleCloseModalManagePartition(partition, tempPartition)}
-      />
-    );
-  }
-  function HandleCloseModalManagePartition(partition, tempPartition) {
-    if (tempPartition) {
-      if (partition) {
-        let index = location.traversal.partitions.findIndex((p) => p.type === partition.type);
-        location.traversal.partitions.splice(index, 1, tempPartition);
-      } else {
-        location.traversal.partitions.push(tempPartition);
-      }
+  // function OpenModalManagePartition(partition) {
+  //   setModal(
+  //     <ModalManagePartition
+  //       partition={partition}
+  //       partitions={location.traversal.partitions}
+  //       onClose={(tempPartition) => HandleCloseModalManagePartition(partition, tempPartition)}
+  //     />
+  //   );
+  // }
+  // function HandleCloseModalManagePartition(partition, tempPartition) {
+  //   if (tempPartition) {
+  //     if (partition) {
+  //       let index = location.traversal.partitions.findIndex((p) => p.type === partition.type);
+  //       location.traversal.partitions.splice(index, 1, tempPartition);
+  //     } else {
+  //       location.traversal.partitions.push(tempPartition);
+  //     }
 
-      setLocation({ ...location });
-    }
+  //     setLocation({ ...location });
+  //   }
 
-    setModal(null);
-  }
-  function DeletePartition(partition) {
-    location.traversal.partitions = location.traversal.partitions.filter((p) => p.type !== partition.type);
-    setLocation({ ...location });
-  }
+  //   setModal(null);
+  // }
+  // function DeletePartition(partition) {
+  //   location.traversal.partitions = location.traversal.partitions.filter((p) => p.type !== partition.type);
+  //   setLocation({ ...location });
+  // }
 
   function OpenModalManageElement(element) {
     setModal(

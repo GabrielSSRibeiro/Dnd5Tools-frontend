@@ -37,6 +37,11 @@
   z-index: 1;
 }
 
+.Location-container .connection-background {
+  position: absolute;
+  opacity: 0.5;
+}
+
 .Location-container .point-of-interest {
   border: 1px solid var(--black);
 }

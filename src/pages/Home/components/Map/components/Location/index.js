@@ -43,6 +43,38 @@ function Location({
 
     return areaLocs;
   }, [loc, map]);
+  // const refAreaLocs = useMemo(() => {
+  //   function AddAreaLoc(loc, areaLocs) {
+  //     areaLocs.push(loc.data);
+
+  //     //if exterior, add radius
+  //     if (map[loc.data.exteriorLocationId]) {
+  //       AddAreaLoc(map[loc.data.exteriorLocationId], areaLocs);
+  //     }
+  //   }
+
+  //   let refAreaLocs = [];
+  //   AddAreaLoc(loc, refAreaLocs);
+  //   refAreaLocs.reverse();
+
+  //   return areaLocs;
+  // }, [loc, map]);
+  const connectionOffset = useMemo(() => {
+    if (!isMapRendered) {
+      return null;
+    }
+
+    const offsetLoc = areaLocs
+      .toReversed()
+      .filter((l) => l.offset)
+      .find((l) => l.offset.x !== 0 && l.offset.y !== 0);
+    if (!offsetLoc) {
+      return null;
+    }
+
+    return offsetLoc.offset;
+  }, [areaLocs, isMapRendered]);
+  const distanceAngle = useMemo(() => areaLocs.toReversed().find((l) => l.distanceAngle != null)?.distanceAngle, [areaLocs]);
   const connectionStyle = useMemo(() => {
     if (!loc.data.reference.connectionType) {
       return null;
@@ -123,6 +155,47 @@ function Location({
     }
   }
 
+  function GetOffsetStyles(offset) {
+    const offsetStyles = [];
+
+    //horizontal
+    if (offset.x > 0) {
+      offsetStyles.push({ key: "marginRight", value: `${offset.x * -1}px` });
+    } else {
+      offsetStyles.push({ key: "marginLeft", value: `${offset.x}px` });
+    }
+
+    //vertical
+    if (offset.y > 0) {
+      offsetStyles.push({ key: "marginTop", value: `${offset.y * -1}px` });
+    } else {
+      offsetStyles.push({ key: "marginBottom", value: `${offset.y}px` });
+    }
+
+    return offsetStyles;
+  }
+
+  function GetConnectionOffsetStyles(offset) {
+    const offsetStyles = [{ key: "width", value: `${Math.sqrt(offset.x * offset.x + offset.y * offset.y) / 2}px` }];
+
+    //horizontal
+    if (offset.x > 0) {
+      offsetStyles.push({ key: "marginLeft", value: `${(offset.x / 2) * -1}px` });
+    } else {
+      offsetStyles.push({ key: "marginRight", value: `${offset.x / 2}px` });
+    }
+
+    //vertical
+    if (offset.y > 0) {
+      offsetStyles.push({ key: "marginBottom", value: `${(offset.y / 2) * -1}px` });
+    } else {
+      offsetStyles.push({ key: "marginTop", value: `${offset.y / 2}px` });
+    }
+
+    return offsetStyles;
+  }
+
+  //main setup
   useEffect(() => {
     function GetLocDistFromCenterForCalc(loc) {
       const locEl = document.getElementById(
@@ -158,45 +231,34 @@ function Location({
     }
 
     //set offset and position self
-    if (!map[loc.data._id].data.offset) {
+    let locOffset = map[ref.current.id].data.offset;
+    if (!locOffset) {
       map[loc.data._id].data.offset = GetOffset(loc.data);
-      const offset = map[ref.current.id].data.offset;
-      let connection = document.getElementById(`${loc.data._id}-connection`);
+      locOffset = map[ref.current.id].data.offset;
 
-      //horizontal
-      if (offset.x > 0) {
-        ref.current.style.marginRight = `${offset.x * -1}px`;
-        if (connection) {
-          connection.style.marginLeft = `${(offset.x / 2) * -1}px`;
-          // connection.style.width = `${offset.x / 2}px`;
-        }
-      } else {
-        ref.current.style.marginLeft = `${offset.x}px`;
-        if (connection) {
-          connection.style.marginRight = `${offset.x / 2}px`;
-          // connection.style.width = `${offset.x / 2}px`;
-        }
-      }
-
-      //vertical
-      if (offset.y > 0) {
-        ref.current.style.marginTop = `${offset.y * -1}px`;
-        if (connection) {
-          connection.style.marginBottom = `${(offset.y / 2) * -1}px`;
-          // connection.style.width = `${offset.y / 2}px`;
-        }
-      } else {
-        ref.current.style.marginBottom = `${offset.y}px`;
-        if (connection) {
-          connection.style.marginTop = `${offset.y / 2}px`;
-          // connection.style.width = `${offset.y / 2}px`;
-        }
-      }
-
-      if (connection) {
-        connection.style.width = `${Math.sqrt(offset.x * offset.x + offset.y * offset.y) / 2}px`;
-      }
+      GetOffsetStyles(locOffset).forEach((s) => {
+        ref.current.style[s.key] = s.value;
+      });
     }
+
+    //update connection styles
+    let connection = document.getElementById(`${loc.data._id}-connection`);
+    if (connection) {
+      GetOffsetStyles(locOffset).forEach((s) => {
+        connection.style[s.key] = s.value;
+      });
+    }
+
+    //update backgrounds styles
+    Array.from(document.getElementsByClassName(`con-bg-${loc.data._id}`)).forEach((cbg) => {
+      console.log(connectionOffset);
+      if (connectionOffset) {
+        //call method
+        GetConnectionOffsetStyles(connectionOffset).forEach((s) => {
+          cbg.style[s.key] = s.value;
+        });
+      }
+    });
 
     //update refs
     if (!allLocationsRefs.some((r) => r === ref.current)) {
@@ -208,7 +270,18 @@ function Location({
       locationsRefs.push(ref.current);
       setLocationsRefs([...locationsRefs]);
     }
-  }, [allLocationsRefs, interiorLocs.length, loc.data, locationsRefs, map, pxInMScale, refs.length, setAllLocationsRefs, setLocationsRefs]);
+  }, [
+    allLocationsRefs,
+    connectionOffset,
+    interiorLocs.length,
+    loc.data,
+    locationsRefs,
+    map,
+    pxInMScale,
+    refs.length,
+    setAllLocationsRefs,
+    setLocationsRefs,
+  ]);
 
   useEffect(() => {
     setAllLocationsRefs([]);
@@ -239,18 +312,32 @@ function Location({
         <div className="area-wrapper" style={areaWrapperStyle}>
           {areaLocs.map((l, index) => {
             const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
+            const areaStyles = GetAreaStyles(l, isPointOfInterest, index);
+            // const connectionBgHeight = areaStyles.height < l.radius / 2 ? areaStyles.height : l.radius / 2;
 
             return (
-              <div
-                key={l._id}
-                className={`area${isPointOfInterest && !l.interaction.isCurrent ? " not-current" : ""}${
-                  isPointOfInterest ? " point-of-interest" : ""
-                }`}
-                style={GetAreaStyles(l, isPointOfInterest, index)}
-                onClick={() => SetAsCurrent(l, isPointOfInterest)}
-                onMouseMove={(e) => HandleHover(e, l)}
-                onMouseLeave={(e) => HandleHover(e)}
-              ></div>
+              <React.Fragment key={l._id}>
+                {areaLocs[index + 1]?.reference.location && (
+                  <div
+                    name={l._id}
+                    className={`connection-background con-bg-${loc.data._id}`}
+                    style={{
+                      height: areaStyles.height,
+                      backgroundColor: areaStyles.backgroundColor,
+                      rotate: `${distanceAngle * -1}deg`,
+                    }}
+                  ></div>
+                )}
+                <div
+                  className={`area${isPointOfInterest && !l.interaction.isCurrent ? " not-current" : ""}${
+                    isPointOfInterest ? " point-of-interest" : ""
+                  }`}
+                  style={areaStyles}
+                  onClick={() => SetAsCurrent(l, isPointOfInterest)}
+                  onMouseMove={(e) => HandleHover(e, l)}
+                  onMouseLeave={(e) => HandleHover(e)}
+                ></div>
+              </React.Fragment>
             );
           })}
         </div>
