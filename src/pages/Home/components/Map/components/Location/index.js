@@ -43,36 +43,20 @@ function Location({
 
     return areaLocs;
   }, [loc, map]);
-  // const refAreaLocs = useMemo(() => {
-  //   function AddAreaLoc(loc, areaLocs) {
-  //     areaLocs.push(loc.data);
-
-  //     //if exterior, add radius
-  //     if (map[loc.data.exteriorLocationId]) {
-  //       AddAreaLoc(map[loc.data.exteriorLocationId], areaLocs);
-  //     }
-  //   }
-
-  //   let refAreaLocs = [];
-  //   AddAreaLoc(loc, refAreaLocs);
-  //   refAreaLocs.reverse();
-
-  //   return areaLocs;
-  // }, [loc, map]);
-  const connectionOffset = useMemo(() => {
+  const connectionLoc = useMemo(() => {
     if (!isMapRendered) {
       return null;
     }
 
-    const offsetLoc = areaLocs
+    const connectionLoc = areaLocs
       .toReversed()
       .filter((l) => l.offset)
       .find((l) => l.offset.x !== 0 && l.offset.y !== 0);
-    if (!offsetLoc) {
+    if (!connectionLoc) {
       return null;
     }
 
-    return offsetLoc.offset;
+    return connectionLoc;
   }, [areaLocs, isMapRendered]);
   const distanceAngle = useMemo(() => areaLocs.toReversed().find((l) => l.distanceAngle != null)?.distanceAngle, [areaLocs]);
   const connectionStyle = useMemo(() => {
@@ -175,26 +159,6 @@ function Location({
     return offsetStyles;
   }
 
-  function GetConnectionOffsetStyles(offset) {
-    const offsetStyles = [{ key: "width", value: `${Math.sqrt(offset.x * offset.x + offset.y * offset.y) / 2}px` }];
-
-    //horizontal
-    if (offset.x > 0) {
-      offsetStyles.push({ key: "marginLeft", value: `${(offset.x / 2) * -1}px` });
-    } else {
-      offsetStyles.push({ key: "marginRight", value: `${offset.x / 2}px` });
-    }
-
-    //vertical
-    if (offset.y > 0) {
-      offsetStyles.push({ key: "marginBottom", value: `${(offset.y / 2) * -1}px` });
-    } else {
-      offsetStyles.push({ key: "marginTop", value: `${offset.y / 2}px` });
-    }
-
-    return offsetStyles;
-  }
-
   //main setup
   useEffect(() => {
     function GetLocDistFromCenterForCalc(loc) {
@@ -241,7 +205,7 @@ function Location({
       });
     }
 
-    //update connection styles
+    //set onnection styles
     let connection = document.getElementById(`${loc.data._id}-connection`);
     if (connection) {
       GetOffsetStyles(locOffset).forEach((s) => {
@@ -249,16 +213,45 @@ function Location({
       });
     }
 
+    function GetConnectionOffsetStyles(cLoc, extraRadius) {
+      const { x, y } = cLoc.offset;
+      let refAreaDiameter = document.getElementById(`${cLoc.reference.location}-area`).offsetWidth + extraRadius;
+
+      const widthValue = Math.sqrt(x * x + y * y);
+      // const heightValue = 0
+      const offsetStyles = [{ key: "width", value: `${(widthValue - refAreaDiameter) / 2}px` }];
+      const connectionRatio = (widthValue - refAreaDiameter) / widthValue;
+
+      //horizontal
+      if (x > 0) {
+        offsetStyles.push({ key: "marginLeft", value: `${(x * connectionRatio * -1) / 2}px` });
+      } else {
+        offsetStyles.push({ key: "marginRight", value: `${(x * connectionRatio) / 2}px` });
+      }
+
+      //vertical
+      if (y > 0) {
+        offsetStyles.push({ key: "marginBottom", value: `${(y * connectionRatio * -1) / 2}px` });
+      } else {
+        offsetStyles.push({ key: "marginTop", value: `${(y * connectionRatio) / 2}px` });
+      }
+
+      return offsetStyles;
+    }
+
     //update backgrounds styles
-    Array.from(document.getElementsByClassName(`con-bg-${loc.data._id}`)).forEach((cbg) => {
-      console.log(connectionOffset);
-      if (connectionOffset) {
-        //call method
-        GetConnectionOffsetStyles(connectionOffset).forEach((s) => {
+    if (connectionLoc?.offset) {
+      Array.from(document.getElementsByClassName(`con-bg-${loc.data._id}`)).forEach((cbg, i, self) => {
+        let extraRadius = 0;
+        self.slice(i + 1).forEach((c) => {
+          extraRadius += map[c.getAttribute("name")].data.radius / 2;
+        });
+
+        GetConnectionOffsetStyles(connectionLoc, extraRadius).forEach((s) => {
           cbg.style[s.key] = s.value;
         });
-      }
-    });
+      });
+    }
 
     //update refs
     if (!allLocationsRefs.some((r) => r === ref.current)) {
@@ -272,7 +265,7 @@ function Location({
     }
   }, [
     allLocationsRefs,
-    connectionOffset,
+    connectionLoc,
     interiorLocs.length,
     loc.data,
     locationsRefs,
@@ -313,7 +306,7 @@ function Location({
           {areaLocs.map((l, index) => {
             const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
             const areaStyles = GetAreaStyles(l, isPointOfInterest, index);
-            // const connectionBgHeight = areaStyles.height < l.radius / 2 ? areaStyles.height : l.radius / 2;
+            const isLocArea = index === areaLocs.length - 1;
 
             return (
               <React.Fragment key={l._id}>
@@ -329,6 +322,7 @@ function Location({
                   ></div>
                 )}
                 <div
+                  id={isLocArea && `${l._id}-area`}
                   className={`area${isPointOfInterest && !l.interaction.isCurrent ? " not-current" : ""}${
                     isPointOfInterest ? " point-of-interest" : ""
                   }`}
