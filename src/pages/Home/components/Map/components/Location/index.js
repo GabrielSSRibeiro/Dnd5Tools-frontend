@@ -213,14 +213,17 @@ function Location({
       });
     }
 
-    function GetConnectionOffsetStyles(cLoc, extraRadius) {
+    function GetConnectionOffsetStyles(cLoc, widthReductor, areaLocHeight, heightAdditor) {
       const { x, y } = cLoc.offset;
-      let refAreaDiameter = document.getElementById(`${cLoc.reference.location}-area`).offsetWidth + extraRadius;
+      let refAreaDiameter = document.getElementById(`${cLoc.reference.location}-area`).offsetWidth;
 
       const widthValue = Math.sqrt(x * x + y * y);
-      // const heightValue = 0
-      const offsetStyles = [{ key: "width", value: `${(widthValue - refAreaDiameter) / 2}px` }];
-      const connectionRatio = (widthValue - refAreaDiameter) / widthValue;
+      const connectionRatio = (widthValue - (refAreaDiameter + widthReductor)) / widthValue;
+      const offsetStyles = [{ key: "width", value: `${(widthValue - (refAreaDiameter + widthReductor)) / 2}px` }];
+
+      if (areaLocHeight > refAreaDiameter + heightAdditor) {
+        offsetStyles.push({ key: "height", value: `${refAreaDiameter + heightAdditor}px` });
+      }
 
       //horizontal
       if (x > 0) {
@@ -242,12 +245,17 @@ function Location({
     //update backgrounds styles
     if (connectionLoc?.offset) {
       Array.from(document.getElementsByClassName(`con-bg-${loc.data._id}`)).forEach((cbg, i, self) => {
-        let extraRadius = 0;
+        let widthReductor = 0;
         self.slice(i + 1).forEach((c) => {
-          extraRadius += map[c.getAttribute("name")].data.radius / 2;
+          widthReductor += map[c.getAttribute("name")].data.radius / 2;
         });
 
-        GetConnectionOffsetStyles(connectionLoc, extraRadius).forEach((s) => {
+        let heightAdditor = 0;
+        self.slice(i).forEach((c) => {
+          heightAdditor += map[c.getAttribute("name")].data.radius / 2;
+        });
+
+        GetConnectionOffsetStyles(connectionLoc, widthReductor, cbg.offsetHeight, heightAdditor).forEach((s) => {
           cbg.style[s.key] = s.value;
         });
       });
