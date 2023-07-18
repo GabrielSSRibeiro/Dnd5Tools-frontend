@@ -256,32 +256,33 @@ function Location({
         offsetStyles.push({ key: "height", value: `${refAreaDiameter + refHeightAdditor}px` });
       }
 
-      Array.from(cbg.getElementsByClassName("con-bg-area")).forEach((bga) => {
-        //always adjust center
-        if (bga.classList.contains("center")) {
-          bga.style.width = `calc(100% - ${refAreaDiameter / 2}px)`;
-          //adjust corners if smaller than ref
-        } else if (!isRefSmaller) {
-          const reductor = cbgs.slice(index + 1).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, refAreaDiameter);
-          bga.style.width = `calc(100% - ${reductor / 2}px)`;
+      Array.from(cbg.getElementsByClassName("con-bg-area corner")).forEach((bga) => {
+        //adjust further
+        if (isRefSmaller) {
+          bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
+          //adjust back
+        } else if (index !== cbgs.length - 1) {
+          const modifier = cbgs.slice(index + 2).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, refAreaDiameter);
+          bga.style.width = `calc(100% - ${modifier / 2}px)`;
         }
       });
 
       const widthValue = Math.sqrt(x * x + y * y);
-      offsetStyles.push({ key: "width", value: `${widthValue / 2}px` });
+      const connectionRatio = (widthValue - refAreaDiameter) / widthValue;
+      offsetStyles.push({ key: "width", value: `${(widthValue - refAreaDiameter) / 2}px` });
 
       //horizontal
       if (x > 0) {
-        offsetStyles.push({ key: "marginLeft", value: `${(x * -1) / 2}px` });
+        offsetStyles.push({ key: "marginLeft", value: `${(x * connectionRatio * -1) / 2}px` });
       } else {
-        offsetStyles.push({ key: "marginRight", value: `${x / 2}px` });
+        offsetStyles.push({ key: "marginRight", value: `${(x * connectionRatio) / 2}px` });
       }
 
       //vertical
       if (y > 0) {
-        offsetStyles.push({ key: "marginBottom", value: `${(y * -1) / 2}px` });
+        offsetStyles.push({ key: "marginBottom", value: `${(y * connectionRatio * -1) / 2}px` });
       } else {
-        offsetStyles.push({ key: "marginTop", value: `${y / 2}px` });
+        offsetStyles.push({ key: "marginTop", value: `${(y * connectionRatio) / 2}px` });
       }
 
       return offsetStyles;
@@ -363,9 +364,11 @@ function Location({
                       height: areaStyles.height,
                       rotate: `${distanceAngle * -1}deg`,
                     }}
+                    onMouseMove={(e) => HandleHover(e, l)}
+                    onMouseLeave={(e) => HandleHover(e)}
                   >
                     <aside className="con-bg-area corner" style={connectionAreaStyles}></aside>
-                    <aside className="con-bg-area center" style={{ ...connectionAreaStyles, height: refAreaDiameter }}></aside>
+                    <aside className="con-bg-area" style={{ ...connectionAreaStyles, height: refAreaDiameter }}></aside>
                     <aside className="con-bg-area corner" style={connectionAreaStyles}></aside>
                   </div>
                 )}

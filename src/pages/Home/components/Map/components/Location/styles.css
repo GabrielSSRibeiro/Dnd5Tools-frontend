@@ -44,7 +44,6 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
-  /* display: none; */
 }
 
 .Location-container .connection-background .con-bg-area {
