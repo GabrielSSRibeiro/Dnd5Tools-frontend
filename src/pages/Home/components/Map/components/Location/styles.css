@@ -39,7 +39,20 @@
 
 .Location-container .connection-background {
   position: absolute;
-  opacity: 0.5;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  /* display: none; */
+}
+
+.Location-container .connection-background .con-bg-area {
+  width: 100%;
+}
+
+.Location-container .connection-background .con-bg-area.corner {
+  flex: 1;
 }
 
 .Location-container .point-of-interest {

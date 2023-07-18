@@ -58,6 +58,13 @@ function Location({
 
     return connectionLoc;
   }, [areaLocs, isMapRendered]);
+  const refAreaDiameter = useMemo(() => {
+    if (!connectionLoc) {
+      return null;
+    }
+
+    return document.getElementById(`${connectionLoc.reference.location}-area`).offsetWidth;
+  }, [connectionLoc]);
   const distanceAngle = useMemo(() => areaLocs.toReversed().find((l) => l.distanceAngle != null)?.distanceAngle, [areaLocs]);
   const connectionStyle = useMemo(() => {
     if (!loc.data.reference.connectionType) {
@@ -139,8 +146,12 @@ function Location({
     }
   }
 
-  function GetOffsetStyles(offset) {
+  function GetOffsetStyles(offset, includeWidth = false) {
     const offsetStyles = [];
+
+    if (includeWidth) {
+      offsetStyles.push({ key: "width", value: `${Math.sqrt(offset.x * offset.x + offset.y * offset.y) / 2}px` });
+    }
 
     //horizontal
     if (offset.x > 0) {
@@ -154,6 +165,26 @@ function Location({
       offsetStyles.push({ key: "marginTop", value: `${offset.y * -1}px` });
     } else {
       offsetStyles.push({ key: "marginBottom", value: `${offset.y}px` });
+    }
+
+    return offsetStyles;
+  }
+
+  function GetConnectionOffsetStyles(offset) {
+    const offsetStyles = [{ key: "width", value: `${Math.sqrt(offset.x * offset.x + offset.y * offset.y) / 2}px` }];
+
+    //horizontal
+    if (offset.x > 0) {
+      offsetStyles.push({ key: "marginLeft", value: `${(offset.x * -1) / 2}px` });
+    } else {
+      offsetStyles.push({ key: "marginRight", value: `${offset.x / 2}px` });
+    }
+
+    //vertical
+    if (offset.y > 0) {
+      offsetStyles.push({ key: "marginBottom", value: `${(offset.y * -1) / 2}px` });
+    } else {
+      offsetStyles.push({ key: "marginTop", value: `${offset.y / 2}px` });
     }
 
     return offsetStyles;
@@ -208,38 +239,49 @@ function Location({
     //set onnection styles
     let connection = document.getElementById(`${loc.data._id}-connection`);
     if (connection) {
-      GetOffsetStyles(locOffset).forEach((s) => {
+      GetConnectionOffsetStyles(locOffset, true).forEach((s) => {
         connection.style[s.key] = s.value;
       });
     }
 
-    function GetConnectionOffsetStyles(cLoc, widthReductor, areaLocHeight, heightAdditor) {
+    function GetConnectionBgOffsetStyles(cbg, index, cbgs) {
       const offsetStyles = [];
-      const { x, y } = cLoc.offset;
-      const refAreaDiameter = document.getElementById(`${cLoc.reference.location}-area`).offsetWidth;
-      const ignoreWidthAlterHeight = areaLocHeight > refAreaDiameter + heightAdditor;
+      const { x, y } = connectionLoc.offset;
 
-      if (ignoreWidthAlterHeight) {
-        widthReductor = 0;
-        offsetStyles.push({ key: "height", value: `${refAreaDiameter + heightAdditor}px` });
+      const refHeightAdditor = cbgs.slice(index).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
+      const isRefSmaller = cbg.offsetHeight > refAreaDiameter + refHeightAdditor;
+
+      if (isRefSmaller) {
+        //adjust height
+        offsetStyles.push({ key: "height", value: `${refAreaDiameter + refHeightAdditor}px` });
       }
 
+      Array.from(cbg.getElementsByClassName("con-bg-area")).forEach((bga) => {
+        //always adjust center
+        if (bga.classList.contains("center")) {
+          bga.style.width = `calc(100% - ${refAreaDiameter / 2}px)`;
+          //adjust corners if smaller than ref
+        } else if (!isRefSmaller) {
+          const reductor = cbgs.slice(index + 1).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, refAreaDiameter);
+          bga.style.width = `calc(100% - ${reductor / 2}px)`;
+        }
+      });
+
       const widthValue = Math.sqrt(x * x + y * y);
-      const connectionRatio = (widthValue - (refAreaDiameter + widthReductor)) / widthValue;
-      offsetStyles.push({ key: "width", value: `${(widthValue - (refAreaDiameter + widthReductor)) / 2}px` });
+      offsetStyles.push({ key: "width", value: `${widthValue / 2}px` });
 
       //horizontal
       if (x > 0) {
-        offsetStyles.push({ key: "marginLeft", value: `${(x * connectionRatio * -1) / 2}px` });
+        offsetStyles.push({ key: "marginLeft", value: `${(x * -1) / 2}px` });
       } else {
-        offsetStyles.push({ key: "marginRight", value: `${(x * connectionRatio) / 2}px` });
+        offsetStyles.push({ key: "marginRight", value: `${x / 2}px` });
       }
 
       //vertical
       if (y > 0) {
-        offsetStyles.push({ key: "marginBottom", value: `${(y * connectionRatio * -1) / 2}px` });
+        offsetStyles.push({ key: "marginBottom", value: `${(y * -1) / 2}px` });
       } else {
-        offsetStyles.push({ key: "marginTop", value: `${(y * connectionRatio) / 2}px` });
+        offsetStyles.push({ key: "marginTop", value: `${y / 2}px` });
       }
 
       return offsetStyles;
@@ -248,17 +290,7 @@ function Location({
     //update backgrounds styles
     if (connectionLoc?.offset) {
       Array.from(document.getElementsByClassName(`con-bg-${loc.data._id}`)).forEach((cbg, i, self) => {
-        let widthReductor = 0;
-        self.slice(i + 1).forEach((c) => {
-          widthReductor += map[c.getAttribute("name")].data.radius / 2;
-        });
-
-        let heightAdditor = 0;
-        self.slice(i).forEach((c) => {
-          heightAdditor += map[c.getAttribute("name")].data.radius / 2;
-        });
-
-        GetConnectionOffsetStyles(connectionLoc, widthReductor, cbg.offsetHeight, heightAdditor).forEach((s) => {
+        GetConnectionBgOffsetStyles(cbg, i, self).forEach((s) => {
           cbg.style[s.key] = s.value;
         });
       });
@@ -282,6 +314,7 @@ function Location({
     locationsRefs,
     map,
     pxInMScale,
+    refAreaDiameter,
     refs.length,
     setAllLocationsRefs,
     setLocationsRefs,
@@ -316,8 +349,9 @@ function Location({
         <div className="area-wrapper" style={areaWrapperStyle}>
           {areaLocs.map((l, index) => {
             const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
-            const areaStyles = GetAreaStyles(l, isPointOfInterest, index);
             const isLocArea = index === areaLocs.length - 1;
+            const areaStyles = GetAreaStyles(l, isPointOfInterest, index);
+            const connectionAreaStyles = { backgroundColor: areaStyles.backgroundColor };
 
             return (
               <React.Fragment key={l._id}>
@@ -327,10 +361,13 @@ function Location({
                     className={`connection-background con-bg-${loc.data._id}`}
                     style={{
                       height: areaStyles.height,
-                      backgroundColor: areaStyles.backgroundColor,
                       rotate: `${distanceAngle * -1}deg`,
                     }}
-                  ></div>
+                  >
+                    <aside className="con-bg-area corner" style={connectionAreaStyles}></aside>
+                    <aside className="con-bg-area center" style={{ ...connectionAreaStyles, height: refAreaDiameter }}></aside>
+                    <aside className="con-bg-area corner" style={connectionAreaStyles}></aside>
+                  </div>
                 )}
                 <div
                   id={isLocArea && `${l._id}-area`}
