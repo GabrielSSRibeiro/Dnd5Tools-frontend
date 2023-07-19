@@ -357,6 +357,7 @@ function EditLocation({
         {location.exteriorLocationId != null && (
           <Select
             label={"Tamanho"}
+            info={[{ text: "Ex ponto de interesse: Moradia de criatura" }]}
             extraWidth={250}
             value={location}
             valuePropertyPath="size"
@@ -454,7 +455,10 @@ function EditLocation({
                 optionValue={(o) => o.value}
               />
               <CheckInput
-                label="Contato Perigoso"
+                label="Toque Perigoso"
+                info={[
+                  { text: "Ravinas profundas, lagos poluidos, estruturas desmoronantes, rochas afiadas, plantas venenosas, objetos armadilhas" },
+                ]}
                 onClick={() => setLocation({ ...location, interaction: { ...location.interaction, isHazardous: !location.interaction.isHazardous } })}
                 isSelected={location.interaction.isHazardous}
                 className="interaction"

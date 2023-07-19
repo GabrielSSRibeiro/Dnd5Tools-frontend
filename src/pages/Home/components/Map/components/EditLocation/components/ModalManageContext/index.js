@@ -57,11 +57,33 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
   }
 
   return (
-    <Modal title="Contexto" className="ModalManageContext-container" onClickToClose={onClose}>
+    <Modal
+      title="Contexto"
+      info={[
+        {
+          text: "Momento especiais pelo qual a localização pode estar passando. Ex: dominada pelo clã bandido/atormentada pelo dragão verde. Útil para deixar o mundo vivo e responsivo a eventos",
+        },
+      ]}
+      className="ModalManageContext-container"
+      onClickToClose={onClose}
+    >
       {modal}
       <div className="new-context-wrapper df df-fd-c df-jc-fs">
         <TextInput label="Nome" value={tempContext} valuePropertyPath="name" onChange={setTempContext} disabled={isDefault} />
-        <TextInput label="Primeiras Impressões" value={tempContext} valuePropertyPath="firstImpressions" onChange={setTempContext} />
+        <TextInput
+          label="Primeiras Impressões"
+          info={[
+            {
+              text: "O que quem se aproxima a primeira vez desse local experiencia",
+            },
+            {
+              text: "Recomendado 1 entre: O que sentem, o que veem, o que cheiram, o que ouvem",
+            },
+          ]}
+          value={tempContext}
+          valuePropertyPath="firstImpressions"
+          onChange={setTempContext}
+        />
         <div className="details-wrapper">
           <button className="details-blocker" onClick={OpenModalDetails}>
             <i className="fas fa-pencil-alt"></i>
@@ -92,6 +114,11 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
         />
         <Select
           label={"Visão Panorâmica"}
+          info={[
+            {
+              text: "Isso afeita em o quão longe os personagens conseguem ver. A noite a visao eh sempre muito baixa",
+            },
+          ]}
           extraWidth={250}
           value={tempContext}
           valuePropertyPath="panoramicVision"
@@ -102,6 +129,14 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
         />
         <Select
           label={"Periculosidade"}
+          info={[
+            {
+              text: "Chance de encontro por hora de exploração",
+            },
+            {
+              text: "Essa escolha tbm decide a chance de recompensas em corpos de quem morreu ali",
+            },
+          ]}
           extraWidth={250}
           value={tempContext}
           valuePropertyPath="hazardousness"
