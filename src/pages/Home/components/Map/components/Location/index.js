@@ -192,9 +192,9 @@ function Location({
 
   //main setup
   useEffect(() => {
-    function GetLocDistFromCenterForCalc(loc) {
+    function GetLocDistFromCenterForCalc(location) {
       const locEl = document.getElementById(
-        loc.interiorLocs.length > 0 ? loc.interiorLocs.find((l) => !l.data.reference.location).data._id : loc.data._id
+        location.interiorLocs.length > 0 ? location.interiorLocs.find((l) => !l.data.reference.location).data._id : location.data._id
       );
 
       return locEl.offsetHeight / 2;
@@ -216,11 +216,10 @@ function Location({
         //offset is refLocDistFromCenter + distance + locDistFromCenter
         const coordinatesByDistance = utils.GetCoordinatesByDistance(
           refOffset,
-          refLocDistFromCenter + distance + locDistFromCenter,
+          (refLocDistFromCenter + distance + locDistFromCenter) * 2,
           location.distanceAngle
         );
 
-        // console.log("GetOffset", location.name, "->", coordinatesByDistance, "->", refLoc.getAttribute("name"));
         return coordinatesByDistance;
       }
     }
@@ -262,7 +261,7 @@ function Location({
           bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
           //adjust back
         } else if (index !== cbgs.length - 1) {
-          const modifier = cbgs.slice(index + 2).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, refAreaDiameter);
+          const modifier = cbgs.slice(index + 2).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
           bga.style.width = `calc(100% - ${modifier / 2}px)`;
         }
       });

@@ -96,6 +96,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  min-width: 10px;
+  min-height: 10px;
   /* transition: all 0.2s; */
 }
 

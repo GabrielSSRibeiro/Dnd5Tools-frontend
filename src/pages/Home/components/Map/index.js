@@ -22,7 +22,7 @@ function Map({
   locations,
   userId,
 }) {
-  const defaultZoom = useRef(1);
+  const defaultZoom = useRef(3); //base 0.2
   const [currentCenter, setCurrentCenter] = useState({ X: 0, Y: 0 });
   const centerMoveRatio = useRef(50);
   const [locationToEdit, setLocationToEdit] = useState(null);
@@ -349,7 +349,7 @@ function Map({
             <i class="fas fa-plus"></i>
           </button>
           <div className="move-zoom">
-            <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y + centerMoveRatio.current * 3 })}>
+            <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y + centerMoveRatio.current * 2 })}>
               <i class="fas fa-caret-up"></i>
             </button>
             <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X + centerMoveRatio.current })}>
@@ -361,7 +361,7 @@ function Map({
             <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X - centerMoveRatio.current })}>
               <i class="fas fa-caret-right"></i>
             </button>
-            <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y - centerMoveRatio.current * 3 })}>
+            <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y - centerMoveRatio.current * 2 })}>
               <i class="fas fa-caret-down"></i>
             </button>
           </div>
