@@ -342,7 +342,7 @@ function Map({
           <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 1.1))}>
             <i class="fas fa-minus"></i>
           </button>
-          <button onClick={() => MapLoadingWrapper(() => setZoomLevel(defaultZoom.current))}>
+          <button title="Resetar" onClick={() => MapLoadingWrapper(() => setZoomLevel(defaultZoom.current))}>
             <i class="fas fa-search"></i>
           </button>
           <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 0.9))}>
@@ -355,8 +355,8 @@ function Map({
             <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X + centerMoveRatio.current })}>
               <i class="fas fa-caret-left"></i>
             </button>
-            <button onClick={() => setCenterOffset(currentCenter)}>
-              <i class="fas fa-circle"></i>
+            <button title="Centrar" onClick={() => setCenterOffset(currentCenter)}>
+              <i class="fas fa-crosshairs"></i>
             </button>
             <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X - centerMoveRatio.current })}>
               <i class="fas fa-caret-right"></i>

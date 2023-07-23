@@ -40,7 +40,7 @@
   bottom: 0;
   right: 0;
   margin: 10px;
-  background-color: var(--white);
+  background-color: rgba(249, 249, 249, 0.85);
 
   display: flex;
   align-items: center;
@@ -53,7 +53,7 @@
   bottom: 0;
   left: 0;
   margin: 10px;
-  background-color: var(--white);
+  background-color: rgba(249, 249, 249, 0.85);
 
   display: flex;
   align-items: center;

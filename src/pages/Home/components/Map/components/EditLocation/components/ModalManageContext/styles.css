@@ -1,6 +1,7 @@
 .ModalManageContext-container.modal-body {
   width: fit-content;
-  height: fit-content;
+  height: 450px;
+  margin-top: 200px;
 }
 
 .ModalManageContext-container .new-context-wrapper {
