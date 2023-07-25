@@ -81,7 +81,7 @@ function ModalManageCreature({ creature, contexts, onClose }) {
           <div className="creature-detail-group-title">
             <span>Rotinas</span>
             <button onClick={() => OpenModalManageRoutine()}>
-              <i class="fas fa-plus"></i>
+              <i className="fas fa-plus"></i>
             </button>
           </div>
           {tempCreature.routines.map((r) => (
@@ -97,7 +97,7 @@ function ModalManageCreature({ creature, contexts, onClose }) {
                   <i className="fas fa-pencil-alt"></i>
                 </button>
                 <button onClick={() => DeleteRoutine(r)} disabled={tempCreature.routines.length === 1}>
-                  <i class="fas fa-trash"></i>
+                  <i className="fas fa-trash"></i>
                 </button>
               </div>
             </div>

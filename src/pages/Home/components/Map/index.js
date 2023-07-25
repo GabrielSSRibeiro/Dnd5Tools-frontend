@@ -340,32 +340,32 @@ function Map({
         </aside>
         <aside className="map-zoom floating-details">
           <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 1.1))}>
-            <i class="fas fa-minus"></i>
+            <i className="fas fa-minus"></i>
           </button>
           <button title="Resetar" onClick={() => MapLoadingWrapper(() => setZoomLevel(defaultZoom.current))}>
-            <i class="fas fa-search"></i>
+            <i className="fas fa-search"></i>
           </button>
           <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 0.9))}>
-            <i class="fas fa-plus"></i>
+            <i className="fas fa-plus"></i>
           </button>
           <div className="move-zoom">
             <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y + centerMoveRatio.current * 2 })}>
-              <i class="fas fa-caret-up"></i>
+              <i className="fas fa-caret-up"></i>
             </button>
             <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X + centerMoveRatio.current })}>
-              <i class="fas fa-caret-left"></i>
+              <i className="fas fa-caret-left"></i>
             </button>
             <button title="Centrar" onClick={() => setCenterOffset(currentCenter)}>
-              <i class="fas fa-crosshairs"></i>
+              <i className="fas fa-crosshairs"></i>
             </button>
             <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X - centerMoveRatio.current })}>
-              <i class="fas fa-caret-right"></i>
+              <i className="fas fa-caret-right"></i>
             </button>
             <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y - centerMoveRatio.current * 2 })}>
-              <i class="fas fa-caret-down"></i>
+              <i className="fas fa-caret-down"></i>
             </button>
           </div>
-          <div className="compass">N</div>
+          {/* <div className="compass">N</div> */}
         </aside>
         <aside className="new-encounter floating-details">
           <Button text="Novo Encontro" isDisabled={true} />

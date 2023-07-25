@@ -43,6 +43,7 @@ function Location({
 
     return areaLocs;
   }, [loc, map]);
+  const anyConnectionBg = useMemo(() => areaLocs.some((_, index) => areaLocs[index + 1]?.reference.location), [areaLocs]);
   const connectionLoc = useMemo(() => {
     if (!isMapRendered) {
       return null;
@@ -52,12 +53,20 @@ function Location({
       .toReversed()
       .filter((l) => l.offset)
       .find((l) => l.offset.x !== 0 && l.offset.y !== 0);
+
     if (!connectionLoc) {
       return null;
     }
 
     return connectionLoc;
   }, [areaLocs, isMapRendered]);
+  const isAdjacent = useMemo(() => {
+    if (!connectionLoc) {
+      return false;
+    }
+
+    return connectionLoc.reference.distance === lc.REFERENCE_DISTANCES.ADJACENT;
+  }, [connectionLoc]);
   const refAreaDiameter = useMemo(() => {
     if (!connectionLoc) {
       return null;
@@ -125,7 +134,7 @@ function Location({
     return wrapperStyle;
   }, [isMapRendered, locationsRefs, map]);
 
-  function GetAreaStyles(location, isPointOfInterest, index) {
+  function GetAreaStyles(location, index, isLocArea, isPointOfInterest) {
     let radius = location.radius;
     areaLocs.slice(index + 1).forEach((l) => {
       radius += l.radius;
@@ -136,6 +145,18 @@ function Location({
       height: radius / 2,
       backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type).color : cc.GetEnviroment(location.traversal.type).color,
     };
+
+    if (anyConnectionBg && !isLocArea && connectionLoc && isAdjacent && connectionLoc._id !== location._id) {
+      let modifier = 0;
+      const areas = areaLocs.toReversed();
+      const areaAndExterior = areas.slice(areas.findIndex((l) => l._id === connectionLoc._id) + 1).toReversed();
+      const areasToSubtract = areaAndExterior.slice(areaAndExterior.findIndex((l) => l._id === location._id));
+      areasToSubtract.forEach((l) => {
+        modifier += l.radius / 2;
+      });
+
+      areaStyles.marginRight = modifier * -1;
+    }
 
     return areaStyles;
   }
@@ -192,12 +213,24 @@ function Location({
 
   //main setup
   useEffect(() => {
-    function GetLocDistFromCenterForCalc(location) {
-      const locEl = document.getElementById(
-        location.interiorLocs.length > 0 ? location.interiorLocs.find((l) => !l.data.reference.location).data._id : location.data._id
-      );
+    function GetRefLocDistFromCenterForCalc(location) {
+      const locId = location.interiorLocs.length > 0 ? location.interiorLocs.find((l) => !l.data.reference.location).data._id : location.data._id;
+      const locEl = document.getElementById(`${locId}-area`);
 
-      return locEl.offsetHeight / 2;
+      return locEl ? locEl.offsetWidth : 0;
+    }
+
+    function GetLocDistFromCenterForCalc(location) {
+      const locId = location.interiorLocs.length > 0 ? location.interiorLocs.find((l) => !l.data.reference.location).data._id : location.data._id;
+      const locEl = document.getElementById(`${locId}`);
+      let dist = locEl ? locEl.offsetWidth : 0;
+
+      const areas = areaLocs.toReversed();
+      areas.slice(areas.findIndex((l) => l._id === location.data._id) + 1).forEach((l) => {
+        dist -= l.radius / 2;
+      });
+
+      return dist;
     }
 
     function GetOffset(location) {
@@ -205,18 +238,19 @@ function Location({
         return { x: 0, y: 0 };
       } else {
         const refOffset = GetOffset(map[location.reference.location].data);
+
         //if refLoc has interiorLocs get radius(offsetHeight /2) from interiorLocs 1, otherwise from ref
-        const refLocDistFromCenter = GetLocDistFromCenterForCalc(map[location.reference.location]);
+        const refLocDistFromCenter = GetRefLocDistFromCenterForCalc(map[location.reference.location]);
 
         const distance = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
 
         //if loc has interiorLocs get radius(offsetHeight /2) from interiorLocs 1, otherwise from ref
-        const locDistFromCenter = GetLocDistFromCenterForCalc(map[ref.current.id]);
+        const locDistFromCenter = GetLocDistFromCenterForCalc(map[loc.data._id]);
 
         //offset is refLocDistFromCenter + distance + locDistFromCenter
         const coordinatesByDistance = utils.GetCoordinatesByDistance(
           refOffset,
-          (refLocDistFromCenter + distance + locDistFromCenter) * 2,
+          refLocDistFromCenter + distance + locDistFromCenter,
           location.distanceAngle
         );
 
@@ -308,8 +342,10 @@ function Location({
     }
   }, [
     allLocationsRefs,
+    areaLocs,
     connectionLoc,
     interiorLocs.length,
+    isAdjacent,
     loc.data,
     locationsRefs,
     map,
@@ -348,14 +384,15 @@ function Location({
       ) : (
         <div className="area-wrapper" style={areaWrapperStyle}>
           {areaLocs.map((l, index) => {
-            const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
             const isLocArea = index === areaLocs.length - 1;
-            const areaStyles = GetAreaStyles(l, isPointOfInterest, index);
+            const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
+            const hasConnectionBg = areaLocs[index + 1]?.reference.location;
+            const areaStyles = GetAreaStyles(l, index, isLocArea, isPointOfInterest, hasConnectionBg);
             const connectionAreaStyles = { backgroundColor: areaStyles.backgroundColor };
 
             return (
               <React.Fragment key={l._id}>
-                {areaLocs[index + 1]?.reference.location && (
+                {hasConnectionBg && (
                   <div
                     name={l._id}
                     className={`connection-background con-bg-${loc.data._id}`}
@@ -372,15 +409,18 @@ function Location({
                   </div>
                 )}
                 <div
-                  id={isLocArea && `${l._id}-area`}
+                  name={`${l.name}-area`}
+                  id={isLocArea ? `${l._id}-area` : null}
                   className={`area${isPointOfInterest && !l.interaction.isCurrent ? " not-current" : ""}${
                     isPointOfInterest ? " point-of-interest" : ""
                   }`}
-                  style={areaStyles}
+                  style={{ width: areaStyles.width, height: areaStyles.height, rotate: `${distanceAngle * -1}deg` }}
                   onClick={() => SetAsCurrent(l, isPointOfInterest)}
                   onMouseMove={(e) => HandleHover(e, l)}
                   onMouseLeave={(e) => HandleHover(e)}
-                ></div>
+                >
+                  <div style={areaStyles}></div>
+                </div>
               </React.Fragment>
             );
           })}

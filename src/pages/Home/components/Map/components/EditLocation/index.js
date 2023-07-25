@@ -399,7 +399,7 @@ function EditLocation({
                 <div className="location-row location-detail-group-title">
                   <span>Partições</span>
                   <button onClick={() => OpenModalManagePartition()} disabled={location.traversal.partitions.length === 2}>
-                    <i class="fas fa-plus"></i>
+                    <i className="fas fa-plus"></i>
                   </button>
                 </div>
                 {location.traversal.partitions.map((p) => (
@@ -410,7 +410,7 @@ function EditLocation({
                         <i className="fas fa-pencil-alt"></i>
                       </button>
                       <button onClick={() => DeletePartition(p)}>
-                        <i class="fas fa-trash"></i>
+                        <i className="fas fa-trash"></i>
                       </button>
                     </div>
                   </div>
@@ -422,7 +422,7 @@ function EditLocation({
                 <div className="location-row location-detail-group-title">
                   <span>Elementos</span>
                   <button onClick={() => OpenModalManageElement()} disabled={location.traversal.elements.length === 6}>
-                    <i class="fas fa-plus"></i>
+                    <i className="fas fa-plus"></i>
                   </button>
                 </div>
                 {location.traversal.elements.map((e) => (
@@ -433,7 +433,7 @@ function EditLocation({
                         <i className="fas fa-pencil-alt"></i>
                       </button>
                       <button onClick={() => DeleteElement(e)}>
-                        <i class="fas fa-trash"></i>
+                        <i className="fas fa-trash"></i>
                       </button>
                     </div>
                   </div>
@@ -537,7 +537,7 @@ function EditLocation({
           <div className="location-row location-detail-group-title">
             <span>Contextos</span>
             <button onClick={() => OpenModalManageContext()}>
-              <i class="fas fa-plus"></i>
+              <i className="fas fa-plus"></i>
             </button>
           </div>
           {location.contexts.map((c, index) => (
@@ -551,7 +551,7 @@ function EditLocation({
                   <i className="fas fa-pencil-alt"></i>
                 </button>
                 <button onClick={() => DeleteContext(c)} disabled={index === 0}>
-                  <i class="fas fa-trash"></i>
+                  <i className="fas fa-trash"></i>
                 </button>
               </div>
             </div>
@@ -564,7 +564,7 @@ function EditLocation({
           <div className="location-row location-detail-group-title">
             <span>Criaturas</span>
             <button onClick={() => HandleSelectCreatures()}>
-              <i class="fas fa-plus"></i>
+              <i className="fas fa-plus"></i>
             </button>
           </div>
           {location.creatures.map((lc) => (
@@ -575,7 +575,7 @@ function EditLocation({
                   <i className="fas fa-pencil-alt"></i>
                 </button>
                 <button onClick={() => DeleteCreature(lc)}>
-                  <i class="fas fa-trash"></i>
+                  <i className="fas fa-trash"></i>
                 </button>
               </div>
             </div>
@@ -586,10 +586,10 @@ function EditLocation({
         {HandleDelete && (
           <>
             <button className="button-simple" onClick={OpenModalDeleteLocation}>
-              <i class="fas fa-trash"></i>
+              <i className="fas fa-trash"></i>
             </button>
             <button className="button-simple" onClick={OpenModalMoveLocation}>
-              <i class="fas fa-exchange-alt"></i>
+              <i className="fas fa-exchange-alt"></i>
             </button>
             <button className="button-simple" onClick={HandleAscendanceExport}>
               <i className="fas fa-upload"></i>

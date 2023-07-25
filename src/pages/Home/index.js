@@ -270,7 +270,7 @@ function Home() {
 
   return !combatConfig || !creatures ? (
     <div className="backend-loading">
-      <i class="fas fa-spinner fa-spin"></i>
+      <i className="fas fa-spinner fa-spin"></i>
       <h2 style={{ opacity: showLoadingText ? 1 : 0 }}>Por favor aguarde enquanto tiramos o site de inativade. Isso pode lever até 20 segundos...</h2>
     </div>
   ) : (

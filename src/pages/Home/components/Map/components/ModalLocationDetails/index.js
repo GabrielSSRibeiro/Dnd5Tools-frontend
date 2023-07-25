@@ -144,16 +144,16 @@ function ModalLocationDetails({ location, id, locations, onClose, HandleEditNewL
               <div className="list-location df df-jc-sb" key={loc._id}>
                 {loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
                   <button disabled>
-                    <i class="fas fa-route"></i>
+                    <i className="fas fa-route"></i>
                   </button>
                 ) : (
                   <button onClick={() => HandleNewLocation(loc._id)} disabled={locations.length >= 100}>
-                    <i class="fas fa-plus"></i>
+                    <i className="fas fa-plus"></i>
                   </button>
                 )}
                 <span>{loc.name}</span>
                 <button onClick={() => OpenModalLocationDetails(loc, loc._id)}>
-                  <i class="fas fa-book"></i>
+                  <i className="fas fa-book"></i>
                 </button>
               </div>
             ))}

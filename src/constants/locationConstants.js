@@ -97,12 +97,14 @@ export const elementTypes = [
 export const GetElementType = (value) => elementTypes.find((a) => a.value === value);
 
 export const REFERENCE_DISTANCES = {
+  ADJACENT: 5,
   SMALL: 10,
   MEDIUM: 20,
   LARGE: 30,
   EXTREME: 40,
 };
 export const referenceDistances = [
+  { display: "Adjacente", value: REFERENCE_DISTANCES.ADJACENT, baseDistanceMultiplier: 0 },
   { display: "Pequena", value: REFERENCE_DISTANCES.SMALL, baseDistanceMultiplier: 1 },
   { display: "Média", value: REFERENCE_DISTANCES.MEDIUM, baseDistanceMultiplier: 2 },
   { display: "Grande", value: REFERENCE_DISTANCES.LARGE, baseDistanceMultiplier: 3 },

@@ -103,7 +103,7 @@ function ModalMoveLocation({ world, locations, onClose, onSelect }) {
             <div className="list-location df df-jc-sb">
               <span>{world.name}</span>
               <button onClick={() => HandleSelect()}>
-                <i class="fas fa-check"></i>
+                <i className="fas fa-check"></i>
               </button>
             </div>
           )}
@@ -111,7 +111,7 @@ function ModalMoveLocation({ world, locations, onClose, onSelect }) {
             <div className="list-location df df-jc-sb" key={loc._id}>
               <span>{loc.name}</span>
               <button onClick={() => HandleSelect(loc._id)}>
-                <i class="fas fa-check"></i>
+                <i className="fas fa-check"></i>
               </button>
             </div>
           ))}

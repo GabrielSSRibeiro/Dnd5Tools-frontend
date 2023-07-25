@@ -118,18 +118,18 @@ function LocationSummary({ location, id, setLocationToEdit, setLocHoverData, loc
           <aside className="header-action">
             {location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
               <button onClick={() => {}} disabled>
-                <i class="fas fa-route"></i>
+                <i className="fas fa-route"></i>
               </button>
             ) : (
               <button onClick={() => HandleEditNewLocation(id)} disabled={locations.length >= 100}>
-                <i class="fas fa-plus"></i>
+                <i className="fas fa-plus"></i>
               </button>
             )}
           </aside>
           <span className="name">{location.name}</span>
           <aside className="header-details">
             <button onClick={() => OpenModalLocationDetails(location, id)}>
-              <i class="fas fa-book"></i>
+              <i className="fas fa-book"></i>
             </button>
           </aside>
         </header>

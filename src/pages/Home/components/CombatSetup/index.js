@@ -208,14 +208,14 @@ function CombatSetup({
                             className="level-adjuster"
                             disabled={creature.level === creatureRarities.find((r) => r.value === CREATURE_RARITIES.LEGENDARY).baseOutputMax}
                           >
-                            <i class="fas fa-caret-up"></i>
+                            <i className="fas fa-caret-up"></i>
                           </button>
                           <button
                             onClick={() => AdjustLevel(creature, -1)}
                             className="level-adjuster"
                             disabled={creature.level === creatureRarities.find((r) => r.value === CREATURE_RARITIES.LEGENDARY).baseOutputMin}
                           >
-                            <i class="fas fa-caret-down"></i>
+                            <i className="fas fa-caret-down"></i>
                           </button>
                         </div>
                       </div>
