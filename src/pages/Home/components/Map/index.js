@@ -292,7 +292,7 @@ function Map({
   useEffect(() => {
     setAllLocationsRefs([]);
     setLocationsRefs([]);
-  }, [locations, zoomLevel]);
+  }, [locations, mapLoading]);
 
   return (
     <div className="Map-container">
@@ -409,32 +409,27 @@ function Map({
               <div className="wrapper">{locHoverData.distance}</div>
             </div>
           ))}
-        <div
-          id={locationsContainerId}
-          className="locations"
-          style={{
-            translate: `${centerOffset.X}% ${centerOffset.Y}%`,
-            opacity: !mapLoading ? 1 : 0,
-          }}
-        >
-          {rootLocs.map((locationId) => {
-            return (
-              <Location
-                loc={map[locationId]}
-                map={map}
-                locations={locations}
-                pxInMScale={pxInMScale}
-                locationsRefs={locationsRefs}
-                setLocationsRefs={setLocationsRefs}
-                allLocationsRefs={allLocationsRefs}
-                setAllLocationsRefs={setAllLocationsRefs}
-                isMapRendered={isMapRendered}
-                HandleHover={HandleLocHover}
-                key={locationId}
-              />
-            );
-          })}
-        </div>
+        {!mapLoading && (
+          <div id={locationsContainerId} className="locations" style={{ translate: `${centerOffset.X}% ${centerOffset.Y}%` }}>
+            {rootLocs.map((locationId) => {
+              return (
+                <Location
+                  loc={map[locationId]}
+                  map={map}
+                  locations={locations}
+                  pxInMScale={pxInMScale}
+                  locationsRefs={locationsRefs}
+                  setLocationsRefs={setLocationsRefs}
+                  allLocationsRefs={allLocationsRefs}
+                  setAllLocationsRefs={setAllLocationsRefs}
+                  isMapRendered={isMapRendered}
+                  HandleHover={HandleLocHover}
+                  key={locationId}
+                />
+              );
+            })}
+          </div>
+        )}
         {locationToEdit && (
           <>
             <div className="edit-blocker"></div>

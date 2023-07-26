@@ -213,14 +213,14 @@ function Location({
 
   //main setup
   useEffect(() => {
-    function GetRefLocDistFromCenterForCalc(location) {
+    function GetRefLocRadiusForCalc(location) {
       const locId = location.interiorLocs.length > 0 ? location.interiorLocs.find((l) => !l.data.reference.location).data._id : location.data._id;
       const locEl = document.getElementById(`${locId}-area`);
 
       return locEl ? locEl.offsetWidth : 0;
     }
 
-    function GetLocDistFromCenterForCalc(location) {
+    function GetLocRadiusForCalc(location) {
       const locId = location.interiorLocs.length > 0 ? location.interiorLocs.find((l) => !l.data.reference.location).data._id : location.data._id;
       const locEl = document.getElementById(`${locId}`);
       let dist = locEl ? locEl.offsetWidth : 0;
@@ -240,12 +240,12 @@ function Location({
         const refOffset = GetOffset(map[location.reference.location].data);
 
         //if refLoc has interiorLocs get radius(offsetHeight /2) from interiorLocs 1, otherwise from ref
-        const refLocDistFromCenter = GetRefLocDistFromCenterForCalc(map[location.reference.location]);
+        const refLocDistFromCenter = GetRefLocRadiusForCalc(map[location.reference.location]);
 
         const distance = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
 
         //if loc has interiorLocs get radius(offsetHeight /2) from interiorLocs 1, otherwise from ref
-        const locDistFromCenter = GetLocDistFromCenterForCalc(map[loc.data._id]);
+        const locDistFromCenter = GetLocRadiusForCalc(map[loc.data._id]);
 
         //offset is refLocDistFromCenter + distance + locDistFromCenter
         const coordinatesByDistance = utils.GetCoordinatesByDistance(
@@ -330,6 +330,11 @@ function Location({
       });
     }
 
+    //update final width
+    if (isMapRendered) {
+      ref.current.style.width = "0px";
+    }
+
     //update refs
     if (!allLocationsRefs.some((r) => r === ref.current)) {
       allLocationsRefs.push(ref.current);
@@ -346,6 +351,7 @@ function Location({
     connectionLoc,
     interiorLocs.length,
     isAdjacent,
+    isMapRendered,
     loc.data,
     locationsRefs,
     map,
