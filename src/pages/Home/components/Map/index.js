@@ -342,7 +342,10 @@ function Map({
           <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 1.1))}>
             <i className="fas fa-minus"></i>
           </button>
-          <button title="Resetar" onClick={() => MapLoadingWrapper(() => setZoomLevel(defaultZoom.current))}>
+          <button
+            title="Resetar"
+            onClick={() => (defaultZoom.current !== zoomLevel ? MapLoadingWrapper(() => setZoomLevel(defaultZoom.current)) : {})}
+          >
             <i className="fas fa-search"></i>
           </button>
           <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 0.9))}>
