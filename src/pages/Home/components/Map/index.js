@@ -24,7 +24,7 @@ function Map({
 }) {
   const defaultZoom = useRef(3); //base 0.2
   const [currentCenter, setCurrentCenter] = useState({ X: 0, Y: 0 });
-  const centerMoveRatio = useRef(50);
+  const centerMoveRatio = useRef(5);
   const [locationToEdit, setLocationToEdit] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(defaultZoom.current);
   const [mapLoading, setMapLoading] = useState(false);
@@ -50,7 +50,7 @@ function Map({
       .forEach((location, i) => {
         location.radius = lh.GetRadius(location, pxInMScale);
         location.offset = null;
-        location.resetOffset = null;
+        location.centerOffset = null;
 
         //for locs that are interior to others, add their ref
         if (map[location.exteriorLocationId]) {
@@ -409,7 +409,6 @@ function Map({
               <div className="wrapper">{locHoverData.distance}</div>
             </div>
           ))}
-        {/* <hr className="test-center"></hr> */}
         <div
           id={locationsContainerId}
           className="locations"
