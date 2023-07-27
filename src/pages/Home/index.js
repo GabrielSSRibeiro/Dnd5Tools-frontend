@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 // import * as util from "../../utils";
 import * as lc from "../../constants/locationConstants";
 import * as cc from "../../constants/creatureConstants";
@@ -40,6 +40,8 @@ function Home() {
   const [selectedCreatures, setSelectedCreatures] = useState([]);
   const [combats, setCombats] = useState([]);
   const [locations, setLocations] = useState(null);
+  const defaultZoom = useRef(0.5);
+  const [zoomLevel, setZoomLevel] = useState(null);
 
   const { currentUser } = useAuth();
 
@@ -189,7 +191,7 @@ function Home() {
   }
 
   async function HandleSaveCombatConfig() {
-    const combatConfigToSave = { ...combatConfig, level, characterGroups: groups, inactiveGroup };
+    const combatConfigToSave = { ...combatConfig, level, characterGroups: groups, inactiveGroup, zoom: zoomLevel };
 
     await (combatConfigToSave._id ? api.put("UpdateCombatConfig", combatConfigToSave) : api.post("SaveCombatConfig", combatConfigToSave))
       .then((response) => {
@@ -236,6 +238,7 @@ function Home() {
         setLevel(response.data.level);
         setGroups(response.data.characterGroups);
         setInactiveGroup(response.data.inactiveGroup);
+        setZoomLevel(response.data.zoom);
       } else {
         setCombatConfig({
           owner: currentUser.uid,
@@ -321,6 +324,9 @@ function Home() {
             creatures={creatures}
             combatConfig={combatConfig}
             locations={locations}
+            defaultZoom={defaultZoom}
+            zoomLevel={zoomLevel}
+            setZoomLevel={setZoomLevel}
             userId={currentUser.uid}
           />
         </div>

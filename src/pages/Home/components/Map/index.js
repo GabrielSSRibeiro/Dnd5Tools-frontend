@@ -20,13 +20,14 @@ function Map({
   creatures,
   combatConfig,
   locations,
+  defaultZoom,
+  zoomLevel,
+  setZoomLevel,
   userId,
 }) {
-  const defaultZoom = useRef(3); //base 0.2
   const [currentCenter, setCurrentCenter] = useState({ X: 0, Y: 0 });
   const centerMoveRatio = useRef(5);
   const [locationToEdit, setLocationToEdit] = useState(null);
-  const [zoomLevel, setZoomLevel] = useState(defaultZoom.current);
   const [mapLoading, setMapLoading] = useState(false);
   const [centerOffset, setCenterOffset] = useState(currentCenter);
   const [schedule, setSchedule] = useState(null);
@@ -37,8 +38,10 @@ function Map({
   const [allLocationsRefs, setAllLocationsRefs] = useState([]);
 
   const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * zoomLevel, [zoomLevel]);
+  const isMinZoom = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale <= lc.POINT_OF_INTEREST_RADIUS * 2, [pxInMScale]);
+  const isMaxZoom = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale >= lc.BASE_VISION_IN_M / 2, [pxInMScale]);
   const locationsContainerId = useMemo(() => `all-${userId}-locations`, [userId]);
-  // const visionRadius = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale, [pxInMScale]);
+  const visionRadius = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale, [pxInMScale]);
   const map = useMemo(() => {
     let map = {};
     locations
@@ -50,7 +53,6 @@ function Map({
       .forEach((location, i) => {
         location.radius = lh.GetRadius(location, pxInMScale);
         location.offset = null;
-        location.centerOffset = null;
 
         //for locs that are interior to others, add their ref
         if (map[location.exteriorLocationId]) {
@@ -308,6 +310,7 @@ function Map({
             </aside>
           )
         )}
+
         <aside className="map-stats floating-details">
           <Select
             label="Horário"
@@ -339,7 +342,7 @@ function Map({
           />
         </aside>
         <aside className="map-zoom floating-details">
-          <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 1.1))}>
+          <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 1.1))} disabled={isMinZoom}>
             <i className="fas fa-minus"></i>
           </button>
           <button
@@ -348,7 +351,7 @@ function Map({
           >
             <i className="fas fa-search"></i>
           </button>
-          <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 0.9))}>
+          <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 0.9))} disabled={isMaxZoom}>
             <i className="fas fa-plus"></i>
           </button>
           <div className="move-zoom">
@@ -373,6 +376,7 @@ function Map({
         <aside className="new-encounter floating-details">
           <Button text="Novo Encontro" isDisabled={true} />
         </aside>
+
         <div className="world-details floating-details">
           <LocationSummary
             location={combatConfig.world}
@@ -386,6 +390,17 @@ function Map({
             temperature={temperature}
           />
         </div>
+
+        <div className="travel-none floating-details" style={{ width: lc.POINT_OF_INTEREST_RADIUS / 4, height: lc.POINT_OF_INTEREST_RADIUS / 4 }}>
+          <div className="vision floating-details" style={{ width: visionRadius / 2, height: visionRadius / 2 }}></div>
+          <div
+            className="direction-arrow floating-details"
+            style={{ width: lc.POINT_OF_INTEREST_RADIUS, height: lc.POINT_OF_INTEREST_RADIUS, rotate: "0deg" }}
+          >
+            <div className="pointer"></div>
+          </div>
+        </div>
+
         {locHoverData &&
           (locHoverData.location ? (
             <div
