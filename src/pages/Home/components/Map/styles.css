@@ -105,7 +105,7 @@
   column-gap: 10px;
 }
 
-.Map-container .world-map .map-zoom .move-zoom {
+.Map-container .world-map .map-zoom .zoom-section {
   display: flex;
   align-items: center;
   justify-content: center;

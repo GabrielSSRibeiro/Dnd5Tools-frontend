@@ -38,8 +38,10 @@ function Map({
   const [allLocationsRefs, setAllLocationsRefs] = useState([]);
 
   const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * zoomLevel, [zoomLevel]);
-  const isMinZoom = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale <= lc.POINT_OF_INTEREST_RADIUS * 2, [pxInMScale]);
-  const isMaxZoom = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale >= lc.BASE_VISION_IN_M / 2, [pxInMScale]);
+  const minZoom = useMemo(() => lc.BASE_VISION_IN_M / (lc.BASE_PX_IN_M_SCALE * lc.POINT_OF_INTEREST_RADIUS * 2), []);
+  const isMinZoom = useMemo(() => zoomLevel >= minZoom, [minZoom, zoomLevel]);
+  const maxZoom = useMemo(() => lc.BASE_VISION_IN_M / ((lc.BASE_PX_IN_M_SCALE * lc.BASE_VISION_IN_M) / 2), []);
+  const isMaxZoom = useMemo(() => zoomLevel <= maxZoom, [maxZoom, zoomLevel]);
   const locationsContainerId = useMemo(() => `all-${userId}-locations`, [userId]);
   const visionRadius = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale, [pxInMScale]);
   const map = useMemo(() => {
@@ -342,19 +344,33 @@ function Map({
           />
         </aside>
         <aside className="map-zoom floating-details">
-          <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 1.1))} disabled={isMinZoom}>
-            <i className="fas fa-minus"></i>
-          </button>
-          <button
-            title="Resetar"
-            onClick={() => (defaultZoom.current !== zoomLevel ? MapLoadingWrapper(() => setZoomLevel(defaultZoom.current)) : {})}
-          >
-            <i className="fas fa-search"></i>
-          </button>
-          <button onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 0.9))} disabled={isMaxZoom}>
-            <i className="fas fa-plus"></i>
-          </button>
-          <div className="move-zoom">
+          <div className="zoom-section">
+            <button onClick={() => MapLoadingWrapper(() => setZoomLevel(minZoom))} disabled={isMinZoom}>
+              <i className="fas fa-minus-square"></i>
+            </button>
+            <button
+              onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 1.1 >= minZoom ? minZoom : zoomLevel * 1.1))}
+              disabled={isMinZoom}
+            >
+              <i className="fas fa-minus"></i>
+            </button>
+            <button
+              title="Resetar"
+              onClick={() => (defaultZoom.current !== zoomLevel ? MapLoadingWrapper(() => setZoomLevel(defaultZoom.current)) : {})}
+            >
+              <i className="fas fa-search"></i>
+            </button>
+            <button
+              onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 0.9 <= maxZoom ? maxZoom : zoomLevel * 0.9))}
+              disabled={isMaxZoom}
+            >
+              <i className="fas fa-plus"></i>
+            </button>
+            <button onClick={() => MapLoadingWrapper(() => setZoomLevel(maxZoom))} disabled={isMaxZoom}>
+              <i className="fas fa-plus-square"></i>
+            </button>
+          </div>
+          <div className="zoom-section">
             <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y + centerMoveRatio.current * 2 })}>
               <i className="fas fa-caret-up"></i>
             </button>
