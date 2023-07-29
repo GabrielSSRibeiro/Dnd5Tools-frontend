@@ -18,6 +18,7 @@ function Location({
   isMapRendered,
   HandleHover,
   className = "",
+  travel,
   ...rest
 }) {
   const ref = useRef(null);
@@ -368,7 +369,15 @@ function Location({
   }, [locations, setAllLocationsRefs]);
 
   return (
-    <div name={loc.data.name} ref={ref} id={loc.data._id} className={`Location-container ${className}`} style={wrapperStyle} key={rest.key}>
+    <div
+      name={loc.data.name}
+      ref={ref}
+      id={loc.data._id}
+      className={`Location-container ${className}`}
+      style={wrapperStyle}
+      onClick={travel}
+      key={rest.key}
+    >
       {connectionStyle && <div id={`${loc.data._id}-connection`} className="connection" style={connectionStyle}></div>}
       {interiorLocs.length > 0 ? (
         interiorLocs.map((locationId) => (

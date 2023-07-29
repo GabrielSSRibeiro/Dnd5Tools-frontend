@@ -209,3 +209,10 @@ export const GetCoordinatesByDistance = (pA, distance, angle) => {
 
   return { x: x2, y: y2 };
 };
+
+export const GetDistanceByCoordinates = (pA, pB) => {
+  const xDiff = pB.x - pA.x;
+  const yDiff = pB.y - pA.y;
+  const distance = Math.sqrt(xDiff ** 2 + yDiff ** 2);
+  return distance;
+};

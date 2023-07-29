@@ -20,7 +20,9 @@
 }
 
 .LocationSummary-container .header .name {
+  padding: 3px;
   flex: 1;
+  font-weight: 600;
   text-align: center;
 }
 
@@ -35,11 +37,14 @@
 }
 
 .LocationSummary-container footer .env-type {
-  padding: 2px;
+  padding: 3px;
+  /* font-size: 10px; */
 }
 
 .LocationSummary-container footer .first-impressions {
-  padding: 5px;
+  padding: 3px;
+  font-size: 10px;
+  font-style: italic;
 }
 
 .LocationSummary-container .details .divider {
@@ -48,7 +53,7 @@
 }
 
 .LocationSummary-container .details .creature-list {
-  padding: 5px;
+  padding: 3px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -60,8 +65,8 @@
   bottom: 7px;
   object-fit: cover;
   object-position: 0 top;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   border-radius: 100%;
   border: 2px solid var(--white);
 }

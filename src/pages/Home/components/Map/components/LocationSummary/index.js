@@ -8,7 +8,18 @@ import "./styles.css";
 
 import ModalLocationDetails from "../ModalLocationDetails";
 
-function LocationSummary({ location, id, setLocationToEdit, setLocHoverData, locations, creatures, schedule, precipitation, temperature }) {
+function LocationSummary({
+  location,
+  id,
+  setLocationToEdit,
+  setLocHoverData,
+  locations,
+  creatures,
+  schedule,
+  precipitation,
+  temperature,
+  distance = null,
+}) {
   const [modal, setModal] = useState(null);
 
   function OpenModalLocationDetails(loc, locId) {
@@ -107,39 +118,49 @@ function LocationSummary({ location, id, setLocationToEdit, setLocHoverData, loc
       sortedCreaturesForDisplay.push(...g);
     });
 
-    return sortedCreaturesForDisplay;
+    return sortedCreaturesForDisplay.filter((_, i) => i < 3);
   }, [location, currentContext, schedule, precipitation, temperature, creatures]);
 
   return (
     <div className="LocationSummary-container">
       {modal}
-      <div className="body-container" style={{ borderColor: lc.GetHazardousness(currentContext.hazardousness).color }}>
+      <div className="body-container" style={distance ? { borderColor: lc.GetHazardousness(currentContext.hazardousness).color } : {}}>
         <header className="header">
-          <aside className="header-action">
-            {location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
-              <button onClick={() => {}} disabled>
-                <i className="fas fa-route"></i>
-              </button>
-            ) : (
-              <button onClick={() => HandleEditNewLocation(id)} disabled={locations.length >= 100}>
-                <i className="fas fa-plus"></i>
-              </button>
-            )}
-          </aside>
+          {!distance && (
+            <aside className="header-action">
+              {location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
+                <button onClick={() => {}} disabled>
+                  <i className="fas fa-route"></i>
+                </button>
+              ) : (
+                <button onClick={() => HandleEditNewLocation(id)} disabled={locations.length >= 100}>
+                  <i className="fas fa-plus"></i>
+                </button>
+              )}
+            </aside>
+          )}
           <span className="name">{location.name}</span>
-          <aside className="header-details">
-            <button onClick={() => OpenModalLocationDetails(location, id)}>
-              <i className="fas fa-book"></i>
-            </button>
-          </aside>
+          {!distance && (
+            <aside className="header-details">
+              <button onClick={() => OpenModalLocationDetails(location, id)}>
+                <i className="fas fa-book"></i>
+              </button>
+            </aside>
+          )}
         </header>
         <footer className="details">
           <div className="divider"></div>
+
+          {/* type and dist */}
           <span className="env-type">
             {location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST
               ? lc.GetElementType(location.interaction.type).display
               : cc.GetEnviroment(location.traversal.type).display}
+
+            {distance ? `, a ${distance.value} (${distance.time})` : ""}
           </span>
+
+          {/* first impressions */}
           {lh.GetCurrentContext(location)?.firstImpressions && (
             <>
               <div className="divider"></div>

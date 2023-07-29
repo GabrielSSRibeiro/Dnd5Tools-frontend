@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
+import * as utils from "../../../../utils";
 import * as lh from "../../../../helpers/locationHelper";
 import * as lc from "../../../../constants/locationConstants";
 import * as cc from "../../../../constants/creatureConstants";
@@ -8,6 +9,7 @@ import Select from "../../../../components/Select";
 import LocationSummary from "./components/LocationSummary";
 import EditLocation from "./components/EditLocation";
 import Location from "./components/Location";
+import ModalTravelResults from "./components/ModalTravelResults";
 
 import "./styles.css";
 
@@ -21,15 +23,14 @@ function Map({
   combatConfig,
   locations,
   defaultZoom,
-  zoomLevel,
-  setZoomLevel,
   userId,
 }) {
-  const [currentCenter, setCurrentCenter] = useState({ X: 0, Y: 0 });
+  const [modal, setModal] = useState(null);
   const centerMoveRatio = useRef(5);
+  const defaultCenter = useRef({ X: 0, Y: 0 });
   const [locationToEdit, setLocationToEdit] = useState(null);
   const [mapLoading, setMapLoading] = useState(false);
-  const [centerOffset, setCenterOffset] = useState(currentCenter);
+  const [centerOffset, setCenterOffset] = useState(defaultCenter.current);
   const [schedule, setSchedule] = useState(null);
   const [precipitation, setPrecipitation] = useState(null);
   const [temperature, setTemperature] = useState(null);
@@ -37,11 +38,11 @@ function Map({
   const [locationsRefs, setLocationsRefs] = useState([]);
   const [allLocationsRefs, setAllLocationsRefs] = useState([]);
 
-  const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * zoomLevel, [zoomLevel]);
+  const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * combatConfig.zoom, [combatConfig.zoom]);
   const minZoom = useMemo(() => lc.BASE_VISION_IN_M / (lc.BASE_PX_IN_M_SCALE * lc.POINT_OF_INTEREST_RADIUS * 2), []);
-  const isMinZoom = useMemo(() => zoomLevel >= minZoom, [minZoom, zoomLevel]);
+  const isMinZoom = useMemo(() => combatConfig.zoom >= minZoom, [combatConfig.zoom, minZoom]);
   const maxZoom = useMemo(() => lc.BASE_VISION_IN_M / ((lc.BASE_PX_IN_M_SCALE * lc.BASE_VISION_IN_M) / 2), []);
-  const isMaxZoom = useMemo(() => zoomLevel <= maxZoom, [maxZoom, zoomLevel]);
+  const isMaxZoom = useMemo(() => combatConfig.zoom <= maxZoom, [combatConfig.zoom, maxZoom]);
   const locationsContainerId = useMemo(() => `all-${userId}-locations`, [userId]);
   const visionRadius = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale, [pxInMScale]);
   const map = useMemo(() => {
@@ -88,6 +89,10 @@ function Map({
 
     return allLocationsRefs.length === totalLocsToRender;
   }, [allLocationsRefs.length, map, rootLocs]);
+
+  function OpenModalTravelResults() {
+    setModal(<ModalTravelResults onClose={setModal} />);
+  }
 
   function HandleCancel() {
     setLocationToEdit(null);
@@ -246,20 +251,37 @@ function Map({
     setLocationToEdit(null);
   }
 
-  let timer = useRef(null);
+  // let timer = useRef(null);
   function HandleLocHover(e, location) {
-    // if (!locHoverData || !locHoverData.location) {
-    //   //calc distance and travel time
+    const centerOffset = GetCenterOffset(e);
+    const distanceInScale = Math.round(centerOffset * pxInMScale);
+    const distanceValue = distanceInScale < 1000 ? `${distanceInScale}m` : `${Math.round(distanceInScale / 1000)}km`;
+    const distanceTime = "Fazer detalhes de viagem"; //1 == 1 ? `${7} horas` : `${2} dias`;
 
-    //   setLocHoverData({ top: e.clientY, left: e.clientX, location: null, distance: null, style: { pointerEvents: "none" }, disabled: true });
-    // }
+    setLocHoverData({ top: e.clientY, left: e.clientX, location, distance: { value: distanceValue, time: distanceTime } });
 
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => {
-      if (location) {
-        setLocHoverData({ top: e.clientY, left: e.clientX, location, distance: null });
-      }
-    }, 500);
+    // clearTimeout(timer.current);
+    // timer.current = setTimeout(() => {
+    //   if (location) {
+    //     setLocHoverData(null);
+    //   }
+    // }, 500);
+  }
+
+  function GetCenterOffset(e) {
+    // Get the div element that is being hovered
+    const locationsDiv = document.getElementById(locationsContainerId);
+
+    // Get the bounding rectangle of the div (position and dimensions)
+    const divRect = locationsDiv.getBoundingClientRect();
+
+    // Calculate the relative X and Y coordinates to the center of the div
+    const relativeX = e.clientX - (divRect.left + divRect.width / 2);
+    const relativeY = (e.clientY - (divRect.top + divRect.height / 2)) * -1;
+
+    //calculate distance
+    const centerOffset = utils.GetDistanceByCoordinates({ x: relativeX, y: relativeY }, { x: 0, y: 0 });
+    return centerOffset;
   }
 
   function GetAllInteriorLocs(location) {
@@ -300,7 +322,9 @@ function Map({
 
   return (
     <div className="Map-container">
+      {modal}
       <div className="world-map" style={{ backgroundColor: cc.GetEnviroment(combatConfig.world.traversal.type).color }}>
+        {/* title */}
         {locations.length === 0 ? (
           <aside className="info-msg floating-details">
             <h4>Adicione uma nova localização para vê-la no mapa</h4>
@@ -313,6 +337,115 @@ function Map({
           )
         )}
 
+        {/* hover */}
+        {locHoverData?.location && (
+          <div className="location-details floating-details" style={{ ...locHoverData.style, top: locHoverData.top, left: locHoverData.left }}>
+            <LocationSummary
+              location={locHoverData.location}
+              id={locHoverData.location._id}
+              setLocationToEdit={setLocationToEdit}
+              setLocHoverData={setLocHoverData}
+              locations={locations}
+              creatures={creatures}
+              schedule={schedule}
+              precipitation={precipitation}
+              temperature={temperature}
+              distance={locHoverData.distance}
+            />
+          </div>
+        )}
+
+        {/* floating */}
+        <aside className="world-details floating-details">
+          <LocationSummary
+            location={combatConfig.world}
+            id={userId}
+            setLocationToEdit={setLocationToEdit}
+            setLocHoverData={setLocHoverData}
+            locations={locations}
+            creatures={creatures}
+            schedule={schedule}
+            precipitation={precipitation}
+            temperature={temperature}
+          />
+        </aside>
+        <aside className="new-encounter floating-details">
+          <Button text="Novo Encontro" isDisabled={true} />
+        </aside>
+        <aside className="map-zoom floating-details">
+          <div className="zoom-section">
+            <button
+              onClick={() =>
+                MapLoadingWrapper(() => {
+                  combatConfig.zoom = minZoom;
+                })
+              }
+              disabled={isMinZoom}
+            >
+              <i className="fas fa-minus-square"></i>
+            </button>
+            <button
+              onClick={() =>
+                MapLoadingWrapper(() => {
+                  combatConfig.zoom = combatConfig.zoom * 1.1 >= minZoom ? minZoom : combatConfig.zoom * 1.1;
+                })
+              }
+              disabled={isMinZoom}
+            >
+              <i className="fas fa-minus"></i>
+            </button>
+            <button
+              title="Resetar"
+              onClick={() => {
+                if (defaultZoom.current !== combatConfig.zoom) {
+                  MapLoadingWrapper(() => {
+                    combatConfig.zoom = defaultZoom.current;
+                  });
+                }
+              }}
+            >
+              <i className="fas fa-search"></i>
+            </button>
+            <button
+              onClick={() =>
+                MapLoadingWrapper(() => {
+                  combatConfig.zoom = combatConfig.zoom * 0.9 <= maxZoom ? maxZoom : combatConfig.zoom * 0.9;
+                })
+              }
+              disabled={isMaxZoom}
+            >
+              <i className="fas fa-plus"></i>
+            </button>
+            <button
+              onClick={() =>
+                MapLoadingWrapper(() => {
+                  combatConfig.zoom = maxZoom;
+                })
+              }
+              disabled={isMaxZoom}
+            >
+              <i className="fas fa-plus-square"></i>
+            </button>
+          </div>
+          <div className="zoom-section">
+            <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y + centerMoveRatio.current * 2 })}>
+              <i className="fas fa-caret-up"></i>
+            </button>
+            <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X + centerMoveRatio.current })}>
+              <i className="fas fa-caret-left"></i>
+            </button>
+            <button title="Centrar" onClick={() => setCenterOffset(defaultCenter.current)}>
+              <i className="fas fa-crosshairs"></i>
+            </button>
+            <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X - centerMoveRatio.current })}>
+              <i className="fas fa-caret-right"></i>
+            </button>
+            <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y - centerMoveRatio.current * 2 })}>
+              <i className="fas fa-caret-down"></i>
+            </button>
+          </div>
+          {/* <div className="compass">N</div> */}
+        </aside>
         <aside className="map-stats floating-details">
           <Select
             label="Horário"
@@ -343,108 +476,28 @@ function Map({
             optionValue={(o) => o.value}
           />
         </aside>
-        <aside className="map-zoom floating-details">
-          <div className="zoom-section">
-            <button onClick={() => MapLoadingWrapper(() => setZoomLevel(minZoom))} disabled={isMinZoom}>
-              <i className="fas fa-minus-square"></i>
-            </button>
-            <button
-              onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 1.1 >= minZoom ? minZoom : zoomLevel * 1.1))}
-              disabled={isMinZoom}
-            >
-              <i className="fas fa-minus"></i>
-            </button>
-            <button
-              title="Resetar"
-              onClick={() => (defaultZoom.current !== zoomLevel ? MapLoadingWrapper(() => setZoomLevel(defaultZoom.current)) : {})}
-            >
-              <i className="fas fa-search"></i>
-            </button>
-            <button
-              onClick={() => MapLoadingWrapper(() => setZoomLevel(zoomLevel * 0.9 <= maxZoom ? maxZoom : zoomLevel * 0.9))}
-              disabled={isMaxZoom}
-            >
-              <i className="fas fa-plus"></i>
-            </button>
-            <button onClick={() => MapLoadingWrapper(() => setZoomLevel(maxZoom))} disabled={isMaxZoom}>
-              <i className="fas fa-plus-square"></i>
-            </button>
-          </div>
-          <div className="zoom-section">
-            <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y + centerMoveRatio.current * 2 })}>
-              <i className="fas fa-caret-up"></i>
-            </button>
-            <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X + centerMoveRatio.current })}>
-              <i className="fas fa-caret-left"></i>
-            </button>
-            <button title="Centrar" onClick={() => setCenterOffset(currentCenter)}>
-              <i className="fas fa-crosshairs"></i>
-            </button>
-            <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X - centerMoveRatio.current })}>
-              <i className="fas fa-caret-right"></i>
-            </button>
-            <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y - centerMoveRatio.current * 2 })}>
-              <i className="fas fa-caret-down"></i>
-            </button>
-          </div>
-          {/* <div className="compass">N</div> */}
-        </aside>
-        <aside className="new-encounter floating-details">
-          <Button text="Novo Encontro" isDisabled={true} />
-        </aside>
 
-        <div className="world-details floating-details">
-          <LocationSummary
-            location={combatConfig.world}
-            id={userId}
-            setLocationToEdit={setLocationToEdit}
-            setLocHoverData={setLocHoverData}
-            locations={locations}
-            creatures={creatures}
-            schedule={schedule}
-            precipitation={precipitation}
-            temperature={temperature}
-          />
-        </div>
-
-        <div className="travel-none floating-details" style={{ width: lc.POINT_OF_INTEREST_RADIUS / 4, height: lc.POINT_OF_INTEREST_RADIUS / 4 }}>
-          <div className="vision floating-details" style={{ width: visionRadius / 2, height: visionRadius / 2 }}></div>
-          <div
-            className="direction-arrow floating-details"
-            style={{ width: lc.POINT_OF_INTEREST_RADIUS, height: lc.POINT_OF_INTEREST_RADIUS, rotate: "0deg" }}
-          >
-            <div className="pointer"></div>
-          </div>
-        </div>
-
-        {locHoverData &&
-          (locHoverData.location ? (
-            <div
-              className="location-details floating-details"
-              style={{ ...locHoverData.style, top: locHoverData.top, left: locHoverData.left }}
-              onMouseLeave={() => setLocHoverData(null)}
-            >
-              <fieldset className="wrapper" disabled={locHoverData.disabled}>
-                <LocationSummary
-                  location={locHoverData.location}
-                  id={locHoverData.location._id}
-                  setLocationToEdit={setLocationToEdit}
-                  setLocHoverData={setLocHoverData}
-                  locations={locations}
-                  creatures={creatures}
-                  schedule={schedule}
-                  precipitation={precipitation}
-                  temperature={temperature}
-                />
-              </fieldset>
-            </div>
-          ) : (
-            <div className="location-details floating-details" style={{ top: locHoverData.top, left: locHoverData.left, pointerEvents: "none" }}>
-              <div className="wrapper">{locHoverData.distance}</div>
-            </div>
-          ))}
+        {/* locs */}
         {!mapLoading && (
           <div id={locationsContainerId} className="locations" style={{ translate: `${centerOffset.X}% ${centerOffset.Y}%` }}>
+            <div className="travel-none floating-details" style={{ width: lc.POINT_OF_INTEREST_RADIUS / 4, height: lc.POINT_OF_INTEREST_RADIUS / 4 }}>
+              <div className="vision floating-details" style={{ width: visionRadius / 2, height: visionRadius / 2 }}></div>
+              <div
+                className="direction-arrow floating-details"
+                style={{ width: lc.POINT_OF_INTEREST_RADIUS, height: lc.POINT_OF_INTEREST_RADIUS, rotate: `${0}deg` }}
+              >
+                <div className="pointer"></div>
+              </div>
+            </div>
+
+            {/* world */}
+            <div
+              className="world"
+              onClick={OpenModalTravelResults}
+              onMouseMove={(e) => HandleLocHover(e, combatConfig.world)}
+              onMouseLeave={(e) => HandleLocHover(e)}
+            ></div>
+
             {rootLocs.map((locationId) => {
               return (
                 <Location
@@ -458,12 +511,14 @@ function Map({
                   setAllLocationsRefs={setAllLocationsRefs}
                   isMapRendered={isMapRendered}
                   HandleHover={HandleLocHover}
+                  travel={OpenModalTravelResults}
                   key={locationId}
                 />
               );
             })}
           </div>
         )}
+
         {locationToEdit && (
           <>
             <div className="edit-blocker"></div>

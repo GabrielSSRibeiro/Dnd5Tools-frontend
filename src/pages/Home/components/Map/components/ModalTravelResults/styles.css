@@ -1,0 +1,4 @@
+.ModalTravelResults-container.modal-body {
+  width: fit-content;
+  min-height: calc(100% - 210px);
+}

@@ -23,6 +23,7 @@ function Home() {
     TREASURE: "Tesouro",
   };
 
+  const defaultZoom = useRef(0.5);
   const [showLoadingText, setShowLoadingText] = useState(false);
   const [openTab, setOpenTab] = useState(MAIN_TABS.MAP);
   const [isPartyOpen, setIsPartyOpen] = useState(false);
@@ -40,8 +41,6 @@ function Home() {
   const [selectedCreatures, setSelectedCreatures] = useState([]);
   const [combats, setCombats] = useState([]);
   const [locations, setLocations] = useState(null);
-  const defaultZoom = useRef(0.5);
-  const [zoomLevel, setZoomLevel] = useState(null);
 
   const { currentUser } = useAuth();
 
@@ -191,7 +190,7 @@ function Home() {
   }
 
   async function HandleSaveCombatConfig() {
-    const combatConfigToSave = { ...combatConfig, level, characterGroups: groups, inactiveGroup, zoom: zoomLevel };
+    const combatConfigToSave = { ...combatConfig, level, characterGroups: groups, inactiveGroup };
 
     await (combatConfigToSave._id ? api.put("UpdateCombatConfig", combatConfigToSave) : api.post("SaveCombatConfig", combatConfigToSave))
       .then((response) => {
@@ -238,7 +237,6 @@ function Home() {
         setLevel(response.data.level);
         setGroups(response.data.characterGroups);
         setInactiveGroup(response.data.inactiveGroup);
-        setZoomLevel(response.data.zoom);
       } else {
         setCombatConfig({
           owner: currentUser.uid,
@@ -325,8 +323,6 @@ function Home() {
             combatConfig={combatConfig}
             locations={locations}
             defaultZoom={defaultZoom}
-            zoomLevel={zoomLevel}
-            setZoomLevel={setZoomLevel}
             userId={currentUser.uid}
           />
         </div>
