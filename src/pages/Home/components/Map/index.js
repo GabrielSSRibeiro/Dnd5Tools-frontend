@@ -19,18 +19,29 @@ function Map({
   HandleDeleteLocations,
   HandleSelectFromBestiary,
   setSelectedCreatures,
+  HandleSaveCombatConfig,
   creatures,
   combatConfig,
   locations,
   defaultZoom,
   userId,
 }) {
+  const hasCurrentTravelNode = useMemo(() => {
+    if (!combatConfig.travel.currentNode) {
+      return false;
+    }
+
+    return !!combatConfig.travel.currentNode.locId;
+  }, [combatConfig.travel.currentNode]);
+
   const [modal, setModal] = useState(null);
-  const centerMoveRatio = useRef(5);
-  const defaultCenter = useRef({ X: 0, Y: 0 });
+  const centerMoveRatio = useRef(0.05);
+  const defaultCenter = useRef({ x: 0, y: 0 });
   const [locationToEdit, setLocationToEdit] = useState(null);
   const [mapLoading, setMapLoading] = useState(false);
-  const [centerOffset, setCenterOffset] = useState(defaultCenter.current);
+  const [centerOffset, setCenterOffset] = useState(
+    hasCurrentTravelNode ? { x: combatConfig.travel.currentNode.x, y: combatConfig.travel.currentNode.y } : defaultCenter.current
+  );
   const [schedule, setSchedule] = useState(null);
   const [precipitation, setPrecipitation] = useState(null);
   const [temperature, setTemperature] = useState(null);
@@ -91,7 +102,53 @@ function Map({
   }, [allLocationsRefs.length, map, rootLocs]);
 
   function OpenModalTravelResults() {
-    setModal(<ModalTravelResults onClose={setModal} />);
+    if (locations.length === 0 || !locHoverData) {
+      return;
+    }
+
+    //new current node
+    const currentNode = {
+      isHidden: false,
+      x: locHoverData.distance.centerOffset.x * -1,
+      y: locHoverData.distance.centerOffset.y,
+      angle: locHoverData.distance.centerOffset.angle,
+      locId: locHoverData.location?._id ?? userId,
+    };
+
+    if (!hasCurrentTravelNode) {
+      setModal(
+        <ModalTravelResults
+          onClose={setModal}
+          HandleSetCurrentNode={() => HandleSetCurrentNode(currentNode)}
+          HandleAddTravelNode={() => HandleAddTravelNode(currentNode)}
+          HandleSaveCombatConfig={() => HandleAddTravelNode}
+        />
+      );
+    } else {
+      HandleSetCurrentNode(currentNode);
+      HandleSaveCombatConfig(combatConfig);
+    }
+  }
+
+  function HandleSetCurrentNode(currentNode) {
+    combatConfig.travel.currentNode = currentNode;
+    setCenterOffset({ x: currentNode.x, y: currentNode.y });
+  }
+
+  function HandleAddTravelNode(currentNode) {
+    if (combatConfig.travel.travelNodes.length === 100) {
+      combatConfig.travel.travelNodes.shift();
+    }
+
+    combatConfig.travel.travelNodes.push(currentNode);
+  }
+
+  function GetOffsetRatioValue() {
+    const locationsDiv = document.getElementById(locationsContainerId);
+    const widthOffset = locationsDiv.offsetWidth * centerMoveRatio.current;
+    const heightOffset = locationsDiv.offsetHeight * centerMoveRatio.current;
+
+    return { x: widthOffset, y: heightOffset };
   }
 
   function HandleCancel() {
@@ -246,19 +303,23 @@ function Map({
       }
     });
 
-    await HandleUpdateLocations(updateLocationsReq);
+    if (updateLocationsReq.ids.length > 0) {
+      await HandleUpdateLocations(updateLocationsReq);
+    }
+
     await HandleDeleteLocations(idsToDelete);
     setLocationToEdit(null);
   }
 
   // let timer = useRef(null);
   function HandleLocHover(e, location) {
-    const centerOffset = GetCenterOffset(e);
-    const distanceInScale = Math.round(centerOffset * pxInMScale);
-    const distanceValue = distanceInScale < 1000 ? `${distanceInScale}m` : `${Math.round(distanceInScale / 1000)}km`;
-    const distanceTime = "Fazer detalhes de viagem"; //1 == 1 ? `${7} horas` : `${2} dias`;
-
-    setLocHoverData({ top: e.clientY, left: e.clientX, location, distance: { value: distanceValue, time: distanceTime } });
+    let distance = { centerOffset: GetCenterOffset(e) };
+    if (hasCurrentTravelNode) {
+      const distanceInScale = Math.round(distance.centerOffset.value * pxInMScale);
+      distance.valueInUnits = distanceInScale < 1000 ? `${distanceInScale}m` : `${Math.round(distanceInScale / 1000)}km`;
+      distance.timeInUnits = ""; //1 == 1 ? `${7} horas` : `${2} dias`;
+    }
+    setLocHoverData({ top: e.clientY, left: e.clientX, location, distance });
 
     // clearTimeout(timer.current);
     // timer.current = setTimeout(() => {
@@ -280,7 +341,10 @@ function Map({
     const relativeY = (e.clientY - (divRect.top + divRect.height / 2)) * -1;
 
     //calculate distance
-    const centerOffset = utils.GetDistanceByCoordinates({ x: relativeX, y: relativeY }, { x: 0, y: 0 });
+    let centerOffset = utils.GetDistanceByCoordinates({ x: 0, y: 0 }, { x: relativeX, y: relativeY });
+    centerOffset.x = relativeX;
+    centerOffset.y = relativeY;
+
     return centerOffset;
   }
 
@@ -325,20 +389,18 @@ function Map({
       {modal}
       <div className="world-map" style={{ backgroundColor: cc.GetEnviroment(combatConfig.world.traversal.type).color }}>
         {/* title */}
-        {locations.length === 0 ? (
-          <aside className="info-msg floating-details">
+        <aside className="info-msg floating-details">
+          {locations.length === 0 ? (
             <h4>Adicione uma nova localização para vê-la no mapa</h4>
-          </aside>
-        ) : (
-          !locations.some((l) => l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST) && (
-            <aside className="info-msg floating-details">
-              <h4>Adicione pelo menos uma localização ponto de interesse para fazer jornadas</h4>
-            </aside>
-          )
-        )}
+          ) : !hasCurrentTravelNode ? (
+            <h4>Clique em um ponto no mapa para posionar o grupo</h4>
+          ) : (
+            <h4>{map[hasCurrentTravelNode] ? map[hasCurrentTravelNode].data.name : combatConfig.world.name}</h4>
+          )}
+        </aside>
 
         {/* hover */}
-        {locHoverData?.location && (
+        {locations.length > 0 && locHoverData?.location && (
           <div className="location-details floating-details" style={{ ...locHoverData.style, top: locHoverData.top, left: locHoverData.left }}>
             <LocationSummary
               location={locHoverData.location}
@@ -428,19 +490,19 @@ function Map({
             </button>
           </div>
           <div className="zoom-section">
-            <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y + centerMoveRatio.current * 2 })}>
+            <button onClick={() => setCenterOffset({ ...centerOffset, y: centerOffset.y + GetOffsetRatioValue().y * 2 })}>
               <i className="fas fa-caret-up"></i>
             </button>
-            <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X + centerMoveRatio.current })}>
+            <button onClick={() => setCenterOffset({ ...centerOffset, x: centerOffset.x + GetOffsetRatioValue().x })}>
               <i className="fas fa-caret-left"></i>
             </button>
             <button title="Centrar" onClick={() => setCenterOffset(defaultCenter.current)}>
               <i className="fas fa-crosshairs"></i>
             </button>
-            <button onClick={() => setCenterOffset({ ...centerOffset, X: centerOffset.X - centerMoveRatio.current })}>
+            <button onClick={() => setCenterOffset({ ...centerOffset, x: centerOffset.x - GetOffsetRatioValue().x })}>
               <i className="fas fa-caret-right"></i>
             </button>
-            <button onClick={() => setCenterOffset({ ...centerOffset, Y: centerOffset.Y - centerMoveRatio.current * 2 })}>
+            <button onClick={() => setCenterOffset({ ...centerOffset, y: centerOffset.y - GetOffsetRatioValue().y * 2 })}>
               <i className="fas fa-caret-down"></i>
             </button>
           </div>
@@ -477,18 +539,31 @@ function Map({
           />
         </aside>
 
-        {/* locs */}
         {!mapLoading && (
-          <div id={locationsContainerId} className="locations" style={{ translate: `${centerOffset.X}% ${centerOffset.Y}%` }}>
-            <div className="travel-none floating-details" style={{ width: lc.POINT_OF_INTEREST_RADIUS / 4, height: lc.POINT_OF_INTEREST_RADIUS / 4 }}>
-              <div className="vision floating-details" style={{ width: visionRadius / 2, height: visionRadius / 2 }}></div>
+          <div id={locationsContainerId} className="locations" style={{ translate: `${centerOffset.x}px ${centerOffset.y}px` }}>
+            {/* travel */}
+            {hasCurrentTravelNode && (
               <div
-                className="direction-arrow floating-details"
-                style={{ width: lc.POINT_OF_INTEREST_RADIUS, height: lc.POINT_OF_INTEREST_RADIUS, rotate: `${0}deg` }}
+                className="travel-none floating-details"
+                style={{
+                  width: lc.POINT_OF_INTEREST_RADIUS / 4,
+                  height: lc.POINT_OF_INTEREST_RADIUS / 4,
+                  translate: `${combatConfig.travel.currentNode.x * -1}px ${combatConfig.travel.currentNode.y * -1}px`,
+                }}
               >
-                <div className="pointer"></div>
+                <div className="vision floating-details" style={{ width: visionRadius / 2, height: visionRadius / 2 }}></div>
+                <div
+                  className="direction-arrow floating-details"
+                  style={{
+                    width: lc.POINT_OF_INTEREST_RADIUS,
+                    height: lc.POINT_OF_INTEREST_RADIUS,
+                    rotate: `${combatConfig.travel.currentNode.angle * -1}deg`,
+                  }}
+                >
+                  <div className="pointer"></div>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* world */}
             <div
@@ -498,6 +573,7 @@ function Map({
               onMouseLeave={(e) => HandleLocHover(e)}
             ></div>
 
+            {/* locs */}
             {rootLocs.map((locationId) => {
               return (
                 <Location
@@ -519,6 +595,7 @@ function Map({
           </div>
         )}
 
+        {/* edit loc */}
         {locationToEdit && (
           <>
             <div className="edit-blocker"></div>

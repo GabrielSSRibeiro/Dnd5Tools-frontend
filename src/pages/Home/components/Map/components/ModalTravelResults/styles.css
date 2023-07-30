@@ -2,3 +2,24 @@
   width: fit-content;
   min-height: calc(100% - 210px);
 }
+
+.ModalLocationDetails-container .content {
+  column-gap: 15px;
+  min-height: calc(100% - 210px);
+  position: relative;
+}
+
+.ModalTravelResults-container .divider {
+  border-top: 1px solid var(--gray1);
+  width: calc(100% + 50px);
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+.ModalTravelResults-container footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 15px;
+}

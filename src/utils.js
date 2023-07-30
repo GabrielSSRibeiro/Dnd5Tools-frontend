@@ -213,6 +213,9 @@ export const GetCoordinatesByDistance = (pA, distance, angle) => {
 export const GetDistanceByCoordinates = (pA, pB) => {
   const xDiff = pB.x - pA.x;
   const yDiff = pB.y - pA.y;
-  const distance = Math.sqrt(xDiff ** 2 + yDiff ** 2);
-  return distance;
+  const value = Math.sqrt(xDiff ** 2 + yDiff ** 2);
+  const angleRadians = Math.atan2(pB.y - pA.y, pB.x - pA.x);
+  const angle = (angleRadians * 180) / Math.PI;
+
+  return { value, angle };
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 // import * as util from "../../utils";
 import * as lc from "../../constants/locationConstants";
 import * as cc from "../../constants/creatureConstants";
@@ -41,6 +41,7 @@ function Home() {
   const [selectedCreatures, setSelectedCreatures] = useState([]);
   const [combats, setCombats] = useState([]);
   const [locations, setLocations] = useState(null);
+  const isReadyToLoad = useMemo(() => combatConfig && locations && creatures, [combatConfig, creatures, locations]);
 
   const { currentUser } = useAuth();
 
@@ -133,8 +134,15 @@ function Home() {
   async function HandleDeleteLocations(ids) {
     await api
       .delete("DeleteLocations", { params: { ids } })
-      .then((response) => {
+      .then(async (response) => {
         if (response.data) {
+          //remove any travel node related to any loc deleted
+          if (combatConfig.travel.currentNode && ids.includes(combatConfig.travel.currentNode.locId)) {
+            combatConfig.travel.currentNode = null;
+          }
+          combatConfig.travel.travelNodes = combatConfig.travel.travelNodes.filter((n) => !ids.includes(n.locId));
+          await HandleSaveCombatConfig();
+
           window.location.reload(false);
           // let filteredLocs = locations.filter((l) => !ids.includes(l._id));
 
@@ -243,6 +251,11 @@ function Home() {
           level: 1,
           characterGroups: [],
           inactiveGroup: [],
+          zoom: defaultZoom.current,
+          travel: {
+            currentNode: null,
+            travelNodes: [],
+          },
           world: {
             name: "Cenário",
             traversal: { type: cc.CREATURE_ENVIRONMENTS.AQUATIC, irregularTerrainFrequency: lc.IRREGULAR_TERRAIN_FREQUENCIES.LOW },
@@ -269,7 +282,7 @@ function Home() {
     }, 3000);
   }, []);
 
-  return !combatConfig || !creatures ? (
+  return !isReadyToLoad ? (
     <div className="backend-loading">
       <i className="fas fa-spinner fa-spin"></i>
       <h2 style={{ opacity: showLoadingText ? 1 : 0 }}>Por favor aguarde enquanto tiramos o site de inativade. Isso pode lever até 20 segundos...</h2>
@@ -319,6 +332,7 @@ function Home() {
             HandleDeleteLocations={HandleDeleteLocations}
             HandleSelectFromBestiary={HandleSelectFromBestiary}
             setSelectedCreatures={setSelectedCreatures}
+            HandleSaveCombatConfig={HandleSaveCombatConfig}
             creatures={creatures}
             combatConfig={combatConfig}
             locations={locations}

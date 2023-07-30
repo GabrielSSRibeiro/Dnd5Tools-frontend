@@ -125,6 +125,7 @@ function LocationSummary({
     <div className="LocationSummary-container">
       {modal}
       <div className="body-container" style={distance ? { borderColor: lc.GetHazardousness(currentContext.hazardousness).color } : {}}>
+        {/* name and actions */}
         <header className="header">
           {!distance && (
             <aside className="header-action">
@@ -157,7 +158,8 @@ function LocationSummary({
               ? lc.GetElementType(location.interaction.type).display
               : cc.GetEnviroment(location.traversal.type).display}
 
-            {distance ? `, a ${distance.value} (${distance.time})` : ""}
+            {distance?.valueInUnits ? `, a ${distance.valueInUnits}` : ""}
+            {distance?.timeInUnits ? ` (${distance.timeInUnits})` : ""}
           </span>
 
           {/* first impressions */}
