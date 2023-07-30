@@ -26,6 +26,7 @@ function Map({
   defaultZoom,
   userId,
 }) {
+  const centerMoveRatio = useRef(0.05);
   const hasCurrentTravelNode = useMemo(() => {
     if (!combatConfig.travel.currentNode) {
       return false;
@@ -33,15 +34,13 @@ function Map({
 
     return !!combatConfig.travel.currentNode.locId;
   }, [combatConfig.travel.currentNode]);
-
   const [modal, setModal] = useState(null);
-  const centerMoveRatio = useRef(0.05);
-  const defaultCenter = useRef({ x: 0, y: 0 });
+  const [defaultCenter, setDefaultCenter] = useState(
+    hasCurrentTravelNode ? { x: combatConfig.travel.currentNode.x, y: combatConfig.travel.currentNode.y } : { x: 0, y: 0 }
+  );
   const [locationToEdit, setLocationToEdit] = useState(null);
   const [mapLoading, setMapLoading] = useState(false);
-  const [centerOffset, setCenterOffset] = useState(
-    hasCurrentTravelNode ? { x: combatConfig.travel.currentNode.x, y: combatConfig.travel.currentNode.y } : defaultCenter.current
-  );
+  const [centerOffset, setCenterOffset] = useState(defaultCenter);
   const [schedule, setSchedule] = useState(null);
   const [precipitation, setPrecipitation] = useState(null);
   const [temperature, setTemperature] = useState(null);
@@ -115,7 +114,7 @@ function Map({
       locId: locHoverData.location?._id ?? userId,
     };
 
-    if (!hasCurrentTravelNode) {
+    if (hasCurrentTravelNode) {
       setModal(
         <ModalTravelResults
           onClose={setModal}
@@ -132,7 +131,9 @@ function Map({
 
   function HandleSetCurrentNode(currentNode) {
     combatConfig.travel.currentNode = currentNode;
-    setCenterOffset({ x: currentNode.x, y: currentNode.y });
+    const newCenter = { x: currentNode.x, y: currentNode.y };
+    setCenterOffset(newCenter);
+    setDefaultCenter(newCenter);
   }
 
   function HandleAddTravelNode(currentNode) {
@@ -341,11 +342,11 @@ function Map({
     const relativeY = (e.clientY - (divRect.top + divRect.height / 2)) * -1;
 
     //calculate distance
-    let centerOffset = utils.GetDistanceByCoordinates({ x: 0, y: 0 }, { x: relativeX, y: relativeY });
-    centerOffset.x = relativeX;
-    centerOffset.y = relativeY;
+    let offset = utils.GetDistanceByCoordinates(centerOffset, { x: relativeX * -1, y: relativeY });
+    offset.x = relativeX;
+    offset.y = relativeY;
 
-    return centerOffset;
+    return offset;
   }
 
   function GetAllInteriorLocs(location) {
@@ -496,7 +497,7 @@ function Map({
             <button onClick={() => setCenterOffset({ ...centerOffset, x: centerOffset.x + GetOffsetRatioValue().x })}>
               <i className="fas fa-caret-left"></i>
             </button>
-            <button title="Centrar" onClick={() => setCenterOffset(defaultCenter.current)}>
+            <button title="Centrar" onClick={() => setCenterOffset(defaultCenter)}>
               <i className="fas fa-crosshairs"></i>
             </button>
             <button onClick={() => setCenterOffset({ ...centerOffset, x: centerOffset.x - GetOffsetRatioValue().x })}>
@@ -557,7 +558,7 @@ function Map({
                   style={{
                     width: lc.POINT_OF_INTEREST_RADIUS,
                     height: lc.POINT_OF_INTEREST_RADIUS,
-                    rotate: `${combatConfig.travel.currentNode.angle * -1}deg`,
+                    rotate: `${combatConfig.travel.currentNode.angle - 180}deg`,
                   }}
                 >
                   <div className="pointer"></div>
