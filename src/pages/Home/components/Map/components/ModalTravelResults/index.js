@@ -26,11 +26,20 @@ function ModalTravelResults({ onClose, HandleSetCurrentNode, HandleAddTravelNode
       </main>
       <div className="divider"></div>
       <footer>
-        <button className="button-simple" onClick={() => onClose()}>
-          Cancelar
-        </button>
-        <Button text="Continuar" onClick={HandleContinue} />
-        <Button text="Marcar no Mapa" onClick={HandleSave} isDisabled={true} />
+        <aside className="footer-actions">
+          {/* {1 == 1 && (
+            <button className="button-simple" onClick={() => {}}>
+              <i className="fas fa-trash"></i>
+            </button>
+          )} */}
+          <button className="button-simple" onClick={() => onClose()}>
+            Cancelar
+          </button>
+        </aside>
+        <aside className="footer-actions">
+          <Button text="Continuar" onClick={HandleContinue} />
+          <Button text="Marcar no Mapa" onClick={HandleSave} isDisabled={false} />
+        </aside>
       </footer>
     </Modal>
   );

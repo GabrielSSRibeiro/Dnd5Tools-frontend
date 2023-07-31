@@ -27,17 +27,24 @@ function Map({
   userId,
 }) {
   const centerMoveRatio = useRef(0.05);
-  const hasCurrentTravelNode = useMemo(() => {
+  const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * combatConfig.zoom, [combatConfig.zoom]);
+  const currentNode = useMemo(() => {
     if (!combatConfig.travel.currentNode) {
-      return false;
+      return null;
     }
 
-    return !!combatConfig.travel.currentNode.locId;
-  }, [combatConfig.travel.currentNode]);
+    const currentNode = {
+      isHidden: combatConfig.travel.currentNode.isHidden,
+      x: combatConfig.travel.currentNode.x / pxInMScale,
+      y: combatConfig.travel.currentNode.y / pxInMScale,
+      angle: combatConfig.travel.currentNode.angle,
+      locId: combatConfig.travel.currentNode.userId,
+    };
+
+    return currentNode;
+  }, [combatConfig.travel.currentNode, pxInMScale]);
   const [modal, setModal] = useState(null);
-  const [defaultCenter, setDefaultCenter] = useState(
-    hasCurrentTravelNode ? { x: combatConfig.travel.currentNode.x, y: combatConfig.travel.currentNode.y } : { x: 0, y: 0 }
-  );
+  const [defaultCenter, setDefaultCenter] = useState(currentNode ?? { x: 0, y: 0 });
   const [locationToEdit, setLocationToEdit] = useState(null);
   const [mapLoading, setMapLoading] = useState(false);
   const [centerOffset, setCenterOffset] = useState(defaultCenter);
@@ -48,7 +55,6 @@ function Map({
   const [locationsRefs, setLocationsRefs] = useState([]);
   const [allLocationsRefs, setAllLocationsRefs] = useState([]);
 
-  const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * combatConfig.zoom, [combatConfig.zoom]);
   const minZoom = useMemo(() => lc.BASE_VISION_IN_M / (lc.BASE_PX_IN_M_SCALE * lc.POINT_OF_INTEREST_RADIUS * 2), []);
   const isMinZoom = useMemo(() => combatConfig.zoom >= minZoom, [combatConfig.zoom, minZoom]);
   const maxZoom = useMemo(() => lc.BASE_VISION_IN_M / ((lc.BASE_PX_IN_M_SCALE * lc.BASE_VISION_IN_M) / 2), []);
@@ -99,6 +105,49 @@ function Map({
 
     return allLocationsRefs.length === totalLocsToRender;
   }, [allLocationsRefs.length, map, rootLocs]);
+  const travelNodes = useMemo(() => {
+    if (!currentNode || combatConfig.travel.travelNodes.length === 0) {
+      return [];
+    }
+
+    let travelNodes = combatConfig.travel.travelNodes;
+
+    //if the last node is not the current node, add current to render list
+    const lastTravelledNode = combatConfig.travel.travelNodes[combatConfig.travel.travelNodes.length - 1];
+    if (
+      combatConfig.travel.currentNode.x !== lastTravelledNode.x ||
+      combatConfig.travel.currentNode.y !== lastTravelledNode.y ||
+      combatConfig.travel.currentNode.angle !== lastTravelledNode.angle
+    ) {
+      travelNodes = [...travelNodes, combatConfig.travel.currentNode];
+    }
+
+    travelNodes = travelNodes.map((n, index) => ({
+      isHidden: n.isHidden,
+      x: n.x / pxInMScale,
+      y: n.y / pxInMScale,
+      angle: n.angle,
+      locId: n.userId,
+      isCurrent: index === travelNodes.length - 1,
+    }));
+
+    return travelNodes;
+  }, [combatConfig.travel.currentNode, combatConfig.travel.travelNodes, currentNode, pxInMScale]);
+  const nodeStyles = useMemo(() => ({ width: lc.POINT_OF_INTEREST_RADIUS / 4, height: lc.POINT_OF_INTEREST_RADIUS / 4 }), []);
+  const arrowStyles = useMemo(() => {
+    let nodeStyles = {};
+    if (!currentNode) {
+      return nodeStyles;
+    }
+
+    nodeStyles = {
+      width: lc.POINT_OF_INTEREST_RADIUS,
+      height: lc.POINT_OF_INTEREST_RADIUS,
+      rotate: `${combatConfig.travel.currentNode.angle - 180}deg`,
+    };
+
+    return nodeStyles;
+  }, [combatConfig.travel.currentNode.angle, currentNode]);
 
   function OpenModalTravelResults() {
     if (locations.length === 0 || !locHoverData) {
@@ -108,19 +157,19 @@ function Map({
     //new current node
     const currentNode = {
       isHidden: false,
-      x: locHoverData.distance.centerOffset.x * -1,
-      y: locHoverData.distance.centerOffset.y,
+      x: locHoverData.distance.centerOffset.x * -1 * pxInMScale,
+      y: locHoverData.distance.centerOffset.y * pxInMScale,
       angle: locHoverData.distance.centerOffset.angle,
       locId: locHoverData.location?._id ?? userId,
     };
 
-    if (hasCurrentTravelNode) {
+    if (currentNode) {
       setModal(
         <ModalTravelResults
           onClose={setModal}
           HandleSetCurrentNode={() => HandleSetCurrentNode(currentNode)}
           HandleAddTravelNode={() => HandleAddTravelNode(currentNode)}
-          HandleSaveCombatConfig={() => HandleAddTravelNode}
+          HandleSaveCombatConfig={HandleSaveCombatConfig}
         />
       );
     } else {
@@ -131,7 +180,7 @@ function Map({
 
   function HandleSetCurrentNode(currentNode) {
     combatConfig.travel.currentNode = currentNode;
-    const newCenter = { x: currentNode.x, y: currentNode.y };
+    const newCenter = { x: currentNode.x / pxInMScale, y: currentNode.y / pxInMScale };
     setCenterOffset(newCenter);
     setDefaultCenter(newCenter);
   }
@@ -315,7 +364,7 @@ function Map({
   // let timer = useRef(null);
   function HandleLocHover(e, location) {
     let distance = { centerOffset: GetCenterOffset(e) };
-    if (hasCurrentTravelNode) {
+    if (currentNode) {
       const distanceInScale = Math.round(distance.centerOffset.value * pxInMScale);
       distance.valueInUnits = distanceInScale < 1000 ? `${distanceInScale}m` : `${Math.round(distanceInScale / 1000)}km`;
       distance.timeInUnits = ""; //1 == 1 ? `${7} horas` : `${2} dias`;
@@ -393,10 +442,10 @@ function Map({
         <aside className="info-msg floating-details">
           {locations.length === 0 ? (
             <h4>Adicione uma nova localização para vê-la no mapa</h4>
-          ) : !hasCurrentTravelNode ? (
+          ) : !currentNode ? (
             <h4>Clique em um ponto no mapa para posionar o grupo</h4>
           ) : (
-            <h4>{map[hasCurrentTravelNode] ? map[hasCurrentTravelNode].data.name : combatConfig.world.name}</h4>
+            <h4>{map[currentNode] ? map[currentNode].data.name : combatConfig.world.name}</h4>
           )}
         </aside>
 
@@ -543,28 +592,18 @@ function Map({
         {!mapLoading && (
           <div id={locationsContainerId} className="locations" style={{ translate: `${centerOffset.x}px ${centerOffset.y}px` }}>
             {/* travel */}
-            {hasCurrentTravelNode && (
-              <div
-                className="travel-none floating-details"
-                style={{
-                  width: lc.POINT_OF_INTEREST_RADIUS / 4,
-                  height: lc.POINT_OF_INTEREST_RADIUS / 4,
-                  translate: `${combatConfig.travel.currentNode.x * -1}px ${combatConfig.travel.currentNode.y * -1}px`,
-                }}
-              >
-                <div className="vision floating-details" style={{ width: visionRadius / 2, height: visionRadius / 2 }}></div>
-                <div
-                  className="direction-arrow floating-details"
-                  style={{
-                    width: lc.POINT_OF_INTEREST_RADIUS,
-                    height: lc.POINT_OF_INTEREST_RADIUS,
-                    rotate: `${combatConfig.travel.currentNode.angle - 180}deg`,
-                  }}
-                >
-                  <div className="pointer"></div>
-                </div>
+            {travelNodes.map((n, index) => (
+              <div className="travel-none floating-details" style={{ ...nodeStyles, translate: `${n.x * -1}px ${n.y * -1}px` }} key={index}>
+                {n.isCurrent && (
+                  <>
+                    <div className="vision floating-details" style={{ width: visionRadius / 2, height: visionRadius / 2 }}></div>
+                    <div className="direction-arrow floating-details" style={arrowStyles}>
+                      <div className="pointer"></div>
+                    </div>
+                  </>
+                )}
               </div>
-            )}
+            ))}
 
             {/* world */}
             <div

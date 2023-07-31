@@ -21,5 +21,12 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  column-gap: 15px;
+  column-gap: 25px;
+}
+
+.ModalTravelResults-container footer .footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 10px;
 }
