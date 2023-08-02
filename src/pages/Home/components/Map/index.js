@@ -6,6 +6,7 @@ import * as cc from "../../../../constants/creatureConstants";
 
 import Button from "../../../../components/Button";
 import Select from "../../../../components/Select";
+import SelectButton from "../../../../components/SelectButton";
 import LocationSummary from "./components/LocationSummary";
 import EditLocation from "./components/EditLocation";
 import Location from "./components/Location";
@@ -38,13 +39,14 @@ function Map({
       x: combatConfig.travel.currentNode.x / pxInMScale,
       y: combatConfig.travel.currentNode.y / pxInMScale,
       angle: combatConfig.travel.currentNode.angle,
-      locId: combatConfig.travel.currentNode.userId,
+      locId: combatConfig.travel.currentNode.locId,
     };
 
     return currentNode;
   }, [combatConfig.travel.currentNode, pxInMScale]);
   const [modal, setModal] = useState(null);
-  const [defaultCenter, setDefaultCenter] = useState(currentNode ?? { x: 0, y: 0 });
+  const [mapMode, setMapMode] = useState(currentNode ? lc.MAP_MODES.TRAVEL : lc.MAP_MODES.FREE);
+  const [defaultCenter, setDefaultCenter] = useState(currentNode ? { x: currentNode.x, y: currentNode.y } : { x: 0, y: 0 });
   const [locationToEdit, setLocationToEdit] = useState(null);
   const [mapLoading, setMapLoading] = useState(false);
   const [centerOffset, setCenterOffset] = useState(defaultCenter);
@@ -106,7 +108,7 @@ function Map({
     return allLocationsRefs.length === totalLocsToRender;
   }, [allLocationsRefs.length, map, rootLocs]);
   const travelNodes = useMemo(() => {
-    if (!currentNode || combatConfig.travel.travelNodes.length === 0) {
+    if (!currentNode) {
       return [];
     }
 
@@ -115,6 +117,7 @@ function Map({
     //if the last node is not the current node, add current to render list
     const lastTravelledNode = combatConfig.travel.travelNodes[combatConfig.travel.travelNodes.length - 1];
     if (
+      !lastTravelledNode ||
       combatConfig.travel.currentNode.x !== lastTravelledNode.x ||
       combatConfig.travel.currentNode.y !== lastTravelledNode.y ||
       combatConfig.travel.currentNode.angle !== lastTravelledNode.angle
@@ -132,8 +135,8 @@ function Map({
     }));
 
     return travelNodes;
-  }, [combatConfig.travel.currentNode, combatConfig.travel.travelNodes, currentNode, pxInMScale]);
-  const nodeStyles = useMemo(() => ({ width: lc.POINT_OF_INTEREST_RADIUS / 4, height: lc.POINT_OF_INTEREST_RADIUS / 4 }), []);
+  }, [combatConfig, currentNode, pxInMScale]);
+  const nodeStyles = useMemo(() => ({ width: lc.POINT_OF_INTEREST_RADIUS / 3, height: lc.POINT_OF_INTEREST_RADIUS / 3 }), []);
   const arrowStyles = useMemo(() => {
     let nodeStyles = {};
     if (!currentNode) {
@@ -147,15 +150,15 @@ function Map({
     };
 
     return nodeStyles;
-  }, [combatConfig.travel.currentNode.angle, currentNode]);
+  }, [combatConfig.travel.currentNode, currentNode]);
 
   function OpenModalTravelResults() {
-    if (locations.length === 0 || !locHoverData) {
+    if (locations.length === 0 || !locHoverData || mapMode !== lc.MAP_MODES.TRAVEL) {
       return;
     }
 
     //new current node
-    const currentNode = {
+    const newCurrentNode = {
       isHidden: false,
       x: locHoverData.distance.centerOffset.x * -1 * pxInMScale,
       y: locHoverData.distance.centerOffset.y * pxInMScale,
@@ -167,30 +170,30 @@ function Map({
       setModal(
         <ModalTravelResults
           onClose={setModal}
-          HandleSetCurrentNode={() => HandleSetCurrentNode(currentNode)}
-          HandleAddTravelNode={() => HandleAddTravelNode(currentNode)}
+          HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
+          HandleAddTravelNode={() => HandleAddTravelNode(newCurrentNode)}
           HandleSaveCombatConfig={HandleSaveCombatConfig}
         />
       );
     } else {
-      HandleSetCurrentNode(currentNode);
+      HandleSetCurrentNode(newCurrentNode);
       HandleSaveCombatConfig(combatConfig);
     }
   }
 
-  function HandleSetCurrentNode(currentNode) {
-    combatConfig.travel.currentNode = currentNode;
-    const newCenter = { x: currentNode.x / pxInMScale, y: currentNode.y / pxInMScale };
+  function HandleSetCurrentNode(newCurrentNode) {
+    combatConfig.travel.currentNode = newCurrentNode;
+    const newCenter = { x: newCurrentNode.x / pxInMScale, y: newCurrentNode.y / pxInMScale };
     setCenterOffset(newCenter);
     setDefaultCenter(newCenter);
   }
 
-  function HandleAddTravelNode(currentNode) {
+  function HandleAddTravelNode(newCurrentNode) {
     if (combatConfig.travel.travelNodes.length === 100) {
       combatConfig.travel.travelNodes.shift();
     }
 
-    combatConfig.travel.travelNodes.push(currentNode);
+    combatConfig.travel.travelNodes.push(newCurrentNode);
   }
 
   function GetOffsetRatioValue() {
@@ -398,6 +401,19 @@ function Map({
     return offset;
   }
 
+  function UpdateZoom(newZoom) {
+    const zoomRatio = combatConfig.zoom / newZoom;
+    combatConfig.zoom = newZoom;
+
+    setDefaultCenter({ x: defaultCenter.x * zoomRatio, y: defaultCenter.y * zoomRatio });
+  }
+
+  function HandleChangeMapType(newMapMode) {
+    setDefaultCenter(newMapMode === lc.MAP_MODES.TRAVEL ? { x: currentNode.x, y: currentNode.y } : { x: 0, y: 0 });
+
+    setMapMode(newMapMode);
+  }
+
   function GetAllInteriorLocs(location) {
     function AddInteriorLocsToList(loc, list) {
       Object.values(loc.interiorLocs).forEach((l) => {
@@ -430,6 +446,10 @@ function Map({
   }
 
   useEffect(() => {
+    setCenterOffset(defaultCenter);
+  }, [defaultCenter]);
+
+  useEffect(() => {
     setAllLocationsRefs([]);
     setLocationsRefs([]);
   }, [locations, mapLoading]);
@@ -439,18 +459,24 @@ function Map({
       {modal}
       <div className="world-map" style={{ backgroundColor: cc.GetEnviroment(combatConfig.world.traversal.type).color }}>
         {/* title */}
-        <aside className="info-msg floating-details">
-          {locations.length === 0 ? (
+        {locations.length === 0 ? (
+          <aside className="info-msg floating-details">
             <h4>Adicione uma nova localização para vê-la no mapa</h4>
-          ) : !currentNode ? (
-            <h4>Clique em um ponto no mapa para posionar o grupo</h4>
-          ) : (
-            <h4>{map[currentNode] ? map[currentNode].data.name : combatConfig.world.name}</h4>
-          )}
-        </aside>
+          </aside>
+        ) : (
+          mapMode === lc.MAP_MODES.TRAVEL && (
+            <aside className="info-msg floating-details">
+              {!currentNode ? (
+                <h4>Clique em um ponto no mapa para posionar o grupo</h4>
+              ) : (
+                <h4>{map[currentNode.locId] ? map[currentNode.locId].data.name : combatConfig.world.name}</h4>
+              )}
+            </aside>
+          )
+        )}
 
         {/* hover */}
-        {locations.length > 0 && locHoverData?.location && (
+        {locations.length > 0 && mapMode === lc.MAP_MODES.TRAVEL && locHoverData?.location && (
           <div className="location-details floating-details" style={{ ...locHoverData.style, top: locHoverData.top, left: locHoverData.left }}>
             <LocationSummary
               location={locHoverData.location}
@@ -481,129 +507,133 @@ function Map({
             temperature={temperature}
           />
         </aside>
-        <aside className="new-encounter floating-details">
-          <Button text="Novo Encontro" isDisabled={true} />
-        </aside>
-        <aside className="map-zoom floating-details">
-          <div className="zoom-section">
-            <button
-              onClick={() =>
-                MapLoadingWrapper(() => {
-                  combatConfig.zoom = minZoom;
-                })
-              }
-              disabled={isMinZoom}
-            >
-              <i className="fas fa-minus-square"></i>
-            </button>
-            <button
-              onClick={() =>
-                MapLoadingWrapper(() => {
-                  combatConfig.zoom = combatConfig.zoom * 1.1 >= minZoom ? minZoom : combatConfig.zoom * 1.1;
-                })
-              }
-              disabled={isMinZoom}
-            >
-              <i className="fas fa-minus"></i>
-            </button>
-            <button
-              title="Resetar"
-              onClick={() => {
-                if (defaultZoom.current !== combatConfig.zoom) {
-                  MapLoadingWrapper(() => {
-                    combatConfig.zoom = defaultZoom.current;
-                  });
-                }
-              }}
-            >
-              <i className="fas fa-search"></i>
-            </button>
-            <button
-              onClick={() =>
-                MapLoadingWrapper(() => {
-                  combatConfig.zoom = combatConfig.zoom * 0.9 <= maxZoom ? maxZoom : combatConfig.zoom * 0.9;
-                })
-              }
-              disabled={isMaxZoom}
-            >
-              <i className="fas fa-plus"></i>
-            </button>
-            <button
-              onClick={() =>
-                MapLoadingWrapper(() => {
-                  combatConfig.zoom = maxZoom;
-                })
-              }
-              disabled={isMaxZoom}
-            >
-              <i className="fas fa-plus-square"></i>
-            </button>
-          </div>
-          <div className="zoom-section">
-            <button onClick={() => setCenterOffset({ ...centerOffset, y: centerOffset.y + GetOffsetRatioValue().y * 2 })}>
-              <i className="fas fa-caret-up"></i>
-            </button>
-            <button onClick={() => setCenterOffset({ ...centerOffset, x: centerOffset.x + GetOffsetRatioValue().x })}>
-              <i className="fas fa-caret-left"></i>
-            </button>
-            <button title="Centrar" onClick={() => setCenterOffset(defaultCenter)}>
-              <i className="fas fa-crosshairs"></i>
-            </button>
-            <button onClick={() => setCenterOffset({ ...centerOffset, x: centerOffset.x - GetOffsetRatioValue().x })}>
-              <i className="fas fa-caret-right"></i>
-            </button>
-            <button onClick={() => setCenterOffset({ ...centerOffset, y: centerOffset.y - GetOffsetRatioValue().y * 2 })}>
-              <i className="fas fa-caret-down"></i>
-            </button>
-          </div>
-          {/* <div className="compass">N</div> */}
-        </aside>
-        <aside className="map-stats floating-details">
-          <Select
-            label="Horário"
-            isDisabled={true}
-            value={schedule}
-            onSelect={setSchedule}
-            options={lc.routineSchedules}
-            optionDisplay={(o) => o.display}
-            optionValue={(o) => o.value}
-          />
-          <Select label="Viagem" isDisabled={true} />
-          <Select
-            label="Precipitação"
-            isDisabled={true}
-            value={precipitation}
-            onSelect={setPrecipitation}
-            options={lc.precipitationFrequencies}
-            optionDisplay={(o) => o.display}
-            optionValue={(o) => o.value}
-          />
-          <Select
-            label="Temperatura"
-            isDisabled={true}
-            value={temperature}
-            onSelect={setTemperature}
-            options={lc.intenseTemperatureFrequencies}
-            optionDisplay={(o) => o.display}
-            optionValue={(o) => o.value}
-          />
-        </aside>
+        {locations.length > 0 && (
+          <>
+            {mapMode === lc.MAP_MODES.TRAVEL ? (
+              <aside className="travel-details floating-details">
+                <Select label="Passagem do tempo" isDisabled={true} extraWidth={50} />
+                <Select label="Montaria" isDisabled={true} extraWidth={50} />
+                <Select label="Maior Carga" isDisabled={true} extraWidth={50} />
+                <Select label="Ritmo de viagem" isDisabled={true} extraWidth={50} />
+                <Select label="Foco" isDisabled={true} extraWidth={50} />
+              </aside>
+            ) : (
+              <aside className="new-encounter floating-details">
+                <Button text="Novo Encontro" isDisabled={true} />
+              </aside>
+            )}
+            <aside className="map-zoom floating-details">
+              <div className="zoom-section">
+                <button onClick={() => MapLoadingWrapper(() => UpdateZoom(minZoom))} disabled={isMinZoom}>
+                  <i className="fas fa-minus-square"></i>
+                </button>
+                <button
+                  onClick={() => MapLoadingWrapper(() => UpdateZoom(combatConfig.zoom * 1.1 >= minZoom ? minZoom : combatConfig.zoom * 1.1))}
+                  disabled={isMinZoom}
+                >
+                  <i className="fas fa-minus"></i>
+                </button>
+                <button
+                  title="Resetar"
+                  onClick={() => {
+                    if (defaultZoom.current !== combatConfig.zoom) {
+                      MapLoadingWrapper(() => UpdateZoom(defaultZoom.current));
+                    }
+                  }}
+                >
+                  <i className="fas fa-search"></i>
+                </button>
+                <button
+                  onClick={() => MapLoadingWrapper(() => UpdateZoom(combatConfig.zoom * 0.9 <= maxZoom ? maxZoom : combatConfig.zoom * 0.9))}
+                  disabled={isMaxZoom}
+                >
+                  <i className="fas fa-plus"></i>
+                </button>
+                <button onClick={() => MapLoadingWrapper(() => UpdateZoom(maxZoom))} disabled={isMaxZoom}>
+                  <i className="fas fa-plus-square"></i>
+                </button>
+              </div>
+              <div className="zoom-section">
+                <button onClick={() => setCenterOffset({ ...centerOffset, y: centerOffset.y + GetOffsetRatioValue().y * 2 })}>
+                  <i className="fas fa-caret-up"></i>
+                </button>
+                <button onClick={() => setCenterOffset({ ...centerOffset, x: centerOffset.x + GetOffsetRatioValue().x })}>
+                  <i className="fas fa-caret-left"></i>
+                </button>
+                <button title="Centrar" onClick={() => setCenterOffset(defaultCenter)}>
+                  <i className="fas fa-crosshairs"></i>
+                </button>
+                <button onClick={() => setCenterOffset({ ...centerOffset, x: centerOffset.x - GetOffsetRatioValue().x })}>
+                  <i className="fas fa-caret-right"></i>
+                </button>
+                <button onClick={() => setCenterOffset({ ...centerOffset, y: centerOffset.y - GetOffsetRatioValue().y * 2 })}>
+                  <i className="fas fa-caret-down"></i>
+                </button>
+              </div>
+              {/* <div className="compass">N</div> */}
+            </aside>
+            {mapMode === lc.MAP_MODES.TRAVEL && (
+              <aside className="travel-stats floating-details">
+                <Select
+                  label="Horário"
+                  isDisabled={true}
+                  value={schedule}
+                  onSelect={setSchedule}
+                  options={lc.routineSchedules}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
+                />
+                <Select label="Viagem" isDisabled={true} />
+                <Select
+                  label="Precipitação"
+                  isDisabled={true}
+                  value={precipitation}
+                  onSelect={setPrecipitation}
+                  options={lc.precipitationFrequencies}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
+                />
+                <Select
+                  label="Temperatura"
+                  isDisabled={true}
+                  value={temperature}
+                  onSelect={setTemperature}
+                  options={lc.intenseTemperatureFrequencies}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
+                />
+              </aside>
+            )}
+            <aside className="map-modes floating-details">
+              {lc.mapModes.map((m) => (
+                <SelectButton
+                  isSelected={m.value === mapMode}
+                  isLong={false}
+                  text={m.display}
+                  onClick={() => HandleChangeMapType(m.value)}
+                  key={m.value}
+                />
+              ))}
+            </aside>
+          </>
+        )}
 
         {!mapLoading && (
           <div id={locationsContainerId} className="locations" style={{ translate: `${centerOffset.x}px ${centerOffset.y}px` }}>
             {/* travel */}
-            {travelNodes.map((n, index) => (
-              <div className="travel-none floating-details" style={{ ...nodeStyles, translate: `${n.x * -1}px ${n.y * -1}px` }} key={index}>
-                {n.isCurrent && (
-                  <>
-                    <div className="vision floating-details" style={{ width: visionRadius / 2, height: visionRadius / 2 }}></div>
-                    <div className="direction-arrow floating-details" style={arrowStyles}>
-                      <div className="pointer"></div>
-                    </div>
-                  </>
-                )}
-              </div>
-            ))}
+            {mapMode === lc.MAP_MODES.TRAVEL &&
+              travelNodes.map((n, index) => (
+                <div className="travel-none floating-details" style={{ ...nodeStyles, translate: `${n.x * -1}px ${n.y * -1}px` }} key={index}>
+                  {n.isCurrent && (
+                    <>
+                      <div className="vision floating-details" style={{ width: visionRadius / 2, height: visionRadius / 2 }}></div>
+                      <div className="direction-arrow floating-details" style={arrowStyles}>
+                        <div className="pointer"></div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
 
             {/* world */}
             <div

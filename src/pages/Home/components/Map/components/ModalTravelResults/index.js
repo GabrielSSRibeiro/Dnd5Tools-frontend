@@ -37,7 +37,7 @@ function ModalTravelResults({ onClose, HandleSetCurrentNode, HandleAddTravelNode
           </button>
         </aside>
         <aside className="footer-actions">
-          <Button text="Continuar" onClick={HandleContinue} />
+          <Button text="Continuar sem Marcar" onClick={HandleContinue} />
           <Button text="Marcar no Mapa" onClick={HandleSave} isDisabled={false} />
         </aside>
       </footer>

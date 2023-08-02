@@ -275,3 +275,12 @@ export const materialExtractionDifficulties = [
   { display: "Extrema", value: MATERIAL_EXTRACTION_DIFFICULTIES.EXTREME },
 ];
 export const GetMaterialExtractionDifficulty = (value) => materialExtractionDifficulties.find((a) => a.value === value);
+
+export const MAP_MODES = {
+  FREE: 10,
+  TRAVEL: 20,
+};
+export const mapModes = [
+  { display: "Livre", value: MAP_MODES.FREE },
+  { display: "Viagem", value: MAP_MODES.TRAVEL },
+];
