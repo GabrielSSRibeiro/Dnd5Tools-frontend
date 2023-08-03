@@ -298,6 +298,9 @@ function Location({
         } else if (index !== cbgs.length - 1) {
           const modifier = cbgs.slice(index + 2).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
           bga.style.width = `calc(100% - ${modifier / 2}px)`;
+        } else {
+          //still adjust as last option
+          bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
         }
       });
 

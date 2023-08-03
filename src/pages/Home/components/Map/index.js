@@ -367,7 +367,7 @@ function Map({
   // let timer = useRef(null);
   function HandleLocHover(e, location) {
     let distance = { centerOffset: GetCenterOffset(e) };
-    if (currentNode) {
+    if (currentNode && mapMode === lc.MAP_MODES.TRAVEL) {
       const distanceInScale = Math.round(distance.centerOffset.value * pxInMScale);
       distance.valueInUnits = distanceInScale < 1000 ? `${distanceInScale}m` : `${Math.round(distanceInScale / 1000)}km`;
       distance.timeInUnits = ""; //1 == 1 ? `${7} horas` : `${2} dias`;
@@ -476,7 +476,7 @@ function Map({
         )}
 
         {/* hover */}
-        {locations.length > 0 && mapMode === lc.MAP_MODES.TRAVEL && locHoverData?.location && (
+        {locations.length > 0 && locHoverData?.location && (
           <div className="location-details floating-details" style={{ ...locHoverData.style, top: locHoverData.top, left: locHoverData.left }}>
             <LocationSummary
               location={locHoverData.location}
@@ -493,20 +493,6 @@ function Map({
           </div>
         )}
 
-        {/* floating */}
-        <aside className="world-details floating-details">
-          <LocationSummary
-            location={combatConfig.world}
-            id={userId}
-            setLocationToEdit={setLocationToEdit}
-            setLocHoverData={setLocHoverData}
-            locations={locations}
-            creatures={creatures}
-            schedule={schedule}
-            precipitation={precipitation}
-            temperature={temperature}
-          />
-        </aside>
         {locations.length > 0 && (
           <>
             {mapMode === lc.MAP_MODES.TRAVEL ? (
@@ -664,6 +650,21 @@ function Map({
             })}
           </div>
         )}
+
+        {/* floating */}
+        <aside className="world-details floating-details">
+          <LocationSummary
+            location={combatConfig.world}
+            id={userId}
+            setLocationToEdit={setLocationToEdit}
+            setLocHoverData={setLocHoverData}
+            locations={locations}
+            creatures={creatures}
+            schedule={schedule}
+            precipitation={precipitation}
+            temperature={temperature}
+          />
+        </aside>
 
         {/* edit loc */}
         {locationToEdit && (
