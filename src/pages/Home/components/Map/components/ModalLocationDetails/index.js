@@ -142,15 +142,13 @@ function ModalLocationDetails({ location, id, locations, onClose, HandleEditNewL
           <div className="location-list df df-fd-c df-jc-fs">
             {filteredLocations.map((loc) => (
               <div className="list-location df df-jc-sb" key={loc._id}>
-                {loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
-                  <button disabled>
-                    <i className="fas fa-route"></i>
-                  </button>
-                ) : (
-                  <button onClick={() => HandleNewLocation(loc._id)} disabled={locations.length >= 100}>
-                    <i className="fas fa-plus"></i>
-                  </button>
-                )}
+                <button
+                  className={`${loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? "invisible" : ""}`}
+                  onClick={() => HandleNewLocation(loc._id)}
+                  disabled={locations.length >= 100 || loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST}
+                >
+                  <i className="fas fa-plus"></i>
+                </button>
                 <span>{loc.name}</span>
                 <button onClick={() => OpenModalLocationDetails(loc, loc._id)}>
                   <i className="fas fa-book"></i>

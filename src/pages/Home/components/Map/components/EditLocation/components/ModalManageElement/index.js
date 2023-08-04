@@ -16,7 +16,7 @@ function ModalManageElement({ element, elements, onClose }) {
       : {
           type: null,
           frequency: null,
-          groupSize: null,
+          groupSize: lc.GROUP_SIZES.SOLO,
           hazardousness: null,
           material: {
             Probability: null,
@@ -70,7 +70,6 @@ function ModalManageElement({ element, elements, onClose }) {
           value={tempElement}
           valuePropertyPath="groupSize"
           onSelect={setTempElement}
-          nothingSelected="Solitário"
           options={lc.groupSizes}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}

@@ -502,6 +502,7 @@ function Map({
                 <Select label="Maior Carga" isDisabled={true} extraWidth={50} />
                 <Select label="Ritmo de viagem" isDisabled={true} extraWidth={50} />
                 <Select label="Foco" isDisabled={true} extraWidth={50} />
+                <Select label="Viagem" isDisabled={true} extraWidth={50} />
               </aside>
             ) : (
               <aside className="new-encounter floating-details">
@@ -509,7 +510,7 @@ function Map({
               </aside>
             )}
             <aside className="map-zoom floating-details">
-              <div className="zoom-section">
+              <div className="stat-section">
                 <button onClick={() => MapLoadingWrapper(() => UpdateZoom(minZoom))} disabled={isMinZoom}>
                   <i className="fas fa-minus-square"></i>
                 </button>
@@ -539,7 +540,7 @@ function Map({
                   <i className="fas fa-plus-square"></i>
                 </button>
               </div>
-              <div className="zoom-section">
+              <div className="stat-section">
                 <button onClick={() => setCenterOffset({ ...centerOffset, y: centerOffset.y + GetOffsetRatioValue().y * 2 })}>
                   <i className="fas fa-caret-up"></i>
                 </button>
@@ -560,34 +561,17 @@ function Map({
             </aside>
             {mapMode === lc.MAP_MODES.TRAVEL && (
               <aside className="travel-stats floating-details">
-                <Select
-                  label="Horário"
-                  isDisabled={true}
-                  value={schedule}
-                  onSelect={setSchedule}
-                  options={lc.routineSchedules}
-                  optionDisplay={(o) => o.display}
-                  optionValue={(o) => o.value}
-                />
-                <Select label="Viagem" isDisabled={true} />
-                <Select
-                  label="Precipitação"
-                  isDisabled={true}
-                  value={precipitation}
-                  onSelect={setPrecipitation}
-                  options={lc.precipitationFrequencies}
-                  optionDisplay={(o) => o.display}
-                  optionValue={(o) => o.value}
-                />
-                <Select
-                  label="Temperatura"
-                  isDisabled={true}
-                  value={temperature}
-                  onSelect={setTemperature}
-                  options={lc.intenseTemperatureFrequencies}
-                  optionDisplay={(o) => o.display}
-                  optionValue={(o) => o.value}
-                />
+                <div className="stat-section">
+                  <button>
+                    <i className="fas fa-minus"></i>
+                  </button>
+                  <h4>Horário</h4>
+                  <button>
+                    <i className="fas fa-plus"></i>
+                  </button>
+                </div>
+                <h4>Precipitação</h4>
+                <h4>Temperatura</h4>
               </aside>
             )}
             <aside className="map-modes floating-details">

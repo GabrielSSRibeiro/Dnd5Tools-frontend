@@ -22,6 +22,7 @@
 
 .ModalManageCreature-container .creature-detail-group-title {
   width: 100%;
+  min-width: 400px;
   padding: 0 10px;
   margin-bottom: 2px;
 

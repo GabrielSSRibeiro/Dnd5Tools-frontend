@@ -86,6 +86,7 @@
   position: absolute;
   bottom: 0;
   margin: 10px;
+  padding: 10px;
   background-color: rgba(249, 249, 249, 0.85);
 
   display: flex;
@@ -110,7 +111,6 @@
   bottom: 0;
   left: 0;
   margin: 10px;
-  background-color: rgba(249, 249, 249, 0.85);
 
   display: flex;
   align-items: center;
@@ -118,11 +118,12 @@
   column-gap: 10px;
 }
 
-.Map-container .world-map .map-zoom .zoom-section {
+.Map-container .world-map .stat-section {
   display: flex;
   align-items: center;
   justify-content: center;
   column-gap: 3px;
+  background-color: rgba(249, 249, 249, 0.85);
 }
 
 .Map-container .world-map .map-zoom .zoom-section button {

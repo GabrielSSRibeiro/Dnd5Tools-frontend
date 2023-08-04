@@ -17,6 +17,7 @@ function ModalManageCreatureRoutine({ routine, routines, contexts, onClose }) {
           precipitation: null,
           temperature: null,
           context: null,
+          groupSize: lc.GROUP_SIZES.SOLO,
           encounterFrequency: null,
         }
   );
@@ -29,9 +30,26 @@ function ModalManageCreatureRoutine({ routine, routines, contexts, onClose }) {
     onClose(tempRoutine);
   }
 
+  function CheckFinalButtonValid() {
+    if (!tempRoutine.encounterFrequency) {
+      return false;
+    }
+
+    return true;
+  }
+
   return (
     <Modal title="Rotina" className="ModalManageCreatureRoutine-container" onClickToClose={onClose}>
       <div className="new-creature-wrapper">
+        <Select
+          label={"Contexto"}
+          extraWidth={250}
+          value={tempRoutine}
+          valuePropertyPath="context"
+          nothingSelected="Todos"
+          onSelect={setTempRoutine}
+          options={contexts}
+        />
         <Select
           label={"Horários"}
           extraWidth={250}
@@ -50,7 +68,7 @@ function ModalManageCreatureRoutine({ routine, routines, contexts, onClose }) {
           valuePropertyPath="precipitation"
           nothingSelected="Todas"
           onSelect={setTempRoutine}
-          options={lc.precipitationFrequencies}
+          options={lc.routinePrecipitations}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />
@@ -61,18 +79,19 @@ function ModalManageCreatureRoutine({ routine, routines, contexts, onClose }) {
           valuePropertyPath="temperature"
           nothingSelected="Todas"
           onSelect={setTempRoutine}
-          options={lc.intenseTemperatureFrequencies}
+          options={lc.routineTemperatures}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />
         <Select
-          label={"Contexto"}
+          label={"Tamanho de Grupo"}
           extraWidth={250}
           value={tempRoutine}
-          valuePropertyPath="context"
-          nothingSelected="Todos"
+          valuePropertyPath="groupSize"
           onSelect={setTempRoutine}
-          options={contexts}
+          options={lc.groupSizes}
+          optionDisplay={(o) => o.display}
+          optionValue={(o) => o.value}
         />
         <Select
           label={"Frequência de Encontro"}
@@ -80,9 +99,7 @@ function ModalManageCreatureRoutine({ routine, routines, contexts, onClose }) {
           value={tempRoutine}
           valuePropertyPath="encounterFrequency"
           onSelect={setTempRoutine}
-          options={lc.encounterFrequencies.filter(
-            (f) => f.value === routine?.encounterFrequency || !routines.some((r) => r.encounterFrequency === f.value)
-          )}
+          options={lc.encounterFrequencies}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />
@@ -91,7 +108,7 @@ function ModalManageCreatureRoutine({ routine, routines, contexts, onClose }) {
         <button className="button-simple" onClick={HandleCancel}>
           Cancelar
         </button>
-        <Button text="Salvar" onClick={HandleConfirm} />
+        <Button text="Salvar" onClick={HandleConfirm} isDisabled={!CheckFinalButtonValid()} />
       </footer>
     </Modal>
   );

@@ -210,27 +210,49 @@ export const resourceEasiness = [
 ];
 export const GetResourceEasiness = (value) => resourceEasiness.find((a) => a.value === value);
 
+export const ROUTINE_PRECIPITATIONS = {
+  CLEAR: 10,
+  PRECIPITATING: 20,
+};
+export const routinePrecipitations = [
+  { display: "Limpo", value: ROUTINE_PRECIPITATIONS.CLEAR, icon: "fas fa-rainbow" },
+  { display: "Precipitando", value: ROUTINE_PRECIPITATIONS.PRECIPITATING, icon: "fas fa-cloud-showers-heavy" },
+];
+export const GetRoutinePrecipitation = (value) => routinePrecipitations.find((a) => a.value === value);
+
+export const ROUTINE_TEMPERATURES = {
+  NORMAL: 10,
+  EXTREME: 20,
+};
+export const routineTemperatures = [
+  { display: "Normal", value: ROUTINE_TEMPERATURES.NORMAL, icon: "fas fa-thermometer-empty" },
+  { display: "Extrema", value: ROUTINE_TEMPERATURES.EXTREME, icon: "fas fa-thermometer-full" },
+];
+export const GetRoutineTemperature = (value) => routineTemperatures.find((a) => a.value === value);
+
 export const ROUTINE_SCHEDULES = {
   DAY: 10,
   NIGHT: 20,
 };
 export const routineSchedules = [
-  { display: "Dia", value: ROUTINE_SCHEDULES.DAY },
-  { display: "Noite", value: ROUTINE_SCHEDULES.NIGHT },
+  { display: "Dia", value: ROUTINE_SCHEDULES.DAY, icon: "fas fa-sun" },
+  { display: "Noite", value: ROUTINE_SCHEDULES.NIGHT, icon: "fas fa-moon" },
 ];
 export const GetRoutineSchedule = (value) => routineSchedules.find((a) => a.value === value);
 
 export const GROUP_SIZES = {
+  SOLO: 5,
   SMALL: 10,
   MEDIUM: 20,
   LARGE: 30,
   EXTREME: 40,
 };
 export const groupSizes = [
-  { display: "Pequeno (1-2)", value: GROUP_SIZES.SMALL },
-  { display: "Médio (2-3)", value: GROUP_SIZES.MEDIUM },
-  { display: "Grande (3-4)", value: GROUP_SIZES.LARGE },
-  { display: "Extremo (4-5)", value: GROUP_SIZES.EXTREME },
+  { display: "Solitário", value: GROUP_SIZES.SOLO, routineDisplay: "1" },
+  { display: "Pequeno (1-2)", value: GROUP_SIZES.SMALL, routineDisplay: "1-2" },
+  { display: "Médio (2-3)", value: GROUP_SIZES.MEDIUM, routineDisplay: "2-3" },
+  { display: "Grande (3-4)", value: GROUP_SIZES.LARGE, routineDisplay: "3-4" },
+  { display: "Muito Grande (4-5)", value: GROUP_SIZES.EXTREME, routineDisplay: "4-5" },
 ];
 export const GetGroupSize = (value) => groupSizes.find((a) => a.value === value);
 

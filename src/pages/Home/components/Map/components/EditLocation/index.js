@@ -239,9 +239,10 @@ function EditLocation({
     setLocation({ ...location });
   }
 
-  function OpenModalManageCreature(creature) {
+  function OpenModalManageCreature(creature, name) {
     setModal(
       <ModalManageCreature
+        name={name}
         creature={creature}
         contexts={location.contexts.map((c) => c.name)}
         onClose={(tempCreature) => HandleCloseModalManageCreature(creature, tempCreature)}
@@ -567,19 +568,23 @@ function EditLocation({
               <i className="fas fa-plus"></i>
             </button>
           </div>
-          {location.creatures.map((lc) => (
-            <div className="location-row location-detail-group-item" key={lc.creatureId}>
-              <span>{creatures.find((c) => c._id === lc.creatureId).name}</span>
-              <div className="group-item-actions">
-                <button onClick={() => OpenModalManageCreature(lc)}>
-                  <i className="fas fa-pencil-alt"></i>
-                </button>
-                <button onClick={() => DeleteCreature(lc)}>
-                  <i className="fas fa-trash"></i>
-                </button>
+          {location.creatures.map((lc) => {
+            const name = creatures.find((c) => c._id === lc.creatureId).name;
+
+            return (
+              <div className="location-row location-detail-group-item" key={lc.creatureId}>
+                <span>{name}</span>
+                <div className="group-item-actions">
+                  <button onClick={() => OpenModalManageCreature(lc, name)}>
+                    <i className="fas fa-pencil-alt"></i>
+                  </button>
+                  <button onClick={() => DeleteCreature(lc)}>
+                    <i className="fas fa-trash"></i>
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </main>
       <footer className="action-buttons">

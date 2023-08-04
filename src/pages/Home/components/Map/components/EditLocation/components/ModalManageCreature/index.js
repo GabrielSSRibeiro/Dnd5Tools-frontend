@@ -5,18 +5,16 @@ import * as utils from "../../../../../../../../utils";
 import ModalManageCreatureRoutine from "../ModalManageCreatureRoutine";
 import Modal from "../../../../../../../../components/Modal";
 import Button from "../../../../../../../../components/Button";
-import Select from "../../../../../../../../components/Select";
 
 import "./styles.css";
 
-function ModalManageCreature({ creature, contexts, onClose }) {
+function ModalManageCreature({ name, creature, contexts, onClose }) {
   const [modal, setModal] = useState(null);
   const [tempCreature, setTempCreature] = useState(
     creature
       ? utils.clone(creature)
       : {
           creatureId: null,
-          groupSize: null,
           routines: [],
         }
   );
@@ -63,46 +61,36 @@ function ModalManageCreature({ creature, contexts, onClose }) {
   }
 
   return (
-    <Modal title="Criatura" className="ModalManageCreature-container" onClickToClose={onClose}>
+    <Modal title={name} className="ModalManageCreature-container" onClickToClose={onClose}>
       {modal}
       <div className="new-creature-wrapper">
-        <Select
-          label={"Tamanho do Grupo"}
-          extraWidth={250}
-          value={tempCreature}
-          valuePropertyPath="groupSize"
-          nothingSelected="Solitário"
-          onSelect={setTempCreature}
-          options={lc.groupSizes}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
-        <div className="creature-detail-group">
-          <div className="creature-detail-group-title">
-            <span>Rotinas</span>
-            <button onClick={() => OpenModalManageRoutine()}>
-              <i className="fas fa-plus"></i>
-            </button>
-          </div>
-          {tempCreature.routines.map((r) => (
-            <div className="creature-detail-group-item" key={r.encounterFrequency}>
-              <span>{lc.GetRoutineSchedule(r.schedule)?.display ?? "-"}</span>
-              <span>{lc.GetPrecipitationFrequency(r.precipitation)?.display ?? "-"}</span>
-              <span>{lc.GetIntenseTemperatureFrequency(r.temperature)?.display ?? "-"}</span>
-              <span>{contexts.find((c) => c === r.context) ?? "-"}</span>
-              <span>{lc.GetGroupSize(r.groupSize)?.display ?? "-"}</span>
-              <span>{lc.GetEncounterFrequency(r.encounterFrequency)?.display ?? "-"}</span>
-              <div className="group-item-actions">
-                <button onClick={() => OpenModalManageRoutine(r)}>
-                  <i className="fas fa-pencil-alt"></i>
-                </button>
-                <button onClick={() => DeleteRoutine(r)} disabled={tempCreature.routines.length === 1}>
-                  <i className="fas fa-trash"></i>
-                </button>
-              </div>
-            </div>
-          ))}
+        <div className="creature-detail-group-title">
+          <span>Rotinas</span>
+          <button onClick={() => OpenModalManageRoutine()}>
+            <i className="fas fa-plus"></i>
+          </button>
         </div>
+        {tempCreature.routines.map((r) => (
+          <div className="creature-detail-group-item" key={r.encounterFrequency}>
+            <span>{contexts.find((c) => c === r.context) ?? "-"}</span>
+
+            <span>{r.schedule ? <i className={lc.GetRoutineSchedule(r.schedule).icon}></i> : "-"}</span>
+            <span>{r.precipitation ? <i className={lc.GetRoutinePrecipitation(r.precipitation).icon}></i> : "-"}</span>
+            <span>{r.temperature ? <i className={lc.GetRoutineTemperature(r.temperature).icon}></i> : "-"}</span>
+            <span>
+              {lc.GetGroupSize(r.groupSize).routineDisplay} <i className="fas fa-dragon"></i>
+            </span>
+            <span>% {lc.GetEncounterFrequency(r.encounterFrequency).display}</span>
+            <div className="group-item-actions">
+              <button onClick={() => OpenModalManageRoutine(r)}>
+                <i className="fas fa-pencil-alt"></i>
+              </button>
+              <button onClick={() => DeleteRoutine(r)} disabled={tempCreature.routines.length === 1}>
+                <i className="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
       <footer>
         <button className="button-simple" onClick={HandleCancel}>
