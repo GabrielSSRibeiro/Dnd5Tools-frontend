@@ -215,7 +215,7 @@ export const ROUTINE_PRECIPITATIONS = {
   PRECIPITATING: 20,
 };
 export const routinePrecipitations = [
-  { display: "Limpo", value: ROUTINE_PRECIPITATIONS.CLEAR, icon: "fas fa-rainbow" },
+  { display: "Normal", value: ROUTINE_PRECIPITATIONS.CLEAR, icon: "fas fa-rainbow" },
   { display: "Precipitando", value: ROUTINE_PRECIPITATIONS.PRECIPITATING, icon: "fas fa-cloud-showers-heavy" },
 ];
 export const GetRoutinePrecipitation = (value) => routinePrecipitations.find((a) => a.value === value);
@@ -226,7 +226,7 @@ export const ROUTINE_TEMPERATURES = {
 };
 export const routineTemperatures = [
   { display: "Normal", value: ROUTINE_TEMPERATURES.NORMAL, icon: "fas fa-thermometer-empty" },
-  { display: "Extrema", value: ROUTINE_TEMPERATURES.EXTREME, icon: "fas fa-thermometer-full" },
+  { display: "Intensa", value: ROUTINE_TEMPERATURES.EXTREME, icon: "fas fa-thermometer-full" },
 ];
 export const GetRoutineTemperature = (value) => routineTemperatures.find((a) => a.value === value);
 
@@ -304,5 +304,5 @@ export const MAP_MODES = {
 };
 export const mapModes = [
   { display: "Livre", value: MAP_MODES.FREE },
-  { display: "Viagem", value: MAP_MODES.TRAVEL },
+  { display: "Exploraçao", value: MAP_MODES.TRAVEL },
 ];

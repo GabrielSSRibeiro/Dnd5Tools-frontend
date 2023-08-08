@@ -5,6 +5,8 @@ import * as lc from "../../../../constants/locationConstants";
 import * as cc from "../../../../constants/creatureConstants";
 
 import Button from "../../../../components/Button";
+import CheckInput from "../../../../components/CheckInput";
+// import Info from "../../../../components/Info";
 import Select from "../../../../components/Select";
 import SelectButton from "../../../../components/SelectButton";
 import LocationSummary from "./components/LocationSummary";
@@ -23,11 +25,18 @@ function Map({
   HandleSaveCombatConfig,
   creatures,
   combatConfig,
+  setCombatConfig,
   locations,
   defaultZoom,
   userId,
 }) {
   const centerMoveRatio = useRef(0.05);
+  const mapStateLevels = useRef(lc.hazardousness.map((h) => h.color));
+  const exhaustionThreshold = useRef(8);
+  const dayTimeThreshold = useRef(6 * 60);
+  const nightTimeThreshold = useRef(18 * 60);
+  const nearDayTimeThreshold = useRef(dayTimeThreshold.current - 60);
+  const nearNightTimeThreshold = useRef(nightTimeThreshold.current - 60);
   const pxInMScale = useMemo(() => lc.BASE_PX_IN_M_SCALE * combatConfig.zoom, [combatConfig.zoom]);
   const currentNode = useMemo(() => {
     if (!combatConfig.travel.currentNode) {
@@ -50,13 +59,29 @@ function Map({
   const [locationToEdit, setLocationToEdit] = useState(null);
   const [mapLoading, setMapLoading] = useState(false);
   const [centerOffset, setCenterOffset] = useState(defaultCenter);
-  const [schedule, setSchedule] = useState(null);
-  const [precipitation, setPrecipitation] = useState(null);
-  const [temperature, setTemperature] = useState(null);
   const [locHoverData, setLocHoverData] = useState(null);
   const [locationsRefs, setLocationsRefs] = useState([]);
   const [allLocationsRefs, setAllLocationsRefs] = useState([]);
 
+  const isPrecipitating = useMemo(() => combatConfig.travel.precipitation >= mapStateLevels.current.length - 1, [combatConfig.travel.precipitation]);
+  const isExtremeTemp = useMemo(() => combatConfig.travel.temperature >= mapStateLevels.current.length - 1, [combatConfig.travel.temperature]);
+  const currentTime = useMemo(() => utils.MinutesToTimeFormat(combatConfig.travel.schedule), [combatConfig.travel.schedule]);
+  const exhaustionTimer = useMemo(() => Math.floor(combatConfig.travel.exhaustionTimer / 60), [combatConfig.travel.exhaustionTimer]);
+  const exhaustionIndex = useMemo(
+    () => Math.floor(Math.min(exhaustionTimer / exhaustionThreshold.current, 1) * (mapStateLevels.current.length - 1)),
+    [exhaustionTimer]
+  );
+  const isNightTime = useMemo(
+    () => combatConfig.travel.schedule >= nightTimeThreshold.current || combatConfig.travel.schedule < nearDayTimeThreshold.current,
+    [combatConfig.travel.schedule]
+  );
+  const isNearDayOrNightTime = useMemo(
+    () =>
+      (combatConfig.travel.schedule >= nearDayTimeThreshold.current && combatConfig.travel.schedule < dayTimeThreshold.current) ||
+      (combatConfig.travel.schedule >= nearNightTimeThreshold.current && combatConfig.travel.schedule < nightTimeThreshold.current),
+    [combatConfig.travel.schedule]
+  );
+  const isExhausted = useMemo(() => exhaustionTimer >= exhaustionThreshold.current, [exhaustionTimer]);
   const minZoom = useMemo(() => lc.BASE_VISION_IN_M / (lc.BASE_PX_IN_M_SCALE * lc.POINT_OF_INTEREST_RADIUS * 2), []);
   const isMinZoom = useMemo(() => combatConfig.zoom >= minZoom, [combatConfig.zoom, minZoom]);
   const maxZoom = useMemo(() => lc.BASE_VISION_IN_M / ((lc.BASE_PX_IN_M_SCALE * lc.BASE_VISION_IN_M) / 2), []);
@@ -364,6 +389,17 @@ function Map({
     setLocationToEdit(null);
   }
 
+  function HandleScheduleChange(newSchedule) {
+    const dayMinutes = 1440;
+
+    let schedule = newSchedule % dayMinutes;
+    if (schedule < 0) {
+      schedule = dayMinutes + schedule;
+    }
+
+    setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, schedule } });
+  }
+
   // let timer = useRef(null);
   function HandleLocHover(e, location) {
     let distance = { centerOffset: GetCenterOffset(e) };
@@ -485,9 +521,9 @@ function Map({
               setLocHoverData={setLocHoverData}
               locations={locations}
               creatures={creatures}
-              schedule={schedule}
-              precipitation={precipitation}
-              temperature={temperature}
+              schedule={combatConfig.travel.schedule}
+              precipitation={combatConfig.travel.precipitation}
+              temperature={combatConfig.travel.temperature}
               distance={locHoverData.distance}
             />
           </div>
@@ -496,13 +532,63 @@ function Map({
         {locations.length > 0 && (
           <>
             {mapMode === lc.MAP_MODES.TRAVEL ? (
-              <aside className="travel-details floating-details">
-                <Select label="Passagem do tempo" isDisabled={true} extraWidth={50} />
-                <Select label="Montaria" isDisabled={true} extraWidth={50} />
-                <Select label="Maior Carga" isDisabled={true} extraWidth={50} />
-                <Select label="Ritmo de viagem" isDisabled={true} extraWidth={50} />
-                <Select label="Foco" isDisabled={true} extraWidth={50} />
-                <Select label="Viagem" isDisabled={true} extraWidth={50} />
+              <aside className="travel-details floating-details" style={{ borderColor: mapStateLevels.current[exhaustionIndex] }}>
+                <h5>Marcha</h5>
+
+                <Select label="Foco" isDisabled={true} extraWidth={55} />
+                {1 == 1 ? (
+                  <>
+                    <CheckInput
+                      className="oriented"
+                      label="Orientados"
+                      onClick={() => {}}
+                      isSelected={true}
+                      info={[
+                        { text: "Chance de se perder, desviar da direcao" },
+                        // { text: "" },
+                        // { text: "Ex: Noroeste no lugar de norte" }
+                      ]}
+                    />
+                    <Select label="Ritmo de viagem" isDisabled={true} extraWidth={55} />
+                    <Select label="Montaria" isDisabled={true} extraWidth={55} />
+                    <Select label="Maior Carga" isDisabled={true} extraWidth={55} />
+                  </>
+                ) : (
+                  <Select label="Passagem do tempo" isDisabled={true} extraWidth={55} />
+                )}
+                <div className="divider"></div>
+                <h6>Total Acumulado</h6>
+                <div className="stat-section">
+                  <button
+                    onClick={() =>
+                      setCombatConfig({
+                        ...combatConfig,
+                        travel: { ...combatConfig.travel, exhaustionTimer: combatConfig.travel.exhaustionTimer - 60 },
+                      })
+                    }
+                    disabled={combatConfig.travel.exhaustionTimer === 0}
+                  >
+                    <i className="fas fa-minus"></i>
+                  </button>
+                  <h5 style={isExhausted ? { color: mapStateLevels.current[exhaustionIndex] } : {}}>{exhaustionTimer} Horas</h5>
+                  <button
+                    onClick={() =>
+                      setCombatConfig({
+                        ...combatConfig,
+                        travel: { ...combatConfig.travel, exhaustionTimer: combatConfig.travel.exhaustionTimer + 60 },
+                      })
+                    }
+                  >
+                    <i className="fas fa-plus"></i>
+                  </button>
+                  {/* <Info
+                    contents={[
+                      { text: "Cada 8 horas acumuladas pode conceder exaustão" },
+                      { text: "" },
+                      { text: "Descansar reduz o total acumulado" },
+                    ]}
+                  /> */}
+                </div>
               </aside>
             ) : (
               <aside className="new-encounter floating-details">
@@ -562,16 +648,108 @@ function Map({
             {mapMode === lc.MAP_MODES.TRAVEL && (
               <aside className="travel-stats floating-details">
                 <div className="stat-section">
-                  <button>
+                  <button
+                    onClick={() => setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, schedule: dayTimeThreshold.current } })}
+                  >
+                    <i className="fas fa-sun"></i>
+                  </button>
+                  <button onClick={() => HandleScheduleChange(combatConfig.travel.schedule - 60)}>
                     <i className="fas fa-minus"></i>
                   </button>
-                  <h4>Horário</h4>
-                  <button>
+                  <h4>{currentTime}</h4>
+                  <button onClick={() => HandleScheduleChange(combatConfig.travel.schedule + 60)}>
                     <i className="fas fa-plus"></i>
                   </button>
+                  <button
+                    onClick={() => setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, schedule: nightTimeThreshold.current } })}
+                  >
+                    <i className="fas fa-moon"></i>
+                  </button>
                 </div>
-                <h4>Precipitação</h4>
-                <h4>Temperatura</h4>
+
+                <div className="stat-section" style={{ borderColor: mapStateLevels.current[combatConfig.travel.precipitation] }}>
+                  <button
+                    onClick={() => setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, precipitation: 0 } })}
+                    disabled={combatConfig.travel.precipitation === 0}
+                  >
+                    <i className="fas fa-rainbow"></i>
+                  </button>
+                  <button
+                    onClick={() =>
+                      setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, precipitation: combatConfig.travel.precipitation - 1 } })
+                    }
+                    disabled={combatConfig.travel.precipitation === 0}
+                  >
+                    <i className="fas fa-minus"></i>
+                  </button>
+
+                  {isPrecipitating ? (
+                    <h4 style={{ color: mapStateLevels.current[combatConfig.travel.precipitation] }}>
+                      {lc.GetRoutinePrecipitation(lc.ROUTINE_PRECIPITATIONS.PRECIPITATING).display}
+                    </h4>
+                  ) : (
+                    <h4>{lc.GetRoutinePrecipitation(lc.ROUTINE_PRECIPITATIONS.CLEAR).display}</h4>
+                  )}
+
+                  <button
+                    onClick={() =>
+                      setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, precipitation: combatConfig.travel.precipitation + 1 } })
+                    }
+                    disabled={isPrecipitating}
+                  >
+                    <i className="fas fa-plus"></i>
+                  </button>
+                  <button
+                    onClick={() =>
+                      setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, precipitation: mapStateLevels.current.length - 1 } })
+                    }
+                    disabled={isPrecipitating}
+                  >
+                    <i className="fas fa-cloud-showers-heavy"></i>
+                  </button>
+                </div>
+
+                <div className="stat-section" style={{ borderColor: mapStateLevels.current[combatConfig.travel.temperature] }}>
+                  <button
+                    onClick={() => setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, temperature: 0 } })}
+                    disabled={combatConfig.travel.temperature === 0}
+                  >
+                    <i className="fas fa-thermometer-empty"></i>
+                  </button>
+                  <button
+                    onClick={() =>
+                      setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, temperature: combatConfig.travel.temperature - 1 } })
+                    }
+                    disabled={combatConfig.travel.temperature === 0}
+                  >
+                    <i className="fas fa-minus"></i>
+                  </button>
+
+                  {isExtremeTemp ? (
+                    <h4 style={{ color: mapStateLevels.current[combatConfig.travel.temperature] }}>
+                      {lc.GetRoutineTemperature(lc.ROUTINE_TEMPERATURES.EXTREME).display}
+                    </h4>
+                  ) : (
+                    <h4>{lc.GetRoutineTemperature(lc.ROUTINE_TEMPERATURES.NORMAL).display}</h4>
+                  )}
+
+                  <button
+                    onClick={() =>
+                      setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, temperature: combatConfig.travel.temperature + 1 } })
+                    }
+                    disabled={isExtremeTemp}
+                  >
+                    <i className="fas fa-plus"></i>
+                  </button>
+                  <button
+                    onClick={() =>
+                      setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, temperature: mapStateLevels.current.length - 1 } })
+                    }
+                    disabled={isExtremeTemp}
+                  >
+                    <i className="fas fa-thermometer-full"></i>
+                  </button>
+                </div>
               </aside>
             )}
             <aside className="map-modes floating-details">
@@ -590,6 +768,11 @@ function Map({
 
         {!mapLoading && (
           <div id={locationsContainerId} className="locations" style={{ translate: `${centerOffset.x}px ${centerOffset.y}px` }}>
+            {/* time filter */}
+            {mapMode === lc.MAP_MODES.TRAVEL && (isNearDayOrNightTime || isNightTime) && (
+              <div className={`max-dimentions time-filter${isNearDayOrNightTime ? " near-night-or-day" : " night"}`}></div>
+            )}
+
             {/* travel */}
             {mapMode === lc.MAP_MODES.TRAVEL &&
               travelNodes.map((n, index) => (
@@ -607,7 +790,7 @@ function Map({
 
             {/* world */}
             <div
-              className="world"
+              className="world max-dimentions"
               onClick={OpenModalTravelResults}
               onMouseMove={(e) => HandleLocHover(e, combatConfig.world)}
               onMouseLeave={(e) => HandleLocHover(e)}
@@ -644,9 +827,9 @@ function Map({
             setLocHoverData={setLocHoverData}
             locations={locations}
             creatures={creatures}
-            schedule={schedule}
-            precipitation={precipitation}
-            temperature={temperature}
+            schedule={combatConfig.travel.schedule}
+            precipitation={combatConfig.travel.precipitation}
+            temperature={combatConfig.travel.temperature}
           />
         </aside>
 

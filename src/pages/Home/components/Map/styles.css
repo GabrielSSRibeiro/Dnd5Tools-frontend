@@ -33,6 +33,7 @@
   top: 0;
   margin: 10px;
   padding: 10px;
+  border: 1px solid var(--black);
   background-color: rgba(249, 249, 249, 0.85);
 }
 
@@ -86,13 +87,17 @@
   position: absolute;
   bottom: 0;
   margin: 10px;
-  padding: 10px;
-  background-color: rgba(249, 249, 249, 0.85);
 
   display: flex;
   align-items: center;
   justify-content: center;
-  column-gap: 10px;
+  column-gap: 15px;
+}
+
+.Map-container .world-map .travel-stats .stat-section {
+  background-color: rgba(249, 249, 249, 0.85);
+  padding: 10px;
+  border: 1px solid var(--black);
 }
 
 .Map-container .world-map .map-modes {
@@ -126,7 +131,7 @@
   background-color: rgba(249, 249, 249, 0.85);
 }
 
-.Map-container .world-map .map-zoom .zoom-section button {
+.Map-container .world-map .stat-section button {
   width: 20px;
   height: 20px;
 
@@ -151,12 +156,30 @@
   top: 0;
   right: 0;
   margin: 10px;
+  padding: 10px;
   background-color: rgba(249, 249, 249, 0.85);
+  border: 1px solid var(--black);
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  row-gap: 5px;
+}
+
+.Map-container .world-map .travel-details .stat-section {
+  background-color: transparent;
+}
+
+.Map-container .world-map .travel-details .oriented {
+  margin: 5px 0;
+}
+
+.Map-container .world-map .travel-details .divider {
+  border-top: 1px solid var(--gray1);
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 5px;
 }
 
 .Map-container .world-map .world-details {
@@ -182,10 +205,13 @@
   height: 100%;
 }
 
-.Map-container .world-map .world {
-  position: absolute;
+.Map-container .max-dimentions {
   width: 1000000px;
   height: 1000000px;
+}
+
+.Map-container .world-map .world {
+  position: absolute;
 }
 
 .Map-container .world-map .location-details {
@@ -235,4 +261,19 @@
   position: absolute;
   top: 50%;
   translate: 0 -50%;
+}
+
+.Map-container .world-map .time-filter {
+  z-index: 1;
+  position: absolute;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.Map-container .world-map .time-filter.near-night-or-day {
+  background-color: orange;
+}
+
+.Map-container .world-map .time-filter.night {
+  background-color: blue;
 }

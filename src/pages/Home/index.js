@@ -253,6 +253,10 @@ function Home() {
           inactiveGroup: [],
           zoom: defaultZoom.current,
           travel: {
+            schedule: 12 * 60,
+            exhaustionTimer: 8 * 60,
+            precipitation: 1,
+            temperature: 1,
             currentNode: null,
             travelNodes: [],
           },
@@ -335,6 +339,7 @@ function Home() {
             HandleSaveCombatConfig={HandleSaveCombatConfig}
             creatures={creatures}
             combatConfig={combatConfig}
+            setCombatConfig={setCombatConfig}
             locations={locations}
             defaultZoom={defaultZoom}
             userId={currentUser.uid}

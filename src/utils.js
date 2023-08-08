@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export function randomIntFromInterval(min, max) {
   // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -218,4 +220,11 @@ export const GetDistanceByCoordinates = (pA, pB) => {
   const angle = (angleRadians * 180) / Math.PI;
 
   return { value, angle };
+};
+
+export const MinutesToTimeFormat = (minutes) => {
+  const duration = moment.duration(minutes, "minutes");
+  const hours = Math.floor(duration.asHours());
+  const formattedTime = moment().startOf("day").add(hours, "hours").add(duration.minutes(), "minutes").format("HH:mm");
+  return formattedTime;
 };
