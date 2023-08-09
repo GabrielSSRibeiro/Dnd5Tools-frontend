@@ -71,10 +71,10 @@ export const PANORAMIC_VISIONS = {
   EXTREME: 40,
 };
 export const panoramicVisions = [
-  { display: "Baixa", value: PANORAMIC_VISIONS.LOW },
-  { display: "Média", value: PANORAMIC_VISIONS.MEDIUM },
-  { display: "Alta", value: PANORAMIC_VISIONS.HIGH },
-  { display: "Extrema", value: PANORAMIC_VISIONS.EXTREME },
+  { display: "Baixa", value: PANORAMIC_VISIONS.LOW, modofier: 0.5 },
+  { display: "Média", value: PANORAMIC_VISIONS.MEDIUM, modofier: 1 },
+  { display: "Alta", value: PANORAMIC_VISIONS.HIGH, modofier: 2 },
+  { display: "Extrema", value: PANORAMIC_VISIONS.EXTREME, modofier: 3 },
 ];
 export const GetPanoramicVision = (value) => panoramicVisions.find((a) => a.value === value);
 

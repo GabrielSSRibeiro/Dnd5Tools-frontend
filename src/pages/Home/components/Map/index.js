@@ -88,7 +88,6 @@ function Map({
   const maxZoom = useMemo(() => lc.BASE_VISION_IN_M / ((lc.BASE_PX_IN_M_SCALE * lc.BASE_VISION_IN_M) / 2), []);
   const isMaxZoom = useMemo(() => combatConfig.zoom <= maxZoom, [combatConfig.zoom, maxZoom]);
   const locationsContainerId = useMemo(() => `all-${userId}-locations`, [userId]);
-  const visionRadius = useMemo(() => lc.BASE_VISION_IN_M / pxInMScale, [pxInMScale]);
   const map = useMemo(() => {
     let map = {};
     locations
@@ -177,6 +176,18 @@ function Map({
 
     return nodeStyles;
   }, [combatConfig.travel.currentNode, currentNode]);
+  const visionRadius = useMemo(() => {
+    if (!combatConfig.travel.currentNode) {
+      return 0;
+    }
+
+    let visionRadius = lc.BASE_VISION_IN_M / pxInMScale;
+
+    const loc = map[combatConfig.travel.currentNode.locId] ? map[combatConfig.travel.currentNode.locId].data : combatConfig.world;
+    const modofier = lc.GetPanoramicVision(loc.contexts.find((c) => c.isCurrent).panoramicVision).modofier;
+
+    return visionRadius * modofier;
+  }, [combatConfig.travel.currentNode, combatConfig.world, map, pxInMScale]);
 
   function OpenModalTravelResults() {
     if (locations.length === 0 || !locHoverData || mapMode !== lc.MAP_MODES.TRAVEL || combatConfig.travel.pace === lc.TRAVEL_PACES.REST) {
@@ -825,7 +836,10 @@ function Map({
                 <div className="travel-none floating-details" style={{ ...nodeStyles, translate: `${n.x * -1}px ${n.y * -1}px` }} key={index}>
                   {n.isCurrent && (
                     <>
-                      <div className="vision floating-details" style={{ width: visionRadius / 2, height: visionRadius / 2 }}></div>
+                      <div
+                        className={`vision floating-details ${isNightTime ? "night-vision" : "day-vision"}`}
+                        style={{ width: visionRadius / 2, height: visionRadius / 2 }}
+                      ></div>
                       <div className="direction-arrow floating-details" style={arrowStyles}>
                         <div className="pointer"></div>
                       </div>
