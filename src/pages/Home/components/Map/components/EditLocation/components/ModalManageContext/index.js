@@ -116,7 +116,19 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
           label={"Visão Panorâmica"}
           info={[
             {
-              text: "Isso afeita em o quão longe os personagens conseguem ver. A noite a visao eh sempre muito baixa",
+              text: "Isso afeita em o quão longe o grupo consegue ver",
+            },
+            {
+              text: "",
+            },
+            {
+              text: "É representada por uma area ao redor do grupo no mapa",
+            },
+            {
+              text: "",
+            },
+            {
+              text: "A noite a visao panorâmica é sempre 0, tendo apenas a área de marcha sinalizada",
             },
           ]}
           extraWidth={250}

@@ -419,6 +419,8 @@ function Map({
   // let timer = useRef(null);
   function HandleLocHover(e, location) {
     let distance = { centerOffset: GetCenterOffset(e) };
+    distance.isVisible = distance.centerOffset.value <= visionRadius / 4;
+
     if (currentNode && mapMode === lc.MAP_MODES.TRAVEL) {
       const distanceInScale = Math.round(distance.centerOffset.value * pxInMScale);
       distance.valueInUnits = distanceInScale < 1000 ? `${distanceInScale}m` : `${Math.round(distanceInScale / 1000)}km`;
@@ -427,7 +429,6 @@ function Map({
       distance.timeInUnits = travelTime === 0 ? "< 1 hora" : travelTime < 24 ? `${travelTime} hora/s` : `${Math.floor(travelTime / 24)} dia/s)`;
     }
     setLocHoverData({ top: e.clientY, left: e.clientX, location, distance });
-
     // clearTimeout(timer.current);
     // timer.current = setTimeout(() => {
     //   if (location) {
@@ -511,7 +512,13 @@ function Map({
   return (
     <div className="Map-container">
       {modal}
-      <div className="world-map" style={{ backgroundColor: cc.GetEnviroment(combatConfig.world.traversal.type).color }}>
+      <div
+        className="world-map"
+        style={{
+          backgroundColor: cc.GetEnviroment(combatConfig.world.traversal.type).color,
+          cursor: locHoverData?.distance.isVisible ? (combatConfig.travel.oriented ? "pointer" : "help") : "default",
+        }}
+      >
         {/* title */}
         {locations.length === 0 ? (
           <aside className="info-msg floating-details">
