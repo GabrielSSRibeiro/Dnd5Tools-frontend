@@ -306,3 +306,59 @@ export const mapModes = [
   { display: "Livre", value: MAP_MODES.FREE },
   { display: "Exploraçao", value: MAP_MODES.TRAVEL },
 ];
+
+export const TRAVEL_PACES = {
+  REST: 10,
+  CAUTIOUS: 20,
+  ACTIVITY: 30,
+  NORMAL: 40,
+  HASTEN: 50,
+};
+export const travelPaces = [
+  { display: "Descanso", value: TRAVEL_PACES.REST, mobility: 0, fatigue: 0 },
+  { display: "Cauteloso", value: TRAVEL_PACES.CAUTIOUS, mobility: 0.5, fatigue: 1 },
+  { display: "Atividade", value: TRAVEL_PACES.ACTIVITY, mobility: 0.5, fatigue: 1 },
+  { display: "Normal", value: TRAVEL_PACES.NORMAL, mobility: 1, fatigue: 1 },
+  { display: "Apressado", value: TRAVEL_PACES.HASTEN, mobility: 2, fatigue: 2 },
+];
+export const GetTravelPace = (value) => travelPaces.find((a) => a.value === value);
+
+export const TRAVEL_MOUNTS = {
+  NONE: 10,
+  SLOW: 20,
+  NORMAL: 30,
+  FAST: 40,
+  VERY_FAST: 50,
+};
+export const travelMounts = [
+  { display: "Nenhuma", value: TRAVEL_MOUNTS.NONE, mobility: 1, fatigue: 1 },
+  { display: "Devagar", value: TRAVEL_MOUNTS.SLOW, mobility: 1, fatigue: 0.5 },
+  { display: "Normal", value: TRAVEL_MOUNTS.NORMAL, mobility: 1.5, fatigue: 0.5 },
+  { display: "Rápida", value: TRAVEL_MOUNTS.FAST, mobility: 2, fatigue: 0.5 },
+  { display: "Muito rápida", value: TRAVEL_MOUNTS.VERY_FAST, mobility: 3, fatigue: 0.5 },
+];
+export const GetTravelMount = (value) => travelMounts.find((a) => a.value === value);
+
+export const TRAVEL_LOADS = {
+  LOW: 10,
+  MEDIUM: 20,
+  HIGH: 30,
+};
+export const travelLoads = [
+  { display: "Baixa (< 1/3 max)", value: TRAVEL_LOADS.LOW, mobility: 1, fatigue: 1 },
+  { display: "Média (1/3 - 2/3 max)", value: TRAVEL_LOADS.MEDIUM, mobility: 0.67, fatigue: 1 },
+  { display: "Alta (> 2/3 max)", value: TRAVEL_LOADS.HIGH, mobility: 0.33, fatigue: 1 },
+];
+export const GetTravelLoad = (value) => travelLoads.find((a) => a.value === value);
+
+export const REST_TIMES = {
+  SHORT: 10,
+  MEDIUM: 20,
+  LONG: 30,
+};
+export const restTimes = [
+  { display: "10 minutes", value: REST_TIMES.SHORT },
+  { display: "1 hora", value: REST_TIMES.MEDIUM },
+  { display: "8 horas", value: REST_TIMES.LONG },
+];
+export const GetRestTimes = (value) => restTimes.find((a) => a.value === value);

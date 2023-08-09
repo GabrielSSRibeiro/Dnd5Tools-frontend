@@ -62,6 +62,7 @@ function Map({
   const [locHoverData, setLocHoverData] = useState(null);
   const [locationsRefs, setLocationsRefs] = useState([]);
   const [allLocationsRefs, setAllLocationsRefs] = useState([]);
+  const [restTime, setRestTime] = useState(lc.REST_TIMES.LONG);
 
   const isPrecipitating = useMemo(() => combatConfig.travel.precipitation >= mapStateLevels.current.length - 1, [combatConfig.travel.precipitation]);
   const isExtremeTemp = useMemo(() => combatConfig.travel.temperature >= mapStateLevels.current.length - 1, [combatConfig.travel.temperature]);
@@ -178,7 +179,7 @@ function Map({
   }, [combatConfig.travel.currentNode, currentNode]);
 
   function OpenModalTravelResults() {
-    if (locations.length === 0 || !locHoverData || mapMode !== lc.MAP_MODES.TRAVEL) {
+    if (locations.length === 0 || !locHoverData || mapMode !== lc.MAP_MODES.TRAVEL || combatConfig.travel.pace === lc.TRAVEL_PACES.REST) {
       return;
     }
 
@@ -204,6 +205,10 @@ function Map({
       HandleSetCurrentNode(newCurrentNode);
       HandleSaveCombatConfig(combatConfig);
     }
+  }
+
+  function OpenModalTravelResultsForRest() {
+    setModal(<ModalTravelResults onClose={setModal} HandleSaveCombatConfig={HandleSaveCombatConfig} />);
   }
 
   function HandleSetCurrentNode(newCurrentNode) {
@@ -406,7 +411,9 @@ function Map({
     if (currentNode && mapMode === lc.MAP_MODES.TRAVEL) {
       const distanceInScale = Math.round(distance.centerOffset.value * pxInMScale);
       distance.valueInUnits = distanceInScale < 1000 ? `${distanceInScale}m` : `${Math.round(distanceInScale / 1000)}km`;
-      distance.timeInUnits = ""; //1 == 1 ? `${7} horas` : `${2} dias`;
+
+      const travelTime = lh.GetTravelTimeInH(distanceInScale, combatConfig.travel);
+      distance.timeInUnits = travelTime === 0 ? "< 1 hora" : travelTime < 24 ? `${travelTime} hora/s` : `${Math.floor(travelTime / 24)} dia/s)`;
     }
     setLocHoverData({ top: e.clientY, left: e.clientX, location, distance });
 
@@ -512,7 +519,7 @@ function Map({
         )}
 
         {/* hover */}
-        {locations.length > 0 && locHoverData?.location && (
+        {locations.length > 0 && locHoverData?.location && combatConfig.travel.pace !== lc.TRAVEL_PACES.REST && (
           <div className="location-details floating-details" style={{ ...locHoverData.style, top: locHoverData.top, left: locHoverData.left }}>
             <LocationSummary
               location={locHoverData.location}
@@ -534,30 +541,69 @@ function Map({
             {mapMode === lc.MAP_MODES.TRAVEL ? (
               <aside className="travel-details floating-details" style={{ borderColor: mapStateLevels.current[exhaustionIndex] }}>
                 <h5>Marcha</h5>
-
-                <Select label="Foco" isDisabled={true} extraWidth={55} />
-                {1 == 1 ? (
+                <div className="divider"></div>
+                <Select
+                  label={"Ritmo de viagem"}
+                  extraWidth={75}
+                  value={combatConfig}
+                  valuePropertyPath="travel.pace"
+                  onSelect={setCombatConfig}
+                  options={lc.travelPaces}
+                  optionDisplay={(o) => o.display}
+                  optionValue={(o) => o.value}
+                />
+                {combatConfig.travel.pace === lc.TRAVEL_PACES.REST ? (
+                  <div className="rest-wrapper">
+                    <Select
+                      label={"Passagem do tempo"}
+                      extraWidth={75}
+                      value={restTime}
+                      onSelect={setRestTime}
+                      options={lc.restTimes}
+                      optionDisplay={(o) => o.display}
+                      optionValue={(o) => o.value}
+                    />
+                    <Button text="Descansar" onClick={OpenModalTravelResultsForRest} />
+                  </div>
+                ) : (
                   <>
+                    <Select
+                      label={"Montaria"}
+                      extraWidth={75}
+                      value={combatConfig}
+                      valuePropertyPath="travel.mount"
+                      onSelect={setCombatConfig}
+                      options={lc.travelMounts}
+                      optionDisplay={(o) => o.display}
+                      optionValue={(o) => o.value}
+                    />
+                    <Select
+                      label={"Maior Carga"}
+                      extraWidth={75}
+                      value={combatConfig}
+                      valuePropertyPath="travel.load"
+                      onSelect={setCombatConfig}
+                      options={lc.travelLoads}
+                      optionDisplay={(o) => o.display}
+                      optionValue={(o) => o.value}
+                    />
                     <CheckInput
                       className="oriented"
                       label="Orientados"
-                      onClick={() => {}}
-                      isSelected={true}
-                      info={[
-                        { text: "Chance de se perder, desviar da direcao" },
-                        // { text: "" },
-                        // { text: "Ex: Noroeste no lugar de norte" }
-                      ]}
+                      onClick={() =>
+                        setCombatConfig({
+                          ...combatConfig,
+                          travel: { ...combatConfig.travel, oriented: !combatConfig.travel.oriented },
+                        })
+                      }
+                      isSelected={combatConfig.travel.oriented}
+                      info={[{ text: "Chance de se perder, desviar da direcao" }]}
                     />
-                    <Select label="Ritmo de viagem" isDisabled={true} extraWidth={55} />
-                    <Select label="Montaria" isDisabled={true} extraWidth={55} />
-                    <Select label="Maior Carga" isDisabled={true} extraWidth={55} />
                   </>
-                ) : (
-                  <Select label="Passagem do tempo" isDisabled={true} extraWidth={55} />
                 )}
                 <div className="divider"></div>
-                <h6>Total Acumulado</h6>
+                {/* <h6>Total Acumulado</h6> */}
+                <h6>Desgaste Acumulado</h6>
                 <div className="stat-section">
                   <button
                     onClick={() =>
@@ -832,6 +878,9 @@ function Map({
             temperature={combatConfig.travel.temperature}
           />
         </aside>
+
+        {/* rest blocker */}
+        {/* {mapMode === lc.MAP_MODES.TRAVEL && combatConfig.travel.pace === lc.TRAVEL_PACES.REST && <div className="rest-blocker"></div>} */}
 
         {/* edit loc */}
         {locationToEdit && (

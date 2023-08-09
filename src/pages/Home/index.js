@@ -253,6 +253,10 @@ function Home() {
           inactiveGroup: [],
           zoom: defaultZoom.current,
           travel: {
+            pace: lc.TRAVEL_PACES.NORMAL,
+            mount: lc.TRAVEL_MOUNTS.NONE,
+            load: lc.TRAVEL_LOADS.LOW,
+            oriented: true,
             schedule: 12 * 60,
             exhaustionTimer: 8 * 60,
             precipitation: 1,

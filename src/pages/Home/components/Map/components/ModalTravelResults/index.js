@@ -7,7 +7,10 @@ import "./styles.css";
 
 function ModalTravelResults({ onClose, HandleSetCurrentNode, HandleAddTravelNode, HandleSaveCombatConfig }) {
   function HandleContinue() {
-    HandleSetCurrentNode();
+    if (HandleSetCurrentNode) {
+      HandleSetCurrentNode();
+    }
+
     HandleSaveCombatConfig();
     onClose();
   }
@@ -37,8 +40,14 @@ function ModalTravelResults({ onClose, HandleSetCurrentNode, HandleAddTravelNode
           </button>
         </aside>
         <aside className="footer-actions">
-          <Button text="Continuar sem Marcar" onClick={HandleContinue} />
-          <Button text="Marcar no Mapa" onClick={HandleSave} isDisabled={false} />
+          {HandleSetCurrentNode ? (
+            <>
+              <Button text="Marcar no Mapa" onClick={HandleSave} />
+              <Button text="Continuar sem Marcar" onClick={HandleContinue} />
+            </>
+          ) : (
+            <Button text="Continuar" onClick={HandleContinue} />
+          )}
         </aside>
       </footer>
     </Modal>
