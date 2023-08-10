@@ -13,6 +13,7 @@ import LocationSummary from "./components/LocationSummary";
 import EditLocation from "./components/EditLocation";
 import Location from "./components/Location";
 import ModalTravelResults from "./components/ModalTravelResults";
+import ModalWarning from "../../../../components/ModalWarning";
 
 import "./styles.css";
 
@@ -188,6 +189,7 @@ function Map({
 
     return visionRadius * modofier;
   }, [combatConfig.travel.currentNode, combatConfig.world, map, pxInMScale]);
+  const canTravelToPoint = useMemo(() => locHoverData?.distance.isVisible, [locHoverData?.distance.isVisible]);
 
   function OpenModalTravelResults() {
     if (locations.length === 0 || !locHoverData || mapMode !== lc.MAP_MODES.TRAVEL || combatConfig.travel.pace === lc.TRAVEL_PACES.REST) {
@@ -203,18 +205,35 @@ function Map({
       locId: locHoverData.location?._id ?? userId,
     };
 
-    if (currentNode) {
+    if (canTravelToPoint) {
+      if (currentNode) {
+        setModal(
+          <ModalTravelResults
+            onClose={setModal}
+            HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
+            HandleAddTravelNode={() => HandleAddTravelNode(newCurrentNode)}
+            HandleSaveCombatConfig={HandleSaveCombatConfig}
+          />
+        );
+      } else {
+        HandleSetCurrentNode(newCurrentNode);
+        HandleSaveCombatConfig(combatConfig);
+      }
+    } else {
       setModal(
-        <ModalTravelResults
-          onClose={setModal}
-          HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
-          HandleAddTravelNode={() => HandleAddTravelNode(newCurrentNode)}
-          HandleSaveCombatConfig={HandleSaveCombatConfig}
+        <ModalWarning
+          title="Mover Grupo"
+          message="Mover grupo seguramente para ponto?"
+          cancelText="Cancelar"
+          onCancel={setModal}
+          confirmText="Mover"
+          onConfirm={() => {
+            HandleSetCurrentNode(newCurrentNode);
+            HandleSaveCombatConfig(combatConfig);
+            setModal(null);
+          }}
         />
       );
-    } else {
-      HandleSetCurrentNode(newCurrentNode);
-      HandleSaveCombatConfig(combatConfig);
     }
   }
 
@@ -516,7 +535,7 @@ function Map({
         className="world-map"
         style={{
           backgroundColor: cc.GetEnviroment(combatConfig.world.traversal.type).color,
-          cursor: locHoverData?.distance.isVisible ? (combatConfig.travel.oriented ? "pointer" : "help") : "default",
+          cursor: canTravelToPoint ? (combatConfig.travel.oriented ? "pointer" : "help") : "default",
         }}
       >
         {/* title */}

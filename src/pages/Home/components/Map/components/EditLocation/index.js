@@ -62,6 +62,7 @@ function EditLocation({
     return refLocations;
   }, [location._id, location.exteriorLocationId, locations, map]);
   const isWorld = useMemo(() => !location.exteriorLocationId, [location]);
+  const isPointOfInterest = useMemo(() => location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST, [location]);
   const isFirstOfArea = useMemo(
     //if there is no option or there isn't any loc that doesn't have a ref loc
     () => referenceLocations.length === 0 || !referenceLocations.some((l) => !l.reference.location),
@@ -71,6 +72,18 @@ function EditLocation({
   function HandleSaveLocation() {
     //if ref is possible, but not selected, flag as hidden loc
     location.isHidden = !isWorld && !isFirstOfArea && !location.reference.distance && !location.reference.direction && !location.reference.location;
+
+    //if a loc is no longer a PoI, update any certain creature routine to extreme
+    if (!isPointOfInterest) {
+      let creaturesToFix = location.creatures.filter((c) => c.routines.some((r) => r.encounterFrequency === lc.ENCOUNTER_FREQUENCIES.CERTAIN));
+      creaturesToFix.forEach((c) => {
+        c.routines
+          .filter((r) => r.encounterFrequency === lc.ENCOUNTER_FREQUENCIES.CERTAIN)
+          .forEach((r) => {
+            r.encounterFrequency = lc.ENCOUNTER_FREQUENCIES.EXTREME;
+          });
+      });
+    }
 
     HandleSave(location);
   }
@@ -245,6 +258,7 @@ function EditLocation({
         name={name}
         creature={creature}
         contexts={location.contexts.map((c) => c.name)}
+        isPointOfInterest={isPointOfInterest}
         onClose={(tempCreature) => HandleCloseModalManageCreature(creature, tempCreature)}
       />
     );
@@ -286,6 +300,7 @@ function EditLocation({
           routines: [
             {
               encounterFrequency: lc.ENCOUNTER_FREQUENCIES.MEDIUM,
+              groupSize: lc.GROUP_SIZES.SOLO,
             },
           ],
         });

@@ -162,12 +162,6 @@ function Location({
     return areaStyles;
   }
 
-  function SetAsCurrent(location, isPointOfInterest) {
-    if (isPointOfInterest && !location.interaction.isCurrent) {
-      location.interaction.isCurrent = true;
-    }
-  }
-
   function GetOffsetStyles(offset, includeWidth = false) {
     const offsetStyles = [];
 
@@ -429,11 +423,8 @@ function Location({
                 <div
                   name={`${l.name}-area`}
                   id={isLocArea ? `${l._id}-area` : null}
-                  className={`area${isPointOfInterest && !l.interaction.isCurrent ? " not-current" : ""}${
-                    isPointOfInterest ? " point-of-interest" : ""
-                  }`}
+                  className={`area${isPointOfInterest ? " point-of-interest" : ""}`}
                   style={{ width: areaStyles.width, height: areaStyles.height, rotate: `${distanceAngle * -1}deg` }}
-                  onClick={() => SetAsCurrent(l, isPointOfInterest)}
                   onMouseMove={(e) => HandleHover(e, l)}
                   onMouseLeave={(e) => HandleHover(e)}
                 >

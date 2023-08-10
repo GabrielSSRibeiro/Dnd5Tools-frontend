@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import * as lc from "../../../../../../../../constants/locationConstants";
 import * as utils from "../../../../../../../../utils";
 
@@ -8,7 +8,7 @@ import Select from "../../../../../../../../components/Select";
 
 import "./styles.css";
 
-function ModalManageCreatureRoutine({ routine, routines, contexts, onClose }) {
+function ModalManageCreatureRoutine({ routine, contexts, isPointOfInterest, onClose }) {
   const [tempRoutine, setTempRoutine] = useState(
     routine
       ? utils.clone(routine)
@@ -21,6 +21,15 @@ function ModalManageCreatureRoutine({ routine, routines, contexts, onClose }) {
           encounterFrequency: null,
         }
   );
+  const encounterFrequencies = useMemo(() => {
+    let encounterFrequencies = lc.encounterFrequencies;
+
+    if (!isPointOfInterest) {
+      encounterFrequencies = encounterFrequencies.filter((f) => f.value !== lc.ENCOUNTER_FREQUENCIES.CERTAIN);
+    }
+
+    return encounterFrequencies;
+  }, [isPointOfInterest]);
 
   function HandleCancel() {
     onClose();
@@ -99,7 +108,7 @@ function ModalManageCreatureRoutine({ routine, routines, contexts, onClose }) {
           value={tempRoutine}
           valuePropertyPath="encounterFrequency"
           onSelect={setTempRoutine}
-          options={lc.encounterFrequencies}
+          options={encounterFrequencies}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />

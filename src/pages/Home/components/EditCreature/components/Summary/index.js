@@ -5,14 +5,14 @@ import * as cc from "../../../../../../constants/creatureConstants";
 import {
   GetCreatureOffensiveRatio,
   GetCreatureDefensiveRatio,
-  GetCreatureDifficultyRatio,
+  // GetCreatureDifficultyRatio,
   GetCreaturePowerScale,
 } from "../../../../../../helpers/combatHelper";
 
 import Button from "../../../../../../components/Button";
 import Info from "../../../../../../components/Info";
 import ModalExport from "./components/ModalExport";
-import ModalDifficultySimulator from "./components/ModalDifficultySimulator";
+// import ModalDifficultySimulator from "./components/ModalDifficultySimulator";
 import ModalWarning from "../../../../../../components/ModalWarning";
 
 import "./styles.css";
@@ -185,15 +185,15 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
     setModal(<ModalExport creature={creature} onClose={setModal} />);
   }
 
-  async function OpenModalDifficultySimulator() {
-    setModal(
-      <ModalDifficultySimulator
-        creature={creature}
-        difficultyRatio={GetCreatureDifficultyRatio(creatureOffensiveRatio, creatureDefensiveRatio)}
-        onClose={setModal}
-      />
-    );
-  }
+  // async function OpenModalDifficultySimulator() {
+  //   setModal(
+  //     <ModalDifficultySimulator
+  //       creature={creature}
+  //       difficultyRatio={GetCreatureDifficultyRatio(creatureOffensiveRatio, creatureDefensiveRatio)}
+  //       onClose={setModal}
+  //     />
+  //   );
+  // }
 
   async function OpenDeleteConfirmation() {
     if (!isBasicPack) {
@@ -237,9 +237,9 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
           />
         </div>
         <div className="power-scale-wrapper">
-          <button className="power-scale-blocker" onClick={OpenModalDifficultySimulator}>
+          {/* <button className="power-scale-blocker" onClick={OpenModalDifficultySimulator}>
             <h3>Simular Dificuldade</h3>
-          </button>
+          </button> */}
           <i className="fas fa-khanda power-scale-icon"></i>
           <aside className="power-scale-bar">
             <div className="power-scale-fill offensive" style={{ width: GetCreaturePowerScale(creatureOffensiveRatio, creature.rarity) }}></div>

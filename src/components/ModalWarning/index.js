@@ -15,7 +15,7 @@ function ModalWarning({ title = "", message = "", confirmText, onConfirm, cancel
   }
 
   return (
-    <Modal title={title} className="ModalWarning-container" onClickToClose={!confirmText ? onCancel : !cancelText ? onConfirm : () => {}}>
+    <Modal title={title} className="ModalWarning-container" onClickToClose={confirmText ? (cancelText ? () => {} : onConfirm) : onCancel}>
       <span className="warning-message">{message}</span>
       <footer className="warning-actions-wrapper">
         {cancelText && (

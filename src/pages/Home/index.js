@@ -219,7 +219,7 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    if (locations) {
+    if (locations && creatures) {
       locations.forEach((l) => {
         l.creatures = l.creatures.filter((lc) => creatures.some((c) => c._id === lc.creatureId));
       });

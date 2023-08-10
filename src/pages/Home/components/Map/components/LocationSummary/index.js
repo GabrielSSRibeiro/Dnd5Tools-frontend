@@ -58,7 +58,6 @@ function LocationSummary({
         elements: [],
       },
       interaction: {
-        isCurrent: false,
         type: null,
         isHazardous: false,
         rarity: null,

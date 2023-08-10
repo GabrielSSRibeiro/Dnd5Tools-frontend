@@ -53,7 +53,7 @@ function NaviBar({
 
   async function OpenModalMenu() {
     setModal(
-      <Modal title="Versao 1.5" onClickToClose={() => setModal(null)} className="menu-modal-body">
+      <Modal title="Versao 1.7" onClickToClose={() => setModal(null)} className="menu-modal-body">
         <div style={{ display: "flex", flexDirection: "column" }}>
           <p>Motivaçoes</p>
           <span>Subir o piso de mestrar uma sessao. Rapido de criar, facil de editar</span>
@@ -76,7 +76,7 @@ function NaviBar({
           <span>No Foundry, tokens sao genericos, por enquanto</span>
           <p>-</p>
           <p>Próximas Funcionalidades</p>
-          <span>Gerenciador de Combates</span>
+          <span>Gerenciador de Combates, Gerador de Mapa de Batalha, Gerador de Masmorra</span>
         </div>
         <div className="divider"></div>
         <Button text="Sair" onClick={HandleLogout} />

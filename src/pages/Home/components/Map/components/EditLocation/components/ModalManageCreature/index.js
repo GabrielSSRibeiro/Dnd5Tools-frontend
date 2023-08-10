@@ -8,7 +8,7 @@ import Button from "../../../../../../../../components/Button";
 
 import "./styles.css";
 
-function ModalManageCreature({ name, creature, contexts, onClose }) {
+function ModalManageCreature({ name, creature, contexts, isPointOfInterest, onClose }) {
   const [modal, setModal] = useState(null);
   const [tempCreature, setTempCreature] = useState(
     creature
@@ -23,8 +23,8 @@ function ModalManageCreature({ name, creature, contexts, onClose }) {
     setModal(
       <ModalManageCreatureRoutine
         routine={routine}
-        routines={tempCreature.routines}
         contexts={contexts}
+        isPointOfInterest={isPointOfInterest}
         onClose={(tempRoutine) => HandleCloseModalManageRoutine(routine, tempRoutine)}
       />
     );
