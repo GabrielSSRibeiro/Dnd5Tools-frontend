@@ -128,21 +128,15 @@ function LocationSummary({
         <header className="header">
           {!distance && (
             <aside className="header-action">
-              {location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
-                <button onClick={() => {}} disabled>
-                  <i className="fas fa-route"></i>
-                </button>
-              ) : (
-                <button onClick={() => HandleEditNewLocation(id)} disabled={locations.length >= 100}>
-                  <i className="fas fa-plus"></i>
-                </button>
-              )}
+              <button title="Adicionar Dentro" onClick={() => HandleEditNewLocation(id)} disabled={locations.length >= 100}>
+                <i className="fas fa-plus"></i>
+              </button>
             </aside>
           )}
           <span className="name">{location.name}</span>
           {!distance && (
             <aside className="header-details">
-              <button onClick={() => OpenModalLocationDetails(location, id)}>
+              <button title="Abrir Detalhes" onClick={() => OpenModalLocationDetails(location, id)}>
                 <i className="fas fa-book"></i>
               </button>
             </aside>

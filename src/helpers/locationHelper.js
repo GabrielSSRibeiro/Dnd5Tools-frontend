@@ -110,3 +110,23 @@ export const GetTravelTimeInH = (distanceInScale, travel) => {
 
   return Math.floor(distanceInScale / travelDistancePerHourInM);
 };
+
+export const GetLocationDataForExport = (location, creatures) => {
+  let locationDataForExport = [location.name.toUpperCase()];
+
+  if (location.contexts[0].firstImpressions) {
+    locationDataForExport.push(location.contexts[0].firstImpressions);
+  }
+
+  if (location.contexts[0].details) {
+    locationDataForExport.push(location.contexts[0].details);
+  }
+
+  if (location.creatures.length > 0) {
+    locationDataForExport.push(location.creatures.map((lc) => creatures.find((c) => c._id === lc.creatureId).name).join(", "));
+  }
+
+  locationDataForExport.push("---------------------------------");
+
+  return locationDataForExport;
+};

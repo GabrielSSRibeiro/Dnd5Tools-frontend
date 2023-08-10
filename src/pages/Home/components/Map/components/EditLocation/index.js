@@ -354,7 +354,31 @@ function EditLocation({
     exportLocation.exteriorLocationId = null;
     exportLocation.owner = null;
 
-    utils.downloadObjectAsJson(exportLocation, `${exportLocation.name}`);
+    utils.downloadData(JSON.stringify(exportLocation), `${exportLocation.name}.json`);
+  }
+
+  function HandleWorldExport() {
+    function AddLocationsData(locs) {
+      lh.sortLocsByRef(locs.map((l) => l.data)).forEach((l) => {
+        let location = locs.find((loc) => loc.data._id === l._id);
+        content.push(...lh.GetLocationDataForExport(location.data, creatures));
+
+        const interiorLocs = Object.keys(location.interiorLocs).map((locId) => map[locId]);
+        AddLocationsData(interiorLocs);
+      });
+    }
+
+    let content = lh.GetLocationDataForExport(world, creatures);
+
+    const rootLocs = Object.keys(map)
+      .filter((locationId) => !map[map[locationId].data.exteriorLocationId])
+      .map((locId) => map[locId]);
+    AddLocationsData(rootLocs);
+
+    //remove last divider
+    content.pop();
+
+    utils.downloadData(content.join("\n\n"), `${world.name}.txt`);
   }
 
   return (
@@ -362,7 +386,7 @@ function EditLocation({
       {modal}
       <div className="title-wrapper">
         <h3>Localização</h3>
-        <button onClick={() => inputRef.current.click()} className="location-import">
+        <button title="Importar" onClick={() => inputRef.current.click()} className="location-import">
           <i className="fas fa-download"></i>
           <input type="file" onChange={ImportAscendance} ref={inputRef} hidden={true} accept="application/JSON" />
         </button>
@@ -603,18 +627,22 @@ function EditLocation({
         </div>
       </main>
       <footer className="action-buttons">
-        {HandleDelete && (
+        {HandleDelete ? (
           <>
-            <button className="button-simple" onClick={OpenModalDeleteLocation}>
+            <button title="Deletar" className="button-simple" onClick={OpenModalDeleteLocation}>
               <i className="fas fa-trash"></i>
             </button>
-            <button className="button-simple" onClick={OpenModalMoveLocation}>
+            <button title="Mover" className="button-simple" onClick={OpenModalMoveLocation}>
               <i className="fas fa-exchange-alt"></i>
             </button>
-            <button className="button-simple" onClick={HandleAscendanceExport}>
+            <button title="Exportar" className="button-simple" onClick={HandleAscendanceExport}>
               <i className="fas fa-upload"></i>
             </button>
           </>
+        ) : (
+          <button title="Exportar Mundo" className="button-simple" onClick={HandleWorldExport}>
+            <i className="fas fa-upload"></i>
+          </button>
         )}
         <div className="basic-actions">
           <button className="button-simple" onClick={FinishEditing}>

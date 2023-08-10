@@ -147,11 +147,11 @@ export function createArrayFromInt(int) {
   return Array.from(Array(int).keys());
 }
 
-export function downloadObjectAsJson(exportObj, exportName) {
-  var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+export function downloadData(data, exportName) {
+  var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(data);
   var downloadAnchorNode = document.createElement("a");
   downloadAnchorNode.setAttribute("href", dataStr);
-  downloadAnchorNode.setAttribute("download", exportName + ".json");
+  downloadAnchorNode.setAttribute("download", exportName);
   document.body.appendChild(downloadAnchorNode); // required for firefox
   downloadAnchorNode.click();
   downloadAnchorNode.remove();

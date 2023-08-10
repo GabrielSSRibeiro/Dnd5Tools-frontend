@@ -732,6 +732,7 @@ function Map({
               <aside className="travel-stats floating-details">
                 <div className="stat-section">
                   <button
+                    title="Amanhecer"
                     onClick={() => setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, schedule: dayTimeThreshold.current } })}
                   >
                     <i className="fas fa-sun"></i>
@@ -744,6 +745,7 @@ function Map({
                     <i className="fas fa-plus"></i>
                   </button>
                   <button
+                    title="Anoitecer"
                     onClick={() => setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, schedule: nightTimeThreshold.current } })}
                   >
                     <i className="fas fa-moon"></i>
@@ -752,6 +754,7 @@ function Map({
 
                 <div className="stat-section" style={{ borderColor: mapStateLevels.current[combatConfig.travel.precipitation] }}>
                   <button
+                    title="Limpar"
                     onClick={() => setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, precipitation: 0 } })}
                     disabled={combatConfig.travel.precipitation === 0}
                   >
@@ -783,6 +786,7 @@ function Map({
                     <i className="fas fa-plus"></i>
                   </button>
                   <button
+                    title="Precipitar"
                     onClick={() =>
                       setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, precipitation: mapStateLevels.current.length - 1 } })
                     }
@@ -794,6 +798,7 @@ function Map({
 
                 <div className="stat-section" style={{ borderColor: mapStateLevels.current[combatConfig.travel.temperature] }}>
                   <button
+                    title="Normal"
                     onClick={() => setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, temperature: 0 } })}
                     disabled={combatConfig.travel.temperature === 0}
                   >
@@ -825,6 +830,7 @@ function Map({
                     <i className="fas fa-plus"></i>
                   </button>
                   <button
+                    title="Intensa"
                     onClick={() =>
                       setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, temperature: mapStateLevels.current.length - 1 } })
                     }

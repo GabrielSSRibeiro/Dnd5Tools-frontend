@@ -31,7 +31,7 @@ function ModalExport({ creature, onClose }) {
 
   function HandleFoundryExport() {
     const foundryFormattedCreature = GetFoundryFormattedCreature(creature, exportLevel);
-    utils.downloadObjectAsJson(foundryFormattedCreature, `Foundry Export - ${creature.name}`);
+    utils.downloadData(JSON.stringify(foundryFormattedCreature), `Foundry Export - ${creature.name}.json`);
   }
 
   function HandleAscendanceExport() {
@@ -39,7 +39,7 @@ function ModalExport({ creature, onClose }) {
     exportCreature._id = null;
     exportCreature.owner = null;
 
-    utils.downloadObjectAsJson(exportCreature, `${exportCreature.name}`);
+    utils.downloadData(JSON.stringify(exportCreature), `${exportCreature.name}.json`);
   }
 
   return (
