@@ -275,7 +275,7 @@ function Map({
       });
     }
 
-    HandleSaveLocation(location);
+    MapLoadingWrapper(async () => await HandleSaveLocation(location));
     setLocationToEdit(null);
   }
 
@@ -359,7 +359,7 @@ function Map({
       }
     });
 
-    await HandleUpdateLocations(updateLocationsReq);
+    MapLoadingWrapper(async () => await HandleUpdateLocations(updateLocationsReq));
     setLocationToEdit(null);
   }
 
@@ -420,7 +420,7 @@ function Map({
       await HandleUpdateLocations(updateLocationsReq);
     }
 
-    await HandleDeleteLocations(idsToDelete);
+    MapLoadingWrapper(async () => await HandleDeleteLocations(idsToDelete));
     setLocationToEdit(null);
   }
 
@@ -516,7 +516,7 @@ function Map({
 
     setTimeout(() => {
       setMapLoading(false);
-    }, 100);
+    }, 200);
   }
 
   useEffect(() => {

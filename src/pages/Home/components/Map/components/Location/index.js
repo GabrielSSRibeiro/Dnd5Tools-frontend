@@ -73,7 +73,7 @@ function Location({
       return null;
     }
 
-    return document.getElementById(`${connectionLoc.reference.location}-area`).offsetWidth;
+    return document.getElementById(`${connectionLoc.reference.location}-area`)?.offsetWidth ?? 0;
   }, [connectionLoc]);
   const distanceAngle = useMemo(() => areaLocs.toReversed().find((l) => l.distanceAngle != null)?.distanceAngle, [areaLocs]);
   const connectionStyle = useMemo(() => {

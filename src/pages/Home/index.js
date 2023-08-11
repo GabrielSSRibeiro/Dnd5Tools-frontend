@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-// import * as util from "../../utils";
+import * as util from "../../utils";
 import * as lc from "../../constants/locationConstants";
 import * as cc from "../../constants/creatureConstants";
 import api from "../../services/api";
@@ -87,16 +87,16 @@ function Home() {
       await (locationToSave._id ? api.put("UpdateLocation", locationToSave) : api.post("SaveLocation", locationToSave))
         .then((response) => {
           if (response.data) {
-            window.location.reload(false);
-            // let index = locations.findIndex((l) => l._id === locationToSave._id);
-            // if (index >= 0) {
-            //   locations.splice(index, 1, locationToSave);
-            // } else {
-            //   locationToSave._id = response.data._id;
-            //   locations.push(locationToSave);
-            // }
+            // window.location.reload(false);
+            let index = locations.findIndex((l) => l._id === locationToSave._id);
+            if (index >= 0) {
+              locations.splice(index, 1, locationToSave);
+            } else {
+              locationToSave._id = response.data._id;
+              locations.push(locationToSave);
+            }
 
-            // setLocations([...locations]);
+            setLocations([...locations]);
           }
         })
         .catch((err) => {
@@ -113,17 +113,17 @@ function Home() {
       .put("UpdateLocations", updateLocsReq)
       .then((response) => {
         if (response.data) {
-          window.location.reload(false);
-          // let tempLocations = util.clone(locations);
+          // window.location.reload(false);
+          let tempLocations = util.clone(locations);
 
-          // updateLocsReq.ids.forEach((id, i) => {
-          //   let location = tempLocations.find((l) => l._id === id);
-          //   updateLocsReq.updates[i].forEach((u) => {
-          //     util.setObjPropertyValue(location, u.field, u.value);
-          //   });
-          // });
+          updateLocsReq.ids.forEach((id, i) => {
+            let location = tempLocations.find((l) => l._id === id);
+            updateLocsReq.updates[i].forEach((u) => {
+              util.setObjPropertyValue(location, u.field, u.value);
+            });
+          });
 
-          // setLocations([...tempLocations]);
+          setLocations([...tempLocations]);
         }
       })
       .catch((err) => {
@@ -143,10 +143,10 @@ function Home() {
           combatConfig.travel.travelNodes = combatConfig.travel.travelNodes.filter((n) => !ids.includes(n.locId));
           await HandleSaveCombatConfig();
 
-          window.location.reload(false);
-          // let filteredLocs = locations.filter((l) => !ids.includes(l._id));
+          // window.location.reload(false);
+          let filteredLocs = locations.filter((l) => !ids.includes(l._id));
 
-          // setLocations([...filteredLocs]);
+          setLocations([...filteredLocs]);
         }
       })
       .catch((err) => {
