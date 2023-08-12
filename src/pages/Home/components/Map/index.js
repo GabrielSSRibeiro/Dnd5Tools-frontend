@@ -65,6 +65,7 @@ function Map({
   const [allLocationsRefs, setAllLocationsRefs] = useState([]);
   const [restTime, setRestTime] = useState(lc.REST_TIMES.LONG);
 
+  const isNewLoc = useMemo(() => locationToEdit?.exteriorLocationId && !locationToEdit._id, [locationToEdit]);
   const isPrecipitating = useMemo(() => combatConfig.travel.precipitation >= mapStateLevels.current.length - 1, [combatConfig.travel.precipitation]);
   const isExtremeTemp = useMemo(() => combatConfig.travel.temperature >= mapStateLevels.current.length - 1, [combatConfig.travel.temperature]);
   const currentTime = useMemo(() => utils.MinutesToTimeFormat(combatConfig.travel.schedule), [combatConfig.travel.schedule]);
@@ -205,8 +206,8 @@ function Map({
       locId: locHoverData.location?._id ?? userId,
     };
 
-    if (canTravelToPoint) {
-      if (currentNode) {
+    if (currentNode) {
+      if (canTravelToPoint) {
         setModal(
           <ModalTravelResults
             onClose={setModal}
@@ -216,24 +217,24 @@ function Map({
           />
         );
       } else {
-        HandleSetCurrentNode(newCurrentNode);
-        HandleSaveCombatConfig(combatConfig);
+        setModal(
+          <ModalWarning
+            title="Mover Grupo"
+            message="Mover grupo seguramente para ponto?"
+            cancelText="Cancelar"
+            onCancel={setModal}
+            confirmText="Mover"
+            onConfirm={() => {
+              HandleSetCurrentNode(newCurrentNode);
+              HandleSaveCombatConfig(combatConfig);
+              setModal(null);
+            }}
+          />
+        );
       }
     } else {
-      setModal(
-        <ModalWarning
-          title="Mover Grupo"
-          message="Mover grupo seguramente para ponto?"
-          cancelText="Cancelar"
-          onCancel={setModal}
-          confirmText="Mover"
-          onConfirm={() => {
-            HandleSetCurrentNode(newCurrentNode);
-            HandleSaveCombatConfig(combatConfig);
-            setModal(null);
-          }}
-        />
-      );
+      HandleSetCurrentNode(newCurrentNode);
+      HandleSaveCombatConfig(combatConfig);
     }
   }
 
@@ -269,14 +270,39 @@ function Map({
   }
 
   function HandleSave(location) {
-    if (map[location._id]) {
-      allLocationsRefs.forEach((r) => {
-        r.style.opacity = 0;
-      });
+    function Save() {
+      if (map[location._id]) {
+        allLocationsRefs.forEach((r) => {
+          r.style.opacity = 0;
+        });
+      }
+
+      MapLoadingWrapper(async () => await HandleSaveLocation(location));
+      setLocationToEdit(null);
     }
 
-    MapLoadingWrapper(async () => await HandleSaveLocation(location));
-    setLocationToEdit(null);
+    if (isNewLoc && combatConfig.travel.currentNode) {
+      setModal(
+        <ModalWarning
+          title="Adicionar Localização"
+          message="Adicionar uma nova localização fará o mapa ser reajustado, removendo qualquer marcação e posição de grupo"
+          cancelText="Cancelar"
+          onCancel={setModal}
+          confirmText="Adicionar"
+          onConfirm={() => {
+            //remove travel nodes, since the map will change
+            combatConfig.travel.currentNode = null;
+            combatConfig.travel.travelNodes = [];
+            HandleSaveCombatConfig();
+
+            Save();
+            setModal(null);
+          }}
+        />
+      );
+    } else {
+      Save();
+    }
   }
 
   async function HandleMove(location, newExteriorLocId, moveInteriorLocs) {
@@ -421,6 +447,12 @@ function Map({
     }
 
     MapLoadingWrapper(async () => await HandleDeleteLocations(idsToDelete));
+
+    //remove travel nodes, since the map will change
+    combatConfig.travel.currentNode = null;
+    combatConfig.travel.travelNodes = [];
+    HandleSaveCombatConfig();
+
     setLocationToEdit(null);
   }
 
@@ -483,7 +515,7 @@ function Map({
   }
 
   function HandleChangeMapType(newMapMode) {
-    setDefaultCenter(newMapMode === lc.MAP_MODES.TRAVEL ? { x: currentNode.x, y: currentNode.y } : { x: 0, y: 0 });
+    setDefaultCenter(newMapMode === lc.MAP_MODES.TRAVEL && currentNode ? { x: currentNode.x, y: currentNode.y } : { x: 0, y: 0 });
 
     setMapMode(newMapMode);
   }
@@ -945,6 +977,7 @@ function Map({
                 locations={locations}
                 world={combatConfig.world}
                 map={map}
+                isNewLoc={isNewLoc}
               />
             </div>
           </>

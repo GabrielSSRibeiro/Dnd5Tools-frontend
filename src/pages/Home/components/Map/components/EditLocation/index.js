@@ -29,6 +29,7 @@ function EditLocation({
   locations,
   world,
   map,
+  isNewLoc,
 }) {
   let inputRef = useRef(null);
   const [location, setLocation] = useState(locationToEdit);
@@ -92,7 +93,6 @@ function EditLocation({
     setModal(
       <ModalDeleteLocation
         title="Deletar Localização"
-        message="Tem certeza que deseja deletar essa localização?"
         cancelText="Cancelar"
         onCancel={setModal}
         confirmText="Deletar"
@@ -640,15 +640,17 @@ function EditLocation({
             </button>
           </>
         ) : (
-          <button title="Exportar Mundo" className="button-simple" onClick={HandleWorldExport}>
-            <i className="fas fa-upload"></i>
-          </button>
+          !isNewLoc && (
+            <button title="Exportar Mundo" className="button-simple" onClick={HandleWorldExport}>
+              <i className="fas fa-upload"></i>
+            </button>
+          )
         )}
         <div className="basic-actions">
           <button className="button-simple" onClick={FinishEditing}>
             Cancelar
           </button>
-          <Button text="Salvar" onClick={HandleSaveLocation} isDisabled={!IsLocationValid()} />
+          <Button text={isNewLoc ? "Adicionar" : "Salvar"} onClick={HandleSaveLocation} isDisabled={!IsLocationValid()} />
         </div>
       </footer>
     </div>

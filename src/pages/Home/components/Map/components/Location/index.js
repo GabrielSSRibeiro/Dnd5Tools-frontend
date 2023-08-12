@@ -259,7 +259,7 @@ function Location({
       });
     }
 
-    //set onnection styles
+    //set connection styles
     let connection = document.getElementById(`${loc.data._id}-connection`);
     if (connection) {
       GetConnectionOffsetStyles(locOffset, true).forEach((s) => {
