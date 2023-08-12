@@ -275,15 +275,17 @@ function Location({
         offsetStyles.push({ key: "height", value: `${refAreaDiameter + refHeightAdditor}px` });
       }
 
-      Array.from(cbg.getElementsByClassName("con-bg-area corner")).forEach((bga) => {
+      Array.from(cbg.getElementsByClassName("con-bg-area")).forEach((bga) => {
+        const isCorner = bga.classList.contains("corner");
+
         //adjust further
-        if (isRefSmaller) {
+        if (isRefSmaller && isCorner) {
           bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
           //adjust back
         } else if (index !== cbgs.length - 1) {
           const modifier = cbgs.slice(index + 2).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
           bga.style.width = `calc(100% - ${modifier / 2}px)`;
-        } else {
+        } else if (isCorner) {
           //still adjust as last option
           bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
         }
@@ -291,6 +293,8 @@ function Location({
 
       const widthValue = Math.sqrt(x * x + y * y);
       const connectionRatio = (widthValue - refAreaDiameter) / widthValue;
+      console.log(connectionLoc.name, connectionLoc.offset, refAreaDiameter, widthValue, connectionRatio);
+
       offsetStyles.push({ key: "width", value: `${(widthValue - refAreaDiameter) / 2}px` });
 
       //horizontal
