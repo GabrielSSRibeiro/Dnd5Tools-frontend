@@ -208,24 +208,19 @@ function Location({
 
   //main setup
   useEffect(() => {
-    function GetRefLocRadiusForCalc(location) {
-      const locId = location.interiorLocs.length > 0 ? location.interiorLocs.find((l) => !l.data.reference.location).data._id : location.data._id;
-      const locEl = document.getElementById(`${locId}-area`);
-
-      return locEl ? locEl.offsetWidth : 0;
-    }
-
     function GetLocRadiusForCalc(location) {
-      const locId = location.interiorLocs.length > 0 ? location.interiorLocs.find((l) => !l.data.reference.location).data._id : location.data._id;
-      const locEl = document.getElementById(`${locId}`);
-      let dist = locEl ? locEl.offsetWidth : 0;
+      function GetAllFirstLocRadius(location) {
+        const interiorLocs = Object.keys(location.interiorLocs).map((locId) => map[locId]);
+        if (interiorLocs.length === 0) {
+          return location.data.radius;
+        } else {
+          return location.data.radius + GetAllFirstLocRadius(interiorLocs.find((l) => !l.data.reference.location && !l.data.isHidden));
+        }
+      }
 
-      const areas = areaLocs.toReversed();
-      areas.slice(areas.findIndex((l) => l._id === location.data._id) + 1).forEach((l) => {
-        dist -= l.radius / 2;
-      });
+      let radius = GetAllFirstLocRadius(location);
 
-      return dist;
+      return radius / 2;
     }
 
     function GetOffset(location) {
@@ -235,7 +230,7 @@ function Location({
         const refOffset = GetOffset(map[location.reference.location].data);
 
         //if refLoc has interiorLocs get radius(offsetHeight /2) from interiorLocs 1, otherwise from ref
-        const refLocDistFromCenter = GetRefLocRadiusForCalc(map[location.reference.location]);
+        const refLocDistFromCenter = GetLocRadiusForCalc(map[location.reference.location]);
 
         const distance = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
 
