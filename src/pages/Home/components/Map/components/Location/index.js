@@ -11,6 +11,7 @@ function Location({
   map,
   locations,
   pxInMScale,
+  GetLocRadiusForCalc,
   locationsRefs,
   setLocationsRefs,
   allLocationsRefs,
@@ -73,8 +74,8 @@ function Location({
       return null;
     }
 
-    return GetLocRadiusForCalc(map[connectionLoc.reference.location], map);
-  }, [connectionLoc, map]);
+    return GetLocRadiusForCalc(map[connectionLoc.reference.location]);
+  }, [GetLocRadiusForCalc, connectionLoc, map]);
   const distanceAngle = useMemo(() => areaLocs.toReversed().find((l) => l.distanceAngle != null)?.distanceAngle, [areaLocs]);
   const connectionStyle = useMemo(() => {
     if (!loc.data.reference.connectionType) {
@@ -206,21 +207,6 @@ function Location({
     return offsetStyles;
   }
 
-  function GetLocRadiusForCalc(location, map) {
-    function GetAllFirstLocRadius(location) {
-      const interiorLocs = Object.keys(location.interiorLocs).map((locId) => map[locId]);
-      if (interiorLocs.length === 0) {
-        return location.data.radius;
-      } else {
-        return location.data.radius + GetAllFirstLocRadius(interiorLocs.find((l) => !l.data.reference.location && !l.data.isHidden));
-      }
-    }
-
-    let radius = GetAllFirstLocRadius(location);
-
-    return radius / 2;
-  }
-
   //main setup
   useEffect(() => {
     function GetOffset(location) {
@@ -229,18 +215,14 @@ function Location({
       } else {
         const refOffset = GetOffset(map[location.reference.location].data);
 
-        const refLocDistFromCenter = GetLocRadiusForCalc(map[location.reference.location], map);
+        const refLocDistFromCenter = GetLocRadiusForCalc(map[location.reference.location]);
         const distance = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
-        const locDistFromCenter = GetLocRadiusForCalc(map[loc.data._id], map);
+        const locDistFromCenter = GetLocRadiusForCalc(map[location._id]);
+        const offsetDistance = refLocDistFromCenter + distance + locDistFromCenter;
 
-        //offset is refLocDistFromCenter + distance + locDistFromCenter
-        const coordinatesByDistance = utils.GetCoordinatesByDistance(
-          refOffset,
-          refLocDistFromCenter + distance + locDistFromCenter,
-          location.distanceAngle
-        );
+        const coordinatesByDistance = utils.GetCoordinatesByDistance(refOffset, offsetDistance, location.distanceAngle);
 
-        return coordinatesByDistance;
+        return { ...coordinatesByDistance, distance: offsetDistance };
       }
     }
 
@@ -265,7 +247,12 @@ function Location({
 
     function GetConnectionBgOffsetStyles(cbg, index, cbgs) {
       const offsetStyles = [];
-      const { x, y } = connectionLoc.offset;
+
+      let { x, y, distance } = connectionLoc.offset;
+
+      //remove the ref offset from x and y, making it the new center for the dist
+      x -= map[connectionLoc.reference.location].data.offset.x;
+      y -= map[connectionLoc.reference.location].data.offset.y;
 
       const refHeightAdditor = cbgs.slice(index).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
       const isRefSmaller = cbg.offsetHeight > refAreaDiameter + refHeightAdditor;
@@ -281,21 +268,20 @@ function Location({
         //adjust further
         if (isRefSmaller && isCorner) {
           bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
-          //adjust back
-        } else if (index !== cbgs.length - 1) {
+        }
+        //adjust back
+        else if (index !== cbgs.length - 1) {
           const modifier = cbgs.slice(index + 2).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
           bga.style.width = `calc(100% - ${modifier / 2}px)`;
-        } else if (isCorner) {
-          //still adjust as last option
+        }
+        //still adjust as last option
+        else if (isCorner) {
           bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
         }
       });
 
-      const widthValue = Math.sqrt(x * x + y * y);
-      const connectionRatio = (widthValue - refAreaDiameter) / widthValue;
-      console.log(connectionLoc.name, connectionLoc.offset, refAreaDiameter, widthValue, connectionRatio);
-
-      offsetStyles.push({ key: "width", value: `${(widthValue - refAreaDiameter) / 2}px` });
+      const connectionRatio = (distance - refAreaDiameter) / distance;
+      offsetStyles.push({ key: "width", value: `${(distance - refAreaDiameter) / 2}px` });
 
       //horizontal
       if (x > 0) {
@@ -339,6 +325,7 @@ function Location({
       setLocationsRefs([...locationsRefs]);
     }
   }, [
+    GetLocRadiusForCalc,
     allLocationsRefs,
     areaLocs,
     connectionLoc,
@@ -378,6 +365,7 @@ function Location({
             map={map}
             locations={locations}
             pxInMScale={pxInMScale}
+            GetLocRadiusForCalc={GetLocRadiusForCalc}
             locationsRefs={refs}
             setLocationsRefs={setRefs}
             allLocationsRefs={allLocationsRefs}

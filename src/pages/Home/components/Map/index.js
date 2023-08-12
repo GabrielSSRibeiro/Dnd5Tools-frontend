@@ -548,6 +548,21 @@ function Map({
     return refLocs;
   }
 
+  function GetLocRadiusForCalc(location) {
+    function GetAllFirstLocRadius(loc) {
+      const interiorLocs = Object.keys(loc.interiorLocs).map((locId) => map[locId]);
+      if (interiorLocs.length === 0) {
+        return loc.data.radius;
+      } else {
+        return loc.data.radius + GetAllFirstLocRadius(interiorLocs.find((l) => !l.data.reference.location && !l.data.isHidden));
+      }
+    }
+
+    let radius = GetAllFirstLocRadius(location);
+
+    return radius / 2;
+  }
+
   async function MapLoadingWrapper(func, timer = 100) {
     setMapLoading(true);
     await func();
@@ -934,6 +949,7 @@ function Map({
                   map={map}
                   locations={locations}
                   pxInMScale={pxInMScale}
+                  GetLocRadiusForCalc={GetLocRadiusForCalc}
                   locationsRefs={locationsRefs}
                   setLocationsRefs={setLocationsRefs}
                   allLocationsRefs={allLocationsRefs}
