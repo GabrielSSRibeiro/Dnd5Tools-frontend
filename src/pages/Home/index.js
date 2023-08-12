@@ -114,16 +114,14 @@ function Home() {
       .then((response) => {
         if (response.data) {
           // window.location.reload(false);
-          let tempLocations = util.clone(locations);
-
           updateLocsReq.ids.forEach((id, i) => {
-            let location = tempLocations.find((l) => l._id === id);
+            let location = locations.find((l) => l._id === id);
             updateLocsReq.updates[i].forEach((u) => {
               util.setObjPropertyValue(location, u.field, u.value);
             });
           });
 
-          setLocations([...tempLocations]);
+          setLocations([...locations]);
         }
       })
       .catch((err) => {

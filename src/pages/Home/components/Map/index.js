@@ -417,7 +417,7 @@ function Map({
     });
 
     if (updateLocationsReq.ids.length > 0) {
-      await HandleUpdateLocations(updateLocationsReq);
+      await HandleUpdateLocations(updateLocationsReq, true);
     }
 
     MapLoadingWrapper(async () => await HandleDeleteLocations(idsToDelete));
