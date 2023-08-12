@@ -277,18 +277,24 @@ function Map({
         });
       }
 
-      MapLoadingWrapper(async () => await HandleSaveLocation(location));
+      //wait for loc save, not world
+      if (locationToEdit?.exteriorLocationId) {
+        MapLoadingWrapper(async () => await HandleSaveLocation(location), 200);
+      } else {
+        HandleSaveLocation(location);
+      }
+
       setLocationToEdit(null);
     }
 
-    if (isNewLoc && combatConfig.travel.currentNode) {
+    if (combatConfig.travel.currentNode && locationToEdit?.exteriorLocationId) {
       setModal(
         <ModalWarning
-          title="Adicionar Localização"
-          message="Adicionar uma nova localização fará o mapa ser reajustado, removendo qualquer marcação e posição de grupo"
+          title="Salvar Localização"
+          message="Modificar uma localização fará o mapa ser reajustado, removendo qualquer marcação e posição de grupo"
           cancelText="Cancelar"
           onCancel={setModal}
-          confirmText="Adicionar"
+          confirmText="Salvar"
           onConfirm={() => {
             //remove travel nodes, since the map will change
             combatConfig.travel.currentNode = null;
@@ -385,7 +391,7 @@ function Map({
       }
     });
 
-    MapLoadingWrapper(async () => await HandleUpdateLocations(updateLocationsReq));
+    MapLoadingWrapper(async () => await HandleUpdateLocations(updateLocationsReq), 200);
     setLocationToEdit(null);
   }
 
@@ -446,7 +452,7 @@ function Map({
       await HandleUpdateLocations(updateLocationsReq, true);
     }
 
-    MapLoadingWrapper(async () => await HandleDeleteLocations(idsToDelete));
+    MapLoadingWrapper(async () => await HandleDeleteLocations(idsToDelete), 200);
 
     //remove travel nodes, since the map will change
     combatConfig.travel.currentNode = null;
@@ -542,13 +548,13 @@ function Map({
     return refLocs;
   }
 
-  function MapLoadingWrapper(func) {
+  async function MapLoadingWrapper(func, timer = 100) {
     setMapLoading(true);
-    func();
+    await func();
 
     setTimeout(() => {
       setMapLoading(false);
-    }, 200);
+    }, timer);
   }
 
   useEffect(() => {
