@@ -73,8 +73,8 @@ function Location({
       return null;
     }
 
-    return document.getElementById(`${connectionLoc.reference.location}-area`)?.offsetWidth ?? 0;
-  }, [connectionLoc]);
+    return GetLocRadiusForCalc(map[connectionLoc.reference.location], map);
+  }, [connectionLoc, map]);
   const distanceAngle = useMemo(() => areaLocs.toReversed().find((l) => l.distanceAngle != null)?.distanceAngle, [areaLocs]);
   const connectionStyle = useMemo(() => {
     if (!loc.data.reference.connectionType) {
@@ -206,36 +206,32 @@ function Location({
     return offsetStyles;
   }
 
-  //main setup
-  useEffect(() => {
-    function GetLocRadiusForCalc(location) {
-      function GetAllFirstLocRadius(location) {
-        const interiorLocs = Object.keys(location.interiorLocs).map((locId) => map[locId]);
-        if (interiorLocs.length === 0) {
-          return location.data.radius;
-        } else {
-          return location.data.radius + GetAllFirstLocRadius(interiorLocs.find((l) => !l.data.reference.location && !l.data.isHidden));
-        }
+  function GetLocRadiusForCalc(location, map) {
+    function GetAllFirstLocRadius(location) {
+      const interiorLocs = Object.keys(location.interiorLocs).map((locId) => map[locId]);
+      if (interiorLocs.length === 0) {
+        return location.data.radius;
+      } else {
+        return location.data.radius + GetAllFirstLocRadius(interiorLocs.find((l) => !l.data.reference.location && !l.data.isHidden));
       }
-
-      let radius = GetAllFirstLocRadius(location);
-
-      return radius / 2;
     }
 
+    let radius = GetAllFirstLocRadius(location);
+
+    return radius / 2;
+  }
+
+  //main setup
+  useEffect(() => {
     function GetOffset(location) {
       if (!location.reference.location || !map[location.reference.location]) {
         return { x: 0, y: 0 };
       } else {
         const refOffset = GetOffset(map[location.reference.location].data);
 
-        //if refLoc has interiorLocs get radius(offsetHeight /2) from interiorLocs 1, otherwise from ref
-        const refLocDistFromCenter = GetLocRadiusForCalc(map[location.reference.location]);
-
+        const refLocDistFromCenter = GetLocRadiusForCalc(map[location.reference.location], map);
         const distance = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
-
-        //if loc has interiorLocs get radius(offsetHeight /2) from interiorLocs 1, otherwise from ref
-        const locDistFromCenter = GetLocRadiusForCalc(map[loc.data._id]);
+        const locDistFromCenter = GetLocRadiusForCalc(map[loc.data._id], map);
 
         //offset is refLocDistFromCenter + distance + locDistFromCenter
         const coordinatesByDistance = utils.GetCoordinatesByDistance(
@@ -393,7 +389,7 @@ function Location({
           {areaLocs.map((l, index) => {
             const isLocArea = index === areaLocs.length - 1;
             const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
-            const hasConnectionBg = areaLocs[index + 1]?.reference.location;
+            const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location);
             const areaStyles = GetAreaStyles(l, index, isLocArea, isPointOfInterest, hasConnectionBg);
             const connectionAreaStyles = { backgroundColor: areaStyles.backgroundColor };
 
