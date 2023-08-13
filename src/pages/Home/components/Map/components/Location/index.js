@@ -263,20 +263,27 @@ function Location({
       }
 
       Array.from(cbg.getElementsByClassName("con-bg-area")).forEach((bga) => {
-        const isCorner = bga.classList.contains("corner");
+        if (bga.classList.contains("needs-adjust")) {
+          const isCorner = bga.classList.contains("corner");
 
-        //adjust further
-        if (isRefSmaller && isCorner) {
-          bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
-        }
-        //adjust back
-        else if (index !== cbgs.length - 1) {
-          const modifier = cbgs.slice(index + 2).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
-          bga.style.width = `calc(100% - ${modifier / 2}px)`;
-        }
-        //still adjust as last option
-        else if (isCorner) {
-          bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
+          //adjust further
+          if (isRefSmaller && isCorner) {
+            bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
+          }
+          //adjust back if not last
+          else if (index !== cbgs.length - 1) {
+            //control how much should be adjusted by the ref size
+            const sliceIndex = refAreaDiameter > connectionLoc.radius / 2 ? index + 1 : index + 2;
+
+            const modifier = cbgs.slice(sliceIndex).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
+            bga.style.width = `calc(100% - ${modifier / 2}px)`;
+          }
+          //still adjust further as last option
+          else if (isCorner) {
+            bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
+          }
+
+          bga.classList.remove("needs-adjust");
         }
       });
 
@@ -398,9 +405,9 @@ function Location({
                     onMouseMove={(e) => HandleHover(e, l)}
                     onMouseLeave={(e) => HandleHover(e)}
                   >
-                    <aside className="con-bg-area corner" style={connectionAreaStyles}></aside>
-                    <aside className="con-bg-area" style={{ ...connectionAreaStyles, height: refAreaDiameter }}></aside>
-                    <aside className="con-bg-area corner" style={connectionAreaStyles}></aside>
+                    <aside className="con-bg-area corner needs-adjust" style={connectionAreaStyles}></aside>
+                    <aside className="con-bg-area needs-adjust" style={{ ...connectionAreaStyles, height: refAreaDiameter }}></aside>
+                    <aside className="con-bg-area corner needs-adjust" style={connectionAreaStyles}></aside>
                   </div>
                 )}
                 <div
