@@ -425,6 +425,7 @@ function EditLocation({
               />
               <Select
                 label={"Prob. Terreno Irregular"}
+                info={[{ text: "Aumentar tempo de marcha em 25%" }]}
                 extraWidth={85}
                 value={location}
                 valuePropertyPath="traversal.irregularTerrainFrequency"

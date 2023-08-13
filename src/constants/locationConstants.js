@@ -29,10 +29,10 @@ export const IRREGULAR_TERRAIN_FREQUENCIES = {
   EXTREME: 40,
 };
 export const irregularTerrainFrequencies = [
-  { display: "Baixa", value: IRREGULAR_TERRAIN_FREQUENCIES.LOW },
-  { display: "Média", value: IRREGULAR_TERRAIN_FREQUENCIES.MEDIUM },
-  { display: "Alta", value: IRREGULAR_TERRAIN_FREQUENCIES.HIGH },
-  { display: "Extrema", value: IRREGULAR_TERRAIN_FREQUENCIES.EXTREME },
+  { display: "Baixa", value: IRREGULAR_TERRAIN_FREQUENCIES.LOW, probability: 0.1 },
+  { display: "Média", value: IRREGULAR_TERRAIN_FREQUENCIES.MEDIUM, probability: 0.25 },
+  { display: "Alta", value: IRREGULAR_TERRAIN_FREQUENCIES.HIGH, probability: 0.5 },
+  { display: "Extrema", value: IRREGULAR_TERRAIN_FREQUENCIES.EXTREME, probability: 0.75 },
 ];
 export const GetIrregularTerrainFrequency = (value) => irregularTerrainFrequencies.find((a) => a.value === value);
 
@@ -203,10 +203,10 @@ export const RESOURCE_EASINESS = {
   SCARCE: 40,
 };
 export const resourceEasiness = [
-  { display: "Abundante", value: RESOURCE_EASINESS.ABUNDANT },
-  { display: "Normal", value: RESOURCE_EASINESS.NORMAL },
-  { display: "Limitado", value: RESOURCE_EASINESS.LIMITED },
-  { display: "Escasso", value: RESOURCE_EASINESS.SCARCE },
+  { display: "Abundante", value: RESOURCE_EASINESS.ABUNDANT, difficult: cc.DIFFICULTY_CLASSES.LOW },
+  { display: "Normal", value: RESOURCE_EASINESS.NORMAL, difficult: cc.DIFFICULTY_CLASSES.MEDIUM },
+  { display: "Limitado", value: RESOURCE_EASINESS.LIMITED, difficult: cc.DIFFICULTY_CLASSES.HIGH },
+  { display: "Escasso", value: RESOURCE_EASINESS.SCARCE, difficult: cc.DIFFICULTY_CLASSES.EXTREME },
 ];
 export const GetResourceEasiness = (value) => resourceEasiness.find((a) => a.value === value);
 
@@ -311,15 +311,15 @@ export const mapModes = [
 
 export const TRAVEL_PACES = {
   REST: 10,
-  CAUTIOUS: 20,
-  ACTIVITY: 30,
+  ACTIVITY: 20,
+  SLOW: 30,
   NORMAL: 40,
   HASTEN: 50,
 };
 export const travelPaces = [
   { display: "Descanso", value: TRAVEL_PACES.REST, mobility: 0, fatigue: 0 },
-  { display: "Cauteloso", value: TRAVEL_PACES.CAUTIOUS, mobility: 0.5, fatigue: 1 },
   { display: "Atividade", value: TRAVEL_PACES.ACTIVITY, mobility: 0.5, fatigue: 1 },
+  { display: "Devagar", value: TRAVEL_PACES.SLOW, mobility: 0.5, fatigue: 1 },
   { display: "Normal", value: TRAVEL_PACES.NORMAL, mobility: 1, fatigue: 1 },
   { display: "Apressado", value: TRAVEL_PACES.HASTEN, mobility: 2, fatigue: 2 },
 ];

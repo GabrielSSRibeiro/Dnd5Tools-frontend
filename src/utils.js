@@ -222,6 +222,12 @@ export const GetDistanceByCoordinates = (pA, pB) => {
   return { value, angle };
 };
 
+export const MinutesToTimeInUnits = (minutes) => {
+  const timeInUnits =
+    minutes < 60 ? `${minutes} min(s)` : minutes < 60 * 24 ? `${Math.floor(minutes / 60)} hora(s)` : `${Math.floor(minutes / (60 * 24))} dia(s)`;
+  return timeInUnits;
+};
+
 export const MinutesToTimeFormat = (minutes) => {
   const duration = moment.duration(minutes, "minutes");
   const hours = Math.floor(duration.asHours());

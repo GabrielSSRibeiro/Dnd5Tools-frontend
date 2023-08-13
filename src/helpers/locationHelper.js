@@ -101,14 +101,13 @@ export const sortLocsByRef = (locations) => {
   return result;
 };
 
-export const GetTravelTimeInH = (distanceInScale, travel) => {
+export const GetTravelTimeInMin = (distanceInScale, travel) => {
   const paceMob = lc.GetTravelPace(travel.pace).mobility;
   const mountMob = lc.GetTravelMount(travel.mount).mobility;
   const loadMob = lc.GetTravelLoad(travel.load).mobility;
 
   let travelDistancePerHourInM = lc.BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M * paceMob * mountMob * loadMob;
-
-  return Math.floor(distanceInScale / travelDistancePerHourInM);
+  return Math.floor((60 * distanceInScale) / travelDistancePerHourInM);
 };
 
 export const GetLocationDataForExport = (location, creatures) => {

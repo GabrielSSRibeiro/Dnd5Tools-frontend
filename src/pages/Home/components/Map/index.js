@@ -161,7 +161,7 @@ function Map({
 
     return travelNodes;
   }, [combatConfig, currentNode, pxInMScale]);
-  const nodeStyles = useMemo(() => ({ width: lc.POINT_OF_INTEREST_RADIUS / 3, height: lc.POINT_OF_INTEREST_RADIUS / 3 }), []);
+
   const arrowStyles = useMemo(() => {
     let nodeStyles = {};
     if (!currentNode) {
@@ -189,21 +189,35 @@ function Map({
     return visionRadius * modofier;
   }, [combatConfig.travel.currentNode, combatConfig.world, map, pxInMScale]);
   const canTravelToPoint = useMemo(() => locHoverData?.distance.isVisible, [locHoverData?.distance.isVisible]);
+  const paceMove = useMemo(
+    () => combatConfig.travel.pace !== lc.TRAVEL_PACES.REST && combatConfig.travel.pace !== lc.TRAVEL_PACES.ACTIVITY,
+    [combatConfig.travel.pace]
+  );
+  const nodeStyles = useMemo(() => {
+    let nodeStyles = { width: lc.POINT_OF_INTEREST_RADIUS / 3, height: lc.POINT_OF_INTEREST_RADIUS / 3 };
+    if (!paceMove) {
+      nodeStyles.cursor = "not-allowed";
+    }
+
+    return nodeStyles;
+  }, [paceMove]);
 
   function OpenModalTravelResults(node, isRest) {
-    if (locations.length === 0 || mapMode !== lc.MAP_MODES.TRAVEL || (!isRest && combatConfig.travel.pace === lc.TRAVEL_PACES.REST)) {
+    if (locations.length === 0 || mapMode !== lc.MAP_MODES.TRAVEL || (!isRest && !paceMove)) {
       return;
     }
 
     //new current node
-    const newCurrentNode = node
+    let newCurrentNode = node
       ? {
+          name: node.name,
           x: node.x * pxInMScale,
           y: node.y * pxInMScale,
           angle: node.angle,
           locId: node.locId,
         }
       : {
+          name: null,
           x: locHoverData.distance.centerOffset.x * -1 * pxInMScale,
           y: locHoverData.distance.centerOffset.y * pxInMScale,
           angle: locHoverData.distance.centerOffset.angle,
@@ -215,9 +229,17 @@ function Map({
         setModal(
           <ModalTravelResults
             onClose={setModal}
+            hasMoved={combatConfig.travel.currentNode.x !== newCurrentNode.x && combatConfig.travel.currentNode.y !== newCurrentNode.y}
             newCurrentNode={newCurrentNode}
+            currentLocation={map[combatConfig.travel.currentNode.locId] ? map[combatConfig.travel.currentNode.locId].data : combatConfig.world}
+            newLocation={map[newCurrentNode.locId] ? map[newCurrentNode.locId].data : combatConfig.world}
+            locHoverData={locHoverData}
+            travel={combatConfig.travel}
+            restTime={restTime}
+            level={combatConfig.level}
+            GetUpdatedSchedule={GetUpdatedSchedule}
             HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
-            HandleAddTravelNode={() => HandleAddTravelNode(newCurrentNode)}
+            HandleAddTravelNode={node ? null : () => HandleAddTravelNode(newCurrentNode)}
             HandleSaveCombatConfig={HandleSaveCombatConfig}
           />
         );
@@ -490,7 +512,7 @@ function Map({
     setLocationToEdit(null);
   }
 
-  function HandleScheduleChange(newSchedule) {
+  function GetUpdatedSchedule(newSchedule) {
     const dayMinutes = 1440;
 
     let schedule = newSchedule % dayMinutes;
@@ -498,7 +520,7 @@ function Map({
       schedule = dayMinutes + schedule;
     }
 
-    setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, schedule } });
+    return schedule;
   }
 
   // let timer = useRef(null);
@@ -510,8 +532,8 @@ function Map({
       const distanceInScale = Math.round(distance.centerOffset.value * pxInMScale);
       distance.valueInUnits = distanceInScale < 1000 ? `${distanceInScale}m` : `${Math.round(distanceInScale / 1000)}km`;
 
-      const travelTime = lh.GetTravelTimeInH(distanceInScale, combatConfig.travel);
-      distance.timeInUnits = travelTime === 0 ? "< 1 hora" : travelTime < 24 ? `${travelTime} hora(s)` : `${Math.floor(travelTime / 24)} dia(s)`;
+      distance.travelTimeInMin = lh.GetTravelTimeInMin(distanceInScale, combatConfig.travel);
+      distance.timeInUnits = utils.MinutesToTimeInUnits(distance.travelTimeInMin);
     }
     setLocHoverData({ top: e.clientY, left: e.clientX, location, node, distance });
     // clearTimeout(timer.current);
@@ -616,7 +638,7 @@ function Map({
         className="world-map"
         style={{
           backgroundColor: cc.GetEnviroment(combatConfig.world.traversal.type).color,
-          cursor: canTravelToPoint ? (combatConfig.travel.oriented ? "pointer" : "help") : "default",
+          cursor: !paceMove ? "not-allowed" : canTravelToPoint ? (combatConfig.travel.oriented ? "pointer" : "help") : "default",
         }}
       >
         {/* title */}
@@ -637,7 +659,7 @@ function Map({
         )}
 
         {/* hover */}
-        {locations.length > 0 && locHoverData && combatConfig.travel.pace !== lc.TRAVEL_PACES.REST && (
+        {locations.length > 0 && locHoverData && paceMove && (
           <div className="location-details floating-details" style={{ ...locHoverData.style, top: locHoverData.top, left: locHoverData.left }}>
             {locHoverData.location && (
               <LocationSummary
@@ -653,7 +675,11 @@ function Map({
                 distance={locHoverData.distance}
               />
             )}
-            {locHoverData.node && <div className="node-summary">fafa</div>}
+            {locHoverData.node?.name && (
+              <div className="node-summary">
+                <span>{locHoverData.node.name}</span>
+              </div>
+            )}
           </div>
         )}
 
@@ -673,7 +699,7 @@ function Map({
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
                 />
-                {combatConfig.travel.pace === lc.TRAVEL_PACES.REST ? (
+                {!paceMove ? (
                   <div className="rest-wrapper">
                     <Select
                       label={"Passagem do tempo"}
@@ -821,11 +847,25 @@ function Map({
                   >
                     <i className="fas fa-sun"></i>
                   </button>
-                  <button onClick={() => HandleScheduleChange(combatConfig.travel.schedule - 60)}>
+                  <button
+                    onClick={() =>
+                      setCombatConfig({
+                        ...combatConfig,
+                        travel: { ...combatConfig.travel, schedule: GetUpdatedSchedule(combatConfig.travel.schedule - 60) },
+                      })
+                    }
+                  >
                     <i className="fas fa-minus"></i>
                   </button>
                   <h4>{currentTime}</h4>
-                  <button onClick={() => HandleScheduleChange(combatConfig.travel.schedule + 60)}>
+                  <button
+                    onClick={() =>
+                      setCombatConfig({
+                        ...combatConfig,
+                        travel: { ...combatConfig.travel, schedule: GetUpdatedSchedule(combatConfig.travel.schedule + 60) },
+                      })
+                    }
+                  >
                     <i className="fas fa-plus"></i>
                   </button>
                   <button
@@ -1016,9 +1056,6 @@ function Map({
             temperature={combatConfig.travel.temperature}
           />
         </aside>
-
-        {/* rest blocker */}
-        {/* {mapMode === lc.MAP_MODES.TRAVEL && combatConfig.travel.pace === lc.TRAVEL_PACES.REST && <div className="rest-blocker"></div>} */}
 
         {/* edit loc */}
         {locationToEdit && (
