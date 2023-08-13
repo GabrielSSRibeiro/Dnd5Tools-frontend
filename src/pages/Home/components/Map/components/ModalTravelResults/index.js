@@ -7,10 +7,7 @@ import "./styles.css";
 
 function ModalTravelResults({ onClose, node, HandleSetCurrentNode, HandleAddTravelNode, HandleSaveCombatConfig }) {
   function HandleContinue() {
-    if (HandleSetCurrentNode) {
-      HandleSetCurrentNode();
-    }
-
+    HandleSetCurrentNode();
     HandleSaveCombatConfig();
     onClose();
   }

@@ -190,25 +190,32 @@ function Map({
   }, [combatConfig.travel.currentNode, combatConfig.world, map, pxInMScale]);
   const canTravelToPoint = useMemo(() => locHoverData?.distance.isVisible, [locHoverData?.distance.isVisible]);
 
-  function OpenModalTravelResults(node) {
-    if (locations.length === 0 || !locHoverData || mapMode !== lc.MAP_MODES.TRAVEL || combatConfig.travel.pace === lc.TRAVEL_PACES.REST) {
+  function OpenModalTravelResults(node, isRest) {
+    if (locations.length === 0 || mapMode !== lc.MAP_MODES.TRAVEL || (!isRest && combatConfig.travel.pace === lc.TRAVEL_PACES.REST)) {
       return;
     }
 
     //new current node
-    const newCurrentNode = {
-      x: locHoverData.distance.centerOffset.x * -1 * pxInMScale,
-      y: locHoverData.distance.centerOffset.y * pxInMScale,
-      angle: locHoverData.distance.centerOffset.angle,
-      locId: node ? node.locId : locHoverData.location?._id ?? userId,
-    };
+    const newCurrentNode = node
+      ? {
+          x: node.x * pxInMScale,
+          y: node.y * pxInMScale,
+          angle: node.angle,
+          locId: node.locId,
+        }
+      : {
+          x: locHoverData.distance.centerOffset.x * -1 * pxInMScale,
+          y: locHoverData.distance.centerOffset.y * pxInMScale,
+          angle: locHoverData.distance.centerOffset.angle,
+          locId: locHoverData.location?._id ?? userId,
+        };
 
     if (currentNode) {
-      if (canTravelToPoint) {
+      if (canTravelToPoint || isRest) {
         setModal(
           <ModalTravelResults
             onClose={setModal}
-            node={node}
+            newCurrentNode={newCurrentNode}
             HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
             HandleAddTravelNode={() => HandleAddTravelNode(newCurrentNode)}
             HandleSaveCombatConfig={HandleSaveCombatConfig}
@@ -225,7 +232,7 @@ function Map({
             text: "Mover Seguramente",
             click: () => {
               HandleSetCurrentNode(newCurrentNode);
-              HandleSaveCombatConfig(combatConfig);
+              HandleSaveCombatConfig();
               setModal(null);
             },
           },
@@ -235,7 +242,13 @@ function Map({
           actions = [
             {
               text: "Deletar Marcação",
-              click: () => {},
+              click: () => {
+                combatConfig.travel.travelNodes = combatConfig.travel.travelNodes.filter(
+                  (tn) => tn.x !== newCurrentNode.x && tn.y !== newCurrentNode.y
+                );
+                HandleSaveCombatConfig();
+                setModal(null);
+              },
               isSimple: true,
             },
             ...actions,
@@ -246,12 +259,8 @@ function Map({
       }
     } else {
       HandleSetCurrentNode(newCurrentNode);
-      HandleSaveCombatConfig(combatConfig);
+      HandleSaveCombatConfig();
     }
-  }
-
-  function OpenModalTravelResultsForRest() {
-    setModal(<ModalTravelResults onClose={setModal} HandleSaveCombatConfig={HandleSaveCombatConfig} />);
   }
 
   function HandleSetCurrentNode(newCurrentNode) {
@@ -675,7 +684,7 @@ function Map({
                       optionDisplay={(o) => o.display}
                       optionValue={(o) => o.value}
                     />
-                    <Button text="Descansar" onClick={OpenModalTravelResultsForRest} />
+                    <Button text="Descansar" onClick={() => OpenModalTravelResults(currentNode, true)} />
                   </div>
                 ) : (
                   <>
