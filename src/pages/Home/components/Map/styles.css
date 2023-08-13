@@ -246,6 +246,16 @@
   justify-content: center;
 } */
 
+.Map-container .location-details .node-summary {
+  width: 200px;
+  background-color: rgba(249, 249, 249, 0.85);
+  border: 1px solid var(--black);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .Map-container .world-details .LocationSummary-container footer.details {
   display: none;
 }

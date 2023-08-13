@@ -201,10 +201,17 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
         <ModalWarning
           title="Deletar Criatura"
           message="Tem certeza que deseja deletar essa criatura?"
-          cancelText="Cancelar"
-          onCancel={setModal}
-          confirmText="Deletar"
-          onConfirm={HandleDeleteCreature}
+          actions={[
+            {
+              text: "Cancelar",
+              click: () => setModal(null),
+              isSimple: true,
+            },
+            {
+              text: "Deletar",
+              click: HandleDeleteCreature,
+            },
+          ]}
         />
       );
     }

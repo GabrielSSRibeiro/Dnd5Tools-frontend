@@ -5,7 +5,7 @@ import Modal from "../../../../../../components/Modal";
 
 import "./styles.css";
 
-function ModalTravelResults({ onClose, HandleSetCurrentNode, HandleAddTravelNode, HandleSaveCombatConfig }) {
+function ModalTravelResults({ onClose, node, HandleSetCurrentNode, HandleAddTravelNode, HandleSaveCombatConfig }) {
   function HandleContinue() {
     if (HandleSetCurrentNode) {
       HandleSetCurrentNode();
@@ -30,23 +30,18 @@ function ModalTravelResults({ onClose, HandleSetCurrentNode, HandleAddTravelNode
       <div className="divider"></div>
       <footer>
         <aside className="footer-actions">
-          {/* {1 == 1 && (
-            <button className="button-simple" onClick={() => {}}>
-              <i className="fas fa-trash"></i>
-            </button>
-          )} */}
           <button className="button-simple" onClick={() => onClose()}>
             Cancelar
           </button>
         </aside>
         <aside className="footer-actions">
-          {HandleSetCurrentNode ? (
+          {node ? (
+            <Button text="Continuar" onClick={HandleContinue} />
+          ) : (
             <>
               <Button text="Marcar no Mapa" onClick={HandleSave} />
               <Button text="Continuar sem Marcar" onClick={HandleContinue} />
             </>
-          ) : (
-            <Button text="Continuar" onClick={HandleContinue} />
           )}
         </aside>
       </footer>

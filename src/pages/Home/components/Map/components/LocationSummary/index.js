@@ -152,7 +152,7 @@ function LocationSummary({
               : cc.GetEnviroment(location.traversal.type).display}
 
             {distance?.valueInUnits ? `, a ${distance.valueInUnits}` : ""}
-            {distance?.timeInUnits ? ` (${distance.timeInUnits})` : ""}
+            {distance?.timeInUnits ? ` / ${distance.timeInUnits}` : ""}
           </span>
 
           {/* first impressions */}

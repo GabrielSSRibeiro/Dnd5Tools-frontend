@@ -5,25 +5,20 @@ import Button from "../Button";
 
 import "./styles.css";
 
-function ModalWarning({ title = "", message = "", confirmText, onConfirm, cancelText, onCancel }) {
-  function HandleCancel() {
-    onCancel();
-  }
-
-  function HandleConfirm() {
-    onConfirm();
-  }
-
+function ModalWarning({ title = "", message = "", actions = [] }) {
   return (
-    <Modal title={title} className="ModalWarning-container" onClickToClose={confirmText ? (cancelText ? () => {} : onConfirm) : onCancel}>
-      <span className="warning-message">{message}</span>
+    <Modal title={title} className="ModalWarning-container" onClickToClose={actions.length === 1 ? actions[0].click : () => {}}>
+      {message && <span className="warning-message">{message}</span>}
       <footer className="warning-actions-wrapper">
-        {cancelText && (
-          <button className="button-simple" onClick={HandleCancel}>
-            {cancelText}
-          </button>
+        {actions.map((a, index) =>
+          a.isSimple ? (
+            <button className="button-simple" onClick={a.click} key={index}>
+              {a.text}
+            </button>
+          ) : (
+            <Button text={a.text} onClick={a.click} key={index} />
+          )
         )}
-        {confirmText && <Button text={confirmText} onClick={HandleConfirm} />}
       </footer>
     </Modal>
   );

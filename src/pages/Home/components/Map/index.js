@@ -45,7 +45,6 @@ function Map({
     }
 
     const currentNode = {
-      isHidden: combatConfig.travel.currentNode.isHidden,
       x: combatConfig.travel.currentNode.x / pxInMScale,
       y: combatConfig.travel.currentNode.y / pxInMScale,
       angle: combatConfig.travel.currentNode.angle,
@@ -153,11 +152,10 @@ function Map({
     }
 
     travelNodes = travelNodes.map((n, index) => ({
-      isHidden: n.isHidden,
       x: n.x / pxInMScale,
       y: n.y / pxInMScale,
       angle: n.angle,
-      locId: n.userId,
+      locId: n.locId,
       isCurrent: index === travelNodes.length - 1,
     }));
 
@@ -192,18 +190,17 @@ function Map({
   }, [combatConfig.travel.currentNode, combatConfig.world, map, pxInMScale]);
   const canTravelToPoint = useMemo(() => locHoverData?.distance.isVisible, [locHoverData?.distance.isVisible]);
 
-  function OpenModalTravelResults() {
+  function OpenModalTravelResults(node) {
     if (locations.length === 0 || !locHoverData || mapMode !== lc.MAP_MODES.TRAVEL || combatConfig.travel.pace === lc.TRAVEL_PACES.REST) {
       return;
     }
 
     //new current node
     const newCurrentNode = {
-      isHidden: false,
       x: locHoverData.distance.centerOffset.x * -1 * pxInMScale,
       y: locHoverData.distance.centerOffset.y * pxInMScale,
       angle: locHoverData.distance.centerOffset.angle,
-      locId: locHoverData.location?._id ?? userId,
+      locId: node ? node.locId : locHoverData.location?._id ?? userId,
     };
 
     if (currentNode) {
@@ -211,26 +208,41 @@ function Map({
         setModal(
           <ModalTravelResults
             onClose={setModal}
+            node={node}
             HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
             HandleAddTravelNode={() => HandleAddTravelNode(newCurrentNode)}
             HandleSaveCombatConfig={HandleSaveCombatConfig}
           />
         );
       } else {
-        setModal(
-          <ModalWarning
-            title="Mover Grupo"
-            message="Mover grupo seguramente para ponto?"
-            cancelText="Cancelar"
-            onCancel={setModal}
-            confirmText="Mover"
-            onConfirm={() => {
+        let actions = [
+          {
+            text: "Cancelar",
+            click: () => setModal(null),
+            isSimple: true,
+          },
+          {
+            text: "Mover Seguramente",
+            click: () => {
               HandleSetCurrentNode(newCurrentNode);
               HandleSaveCombatConfig(combatConfig);
               setModal(null);
-            }}
-          />
-        );
+            },
+          },
+        ];
+
+        if (node) {
+          actions = [
+            {
+              text: "Deletar Marcação",
+              click: () => {},
+              isSimple: true,
+            },
+            ...actions,
+          ];
+        }
+
+        setModal(<ModalWarning title="Mover Grupo" actions={actions} />);
       }
     } else {
       HandleSetCurrentNode(newCurrentNode);
@@ -292,18 +304,25 @@ function Map({
         <ModalWarning
           title="Salvar Localização"
           message="Modificar uma localização fará o mapa ser reajustado, removendo qualquer marcação e posição de grupo"
-          cancelText="Cancelar"
-          onCancel={setModal}
-          confirmText="Salvar"
-          onConfirm={() => {
-            //remove travel nodes, since the map will change
-            combatConfig.travel.currentNode = null;
-            combatConfig.travel.travelNodes = [];
-            HandleSaveCombatConfig();
+          actions={[
+            {
+              text: "Cancelar",
+              click: () => setModal(null),
+              isSimple: true,
+            },
+            {
+              text: "Salvar",
+              click: () => {
+                //remove travel nodes, since the map will change
+                combatConfig.travel.currentNode = null;
+                combatConfig.travel.travelNodes = [];
+                HandleSaveCombatConfig();
 
-            Save();
-            setModal(null);
-          }}
+                Save();
+                setModal(null);
+              },
+            },
+          ]}
         />
       );
     } else {
@@ -474,7 +493,7 @@ function Map({
   }
 
   // let timer = useRef(null);
-  function HandleLocHover(e, location) {
+  function HandleLocHover(e, location, node) {
     let distance = { centerOffset: GetCenterOffset(e) };
     distance.isVisible = distance.centerOffset.value <= visionRadius / 4;
 
@@ -483,9 +502,9 @@ function Map({
       distance.valueInUnits = distanceInScale < 1000 ? `${distanceInScale}m` : `${Math.round(distanceInScale / 1000)}km`;
 
       const travelTime = lh.GetTravelTimeInH(distanceInScale, combatConfig.travel);
-      distance.timeInUnits = travelTime === 0 ? "< 1 hora" : travelTime < 24 ? `${travelTime} hora/s` : `${Math.floor(travelTime / 24)} dia/s)`;
+      distance.timeInUnits = travelTime === 0 ? "< 1 hora" : travelTime < 24 ? `${travelTime} hora(s)` : `${Math.floor(travelTime / 24)} dia(s)`;
     }
-    setLocHoverData({ top: e.clientY, left: e.clientX, location, distance });
+    setLocHoverData({ top: e.clientY, left: e.clientX, location, node, distance });
     // clearTimeout(timer.current);
     // timer.current = setTimeout(() => {
     //   if (location) {
@@ -609,20 +628,23 @@ function Map({
         )}
 
         {/* hover */}
-        {locations.length > 0 && locHoverData?.location && combatConfig.travel.pace !== lc.TRAVEL_PACES.REST && (
+        {locations.length > 0 && locHoverData && combatConfig.travel.pace !== lc.TRAVEL_PACES.REST && (
           <div className="location-details floating-details" style={{ ...locHoverData.style, top: locHoverData.top, left: locHoverData.left }}>
-            <LocationSummary
-              location={locHoverData.location}
-              id={locHoverData.location._id}
-              setLocationToEdit={setLocationToEdit}
-              setLocHoverData={setLocHoverData}
-              locations={locations}
-              creatures={creatures}
-              schedule={combatConfig.travel.schedule}
-              precipitation={combatConfig.travel.precipitation}
-              temperature={combatConfig.travel.temperature}
-              distance={locHoverData.distance}
-            />
+            {locHoverData.location && (
+              <LocationSummary
+                location={locHoverData.location}
+                id={locHoverData.location._id}
+                setLocationToEdit={setLocationToEdit}
+                setLocHoverData={setLocHoverData}
+                locations={locations}
+                creatures={creatures}
+                schedule={combatConfig.travel.schedule}
+                precipitation={combatConfig.travel.precipitation}
+                temperature={combatConfig.travel.temperature}
+                distance={locHoverData.distance}
+              />
+            )}
+            {locHoverData.node && <div className="node-summary">fafa</div>}
           </div>
         )}
 
@@ -918,7 +940,14 @@ function Map({
             {/* travel */}
             {mapMode === lc.MAP_MODES.TRAVEL &&
               travelNodes.map((n, index) => (
-                <div className="travel-none floating-details" style={{ ...nodeStyles, translate: `${n.x * -1}px ${n.y * -1}px` }} key={index}>
+                <div
+                  className="travel-none floating-details"
+                  style={{ ...nodeStyles, translate: `${n.x * -1}px ${n.y * -1}px` }}
+                  key={index}
+                  onClick={() => OpenModalTravelResults(n)}
+                  onMouseMove={(e) => HandleLocHover(e, null, n)}
+                  onMouseLeave={(e) => HandleLocHover(e)}
+                >
                   {n.isCurrent && (
                     <>
                       <div
@@ -936,7 +965,7 @@ function Map({
             {/* world */}
             <div
               className="world max-dimentions"
-              onClick={OpenModalTravelResults}
+              onClick={() => OpenModalTravelResults()}
               onMouseMove={(e) => HandleLocHover(e, combatConfig.world)}
               onMouseLeave={(e) => HandleLocHover(e)}
             ></div>
@@ -956,7 +985,7 @@ function Map({
                   setAllLocationsRefs={setAllLocationsRefs}
                   isMapRendered={isMapRendered}
                   HandleHover={HandleLocHover}
-                  travel={OpenModalTravelResults}
+                  travel={() => OpenModalTravelResults()}
                   key={locationId}
                 />
               );
