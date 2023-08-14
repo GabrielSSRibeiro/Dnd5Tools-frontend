@@ -25,6 +25,7 @@ function ModalTravelResults({
   HandleSaveCombatConfig,
 }) {
   const [name, setName] = useState(newCurrentNode.name);
+  const [notes, setNotes] = useState(newCurrentNode.notes);
   const timeInUnits = useMemo(
     () =>
       utils.ProbabilityCheck(lc.GetIrregularTerrainFrequency(newLocation.traversal.irregularTerrainFrequency).probability)
@@ -64,7 +65,16 @@ function ModalTravelResults({
     }
 
     newCurrentNode.name = name;
+    newCurrentNode.notes = notes;
     travel.schedule = GetUpdatedSchedule(travel.schedule + locHoverData.distance.travelTimeInMin);
+  }
+
+  function CheckSaveValid() {
+    if (!name) {
+      return false;
+    }
+
+    return true;
   }
 
   return (
@@ -78,8 +88,10 @@ function ModalTravelResults({
         <h4>preci</h4>
         <h4>temp</h4>
         <h6>Encontrar Recursos: CD {findResourcesDifficulty}</h6>
+        <TextInput label="Nome" value={name} onChange={setName} className="" />
+        <TextInput label="Notas (opcional)" value={notes} onChange={setNotes} className="" />
       </main>
-      <TextInput label="Nome" value={name} onChange={setName} className="" />
+
       <div className="divider"></div>
       <footer>
         <aside className="footer-actions">
@@ -90,7 +102,7 @@ function ModalTravelResults({
         <aside className="footer-actions">
           {HandleAddTravelNode ? (
             <>
-              <Button text="Marcar no Mapa" onClick={HandleSave} />
+              <Button text="Marcar no Mapa" onClick={HandleSave} isDisabled={!CheckSaveValid()} />
               <Button text="Continuar sem Marcar" onClick={HandleContinue} />
             </>
           ) : (

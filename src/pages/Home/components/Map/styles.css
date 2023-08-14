@@ -250,10 +250,21 @@
   width: 200px;
   background-color: rgba(249, 249, 249, 0.85);
   border: 1px solid var(--black);
+  padding: 3px;
 
   display: flex;
+  flex-direction: column;
+  row-gap: 10px;
   align-items: center;
   justify-content: center;
+}
+
+.Map-container .location-details .node-summary .name {
+  font-weight: 600;
+}
+
+.Map-container .location-details .node-summary .notes {
+  font-size: 10px;
 }
 
 .Map-container .world-details .LocationSummary-container footer.details {

@@ -1,11 +1,10 @@
 .ModalTravelResults-container.modal-body {
   width: fit-content;
-  min-height: calc(100% - 210px);
+  height: fit-content;
 }
 
 .ModalTravelResults-container .content {
   row-gap: 10px;
-  min-height: calc(100% - 210px);
   position: relative;
   flex-direction: column;
 }

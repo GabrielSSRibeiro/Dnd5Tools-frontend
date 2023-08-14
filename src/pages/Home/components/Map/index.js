@@ -45,6 +45,8 @@ function Map({
     }
 
     const currentNode = {
+      name: combatConfig.travel.currentNode.name,
+      notes: combatConfig.travel.currentNode.notes,
       x: combatConfig.travel.currentNode.x / pxInMScale,
       y: combatConfig.travel.currentNode.y / pxInMScale,
       angle: combatConfig.travel.currentNode.angle,
@@ -152,6 +154,8 @@ function Map({
     }
 
     travelNodes = travelNodes.map((n, index) => ({
+      name: n.name,
+      notes: n.notes,
       x: n.x / pxInMScale,
       y: n.y / pxInMScale,
       angle: n.angle,
@@ -211,6 +215,7 @@ function Map({
     let newCurrentNode = node
       ? {
           name: node.name,
+          notes: node.notes,
           x: node.x * pxInMScale,
           y: node.y * pxInMScale,
           angle: node.angle,
@@ -218,6 +223,7 @@ function Map({
         }
       : {
           name: null,
+          notes: null,
           x: locHoverData.distance.centerOffset.x * -1 * pxInMScale,
           y: locHoverData.distance.centerOffset.y * pxInMScale,
           angle: locHoverData.distance.centerOffset.angle,
@@ -677,7 +683,8 @@ function Map({
             )}
             {locHoverData.node?.name && (
               <div className="node-summary">
-                <span>{locHoverData.node.name}</span>
+                {locHoverData.node.name && <span className="name">{locHoverData.node.name}</span>}
+                {locHoverData.node.notes && <span className="notes">{locHoverData.node.notes}</span>}
               </div>
             )}
           </div>
