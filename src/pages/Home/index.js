@@ -259,6 +259,7 @@ function Home() {
             exhaustionTimer: 8 * 60,
             precipitation: 1,
             temperature: 1,
+            nextConditionsUpdate: null,
             currentNode: null,
             travelNodes: [],
           },

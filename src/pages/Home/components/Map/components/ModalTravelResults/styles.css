@@ -9,6 +9,10 @@
   flex-direction: column;
 }
 
+.ModalTravelResults-container .content .movement span {
+  font-size: 15px;
+}
+
 .ModalTravelResults-container .divider {
   border-top: 1px solid var(--gray1);
   width: calc(100% + 50px);

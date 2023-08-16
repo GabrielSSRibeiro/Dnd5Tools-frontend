@@ -43,10 +43,10 @@ export const PRECIPITATION_FREQUENCIES = {
   EXTREME: 40,
 };
 export const precipitationFrequencies = [
-  { display: "Baixa", value: PRECIPITATION_FREQUENCIES.LOW },
-  { display: "Média", value: PRECIPITATION_FREQUENCIES.MEDIUM },
-  { display: "Alta", value: PRECIPITATION_FREQUENCIES.HIGH },
-  { display: "Extrema", value: PRECIPITATION_FREQUENCIES.EXTREME },
+  { display: "Baixa", value: PRECIPITATION_FREQUENCIES.LOW, probability: 0.1 },
+  { display: "Média", value: PRECIPITATION_FREQUENCIES.MEDIUM, probability: 0.25 },
+  { display: "Alta", value: PRECIPITATION_FREQUENCIES.HIGH, probability: 0.5 },
+  { display: "Extrema", value: PRECIPITATION_FREQUENCIES.EXTREME, probability: 0.75 },
 ];
 export const GetPrecipitationFrequency = (value) => precipitationFrequencies.find((a) => a.value === value);
 
@@ -57,10 +57,10 @@ export const INTENSE_TEMPERATURE_FREQUENCIES = {
   EXTREME: 40,
 };
 export const intenseTemperatureFrequencies = [
-  { display: "Baixa", value: INTENSE_TEMPERATURE_FREQUENCIES.LOW },
-  { display: "Média", value: INTENSE_TEMPERATURE_FREQUENCIES.MEDIUM },
-  { display: "Alta", value: INTENSE_TEMPERATURE_FREQUENCIES.HIGH },
-  { display: "Extrema", value: INTENSE_TEMPERATURE_FREQUENCIES.EXTREME },
+  { display: "Baixa", value: INTENSE_TEMPERATURE_FREQUENCIES.LOW, probability: 0.1 },
+  { display: "Média", value: INTENSE_TEMPERATURE_FREQUENCIES.MEDIUM, probability: 0.25 },
+  { display: "Alta", value: INTENSE_TEMPERATURE_FREQUENCIES.HIGH, probability: 0.5 },
+  { display: "Extrema", value: INTENSE_TEMPERATURE_FREQUENCIES.EXTREME, probability: 0.75 },
 ];
 export const GetIntenseTemperatureFrequency = (value) => intenseTemperatureFrequencies.find((a) => a.value === value);
 

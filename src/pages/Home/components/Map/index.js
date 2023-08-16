@@ -32,7 +32,7 @@ function Map({
   userId,
 }) {
   const centerMoveRatio = useRef(0.05);
-  const mapStateLevels = useRef(lc.hazardousness.map((h) => h.color));
+  const mapConditionLevels = useRef(lc.hazardousness.map((h) => h.color));
   const exhaustionThreshold = useRef(8);
   const dayTimeThreshold = useRef(6 * 60);
   const nightTimeThreshold = useRef(18 * 60);
@@ -67,12 +67,15 @@ function Map({
   const [restTime, setRestTime] = useState(lc.REST_TIMES.LONG);
 
   const isNewLoc = useMemo(() => locationToEdit?.exteriorLocationId && !locationToEdit._id, [locationToEdit]);
-  const isPrecipitating = useMemo(() => combatConfig.travel.precipitation >= mapStateLevels.current.length - 1, [combatConfig.travel.precipitation]);
-  const isExtremeTemp = useMemo(() => combatConfig.travel.temperature >= mapStateLevels.current.length - 1, [combatConfig.travel.temperature]);
+  const isPrecipitating = useMemo(
+    () => combatConfig.travel.precipitation >= mapConditionLevels.current.length - 1,
+    [combatConfig.travel.precipitation]
+  );
+  const isExtremeTemp = useMemo(() => combatConfig.travel.temperature >= mapConditionLevels.current.length - 1, [combatConfig.travel.temperature]);
   const currentTime = useMemo(() => utils.MinutesToTimeFormat(combatConfig.travel.schedule), [combatConfig.travel.schedule]);
   const exhaustionTimer = useMemo(() => Math.floor(combatConfig.travel.exhaustionTimer / 60), [combatConfig.travel.exhaustionTimer]);
   const exhaustionIndex = useMemo(
-    () => Math.floor(Math.min(exhaustionTimer / exhaustionThreshold.current, 1) * (mapStateLevels.current.length - 1)),
+    () => Math.floor(Math.min(exhaustionTimer / exhaustionThreshold.current, 1) * (mapConditionLevels.current.length - 1)),
     [exhaustionTimer]
   );
   const isNightTime = useMemo(
@@ -243,6 +246,7 @@ function Map({
             travel={combatConfig.travel}
             restTime={restTime}
             level={combatConfig.level}
+            mapConditionLevels={mapConditionLevels}
             GetUpdatedSchedule={GetUpdatedSchedule}
             HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
             HandleAddTravelNode={node ? null : () => HandleAddTravelNode(newCurrentNode)}
@@ -693,7 +697,7 @@ function Map({
         {locations.length > 0 && (
           <>
             {mapMode === lc.MAP_MODES.TRAVEL ? (
-              <aside className="travel-details floating-details" style={{ borderColor: mapStateLevels.current[exhaustionIndex] }}>
+              <aside className="travel-details floating-details" style={{ borderColor: mapConditionLevels.current[exhaustionIndex] }}>
                 <h5>Marcha</h5>
                 <div className="divider"></div>
                 <Select
@@ -770,7 +774,7 @@ function Map({
                   >
                     <i className="fas fa-minus"></i>
                   </button>
-                  <h5 style={isExhausted ? { color: mapStateLevels.current[exhaustionIndex] } : {}}>{exhaustionTimer} Horas</h5>
+                  <h5 style={isExhausted ? { color: mapConditionLevels.current[exhaustionIndex] } : {}}>{exhaustionTimer} Horas</h5>
                   <button
                     onClick={() =>
                       setCombatConfig({
@@ -883,7 +887,7 @@ function Map({
                   </button>
                 </div>
 
-                <div className="stat-section" style={{ borderColor: mapStateLevels.current[combatConfig.travel.precipitation] }}>
+                <div className="stat-section" style={{ borderColor: mapConditionLevels.current[combatConfig.travel.precipitation] }}>
                   <button
                     title="Limpar"
                     onClick={() => setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, precipitation: 0 } })}
@@ -901,7 +905,7 @@ function Map({
                   </button>
 
                   {isPrecipitating ? (
-                    <h4 style={{ color: mapStateLevels.current[combatConfig.travel.precipitation] }}>
+                    <h4 style={{ color: mapConditionLevels.current[combatConfig.travel.precipitation] }}>
                       {lc.GetRoutinePrecipitation(lc.ROUTINE_PRECIPITATIONS.PRECIPITATING).display}
                     </h4>
                   ) : (
@@ -919,7 +923,7 @@ function Map({
                   <button
                     title="Precipitar"
                     onClick={() =>
-                      setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, precipitation: mapStateLevels.current.length - 1 } })
+                      setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, precipitation: mapConditionLevels.current.length - 1 } })
                     }
                     disabled={isPrecipitating}
                   >
@@ -927,7 +931,7 @@ function Map({
                   </button>
                 </div>
 
-                <div className="stat-section" style={{ borderColor: mapStateLevels.current[combatConfig.travel.temperature] }}>
+                <div className="stat-section" style={{ borderColor: mapConditionLevels.current[combatConfig.travel.temperature] }}>
                   <button
                     title="Normal"
                     onClick={() => setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, temperature: 0 } })}
@@ -945,7 +949,7 @@ function Map({
                   </button>
 
                   {isExtremeTemp ? (
-                    <h4 style={{ color: mapStateLevels.current[combatConfig.travel.temperature] }}>
+                    <h4 style={{ color: mapConditionLevels.current[combatConfig.travel.temperature] }}>
                       {lc.GetRoutineTemperature(lc.ROUTINE_TEMPERATURES.EXTREME).display}
                     </h4>
                   ) : (
@@ -963,7 +967,7 @@ function Map({
                   <button
                     title="Intensa"
                     onClick={() =>
-                      setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, temperature: mapStateLevels.current.length - 1 } })
+                      setCombatConfig({ ...combatConfig, travel: { ...combatConfig.travel, temperature: mapConditionLevels.current.length - 1 } })
                     }
                     disabled={isExtremeTemp}
                   >
