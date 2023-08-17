@@ -1,8 +1,9 @@
 .Map-container {
   width: 100vw;
-  height: calc(100vh - 120px);
+  /* height: calc(100vh - 120px); */
   min-width: calc(1440px);
-  min-height: calc(700px - 120px);
+  /* min-height: calc(700px - 120px); */
+  flex: 1;
 
   display: flex;
   flex-direction: column;

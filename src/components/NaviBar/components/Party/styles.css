@@ -91,7 +91,7 @@
   backdrop-filter: blur(25px);
 
   min-width: 720px;
-  min-height: 586px;
+  min-height: calc(700px - 62px);
 
   display: flex;
   flex-direction: column;
