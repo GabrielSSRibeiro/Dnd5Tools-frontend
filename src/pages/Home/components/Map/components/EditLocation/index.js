@@ -468,7 +468,7 @@ function EditLocation({
                 </div>
                 {location.traversal.elements.map((e) => (
                   <div className="location-row location-detail-group-item" key={e.type}>
-                    <span>{lc.GetPartitionType(e.type).display}</span>
+                    <span>{lc.GetElementType(e.type).display}</span>
                     <div className="group-item-actions">
                       <button onClick={() => OpenModalManageElement(e)}>
                         <i className="fas fa-pencil-alt"></i>

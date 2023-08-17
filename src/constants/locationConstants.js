@@ -189,10 +189,10 @@ export const HAZARDOUSNESS = {
   EXTREME: 40,
 };
 export const hazardousness = [
-  { display: "Baixa", value: HAZARDOUSNESS.LOW, color: cc.GetRarity(HAZARDOUSNESS.LOW).color },
-  { display: "Média", value: HAZARDOUSNESS.MEDIUM, color: cc.GetRarity(HAZARDOUSNESS.MEDIUM).color },
-  { display: "Alta", value: HAZARDOUSNESS.HIGH, color: cc.GetRarity(HAZARDOUSNESS.HIGH).color },
-  { display: "Extrema", value: HAZARDOUSNESS.EXTREME, color: cc.GetRarity(HAZARDOUSNESS.EXTREME).color },
+  { display: "Baixa", value: HAZARDOUSNESS.LOW, color: cc.GetRarity(HAZARDOUSNESS.LOW).color, probability: 0.1 },
+  { display: "Média", value: HAZARDOUSNESS.MEDIUM, color: cc.GetRarity(HAZARDOUSNESS.MEDIUM).color, probability: 0.25 },
+  { display: "Alta", value: HAZARDOUSNESS.HIGH, color: cc.GetRarity(HAZARDOUSNESS.HIGH).color, probability: 0.5 },
+  { display: "Extrema", value: HAZARDOUSNESS.EXTREME, color: cc.GetRarity(HAZARDOUSNESS.EXTREME).color, probability: 0.75 },
 ];
 export const GetHazardousness = (value) => hazardousness.find((a) => a.value === value);
 
@@ -248,11 +248,11 @@ export const GROUP_SIZES = {
   EXTREME: 40,
 };
 export const groupSizes = [
-  { display: "Solitário", value: GROUP_SIZES.SOLO, routineDisplay: "1" },
-  { display: "Pequeno (1-2)", value: GROUP_SIZES.SMALL, routineDisplay: "1-2" },
-  { display: "Médio (2-3)", value: GROUP_SIZES.MEDIUM, routineDisplay: "2-3" },
-  { display: "Grande (3-4)", value: GROUP_SIZES.LARGE, routineDisplay: "3-4" },
-  { display: "Muito Grande (4-5)", value: GROUP_SIZES.EXTREME, routineDisplay: "4-5" },
+  { display: "Solitário", value: GROUP_SIZES.SOLO, routineDisplay: "1", min: 1, max: 1 },
+  { display: "Pequeno (1-2)", value: GROUP_SIZES.SMALL, routineDisplay: "1-2", min: 1, max: 2 },
+  { display: "Médio (2-3)", value: GROUP_SIZES.MEDIUM, routineDisplay: "2-3", min: 2, max: 3 },
+  { display: "Grande (3-4)", value: GROUP_SIZES.LARGE, routineDisplay: "3-4", min: 3, max: 4 },
+  { display: "Muito Grande (4-5)", value: GROUP_SIZES.EXTREME, routineDisplay: "4-5", min: 4, max: 5 },
 ];
 export const GetGroupSize = (value) => groupSizes.find((a) => a.value === value);
 
@@ -264,11 +264,11 @@ export const ENCOUNTER_FREQUENCIES = {
   CERTAIN: 50,
 };
 export const encounterFrequencies = [
-  { display: "Baixa", value: ENCOUNTER_FREQUENCIES.LOW, opacity: 0.5 },
-  { display: "Média", value: ENCOUNTER_FREQUENCIES.MEDIUM, opacity: 0.67 },
-  { display: "Alta", value: ENCOUNTER_FREQUENCIES.HIGH, opacity: 0.83 },
-  { display: "Extrema", value: ENCOUNTER_FREQUENCIES.EXTREME, opacity: 1 },
-  { display: "Certa", value: ENCOUNTER_FREQUENCIES.CERTAIN, opacity: 1 },
+  { display: "Baixa", value: ENCOUNTER_FREQUENCIES.LOW, opacity: 0.5, probability: 0.1 },
+  { display: "Média", value: ENCOUNTER_FREQUENCIES.MEDIUM, opacity: 0.67, probability: 0.2 },
+  { display: "Alta", value: ENCOUNTER_FREQUENCIES.HIGH, opacity: 0.83, probability: 0.3 },
+  { display: "Extrema", value: ENCOUNTER_FREQUENCIES.EXTREME, opacity: 1, probability: 0.5 },
+  { display: "Certa", value: ENCOUNTER_FREQUENCIES.CERTAIN, opacity: 1, probability: 1 },
 ];
 export const GetEncounterFrequency = (value) => encounterFrequencies.find((a) => a.value === value);
 
@@ -279,10 +279,10 @@ export const ELEMENT_MATERIAL_FREQUENCIES = {
   EXTREME: 40,
 };
 export const elementMaterialFrequencies = [
-  { display: "Baixa", value: ELEMENT_MATERIAL_FREQUENCIES.LOW },
-  { display: "Média", value: ELEMENT_MATERIAL_FREQUENCIES.MEDIUM },
-  { display: "Alta", value: ELEMENT_MATERIAL_FREQUENCIES.HIGH },
-  { display: "Extrema", value: ELEMENT_MATERIAL_FREQUENCIES.EXTREME },
+  { display: "Baixa", value: ELEMENT_MATERIAL_FREQUENCIES.LOW, probability: 0.1 },
+  { display: "Média", value: ELEMENT_MATERIAL_FREQUENCIES.MEDIUM, probability: 0.25 },
+  { display: "Alta", value: ELEMENT_MATERIAL_FREQUENCIES.HIGH, probability: 0.5 },
+  { display: "Extrema", value: ELEMENT_MATERIAL_FREQUENCIES.EXTREME, probability: 0.75 },
 ];
 export const GetElementMaterialFrequency = (value) => elementMaterialFrequencies.find((a) => a.value === value);
 
@@ -317,11 +317,11 @@ export const TRAVEL_PACES = {
   HASTEN: 50,
 };
 export const travelPaces = [
-  { display: "Descanso", value: TRAVEL_PACES.REST, mobility: 0, fatigue: 0 },
-  { display: "Atividade", value: TRAVEL_PACES.ACTIVITY, mobility: 0.5, fatigue: 1 },
-  { display: "Devagar", value: TRAVEL_PACES.SLOW, mobility: 0.5, fatigue: 1 },
-  { display: "Normal", value: TRAVEL_PACES.NORMAL, mobility: 1, fatigue: 1 },
-  { display: "Apressado", value: TRAVEL_PACES.HASTEN, mobility: 2, fatigue: 2 },
+  { display: "Descanso (x0)", value: TRAVEL_PACES.REST, mobility: 0, fatigue: 0 },
+  { display: "Atividade (x0.5)", value: TRAVEL_PACES.ACTIVITY, mobility: 0.5, fatigue: 1 },
+  { display: "Devagar (x0.5)", value: TRAVEL_PACES.SLOW, mobility: 0.5, fatigue: 1 },
+  { display: "Normal (x1)", value: TRAVEL_PACES.NORMAL, mobility: 1, fatigue: 1 },
+  { display: "Apressado (x2)", value: TRAVEL_PACES.HASTEN, mobility: 2, fatigue: 2 },
 ];
 export const GetTravelPace = (value) => travelPaces.find((a) => a.value === value);
 
@@ -333,11 +333,11 @@ export const TRAVEL_MOUNTS = {
   VERY_FAST: 50,
 };
 export const travelMounts = [
-  { display: "Nenhuma", value: TRAVEL_MOUNTS.NONE, mobility: 1, fatigue: 1 },
-  { display: "Devagar", value: TRAVEL_MOUNTS.SLOW, mobility: 1, fatigue: 0.5 },
-  { display: "Normal", value: TRAVEL_MOUNTS.NORMAL, mobility: 1.5, fatigue: 0.5 },
-  { display: "Rápida", value: TRAVEL_MOUNTS.FAST, mobility: 2, fatigue: 0.5 },
-  { display: "Muito rápida", value: TRAVEL_MOUNTS.VERY_FAST, mobility: 3, fatigue: 0.5 },
+  { display: "Nenhuma (x1)", value: TRAVEL_MOUNTS.NONE, mobility: 1, fatigue: 1 },
+  { display: "Devagar (x1)", value: TRAVEL_MOUNTS.SLOW, mobility: 1, fatigue: 0.5 },
+  { display: "Normal (x1.5)", value: TRAVEL_MOUNTS.NORMAL, mobility: 1.5, fatigue: 0.5 },
+  { display: "Rápida (x2)", value: TRAVEL_MOUNTS.FAST, mobility: 2, fatigue: 0.5 },
+  { display: "Muito rápida (x3)", value: TRAVEL_MOUNTS.VERY_FAST, mobility: 3, fatigue: 0.5 },
 ];
 export const GetTravelMount = (value) => travelMounts.find((a) => a.value === value);
 
@@ -364,3 +364,17 @@ export const restTimes = [
   { display: "8 horas", value: REST_TIMES.LONG },
 ];
 export const GetRestTimes = (value) => restTimes.find((a) => a.value === value);
+
+export const ELEMENT_ALTERATIONS = {
+  SIZE: 10,
+  NUMBER: 20,
+  SHAPE: 30,
+  CONDITION: 40,
+};
+export const elementAlterations = [
+  { display: "Tamanho", value: ELEMENT_ALTERATIONS.SIZE },
+  { display: "Quantidade", value: ELEMENT_ALTERATIONS.NUMBER },
+  { display: "Forma", value: ELEMENT_ALTERATIONS.SHAPE },
+  { display: "Condição", value: ELEMENT_ALTERATIONS.CONDITION },
+];
+export const GetElementAlteration = (value) => elementAlterations.find((a) => a.value === value);

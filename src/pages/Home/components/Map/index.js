@@ -47,6 +47,9 @@ function Map({
     const currentNode = {
       name: combatConfig.travel.currentNode.name,
       notes: combatConfig.travel.currentNode.notes,
+      findResourcesDifficulty: combatConfig.travel.currentNode.findResourcesDifficulty,
+      materialRarity: combatConfig.travel.currentNode.materialRarity,
+      isHazardous: combatConfig.travel.currentNode.isHazardous,
       x: combatConfig.travel.currentNode.x / pxInMScale,
       y: combatConfig.travel.currentNode.y / pxInMScale,
       angle: combatConfig.travel.currentNode.angle,
@@ -159,6 +162,9 @@ function Map({
     travelNodes = travelNodes.map((n, index) => ({
       name: n.name,
       notes: n.notes,
+      findResourcesDifficulty: n.findResourcesDifficulty,
+      materialRarity: n.materialRarity,
+      isHazardous: n.isHazardous,
       x: n.x / pxInMScale,
       y: n.y / pxInMScale,
       angle: n.angle,
@@ -219,6 +225,9 @@ function Map({
       ? {
           name: node.name,
           notes: node.notes,
+          findResourcesDifficulty: node.findResourcesDifficulty,
+          materialRarity: node.materialRarity,
+          isHazardous: node.isHazardous,
           x: node.x * pxInMScale,
           y: node.y * pxInMScale,
           angle: node.angle,
@@ -227,6 +236,9 @@ function Map({
       : {
           name: null,
           notes: null,
+          findResourcesDifficulty: null,
+          materialRarity: null,
+          isHazardous: null,
           x: locHoverData.distance.centerOffset.x * -1 * pxInMScale,
           y: locHoverData.distance.centerOffset.y * pxInMScale,
           angle: locHoverData.distance.centerOffset.angle,
@@ -235,13 +247,15 @@ function Map({
 
     if (currentNode) {
       if (canTravelToPoint || isRest) {
+        const newLocation = map[newCurrentNode.locId]?.data;
+
         setModal(
           <ModalTravelResults
             onClose={setModal}
             hasMoved={combatConfig.travel.currentNode.x !== newCurrentNode.x && combatConfig.travel.currentNode.y !== newCurrentNode.y}
             newCurrentNode={newCurrentNode}
-            currentLocation={map[combatConfig.travel.currentNode.locId] ? map[combatConfig.travel.currentNode.locId].data : combatConfig.world}
-            newLocation={map[newCurrentNode.locId] ? map[newCurrentNode.locId].data : combatConfig.world}
+            newLocation={newLocation ?? combatConfig.world}
+            exteriorLocation={newLocation && map[newLocation.exteriorLocationId] ? map[newLocation.exteriorLocationId].data : null}
             locHoverData={locHoverData}
             travel={combatConfig.travel}
             restTime={restTime}

@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import * as utils from "../../../../../../utils";
+import * as cc from "../../../../../../constants/creatureConstants";
 import * as lc from "../../../../../../constants/locationConstants";
 import * as ch from "../../../../../../helpers/creatureHelper";
 
@@ -13,8 +14,8 @@ function ModalTravelResults({
   onClose,
   hasMoved,
   newCurrentNode,
-  currentLocation,
   newLocation,
+  exteriorLocation,
   locHoverData,
   travel,
   restTime,
@@ -25,18 +26,41 @@ function ModalTravelResults({
   HandleAddTravelNode,
   HandleSaveCombatConfig,
 }) {
-  const [name, setName] = useState(newCurrentNode.name);
-  const [notes, setNotes] = useState(newCurrentNode.notes);
+  const isPointOfInterest = useMemo(() => newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST, [newLocation.size]);
+  const element = useRef(
+    !newCurrentNode.name && !isPointOfInterest && newLocation.traversal.elements
+      ? utils.randomItemFromArray(
+          newLocation.traversal.elements.filter((e) => utils.ProbabilityCheck(lc.GetEncounterFrequency(e.frequency).probability))
+        )
+      : null
+  );
+  const findResourcesDifficulty = useRef(
+    newCurrentNode.findResourcesDifficulty ??
+      ch.GetDCValue(lc.GetResourceEasiness(newLocation.contexts.find((c) => c.isCurrent).resourceEasiness).difficult, level)
+  );
+  const materialRarity = useRef(
+    newCurrentNode.materialRarity ??
+      (element.current && utils.ProbabilityCheck(lc.GetElementMaterialFrequency(element.current.material.probability).probability)
+        ? element.current.material.rarity
+        : null)
+  );
+  const materialRarityDisplay = useRef(materialRarity.current ? cc.GetRarity(element.current.material.rarity).treasureDisplay : null);
+  const isHazardous = useRef(
+    newCurrentNode.isHazardous ?? (element.current && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
+  );
+  const [name, setName] = useState(newCurrentNode.name ?? (element.current ? `${lc.GetElementType(element.current.type).display}...` : null));
+  const [notes, setNotes] = useState(
+    newCurrentNode.notes ??
+      (element.current
+        ? `…com modificação de "${utils.randomItemFromArray(lc.elementAlterations.map((a) => a.display))}"`
+        : "Nada em especial a vista…")
+  );
   const timeInUnits = useMemo(
     () =>
       utils.ProbabilityCheck(lc.GetIrregularTerrainFrequency(newLocation.traversal.irregularTerrainFrequency).probability)
         ? utils.MinutesToTimeInUnits(Math.round(locHoverData.distance.travelTimeInMin * 1.25))
         : locHoverData.distance.timeInUnits,
     [locHoverData.distance.timeInUnits, locHoverData.distance.travelTimeInMin, newLocation.traversal.irregularTerrainFrequency]
-  );
-  const findResourcesDifficulty = useMemo(
-    () => ch.GetDCValue(lc.GetResourceEasiness(newLocation.contexts.find((c) => c.isCurrent).resourceEasiness).difficult, level),
-    [level, newLocation.contexts]
   );
   const newSchedule = useMemo(
     () => travel.schedule + locHoverData.distance.travelTimeInMin,
@@ -113,6 +137,9 @@ function ModalTravelResults({
 
     newCurrentNode.name = name;
     newCurrentNode.notes = notes;
+    newCurrentNode.findResourcesDifficulty = findResourcesDifficulty.current;
+    newCurrentNode.materialRarity = materialRarity.current;
+    newCurrentNode.isHazardous = isHazardous.current;
 
     travel.schedule = newScheduleUpdated;
     if (shoudUpdateConditions) {
@@ -133,9 +160,9 @@ function ModalTravelResults({
   }
 
   return (
-    <Modal title="Resultado da Marcha" className="ModalTravelResults-container df ">
+    <Modal title="Resultado da Marcha" className="ModalTravelResults-container df">
       <main className="content df df-jc-fs df-f1">
-        <TextInput placeholder="Nome" value={name} onChange={setName} />
+        <TextInput placeholder="Nome..." value={name} onChange={setName} />
         <TextInput placeholder="Notas..." value={notes} onChange={setNotes} />
         {hasMoved && (
           <div className="movement">
@@ -144,6 +171,7 @@ function ModalTravelResults({
             <span className="bold">{timeInUnits}</span>
           </div>
         )}
+        <h4>{newLocation.name}</h4>
 
         {newPreciptation !== travel.precipitation && (
           <h4>
@@ -163,10 +191,18 @@ function ModalTravelResults({
               : "A temperatura piorou"}
           </h4>
         )}
-        <h6>Encontrar Recursos: CD {findResourcesDifficulty}</h6>
+        <h6>Encontrar Recursos: CD {findResourcesDifficulty.current}</h6>
+        {(materialRarityDisplay.current || isHazardous.current) && (
+          <div className="material">
+            {materialRarityDisplay.current && <span>Material {materialRarityDisplay.current}</span>}
+            {materialRarityDisplay.current && isHazardous.current && <span>, </span>}
+            {isHazardous.current && <span>Interação Perigosa</span>}
+          </div>
+        )}
       </main>
 
       <div className="divider"></div>
+
       <footer>
         <aside className="footer-actions">
           <button className="button-simple" onClick={() => onClose()}>

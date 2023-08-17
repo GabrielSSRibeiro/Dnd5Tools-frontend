@@ -19,7 +19,7 @@ function ModalManageElement({ element, elements, onClose }) {
           groupSize: lc.GROUP_SIZES.SOLO,
           hazardousness: null,
           material: {
-            Probability: null,
+            probability: null,
             rarity: null,
           },
         }
@@ -60,11 +60,11 @@ function ModalManageElement({ element, elements, onClose }) {
           value={tempElement}
           valuePropertyPath="frequency"
           onSelect={setTempElement}
-          options={lc.encounterFrequencies}
+          options={lc.encounterFrequencies.filter((f) => f.value !== lc.ENCOUNTER_FREQUENCIES.CERTAIN)}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />
-        <Select
+        {/* <Select
           label={"Tamanho do Grupo"}
           extraWidth={250}
           value={tempElement}
@@ -73,9 +73,9 @@ function ModalManageElement({ element, elements, onClose }) {
           options={lc.groupSizes}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
-        />
+        /> */}
         <Select
-          label={"Periculosidade"}
+          label={"Chance de ser Perigoso"}
           extraWidth={250}
           value={tempElement}
           valuePropertyPath="hazardousness"
@@ -89,14 +89,14 @@ function ModalManageElement({ element, elements, onClose }) {
           label={"Frequência de Ser Material"}
           extraWidth={250}
           value={tempElement}
-          valuePropertyPath="material.Probability"
+          valuePropertyPath="material.probability"
           onSelect={setTempElement}
           nothingSelected="Nenhum"
           options={lc.elementMaterialFrequencies}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />
-        {tempElement.material.Probability && (
+        {tempElement.material.probability && (
           <Select
             label={"Raridade"}
             extraWidth={250}
