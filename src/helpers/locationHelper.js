@@ -107,7 +107,20 @@ export const GetTravelTimeInMin = (distanceInScale, travel) => {
   const loadMob = lc.GetTravelLoad(travel.load).mobility;
 
   let travelDistancePerHourInM = lc.BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M * paceMob * mountMob * loadMob;
+  if (travelDistancePerHourInM === 0) {
+    return 0;
+  }
+
   return Math.floor((60 * distanceInScale) / travelDistancePerHourInM);
+};
+
+export const GetTravelFatigueModifier = (travel) => {
+  const paceFatigue = lc.GetTravelPace(travel.pace).fatigue;
+  const mountFatigue = lc.GetTravelMount(travel.mount).fatigue;
+  const loadFatigue = lc.GetTravelLoad(travel.load).fatigue;
+
+  const travelFatigueModifier = paceFatigue * mountFatigue * loadFatigue;
+  return travelFatigueModifier;
 };
 
 export const GetLocationDataForExport = (location, creatures) => {

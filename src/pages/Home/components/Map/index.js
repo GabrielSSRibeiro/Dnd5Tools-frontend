@@ -784,7 +784,7 @@ function Map({
                         travel: { ...combatConfig.travel, exhaustionTimer: combatConfig.travel.exhaustionTimer - 60 },
                       })
                     }
-                    disabled={combatConfig.travel.exhaustionTimer === 0}
+                    disabled={exhaustionTimer === 0}
                   >
                     <i className="fas fa-minus"></i>
                   </button>

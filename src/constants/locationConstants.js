@@ -317,8 +317,8 @@ export const TRAVEL_PACES = {
   HASTEN: 50,
 };
 export const travelPaces = [
-  { display: "Descanso (x0)", value: TRAVEL_PACES.REST, mobility: 0, fatigue: 0 },
-  { display: "Atividade (x0.5)", value: TRAVEL_PACES.ACTIVITY, mobility: 0.5, fatigue: 1 },
+  { display: "Descanso (x0)", value: TRAVEL_PACES.REST, mobility: 0, fatigue: 0, resultDisplay: "Descanso" },
+  { display: "Atividade (x0.5)", value: TRAVEL_PACES.ACTIVITY, mobility: 0.5, fatigue: 1, resultDisplay: "Atividade" },
   { display: "Devagar (x0.5)", value: TRAVEL_PACES.SLOW, mobility: 0.5, fatigue: 1 },
   { display: "Normal (x1)", value: TRAVEL_PACES.NORMAL, mobility: 1, fatigue: 1 },
   { display: "Apressado (x2)", value: TRAVEL_PACES.HASTEN, mobility: 2, fatigue: 2 },
@@ -359,11 +359,11 @@ export const REST_TIMES = {
   LONG: 30,
 };
 export const restTimes = [
-  { display: "10 minutes", value: REST_TIMES.SHORT },
-  { display: "1 hora", value: REST_TIMES.MEDIUM },
-  { display: "8 horas", value: REST_TIMES.LONG },
+  { display: "10 minutes", value: REST_TIMES.SHORT, timeInMin: 10 },
+  { display: "1 hora", value: REST_TIMES.MEDIUM, timeInMin: 1 * 60 },
+  { display: "8 horas", value: REST_TIMES.LONG, timeInMin: 8 * 60 },
 ];
-export const GetRestTimes = (value) => restTimes.find((a) => a.value === value);
+export const GetRestTime = (value) => restTimes.find((a) => a.value === value);
 
 export const ELEMENT_ALTERATIONS = {
   SIZE: 10,

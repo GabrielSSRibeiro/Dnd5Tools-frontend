@@ -3,6 +3,7 @@ import * as utils from "../../../../../../utils";
 import * as cc from "../../../../../../constants/creatureConstants";
 import * as lc from "../../../../../../constants/locationConstants";
 import * as ch from "../../../../../../helpers/creatureHelper";
+import * as lh from "../../../../../../helpers/locationHelper";
 
 import TextInput from "../../../../../../components/TextInput";
 import Button from "../../../../../../components/Button";
@@ -28,7 +29,7 @@ function ModalTravelResults({
 }) {
   const isPointOfInterest = useMemo(() => newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST, [newLocation.size]);
   const element = useRef(
-    !newCurrentNode.name && !isPointOfInterest && newLocation.traversal.elements
+    HandleAddTravelNode && !isPointOfInterest && newLocation.traversal.elements
       ? utils.randomItemFromArray(
           newLocation.traversal.elements.filter((e) => utils.ProbabilityCheck(lc.GetEncounterFrequency(e.frequency).probability))
         )
@@ -39,12 +40,13 @@ function ModalTravelResults({
       ch.GetDCValue(lc.GetResourceEasiness(newLocation.contexts.find((c) => c.isCurrent).resourceEasiness).difficult, level)
   );
   const materialRarity = useRef(
-    newCurrentNode.materialRarity ??
-      (element.current && utils.ProbabilityCheck(lc.GetElementMaterialFrequency(element.current.material.probability).probability)
+    HandleAddTravelNode
+      ? element.current && utils.ProbabilityCheck(lc.GetElementMaterialFrequency(element.current.material.probability).probability)
         ? element.current.material.rarity
-        : null)
+        : null
+      : newCurrentNode.materialRarity
   );
-  const materialRarityDisplay = useRef(materialRarity.current ? cc.GetRarity(element.current.material.rarity).treasureDisplay : null);
+  const materialRarityDisplay = useRef(materialRarity.current ? cc.GetRarity(materialRarity.current).treasureDisplay : null);
   const isHazardous = useRef(
     newCurrentNode.isHazardous ?? (element.current && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
   );
@@ -55,17 +57,34 @@ function ModalTravelResults({
         ? `…com modificação de "${utils.randomItemFromArray(lc.elementAlterations.map((a) => a.display))}"`
         : "Nada em especial a vista…")
   );
-  const timeInUnits = useMemo(
-    () =>
-      utils.ProbabilityCheck(lc.GetIrregularTerrainFrequency(newLocation.traversal.irregularTerrainFrequency).probability)
-        ? utils.MinutesToTimeInUnits(Math.round(locHoverData.distance.travelTimeInMin * 1.25))
-        : locHoverData.distance.timeInUnits,
-    [locHoverData.distance.timeInUnits, locHoverData.distance.travelTimeInMin, newLocation.traversal.irregularTerrainFrequency]
+  const timeInUnits = useMemo(() => {
+    if (!locHoverData) {
+      return utils.MinutesToTimeInUnits(0);
+    }
+
+    return utils.ProbabilityCheck(lc.GetIrregularTerrainFrequency(newLocation.traversal.irregularTerrainFrequency).probability)
+      ? utils.MinutesToTimeInUnits(Math.round(locHoverData.distance.travelTimeInMin * 1.25))
+      : locHoverData.distance.timeInUnits;
+  }, [locHoverData, newLocation.traversal.irregularTerrainFrequency]);
+  const timePassed = useMemo(
+    () => (travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY ? 0 : lc.GetRestTime(restTime).timeInMin),
+    [restTime, travel.pace]
   );
-  const newSchedule = useMemo(
-    () => travel.schedule + locHoverData.distance.travelTimeInMin,
-    [locHoverData.distance.travelTimeInMin, travel.schedule]
+  const timeRestedDisplay = useMemo(
+    () => `${utils.MinutesToTimeInUnits(timePassed)} passado(s) em ${lc.GetTravelPace(travel.pace).resultDisplay}`,
+    [timePassed, travel.pace]
   );
+  const newSchedule = useMemo(() => {
+    if (!locHoverData) {
+      return travel.schedule;
+    }
+
+    if (timePassed > 0) {
+      return travel.schedule + timePassed;
+    }
+
+    return travel.schedule + locHoverData.distance.travelTimeInMin;
+  }, [locHoverData, timePassed, travel.schedule]);
   const newScheduleUpdated = useMemo(() => GetUpdatedSchedule(newSchedule), [GetUpdatedSchedule, newSchedule]);
   const shoudUpdateConditions = useMemo(
     () =>
@@ -149,6 +168,14 @@ function ModalTravelResults({
       //every x hours, with variance, update preciptation and temp
       travel.nextConditionsUpdate = GetUpdatedSchedule(travel.schedule + utils.randomValueFromVarianceInt(8, 2) * 60);
     }
+
+    if (travel.pace === lc.TRAVEL_PACES.REST) {
+      travel.exhaustionTimer = Math.max(travel.exhaustionTimer - timePassed, 0);
+    } else if (travel.pace === lc.TRAVEL_PACES.ACTIVITY) {
+      travel.exhaustionTimer += timePassed * lc.GetTravelPace(travel.pace).fatigue;
+    } else {
+      travel.exhaustionTimer += Math.round(locHoverData.distance.travelTimeInMin * lh.GetTravelFatigueModifier(travel));
+    }
   }
 
   function CheckSaveValid() {
@@ -160,15 +187,25 @@ function ModalTravelResults({
   }
 
   return (
-    <Modal title="Resultado da Marcha" className="ModalTravelResults-container df">
+    <Modal
+      title="Resultado da Marcha"
+      className="ModalTravelResults-container df"
+      // info={[{ text: "" }]}
+    >
       <main className="content df df-jc-fs df-f1">
         <TextInput placeholder="Nome..." value={name} onChange={setName} />
         <TextInput placeholder="Notas..." value={notes} onChange={setNotes} />
-        {hasMoved && (
+        {(hasMoved || travel.pace === lc.TRAVEL_PACES.REST || travel.pace === lc.TRAVEL_PACES.ACTIVITY) && (
           <div className="movement">
-            <span className="bold">{locHoverData.distance.valueInUnits}</span>
-            <span> percorrido(s) em </span>
-            <span className="bold">{timeInUnits}</span>
+            {hasMoved ? (
+              <>
+                <span className="bold">{locHoverData.distance.valueInUnits}</span>
+                <span> percorrido(s) em </span>
+                <span className="bold">{timeInUnits}</span>
+              </>
+            ) : (
+              <span>{timeRestedDisplay}</span>
+            )}
           </div>
         )}
         <h4>{newLocation.name}</h4>
