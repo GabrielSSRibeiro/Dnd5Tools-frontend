@@ -43,17 +43,31 @@ function ModalTravelResults({
     HandleAddTravelNode
       ? element.current && utils.ProbabilityCheck(lc.GetElementMaterialFrequency(element.current.material.probability).probability)
         ? element.current.material.rarity
+        : isPointOfInterest
+        ? newLocation.interaction.rarity
         : null
       : newCurrentNode.materialRarity
   );
   const materialRarityDisplay = useRef(materialRarity.current ? cc.GetRarity(materialRarity.current).treasureDisplay : null);
   const isHazardous = useRef(
-    newCurrentNode.isHazardous ?? (element.current && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
+    newCurrentNode.isHazardous ??
+      (isPointOfInterest
+        ? newLocation.interaction.isHazardous
+        : element.current && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
   );
-  const [name, setName] = useState(newCurrentNode.name ?? (element.current ? `${lc.GetElementType(element.current.type).display}...` : null));
+  const [name, setName] = useState(
+    newCurrentNode.name ??
+      (isPointOfInterest
+        ? lc.GetElementType(newLocation.interaction.type).display
+        : element.current
+        ? `${lc.GetElementType(element.current.type).display}...`
+        : null)
+  );
   const [notes, setNotes] = useState(
     newCurrentNode.notes ??
-      (element.current
+      (isPointOfInterest
+        ? null
+        : element.current
         ? `…com modificação de "${utils.randomItemFromArray(lc.elementAlterations.map((a) => a.display))}"`
         : "Nada em especial a vista…")
   );
@@ -192,50 +206,65 @@ function ModalTravelResults({
       className="ModalTravelResults-container df"
       // info={[{ text: "" }]}
     >
-      <main className="content df df-jc-fs df-f1">
-        <TextInput placeholder="Nome..." value={name} onChange={setName} />
-        <TextInput placeholder="Notas..." value={notes} onChange={setNotes} />
-        {(hasMoved || travel.pace === lc.TRAVEL_PACES.REST || travel.pace === lc.TRAVEL_PACES.ACTIVITY) && (
-          <div className="movement">
-            {hasMoved ? (
-              <>
-                <span className="bold">{locHoverData.distance.valueInUnits}</span>
-                <span> percorrido(s) em </span>
-                <span className="bold">{timeInUnits}</span>
-              </>
-            ) : (
-              <span>{timeRestedDisplay}</span>
-            )}
-          </div>
-        )}
-        <h4>{newLocation.name}</h4>
+      <main className="content df df-jc-c df-ai-fs df-f1">
+        {/* world */}
+        <aside className="details-wrapper df df-fd-c df-jc-fs">
+          <h3>Mundo</h3>
+          {hasMoved || travel.pace === lc.TRAVEL_PACES.REST || travel.pace === lc.TRAVEL_PACES.ACTIVITY ? (
+            <div className="movement">
+              {hasMoved ? (
+                <>
+                  <span className="bold">{locHoverData.distance.valueInUnits}</span>
+                  <span> percorrido(s) em </span>
+                  <span className="bold">{timeInUnits}</span>
+                </>
+              ) : (
+                <span>{timeRestedDisplay}</span>
+              )}
+            </div>
+          ) : (
+            <span>-</span>
+          )}
 
-        {newPreciptation !== travel.precipitation && (
-          <h4>
-            {newPreciptation === mapConditionLevels.current.length - 1
-              ? "Tempo está precipitando"
-              : newPreciptation < travel.precipitation
-              ? "O tempo melhorou"
-              : "O tempo piorou"}
-          </h4>
-        )}
-        {newTemperature !== travel.temperature && (
-          <h4>
-            {newTemperature === mapConditionLevels.current.length - 1
-              ? "Temperatura está intensa"
-              : newTemperature < travel.temperature
-              ? "A temperatura melhorou"
-              : "A temperatura piorou"}
-          </h4>
-        )}
-        <h6>Encontrar Recursos: CD {findResourcesDifficulty.current}</h6>
-        {(materialRarityDisplay.current || isHazardous.current) && (
-          <div className="material">
-            {materialRarityDisplay.current && <span>Material {materialRarityDisplay.current}</span>}
-            {materialRarityDisplay.current && isHazardous.current && <span>, </span>}
-            {isHazardous.current && <span>Interação Perigosa</span>}
-          </div>
-        )}
+          {newPreciptation !== travel.precipitation && (
+            <h4>
+              {newPreciptation === mapConditionLevels.current.length - 1
+                ? "Tempo está precipitando"
+                : newPreciptation < travel.precipitation
+                ? "O tempo melhorou"
+                : "O tempo piorou"}
+            </h4>
+          )}
+          {newTemperature !== travel.temperature && (
+            <h4>
+              {newTemperature === mapConditionLevels.current.length - 1
+                ? "Temperatura está intensa"
+                : newTemperature < travel.temperature
+                ? "A temperatura melhorou"
+                : "A temperatura piorou"}
+            </h4>
+          )}
+        </aside>
+
+        {/* loc */}
+        <aside className="details-wrapper df df-fd-c df-jc-fs">
+          <h3>{newLocation.name}</h3>
+          <TextInput placeholder="Nomear ponto" value={name} onChange={setName} />
+          <TextInput placeholder="Notas..." value={notes} onChange={setNotes} />
+          {(materialRarityDisplay.current || isHazardous.current) && (
+            <div className="material">
+              {materialRarityDisplay.current && <span>Material {materialRarityDisplay.current}</span>}
+              {materialRarityDisplay.current && isHazardous.current && <span>, </span>}
+              {isHazardous.current && <span>Interação Perigosa</span>}
+            </div>
+          )}
+        </aside>
+
+        {/* surroundings */}
+        <aside className="details-wrapper df df-fd-c df-jc-fs">
+          <h3>Arredores</h3>
+          <h6>Encontrar Recursos: CD {findResourcesDifficulty.current}</h6>
+        </aside>
       </main>
 
       <div className="divider"></div>
