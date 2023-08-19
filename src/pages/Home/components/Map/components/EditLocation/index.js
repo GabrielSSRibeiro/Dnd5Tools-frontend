@@ -299,6 +299,10 @@ function EditLocation({
           creatureId: sc._id,
           routines: [
             {
+              schedule: null,
+              precipitation: null,
+              temperature: null,
+              context: null,
               encounterFrequency: lc.ENCOUNTER_FREQUENCIES.MEDIUM,
               groupSize: lc.GROUP_SIZES.SOLO,
             },

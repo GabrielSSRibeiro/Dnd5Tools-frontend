@@ -14,12 +14,35 @@
   row-gap: 10px;
 }
 
+.ModalTravelResults-container .details-wrapper h3 {
+  line-height: 1;
+}
+
 .ModalTravelResults-container .content .movement span {
   font-size: 15px;
 }
 
 .ModalTravelResults-container .content .material span {
   font-size: 12px;
+}
+
+.ModalTravelResults-container .creature-list {
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.ModalTravelResults-container .creature-list .creature-avatar {
+  bottom: 7px;
+  object-fit: cover;
+  object-position: 0 top;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  border: 2px solid var(--white);
 }
 
 .ModalTravelResults-container .divider {

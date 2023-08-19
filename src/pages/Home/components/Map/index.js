@@ -50,6 +50,7 @@ function Map({
       findResourcesDifficulty: combatConfig.travel.currentNode.findResourcesDifficulty,
       materialRarity: combatConfig.travel.currentNode.materialRarity,
       isHazardous: combatConfig.travel.currentNode.isHazardous,
+      creatures: combatConfig.travel.currentNode.creatures,
       x: combatConfig.travel.currentNode.x / pxInMScale,
       y: combatConfig.travel.currentNode.y / pxInMScale,
       angle: combatConfig.travel.currentNode.angle,
@@ -165,6 +166,7 @@ function Map({
       findResourcesDifficulty: n.findResourcesDifficulty,
       materialRarity: n.materialRarity,
       isHazardous: n.isHazardous,
+      creatures: n.creatures,
       x: n.x / pxInMScale,
       y: n.y / pxInMScale,
       angle: n.angle,
@@ -228,6 +230,7 @@ function Map({
           findResourcesDifficulty: node.findResourcesDifficulty,
           materialRarity: node.materialRarity,
           isHazardous: node.isHazardous,
+          creatures: node.creatures,
           x: node.x * pxInMScale,
           y: node.y * pxInMScale,
           angle: node.angle,
@@ -239,6 +242,7 @@ function Map({
           findResourcesDifficulty: null,
           materialRarity: null,
           isHazardous: null,
+          creatures: [],
           x: locHoverData.distance.centerOffset.x * -1 * pxInMScale,
           y: locHoverData.distance.centerOffset.y * pxInMScale,
           angle: locHoverData.distance.centerOffset.angle,
@@ -259,7 +263,18 @@ function Map({
             locHoverData={locHoverData}
             travel={combatConfig.travel}
             restTime={restTime}
+            isNightTime={isNightTime}
+            GetCreatureCurrentRoutine={(locationCreature, currentContext) =>
+              lh.GetCreatureCurrentRoutine(
+                locationCreature,
+                isNightTime ? lc.ROUTINE_SCHEDULES.NIGHT : lc.ROUTINE_SCHEDULES.DAY,
+                isPrecipitating ? lc.ROUTINE_PRECIPITATIONS.PRECIPITATING : lc.ROUTINE_PRECIPITATIONS.CLEAR,
+                isExtremeTemp ? lc.ROUTINE_TEMPERATURES.EXTREME : lc.ROUTINE_TEMPERATURES.NORMAL,
+                currentContext?.name
+              )
+            }
             level={combatConfig.level}
+            creatures={creatures}
             mapConditionLevels={mapConditionLevels}
             GetUpdatedSchedule={GetUpdatedSchedule}
             HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
@@ -311,6 +326,13 @@ function Map({
 
   function HandleSetCurrentNode(newCurrentNode) {
     combatConfig.travel.currentNode = newCurrentNode;
+
+    //update original node if it exists
+    let nodeIndex = combatConfig.travel.travelNodes.findIndex((n) => n.x !== newCurrentNode.x && n.y !== newCurrentNode.y);
+    if (nodeIndex) {
+      combatConfig.travel.travelNodes.splice(nodeIndex, 1, newCurrentNode);
+    }
+
     const newCenter = { x: newCurrentNode.x / pxInMScale, y: newCurrentNode.y / pxInMScale };
     setCenterOffset(newCenter);
     setDefaultCenter(newCenter);
@@ -693,9 +715,9 @@ function Map({
                 setLocHoverData={setLocHoverData}
                 locations={locations}
                 creatures={creatures}
-                schedule={combatConfig.travel.schedule}
-                precipitation={combatConfig.travel.precipitation}
-                temperature={combatConfig.travel.temperature}
+                schedule={isNightTime ? lc.ROUTINE_SCHEDULES.NIGHT : lc.ROUTINE_SCHEDULES.DAY}
+                precipitation={isPrecipitating ? lc.ROUTINE_PRECIPITATIONS.PRECIPITATING : lc.ROUTINE_PRECIPITATIONS.CLEAR}
+                temperature={isExtremeTemp ? lc.ROUTINE_TEMPERATURES.EXTREME : lc.ROUTINE_TEMPERATURES.NORMAL}
                 distance={locHoverData.distance}
               />
             )}
@@ -1076,9 +1098,9 @@ function Map({
             setLocHoverData={setLocHoverData}
             locations={locations}
             creatures={creatures}
-            schedule={combatConfig.travel.schedule}
-            precipitation={combatConfig.travel.precipitation}
-            temperature={combatConfig.travel.temperature}
+            schedule={isNightTime ? lc.ROUTINE_SCHEDULES.NIGHT : lc.ROUTINE_SCHEDULES.DAY}
+            precipitation={isPrecipitating ? lc.ROUTINE_PRECIPITATIONS.PRECIPITATING : lc.ROUTINE_PRECIPITATIONS.CLEAR}
+            temperature={isExtremeTemp ? lc.ROUTINE_TEMPERATURES.EXTREME : lc.ROUTINE_TEMPERATURES.NORMAL}
           />
         </aside>
 

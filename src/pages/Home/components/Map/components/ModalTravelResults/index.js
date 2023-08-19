@@ -20,13 +20,20 @@ function ModalTravelResults({
   locHoverData,
   travel,
   restTime,
+  isNightTime,
+  GetCreatureCurrentRoutine,
   level,
+  creatures,
   mapConditionLevels,
   GetUpdatedSchedule,
   HandleSetCurrentNode,
   HandleAddTravelNode,
   HandleSaveCombatConfig,
 }) {
+  const viewingCurrent = useMemo(
+    () => !hasMoved && travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY,
+    [hasMoved, travel.pace]
+  );
   const isPointOfInterest = useMemo(() => newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST, [newLocation.size]);
   const element = useRef(
     HandleAddTravelNode && !isPointOfInterest && newLocation.traversal.elements
@@ -54,6 +61,20 @@ function ModalTravelResults({
       (isPointOfInterest
         ? newLocation.interaction.isHazardous
         : element.current && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
+  );
+  const nodeCreatures = useRef(
+    !viewingCurrent ? (isPointOfInterest ? GetLocationCreatures(newLocation) : GetLocationCreatures(newLocation)) : newCurrentNode.creatures
+  );
+  const creaturesForDisplay = useRef(
+    nodeCreatures.current.map((nc) => {
+      const creature = creatures.find((c) => c._id === nc.creatureId);
+
+      return {
+        id: nc.creatureId,
+        color: cc.GetRarity(creature.rarity).color,
+        image: creature.image,
+      };
+    })
   );
   const [name, setName] = useState(
     newCurrentNode.name ??
@@ -160,6 +181,25 @@ function ModalTravelResults({
     onClose();
   }
 
+  function GetLocationCreatures(location) {
+    const currentContext = lh.GetCurrentContext(location);
+
+    return location.creatures
+      .map((c) => ({
+        creatureId: c.creatureId,
+        routine: GetCreatureCurrentRoutine(c, currentContext),
+      }))
+      .filter((c) => c.routine && utils.ProbabilityCheck(lc.GetEncounterFrequency(c.routine.encounterFrequency).probability))
+      .map((c) => {
+        const groupSize = lc.GetGroupSize(c.routine.groupSize);
+
+        return {
+          creatureId: c.creatureId,
+          number: utils.randomIntFromInterval(groupSize.min, groupSize.max),
+        };
+      });
+  }
+
   function UpdateData() {
     //for not oriented, travel is modified randomly by 10%
     if (!travel.oriented && travel.pace !== lc.TRAVEL_PACES.REST) {
@@ -173,6 +213,7 @@ function ModalTravelResults({
     newCurrentNode.findResourcesDifficulty = findResourcesDifficulty.current;
     newCurrentNode.materialRarity = materialRarity.current;
     newCurrentNode.isHazardous = isHazardous.current;
+    newCurrentNode.creatures = nodeCreatures.current;
 
     travel.schedule = newScheduleUpdated;
     if (shoudUpdateConditions) {
@@ -210,7 +251,9 @@ function ModalTravelResults({
         {/* world */}
         <aside className="details-wrapper df df-fd-c df-jc-fs">
           <h3>Mundo</h3>
-          {hasMoved || travel.pace === lc.TRAVEL_PACES.REST || travel.pace === lc.TRAVEL_PACES.ACTIVITY ? (
+          {viewingCurrent ? (
+            <span>-</span>
+          ) : (
             <div className="movement">
               {hasMoved ? (
                 <>
@@ -222,8 +265,6 @@ function ModalTravelResults({
                 <span>{timeRestedDisplay}</span>
               )}
             </div>
-          ) : (
-            <span>-</span>
           )}
 
           {newPreciptation !== travel.precipitation && (
@@ -263,6 +304,19 @@ function ModalTravelResults({
         {/* surroundings */}
         <aside className="details-wrapper df df-fd-c df-jc-fs">
           <h3>Arredores</h3>
+          <div className="creature-list">
+            {creaturesForDisplay.current.map((c) => (
+              <img
+                key={c.id}
+                className="creature-avatar"
+                style={{
+                  borderColor: c.color,
+                }}
+                src={c.image}
+                alt="creature-avatar"
+              />
+            ))}
+          </div>
           <h6>Encontrar Recursos: CD {findResourcesDifficulty.current}</h6>
         </aside>
       </main>
