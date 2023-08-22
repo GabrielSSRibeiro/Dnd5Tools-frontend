@@ -1,11 +1,13 @@
 .ModalTravelResults-container.modal-body {
   width: fit-content;
   height: fit-content;
+  max-height: 450px;
 }
 
 .ModalTravelResults-container .content {
   position: relative;
   column-gap: 15px;
+  overflow: auto;
 }
 
 .ModalTravelResults-container .details-wrapper {
@@ -26,12 +28,22 @@
   font-size: 12px;
 }
 
+.ModalTravelResults-container .details-wrapper .imminent {
+  color: red;
+  font-weight: 600;
+}
+
+.ModalTravelResults-container .details-wrapper .near {
+  color: DarkOrange;
+  font-weight: 600;
+}
+
 .ModalTravelResults-container .creature-list {
   padding: 3px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 5px;
+  justify-content: center;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -39,8 +51,8 @@
   bottom: 7px;
   object-fit: cover;
   object-position: 0 top;
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 100%;
   border: 2px solid var(--white);
 }

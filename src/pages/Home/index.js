@@ -225,6 +225,20 @@ function Home() {
   }, [locations, creatures]);
 
   useEffect(() => {
+    if (combatConfig && creatures) {
+      if (combatConfig.travel.currentNode) {
+        combatConfig.travel.currentNode.creatures = combatConfig.travel.currentNode.creatures.filter((nc) =>
+          creatures.some((c) => c._id === nc.creatureId)
+        );
+      }
+
+      combatConfig.travel.travelNodes.forEach((n) => {
+        n.creatures = n.creatures.filter((nc) => creatures.some((c) => c._id === nc.creatureId));
+      });
+    }
+  }, [combatConfig, creatures]);
+
+  useEffect(() => {
     api.get("GetCreaturesByOwner", { params: { owner: currentUser.uid } }).then((response) => {
       if (response.data) {
         setCreatures(response.data);

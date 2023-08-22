@@ -38,7 +38,7 @@ function ModalTravelResults({
   const element = useRef(
     HandleAddTravelNode && !isPointOfInterest && newLocation.traversal.elements
       ? utils.randomItemFromArray(
-          newLocation.traversal.elements.filter((e) => utils.ProbabilityCheck(lc.GetEncounterFrequency(e.frequency).probability))
+          newLocation.traversal.elements.filter((e) => GetProbUpdatedByTravelTimeMod(lc.GetEncounterFrequency(e.frequency).probability))
         )
       : null
   );
@@ -62,20 +62,38 @@ function ModalTravelResults({
         ? newLocation.interaction.isHazardous
         : element.current && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
   );
+  const hazardCount = useRef(GetHazardCount());
   const nodeCreatures = useRef(
     !viewingCurrent ? (isPointOfInterest ? GetLocationCreatures(newLocation) : GetLocationCreatures(newLocation)) : newCurrentNode.creatures
   );
-  const creaturesForDisplay = useRef(
-    nodeCreatures.current.map((nc) => {
-      const creature = creatures.find((c) => c._id === nc.creatureId);
+  const tracksForDisplay = useRef(
+    nodeCreatures.current
+      .filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.TRACKS)
+      .map((nc) => {
+        const creature = creatures.find((c) => c._id === nc.creatureId);
 
-      return {
-        id: nc.creatureId,
-        color: cc.GetRarity(creature.rarity).color,
-        image: creature.image,
-      };
-    })
+        return `${nc.number} ${cc.GetType(creature.type).display} ${cc.GetSize(creature.size).display}`;
+      })
   );
+  const creaturesForDisplay = useRef({
+    condition:
+      nodeCreatures.current.filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT).length >
+      nodeCreatures.current.filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR).length
+        ? lc.NODE_CREATURE_CONDITIONS.IMMINENT
+        : lc.NODE_CREATURE_CONDITIONS.NEAR,
+    creatures: nodeCreatures.current
+      .filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT || c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR)
+      .map((nc) => {
+        const creature = creatures.find((c) => c._id === nc.creatureId);
+
+        return {
+          id: nc.creatureId,
+          color: cc.GetRarity(creature.rarity).color,
+          image: creature.image,
+          number: nc.number,
+        };
+      }),
+  });
   const [name, setName] = useState(
     newCurrentNode.name ??
       (isPointOfInterest
@@ -90,7 +108,7 @@ function ModalTravelResults({
         ? null
         : element.current
         ? `…com modificação de "${utils.randomItemFromArray(lc.elementAlterations.map((a) => a.display))}"`
-        : "Nada em especial a vista…")
+        : "Nenhum ponto chama a atenção…")
   );
   const timeInUnits = useMemo(() => {
     if (!locHoverData) {
@@ -181,21 +199,51 @@ function ModalTravelResults({
     onClose();
   }
 
+  function GetHazardCount() {
+    const hazardProb = GetProbUpdatedByTravelTimeMod(lc.GetHazardousness(lh.GetCurrentContext(newLocation).hazardousness).probability);
+  }
+
+  function GetProbUpdatedByTravelTimeMod(probability) {
+    const travelTimeMod = locHoverData.distance.travelTimeInMin / 60;
+
+    return utils.ProbabilityCheckWithRatio(probability, travelTimeMod);
+  }
+
   function GetLocationCreatures(location) {
     const currentContext = lh.GetCurrentContext(location);
+    const dayTimeImminentEncounterProb = 0.5;
+    const nightTimeImminentEncounterProb = 1;
+    const encounterProb = isNightTime ? nightTimeImminentEncounterProb : dayTimeImminentEncounterProb;
+    const tracksProb = 0.5;
+    const differentCreatureMod = 0.3;
 
+    let creatureTypesInEncounter = 0;
     return location.creatures
       .map((c) => ({
         creatureId: c.creatureId,
         routine: GetCreatureCurrentRoutine(c, currentContext),
       }))
-      .filter((c) => c.routine && utils.ProbabilityCheck(lc.GetEncounterFrequency(c.routine.encounterFrequency).probability))
+      .filter((c) => c.routine)
       .map((c) => {
         const groupSize = lc.GetGroupSize(c.routine.groupSize);
+
+        const probMod = creatureTypesInEncounter > 0 ? Math.pow(differentCreatureMod, creatureTypesInEncounter) : 1;
+        const isEncounter = GetProbUpdatedByTravelTimeMod(lc.GetEncounterFrequency(c.routine.encounterFrequency).probability * probMod);
+
+        if (isEncounter) {
+          creatureTypesInEncounter++;
+        }
 
         return {
           creatureId: c.creatureId,
           number: utils.randomIntFromInterval(groupSize.min, groupSize.max),
+          condition: isEncounter
+            ? utils.ProbabilityCheck(Math.min(encounterProb * lc.GetTravelPace(travel.pace).encounterProbMod, 1))
+              ? lc.NODE_CREATURE_CONDITIONS.IMMINENT
+              : lc.NODE_CREATURE_CONDITIONS.NEAR
+            : GetProbUpdatedByTravelTimeMod(tracksProb * probMod)
+            ? lc.NODE_CREATURE_CONDITIONS.TRACKS
+            : lc.NODE_CREATURE_CONDITIONS.NONE,
         };
       });
   }
@@ -242,11 +290,7 @@ function ModalTravelResults({
   }
 
   return (
-    <Modal
-      title="Resultado da Marcha"
-      className="ModalTravelResults-container df"
-      // info={[{ text: "" }]}
-    >
+    <Modal title="Resultado da Marcha" className="ModalTravelResults-container df">
       <main className="content df df-jc-c df-ai-fs df-f1">
         {/* world */}
         <aside className="details-wrapper df df-fd-c df-jc-fs">
@@ -299,25 +343,37 @@ function ModalTravelResults({
               {isHazardous.current && <span>Interação Perigosa</span>}
             </div>
           )}
+          {tracksForDisplay.current.length > 0 && <h6>Rastros de: "{tracksForDisplay.current.join(", ")}"</h6>}
         </aside>
 
         {/* surroundings */}
         <aside className="details-wrapper df df-fd-c df-jc-fs">
           <h3>Arredores</h3>
-          <div className="creature-list">
-            {creaturesForDisplay.current.map((c) => (
-              <img
-                key={c.id}
-                className="creature-avatar"
-                style={{
-                  borderColor: c.color,
-                }}
-                src={c.image}
-                alt="creature-avatar"
-              />
-            ))}
-          </div>
           <h6>Encontrar Recursos: CD {findResourcesDifficulty.current}</h6>
+
+          {creaturesForDisplay.current.creatures.length > 0 && (
+            <>
+              <span className={creaturesForDisplay.current.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
+                {lc.GetNodeCreatureCondition(creaturesForDisplay.current.condition).display}
+              </span>
+              <div className="creature-list">
+                {creaturesForDisplay.current.creatures.map((c) => (
+                  <div className="df" key={c.id}>
+                    <img
+                      className="creature-avatar"
+                      style={{
+                        borderColor: c.color,
+                      }}
+                      src={c.image}
+                      alt="creature-avatar"
+                    />
+                    <span>x{c.number}</span>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+          <Button text="Combate" onClick={() => {}} isDisabled={true} />
         </aside>
       </main>
 

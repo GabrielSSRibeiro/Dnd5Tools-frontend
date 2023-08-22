@@ -176,7 +176,6 @@ function Map({
 
     return travelNodes;
   }, [combatConfig, currentNode, pxInMScale]);
-
   const arrowStyles = useMemo(() => {
     let nodeStyles = {};
     if (!currentNode) {

@@ -234,3 +234,16 @@ export const MinutesToTimeFormat = (minutes) => {
   const formattedTime = moment().startOf("day").add(hours, "hours").add(duration.minutes(), "minutes").format("HH:mm");
   return formattedTime;
 };
+
+export const ProbabilityCheckWithRatio = (probability, ratio) => {
+  const fullProbs = Math.floor(ratio);
+  const parcialProb = ratio % 1;
+
+  let probArray = createArrayFromInt(fullProbs).map((_) => probability);
+  if (parcialProb > 0) {
+    probArray.push(probability * parcialProb);
+  }
+
+  const probabilityCheck = probArray.some((p) => ProbabilityCheck(p));
+  return probabilityCheck;
+};

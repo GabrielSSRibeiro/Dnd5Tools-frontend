@@ -146,7 +146,7 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
               text: "Chance de encontro por hora de exploração",
             },
             {
-              text: "Essa escolha tbm decide a chance de recompensas em corpos de quem morreu ali",
+              text: "Essa escolha também decide a chance de encontrar corpos com recompensas",
             },
           ]}
           extraWidth={250}

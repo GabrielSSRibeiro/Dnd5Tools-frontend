@@ -264,6 +264,7 @@ export const ENCOUNTER_FREQUENCIES = {
   CERTAIN: 50,
 };
 export const encounterFrequencies = [
+  //probability is per hour
   { display: "Baixa", value: ENCOUNTER_FREQUENCIES.LOW, opacity: 0.5, probability: 0.1 },
   { display: "Média", value: ENCOUNTER_FREQUENCIES.MEDIUM, opacity: 0.67, probability: 0.2 },
   { display: "Alta", value: ENCOUNTER_FREQUENCIES.HIGH, opacity: 0.83, probability: 0.3 },
@@ -317,11 +318,11 @@ export const TRAVEL_PACES = {
   HASTEN: 50,
 };
 export const travelPaces = [
-  { display: "Descanso (x0)", value: TRAVEL_PACES.REST, mobility: 0, fatigue: 0, resultDisplay: "Descanso" },
-  { display: "Atividade (x0.5)", value: TRAVEL_PACES.ACTIVITY, mobility: 0.5, fatigue: 1, resultDisplay: "Atividade" },
-  { display: "Devagar (x0.5)", value: TRAVEL_PACES.SLOW, mobility: 0.5, fatigue: 1 },
-  { display: "Normal (x1)", value: TRAVEL_PACES.NORMAL, mobility: 1, fatigue: 1 },
-  { display: "Apressado (x2)", value: TRAVEL_PACES.HASTEN, mobility: 2, fatigue: 2 },
+  { display: "Descanso (x0)", value: TRAVEL_PACES.REST, mobility: 0, fatigue: 0, encounterProbMod: 1, resultDisplay: "Descanso" },
+  { display: "Atividade (x0.5)", value: TRAVEL_PACES.ACTIVITY, mobility: 0.5, fatigue: 1, encounterProbMod: 0.5, resultDisplay: "Atividade" },
+  { display: "Devagar (x0.5)", value: TRAVEL_PACES.SLOW, mobility: 0.5, fatigue: 1, encounterProbMod: 0.5 },
+  { display: "Normal (x1)", value: TRAVEL_PACES.NORMAL, mobility: 1, fatigue: 1, encounterProbMod: 1 },
+  { display: "Apressado (x2)", value: TRAVEL_PACES.HASTEN, mobility: 2, fatigue: 2, encounterProbMod: 1.5 },
 ];
 export const GetTravelPace = (value) => travelPaces.find((a) => a.value === value);
 
@@ -378,3 +379,17 @@ export const elementAlterations = [
   { display: "Condição", value: ELEMENT_ALTERATIONS.CONDITION },
 ];
 export const GetElementAlteration = (value) => elementAlterations.find((a) => a.value === value);
+
+export const NODE_CREATURE_CONDITIONS = {
+  NONE: 10,
+  TRACKS: 20,
+  NEAR: 30,
+  IMMINENT: 40,
+};
+export const nodeCreatureConditions = [
+  { display: "Nenhum", value: NODE_CREATURE_CONDITIONS.NONE },
+  { display: "Rastros", value: NODE_CREATURE_CONDITIONS.TRACKS },
+  { display: "Perigosamente Próximo", value: NODE_CREATURE_CONDITIONS.NEAR },
+  { display: "Encontro Eminente", value: NODE_CREATURE_CONDITIONS.IMMINENT },
+];
+export const GetNodeCreatureCondition = (value) => nodeCreatureConditions.find((a) => a.value === value);
