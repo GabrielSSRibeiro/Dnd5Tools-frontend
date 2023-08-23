@@ -104,6 +104,7 @@ function ModalManageCreatureRoutine({ routine, contexts, isPointOfInterest, onCl
         />
         <Select
           label={"Frequência de Encontro"}
+          info={[{ text: "Quando um encontro é sorteado para acontecer na localização, qual a chance de essa criatura aparecer" }]}
           extraWidth={250}
           value={tempRoutine}
           valuePropertyPath="encounterFrequency"

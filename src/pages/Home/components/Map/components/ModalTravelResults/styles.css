@@ -28,6 +28,10 @@
   font-size: 12px;
 }
 
+.ModalTravelResults-container .details-wrapper .surroundings {
+  column-gap: 10px;
+}
+
 .ModalTravelResults-container .details-wrapper .imminent {
   color: red;
   font-weight: 600;

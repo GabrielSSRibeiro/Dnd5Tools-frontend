@@ -383,12 +383,14 @@ export const GetElementAlteration = (value) => elementAlterations.find((a) => a.
 export const NODE_CREATURE_CONDITIONS = {
   NONE: 10,
   TRACKS: 20,
-  NEAR: 30,
-  IMMINENT: 40,
+  REMAINS: 30,
+  NEAR: 40,
+  IMMINENT: 50,
 };
 export const nodeCreatureConditions = [
   { display: "Nenhum", value: NODE_CREATURE_CONDITIONS.NONE },
   { display: "Rastros", value: NODE_CREATURE_CONDITIONS.TRACKS },
+  { display: "Restos mortais", value: NODE_CREATURE_CONDITIONS.REMAINS },
   { display: "Perigosamente Próximo", value: NODE_CREATURE_CONDITIONS.NEAR },
   { display: "Encontro Eminente", value: NODE_CREATURE_CONDITIONS.IMMINENT },
 ];

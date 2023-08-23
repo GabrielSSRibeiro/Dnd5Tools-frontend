@@ -1,3 +1,5 @@
+import { GOLD_PIECES_QUANTITIES } from "./treasureConstants";
+
 export const creatureXps = [
   200, 450, 700, 1100, 1800, 2300, 2900, 3900, 5000, 5900, 7200, 8400, 10000, 11500, 13000, 15000, 18000, 20000, 22000, 25000, 33000, 41000, 50000,
   62000, 75000, 90000, 105000, 12000, 135000, 155000,
@@ -19,6 +21,7 @@ export const creatureRarities = [
     baseOutputMin: 1,
     baseOutputMax: 5,
     color: "#D3D3D3",
+    goldPiecesQuantity: GOLD_PIECES_QUANTITIES.FEW,
   },
   {
     display: "Incomum (Nível 6 - 10)",
@@ -28,6 +31,7 @@ export const creatureRarities = [
     baseOutputMin: 6,
     baseOutputMax: 10,
     color: "#E9BA41",
+    goldPiecesQuantity: GOLD_PIECES_QUANTITIES.AVERAGE,
   },
   {
     display: "Rara (Nível 11 - 15)",
@@ -37,6 +41,7 @@ export const creatureRarities = [
     baseOutputMin: 11,
     baseOutputMax: 15,
     color: "#E78C25",
+    goldPiecesQuantity: GOLD_PIECES_QUANTITIES.SEVERAL,
   },
   {
     display: "Muito Rara (Nível 16 - 20)",
@@ -46,6 +51,7 @@ export const creatureRarities = [
     baseOutputMin: 16,
     baseOutputMax: 20,
     color: "#B93217",
+    goldPiecesQuantity: GOLD_PIECES_QUANTITIES.MANY,
   },
   {
     display: "Lendária (Nível 21+)",
@@ -55,6 +61,7 @@ export const creatureRarities = [
     baseOutputMin: 21,
     baseOutputMax: 40,
     color: "#5C2280",
+    goldPiecesQuantity: GOLD_PIECES_QUANTITIES.MANY,
   },
 ];
 export const GetRarity = (value) => creatureRarities.find((a) => a.value === value);
