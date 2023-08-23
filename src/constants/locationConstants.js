@@ -264,7 +264,6 @@ export const ENCOUNTER_FREQUENCIES = {
   CERTAIN: 50,
 };
 export const encounterFrequencies = [
-  //probability is per hour
   { display: "Baixa", value: ENCOUNTER_FREQUENCIES.LOW, opacity: 0.5, probability: 0.1 },
   { display: "Média", value: ENCOUNTER_FREQUENCIES.MEDIUM, opacity: 0.67, probability: 0.25 },
   { display: "Alta", value: ENCOUNTER_FREQUENCIES.HIGH, opacity: 0.83, probability: 0.5 },
