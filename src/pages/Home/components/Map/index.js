@@ -668,6 +668,12 @@ function Map({
   }
 
   useEffect(() => {
+    if (!currentNode) {
+      combatConfig.travel.pace = lc.TRAVEL_PACES.NORMAL;
+    }
+  }, [combatConfig.travel, currentNode, defaultCenter]);
+
+  useEffect(() => {
     setCenterOffset(defaultCenter);
   }, [defaultCenter]);
 
@@ -744,6 +750,7 @@ function Map({
                   options={lc.travelPaces}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
+                  isDisabled={!currentNode}
                 />
                 {!paceMove ? (
                   <div className="rest-wrapper">
@@ -830,9 +837,7 @@ function Map({
                 </div>
               </aside>
             ) : (
-              <aside className="new-encounter floating-details">
-                <Button text="Novo Encontro" isDisabled={true} />
-              </aside>
+              <aside className="new-encounter floating-details">{/* <Button text="Novo Encontro" isDisabled={true} /> */}</aside>
             )}
             <aside className="map-zoom floating-details">
               <div className="stat-section">

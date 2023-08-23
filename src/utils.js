@@ -244,6 +244,15 @@ export const ProbabilityCheckWithRatio = (probability, ratio) => {
     probArray.push(probability * parcialProb);
   }
 
-  const probabilityCheck = probArray.some((p) => ProbabilityCheck(p));
-  return probabilityCheck;
+  let probChecked = 0;
+  const probabilityCheck = probArray.some((p) => {
+    const result = ProbabilityCheck(p);
+    probChecked += p;
+
+    return result;
+  });
+
+  const ratioChecked = probChecked / probability;
+
+  return { probabilityCheck, ratioChecked };
 };

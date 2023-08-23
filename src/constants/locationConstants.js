@@ -189,10 +189,10 @@ export const HAZARDOUSNESS = {
   EXTREME: 40,
 };
 export const hazardousness = [
-  { display: "Baixa", value: HAZARDOUSNESS.LOW, color: cc.GetRarity(HAZARDOUSNESS.LOW).color, probability: 0.1 },
-  { display: "Média", value: HAZARDOUSNESS.MEDIUM, color: cc.GetRarity(HAZARDOUSNESS.MEDIUM).color, probability: 0.25 },
-  { display: "Alta", value: HAZARDOUSNESS.HIGH, color: cc.GetRarity(HAZARDOUSNESS.HIGH).color, probability: 0.5 },
-  { display: "Extrema", value: HAZARDOUSNESS.EXTREME, color: cc.GetRarity(HAZARDOUSNESS.EXTREME).color, probability: 0.75 },
+  { display: "Baixa", value: HAZARDOUSNESS.LOW, color: cc.GetRarity(HAZARDOUSNESS.LOW).color, probability: 0.05 },
+  { display: "Média", value: HAZARDOUSNESS.MEDIUM, color: cc.GetRarity(HAZARDOUSNESS.MEDIUM).color, probability: 0.1 },
+  { display: "Alta", value: HAZARDOUSNESS.HIGH, color: cc.GetRarity(HAZARDOUSNESS.HIGH).color, probability: 0.15 },
+  { display: "Extrema", value: HAZARDOUSNESS.EXTREME, color: cc.GetRarity(HAZARDOUSNESS.EXTREME).color, probability: 0.25 },
 ];
 export const GetHazardousness = (value) => hazardousness.find((a) => a.value === value);
 
@@ -266,9 +266,9 @@ export const ENCOUNTER_FREQUENCIES = {
 export const encounterFrequencies = [
   //probability is per hour
   { display: "Baixa", value: ENCOUNTER_FREQUENCIES.LOW, opacity: 0.5, probability: 0.1 },
-  { display: "Média", value: ENCOUNTER_FREQUENCIES.MEDIUM, opacity: 0.67, probability: 0.2 },
-  { display: "Alta", value: ENCOUNTER_FREQUENCIES.HIGH, opacity: 0.83, probability: 0.3 },
-  { display: "Extrema", value: ENCOUNTER_FREQUENCIES.EXTREME, opacity: 1, probability: 0.5 },
+  { display: "Média", value: ENCOUNTER_FREQUENCIES.MEDIUM, opacity: 0.67, probability: 0.25 },
+  { display: "Alta", value: ENCOUNTER_FREQUENCIES.HIGH, opacity: 0.83, probability: 0.5 },
+  { display: "Extrema", value: ENCOUNTER_FREQUENCIES.EXTREME, opacity: 1, probability: 0.75 },
   { display: "Certa", value: ENCOUNTER_FREQUENCIES.CERTAIN, opacity: 1, probability: 1 },
 ];
 export const GetEncounterFrequency = (value) => encounterFrequencies.find((a) => a.value === value);

@@ -65,8 +65,11 @@ function ModalTravelResults({
         : element.current && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
   );
   const encounterLocation = useRef(isPointOfInterest && hasMoved ? exteriorLocation : newLocation);
+  const [timePassed, setTimePassed] = useState(
+    travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY ? 0 : lc.GetRestTime(restTime).timeInMin
+  );
   const isEncounter = useRef(
-    ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(lh.GetCurrentContext(encounterLocation.current).hazardousness).probability)
+    ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(lh.GetCurrentContext(encounterLocation.current).hazardousness).probability, true)
   );
   const nodeCreatures = useRef(!viewingCurrent ? GetLocationCreatures() : newCurrentNode.creatures);
   const creaturesForDisplay = useRef({
@@ -138,10 +141,6 @@ function ModalTravelResults({
       ? utils.MinutesToTimeInUnits(Math.round(locHoverData.distance.travelTimeInMin * 1.25))
       : locHoverData.distance.timeInUnits;
   }, [locHoverData, newLocation.traversal.irregularTerrainFrequency]);
-  const timePassed = useMemo(
-    () => (travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY ? 0 : lc.GetRestTime(restTime).timeInMin),
-    [restTime, travel.pace]
-  );
   const timeRestedDisplay = useMemo(
     () => `${utils.MinutesToTimeInUnits(timePassed)} passado(s) em ${lc.GetTravelPace(travel.pace).resultDisplay}`,
     [timePassed, travel.pace]
@@ -218,10 +217,17 @@ function ModalTravelResults({
     onClose();
   }
 
-  function ProbUpdatedByTravelTimeModCheck(probability) {
-    const travelTimeMod = (hasMoved ? locHoverData.distance.travelTimeInMin : restTime) / 60;
+  function ProbUpdatedByTravelTimeModCheck(probability, updateTimePassed = false) {
+    const travelTimeMod = (hasMoved ? locHoverData.distance.travelTimeInMin : timePassed) / 60;
+    const check = utils.ProbabilityCheckWithRatio(probability, travelTimeMod);
 
-    return utils.ProbabilityCheckWithRatio(probability, travelTimeMod);
+    const updatedTimePassed = Math.round(check.ratioChecked * 60);
+
+    if (updateTimePassed && updatedTimePassed !== timePassed) {
+      setTimePassed(updatedTimePassed);
+    }
+
+    return check.probabilityCheck;
   }
 
   function GetLocationCreatures() {
@@ -232,6 +238,7 @@ function ModalTravelResults({
       return [];
     }
 
+    //setup
     let locationCreatures = encounterLocation.current.creatures
       .map((c) => {
         const routine = GetCreatureCurrentRoutine(c, currentContext);
@@ -251,6 +258,7 @@ function ModalTravelResults({
       })
       .filter((c) => c);
 
+    //add crratures
     let possibleEncounterCreatures = locationCreatures.filter((c) => c.isEncounter);
     if (possibleEncounterCreatures.length > 0) {
       let addToEncounter = true;
@@ -266,6 +274,7 @@ function ModalTravelResults({
           addToEncounter = false;
         }
       }
+      //add 1 crrature
     } else if (isEncounter.current) {
       locationCreatures.sort((a, b) => b.encounterFrequency - a.encounterFrequency);
       const moreCommonCreatures = locationCreatures.filter((c) => c.encounterFrequency === locationCreatures[0].encounterFrequency);
