@@ -51,6 +51,10 @@
   flex-wrap: wrap;
 }
 
+.ModalTravelResults-container .creature-list .encounter-creature {
+  position: relative;
+}
+
 .ModalTravelResults-container .creature-list .creature-avatar {
   bottom: 7px;
   object-fit: cover;

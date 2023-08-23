@@ -41,7 +41,7 @@ export const creatureRarities = [
     baseOutputMin: 11,
     baseOutputMax: 15,
     color: "#E78C25",
-    goldPiecesQuantity: GOLD_PIECES_QUANTITIES.SEVERAL,
+    goldPiecesQuantity: GOLD_PIECES_QUANTITIES.AVERAGE,
   },
   {
     display: "Muito Rara (Nível 16 - 20)",
@@ -51,7 +51,7 @@ export const creatureRarities = [
     baseOutputMin: 16,
     baseOutputMax: 20,
     color: "#B93217",
-    goldPiecesQuantity: GOLD_PIECES_QUANTITIES.MANY,
+    goldPiecesQuantity: GOLD_PIECES_QUANTITIES.SEVERAL,
   },
   {
     display: "Lendária (Nível 21+)",
@@ -61,7 +61,7 @@ export const creatureRarities = [
     baseOutputMin: 21,
     baseOutputMax: 40,
     color: "#5C2280",
-    goldPiecesQuantity: GOLD_PIECES_QUANTITIES.MANY,
+    goldPiecesQuantity: GOLD_PIECES_QUANTITIES.SEVERAL,
   },
 ];
 export const GetRarity = (value) => creatureRarities.find((a) => a.value === value);

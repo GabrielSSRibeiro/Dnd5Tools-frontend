@@ -4,7 +4,7 @@ import Tooltip from "../Tooltip";
 
 import "./styles.css";
 
-function Info({ contents }) {
+function Info({ contents, tooltipOnly = false, className = "" }) {
   const [positions, setPositions] = useState({ width: 0, top: 0, left: 0 });
 
   function GetComponentPositions(e) {
@@ -12,7 +12,7 @@ function Info({ contents }) {
   }
 
   return (
-    <div className="Info-container" onMouseOver={GetComponentPositions}>
+    <div className={`Info-container${tooltipOnly ? " tooltip-only" : ""} ${className}`} onMouseOver={GetComponentPositions}>
       <i className="fas fa-info"></i>
       <Tooltip contents={contents} top={positions.top} left={positions.left + positions.width / 2} className="tooltip-hover" />
     </div>

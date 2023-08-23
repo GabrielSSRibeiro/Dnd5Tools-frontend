@@ -64,7 +64,7 @@ function ModalTravelResults({
         ? newLocation.interaction.isHazardous
         : element.current && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
   );
-  const encounterLocation = useRef(isPointOfInterest ? newLocation : newLocation);
+  const encounterLocation = useRef(isPointOfInterest && hasMoved ? exteriorLocation : newLocation);
   const isEncounter = useRef(
     ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(lh.GetCurrentContext(encounterLocation.current).hazardousness).probability)
   );
@@ -83,6 +83,8 @@ function ModalTravelResults({
         return {
           id: nc.creatureId,
           color: cc.GetRarity(creature.rarity).color,
+          name: creature.name,
+          size: cc.GetSize(creature.size).display,
           image: creature.image,
           number: nc.number,
         };
@@ -217,7 +219,7 @@ function ModalTravelResults({
   }
 
   function ProbUpdatedByTravelTimeModCheck(probability) {
-    const travelTimeMod = locHoverData.distance.travelTimeInMin / 60;
+    const travelTimeMod = (hasMoved ? locHoverData.distance.travelTimeInMin : restTime) / 60;
 
     return utils.ProbabilityCheckWithRatio(probability, travelTimeMod);
   }
@@ -225,6 +227,10 @@ function ModalTravelResults({
   function GetLocationCreatures() {
     const currentContext = lh.GetCurrentContext(encounterLocation.current);
     const differentCreatureProb = 0.1;
+
+    if (encounterLocation.current.creatures.length === 0) {
+      return [];
+    }
 
     let locationCreatures = encounterLocation.current.creatures
       .map((c) => {
@@ -397,7 +403,8 @@ function ModalTravelResults({
               </span>
               <div className="creature-list">
                 {creaturesForDisplay.current.creatures.map((c) => (
-                  <div className="df" key={c.id}>
+                  <div className="df encounter-creature" key={c.id}>
+                    <Info contents={[{ text: c.name }, { text: "" }, { text: `Tamanho: ${c.size}` }]} tooltipOnly={true} />
                     <img
                       className="creature-avatar"
                       style={{

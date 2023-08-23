@@ -18,3 +18,14 @@
 .Info-container:hover .tooltip-hover {
   opacity: 1;
 }
+
+.Info-container.tooltip-only {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+}
+
+.Info-container.tooltip-only .fa-info {
+  opacity: 0;
+}
