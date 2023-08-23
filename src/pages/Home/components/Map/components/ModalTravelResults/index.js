@@ -64,7 +64,7 @@ function ModalTravelResults({
         ? newLocation.interaction.isHazardous
         : element.current && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
   );
-  const encounterLocation = useRef(isPointOfInterest && hasMoved ? exteriorLocation : newLocation);
+  const encounterLocation = useRef(isPointOfInterest && exteriorLocation && hasMoved ? exteriorLocation : newLocation);
   const [timePassed, setTimePassed] = useState(
     travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY ? 0 : lc.GetRestTime(restTime).timeInMin
   );
