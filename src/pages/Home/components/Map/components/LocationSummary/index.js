@@ -90,6 +90,10 @@ function LocationSummary({
   const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
 
   const creaturesForDisplay = useMemo(() => {
+    if (creatures.length === 0) {
+      return [];
+    }
+
     let creaturesForDisplay = location.creatures
       .map((locationCreature) => ({
         creature: creatures.find((c) => c._id === locationCreature.creatureId),

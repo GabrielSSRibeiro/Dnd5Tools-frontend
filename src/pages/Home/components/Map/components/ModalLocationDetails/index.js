@@ -160,7 +160,7 @@ function ModalLocationDetails({ location, id, locations, onClose, HandleEditNewL
         </aside>
       </main>
       <div className="divider"></div>
-      <Button text="Editar" onClick={() => HandleEditLocation(location)} />
+      <Button text="Editar" icon="fas fa-pen" onClick={() => HandleEditLocation(location)} />
     </Modal>
   );
 }

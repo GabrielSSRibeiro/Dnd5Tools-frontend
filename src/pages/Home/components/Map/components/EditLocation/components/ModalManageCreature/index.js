@@ -80,7 +80,7 @@ function ModalManageCreature({ name, creature, contexts, isPointOfInterest, onCl
             <span>
               {lc.GetGroupSize(r.groupSize).routineDisplay} <i className="fas fa-dragon"></i>
             </span>
-            <span>% {lc.GetEncounterFrequency(r.encounterFrequency).display}</span>
+            <span>{lc.GetEncounterFrequency(r.encounterFrequency).display}</span>
             <div className="group-item-actions">
               <button onClick={() => OpenModalManageRoutine(r)}>
                 <i className="fas fa-pencil-alt"></i>

@@ -1,6 +1,7 @@
 .ModalManageElement-container.modal-body {
   width: fit-content;
-  height: fit-content;
+  height: 450px;
+  margin-top: 200px;
 }
 
 .ModalManageElement-container .new-element-wrapper {

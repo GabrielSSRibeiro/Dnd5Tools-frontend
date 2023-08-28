@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as lc from "../../../../../../../../constants/locationConstants";
 import * as cc from "../../../../../../../../constants/creatureConstants";
 import * as utils from "../../../../../../../../utils";
@@ -24,6 +24,7 @@ function ModalManageElement({ element, elements, onClose }) {
           },
         }
   );
+  const [canBeMaterial, setCanBeMaterial] = useState(false);
 
   function HandleCancel() {
     onClose();
@@ -41,8 +42,29 @@ function ModalManageElement({ element, elements, onClose }) {
     return true;
   }
 
+  useEffect(() => {
+    if (lc.GetElementType(tempElement.type).canBeMaterial) {
+      setCanBeMaterial(true);
+    } else {
+      tempElement.material = {
+        probability: null,
+        rarity: null,
+      };
+      setCanBeMaterial(false);
+    }
+  }, [tempElement, tempElement.type]);
+
   return (
-    <Modal title="Elemento" className="ModalManageElement-container" onClickToClose={onClose}>
+    <Modal
+      title="Elemento"
+      className="ModalManageElement-container"
+      onClickToClose={onClose}
+      info={[
+        {
+          text: "Elementos podem ser sorteados para aparecer quando o grupo está explorando pelo mapa",
+        },
+      ]}
+    >
       <div className="new-element-wrapper">
         <Select
           label={"Tipo"}
@@ -85,28 +107,32 @@ function ModalManageElement({ element, elements, onClose }) {
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />
-        <Select
-          label={"Frequência de Ser Material"}
-          extraWidth={250}
-          value={tempElement}
-          valuePropertyPath="material.probability"
-          onSelect={setTempElement}
-          nothingSelected="Nenhum"
-          options={lc.elementMaterialFrequencies}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
-        {tempElement.material.probability && (
-          <Select
-            label={"Raridade"}
-            extraWidth={250}
-            value={tempElement}
-            valuePropertyPath="material.rarity"
-            onSelect={setTempElement}
-            options={cc.creatureRarities}
-            optionDisplay={(o) => o.treasureDisplay}
-            optionValue={(o) => o.value}
-          />
+        {canBeMaterial && (
+          <>
+            <Select
+              label={"Frequência de Ser Material Mágico"}
+              extraWidth={250}
+              value={tempElement}
+              valuePropertyPath="material.probability"
+              onSelect={setTempElement}
+              nothingSelected="Nenhum"
+              options={lc.elementMaterialFrequencies}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+            {tempElement.material.probability && (
+              <Select
+                label={"Raridade de Material"}
+                extraWidth={250}
+                value={tempElement}
+                valuePropertyPath="material.rarity"
+                onSelect={setTempElement}
+                options={cc.creatureRarities}
+                optionDisplay={(o) => o.treasureDisplay}
+                optionValue={(o) => o.value}
+              />
+            )}
+          </>
         )}
       </div>
       <footer>

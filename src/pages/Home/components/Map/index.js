@@ -575,7 +575,7 @@ function Map({
 
     if (currentNode && mapMode === lc.MAP_MODES.TRAVEL) {
       const distanceInScale = Math.round(distance.centerOffset.value * pxInMScale);
-      distance.valueInUnits = distanceInScale < 1000 ? `${distanceInScale}m` : `${Math.round(distanceInScale / 1000)}km`;
+      distance.valueInUnits = utils.MInUnits(distanceInScale);
 
       distance.travelTimeInMin = lh.GetTravelTimeInMin(distanceInScale, combatConfig.travel);
       distance.timeInUnits = utils.MinutesToTimeInUnits(distance.travelTimeInMin);
@@ -719,7 +719,7 @@ function Map({
                 setLocationToEdit={setLocationToEdit}
                 setLocHoverData={setLocHoverData}
                 locations={locations}
-                creatures={creatures}
+                creatures={mapMode === lc.MAP_MODES.TRAVEL ? creatures : []}
                 schedule={isNightTime ? lc.ROUTINE_SCHEDULES.NIGHT : lc.ROUTINE_SCHEDULES.DAY}
                 precipitation={isPrecipitating ? lc.ROUTINE_PRECIPITATIONS.PRECIPITATING : lc.ROUTINE_PRECIPITATIONS.CLEAR}
                 temperature={isExtremeTemp ? lc.ROUTINE_TEMPERATURES.EXTREME : lc.ROUTINE_TEMPERATURES.NORMAL}

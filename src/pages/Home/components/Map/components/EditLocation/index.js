@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef } from "react";
 import * as utils from "../../../../../../utils";
 import * as lc from "../../../../../../constants/locationConstants";
-import { creatureRarities, creatureEnvironments } from "../../../../../../constants/creatureConstants";
+import { creatureRarities, CREATURE_ENVIRONMENTS, creatureEnvironments } from "../../../../../../constants/creatureConstants";
 import * as lh from "../../../../../../helpers/locationHelper";
 
 import Button from "../../../../../../components/Button";
@@ -41,6 +41,13 @@ function EditLocation({
     if (map[location._id] && Object.values(map[location._id].interiorLocs).length > 0) {
       locationSizes = locationSizes.filter((ls) => ls.value !== lc.LOCATION_SIZES.POINT_OF_INTEREST);
     }
+
+    //add real value to display
+    locationSizes
+      .filter((s) => s.value !== lc.LOCATION_SIZES.POINT_OF_INTEREST)
+      .forEach((s) => {
+        s.display += ` (raio de ${utils.MInUnits(lc.BASE_VISION_IN_M * s.baseRadiusMultiplier)})`;
+      });
 
     return locationSizes;
   }, [location._id, map]);
@@ -423,7 +430,7 @@ function EditLocation({
                 value={location}
                 valuePropertyPath="traversal.type"
                 onSelect={setLocation}
-                options={creatureEnvironments}
+                options={creatureEnvironments.filter((e) => e.value !== CREATURE_ENVIRONMENTS.ALL)}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
               />
@@ -525,9 +532,21 @@ function EditLocation({
           </>
         )}
 
+        {/* reference */}
         {!isWorld && !isFirstOfArea && (
           <>
             <div className="divider"></div>
+            <Select
+              label={"Localização Referência"}
+              extraWidth={250}
+              value={location}
+              valuePropertyPath="reference.location"
+              onSelect={setLocation}
+              nothingSelected="-"
+              options={referenceLocations}
+              optionDisplay={(o) => o.refListName}
+              optionValue={(o) => o._id}
+            />
             <div className="location-row df df-jc-sb">
               <Select
                 label={"Distância"}
@@ -563,17 +582,6 @@ function EditLocation({
                 optionValue={(o) => o.value}
               />
             </div>
-            <Select
-              label={"Localização"}
-              extraWidth={250}
-              value={location}
-              valuePropertyPath="reference.location"
-              onSelect={setLocation}
-              nothingSelected="-"
-              options={referenceLocations}
-              optionDisplay={(o) => o.refListName}
-              optionValue={(o) => o._id}
-            />
           </>
         )}
         <div className="divider"></div>

@@ -2,7 +2,7 @@ import * as cc from "./creatureConstants";
 
 export const POINT_OF_INTEREST_RADIUS = 20;
 export const BASE_VISION_IN_M = 5000;
-export const BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M = 5000;
+export const BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M = 2500; //5000;
 export const MAXIMUM_SEQUENTIAL_EXPLORATION_HOURS = 8;
 export const BASE_PX_IN_M_SCALE = 25;
 
@@ -189,10 +189,10 @@ export const HAZARDOUSNESS = {
   EXTREME: 40,
 };
 export const hazardousness = [
-  { display: "Baixa", value: HAZARDOUSNESS.LOW, color: cc.GetRarity(HAZARDOUSNESS.LOW).color, probability: 0.05 },
-  { display: "Média", value: HAZARDOUSNESS.MEDIUM, color: cc.GetRarity(HAZARDOUSNESS.MEDIUM).color, probability: 0.1 },
-  { display: "Alta", value: HAZARDOUSNESS.HIGH, color: cc.GetRarity(HAZARDOUSNESS.HIGH).color, probability: 0.15 },
-  { display: "Extrema", value: HAZARDOUSNESS.EXTREME, color: cc.GetRarity(HAZARDOUSNESS.EXTREME).color, probability: 0.25 },
+  { display: "Baixa (5%)", value: HAZARDOUSNESS.LOW, color: cc.GetRarity(HAZARDOUSNESS.LOW).color, probability: 0.05 },
+  { display: "Média (10%)", value: HAZARDOUSNESS.MEDIUM, color: cc.GetRarity(HAZARDOUSNESS.MEDIUM).color, probability: 0.1 },
+  { display: "Alta (15%)", value: HAZARDOUSNESS.HIGH, color: cc.GetRarity(HAZARDOUSNESS.HIGH).color, probability: 0.15 },
+  { display: "Extrema (25%)", value: HAZARDOUSNESS.EXTREME, color: cc.GetRarity(HAZARDOUSNESS.EXTREME).color, probability: 0.25 },
 ];
 export const GetHazardousness = (value) => hazardousness.find((a) => a.value === value);
 
@@ -264,11 +264,11 @@ export const ENCOUNTER_FREQUENCIES = {
   CERTAIN: 50,
 };
 export const encounterFrequencies = [
-  { display: "Baixa", value: ENCOUNTER_FREQUENCIES.LOW, opacity: 0.5, probability: 0.1 },
-  { display: "Média", value: ENCOUNTER_FREQUENCIES.MEDIUM, opacity: 0.67, probability: 0.25 },
-  { display: "Alta", value: ENCOUNTER_FREQUENCIES.HIGH, opacity: 0.83, probability: 0.5 },
-  { display: "Extrema", value: ENCOUNTER_FREQUENCIES.EXTREME, opacity: 1, probability: 0.75 },
-  { display: "Certa", value: ENCOUNTER_FREQUENCIES.CERTAIN, opacity: 1, probability: 1 },
+  { display: "Baixa (10%)", value: ENCOUNTER_FREQUENCIES.LOW, opacity: 0.5, probability: 0.1 },
+  { display: "Média (25%)", value: ENCOUNTER_FREQUENCIES.MEDIUM, opacity: 0.67, probability: 0.25 },
+  { display: "Alta (50%)", value: ENCOUNTER_FREQUENCIES.HIGH, opacity: 0.83, probability: 0.5 },
+  { display: "Extrema (75%)", value: ENCOUNTER_FREQUENCIES.EXTREME, opacity: 1, probability: 0.75 },
+  { display: "Certa (100%)", value: ENCOUNTER_FREQUENCIES.CERTAIN, opacity: 1, probability: 1 },
 ];
 export const GetEncounterFrequency = (value) => encounterFrequencies.find((a) => a.value === value);
 
@@ -359,7 +359,7 @@ export const REST_TIMES = {
   LONG: 30,
 };
 export const restTimes = [
-  { display: "10 minutes", value: REST_TIMES.SHORT, timeInMin: 10 },
+  { display: "10 minutos", value: REST_TIMES.SHORT, timeInMin: 10 },
   { display: "1 hora", value: REST_TIMES.MEDIUM, timeInMin: 1 * 60 },
   { display: "8 horas", value: REST_TIMES.LONG, timeInMin: 8 * 60 },
 ];

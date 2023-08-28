@@ -48,7 +48,16 @@ function ModalManageCreatureRoutine({ routine, contexts, isPointOfInterest, onCl
   }
 
   return (
-    <Modal title="Rotina" className="ModalManageCreatureRoutine-container" onClickToClose={onClose}>
+    <Modal
+      title="Rotina"
+      className="ModalManageCreatureRoutine-container"
+      onClickToClose={onClose}
+      info={[
+        {
+          text: "Uma rotina define como é possivel encontrar uma criatura em uma localização",
+        },
+      ]}
+    >
       <div className="new-creature-wrapper">
         <Select
           label={"Contexto"}

@@ -116,7 +116,7 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
           label={"Visão Panorâmica"}
           info={[
             {
-              text: "Isso afeita em o quão longe o grupo consegue ver",
+              text: "Isso afeita o quão longe o grupo consegue ver. Terrenos elevadas a frente podem ser vistas mesmo além dessa distância",
             },
             {
               text: "",
@@ -144,6 +144,15 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
           info={[
             {
               text: "Chance de encontro por hora de exploração",
+            },
+            {
+              text: "",
+            },
+            {
+              text: "Representado por borda colorida ao redor dos detalhes da localização",
+            },
+            {
+              text: "",
             },
             {
               text: "Essa escolha também decide a chance de encontrar corpos com recompensas",
