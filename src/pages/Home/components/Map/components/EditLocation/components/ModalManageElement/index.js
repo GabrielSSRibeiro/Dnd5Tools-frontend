@@ -43,7 +43,7 @@ function ModalManageElement({ element, elements, onClose }) {
   }
 
   useEffect(() => {
-    if (lc.GetElementType(tempElement.type).canBeMaterial) {
+    if (lc.GetElementType(tempElement.type)?.canBeMaterial) {
       setCanBeMaterial(true);
     } else {
       tempElement.material = {

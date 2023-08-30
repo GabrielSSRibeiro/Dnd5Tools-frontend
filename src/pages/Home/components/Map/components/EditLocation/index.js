@@ -36,7 +36,7 @@ function EditLocation({
   const [modal, setModal] = useState(null);
 
   const locationSizes = useMemo(() => {
-    let locationSizes = lc.locationSizes;
+    let locationSizes = utils.clone(lc.locationSizes);
 
     if (map[location._id] && Object.values(map[location._id].interiorLocs).length > 0) {
       locationSizes = locationSizes.filter((ls) => ls.value !== lc.LOCATION_SIZES.POINT_OF_INTEREST);
