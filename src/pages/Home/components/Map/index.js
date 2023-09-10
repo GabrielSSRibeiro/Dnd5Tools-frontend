@@ -486,6 +486,11 @@ function Map({
       }
     });
 
+    //remove travel nodes, since the map will change
+    combatConfig.travel.currentNode = null;
+    combatConfig.travel.travelNodes = [];
+    HandleSaveCombatConfig();
+
     MapLoadingWrapper(async () => await HandleUpdateLocations(updateLocationsReq), 200);
     setLocationToEdit(null);
   }

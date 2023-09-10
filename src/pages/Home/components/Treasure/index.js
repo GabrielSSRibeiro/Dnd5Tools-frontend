@@ -209,18 +209,7 @@ function Treasure({ resultText, level }) {
                 },
                 { text: "" },
                 {
-                  text: "Consumíveis tem bônus de afixos dobrado, mas so duram até o final do próximo turno de quem o usa. Estes normalmente são poçōes, mas podem ser munições ou itens de arremesso(um ataque em ação Arremessar). Para esses casos, os bônus aplicam efeito inverso no alvo que atingem. Consumíveis com cargas, tem cargas usos.",
-                },
-                { text: "" },
-                {
-                  text: "Equipamentos lendários só podem ser criados como tesouro de criaturas lendárias e possuem ambos 5 afixos e habilidade bônus",
-                },
-                { text: "" },
-                {
-                  text: "Itens podem ser re-forjados pelo preço equivalente a sua raridade. Escolha um afixo para ser removido em troca de um bônus que varia com o tipo de equipamento ou um personalizado se feito por um mestre",
-                },
-                {
-                  text: "Arma: Dano mínimo +2, mesmo ao errar. Armadura: Causa 2 de dano ao atacante se sofrer dano corpo a corpo. Acessório: +1 em teste de concentração e de resistência contra morte. Consumível: Cura 4d4+4",
+                  text: "Equipamentos lendários só podem ser criados como tesouro de criaturas lendárias",
                 },
                 { text: "" },
                 {

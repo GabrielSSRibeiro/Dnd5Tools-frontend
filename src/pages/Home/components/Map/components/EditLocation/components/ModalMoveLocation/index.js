@@ -63,7 +63,8 @@ function ModalMoveLocation({ world, locations, onClose, onSelect }) {
   return (
     <Modal title="Mover Localização" className="ModalMoveLocation-container" onClickToClose={onClose}>
       <main className="content details-wrapper df df-fd-c df-jc-fs">
-        <span className="warning-message">Mudanças não salvas na localização serão descartadas</span>
+        <span>Mudanças não salvas na localização serão descartadas</span>
+        <span className="warning-message">Isso fará o mapa ser reajustado, removendo qualquer marcação e posição de grupo</span>
         <CheckInput
           label="Também mover localizações internas"
           onClick={() => setMoveInteriorLocs(!moveInteriorLocs)}

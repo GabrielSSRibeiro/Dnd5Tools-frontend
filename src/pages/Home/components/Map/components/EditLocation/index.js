@@ -140,6 +140,7 @@ function EditLocation({
 
   function HandleSelectSize(updatedValue) {
     location.radiusMultiplier = lh.GetRadiusMultiplier(updatedValue.size);
+    location.reference.connectionType = null;
     setLocation({ ...location });
   }
 
@@ -580,6 +581,7 @@ function EditLocation({
                 options={lc.locationConnectionTypes}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
+                isDisabled={location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST}
               />
             </div>
           </>

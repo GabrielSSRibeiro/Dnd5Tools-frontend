@@ -188,7 +188,7 @@ function Location({
   }
 
   function GetConnectionOffsetStyles(offset) {
-    const offsetStyles = [{ key: "width", value: `${Math.sqrt(offset.x * offset.x + offset.y * offset.y) / 2}px` }];
+    const offsetStyles = [{ key: "width", value: `${(Math.sqrt(offset.x * offset.x + offset.y * offset.y) - lc.POINT_OF_INTEREST_RADIUS) / 2}px` }];
 
     //horizontal
     if (offset.x > 0) {
