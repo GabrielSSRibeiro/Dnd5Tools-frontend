@@ -8,13 +8,13 @@ import {
   goldPiecesQuantities,
   materialQuantities,
   materialWeigths,
-  equipmentAttributes,
+  // equipmentAttributes,
   equipmentTypes,
 } from "../../../../../../../../constants/treasureConstants";
 import {
   CREATURE_RARITIES,
   creatureRarities,
-  damageTypes,
+  // damageTypes,
   CREATURE_ACTION_FREQUENCIES,
   creatureActionFrequencies,
 } from "../../../../../../../../constants/creatureConstants";
@@ -191,7 +191,7 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                 label={"Raridade"}
                 info={[
                   {
-                    text: "Equipamentos lendários só podem ser criados como tesouro de criaturas lendárias e possuem ambos 5 afixos e habilidade bônus",
+                    text: "Equipamentos lendários só podem ser criados como tesouro de criaturas lendárias",
                   },
                 ]}
                 extraWidth={100}
@@ -265,13 +265,9 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                   <Select
                     label={"Tipo do Equipamento"}
                     info={[
-                      { text: "Todos os itens gerados não consumíveis são mágicos e precisam de sincronização" },
+                      { text: "Todos os itens gerados são mágicos e precisam de sincronização" },
                       {
-                        text: "1 vez por descanso longo, pode re-sincronizar um item com cargas, tornando o total atual o resultado de 1d(x + total de habilidades) - total de habilidades, mínimo 0",
-                      },
-                      { text: "" },
-                      {
-                        text: "Consumíveis tem bônus de afixos dobrado, mas só duram até o final do próximo turno de quem o usa. Estes normalmente são poçōes, mas podem ser munições ou itens de arremesso(um ataque em ação Arremessar). Para esses casos, os bônus aplicam efeito inverso no alvo que atingem. Consumíveis com cargas, tem cargas usos.",
+                        text: "1 vez por descanso longo, pode re-sincronizar um item com cargas, tornando o total atual o resultado de 1d(x + total de habilidades) - total de habilidades, onde x é total de cargas do item, mínimo 0",
                       },
                     ]}
                     extraWidth={100}
@@ -288,10 +284,8 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                     className="equipment-ability"
                     info={[
                       {
-                        text: "Transforme uma das ações não comuns da criatura em uma habilidade que número de usos diários de acordo com a frequência",
+                        text: "Transforme uma das ações não comuns da criatura em uma habilidade com número de usos diários de acordo com a frequência",
                       },
-                      { text: "" },
-                      { text: "Um equipamento pode ter afixos OU uma habilidade. Lendários tem ambos" },
                       { text: "" },
                       {
                         text: "Essa habilidade também pode ser usada uma vez adicional, fazendo a habilidade não ser mais recuperada diariamente. É apenas possível recuperar uma habilidade usada assim através de forja com uma material da mesma raridade do equipamento",
@@ -315,7 +309,7 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                     optionValue={(o) => o.name}
                   />
                 </section>
-                {(!tempTreasure.equipment.ability || tempTreasure.equipment.rarity === CREATURE_RARITIES.LEGENDARY) && (
+                {/* {(!tempTreasure.equipment.ability || tempTreasure.equipment.rarity === CREATURE_RARITIES.LEGENDARY) && (
                   <section className="action-row">
                     <Select
                       label={"Tipo de Possível Dano"}
@@ -340,7 +334,7 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                       optionValue={(o) => o.value}
                     />
                   </section>
-                )}
+                )} */}
               </aside>
             )}
           </section>

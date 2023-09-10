@@ -7,6 +7,7 @@ import {
   creatureReactionsPerRound,
   creatureActionFrequencies,
   creatureAuraReaches,
+  CREATURE_ACTION_FREQUENCIES,
 } from "../../../../../../constants/creatureConstants";
 import { GetAverageLevel } from "../../../../../../helpers/creatureHelper";
 
@@ -40,6 +41,10 @@ function Actions({ creature, setCreature }) {
   function HandleCloseModalManageAction(action, tempAction) {
     if (tempAction) {
       if (action) {
+        if (action.frequency === CREATURE_ACTION_FREQUENCIES.COMMON) {
+          creature.treasures = creature.treasures.filter((t) => t.equipment.ability !== action.name);
+        }
+
         if (action.name !== tempAction.name) {
           creature.treasures
             .filter((t) => t.type === TREASURE_TYPES.EQUIPMENT && t.equipment.ability === action.name)
@@ -60,11 +65,7 @@ function Actions({ creature, setCreature }) {
     setModal(null);
   }
   function DeleteAction(action) {
-    creature.treasures
-      .filter((t) => t.type === TREASURE_TYPES.EQUIPMENT && t.equipment.ability === action.name)
-      .forEach((t) => {
-        t.equipment.ability = null;
-      });
+    creature.treasures = creature.treasures.filter((t) => t.equipment.ability !== action.name);
 
     creature.actions = creature.actions.filter((a) => a.name !== action.name);
     setCreature({ ...creature });

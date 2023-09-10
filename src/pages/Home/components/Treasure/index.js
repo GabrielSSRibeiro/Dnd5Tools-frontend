@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { GetDCValue } from "../../../../helpers/creatureHelper";
 import {
   getGoldPiecesAmount,
@@ -18,7 +18,7 @@ import {
 } from "../../../../helpers/treasureHelper";
 import {
   TREASURE_TYPES,
-  treasureTypes,
+  treasureTypes as tt,
   GOLD_PIECES_QUANTITIES,
   goldPiecesQuantities,
   MATERIAL_PRICE_INFLATIONS,
@@ -56,6 +56,7 @@ function Treasure({ resultText, level }) {
   const [equipmentRarity, setEquipmentRarity] = useState(null);
   const [equipmentDamageType, setEquipmentDamageType] = useState(null);
   const [equipmentAttribute, setEquipmentAttribute] = useState(null);
+  const treasureTypes = useMemo(() => tt.filter((t) => t.value !== TREASURE_TYPES.EQUIPMENT), []);
 
   const generatedItem =
     hasResult && treasureType === TREASURE_TYPES.EQUIPMENT
@@ -168,9 +169,6 @@ function Treasure({ resultText, level }) {
                 },
                 {
                   text: "Todos os usos sao consumidos em um sucesso",
-                },
-                {
-                  text: "Múltiplas tentativas de forja podem ser feitas mesmo após sucesso. O sucesso só é mantido se todos forem sucesso e aí são múltiplos itens gerados pra a escolha de uma versão",
                 },
               ]}
             >
