@@ -33,6 +33,7 @@ function EditLocation({
 }) {
   let inputRef = useRef(null);
   const [location, setLocation] = useState(locationToEdit);
+  const [willAdjustMap, setWillAdjustMap] = useState(false);
   const [modal, setModal] = useState(null);
 
   const locationSizes = useMemo(() => {
@@ -93,7 +94,7 @@ function EditLocation({
       });
     }
 
-    HandleSave(location);
+    HandleSave(location, willAdjustMap);
   }
 
   function OpenModalDeleteLocation() {
@@ -142,18 +143,26 @@ function EditLocation({
     location.radiusMultiplier = lh.GetRadiusMultiplier(updatedValue.size);
     location.reference.connectionType = null;
     setLocation({ ...location });
+    setWillAdjustMap(true);
+  }
+
+  function HandleSelectRefLocation(updatedValue) {
+    setLocation({ ...location });
+    setWillAdjustMap(true);
   }
 
   function HandleSelectRefDistance(updatedValue) {
     location.distanceMultiplier = updatedValue.reference.distance ? lh.GetDistanceMultiplier(updatedValue.reference.distance) : null;
 
     setLocation({ ...location });
+    setWillAdjustMap(true);
   }
 
   function HandleSelectRefDirection(updatedValue) {
     location.distanceAngle = updatedValue.reference.direction ? lh.GetDistanceAngle(updatedValue.reference.direction) : null;
 
     setLocation({ ...location });
+    setWillAdjustMap(true);
   }
 
   function HandleSelectContext(context) {
@@ -431,7 +440,7 @@ function EditLocation({
                 value={location}
                 valuePropertyPath="traversal.type"
                 onSelect={setLocation}
-                options={creatureEnvironments.filter((e) => e.value !== CREATURE_ENVIRONMENTS.ALL)}
+                options={creatureEnvironments.filter((e) => e.value !== CREATURE_ENVIRONMENTS.URBAN && e.value !== CREATURE_ENVIRONMENTS.ALL)}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
               />
@@ -542,7 +551,7 @@ function EditLocation({
               extraWidth={250}
               value={location}
               valuePropertyPath="reference.location"
-              onSelect={setLocation}
+              onSelect={HandleSelectRefLocation}
               nothingSelected="-"
               options={referenceLocations}
               optionDisplay={(o) => o.refListName}

@@ -200,7 +200,7 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
       setModal(
         <ModalWarning
           title="Deletar Criatura"
-          message="Tem certeza que deseja deletar essa criatura?"
+          messages={["Tem certeza que deseja deletar essa criatura?"]}
           actions={[
             {
               text: "Cancelar",

@@ -44,7 +44,10 @@
 }
 
 .Home-container .section-wrapper {
-  /* height: calc(100% - 60px); */
   flex: 1;
   display: flex;
+}
+
+.Home-container .section-wrapper.edit-creature {
+  height: calc(100% - 60px);
 }

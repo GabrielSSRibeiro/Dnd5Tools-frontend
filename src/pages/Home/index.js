@@ -386,7 +386,7 @@ function Home() {
       </div>
 
       {creatureToEdit && (
-        <div className={"section-wrapper"}>
+        <div className={"section-wrapper edit-creature"}>
           <EditCreature
             creatureToEdit={creatureToEdit}
             HandleSave={HandleSaveCreature}

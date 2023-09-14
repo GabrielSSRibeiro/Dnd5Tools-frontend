@@ -5,10 +5,14 @@ import Button from "../Button";
 
 import "./styles.css";
 
-function ModalWarning({ title = "", message = "", actions = [] }) {
+function ModalWarning({ title = "", messages = [], actions = [] }) {
   return (
     <Modal title={title} className="ModalWarning-container" onClickToClose={actions.length === 1 ? actions[0].click : () => {}}>
-      {message && <span className="warning-message">{message}</span>}
+      {messages.map((message, index) => (
+        <span className="warning-message" key={index}>
+          {message}
+        </span>
+      ))}
       <footer className="warning-actions-wrapper">
         {actions.map((a, index) =>
           a.isSimple ? (

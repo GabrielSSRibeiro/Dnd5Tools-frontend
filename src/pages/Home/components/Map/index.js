@@ -216,6 +216,30 @@ function Map({
     return nodeStyles;
   }, [paceMove]);
 
+  function OpenModalSuggestions() {
+    setModal(
+      <ModalWarning
+        title="Sugestões de Criação"
+        messages={[
+          "Escolha uma criatura e defina quem ela é/são",
+          "Em que tipo de terreno ela/elas moram e pq? Localização vantajosa? Riquezas/recursos abundantes? Clima ideal?",
+          "Como a presença dela/delas afeta a localização? Ela/elas tem um covil?",
+          "Que outras criaturas estão presentes por ali e como ela/elas as afetam ou é/são afetadas por ela/elas?",
+          "O q os habitantes dessa localização fazem/vivem de? Como é possível interagir com eles e pq?",
+          "Como essa localização é conhecida? Uma localização tem q ter uma justificativa para ter o nome que tem",
+          "Como essa localização afeta as localizações próximas e que tipo de terreno elas são?",
+          "Continuar exército até que localizações tenham 4-12 tipos de criaturas",
+        ]}
+        actions={[
+          {
+            text: "Fechar",
+            click: () => setModal(null),
+          },
+        ]}
+      />
+    );
+  }
+
   function OpenModalTravelResults(node, isRest) {
     if (locations.length === 0 || mapMode !== lc.MAP_MODES.TRAVEL || (!isRest && !paceMove)) {
       return;
@@ -357,7 +381,7 @@ function Map({
     setLocationToEdit(null);
   }
 
-  function HandleSave(location) {
+  function HandleSave(location, willAdjustMap) {
     function Save() {
       if (map[location._id]) {
         allLocationsRefs.forEach((r) => {
@@ -375,11 +399,11 @@ function Map({
       setLocationToEdit(null);
     }
 
-    if (combatConfig.travel.currentNode && locationToEdit?.exteriorLocationId) {
+    if (willAdjustMap && combatConfig.travel.currentNode && locationToEdit?.exteriorLocationId) {
       setModal(
         <ModalWarning
           title="Salvar Localização"
-          message="Modificar uma localização fará o mapa ser reajustado, removendo qualquer marcação e posição de grupo"
+          messages={["Modificar uma localização fará o mapa ser reajustado, removendo qualquer marcação e posição de grupo"]}
           actions={[
             {
               text: "Cancelar",
@@ -742,7 +766,7 @@ function Map({
 
         {locations.length > 0 && (
           <>
-            {mapMode === lc.MAP_MODES.TRAVEL ? (
+            {mapMode === lc.MAP_MODES.TRAVEL && (
               <aside className="travel-details floating-details" style={{ borderColor: mapConditionLevels.current[exhaustionIndex] }}>
                 <h5>Marcha</h5>
                 <div className="divider"></div>
@@ -841,8 +865,6 @@ function Map({
                   /> */}
                 </div>
               </aside>
-            ) : (
-              <aside className="new-encounter floating-details">{/* <Button text="Novo Encontro" isDisabled={true} /> */}</aside>
             )}
             <aside className="map-zoom floating-details">
               <div className="stat-section">
@@ -1033,6 +1055,12 @@ function Map({
               ))}
             </aside>
           </>
+        )}
+
+        {(locations.length === 0 || mapMode !== lc.MAP_MODES.TRAVEL) && (
+          <aside className="suggestions floating-details">
+            <Button icon={"fas fa-question-circle"} onClick={OpenModalSuggestions} />
+          </aside>
         )}
 
         {!mapLoading && (
