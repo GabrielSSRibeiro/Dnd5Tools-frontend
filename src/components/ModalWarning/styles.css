@@ -3,7 +3,8 @@
   height: fit-content;
 }
 
-.ModalWarning-container .warning-message {
+.ModalWarning-container .messages-wrapper {
+  row-gap: 10px;
   margin-bottom: 25px;
 }
 

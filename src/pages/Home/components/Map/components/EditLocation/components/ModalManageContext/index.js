@@ -69,7 +69,14 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
     >
       {modal}
       <div className="new-context-wrapper df df-fd-c df-jc-fs">
-        <TextInput label="Nome" value={tempContext} valuePropertyPath="name" onChange={setTempContext} disabled={isDefault} />
+        <TextInput
+          label="Nome"
+          value={tempContext}
+          valuePropertyPath="name"
+          onChange={setTempContext}
+          disabled={isDefault}
+          className={isDefault ? "element-disabled" : ""}
+        />
         <TextInput
           label="Primeiras Impressões"
           info={[

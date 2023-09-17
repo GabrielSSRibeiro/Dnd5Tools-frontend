@@ -20,7 +20,7 @@ function ModalDeleteLocation({ title = "", confirmText, onConfirm, cancelText, o
   return (
     <Modal title={title} className="ModalDeleteLocation-container" onClickToClose={!confirmText ? onCancel : !cancelText ? onConfirm : () => {}}>
       <span>Tem certeza que deseja deletar essa localização?</span>
-      <span className="warning-message">Isso fará o mapa ser reajustado, removendo qualquer marcação e posição de grupo</span>
+      <span className="warning-message">Isso fará o mapa ser reajustado, e todas as marcações atuais serão marcadas para ser reposicionadas</span>
       <CheckInput
         label="Também deletar localizações internas"
         onClick={() => setDeleteInteriorLocs(!deleteInteriorLocs)}

@@ -284,6 +284,7 @@ function Home() {
               {
                 isCurrent: true,
                 name: "Normal",
+                details: "O que todos sabem sobre esse mundo? O que poucos sabem?",
                 panoramicVision: lc.PANORAMIC_VISIONS.MEDIUM,
                 hazardousness: lc.HAZARDOUSNESS.MEDIUM,
                 resourceEasiness: lc.RESOURCE_EASINESS.NORMAL,

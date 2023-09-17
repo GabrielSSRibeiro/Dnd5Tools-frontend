@@ -159,6 +159,10 @@
   justify-content: center;
 }
 
+.Map-container .node-modal-action {
+  margin-right: 25px;
+}
+
 .Map-container .world-map .travel-details {
   position: absolute;
   top: 0;
@@ -321,4 +325,8 @@
 
 .Map-container .world-map .time-filter.night {
   background-color: blue;
+}
+
+.Map-container .world-map .needs-reposition {
+  color: red;
 }

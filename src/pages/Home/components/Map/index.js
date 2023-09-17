@@ -6,7 +6,6 @@ import * as cc from "../../../../constants/creatureConstants";
 
 import Button from "../../../../components/Button";
 import CheckInput from "../../../../components/CheckInput";
-// import Info from "../../../../components/Info";
 import Select from "../../../../components/Select";
 import SelectButton from "../../../../components/SelectButton";
 import LocationSummary from "./components/LocationSummary";
@@ -55,11 +54,13 @@ function Map({
       y: combatConfig.travel.currentNode.y / pxInMScale,
       angle: combatConfig.travel.currentNode.angle,
       locId: combatConfig.travel.currentNode.locId,
+      needsReposition: combatConfig.travel.currentNode.needsReposition,
     };
 
     return currentNode;
   }, [combatConfig.travel.currentNode, pxInMScale]);
   const [modal, setModal] = useState(null);
+  const [nodeToMove, setNodeToMove] = useState(null);
   const [mapMode, setMapMode] = useState(currentNode ? lc.MAP_MODES.TRAVEL : lc.MAP_MODES.FREE);
   const [defaultCenter, setDefaultCenter] = useState(currentNode ? { x: currentNode.x, y: currentNode.y } : { x: 0, y: 0 });
   const [locationToEdit, setLocationToEdit] = useState(null);
@@ -171,6 +172,7 @@ function Map({
       y: n.y / pxInMScale,
       angle: n.angle,
       locId: n.locId,
+      needsReposition: n.needsReposition,
       isCurrent: index === travelNodes.length - 1,
     }));
 
@@ -222,13 +224,19 @@ function Map({
         title="Sugestões de Criação"
         messages={[
           "Escolha uma criatura e defina quem ela é/são",
-          "Em que tipo de terreno ela/elas moram e pq? Localização vantajosa? Riquezas/recursos abundantes? Clima ideal?",
+          "Em que tipo de terreno ela/elas moram e por que? Localização vantajosa? Riquezas/recursos abundantes? Clima ideal?",
           "Como a presença dela/delas afeta a localização? Ela/elas tem um covil?",
           "Que outras criaturas estão presentes por ali e como ela/elas as afetam ou é/são afetadas por ela/elas?",
-          "O q os habitantes dessa localização fazem/vivem de? Como é possível interagir com eles e pq?",
-          "Como essa localização é conhecida? Uma localização tem q ter uma justificativa para ter o nome que tem",
+          "O que os habitantes dessa localização vivem de? O que fazem no tempo livre? Eles tem algum governo/tradição/religião ou funções individuais?",
+          "Como é possível interagir com eles e por que?",
+          "Como essa localização é conhecida? Uma localização tem que ter uma justificativa para ter o nome que tem",
           "Como essa localização afeta as localizações próximas e que tipo de terreno elas são?",
-          "Continuar exército até que localizações tenham 4-12 tipos de criaturas",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Continuar exercício até que localizações tenham 4-12 tipos de criaturas",
         ]}
         actions={[
           {
@@ -245,6 +253,18 @@ function Map({
       return;
     }
 
+    if (nodeToMove) {
+      let originalNode = combatConfig.travel.travelNodes.find((tn) => tn.x !== nodeToMove.x && tn.y !== nodeToMove.y);
+      originalNode.x = locHoverData.distance.centerOffset.x * -1 * pxInMScale;
+      originalNode.y = locHoverData.distance.centerOffset.y * pxInMScale;
+      originalNode.angle = locHoverData.distance.centerOffset.angle;
+      originalNode.locId = locHoverData.location?._id ?? userId;
+      originalNode.needsReposition = false;
+      HandleSaveCombatConfig();
+      setNodeToMove(null);
+      return;
+    }
+
     //new current node
     let newCurrentNode = node
       ? {
@@ -258,6 +278,7 @@ function Map({
           y: node.y * pxInMScale,
           angle: node.angle,
           locId: node.locId,
+          needsReposition: node.needsReposition,
         }
       : {
           name: null,
@@ -270,6 +291,7 @@ function Map({
           y: locHoverData.distance.centerOffset.y * pxInMScale,
           angle: locHoverData.distance.centerOffset.angle,
           locId: locHoverData.location?._id ?? userId,
+          needsReposition: false,
         };
 
     if (currentNode) {
@@ -325,12 +347,22 @@ function Map({
         if (node) {
           actions = [
             {
-              text: "Deletar Marcação",
+              text: "Deletar",
               click: () => {
                 combatConfig.travel.travelNodes = combatConfig.travel.travelNodes.filter(
                   (tn) => tn.x !== newCurrentNode.x && tn.y !== newCurrentNode.y
                 );
                 HandleSaveCombatConfig();
+                setModal(null);
+              },
+              isSimple: true,
+            },
+            {
+              text: "Mover Marcação",
+              className: "node-modal-action",
+              click: () => {
+                node.isNodeToMove = true;
+                setNodeToMove(node);
                 setModal(null);
               },
               isSimple: true,
@@ -352,7 +384,7 @@ function Map({
 
     //update original node if it exists
     let nodeIndex = combatConfig.travel.travelNodes.findIndex((n) => n.x !== newCurrentNode.x && n.y !== newCurrentNode.y);
-    if (nodeIndex) {
+    if (nodeIndex > 0) {
       combatConfig.travel.travelNodes.splice(nodeIndex, 1, newCurrentNode);
     }
 
@@ -403,7 +435,7 @@ function Map({
       setModal(
         <ModalWarning
           title="Salvar Localização"
-          messages={["Modificar uma localização fará o mapa ser reajustado, removendo qualquer marcação e posição de grupo"]}
+          messages={["Modificar uma localização fará o mapa ser reajustado, e todas as marcações atuais serão marcadas para ser reposicionadas"]}
           actions={[
             {
               text: "Cancelar",
@@ -413,9 +445,7 @@ function Map({
             {
               text: "Salvar",
               click: () => {
-                //remove travel nodes, since the map will change
-                combatConfig.travel.currentNode = null;
-                combatConfig.travel.travelNodes = [];
+                HandleLocUpdate();
                 HandleSaveCombatConfig();
 
                 Save();
@@ -510,9 +540,7 @@ function Map({
       }
     });
 
-    //remove travel nodes, since the map will change
-    combatConfig.travel.currentNode = null;
-    combatConfig.travel.travelNodes = [];
+    HandleLocUpdate();
     HandleSaveCombatConfig();
 
     MapLoadingWrapper(async () => await HandleUpdateLocations(updateLocationsReq), 200);
@@ -578,12 +606,18 @@ function Map({
 
     MapLoadingWrapper(async () => await HandleDeleteLocations(idsToDelete), 200);
 
-    //remove travel nodes, since the map will change
-    combatConfig.travel.currentNode = null;
-    combatConfig.travel.travelNodes = [];
+    HandleLocUpdate();
     HandleSaveCombatConfig();
 
     setLocationToEdit(null);
+  }
+
+  function HandleLocUpdate() {
+    //remove highlight nodes that were created before this update, since the map will change and they might need to be moved
+    combatConfig.travel.currentNode.needsReposition = true;
+    combatConfig.travel.travelNodes.forEach((n) => {
+      n.needsReposition = true;
+    });
   }
 
   function GetUpdatedSchedule(newSchedule) {
@@ -757,7 +791,9 @@ function Map({
             )}
             {locHoverData.node?.name && (
               <div className="node-summary">
-                {locHoverData.node.name && <span className="name">{locHoverData.node.name}</span>}
+                {locHoverData.node.name && (
+                  <span className={`name${locHoverData.node.needsReposition ? " needs-reposition" : ""}`}>{locHoverData.node.name}</span>
+                )}
                 {locHoverData.node.notes && <span className="notes">{locHoverData.node.notes}</span>}
               </div>
             )}
@@ -1072,28 +1108,37 @@ function Map({
 
             {/* travel */}
             {mapMode === lc.MAP_MODES.TRAVEL &&
-              travelNodes.map((n, index) => (
-                <div
-                  className="travel-none floating-details"
-                  style={{ ...nodeStyles, translate: `${n.x * -1}px ${n.y * -1}px` }}
-                  key={index}
-                  onClick={() => OpenModalTravelResults(n)}
-                  onMouseMove={(e) => HandleLocHover(e, null, n)}
-                  onMouseLeave={(e) => HandleLocHover(e)}
-                >
-                  {n.isCurrent && (
-                    <>
-                      <div
-                        className={`vision floating-details ${isNightTime ? "night-vision" : "day-vision"}`}
-                        style={{ width: visionRadius / 2, height: visionRadius / 2 }}
-                      ></div>
-                      <div className="direction-arrow floating-details" style={arrowStyles}>
-                        <div className="pointer"></div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))}
+              travelNodes.map((n, index) => {
+                const updatedStyles = { ...nodeStyles, translate: `${n.x * -1}px ${n.y * -1}px` };
+                if (n.isNodeToMove) {
+                  updatedStyles.backgroundColor = "white";
+                } else if (n.needsReposition) {
+                  updatedStyles.backgroundColor = "red";
+                }
+
+                return (
+                  <div
+                    className="travel-none floating-details"
+                    style={updatedStyles}
+                    key={index}
+                    onClick={() => OpenModalTravelResults(n)}
+                    onMouseMove={(e) => HandleLocHover(e, null, n)}
+                    onMouseLeave={(e) => HandleLocHover(e)}
+                  >
+                    {n.isCurrent && (
+                      <>
+                        <div
+                          className={`vision floating-details ${isNightTime ? "night-vision" : "day-vision"}`}
+                          style={{ width: visionRadius / 2, height: visionRadius / 2 }}
+                        ></div>
+                        <div className="direction-arrow floating-details" style={arrowStyles}>
+                          <div className="pointer"></div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
 
             {/* world */}
             <div
