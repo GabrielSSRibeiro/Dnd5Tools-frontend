@@ -229,6 +229,7 @@ function Map({
           "Que outras criaturas estão presentes por ali e como ela/elas as afetam ou é/são afetadas por ela/elas?",
           "O que os habitantes dessa localização vivem de? O que fazem no tempo livre? Eles tem algum governo/tradição/religião ou funções individuais?",
           "Como é possível interagir com eles e por que?",
+          "Como os detalhes especiais do mundo afetam essa localização?",
           "Como essa localização é conhecida? Uma localização tem que ter uma justificativa para ter o nome que tem",
           "Como essa localização afeta as localizações próximas e que tipo de terreno elas são?",
           "",
