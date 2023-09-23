@@ -151,7 +151,7 @@ function Location({
     let areaStyles = {
       width: radius / 2,
       height: radius / 2,
-      backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type).color : cc.GetEnviroment(location.traversal.type).color,
+      backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type)?.color : cc.GetEnviroment(location.traversal.type)?.color,
       filter: `contrast(${filterValue})`,
     };
 
