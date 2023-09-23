@@ -747,6 +747,10 @@ function Map({
   }
 
   function GetLocRadiusForCalc(location) {
+    if (!location) {
+      return 0;
+    }
+
     function GetAllFirstLocRadius(loc) {
       const interiorLocs = Object.keys(loc.interiorLocs).map((locId) => map[locId]);
       if (interiorLocs.length === 0) {
