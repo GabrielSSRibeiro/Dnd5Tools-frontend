@@ -386,7 +386,7 @@ function Map({
             text: "Adicionar",
             icon: "fas fa-plus",
             click: () => {
-              setLocationToEdit(lc.GetNewLocation(clickedLoc._id));
+              setLocationToEdit(lc.GetNewLocation(clickedLoc._id ?? userId));
               setModal(null);
             },
             isSimple: true,
