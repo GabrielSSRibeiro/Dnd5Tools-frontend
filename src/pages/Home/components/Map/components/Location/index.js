@@ -142,11 +142,17 @@ function Location({
       radius += l.radius;
     });
 
+    //add contrast with type equal to parent but diffrent than grand parent
+    const parentLoc = map[location.exteriorLocationId]?.data;
+    const grandParentLoc = parentLoc ? map[parentLoc.exteriorLocationId]?.data : null;
+    const filterValue =
+      location.traversal.type === parentLoc?.traversal.type && location.traversal.type !== grandParentLoc?.traversal.type ? 0.75 : 1;
+
     let areaStyles = {
       width: radius / 2,
       height: radius / 2,
       backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type).color : cc.GetEnviroment(location.traversal.type).color,
-      filter: `contrast(${location.traversal.type === map[location.exteriorLocationId]?.data.traversal.type ? 0.75 : 1})`,
+      filter: `contrast(${filterValue})`,
     };
 
     if (anyConnectionBg && !isLocArea && connectionLoc && isAdjacent && connectionLoc._id !== location._id) {
