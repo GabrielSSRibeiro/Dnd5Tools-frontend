@@ -747,21 +747,17 @@ function Map({
   }
 
   function GetLocRadiusForCalc(location) {
-    if (!location) {
-      return 0;
-    }
-
     function GetAllFirstLocRadius(loc) {
       const interiorLocs = Object.keys(loc.interiorLocs).map((locId) => map[locId]);
       if (interiorLocs.length === 0) {
         return loc.data.radius;
       } else {
-        return loc.data.radius + GetAllFirstLocRadius(interiorLocs.find((l) => !l.data.reference.location && !l.data.isHidden));
+        const interiorLoc = interiorLocs.find((l) => !l.data.reference.location && !l.data.isHidden);
+        return loc.data.radius + (interiorLoc ? GetAllFirstLocRadius(interiorLoc) : 0);
       }
     }
 
     let radius = GetAllFirstLocRadius(location);
-
     return radius / 2;
   }
 
