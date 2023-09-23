@@ -44,47 +44,8 @@ function LocationSummary({
     setModal(null);
   }
 
-  function HandleEditNewLocation(newLocId) {
-    const newLocation = {
-      owner: false,
-      name: null,
-      isHidden: false,
-      exteriorLocationId: newLocId,
-      size: lc.LOCATION_SIZES.POINT_OF_INTEREST,
-      traversal: {
-        type: null,
-        irregularTerrainFrequency: lc.IRREGULAR_TERRAIN_FREQUENCIES.LOW,
-        partitions: [],
-        elements: [],
-      },
-      interaction: {
-        type: null,
-        isHazardous: false,
-        rarity: null,
-      },
-      reference: {
-        distance: null,
-        direction: null,
-        location: null,
-        connectionType: null,
-      },
-      contexts: [
-        {
-          isCurrent: true,
-          name: "Normal",
-          firstImpressions: null,
-          details: null,
-          precipitationFrequency: null,
-          intenseTemperatureFrequency: null,
-          panoramicVision: lc.PANORAMIC_VISIONS.MEDIUM,
-          hazardousness: lc.HAZARDOUSNESS.MEDIUM,
-          resourceEasiness: lc.RESOURCE_EASINESS.NORMAL,
-        },
-      ],
-      creatures: [],
-    };
-
-    setLocationToEdit(newLocation);
+  function HandleEditNewLocation(exteriorLocationId) {
+    setLocationToEdit(lc.GetNewLocation(exteriorLocationId));
   }
 
   const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);

@@ -6,6 +6,45 @@ export const BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M = 2500; //5000;
 export const MAXIMUM_SEQUENTIAL_EXPLORATION_HOURS = 8;
 export const BASE_PX_IN_M_SCALE = 25;
 
+export const GetNewLocation = (exteriorLocationId) => ({
+  owner: false,
+  name: null,
+  isHidden: false,
+  exteriorLocationId,
+  size: LOCATION_SIZES.POINT_OF_INTEREST,
+  traversal: {
+    type: null,
+    irregularTerrainFrequency: IRREGULAR_TERRAIN_FREQUENCIES.LOW,
+    partitions: [],
+    elements: [],
+  },
+  interaction: {
+    type: null,
+    isHazardous: false,
+    rarity: null,
+  },
+  reference: {
+    distance: null,
+    direction: null,
+    location: null,
+    connectionType: null,
+  },
+  contexts: [
+    {
+      isCurrent: true,
+      name: "Normal",
+      firstImpressions: null,
+      details: null,
+      precipitationFrequency: null,
+      intenseTemperatureFrequency: null,
+      panoramicVision: PANORAMIC_VISIONS.MEDIUM,
+      hazardousness: HAZARDOUSNESS.MEDIUM,
+      resourceEasiness: RESOURCE_EASINESS.NORMAL,
+    },
+  ],
+  creatures: [],
+});
+
 export const LOCATION_SIZES = {
   POINT_OF_INTEREST: 10,
   SMALL: 20,

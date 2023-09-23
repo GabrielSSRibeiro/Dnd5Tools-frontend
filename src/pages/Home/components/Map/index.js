@@ -295,16 +295,10 @@ function Map({
           needsReposition: false,
         };
 
-    const clickedLoc = map[newCurrentNode.locId] ? map[newCurrentNode.locId].data : combatConfig.world;
-    if (mapMode !== lc.MAP_MODES.TRAVEL) {
-      setLocationToEdit(clickedLoc);
-      return;
-    }
-
     if (currentNode) {
-      if (canTravelToPoint || isRest) {
+      if (mapMode === lc.MAP_MODES.TRAVEL && (canTravelToPoint || isRest)) {
         const newLocation = map[newCurrentNode.locId]?.data;
-
+        console.log(currentNode, canTravelToPoint, isRest);
         setModal(
           <ModalTravelResults
             onClose={setModal}
@@ -335,13 +329,15 @@ function Map({
           />
         );
       } else {
+        let title = "Mover Grupo";
         let messages = [];
+        let cancelAction = {
+          text: "Cancelar",
+          click: () => setModal(null),
+          isSimple: true,
+        };
         let actions = [
-          {
-            text: "Cancelar",
-            click: () => setModal(null),
-            isSimple: true,
-          },
+          cancelAction,
           {
             text: "Mover Seguramente",
             click: () => {
@@ -378,27 +374,44 @@ function Map({
             ...actions,
           ];
         } else {
+          const clickedLoc = map[newCurrentNode.locId] ? map[newCurrentNode.locId].data : combatConfig.world;
+          messages.push(clickedLoc.name);
+
           const details = clickedLoc.contexts.find((c) => c.isCurrent).details;
           if (details) {
-            messages.push(clickedLoc.name);
             messages.push(details);
           }
 
-          actions = [
-            {
-              text: "Editar",
-              className: "node-modal-action",
-              click: () => {
-                setLocationToEdit(clickedLoc);
-                setModal(null);
-              },
-              isSimple: true,
+          let addAction = {
+            text: "Adicionar",
+            icon: "fas fa-plus",
+            click: () => {
+              setLocationToEdit(lc.GetNewLocation(clickedLoc._id));
+              setModal(null);
             },
-            ...actions,
-          ];
+            isSimple: true,
+          };
+          let editAction = {
+            text: "Editar",
+            icon: "fas fa-pen",
+            click: () => {
+              setLocationToEdit(clickedLoc);
+              setModal(null);
+            },
+            isSimple: true,
+          };
+
+          if (mapMode === lc.MAP_MODES.TRAVEL) {
+            editAction.className = "node-modal-left-action";
+            actions = [addAction, editAction, ...actions];
+          } else {
+            title = "Localização";
+            editAction.className = "node-modal-left-action";
+            actions = [addAction, editAction, cancelAction];
+          }
         }
 
-        setModal(<ModalWarning title="Mover Grupo" messages={messages} actions={actions} />);
+        setModal(<ModalWarning title={title} messages={messages} actions={actions} onClose />);
       }
     } else {
       HandleSetCurrentNode(newCurrentNode);

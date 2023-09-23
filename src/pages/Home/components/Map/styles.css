@@ -159,9 +159,13 @@
   justify-content: center;
 }
 
-.Map-container .node-modal-action {
+.Map-container .node-modal-left-action {
   margin-right: 25px;
 }
+
+/* .Map-container .node-modal-right-action {
+  margin-left: 25px;
+} */
 
 .Map-container .world-map .travel-details {
   position: absolute;

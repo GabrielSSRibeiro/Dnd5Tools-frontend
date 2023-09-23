@@ -172,6 +172,38 @@ button {
   align-items: flex-end;
 }
 
+.df-rg-5 {
+  row-gap: 5px;
+}
+.df-rg-10 {
+  row-gap: 10px;
+}
+.df-rg-15 {
+  row-gap: 15px;
+}
+.df-rg-20 {
+  row-gap: 20px;
+}
+.df-rg-25 {
+  row-gap: 25px;
+}
+
+.df-cg-5 {
+  column-gap: 5px;
+}
+.df-cg-10 {
+  column-gap: 10px;
+}
+.df-cg-15 {
+  column-gap: 15px;
+}
+.df-cg-20 {
+  column-gap: 20px;
+}
+.df-cg-25 {
+  column-gap: 25px;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   border-radius: 999px;
