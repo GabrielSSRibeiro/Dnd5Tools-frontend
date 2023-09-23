@@ -145,7 +145,14 @@ function Treasure({ resultText, level }) {
       {treasureType === TREASURE_TYPES.MATERIAL && (
         <>
           <section className="treasure-panels">
-            <Panel title="Preço" info={[{ text: `Preço mínimo de item incomum: ${UNCOMMON_ITEM_MIN_PRICE} PO` }]}>
+            <Panel
+              title="Preço"
+              info={[
+                { text: `Preço mínimo de item incomum: ${UNCOMMON_ITEM_MIN_PRICE} PO` },
+                { text: "" },
+                { text: "PO de forja equivale a valor de resurcos necessários para componentes de forja" },
+              ]}
+            >
               <main className="panel-select">
                 {materialPriceInflations.map((option) => (
                   <SelectButton

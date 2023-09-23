@@ -154,9 +154,15 @@ function ModalLocationDetails({
               <div className="list-location df df-jc-sb" key={loc._id}>
                 <button
                   title="Adicionar Dentro"
-                  className={`${loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? "invisible" : ""}`}
+                  className={`${
+                    loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST || loc.reference.distance === lc.REFERENCE_DISTANCES.ADJACENT ? "invisible" : ""
+                  }`}
                   onClick={() => HandleNewLocation(loc._id)}
-                  disabled={locations.length >= 100 || loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST}
+                  disabled={
+                    locations.length >= 100 ||
+                    loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ||
+                    loc.reference.distance === lc.REFERENCE_DISTANCES.ADJACENT
+                  }
                 >
                   <i className="fas fa-plus"></i>
                 </button>

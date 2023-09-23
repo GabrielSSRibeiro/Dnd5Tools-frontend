@@ -390,6 +390,7 @@ function Map({
               setModal(null);
             },
             isSimple: true,
+            disabled: clickedLoc.reference.distance === lc.REFERENCE_DISTANCES.ADJACENT,
           };
           let editAction = {
             text: "Editar",

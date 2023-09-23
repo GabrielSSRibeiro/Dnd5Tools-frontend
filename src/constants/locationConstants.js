@@ -143,7 +143,7 @@ export const REFERENCE_DISTANCES = {
   EXTREME: 40,
 };
 export const referenceDistances = [
-  // { display: "Adjacente", value: REFERENCE_DISTANCES.ADJACENT, baseDistanceMultiplier: 0 },
+  { display: "Adjacente", value: REFERENCE_DISTANCES.ADJACENT, baseDistanceMultiplier: 0 },
   { display: "Pequena", value: REFERENCE_DISTANCES.SMALL, baseDistanceMultiplier: 1 },
   { display: "Média", value: REFERENCE_DISTANCES.MEDIUM, baseDistanceMultiplier: 2 },
   { display: "Grande", value: REFERENCE_DISTANCES.LARGE, baseDistanceMultiplier: 3 },

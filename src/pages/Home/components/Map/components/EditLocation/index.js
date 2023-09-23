@@ -565,7 +565,7 @@ function EditLocation({
                 valuePropertyPath="reference.distance"
                 onSelect={HandleSelectRefDistance}
                 nothingSelected="-"
-                options={lc.referenceDistances}
+                options={lc.referenceDistances.filter((d) => d.value !== lc.REFERENCE_DISTANCES.ADJACENT || !map[location.exteriorLocationId])}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
               />
@@ -591,12 +591,13 @@ function EditLocation({
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
                 isDisabled={
-                  location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST &&
-                  (!location._id ||
-                    !map[location._id] ||
-                    !Object.keys(map[location._id]?.interiorLocs).some(
-                      (id) => !map[id].data.isHidden && map[id].data.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && !map[id].data.reference.location
-                    ))
+                  location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST
+                  // &&
+                  // (!location._id ||
+                  //   !map[location._id] ||
+                  //   !Object.keys(map[location._id]?.interiorLocs).some(
+                  //     (id) => !map[id].data.isHidden && map[id].data.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && !map[id].data.reference.location
+                  //   ))
                 }
               />
             </div>

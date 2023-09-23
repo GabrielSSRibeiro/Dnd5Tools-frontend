@@ -20,7 +20,12 @@ function ModalWarning({ title = "", messages = [], actions = [] }) {
       <footer className="warning-actions-wrapper">
         {actions.map((a, index) =>
           a.isSimple ? (
-            <button className={`df df-cg-5 button-simple${a.className ? ` ${a.className}` : ""}`} onClick={a.click} key={index}>
+            <button
+              className={`df df-cg-5 button-simple${a.className ? ` ${a.className}` : ""}${a.disabled ? " element-disabled" : ""}`}
+              onClick={a.click}
+              disabled={a.disabled}
+              key={index}
+            >
               {a.icon && <i className={a.icon}></i>}
               {a.text}
             </button>
