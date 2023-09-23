@@ -590,7 +590,14 @@ function EditLocation({
                 options={lc.locationConnectionTypes}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                isDisabled={location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST}
+                isDisabled={
+                  location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST &&
+                  (!location._id ||
+                    !map[location._id] ||
+                    !Object.keys(map[location._id]?.interiorLocs).some(
+                      (id) => !map[id].data.isHidden && map[id].data.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && !map[id].data.reference.location
+                    ))
+                }
               />
             </div>
           </>
