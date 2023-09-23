@@ -22,12 +22,13 @@ function LocationSummary({
 }) {
   const [modal, setModal] = useState(null);
 
-  function OpenModalLocationDetails(loc, locId) {
+  function OpenModalLocationDetails(loc, locId, defaultLevel) {
     setLocationToEdit(null);
     setModal(
       <ModalLocationDetails
         location={loc}
         id={locId}
+        defaultLevel={defaultLevel}
         locations={locations}
         onClose={setModal}
         HandleEditNewLocation={HandleEditNewLocation}
@@ -101,7 +102,7 @@ function LocationSummary({
           <span className="name">{location.name}</span>
           {!distance && (
             <aside className="header-details">
-              <button title="Abrir Detalhes" onClick={() => OpenModalLocationDetails(location, id)}>
+              <button title="Abrir Detalhes" onClick={() => OpenModalLocationDetails(location, id, true)}>
                 <i className="fas fa-book"></i>
               </button>
             </aside>

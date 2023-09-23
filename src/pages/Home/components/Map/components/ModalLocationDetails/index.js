@@ -9,11 +9,21 @@ import Select from "../../../../../../components/Select";
 
 import "./styles.css";
 
-function ModalLocationDetails({ location, id, locations, onClose, HandleEditNewLocation, OpenModalLocationDetails, HandleEditLocation, creatures }) {
+function ModalLocationDetails({
+  location,
+  id,
+  defaultLevel,
+  locations,
+  onClose,
+  HandleEditNewLocation,
+  OpenModalLocationDetails,
+  HandleEditLocation,
+  creatures,
+}) {
   const [nameFilter, setNameFilter] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
-  const [selectedLevel, setSelectedLevel] = useState(id);
+  const [selectedLevel, setSelectedLevel] = useState(null);
 
   const locationLevels = [{ display: "Internas", value: id }];
 
@@ -85,11 +95,11 @@ function ModalLocationDetails({ location, id, locations, onClose, HandleEditNewL
       setNameFilter(null);
       setSelectedSize(null);
       setSelectedType(null);
-      setSelectedLevel(id);
+      setSelectedLevel(defaultLevel ? null : id);
     }
 
     resetFilters();
-  }, [id, location]);
+  }, [defaultLevel, id, location]);
 
   return (
     <Modal title={location.name} className="ModalLocationDetails-container df" onClickToClose={onClose}>
@@ -151,7 +161,7 @@ function ModalLocationDetails({ location, id, locations, onClose, HandleEditNewL
                   <i className="fas fa-plus"></i>
                 </button>
                 <span>{loc.name}</span>
-                <button title="Abrir Detalhes" onClick={() => OpenModalLocationDetails(loc, loc._id)}>
+                <button title="Abrir Detalhes" onClick={() => OpenModalLocationDetails(loc, loc._id, false)}>
                   <i className="fas fa-book"></i>
                 </button>
               </div>
