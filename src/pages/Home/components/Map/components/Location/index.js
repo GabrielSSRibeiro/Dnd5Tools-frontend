@@ -146,6 +146,7 @@ function Location({
       width: radius / 2,
       height: radius / 2,
       backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type).color : cc.GetEnviroment(location.traversal.type).color,
+      filter: `contrast(${location.traversal.type === map[location.exteriorLocationId]?.data.traversal.type ? 0.75 : 1})`,
     };
 
     if (anyConnectionBg && !isLocArea && connectionLoc && isAdjacent && connectionLoc._id !== location._id) {
@@ -396,7 +397,7 @@ function Location({
             const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
             const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location);
             const areaStyles = GetAreaStyles(l, index, isLocArea, isPointOfInterest, hasConnectionBg);
-            const connectionAreaStyles = { backgroundColor: areaStyles.backgroundColor };
+            const connectionAreaStyles = { backgroundColor: areaStyles.backgroundColor, filter: areaStyles.filter };
 
             return (
               <React.Fragment key={l._id}>
