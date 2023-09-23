@@ -51,6 +51,8 @@ export const LOCATION_SIZES = {
   MEDIUM: 30,
   LARGE: 40,
   EXTREME: 50,
+  EXTREME2: 60,
+  EXTREME3: 70,
 };
 export const locationSizes = [
   { display: "Ponto de Interesse", value: LOCATION_SIZES.POINT_OF_INTEREST, baseRadiusMultiplier: 0 },
@@ -58,6 +60,8 @@ export const locationSizes = [
   { display: "Médio", value: LOCATION_SIZES.MEDIUM, baseRadiusMultiplier: 2 },
   { display: "Grande", value: LOCATION_SIZES.LARGE, baseRadiusMultiplier: 3 },
   { display: "Extremo", value: LOCATION_SIZES.EXTREME, baseRadiusMultiplier: 5 },
+  { display: "Extremo 2", value: LOCATION_SIZES.EXTREME2, baseRadiusMultiplier: 7 },
+  { display: "Extremo 3", value: LOCATION_SIZES.EXTREME3, baseRadiusMultiplier: 10 },
 ];
 export const GetLocationSize = (value) => locationSizes.find((a) => a.value === value);
 
@@ -136,18 +140,24 @@ export const elementTypes = [
 export const GetElementType = (value) => elementTypes.find((a) => a.value === value);
 
 export const REFERENCE_DISTANCES = {
+  BLEND: 3,
   ADJACENT: 5,
   SMALL: 10,
   MEDIUM: 20,
   LARGE: 30,
   EXTREME: 40,
+  EXTREME2: 50,
+  EXTREME3: 60,
 };
 export const referenceDistances = [
+  { display: "Mesclado", value: REFERENCE_DISTANCES.BLEND, baseDistanceMultiplier: 0 },
   { display: "Adjacente", value: REFERENCE_DISTANCES.ADJACENT, baseDistanceMultiplier: 0 },
   { display: "Pequena", value: REFERENCE_DISTANCES.SMALL, baseDistanceMultiplier: 1 },
   { display: "Média", value: REFERENCE_DISTANCES.MEDIUM, baseDistanceMultiplier: 2 },
   { display: "Grande", value: REFERENCE_DISTANCES.LARGE, baseDistanceMultiplier: 3 },
   { display: "Extrema", value: REFERENCE_DISTANCES.EXTREME, baseDistanceMultiplier: 5 },
+  { display: "Extrema 2", value: REFERENCE_DISTANCES.EXTREME2, baseDistanceMultiplier: 7 },
+  { display: "Extrema 3", value: REFERENCE_DISTANCES.EXTREME3, baseDistanceMultiplier: 10 },
 ];
 export const GetReferenceDistance = (value) => referenceDistances.find((a) => a.value === value);
 

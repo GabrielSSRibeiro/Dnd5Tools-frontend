@@ -227,7 +227,12 @@ function Location({
 
         //distance will be the largest between calc dist and all bg area radius
         const calcDist = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
-        const distance = Math.max(calcDist, areaWrapperStyle.width - locDistFromCenter);
+        let distance = calcDist;
+        if (location.reference.distance === lc.REFERENCE_DISTANCES.BLEND) {
+          distance -= lc.POINT_OF_INTEREST_RADIUS;
+        } else if (location.reference.distance !== lc.REFERENCE_DISTANCES.ADJACENT) {
+          distance = Math.max(calcDist, areaWrapperStyle.width - locDistFromCenter);
+        }
 
         const offsetDistance = refLocDistFromCenter + distance + locDistFromCenter;
 
