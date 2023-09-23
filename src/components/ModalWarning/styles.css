@@ -1,13 +1,16 @@
 .ModalWarning-container.modal-body {
   width: fit-content;
   max-width: 80%;
+  max-height: 70%;
   height: fit-content;
 }
 
 .ModalWarning-container .messages-wrapper {
   row-gap: 10px;
+  flex: 1;
   margin-bottom: 25px;
   white-space: break-spaces;
+  overflow: auto;
 }
 
 .ModalWarning-container .warning-actions-wrapper {
