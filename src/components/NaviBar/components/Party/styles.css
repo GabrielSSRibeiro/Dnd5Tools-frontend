@@ -91,12 +91,17 @@
   backdrop-filter: blur(25px);
 
   min-width: 720px;
-  min-height: calc(700px - 62px);
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+}
+
+@media (max-height: 600px) {
+  .Party-container > .party-tab {
+    min-height: calc(700px - 60px);
+  }
 }
 
 .Party-container > .party-tab > header {

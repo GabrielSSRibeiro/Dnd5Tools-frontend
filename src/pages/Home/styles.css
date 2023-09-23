@@ -23,7 +23,12 @@
   position: relative;
 
   min-width: 1440px;
-  min-height: 697px;
+}
+
+@media (max-height: 600px) {
+  .Home-container {
+    min-height: 700px;
+  }
 }
 
 .Home-container > img {
