@@ -11,7 +11,7 @@ import {
 
 import Button from "../../../../../../components/Button";
 import Info from "../../../../../../components/Info";
-import ModalExport from "./components/ModalExport";
+import ModalExport from "../../../../../../components/ModalExport";
 // import ModalDifficultySimulator from "./components/ModalDifficultySimulator";
 import ModalWarning from "../../../../../../components/ModalWarning";
 

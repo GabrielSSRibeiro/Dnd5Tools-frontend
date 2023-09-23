@@ -228,7 +228,7 @@ function Map({
           "Como a presença dela/delas afeta a localização? Ela/elas tem um covil?",
           "Que outras criaturas estão presentes por ali e como ela/elas as afetam ou é/são afetadas por ela/elas?",
           "O que os habitantes dessa localização vivem de? O que fazem no tempo livre? Eles tem algum governo/tradição/religião ou funções individuais?",
-          "Como é possível interagir com eles e por que?",
+          "Como é possível interagir com eles e por que? Quais os rumores da localização?",
           "Como os detalhes especiais do mundo afetam essa localização?",
           "Como essa localização é conhecida? Uma localização tem que ter uma justificativa para ter o nome que tem",
           "Como essa localização afeta as localizações próximas e que tipo de terreno elas são?",
@@ -250,7 +250,7 @@ function Map({
   }
 
   function OpenModalTravelResults(node, isRest) {
-    if (locations.length === 0 || mapMode !== lc.MAP_MODES.TRAVEL || (!isRest && !paceMove)) {
+    if (locations.length === 0 || (!isRest && !paceMove)) {
       return;
     }
 
@@ -295,6 +295,12 @@ function Map({
           needsReposition: false,
         };
 
+    const clickedLoc = map[newCurrentNode.locId] ? map[newCurrentNode.locId].data : combatConfig.world;
+    if (mapMode !== lc.MAP_MODES.TRAVEL) {
+      setLocationToEdit(clickedLoc);
+      return;
+    }
+
     if (currentNode) {
       if (canTravelToPoint || isRest) {
         const newLocation = map[newCurrentNode.locId]?.data;
@@ -329,6 +335,7 @@ function Map({
           />
         );
       } else {
+        let messages = [];
         let actions = [
           {
             text: "Cancelar",
@@ -370,9 +377,28 @@ function Map({
             },
             ...actions,
           ];
+        } else {
+          const details = clickedLoc.contexts.find((c) => c.isCurrent).details;
+          if (details) {
+            messages.push(clickedLoc.name);
+            messages.push(details);
+          }
+
+          actions = [
+            {
+              text: "Editar",
+              className: "node-modal-action",
+              click: () => {
+                setLocationToEdit(clickedLoc);
+                setModal(null);
+              },
+              isSimple: true,
+            },
+            ...actions,
+          ];
         }
 
-        setModal(<ModalWarning title="Mover Grupo" actions={actions} />);
+        setModal(<ModalWarning title="Mover Grupo" messages={messages} actions={actions} />);
       }
     } else {
       HandleSetCurrentNode(newCurrentNode);
@@ -753,7 +779,13 @@ function Map({
         className="world-map"
         style={{
           backgroundColor: cc.GetEnviroment(combatConfig.world.traversal.type).color,
-          cursor: !paceMove ? "not-allowed" : canTravelToPoint ? (combatConfig.travel.oriented ? "pointer" : "help") : "default",
+          cursor: !paceMove
+            ? "not-allowed"
+            : canTravelToPoint && mapMode === lc.MAP_MODES.TRAVEL
+            ? combatConfig.travel.oriented
+              ? "pointer"
+              : "help"
+            : "default",
         }}
       >
         {/* title */}

@@ -53,6 +53,7 @@
 
 .ModalTravelResults-container .creature-list .encounter-creature {
   position: relative;
+  cursor: pointer;
 }
 
 .ModalTravelResults-container .creature-list .creature-avatar {

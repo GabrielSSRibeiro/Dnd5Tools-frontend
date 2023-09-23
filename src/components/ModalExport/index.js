@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import * as utils from "../../../../../../../../utils";
-import { CREATURE_RARITIES, creatureRarities, GetRarity } from "../../../../../../../../constants/creatureConstants";
-import { GetAverageLevel } from "../../../../../../../../helpers/creatureHelper";
-import { GetFoundryFormattedCreature } from "../../../../../../../../helpers/foundryHelper";
+import * as utils from "../../utils";
+import { CREATURE_RARITIES, creatureRarities, GetRarity } from "../../constants/creatureConstants";
+import { GetAverageLevel } from "../../helpers/creatureHelper";
+import { GetFoundryFormattedCreature } from "../../helpers/foundryHelper";
 
-import Button from "../../../../../../../../components/Button";
-import Select from "../../../../../../../../components/Select";
-import Modal from "../../../../../../../../components/Modal";
+import Button from "../Button";
+import Select from "../Select";
+import Modal from "../Modal";
 
 import "./styles.css";
 

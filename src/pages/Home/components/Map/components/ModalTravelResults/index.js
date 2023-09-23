@@ -10,6 +10,7 @@ import Info from "../../../../../../components/Info";
 import TextInput from "../../../../../../components/TextInput";
 import Button from "../../../../../../components/Button";
 import Modal from "../../../../../../components/Modal";
+import ModalExport from "../../../../../../components/ModalExport";
 
 import "./styles.css";
 
@@ -86,10 +87,9 @@ function ModalTravelResults({
         return {
           id: nc.creatureId,
           color: cc.GetRarity(creature.rarity).color,
-          name: creature.name,
           size: cc.GetSize(creature.size).display,
-          image: creature.image,
           number: nc.number,
+          creature,
         };
       }),
   });
@@ -116,6 +116,7 @@ function ModalTravelResults({
         return `${nc.number} ${cc.GetType(creature.type).display} ${cc.GetSize(creature.size).display}`;
       })
   );
+  const [modal, setModal] = useState(null);
   const [name, setName] = useState(
     newCurrentNode.name ??
       (isPointOfInterest
@@ -339,8 +340,13 @@ function ModalTravelResults({
     return true;
   }
 
+  async function OpenModalExport(creature) {
+    setModal(<ModalExport creature={creature} onClose={setModal} />);
+  }
+
   return (
     <Modal title="Resultado da Marcha" className="ModalTravelResults-container df">
+      {modal}
       <main className="content df df-jc-c df-ai-fs df-f1">
         {/* world */}
         <aside className="details-wrapper df df-fd-c df-jc-fs">
@@ -412,14 +418,23 @@ function ModalTravelResults({
               </span>
               <div className="creature-list">
                 {creaturesForDisplay.current.creatures.map((c) => (
-                  <div className="df encounter-creature" key={c.id}>
-                    <Info contents={[{ text: c.name }, { text: "" }, { text: `Tamanho: ${c.size}` }]} tooltipOnly={true} />
+                  <div className="df encounter-creature" onClick={() => OpenModalExport(c.creature)} key={c.id}>
+                    <Info
+                      contents={[
+                        { text: c.creature.name },
+                        { text: "" },
+                        { text: `Tamanho: ${c.size}` },
+                        { text: "" },
+                        { text: "[Exportar]", icon: "fas fa-upload" },
+                      ]}
+                      tooltipOnly={true}
+                    />
                     <img
                       className="creature-avatar"
                       style={{
                         borderColor: c.color,
                       }}
-                      src={c.image}
+                      src={c.creature.image}
                       alt="creature-avatar"
                     />
                     <span>x{c.number}</span>
