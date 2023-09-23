@@ -378,6 +378,13 @@ function EditLocation({
     utils.downloadData(JSON.stringify(exportLocation), `${exportLocation.name}.json`);
   }
 
+  function HandleHide() {
+    location.reference.distance = null;
+    location.reference.direction = null;
+    location.reference.location = null;
+    HandleSaveLocation();
+  }
+
   function HandleWorldExport() {
     function AddLocationsData(locs) {
       lh.sortLocsByRef(locs.map((l) => l.data)).forEach((l) => {
@@ -670,6 +677,11 @@ function EditLocation({
             <button title="Exportar" className="button-simple" onClick={HandleAscendanceExport}>
               <i className="fas fa-upload"></i>
             </button>
+            {!isWorld && !isFirstOfArea && (
+              <button title="Ocultar" className="button-simple" onClick={HandleHide}>
+                <i className="fas fa-eye-slash"></i>
+              </button>
+            )}
           </>
         ) : (
           !isNewLoc && (
