@@ -229,7 +229,9 @@ function Location({
         const calcDist = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
         let distance = calcDist;
         if (location.reference.distance === lc.REFERENCE_DISTANCES.BLEND) {
-          distance -= lc.POINT_OF_INTEREST_RADIUS;
+          if (map[location.reference.location].data.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST) {
+            distance -= lc.POINT_OF_INTEREST_RADIUS;
+          }
         } else if (location.reference.distance !== lc.REFERENCE_DISTANCES.ADJACENT) {
           distance = Math.max(calcDist, areaWrapperStyle.width - locDistFromCenter);
         }
