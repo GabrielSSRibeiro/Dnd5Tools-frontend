@@ -121,6 +121,7 @@ function NaviBar({
             setGroups={setGroups}
             inactiveGroup={inactiveGroup}
             setInactiveGroup={setInactiveGroup}
+            setModal={setModal}
           />
           <SelectButton
             isLarge={true}

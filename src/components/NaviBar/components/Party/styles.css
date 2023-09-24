@@ -104,6 +104,11 @@
   }
 }
 
+.Party-container > .party-tab .calc-xp {
+  color: var(--white);
+  margin-right: 30px;
+}
+
 .Party-container > .party-tab > header {
   height: 60px;
   width: 100%;

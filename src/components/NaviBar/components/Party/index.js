@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { LEVELS } from "../../../../constants/combatConstants";
 import { MAX_CHARACTERS_ALLOWED } from "../../../../constants/combatConstants";
 
+import ModalCalcXp from "../../../ModalCalcXp";
 import Button from "../../../Button";
 import Select from "../../../Select";
 import CheckInput from "../../../CheckInput";
@@ -24,6 +25,7 @@ function Party({
   setGroups,
   inactiveGroup,
   setInactiveGroup,
+  setModal,
 }) {
   const [isNewCharacterOpen, setIsNewCharacterOpen] = useState(false);
   const [newCharacterName, setNewCharacterName] = useState(null);
@@ -189,6 +191,15 @@ function Party({
     setSelectedCharacters([]);
   }
 
+  function OpenModalCalcXp() {
+    setIsPartyOpen(false);
+    setModal(<ModalCalcXp level={level} onClose={CloseModalCalcXp} />);
+  }
+  function CloseModalCalcXp() {
+    setModal(null);
+    setIsPartyOpen(true);
+  }
+
   useEffect(() => {
     setTempSelectedCharacters(selectedCharacters);
   }, [selectedCharacters]);
@@ -234,8 +245,11 @@ function Party({
             <div>
               {!isSelecting && (
                 <>
+                  <button className="button-simple calc-xp" onClick={OpenModalCalcXp}>
+                    Calcular XP
+                  </button>
                   <h5>Nível</h5>
-                  <Select value={level} onSelect={setLevel} options={LEVELS} optionsAtATime={10} />
+                  <Select value={level} onSelect={setLevel} options={LEVELS} optionsAtATime={10} className="level-select" />
                 </>
               )}
               <div className="sharp-button" onClick={HandleClose}>

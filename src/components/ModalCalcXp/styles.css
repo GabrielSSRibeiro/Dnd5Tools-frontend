@@ -1,0 +1,17 @@
+.ModalCalcXp-container.modal-body {
+  width: fit-content;
+  max-width: 80%;
+  max-height: 70%;
+  height: fit-content;
+}
+
+.ModalCalcXp-container.modal-body .result {
+  font-weight: 700;
+}
+
+.ModalCalcXp-container .divider {
+  border-top: 1px solid var(--gray1);
+  width: calc(100% + 50px);
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
