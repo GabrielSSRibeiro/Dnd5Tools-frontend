@@ -359,8 +359,7 @@ function Treasure({ resultText, level }) {
                     <span className="label">Armas: </span>Ferramentas de ferreiro
                   </span>
                   <span>
-                    <span className="label">Armaduras: </span>Ferramentas de ferreiro, ferramentas de costureiro, ferramentas de coureiro, ferramentas
-                    de sapateiro
+                    <span className="label">Armaduras: </span>Ferramentas de ferreiro, ferramentas de coureiro, ferramentas de costureiro
                   </span>
                   <span>
                     <span className="label">Acessórios: </span>Ferramentas de joalheiro
