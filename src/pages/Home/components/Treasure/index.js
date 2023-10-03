@@ -106,7 +106,7 @@ function Treasure({ resultText, level }) {
             },
             { text: "" },
             {
-              text: "Depedendo do tipo de equipamento desejado para o material, a ferramenta necessaria para sua forja será diferente. a CD e tempo necessário são determinados pela raridade. Esse tempo é limitado a até 8 horas por dia e pode ser dividido iqualmente entre o número de pessoas que estão forjando, mas todos tem que passar no teste para ter sucesso",
+              text: "Depedendo do tipo de equipamento desejado para o material, a ferramenta necessaria para sua forja será diferente. a CD e tempo necessário são determinados pela raridade. Um dia de forja é o equivalente a 8 horas, o limite diárío sem exaustão, e pode ser dividido iqualmente entre o número de pessoas que estão forjando, mas todos tem que passar no teste para ter sucesso",
             },
           ]}
         >
