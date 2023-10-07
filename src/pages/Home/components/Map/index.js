@@ -198,12 +198,15 @@ function Map({
     }
 
     let visionRadius = lc.BASE_VISION_IN_M / pxInMScale;
+    if (combatConfig.travel.isOverlook) {
+      visionRadius *= 2;
+    }
 
     const loc = map[combatConfig.travel.currentNode.locId] ? map[combatConfig.travel.currentNode.locId].data : combatConfig.world;
     const modofier = lc.GetPanoramicVision(loc.contexts.find((c) => c.isCurrent).panoramicVision).modofier;
 
     return visionRadius * modofier;
-  }, [combatConfig.travel.currentNode, combatConfig.world, map, pxInMScale]);
+  }, [combatConfig.travel.currentNode, combatConfig.travel.isOverlook, combatConfig.world, map, pxInMScale]);
   const canTravelToPoint = useMemo(() => locHoverData?.distance.isVisible, [locHoverData?.distance.isVisible]);
   const paceMove = useMemo(
     () => combatConfig.travel.pace !== lc.TRAVEL_PACES.REST && combatConfig.travel.pace !== lc.TRAVEL_PACES.ACTIVITY,
@@ -298,7 +301,6 @@ function Map({
     if (currentNode) {
       if (mapMode === lc.MAP_MODES.TRAVEL && (canTravelToPoint || isRest)) {
         const newLocation = map[newCurrentNode.locId]?.data;
-        console.log(currentNode, canTravelToPoint, isRest);
         setModal(
           <ModalTravelResults
             onClose={setModal}
@@ -899,18 +901,31 @@ function Map({
                       optionDisplay={(o) => o.display}
                       optionValue={(o) => o.value}
                     />
-                    <CheckInput
-                      className="oriented"
-                      label="Orientados"
-                      onClick={() =>
-                        setCombatConfig({
-                          ...combatConfig,
-                          travel: { ...combatConfig.travel, oriented: !combatConfig.travel.oriented },
-                        })
-                      }
-                      isSelected={combatConfig.travel.oriented}
-                      info={[{ text: "Chance de se perder, desviar da direcao" }]}
-                    />
+                    <div className="df df-fd-c travel-options">
+                      <CheckInput
+                        className="oriented"
+                        label="Orientados"
+                        onClick={() =>
+                          setCombatConfig({
+                            ...combatConfig,
+                            travel: { ...combatConfig.travel, oriented: !combatConfig.travel.oriented },
+                          })
+                        }
+                        isSelected={combatConfig.travel.oriented}
+                        info={[{ text: "Chance de se perder, desviar da direcao" }]}
+                      />
+                      <CheckInput
+                        label="Local Alto"
+                        onClick={() =>
+                          setCombatConfig({
+                            ...combatConfig,
+                            travel: { ...combatConfig.travel, isOverlook: !combatConfig.travel.isOverlook },
+                          })
+                        }
+                        isSelected={combatConfig.travel.isOverlook}
+                        info={[{ text: "Amplifica visão" }]}
+                      />
+                    </div>
                   </>
                 )}
                 <div className="divider"></div>

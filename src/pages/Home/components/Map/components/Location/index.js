@@ -384,7 +384,15 @@ function Location({
       onClick={travel}
       key={rest.key}
     >
-      {connectionStyle && <div id={`${loc.data._id}-connection`} className="connection" style={connectionStyle}></div>}
+      {connectionStyle && (
+        <div
+          id={`${loc.data._id}-connection`}
+          className="connection"
+          style={connectionStyle}
+          onMouseMove={(e) => HandleHover(e, loc.data)}
+          onMouseLeave={(e) => HandleHover(e)}
+        ></div>
+      )}
       {interiorLocs.length > 0 ? (
         interiorLocs.map((locationId) => (
           <Location

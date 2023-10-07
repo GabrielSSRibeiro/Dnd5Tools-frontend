@@ -183,6 +183,15 @@
   row-gap: 5px;
 }
 
+.Map-container .world-map .travel-details .travel-options {
+  width: 100%;
+}
+
+.Map-container .world-map .travel-details .travel-options .CheckInput-container {
+  width: 100%;
+  justify-content: space-between;
+}
+
 .Map-container .world-map .travel-details .rest-wrapper {
   display: flex;
   flex-direction: column;

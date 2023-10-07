@@ -302,7 +302,8 @@ function ModalTravelResults({
   function UpdateData() {
     //for not oriented, travel is modified randomly by 10%
     if (!travel.oriented && travel.pace !== lc.TRAVEL_PACES.REST) {
-      const modifier = 0.1;
+      const modifier = 0.5;
+      newCurrentNode.angle = utils.randomValueFromVariancePercentage(newCurrentNode.angle, modifier);
       newCurrentNode.x = utils.randomValueFromVariancePercentage(newCurrentNode.x, modifier);
       newCurrentNode.y = utils.randomValueFromVariancePercentage(newCurrentNode.y, modifier);
     }

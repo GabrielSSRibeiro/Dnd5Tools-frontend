@@ -269,6 +269,7 @@ function Home() {
             mount: lc.TRAVEL_MOUNTS.NONE,
             load: lc.TRAVEL_LOADS.LOW,
             oriented: true,
+            isOverlook: false,
             schedule: 12 * 60,
             exhaustionTimer: 8 * 60,
             precipitation: 1,
