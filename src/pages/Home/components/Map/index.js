@@ -197,15 +197,18 @@ function Map({
       return 0;
     }
 
-    let visionRadius = lc.BASE_VISION_IN_M / pxInMScale;
-    if (combatConfig.travel.isOverlook) {
-      visionRadius *= 2;
-    }
+    const baseVision = lc.BASE_VISION_IN_M / pxInMScale;
+    let visionRadius = baseVision;
 
     const loc = map[combatConfig.travel.currentNode.locId] ? map[combatConfig.travel.currentNode.locId].data : combatConfig.world;
-    const modofier = lc.GetPanoramicVision(loc.contexts.find((c) => c.isCurrent).panoramicVision).modofier;
+    const modifier = lc.GetPanoramicVision(loc.contexts.find((c) => c.isCurrent).panoramicVision).modifier;
+    visionRadius *= modifier;
 
-    return visionRadius * modofier;
+    if (combatConfig.travel.isOverlook) {
+      visionRadius += baseVision;
+    }
+
+    return visionRadius;
   }, [combatConfig.travel.currentNode, combatConfig.travel.isOverlook, combatConfig.world, map, pxInMScale]);
   const canTravelToPoint = useMemo(() => locHoverData?.distance.isVisible, [locHoverData?.distance.isVisible]);
   const paceMove = useMemo(
