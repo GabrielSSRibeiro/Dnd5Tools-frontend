@@ -230,8 +230,10 @@ function Map({
       <ModalWarning
         title="Sugestões de Criação"
         messages={[
+          "Responda essas perguntas separadamente antes de começar",
+          "",
           "Escolha uma criatura e defina quem ela é/são",
-          "Em que tipo de terreno ela/elas moram e por que? Localização vantajosa? Riquezas/recursos abundantes? Clima ideal?",
+          "Em que tipo de terreno ela/elas moram ou por que elas moram nesse terreno? Localização vantajosa? Riquezas/recursos abundantes? Clima ideal?",
           "Como a presença dela/delas afeta a localização? Ela/elas tem um covil?",
           "Que outras criaturas estão presentes por ali e como ela/elas as afetam ou é/são afetadas por ela/elas?",
           "O que os habitantes dessa localização vivem de? O que fazem no tempo livre? Eles tem algum governo/tradição/religião ou funções individuais?",
@@ -244,7 +246,7 @@ function Map({
           "",
           "",
           "",
-          "Continuar exercício até que localizações tenham 4-12 tipos de criaturas",
+          "Continuar exercício até que essa localização e as próximas tenham 4-12 tipos de criaturas",
         ]}
         actions={[
           {
