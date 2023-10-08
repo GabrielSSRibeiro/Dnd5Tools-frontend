@@ -211,8 +211,12 @@ function Location({
         const locDistFromCenter = GetLocRadiusForCalc(map[location._id]);
 
         //distance will be the largest between calc dist and all bg area radius
-        const distance = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
-        // let distance = calcDist;
+        const calcDist = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
+        let distance = calcDist;
+        // if (map[location.reference.location].data.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST) {
+        //   distance -= lc.POINT_OF_INTEREST_RADIUS;
+        // }
+
         // if (location.reference.distance !== lc.REFERENCE_DISTANCES.ADJACENT) {
         //   distance = Math.max(calcDist, areaWrapperStyle.width - locDistFromCenter);
         // }
@@ -226,6 +230,7 @@ function Location({
     }
 
     function GetConnectionOffsetStyles(offset) {
+      console.log(offset, map[connectionLoc.reference.location].data.offset);
       let { x, y, distance } = offset;
 
       //remove the ref offset from x and y, making it the new center for the dist
@@ -354,7 +359,7 @@ function Location({
     }
 
     //set connection and bg
-    if (connectionLoc?.offset) {
+    if (connectionLoc?.offset && map[connectionLoc.reference.location].data.offset) {
       //set connection styles
       let connection = document.getElementById(`${loc.data._id}-connection`);
       if (connection && connection.classList.contains("not-flat")) {
