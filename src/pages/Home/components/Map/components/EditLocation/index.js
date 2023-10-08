@@ -578,7 +578,7 @@ function EditLocation({
               />
               <Select
                 label={"Direção"}
-                extraWidth={12}
+                extraWidth={30}
                 value={location}
                 valuePropertyPath="reference.direction"
                 onSelect={HandleSelectRefDirection}
@@ -588,8 +588,8 @@ function EditLocation({
                 optionValue={(o) => o.value}
               />
               <Select
-                label={"Conectado Por"}
-                extraWidth={12}
+                label={"Conecção"}
+                extraWidth={0}
                 value={location}
                 valuePropertyPath="reference.connectionType"
                 onSelect={setLocation}

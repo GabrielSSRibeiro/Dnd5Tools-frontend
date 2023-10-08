@@ -12,6 +12,7 @@ function Location({
   locations,
   pxInMScale,
   GetLocRadiusForCalc,
+  GetAllExteriorLocs,
   locationsRefs,
   setLocationsRefs,
   allLocationsRefs,
@@ -45,7 +46,7 @@ function Location({
 
     return areaLocs;
   }, [loc, map]);
-  const anyConnectionBg = useMemo(() => areaLocs.some((_, index) => areaLocs[index + 1]?.reference.location), [areaLocs]);
+  // const anyConnectionBg = useMemo(() => areaLocs.some((_, index) => areaLocs[index + 1]?.reference.location), [areaLocs]);
   const connectionLoc = useMemo(() => {
     if (!isMapRendered) {
       return null;
@@ -85,10 +86,11 @@ function Location({
     let connectionStyle = {
       rotate: `${loc.data.distanceAngle * -1}deg`,
       backgroundColor: lc.GetElementType(lc.GetLocationConnectionType(loc.data.reference.connectionType).elementType).color,
+      zIndex: areaLocs.length,
     };
 
     return connectionStyle;
-  }, [loc.data]);
+  }, [areaLocs.length, loc.data.distanceAngle, loc.data.reference.connectionType]);
   const areaWrapperStyle = useMemo(() => {
     let radius = 0;
     areaLocs.forEach((l) => {
@@ -131,10 +133,11 @@ function Location({
       return wrapperStyle;
     }
 
-    wrapperStyle.translate = `0 ${GetResetOffset()}px`;
+    map[loc.data._id].data.resetOffset = GetResetOffset();
+    wrapperStyle.translate = `0 ${map[loc.data._id].data.resetOffset}px`;
 
     return wrapperStyle;
-  }, [isMapRendered, locationsRefs, map]);
+  }, [isMapRendered, loc.data._id, locationsRefs, map]);
 
   function GetAreaStyles(location, index, isLocArea, isPointOfInterest) {
     let radius = location.radius;
@@ -153,19 +156,20 @@ function Location({
       height: radius / 2,
       backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type)?.color : cc.GetEnviroment(location.traversal.type)?.color,
       filter: `contrast(${filterValue})`,
+      borderRadius: "100%",
     };
 
-    if (anyConnectionBg && !isLocArea && connectionLoc && isAdjacent && connectionLoc._id !== location._id) {
-      let modifier = 0;
-      const areas = areaLocs.toReversed();
-      const areaAndExterior = areas.slice(areas.findIndex((l) => l._id === connectionLoc._id) + 1).toReversed();
-      const areasToSubtract = areaAndExterior.slice(areaAndExterior.findIndex((l) => l._id === location._id));
-      areasToSubtract.forEach((l) => {
-        modifier += l.radius / 2;
-      });
+    // if (anyConnectionBg && !isLocArea && connectionLoc && isAdjacent && connectionLoc._id !== location._id) {
+    //   let modifier = 0;
+    //   const areas = areaLocs.toReversed();
+    //   const areaAndExterior = areas.slice(areas.findIndex((l) => l._id === connectionLoc._id) + 1).toReversed();
+    //   const areasToSubtract = areaAndExterior.slice(areaAndExterior.findIndex((l) => l._id === location._id));
+    //   areasToSubtract.forEach((l) => {
+    //     modifier += l.radius / 2;
+    //   });
 
-      areaStyles.marginRight = modifier * -1;
-    }
+    //   areaStyles.marginRight = modifier * -1;
+    // }
 
     return areaStyles;
   }
@@ -223,18 +227,15 @@ function Location({
         const refOffset = GetOffset(map[location.reference.location].data);
 
         const refLocDistFromCenter = GetLocRadiusForCalc(map[location.reference.location]);
+
         const locDistFromCenter = GetLocRadiusForCalc(map[location._id]);
 
         //distance will be the largest between calc dist and all bg area radius
-        const calcDist = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
-        let distance = calcDist;
-        if (location.reference.distance === lc.REFERENCE_DISTANCES.BLEND) {
-          if (map[location.reference.location].data.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST) {
-            distance -= lc.POINT_OF_INTEREST_RADIUS;
-          }
-        } else if (location.reference.distance !== lc.REFERENCE_DISTANCES.ADJACENT) {
-          distance = Math.max(calcDist, areaWrapperStyle.width - locDistFromCenter);
-        }
+        const distance = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
+        // let distance = calcDist;
+        // if (location.reference.distance !== lc.REFERENCE_DISTANCES.ADJACENT) {
+        //   distance = Math.max(calcDist, areaWrapperStyle.width - locDistFromCenter);
+        // }
 
         const offsetDistance = refLocDistFromCenter + distance + locDistFromCenter;
 
@@ -327,15 +328,56 @@ function Location({
 
     //update backgrounds styles
     if (connectionLoc?.offset) {
-      Array.from(document.getElementsByClassName(`con-bg-${loc.data._id}`)).forEach((cbg, i, self) => {
-        GetConnectionBgOffsetStyles(cbg, i, self).forEach((s) => {
-          cbg.style[s.key] = s.value;
+      Array.from(document.getElementsByClassName(`con-bg-${loc.data._id}`))
+        .filter((cbg) => cbg.classList.contains("not-flat"))
+        .forEach((cbg, i, self) => {
+          GetConnectionBgOffsetStyles(cbg, i, self).forEach((s) => {
+            cbg.style[s.key] = s.value;
+          });
         });
-      });
     }
 
-    //update final width
+    function GetFlatUpdateStyles(nfel) {
+      const flatUpdateStyles = [];
+      let marginTop = ref.current.style.marginTop ? parseInt(ref.current.style.marginTop) : 0;
+      let marginRight = ref.current.style.marginRight ? parseInt(ref.current.style.marginRight) : 0;
+      let marginBottom = ref.current.style.marginBottom ? parseInt(ref.current.style.marginBottom) : 0;
+      let marginLeft = ref.current.style.marginLeft ? parseInt(ref.current.style.marginLeft) : 0;
+
+      GetAllExteriorLocs(loc.data)
+        .map((l) => document.getElementById(l.data._id))
+        .forEach((el) => {
+          marginTop += el.style.marginTop ? parseInt(el.style.marginTop) : 0;
+          marginRight += el.style.marginRight ? parseInt(el.style.marginRight) : 0;
+          marginBottom += el.style.marginBottom ? parseInt(el.style.marginBottom) : 0;
+          marginLeft += el.style.marginLeft ? parseInt(el.style.marginLeft) : 0;
+        });
+
+      marginTop += nfel.style.marginTop ? parseInt(nfel.style.marginTop) : 0;
+      marginRight += nfel.style.marginRight ? parseInt(nfel.style.marginRight) : 0;
+      marginBottom += nfel.style.marginBottom ? parseInt(nfel.style.marginBottom) : 0;
+      marginLeft += nfel.style.marginLeft ? parseInt(nfel.style.marginLeft) : 0;
+
+      flatUpdateStyles.push({ key: "marginTop", value: `${marginTop}px` });
+      flatUpdateStyles.push({ key: "marginRight", value: `${marginRight}px` });
+      flatUpdateStyles.push({ key: "marginBottom", value: `${marginBottom}px` });
+      flatUpdateStyles.push({ key: "marginLeft", value: `${marginLeft}px` });
+
+      return flatUpdateStyles;
+    }
+
+    //final movement and update final width
     if (isMapRendered) {
+      //move all interior locs to the world level so the index takes proper effect
+      const flatContainer = document.getElementById("flat-locs");
+      Array.from(ref.current.getElementsByClassName("not-flat")).forEach((nfel) => {
+        GetFlatUpdateStyles(nfel).forEach((s) => {
+          nfel.style[s.key] = s.value;
+        });
+        nfel.classList.remove("not-flat");
+        flatContainer.appendChild(nfel);
+      });
+
       ref.current.style.width = "0px";
     }
 
@@ -350,6 +392,7 @@ function Location({
       setLocationsRefs([...locationsRefs]);
     }
   }, [
+    GetAllExteriorLocs,
     GetLocRadiusForCalc,
     allLocationsRefs,
     areaLocs,
@@ -387,7 +430,7 @@ function Location({
       {connectionStyle && (
         <div
           id={`${loc.data._id}-connection`}
-          className="connection"
+          className="connection not-flat"
           style={connectionStyle}
           onMouseMove={(e) => HandleHover(e, loc.data)}
           onMouseLeave={(e) => HandleHover(e)}
@@ -401,6 +444,7 @@ function Location({
             locations={locations}
             pxInMScale={pxInMScale}
             GetLocRadiusForCalc={GetLocRadiusForCalc}
+            GetAllExteriorLocs={GetAllExteriorLocs}
             locationsRefs={refs}
             setLocationsRefs={setRefs}
             allLocationsRefs={allLocationsRefs}
@@ -417,32 +461,36 @@ function Location({
             const isLocArea = index === areaLocs.length - 1;
             const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
             const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location);
-            const areaStyles = GetAreaStyles(l, index, isLocArea, isPointOfInterest, hasConnectionBg);
-            const connectionAreaStyles = { backgroundColor: areaStyles.backgroundColor, filter: areaStyles.filter };
+            let areaStyles = GetAreaStyles(l, index, isLocArea, isPointOfInterest, hasConnectionBg);
+            let connectionAreaStyles = { backgroundColor: areaStyles.backgroundColor, filter: areaStyles.filter };
 
             return (
               <React.Fragment key={l._id}>
                 {hasConnectionBg && (
                   <div
                     name={l._id}
-                    className={`connection-background con-bg-${loc.data._id}`}
+                    className={`connection-background con-bg-${loc.data._id} not-flat`}
                     style={{
+                      backgroundColor: areaStyles.backgroundColor,
+                      filter: areaStyles.filter,
                       height: areaStyles.height,
                       rotate: `${distanceAngle * -1}deg`,
+                      zIndex: index,
                     }}
                     onMouseMove={(e) => HandleHover(e, l)}
                     onMouseLeave={(e) => HandleHover(e)}
                   >
                     <aside className="con-bg-area corner needs-adjust" style={connectionAreaStyles}></aside>
+                    {/* <aside className="con-bg-area corner needs-adjust" style={connectionAreaStyles}></aside>
                     <aside className="con-bg-area needs-adjust" style={{ ...connectionAreaStyles, height: refAreaDiameter }}></aside>
-                    <aside className="con-bg-area corner needs-adjust" style={connectionAreaStyles}></aside>
+                    <aside className="con-bg-area corner needs-adjust" style={connectionAreaStyles}></aside> */}
                   </div>
                 )}
                 <div
                   name={`${l.name}-area`}
                   id={isLocArea ? `${l._id}-area` : null}
-                  className={`area${isPointOfInterest ? " point-of-interest" : ""}`}
-                  style={{ width: areaStyles.width, height: areaStyles.height, rotate: `${distanceAngle * -1}deg` }}
+                  className={`area${isPointOfInterest ? " point-of-interest" : ""} not-flat`}
+                  style={{ width: areaStyles.width, height: areaStyles.height, rotate: `${distanceAngle * -1}deg`, zIndex: index }}
                   onMouseMove={(e) => HandleHover(e, l)}
                   onMouseLeave={(e) => HandleHover(e)}
                 >

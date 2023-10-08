@@ -140,7 +140,7 @@ export const elementTypes = [
 export const GetElementType = (value) => elementTypes.find((a) => a.value === value);
 
 export const REFERENCE_DISTANCES = {
-  BLEND: 3,
+  // BLEND: 3,
   ADJACENT: 5,
   SMALL: 10,
   MEDIUM: 20,
@@ -150,7 +150,7 @@ export const REFERENCE_DISTANCES = {
   EXTREME3: 60,
 };
 export const referenceDistances = [
-  { display: "Mesclado", value: REFERENCE_DISTANCES.BLEND, baseDistanceMultiplier: 0 },
+  // { display: "Mesclado", value: REFERENCE_DISTANCES.BLEND, baseDistanceMultiplier: 0 },
   { display: "Adjacente", value: REFERENCE_DISTANCES.ADJACENT, baseDistanceMultiplier: 0 },
   { display: "Pequena", value: REFERENCE_DISTANCES.SMALL, baseDistanceMultiplier: 1 },
   { display: "Média", value: REFERENCE_DISTANCES.MEDIUM, baseDistanceMultiplier: 2 },
@@ -182,14 +182,14 @@ export const DIRECTIONS = {
   NORTH_WEST: 80,
 };
 export const directions = [
-  { display: "Norte", value: DIRECTIONS.NORTH, baseAngle: 90 },
-  { display: "Nordeste", value: DIRECTIONS.NORTH_EAST, baseAngle: 45 },
-  { display: "Leste", value: DIRECTIONS.EAST, baseAngle: 0 },
-  { display: "Sudeste", value: DIRECTIONS.SOUTH_EAST, baseAngle: 315 },
-  { display: "Sul", value: DIRECTIONS.SOUTH, baseAngle: 270 },
-  { display: "Sudoeste", value: DIRECTIONS.SOUTH_WEST, baseAngle: 225 },
-  { display: "Oeste", value: DIRECTIONS.WEST, baseAngle: 180 },
-  { display: "Noroeste", value: DIRECTIONS.NORTH_WEST, baseAngle: 135 },
+  { display: "Norte ↑", value: DIRECTIONS.NORTH, baseAngle: 90 },
+  { display: "Nordeste ↗", value: DIRECTIONS.NORTH_EAST, baseAngle: 45 },
+  { display: "Leste →", value: DIRECTIONS.EAST, baseAngle: 0 },
+  { display: "Sudeste ↘", value: DIRECTIONS.SOUTH_EAST, baseAngle: 315 },
+  { display: "Sul ↓", value: DIRECTIONS.SOUTH, baseAngle: 270 },
+  { display: "Sudoeste ↙", value: DIRECTIONS.SOUTH_WEST, baseAngle: 225 },
+  { display: "Oeste ←", value: DIRECTIONS.WEST, baseAngle: 180 },
+  { display: "Noroeste ↖", value: DIRECTIONS.NORTH_WEST, baseAngle: 135 },
 ];
 export const GetDirection = (value) => directions.find((a) => a.value === value);
 

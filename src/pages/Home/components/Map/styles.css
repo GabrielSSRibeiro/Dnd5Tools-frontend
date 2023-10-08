@@ -238,6 +238,10 @@
   height: 100%;
 }
 
+.Map-container .world-map #flat-locs {
+  position: absolute;
+}
+
 .Map-container .max-dimentions {
   width: 1000000px;
   height: 1000000px;

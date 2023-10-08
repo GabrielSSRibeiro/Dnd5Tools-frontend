@@ -110,6 +110,7 @@ function Map({
       .forEach((location, i) => {
         location.radius = lh.GetRadius(location, pxInMScale);
         location.offset = null;
+        location.resetOffset = null;
 
         //for locs that are interior to others, add their ref
         if (map[location.exteriorLocationId]) {
@@ -730,6 +731,20 @@ function Map({
     setMapMode(newMapMode);
   }
 
+  function GetAllExteriorLocs(location) {
+    function AddExteriorLocsToList(loc, list) {
+      if (map[loc.data.exteriorLocationId]) {
+        list.push(map[loc.data.exteriorLocationId]);
+        AddExteriorLocsToList(map[loc.data.exteriorLocationId], list);
+      }
+    }
+
+    let exteriorLocs = [];
+    AddExteriorLocsToList(map[location._id], exteriorLocs);
+
+    return exteriorLocs;
+  }
+
   function GetAllInteriorLocs(location) {
     function AddInteriorLocsToList(loc, list) {
       Object.values(loc.interiorLocs).forEach((l) => {
@@ -1222,6 +1237,7 @@ function Map({
                   locations={locations}
                   pxInMScale={pxInMScale}
                   GetLocRadiusForCalc={GetLocRadiusForCalc}
+                  GetAllExteriorLocs={GetAllExteriorLocs}
                   locationsRefs={locationsRefs}
                   setLocationsRefs={setLocationsRefs}
                   allLocationsRefs={allLocationsRefs}
@@ -1233,6 +1249,9 @@ function Map({
                 />
               );
             })}
+
+            {/* final flat place */}
+            <div id="flat-locs" className="Location-container"></div>
           </div>
         )}
 
