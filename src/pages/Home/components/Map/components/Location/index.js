@@ -198,26 +198,6 @@ function Location({
     return offsetStyles;
   }
 
-  function GetConnectionOffsetStyles(offset) {
-    const offsetStyles = [{ key: "width", value: `${(Math.sqrt(offset.x * offset.x + offset.y * offset.y) - lc.POINT_OF_INTEREST_RADIUS) / 2}px` }];
-
-    //horizontal
-    if (offset.x > 0) {
-      offsetStyles.push({ key: "marginLeft", value: `${(offset.x * -1) / 2}px` });
-    } else {
-      offsetStyles.push({ key: "marginRight", value: `${offset.x / 2}px` });
-    }
-
-    //vertical
-    if (offset.y > 0) {
-      offsetStyles.push({ key: "marginBottom", value: `${(offset.y * -1) / 2}px` });
-    } else {
-      offsetStyles.push({ key: "marginTop", value: `${offset.y / 2}px` });
-    }
-
-    return offsetStyles;
-  }
-
   //main setup
   useEffect(() => {
     function GetOffset(location) {
@@ -256,12 +236,30 @@ function Location({
       });
     }
 
-    //set connection styles
-    let connection = document.getElementById(`${loc.data._id}-connection`);
-    if (connection) {
-      GetConnectionOffsetStyles(locOffset, true).forEach((s) => {
-        connection.style[s.key] = s.value;
-      });
+    function GetConnectionOffsetStyles(offset) {
+      let { x, y, distance } = offset;
+
+      //remove the ref offset from x and y, making it the new center for the dist
+      x -= map[connectionLoc.reference.location].data.offset.x;
+      y -= map[connectionLoc.reference.location].data.offset.y;
+
+      const offsetStyles = [{ key: "width", value: `${distance / 2}px` }];
+
+      //horizontal
+      if (x > 0) {
+        offsetStyles.push({ key: "marginLeft", value: `${(x * -1) / 2}px` });
+      } else {
+        offsetStyles.push({ key: "marginRight", value: `${x / 2}px` });
+      }
+
+      //vertical
+      if (y > 0) {
+        offsetStyles.push({ key: "marginBottom", value: `${(y * -1) / 2}px` });
+      } else {
+        offsetStyles.push({ key: "marginTop", value: `${y / 2}px` });
+      }
+
+      return offsetStyles;
     }
 
     function GetConnectionBgOffsetStyles(cbg, index, cbgs) {
@@ -326,8 +324,16 @@ function Location({
       return offsetStyles;
     }
 
-    //update backgrounds styles
     if (connectionLoc?.offset) {
+      //set connection styles
+      let connection = document.getElementById(`${loc.data._id}-connection`);
+      if (connection && connection.classList.contains("not-flat")) {
+        GetConnectionOffsetStyles(locOffset).forEach((s) => {
+          connection.style[s.key] = s.value;
+        });
+      }
+
+      //update backgrounds styles
       Array.from(document.getElementsByClassName(`con-bg-${loc.data._id}`))
         .filter((cbg) => cbg.classList.contains("not-flat"))
         .forEach((cbg, i, self) => {
@@ -490,7 +496,12 @@ function Location({
                   name={`${l.name}-area`}
                   id={isLocArea ? `${l._id}-area` : null}
                   className={`area${isPointOfInterest ? " point-of-interest" : ""} not-flat`}
-                  style={{ width: areaStyles.width, height: areaStyles.height, rotate: `${distanceAngle * -1}deg`, zIndex: index }}
+                  style={{
+                    width: areaStyles.width,
+                    height: areaStyles.height,
+                    rotate: `${distanceAngle * -1}deg`,
+                    zIndex: isPointOfInterest ? locations.length : index,
+                  }}
                   onMouseMove={(e) => HandleHover(e, l)}
                   onMouseLeave={(e) => HandleHover(e)}
                 >
