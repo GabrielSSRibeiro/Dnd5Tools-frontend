@@ -44,17 +44,9 @@ function Map({
     }
 
     const currentNode = {
-      name: combatConfig.travel.currentNode.name,
-      notes: combatConfig.travel.currentNode.notes,
-      findResourcesDifficulty: combatConfig.travel.currentNode.findResourcesDifficulty,
-      materialRarity: combatConfig.travel.currentNode.materialRarity,
-      isHazardous: combatConfig.travel.currentNode.isHazardous,
-      creatures: combatConfig.travel.currentNode.creatures,
+      ...combatConfig.travel.currentNode,
       x: combatConfig.travel.currentNode.x / pxInMScale,
       y: combatConfig.travel.currentNode.y / pxInMScale,
-      angle: combatConfig.travel.currentNode.angle,
-      locId: combatConfig.travel.currentNode.locId,
-      needsReposition: combatConfig.travel.currentNode.needsReposition,
     };
 
     return currentNode;
@@ -163,22 +155,14 @@ function Map({
     }
 
     travelNodes = travelNodes.map((n, index) => ({
-      name: n.name,
-      notes: n.notes,
-      findResourcesDifficulty: n.findResourcesDifficulty,
-      materialRarity: n.materialRarity,
-      isHazardous: n.isHazardous,
-      creatures: n.creatures,
+      ...n,
       x: n.x / pxInMScale,
       y: n.y / pxInMScale,
-      angle: n.angle,
-      locId: n.locId,
-      needsReposition: n.needsReposition,
       isCurrent: index === travelNodes.length - 1,
     }));
 
     return travelNodes;
-  }, [combatConfig, currentNode, pxInMScale]);
+  }, [combatConfig.travel.currentNode, combatConfig.travel.travelNodes, currentNode, pxInMScale]);
   const arrowStyles = useMemo(() => {
     let nodeStyles = {};
     if (!currentNode) {
