@@ -225,17 +225,6 @@ function Location({
       }
     }
 
-    //set offset and position self
-    let locOffset = map[ref.current.id].data.offset;
-    if (!locOffset) {
-      map[loc.data._id].data.offset = GetOffset(loc.data);
-      locOffset = map[ref.current.id].data.offset;
-
-      GetOffsetStyles(locOffset).forEach((s) => {
-        ref.current.style[s.key] = s.value;
-      });
-    }
-
     function GetConnectionOffsetStyles(offset) {
       let { x, y, distance } = offset;
 
@@ -324,25 +313,6 @@ function Location({
       return offsetStyles;
     }
 
-    if (connectionLoc?.offset) {
-      //set connection styles
-      let connection = document.getElementById(`${loc.data._id}-connection`);
-      if (connection && connection.classList.contains("not-flat")) {
-        GetConnectionOffsetStyles(locOffset).forEach((s) => {
-          connection.style[s.key] = s.value;
-        });
-      }
-
-      //update backgrounds styles
-      Array.from(document.getElementsByClassName(`con-bg-${loc.data._id}`))
-        .filter((cbg) => cbg.classList.contains("not-flat"))
-        .forEach((cbg, i, self) => {
-          GetConnectionBgOffsetStyles(cbg, i, self).forEach((s) => {
-            cbg.style[s.key] = s.value;
-          });
-        });
-    }
-
     function GetFlatUpdateStyles(nfel) {
       const flatUpdateStyles = [];
       let marginTop = ref.current.style.marginTop ? parseInt(ref.current.style.marginTop) : 0;
@@ -372,7 +342,38 @@ function Location({
       return flatUpdateStyles;
     }
 
-    //final movement and update final width
+    //set offset and position self
+    let locOffset = map[ref.current.id].data.offset;
+    if (!locOffset) {
+      map[loc.data._id].data.offset = GetOffset(loc.data);
+      locOffset = map[ref.current.id].data.offset;
+
+      GetOffsetStyles(locOffset).forEach((s) => {
+        ref.current.style[s.key] = s.value;
+      });
+    }
+
+    //set connection and bg
+    if (connectionLoc?.offset) {
+      //set connection styles
+      let connection = document.getElementById(`${loc.data._id}-connection`);
+      if (connection && connection.classList.contains("not-flat")) {
+        GetConnectionOffsetStyles(locOffset).forEach((s) => {
+          connection.style[s.key] = s.value;
+        });
+      }
+
+      //update backgrounds styles
+      Array.from(document.getElementsByClassName(`con-bg-${loc.data._id}`))
+        .filter((cbg) => cbg.classList.contains("not-flat"))
+        .forEach((cbg, i, self) => {
+          GetConnectionBgOffsetStyles(cbg, i, self).forEach((s) => {
+            cbg.style[s.key] = s.value;
+          });
+        });
+    }
+
+    //final movement and update width
     if (isMapRendered) {
       //move all interior locs to the world level so the index takes proper effect
       const flatContainer = document.getElementById("flat-locs");
