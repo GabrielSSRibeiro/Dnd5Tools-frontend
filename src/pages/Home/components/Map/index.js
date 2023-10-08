@@ -1273,6 +1273,7 @@ function Map({
                 locations={locations}
                 world={combatConfig.world}
                 map={map}
+                GetAllInteriorLocs={GetAllInteriorLocs}
                 isNewLoc={isNewLoc}
               />
             </div>

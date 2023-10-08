@@ -29,6 +29,7 @@ function EditLocation({
   locations,
   world,
   map,
+  GetAllInteriorLocs,
   isNewLoc,
 }) {
   let inputRef = useRef(null);
@@ -58,9 +59,11 @@ function EditLocation({
     locations
       .filter((l) => l._id !== location._id && l.exteriorLocationId === location.exteriorLocationId && !l.isHidden)
       .forEach((rl) => {
-        const interiorLocs = Object.values(map[rl._id].interiorLocs);
+        const interiorLocs = GetAllInteriorLocs(rl);
         if (interiorLocs.length > 0) {
-          rl.refListName = interiorLocs.find((il) => !il.data.reference.location && !il.isHidden).data.name;
+          rl.refListName = interiorLocs.find(
+            (il) => !il.data.reference.location && !il.isHidden && Object.keys(il.interiorLocs).length === 0
+          ).data.name;
         } else {
           rl.refListName = rl.name;
         }
@@ -69,7 +72,7 @@ function EditLocation({
       });
 
     return refLocations;
-  }, [location._id, location.exteriorLocationId, locations, map]);
+  }, [GetAllInteriorLocs, location._id, location.exteriorLocationId, locations]);
   const isWorld = useMemo(() => !location.exteriorLocationId, [location]);
   const isPointOfInterest = useMemo(() => location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST, [location]);
   const isFirstOfArea = useMemo(
