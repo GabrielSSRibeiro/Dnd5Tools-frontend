@@ -398,6 +398,7 @@ function Home() {
           />
         </div>
       )}
+      <div className="portrait-blocker"></div>
     </div>
   );
 }
