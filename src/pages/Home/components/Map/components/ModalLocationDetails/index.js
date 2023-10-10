@@ -50,29 +50,33 @@ function ModalLocationDetails({
         );
       }
 
-      if (selectedSize) {
-        temp = temp.filter((l) => l.size === selectedSize);
-      }
+      if (selectedSize || selectedType || selectedLevel) {
+        if (selectedSize) {
+          temp = temp.filter((l) => l.size === selectedSize);
+        }
 
-      if (selectedType) {
-        temp = temp.filter((l) => l.type === selectedType);
-      }
+        if (selectedType) {
+          temp = temp.filter((l) => l.type === selectedType);
+        }
 
-      if (selectedLevel) {
-        temp = temp.filter((l) => l.exteriorLocationId === selectedLevel);
+        if (selectedLevel) {
+          temp = temp.filter((l) => l.exteriorLocationId === selectedLevel);
+        } else {
+          temp = temp.filter((l) => l._id !== id);
+        }
+
+        if (temp.length > 0) {
+          utils.SortArrayOfObjByStringProperty(temp, "name");
+        }
       } else {
-        temp = temp.filter((l) => l._id !== id);
-      }
-
-      if (temp.length > 0) {
-        utils.SortArrayOfObjByStringProperty(temp, "name");
+        temp.sort((a, b) => (b.exteriorLocationId === id ? 1 : 0) - (a.exteriorLocationId === id ? 1 : 0));
       }
 
       return temp;
     }
 
     return filter();
-  }, [id, locations, nameFilter, selectedSize, selectedType, selectedLevel, creatures]);
+  }, [locations, nameFilter, selectedSize, selectedType, selectedLevel, creatures, id]);
 
   function HandleSelectSize(value) {
     if (
@@ -150,21 +154,26 @@ function ModalLocationDetails({
             </main>
           </div>
           <div className="location-list df df-fd-c df-jc-fs">
-            {filteredLocations.map((loc) => (
-              <div className="list-location df df-jc-sb" key={loc._id}>
-                <button
-                  title="Adicionar Dentro"
-                  className={`${loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? "invisible" : ""}`}
-                  onClick={() => HandleNewLocation(loc._id)}
-                  disabled={locations.length >= 100 || loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST}
-                >
-                  <i className="fas fa-plus"></i>
-                </button>
-                <span>{loc.name}</span>
-                <button title="Abrir Detalhes" onClick={() => OpenModalLocationDetails(loc, loc._id, false)}>
-                  <i className="fas fa-book"></i>
-                </button>
-              </div>
+            {filteredLocations.map((loc, i) => (
+              <React.Fragment key={loc._id}>
+                <div className="list-location df df-jc-sb">
+                  <button
+                    title="Adicionar Dentro"
+                    className={`${loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? "invisible" : ""}`}
+                    onClick={() => HandleNewLocation(loc._id)}
+                    disabled={locations.length >= 100 || loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST}
+                  >
+                    <i className="fas fa-plus"></i>
+                  </button>
+                  <span>{loc.name}</span>
+                  <button title="Abrir Detalhes" onClick={() => OpenModalLocationDetails(loc, loc._id, false)}>
+                    <i className="fas fa-book"></i>
+                  </button>
+                </div>
+                {loc.exteriorLocationId === id && filteredLocations[i + 1] && filteredLocations[i + 1].exteriorLocationId !== id && (
+                  <div className="level-divider"></div>
+                )}
+              </React.Fragment>
             ))}
           </div>
         </aside>
