@@ -12,6 +12,7 @@ import LocationSummary from "./components/LocationSummary";
 import EditLocation from "./components/EditLocation";
 import Location from "./components/Location";
 import ModalTravelResults from "./components/ModalTravelResults";
+import ModalSuggestions from "./components/ModalSuggestions";
 import ModalWarning from "../../../../components/ModalWarning";
 
 import "./styles.css";
@@ -211,33 +212,13 @@ function Map({
 
   function OpenModalSuggestions() {
     setModal(
-      <ModalWarning
-        title="Sugestões de Criação"
-        messages={[
-          "Responda essas perguntas separadamente antes de começar",
-          "",
-          "Escolha uma criatura e defina quem ela é/são",
-          "Em que tipo de terreno ela/elas moram ou por que elas moram nesse terreno? Localização vantajosa? Riquezas/recursos abundantes? Clima ideal?",
-          "Como a presença dela/delas afeta a localização? Ela/elas tem um covil?",
-          "Que outras criaturas estão presentes por ali e como ela/elas as afetam ou é/são afetadas por ela/elas?",
-          "O que os habitantes dessa localização vivem de? O que fazem no tempo livre? Eles tem algum governo/tradição/religião ou funções individuais?",
-          "Como é possível interagir com eles e por que? Quais os rumores da localização?",
-          "Como os detalhes especiais do mundo afetam essa localização?",
-          "Como essa localização é conhecida? Uma localização tem que ter uma justificativa para ter o nome que tem",
-          "Como essa localização afeta as localizações próximas e que tipo de terreno elas são?",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "Continuar exercício até que essa localização e as próximas tenham 4-12 tipos de criaturas",
-        ]}
-        actions={[
-          {
-            text: "Fechar",
-            click: () => setModal(null),
-          },
-        ]}
+      <ModalSuggestions
+        notes={combatConfig.notes}
+        onClose={(tempNotes) => {
+          combatConfig.notes = tempNotes;
+          HandleSaveCombatConfig();
+          setModal(null);
+        }}
       />
     );
   }

@@ -139,14 +139,8 @@ button {
   justify-content: center;
   align-items: center;
 }
-.df-rg-10 {
-  row-gap: 10px;
-}
 .df-fd-c {
   flex-direction: column;
-}
-.df-cg-10 {
-  column-gap: 10px;
 }
 .df-f1 {
   flex: 1;

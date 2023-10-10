@@ -260,6 +260,7 @@ function Home() {
       } else {
         setCombatConfig({
           owner: currentUser.uid,
+          notes: null,
           level: 1,
           characterGroups: [],
           inactiveGroup: [],
