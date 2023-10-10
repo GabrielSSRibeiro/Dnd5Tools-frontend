@@ -309,63 +309,64 @@ function Home() {
   return !isReadyToLoad ? (
     <div className="backend-loading">
       <i className="fas fa-spinner fa-spin"></i>
-      <h2 style={{ opacity: showLoadingText ? 1 : 0 }}>Por favor aguarde enquanto tiramos o site de inativade. Isso pode lever até 20 segundos...</h2>
+      <h2 style={{ opacity: showLoadingText ? 1 : 0 }}>Por favor aguarde enquanto tiramos o site de inativade. Isso pode lever até 30 segundos...</h2>
     </div>
   ) : (
-    <div className="Home-container">
-      <NaviBar
-        combats={combats}
-        selectedCharacters={selectedCharacters}
-        setSelectedCharacters={setSelectedCharacters}
-        selectedCreatures={selectedCreatures}
-        HandleSelectedFromBestiary={HandleSelectedFromBestiary}
-        isSelectingParty={isSelectingParty}
-        isSelectingBestiary={isSelectingBestiary}
-        setIsSelectingParty={setIsSelectingParty}
-        setIsSelectingBestiary={setIsSelectingBestiary}
-        isPartyOpen={isPartyOpen}
-        setIsPartyOpen={setIsPartyOpen}
-        isBestiaryOpen={isBestiaryOpen}
-        setIsBestiaryOpen={setIsBestiaryOpen}
-        HandleSaveCombatConfig={HandleSaveCombatConfig}
-        level={level}
-        setLevel={setLevel}
-        groups={groups}
-        setGroups={setGroups}
-        inactiveGroup={inactiveGroup}
-        setInactiveGroup={setInactiveGroup}
-        creatures={creatures}
-        setCreatures={setCreatures}
-        tabOptions={MAIN_TABS}
-        openTab={openTab}
-        setOpenTab={setOpenTab}
-        creatureToEdit={creatureToEdit}
-        setCreatureToEdit={setCreatureToEdit}
-        HandleEndCombat={HandleEndCombat}
-      />
-      <img src={background} alt="Created by liuzishan - www.freepik.com" />
+    <>
+      <div className="Home-container">
+        <NaviBar
+          combats={combats}
+          selectedCharacters={selectedCharacters}
+          setSelectedCharacters={setSelectedCharacters}
+          selectedCreatures={selectedCreatures}
+          HandleSelectedFromBestiary={HandleSelectedFromBestiary}
+          isSelectingParty={isSelectingParty}
+          isSelectingBestiary={isSelectingBestiary}
+          setIsSelectingParty={setIsSelectingParty}
+          setIsSelectingBestiary={setIsSelectingBestiary}
+          isPartyOpen={isPartyOpen}
+          setIsPartyOpen={setIsPartyOpen}
+          isBestiaryOpen={isBestiaryOpen}
+          setIsBestiaryOpen={setIsBestiaryOpen}
+          HandleSaveCombatConfig={HandleSaveCombatConfig}
+          level={level}
+          setLevel={setLevel}
+          groups={groups}
+          setGroups={setGroups}
+          inactiveGroup={inactiveGroup}
+          setInactiveGroup={setInactiveGroup}
+          creatures={creatures}
+          setCreatures={setCreatures}
+          tabOptions={MAIN_TABS}
+          openTab={openTab}
+          setOpenTab={setOpenTab}
+          creatureToEdit={creatureToEdit}
+          setCreatureToEdit={setCreatureToEdit}
+          HandleEndCombat={HandleEndCombat}
+        />
+        <img src={background} alt="Created by liuzishan - www.freepik.com" />
 
-      <div className={`section-container ${creatureToEdit ? "hidden" : ""}`}>
-        <div className={`section-wrapper ${openTab !== MAIN_TABS.SKILL_CHECK ? "hidden" : ""}`}>
-          <SkillCheck resultText={openTab} level={level} />
-        </div>
-        <div className={`section-wrapper ${openTab !== MAIN_TABS.MAP ? "hidden" : ""}`}>
-          <Map
-            HandleSaveLocation={HandleSaveLocation}
-            HandleUpdateLocations={HandleUpdateLocations}
-            HandleDeleteLocations={HandleDeleteLocations}
-            HandleSelectFromBestiary={HandleSelectFromBestiary}
-            setSelectedCreatures={setSelectedCreatures}
-            HandleSaveCombatConfig={HandleSaveCombatConfig}
-            creatures={creatures}
-            combatConfig={combatConfig}
-            setCombatConfig={setCombatConfig}
-            locations={locations}
-            defaultZoom={defaultZoom}
-            userId={currentUser.uid}
-          />
-        </div>
-        {/* <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
+        <div className={`section-container ${creatureToEdit ? "hidden" : ""}`}>
+          <div className={`section-wrapper ${openTab !== MAIN_TABS.SKILL_CHECK ? "hidden" : ""}`}>
+            <SkillCheck resultText={openTab} level={level} />
+          </div>
+          <div className={`section-wrapper ${openTab !== MAIN_TABS.MAP ? "hidden" : ""}`}>
+            <Map
+              HandleSaveLocation={HandleSaveLocation}
+              HandleUpdateLocations={HandleUpdateLocations}
+              HandleDeleteLocations={HandleDeleteLocations}
+              HandleSelectFromBestiary={HandleSelectFromBestiary}
+              setSelectedCreatures={setSelectedCreatures}
+              HandleSaveCombatConfig={HandleSaveCombatConfig}
+              creatures={creatures}
+              combatConfig={combatConfig}
+              setCombatConfig={setCombatConfig}
+              locations={locations}
+              defaultZoom={defaultZoom}
+              userId={currentUser.uid}
+            />
+          </div>
+          {/* <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
           <CombatSetup
             selectedCharacters={selectedCharacters}
             selectedCreatures={selectedCreatures}
@@ -377,32 +378,33 @@ function Home() {
             level={level}
           />
         </div> */}
-        {combats.map((combat, index) => (
-          <div key={index} className={`section-wrapper ${openTab !== index + 1 ? "hidden" : ""}`}>
-            <Combat combat={combat} />
+          {combats.map((combat, index) => (
+            <div key={index} className={`section-wrapper ${openTab !== index + 1 ? "hidden" : ""}`}>
+              <Combat combat={combat} />
+            </div>
+          ))}
+
+          <div className={`section-wrapper ${openTab !== MAIN_TABS.TREASURE ? "hidden" : ""}`}>
+            <Treasure resultText={openTab} level={level} />
           </div>
-        ))}
-
-        <div className={`section-wrapper ${openTab !== MAIN_TABS.TREASURE ? "hidden" : ""}`}>
-          <Treasure resultText={openTab} level={level} />
         </div>
+
+        {creatureToEdit && (
+          <div className={"section-wrapper edit-creature"}>
+            <EditCreature
+              creatureToEdit={creatureToEdit}
+              HandleSave={HandleSaveCreature}
+              HandleDelete={HandleDeleteCreature}
+              FinishEditing={HandleCancel}
+            />
+          </div>
+        )}
       </div>
-
-      {creatureToEdit && (
-        <div className={"section-wrapper edit-creature"}>
-          <EditCreature
-            creatureToEdit={creatureToEdit}
-            HandleSave={HandleSaveCreature}
-            HandleDelete={HandleDeleteCreature}
-            FinishEditing={HandleCancel}
-          />
-        </div>
-      )}
       <div className="portrait-blocker">
         <i className="fas fa-spinner fa-spin"></i>
         <h2>Por favor use o dispositivo em modo Paisagem</h2>
       </div>
-    </div>
+    </>
   );
 }
 
