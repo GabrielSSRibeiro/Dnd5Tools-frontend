@@ -25,15 +25,36 @@
   min-width: 1440px;
 }
 
+.Home-container .portrait-blocker {
+  display: none;
+  position: fixed;
+  padding: 20px;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--white);
+  z-index: 9999999999999;
+}
+
+.Home-container .portrait-blocker h2 {
+  width: 100%;
+}
+
 @media (max-height: 600px) {
   .Home-container {
     min-height: 700px;
   }
 }
 
-@media only screen and (orientation: portrait) {
+@media (orientation: portrait) {
   .Home-container .portrait-blocker {
-    display: block;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
   }
 }
 
@@ -61,15 +82,4 @@
 
 .Home-container .section-wrapper.edit-creature {
   height: calc(100% - 60px);
-}
-
-.Home-container .portrait-blocker {
-  display: none; /* Initially hidden */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
-  z-index: 9999999999999; /* Ensure the overlay is on top of other content */
 }

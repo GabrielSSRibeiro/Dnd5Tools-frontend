@@ -398,7 +398,10 @@ function Home() {
           />
         </div>
       )}
-      <div className="portrait-blocker"></div>
+      <div className="portrait-blocker">
+        <i className="fas fa-spinner fa-spin"></i>
+        <h2>Por favor use o dispositivo em modo Paisagem</h2>
+      </div>
     </div>
   );
 }
