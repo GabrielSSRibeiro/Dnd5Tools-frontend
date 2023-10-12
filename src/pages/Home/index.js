@@ -304,6 +304,12 @@ function Home() {
     setTimeout(() => {
       setShowLoadingText(true);
     }, 3000);
+
+    setInterval(() => {
+      api.get("Ping").then((r) => {
+        console.log("Ping", r.data);
+      });
+    }, 600000);
   }, []);
 
   return !isReadyToLoad ? (
