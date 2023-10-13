@@ -1,4 +1,6 @@
 import React, { useState, useRef } from "react";
+import * as utils from "../../../../../../utils";
+import { creatureTypes } from "../../../../../../constants/creatureConstants";
 
 import Modal from "../../../../../../components/Modal";
 import Button from "../../../../../../components/Button";
@@ -8,6 +10,7 @@ import "./styles.css";
 
 function ModalSuggestions({ notes, onClose }) {
   const [tempNotes, setTempNotes] = useState(notes);
+  const [randomType, setRandomType] = useState(null);
   const suggestions = useRef([
     "Escolha uma criatura e defina quem ela é/são",
     "Em que tipo de terreno ela/elas moram ou por que elas moram nesse terreno? Localização vantajosa? Riquezas/recursos abundantes? Clima ideal?",
@@ -45,9 +48,15 @@ function ModalSuggestions({ notes, onClose }) {
       </main>
       <div className="divider"></div>
       <footer className="df">
-        <button title="Limpar" className="button-simple" onClick={() => setTempNotes(null)}>
-          <i className="fas fa-trash"></i>
-        </button>
+        <aside className="df df-cg-20">
+          <button title="Limpar" className=" button-simple" onClick={() => setTempNotes(null)}>
+            <i className="fas fa-trash"></i>
+          </button>
+          <button title="Aleatório" className=" button-simple" onClick={() => setRandomType(utils.randomItemFromArray(creatureTypes).display)}>
+            <i className="fas fa-random"></i>
+          </button>
+          <span>{randomType}</span>
+        </aside>
         <Button text="Fechar" onClick={() => onClose(tempNotes)} />
       </footer>
     </Modal>

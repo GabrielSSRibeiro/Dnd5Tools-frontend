@@ -43,7 +43,7 @@
   width: 100%;
 }
 
-.ModalSuggestions-container footer .button-simple {
+.ModalSuggestions-container footer > aside {
   position: absolute;
   left: 25px;
 }
