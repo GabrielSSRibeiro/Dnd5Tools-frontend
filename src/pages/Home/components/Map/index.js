@@ -243,17 +243,9 @@ function Map({
     //new current node
     let newCurrentNode = node
       ? {
-          name: node.name,
-          notes: node.notes,
-          findResourcesDifficulty: node.findResourcesDifficulty,
-          materialRarity: node.materialRarity,
-          isHazardous: node.isHazardous,
-          creatures: node.creatures,
+          ...node,
           x: node.x * pxInMScale,
           y: node.y * pxInMScale,
-          angle: node.angle,
-          locId: node.locId,
-          needsReposition: node.needsReposition,
         }
       : {
           name: null,
@@ -387,7 +379,7 @@ function Map({
 
         setModal(<ModalWarning title={title} messages={messages} actions={actions} onClose />);
       }
-    } else {
+    } else if (mapMode === lc.MAP_MODES.TRAVEL) {
       HandleSetCurrentNode(newCurrentNode);
       HandleSaveCombatConfig();
     }
@@ -445,7 +437,7 @@ function Map({
       setLocationToEdit(null);
     }
 
-    if (willAdjustMap && combatConfig.travel.currentNode && locationToEdit?.exteriorLocationId) {
+    if (willAdjustMap && combatConfig.travel.currentNode && !combatConfig.travel.currentNode.needsReposition && locationToEdit?.exteriorLocationId) {
       setModal(
         <ModalWarning
           title="Salvar Localização"
@@ -627,7 +619,7 @@ function Map({
   }
 
   function HandleLocUpdate() {
-    //remove highlight nodes that were created before this update, since the map will change and they might need to be moved
+    //highlights nodes that were created before this update, since the map will change and they might need to be moved
     combatConfig.travel.currentNode.needsReposition = true;
     combatConfig.travel.travelNodes.forEach((n) => {
       n.needsReposition = true;
@@ -1142,7 +1134,7 @@ function Map({
 
         {(locations.length === 0 || mapMode !== lc.MAP_MODES.TRAVEL) && (
           <aside className="suggestions floating-details">
-            <Button icon={"fas fa-question-circle"} onClick={OpenModalSuggestions} />
+            <Button icon={"fas fa-lightbulb"} onClick={OpenModalSuggestions} />
           </aside>
         )}
 

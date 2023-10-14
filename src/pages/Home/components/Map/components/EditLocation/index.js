@@ -492,7 +492,7 @@ function EditLocation({
             {location.exteriorLocationId != null && (
               <div className="location-detail-group">
                 <div className="location-row location-detail-group-title">
-                  <span>Elementos</span>
+                  <span className={location.traversal.elements.length === 0 ? `lacking-data` : ""}>Elementos</span>
                   <button onClick={() => OpenModalManageElement()} disabled={location.traversal.elements.length === 6}>
                     <i className="fas fa-plus"></i>
                   </button>
@@ -626,7 +626,7 @@ function EditLocation({
             <div className="location-row location-detail-group-item" key={c.name}>
               <div className="df df-cg-10">
                 <CheckInput isSelected={c.isCurrent} onClick={() => HandleSelectContext(c)} />
-                <span>{c.name}</span>
+                <span className={!c.firstImpressions ? `lacking-data` : ""}>{c.name}</span>
               </div>
               <div className="group-item-actions">
                 <button onClick={() => OpenModalManageContext(c)}>
@@ -644,7 +644,7 @@ function EditLocation({
 
         <div className="location-detail-group">
           <div className="location-row location-detail-group-title">
-            <span>Criaturas</span>
+            <span className={location.creatures.length === 0 ? `lacking-data` : ""}>Criaturas</span>
             <button onClick={() => HandleSelectCreatures()}>
               <i className="fas fa-plus"></i>
             </button>

@@ -15,12 +15,16 @@
   height: 100%;
 }
 
-.ModalSuggestions-container .content div .suggestions {
+.ModalSuggestions-container .content div .ideia-suggestions {
   width: 35%;
 }
 
-.ModalSuggestions-container .content div .suggestions > span {
+.ModalSuggestions-container .content div .ideia-suggestions > span {
   font-weight: 600;
+}
+
+.ModalSuggestions-container .content .map-suggestions {
+  height: 100%;
 }
 
 .ModalSuggestions-container .description {
@@ -45,5 +49,12 @@
 
 .ModalSuggestions-container footer > aside {
   position: absolute;
+}
+
+.ModalSuggestions-container footer .suggestion-actions {
   left: 25px;
+}
+
+.ModalSuggestions-container footer .suggestion-modes {
+  right: 25px;
 }
