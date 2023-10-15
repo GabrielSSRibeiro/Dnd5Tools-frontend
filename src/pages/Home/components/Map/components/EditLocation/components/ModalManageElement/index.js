@@ -39,6 +39,10 @@ function ModalManageElement({ element, elements, onClose }) {
       return false;
     }
 
+    if (tempElement.material.probability && !tempElement.material.rarity) {
+      return false;
+    }
+
     return true;
   }
 

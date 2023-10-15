@@ -51,7 +51,7 @@ function ModalTravelResults({
   );
   const materialRarity = useRef(
     HandleAddTravelNode
-      ? element.current && utils.ProbabilityCheck(lc.GetElementMaterialFrequency(element.current.material.probability).probability)
+      ? element.current?.material && utils.ProbabilityCheck(lc.GetElementMaterialFrequency(element.current.material.probability).probability)
         ? element.current.material.rarity
         : isPointOfInterest
         ? newLocation.interaction.rarity
@@ -63,14 +63,17 @@ function ModalTravelResults({
     newCurrentNode.isHazardous ??
       (isPointOfInterest
         ? newLocation.interaction.isHazardous
-        : element.current && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
+        : element.current?.hazardousness && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
   );
   const encounterLocation = useRef(isPointOfInterest && exteriorLocation && hasMoved ? exteriorLocation : newLocation);
+  const currentContext = useRef(lh.GetCurrentContext(encounterLocation.current));
   const [timePassed, setTimePassed] = useState(
     travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY ? 0 : lc.GetRestTime(restTime).timeInMin
   );
   const isEncounter = useRef(
-    ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(lh.GetCurrentContext(encounterLocation.current).hazardousness).probability, true)
+    encounterLocation.current.creatures.some(
+      (c) => GetCreatureCurrentRoutine(c, currentContext.current)?.encounterFrequency === lc.ENCOUNTER_FREQUENCIES.CERTAIN
+    ) || ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(lh.GetCurrentContext(encounterLocation.current).hazardousness).probability, true)
   );
   const nodeCreatures = useRef(!viewingCurrent ? GetLocationCreatures() : newCurrentNode.creatures);
   const creaturesForDisplay = useRef({
@@ -232,7 +235,6 @@ function ModalTravelResults({
   }
 
   function GetLocationCreatures() {
-    const currentContext = lh.GetCurrentContext(encounterLocation.current);
     const differentCreatureProb = 0.1;
 
     if (encounterLocation.current.creatures.length === 0) {
@@ -242,7 +244,7 @@ function ModalTravelResults({
     //setup
     let locationCreatures = encounterLocation.current.creatures
       .map((c) => {
-        const routine = GetCreatureCurrentRoutine(c, currentContext);
+        const routine = GetCreatureCurrentRoutine(c, currentContext.current);
         if (!routine) {
           return null;
         }
@@ -259,7 +261,7 @@ function ModalTravelResults({
       })
       .filter((c) => c);
 
-    //add crratures
+    //add creatures
     let possibleEncounterCreatures = locationCreatures.filter((c) => c.isEncounter);
     if (possibleEncounterCreatures.length > 0) {
       let addToEncounter = true;
@@ -282,7 +284,11 @@ function ModalTravelResults({
       utils.randomItemFromArray(moreCommonCreatures).condition = GetCreatureCondition();
     }
 
-    return locationCreatures.map((c) => ({ creatureId: c.creatureId, number: c.number, condition: c.condition ?? lc.NODE_CREATURE_CONDITIONS.NONE }));
+    return locationCreatures.map((c) => ({
+      creatureId: c.creatureId,
+      number: c.number,
+      condition: c.condition ?? lc.NODE_CREATURE_CONDITIONS.NONE,
+    }));
   }
 
   function GetCreatureCondition() {
@@ -400,8 +406,16 @@ function ModalTravelResults({
               {isHazardous.current && <span>Interação Perigosa</span>}
             </div>
           )}
-          {tracksForDisplay.current.length > 0 && <h6>Rastros de: "{tracksForDisplay.current.join(", ")}"</h6>}
-          {remainsForDisplay.current > 0 && <h6>Restos mortais com o equivalente a {remainsForDisplay.current} PO</h6>}
+          {tracksForDisplay.current.length > 0 && (
+            <span>
+              Rastros de: <span className="bold">"{tracksForDisplay.current.join(", ")}"</span>
+            </span>
+          )}
+          {remainsForDisplay.current > 0 && (
+            <span>
+              Restos mortais com o equivalente a <span className="bold">{remainsForDisplay.current}</span> PO
+            </span>
+          )}
         </aside>
 
         {/* surroundings */}

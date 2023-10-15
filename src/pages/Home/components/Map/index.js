@@ -264,6 +264,7 @@ function Map({
     if (currentNode) {
       if (mapMode === lc.MAP_MODES.TRAVEL && (canTravelToPoint || isRest)) {
         const newLocation = map[newCurrentNode.locId]?.data;
+
         setModal(
           <ModalTravelResults
             onClose={setModal}
@@ -379,7 +380,7 @@ function Map({
 
         setModal(<ModalWarning title={title} messages={messages} actions={actions} onClose />);
       }
-    } else if (mapMode === lc.MAP_MODES.TRAVEL) {
+    } else {
       HandleSetCurrentNode(newCurrentNode);
       HandleSaveCombatConfig();
     }
@@ -666,8 +667,8 @@ function Map({
     const divRect = locationsDiv.getBoundingClientRect();
 
     // Calculate the relative X and Y coordinates to the center of the div
-    const relativeX = e.clientX - (divRect.left + divRect.width / 2);
-    const relativeY = (e.clientY - (divRect.top + divRect.height / 2)) * -1;
+    const relativeX = e.clientX - (divRect.left + divRect.width / 2) - (centerOffset.x - defaultCenter.x);
+    const relativeY = (e.clientY - (divRect.top + divRect.height / 2) - (centerOffset.y - defaultCenter.y)) * -1;
 
     //calculate distance
     let offset = utils.GetDistanceByCoordinates(centerOffset, { x: relativeX * -1, y: relativeY });

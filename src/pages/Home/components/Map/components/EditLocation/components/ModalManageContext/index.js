@@ -129,7 +129,7 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
               text: "",
             },
             {
-              text: "É representada por uma area ao redor do grupo no mapa",
+              text: "É representada por uma area ao redor do grupo no mapa, clicar dentro dessa área realiza uma MARCHA",
             },
             {
               text: "",
