@@ -15,10 +15,10 @@ function ModalSuggestions({ notes, onClose }) {
   const suggestionModes = useRef([ideaSuggestion.current, mapSuggestion.current]);
 
   const ideaSuggestions = useRef([
-    "Escolha uma criatura, defina quem ela é/são e de nome e alcunha",
-    "Em que tipo de terreno (planície, montanha) ela/elas moram ou por que elas moram nesse terreno? Seria localização vantajosa? Riquezas/recursos abundantes? Clima ideal?",
-    "Como a presença dela/delas afeta a localização? Ela/elas tem um covil (nome)?",
-    "Que outras criaturas estão presentes por ali e como ela/elas as afetam ou é/são afetadas por ela/elas?",
+    "Escolha uma criatura, quem ela é e qual seu nome e alcunha?",
+    "Em que tipo de terreno (planície, montanha) ela mora e por que ela mora nesse terreno? Seria localização vantajosa? Riquezas/recursos abundantes? Clima ideal?",
+    "Como a presença dela afeta a localização? Ela tem um covil? Qual o nome dele?",
+    "Que outras criaturas estão presentes por ali e como ela as afeta ou é afetada por elas?",
     "O que os habitantes dessa localização vivem de? O que fazem no tempo livre? Eles tem algum governo/tradição/religião ou funções individuais?",
     "Como é possível interagir com eles e por que? Quais os rumores da localização?",
     "Como os detalhes especiais do mundo(politica, cultura, guerra, magia) afetam essa localização?",
