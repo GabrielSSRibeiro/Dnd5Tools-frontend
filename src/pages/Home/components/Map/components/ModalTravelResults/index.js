@@ -52,7 +52,8 @@ function ModalTravelResults({
   );
   const materialRarity = useRef(
     HandleAddTravelNode
-      ? element.current?.material && utils.ProbabilityCheck(lc.GetElementMaterialFrequency(element.current.material.probability).probability)
+      ? element.current?.material.probability &&
+        utils.ProbabilityCheck(lc.GetElementMaterialFrequency(element.current.material.probability).probability)
         ? element.current.material.rarity
         : isPointOfInterest
         ? newLocation.interaction.rarity
