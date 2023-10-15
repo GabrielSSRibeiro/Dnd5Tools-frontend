@@ -94,7 +94,7 @@ function Bestiary({
       owner: null,
       name: null,
       description: null,
-      image: null,
+      image: "https://i.pinimg.com/736x/68/af/67/68af671bb6fb841bdd77c4cf2a534db8.jpg",
       rarity: null,
       environment: CREATURE_ENVIRONMENTS.ALL,
       size: null,

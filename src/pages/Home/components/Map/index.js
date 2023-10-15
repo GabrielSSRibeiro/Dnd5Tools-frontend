@@ -230,8 +230,8 @@ function Map({
 
     if (nodeToMove) {
       let originalNode = combatConfig.travel.travelNodes.find((tn) => tn.x !== nodeToMove.x && tn.y !== nodeToMove.y);
-      originalNode.x = locHoverData.distance.centerOffset.x * -1 * pxInMScale;
-      originalNode.y = locHoverData.distance.centerOffset.y * pxInMScale;
+      originalNode.x = AdjustCoodernate(locHoverData.distance.centerOffset.x + (centerOffset.x - defaultCenter.x)) * -1;
+      originalNode.y = AdjustCoodernate(locHoverData.distance.centerOffset.y - (centerOffset.y - defaultCenter.y));
       originalNode.angle = locHoverData.distance.centerOffset.angle;
       originalNode.locId = locHoverData.location?._id ?? userId;
       originalNode.needsReposition = false;
@@ -244,8 +244,8 @@ function Map({
     let newCurrentNode = node
       ? {
           ...node,
-          x: node.x * pxInMScale,
-          y: node.y * pxInMScale,
+          x: AdjustCoodernate(node.x),
+          y: AdjustCoodernate(node.y),
         }
       : {
           name: null,
@@ -254,14 +254,15 @@ function Map({
           materialRarity: null,
           isHazardous: null,
           creatures: [],
-          x: locHoverData.distance.centerOffset.x * -1 * pxInMScale,
-          y: locHoverData.distance.centerOffset.y * pxInMScale,
+          x: AdjustCoodernate(locHoverData.distance.centerOffset.x + (centerOffset.x - defaultCenter.x)) * -1,
+          y: AdjustCoodernate(locHoverData.distance.centerOffset.y - (centerOffset.y - defaultCenter.y)),
           angle: locHoverData.distance.centerOffset.angle,
           locId: locHoverData.location?._id ?? userId,
           needsReposition: false,
         };
 
     if (currentNode) {
+      //exploration
       if (mapMode === lc.MAP_MODES.TRAVEL && (canTravelToPoint || isRest)) {
         const newLocation = map[newCurrentNode.locId]?.data;
 
@@ -294,7 +295,9 @@ function Map({
             HandleSaveCombatConfig={HandleSaveCombatConfig}
           />
         );
-      } else {
+      }
+      //free
+      else {
         let title = "Mover Grupo";
         let messages = [];
         let cancelAction = {
@@ -314,6 +317,7 @@ function Map({
           },
         ];
 
+        // node
         if (node) {
           actions = [
             {
@@ -339,7 +343,9 @@ function Map({
             },
             ...actions,
           ];
-        } else {
+        }
+        // loc
+        else {
           const clickedLoc = map[newCurrentNode.locId] ? map[newCurrentNode.locId].data : combatConfig.world;
           messages.push(clickedLoc.name);
 
@@ -390,8 +396,8 @@ function Map({
     combatConfig.travel.currentNode = newCurrentNode;
 
     //update original node if it exists
-    let nodeIndex = combatConfig.travel.travelNodes.findIndex((n) => n.x !== newCurrentNode.x && n.y !== newCurrentNode.y);
-    if (nodeIndex > 0) {
+    let nodeIndex = combatConfig.travel.travelNodes.findIndex((n) => n.x === newCurrentNode.x && n.y === newCurrentNode.y);
+    if (nodeIndex >= 0) {
       combatConfig.travel.travelNodes.splice(nodeIndex, 1, newCurrentNode);
     }
 
@@ -657,6 +663,10 @@ function Map({
     //     setLocHoverData(null);
     //   }
     // }, 500);
+  }
+
+  function AdjustCoodernate(coodernate) {
+    return coodernate * pxInMScale;
   }
 
   function GetCenterOffset(e) {
