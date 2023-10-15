@@ -370,6 +370,7 @@ function Home() {
               locations={locations}
               defaultZoom={defaultZoom}
               userId={currentUser.uid}
+              shouldRender={!creatureToEdit}
             />
           </div>
           {/* <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>

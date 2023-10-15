@@ -30,6 +30,7 @@ function Map({
   locations,
   defaultZoom,
   userId,
+  shouldRender,
 }) {
   const centerMoveRatio = useRef(0.05);
   const mapConditionLevels = useRef(lc.hazardousness.map((h) => h.color));
@@ -120,6 +121,10 @@ function Map({
     return sortedRootLocs;
   }, [map]);
   const isMapRendered = useMemo(() => {
+    if (!shouldRender) {
+      return false;
+    }
+
     let totalLocsToRender = 0;
 
     const countLocsToRender = (loc) => {
@@ -136,7 +141,7 @@ function Map({
     });
 
     return allLocationsRefs.length === totalLocsToRender;
-  }, [allLocationsRefs.length, map, rootLocs]);
+  }, [allLocationsRefs.length, shouldRender, map, rootLocs]);
   const travelNodes = useMemo(() => {
     if (!currentNode) {
       return [];
@@ -754,7 +759,9 @@ function Map({
 
   async function MapLoadingWrapper(func, timer = 100) {
     setMapLoading(true);
-    await func();
+    if (func) {
+      await func();
+    }
 
     setTimeout(() => {
       setMapLoading(false);
