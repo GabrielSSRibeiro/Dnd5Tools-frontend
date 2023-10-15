@@ -809,7 +809,7 @@ function Map({
                 setLocationToEdit={setLocationToEdit}
                 setLocHoverData={setLocHoverData}
                 locations={locations}
-                creatures={mapMode === lc.MAP_MODES.TRAVEL ? creatures : []}
+                creatures={creatures}
                 schedule={isNightTime ? lc.ROUTINE_SCHEDULES.NIGHT : lc.ROUTINE_SCHEDULES.DAY}
                 precipitation={isPrecipitating ? lc.ROUTINE_PRECIPITATIONS.PRECIPITATING : lc.ROUTINE_PRECIPITATIONS.CLEAR}
                 temperature={isExtremeTemp ? lc.ROUTINE_TEMPERATURES.EXTREME : lc.ROUTINE_TEMPERATURES.NORMAL}
