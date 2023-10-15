@@ -20,7 +20,7 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
           name: null,
           firstImpressions: null,
           details: null,
-          precipitationFrequency: null,
+          precipitationFrequency: lc.PRECIPITATION_FREQUENCIES.LOW,
           intenseTemperatureFrequency: null,
           panoramicVision: lc.PANORAMIC_VISIONS.MEDIUM,
           hazardousness: lc.HAZARDOUSNESS.LOW,
@@ -147,14 +147,8 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
           optionValue={(o) => o.value}
         />
         <Select
-          label={"Periculosidade"}
+          label={"Periculosidade (Chance de encontro)"}
           info={[
-            {
-              text: "Chance de encontro por hora de exploração",
-            },
-            {
-              text: "",
-            },
             {
               text: "Representado por borda colorida ao redor dos detalhes da localização",
             },
