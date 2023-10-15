@@ -71,7 +71,7 @@ function Map({
   );
   const isExtremeTemp = useMemo(() => combatConfig.travel.temperature >= mapConditionLevels.current.length - 1, [combatConfig.travel.temperature]);
   const currentTime = useMemo(() => utils.MinutesToTimeFormat(combatConfig.travel.schedule), [combatConfig.travel.schedule]);
-  const exhaustionTimer = useMemo(() => Math.floor(combatConfig.travel.exhaustionTimer / 60), [combatConfig.travel.exhaustionTimer]);
+  const exhaustionTimer = useMemo(() => (combatConfig.travel.exhaustionTimer / 60).toFixed(1), [combatConfig.travel.exhaustionTimer]);
   const exhaustionIndex = useMemo(
     () => Math.floor(Math.min(exhaustionTimer / exhaustionThreshold.current, 1) * (mapConditionLevels.current.length - 1)),
     [exhaustionTimer]
@@ -835,6 +835,7 @@ function Map({
                 <div className="divider"></div>
                 <Select
                   label={"Ritmo de viagem"}
+                  info={[{ text: "Opção Descanso recupera desgaste" }]}
                   extraWidth={75}
                   value={combatConfig}
                   valuePropertyPath="travel.pace"
@@ -914,14 +915,20 @@ function Map({
                     onClick={() =>
                       setCombatConfig({
                         ...combatConfig,
-                        travel: { ...combatConfig.travel, exhaustionTimer: combatConfig.travel.exhaustionTimer - 60 },
+                        travel: {
+                          ...combatConfig.travel,
+                          exhaustionTimer: combatConfig.travel.exhaustionTimer > 60 ? combatConfig.travel.exhaustionTimer - 60 : 0,
+                        },
                       })
                     }
-                    disabled={exhaustionTimer === 0}
+                    // eslint-disable-next-line eqeqeq
+                    disabled={exhaustionTimer == 0}
                   >
                     <i className="fas fa-minus"></i>
                   </button>
-                  <h5 style={isExhausted ? { color: mapConditionLevels.current[exhaustionIndex] } : {}}>{exhaustionTimer} Horas</h5>
+                  <h5 style={isExhausted ? { color: mapConditionLevels.current[exhaustionIndex] } : {}}>
+                    {exhaustionTimer % 1 === 0 ? parseInt(exhaustionTimer) : exhaustionTimer} Horas
+                  </h5>
                   <button
                     onClick={() =>
                       setCombatConfig({

@@ -164,10 +164,12 @@ export const GetReferenceDistance = (value) => referenceDistances.find((a) => a.
 export const LOCATION_CONNECTION_TYPES = {
   ROAD: 10,
   RIVER: 20,
+  CHASM: 30,
 };
 export const locationConnectionTypes = [
   { display: "Estrada", value: LOCATION_CONNECTION_TYPES.ROAD, elementType: ELEMENT_TYPES.STRUCTURE },
   { display: "Rio", value: LOCATION_CONNECTION_TYPES.RIVER, elementType: ELEMENT_TYPES.LAKE },
+  { display: "Abismo", value: LOCATION_CONNECTION_TYPES.CHASM, elementType: ELEMENT_TYPES.PIT },
 ];
 export const GetLocationConnectionType = (value) => locationConnectionTypes.find((a) => a.value === value);
 
@@ -375,7 +377,7 @@ export const travelPaces = [
   { display: "Atividade (x0.5)", value: TRAVEL_PACES.ACTIVITY, mobility: 0.5, fatigue: 1, encounterProbMod: 0.5, resultDisplay: "Atividade" },
   { display: "Devagar (x0.5)", value: TRAVEL_PACES.SLOW, mobility: 0.5, fatigue: 1, encounterProbMod: 0.5 },
   { display: "Normal (x1)", value: TRAVEL_PACES.NORMAL, mobility: 1, fatigue: 1, encounterProbMod: 1 },
-  { display: "Apressado (x2)", value: TRAVEL_PACES.HASTEN, mobility: 2, fatigue: 2, encounterProbMod: 1.5 },
+  { display: "Apressado (x2)", value: TRAVEL_PACES.HASTEN, mobility: 2, fatigue: 3, encounterProbMod: 1.5 },
 ];
 export const GetTravelPace = (value) => travelPaces.find((a) => a.value === value);
 

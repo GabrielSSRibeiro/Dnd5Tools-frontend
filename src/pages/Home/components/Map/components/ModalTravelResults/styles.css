@@ -88,3 +88,7 @@
   justify-content: space-between;
   column-gap: 10px;
 }
+
+.ModalTravelResults-container .ModalWarning-container {
+  margin-top: 75px;
+}

@@ -11,6 +11,7 @@ import TextInput from "../../../../../../components/TextInput";
 import Button from "../../../../../../components/Button";
 import Modal from "../../../../../../components/Modal";
 import ModalExport from "../../../../../../components/ModalExport";
+import ModalWarning from "../../../../../../components/ModalWarning";
 
 import "./styles.css";
 
@@ -351,6 +352,21 @@ function ModalTravelResults({
     setModal(<ModalExport creature={creature} onClose={setModal} />);
   }
 
+  async function OpenModalDetails() {
+    setModal(
+      <ModalWarning
+        title="Detalhes"
+        messages={[lh.GetCurrentContext(newLocation).details]}
+        actions={[
+          {
+            text: "Fechar",
+            click: () => setModal(null),
+          },
+        ]}
+      />
+    );
+  }
+
   return (
     <Modal title="Resultado da Marcha" className="ModalTravelResults-container df">
       {modal}
@@ -396,7 +412,9 @@ function ModalTravelResults({
 
         {/* loc */}
         <aside className="details-wrapper df df-fd-c df-jc-fs">
-          <h3>{newLocation.name}</h3>
+          <button className="button-simple" onClick={OpenModalDetails}>
+            {newLocation.name}
+          </button>
           <TextInput placeholder="Nomear ponto" value={name} onChange={setName} />
           <TextInput placeholder="Notas..." value={notes} onChange={setNotes} />
           {(materialRarityDisplay.current || isHazardous.current) && (
