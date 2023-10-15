@@ -15,12 +15,12 @@ function ModalManageElement({ element, elements, onClose }) {
       ? utils.clone(element)
       : {
           type: null,
-          frequency: null,
+          frequency: lc.ENCOUNTER_FREQUENCIES.MEDIUM,
           groupSize: lc.GROUP_SIZES.SOLO,
           hazardousness: null,
           material: {
             probability: null,
-            rarity: null,
+            rarity: cc.CREATURE_RARITIES.COMMON,
           },
         }
   );
@@ -52,7 +52,7 @@ function ModalManageElement({ element, elements, onClose }) {
     } else {
       tempElement.material = {
         probability: null,
-        rarity: null,
+        rarity: cc.CREATURE_RARITIES.COMMON,
       };
       setCanBeMaterial(false);
     }
@@ -107,7 +107,7 @@ function ModalManageElement({ element, elements, onClose }) {
           valuePropertyPath="hazardousness"
           onSelect={setTempElement}
           nothingSelected="Nenhum"
-          options={lc.hazardousness}
+          options={lc.materialExtractionDifficulties}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />
