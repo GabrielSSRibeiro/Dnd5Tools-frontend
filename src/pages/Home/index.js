@@ -41,6 +41,7 @@ function Home() {
   const [selectedCreatures, setSelectedCreatures] = useState([]);
   const [combats, setCombats] = useState([]);
   const [locations, setLocations] = useState(null);
+  const [shouldRenderMap, setShouldRenderMap] = useState(false);
   const isReadyToLoad = useMemo(() => combatConfig && locations && creatures, [combatConfig, creatures, locations]);
 
   const { currentUser } = useAuth();
@@ -301,6 +302,21 @@ function Home() {
   }, [currentUser.uid]);
 
   useEffect(() => {
+    function IsLandscape(orientation) {
+      if (!orientation) {
+        return false;
+      }
+
+      return orientation.type.includes("landscape");
+    }
+
+    setShouldRenderMap(IsLandscape(window.screen?.orientation));
+    window.screen.orientation.addEventListener("change", (e) => {
+      setTimeout(() => {
+        setShouldRenderMap(IsLandscape(e.target));
+      }, 100);
+    });
+
     setTimeout(() => {
       setShowLoadingText(true);
     }, 3000);
@@ -370,7 +386,7 @@ function Home() {
               locations={locations}
               defaultZoom={defaultZoom}
               userId={currentUser.uid}
-              shouldRender={!creatureToEdit}
+              shouldRender={!creatureToEdit && shouldRenderMap}
             />
           </div>
           {/* <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
