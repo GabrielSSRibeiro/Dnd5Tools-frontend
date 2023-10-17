@@ -98,7 +98,6 @@ function Location({
     });
 
     let areaWrapperStyle = {
-      width: radius,
       height: radius,
     };
 

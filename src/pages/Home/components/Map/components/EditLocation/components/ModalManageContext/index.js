@@ -23,7 +23,7 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
           precipitationFrequency: lc.PRECIPITATION_FREQUENCIES.LOW,
           intenseTemperatureFrequency: null,
           panoramicVision: lc.PANORAMIC_VISIONS.MEDIUM,
-          hazardousness: lc.HAZARDOUSNESS.LOW,
+          hazardousness: lc.HAZARDOUSNESS.MEDIUM,
           resourceEasiness: lc.RESOURCE_EASINESS.NORMAL,
         }
   );
