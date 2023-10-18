@@ -15,6 +15,7 @@ function LocationSummary({
   setLocHoverData,
   locations,
   creatures,
+  world,
   schedule,
   precipitation,
   temperature,
@@ -50,16 +51,26 @@ function LocationSummary({
   }
 
   const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
+  const worldContext = useMemo(() => lh.GetCurrentContext(world), [world]);
+  const shouldlAddWorldCreatures = useMemo(
+    () => world.name !== location.name && worldContext.name !== lc.DEFAULT_CONTEXT_NAME,
+    [location.name, world.name, worldContext.name]
+  );
 
   const creaturesForDisplay = useMemo(() => {
     if (creatures.length === 0) {
       return [];
     }
 
-    let creaturesForDisplay = location.creatures
+    //add world context creatues
+    let allCreatures = shouldlAddWorldCreatures ? [...location.creatures, ...world.creatures] : location.creatures;
+
+    let creaturesForDisplay = allCreatures
       .map((locationCreature) => ({
         creature: creatures.find((c) => c._id === locationCreature.creatureId),
-        routine: lh.GetCreatureCurrentRoutine(locationCreature, schedule, precipitation, temperature, currentContext?.name),
+        routine:
+          lh.GetCreatureCurrentRoutine(locationCreature, schedule, precipitation, temperature, currentContext?.name) ??
+          lh.GetCreatureCurrentRoutine(locationCreature, schedule, precipitation, temperature, worldContext?.name),
       }))
       .filter((c) => c.routine)
       .map((c) => {
@@ -83,8 +94,19 @@ function LocationSummary({
       sortedCreaturesForDisplay.push(...g);
     });
 
-    return sortedCreaturesForDisplay.filter((_, i) => i < 3);
-  }, [location, currentContext, schedule, precipitation, temperature, creatures]);
+    const SHOW_AT_A_TIME = 3;
+    return sortedCreaturesForDisplay.filter((_, i) => i < SHOW_AT_A_TIME);
+  }, [
+    creatures,
+    shouldlAddWorldCreatures,
+    location.creatures,
+    world.creatures,
+    schedule,
+    precipitation,
+    temperature,
+    currentContext?.name,
+    worldContext?.name,
+  ]);
 
   return (
     <div className="LocationSummary-container">

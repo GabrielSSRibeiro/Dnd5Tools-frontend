@@ -257,7 +257,7 @@ export const CREATURE_TYPES = {
   UNDEAD: 140,
 };
 export const creatureTypes = [
-  { display: "Aberração", value: CREATURE_TYPES.ABERRATION, weight: 0 },
+  { display: "Aberraçao", value: CREATURE_TYPES.ABERRATION, weight: 0 },
   { display: "Besta", value: CREATURE_TYPES.BEAST, weight: 0 },
   { display: "Celestial", value: CREATURE_TYPES.CELESTIAL, weight: 0 },
   { display: "Constructo", value: CREATURE_TYPES.CONSTRUCT, weight: 0 },

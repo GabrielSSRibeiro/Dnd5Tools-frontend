@@ -293,6 +293,7 @@ function Map({
             }
             level={combatConfig.level}
             creatures={creatures}
+            world={combatConfig.world}
             mapConditionLevels={mapConditionLevels}
             GetUpdatedSchedule={GetUpdatedSchedule}
             HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
@@ -827,6 +828,7 @@ function Map({
                 setLocHoverData={setLocHoverData}
                 locations={locations}
                 creatures={creatures}
+                world={combatConfig.world}
                 schedule={isNightTime ? lc.ROUTINE_SCHEDULES.NIGHT : lc.ROUTINE_SCHEDULES.DAY}
                 precipitation={isPrecipitating ? lc.ROUTINE_PRECIPITATIONS.PRECIPITATING : lc.ROUTINE_PRECIPITATIONS.CLEAR}
                 temperature={isExtremeTemp ? lc.ROUTINE_TEMPERATURES.EXTREME : lc.ROUTINE_TEMPERATURES.NORMAL}
@@ -1248,6 +1250,7 @@ function Map({
             setLocHoverData={setLocHoverData}
             locations={locations}
             creatures={creatures}
+            world={combatConfig.world}
             schedule={isNightTime ? lc.ROUTINE_SCHEDULES.NIGHT : lc.ROUTINE_SCHEDULES.DAY}
             precipitation={isPrecipitating ? lc.ROUTINE_PRECIPITATIONS.PRECIPITATING : lc.ROUTINE_PRECIPITATIONS.CLEAR}
             temperature={isExtremeTemp ? lc.ROUTINE_TEMPERATURES.EXTREME : lc.ROUTINE_TEMPERATURES.NORMAL}

@@ -6,6 +6,8 @@ export const BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M = 2500; //5000;
 export const MAXIMUM_SEQUENTIAL_EXPLORATION_HOURS = 8;
 export const BASE_PX_IN_M_SCALE = 25;
 
+export const DEFAULT_CONTEXT_NAME = "Normal";
+
 export const GetNewLocation = (exteriorLocationId) => ({
   owner: false,
   name: null,
@@ -32,7 +34,7 @@ export const GetNewLocation = (exteriorLocationId) => ({
   contexts: [
     {
       isCurrent: true,
-      name: "Normal",
+      name: DEFAULT_CONTEXT_NAME,
       firstImpressions: null,
       details: null,
       precipitationFrequency: null,

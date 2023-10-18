@@ -28,6 +28,7 @@ function ModalTravelResults({
   GetCreatureCurrentRoutine,
   level,
   creatures,
+  world,
   mapConditionLevels,
   GetUpdatedSchedule,
   HandleSetCurrentNode,
@@ -69,13 +70,18 @@ function ModalTravelResults({
   );
   const encounterLocation = useRef(isPointOfInterest && exteriorLocation && hasMoved ? exteriorLocation : newLocation);
   const currentContext = useRef(lh.GetCurrentContext(encounterLocation.current));
+  const worldContext = useRef(lh.GetCurrentContext(world));
+  const shouldlAddWorldCreatures = useRef(world.name !== encounterLocation.current.name && worldContext.current.name !== lc.DEFAULT_CONTEXT_NAME);
   const [timePassed, setTimePassed] = useState(
     travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY ? 0 : lc.GetRestTime(restTime).timeInMin
   );
+  const hasAnyCreature = useRef(encounterLocation.current.creatures.length === 0 && (!shouldlAddWorldCreatures || world.creatures.length === 0));
   const isEncounter = useRef(
-    encounterLocation.current.creatures.some(
-      (c) => GetCreatureCurrentRoutine(c, currentContext.current)?.encounterFrequency === lc.ENCOUNTER_FREQUENCIES.CERTAIN
-    ) || ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(lh.GetCurrentContext(encounterLocation.current).hazardousness).probability, true)
+    hasAnyCreature.current &&
+      (encounterLocation.current.creatures.some(
+        (c) => GetCreatureCurrentRoutine(c, currentContext.current)?.encounterFrequency === lc.ENCOUNTER_FREQUENCIES.CERTAIN
+      ) ||
+        ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(currentContext.current.hazardousness).probability, true))
   );
   const nodeCreatures = useRef(!viewingCurrent ? GetLocationCreatures() : newCurrentNode.creatures);
   const creaturesForDisplay = useRef({
@@ -239,14 +245,17 @@ function ModalTravelResults({
   function GetLocationCreatures() {
     const differentCreatureProb = 0.1;
 
-    if (encounterLocation.current.creatures.length === 0) {
+    if (hasAnyCreature.current) {
       return [];
     }
 
+    //add world context creatues
+    let allCreatures = shouldlAddWorldCreatures ? [...encounterLocation.current.creatures, ...world.creatures] : encounterLocation.current.creatures;
+
     //setup
-    let locationCreatures = encounterLocation.current.creatures
+    let locationCreatures = allCreatures
       .map((c) => {
-        const routine = GetCreatureCurrentRoutine(c, currentContext.current);
+        const routine = GetCreatureCurrentRoutine(c, currentContext.current) ?? GetCreatureCurrentRoutine(c, worldContext.current);
         if (!routine) {
           return null;
         }
@@ -262,6 +271,10 @@ function ModalTravelResults({
         };
       })
       .filter((c) => c);
+
+    if (locationCreatures.length === 0) {
+      return [];
+    }
 
     //add creatures
     let possibleEncounterCreatures = locationCreatures.filter((c) => c.isEncounter);
@@ -279,7 +292,7 @@ function ModalTravelResults({
           addToEncounter = false;
         }
       }
-      //add 1 crrature
+      //add 1 creature
     } else if (isEncounter.current) {
       locationCreatures.sort((a, b) => b.encounterFrequency - a.encounterFrequency);
       const moreCommonCreatures = locationCreatures.filter((c) => c.encounterFrequency === locationCreatures[0].encounterFrequency);
@@ -302,7 +315,7 @@ function ModalTravelResults({
       ? utils.ProbabilityCheck(Math.min(imminentEncounterProb * lc.GetTravelPace(travel.pace).encounterProbMod, 1))
         ? lc.NODE_CREATURE_CONDITIONS.IMMINENT
         : lc.NODE_CREATURE_CONDITIONS.NEAR
-      : ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(lh.GetCurrentContext(encounterLocation.current).hazardousness).probability)
+      : ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(currentContext.current.hazardousness).probability)
       ? lc.NODE_CREATURE_CONDITIONS.REMAINS
       : lc.NODE_CREATURE_CONDITIONS.TRACKS;
   }

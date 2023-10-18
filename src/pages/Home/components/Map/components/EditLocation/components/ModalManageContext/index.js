@@ -61,8 +61,9 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
       title="Contexto"
       info={[
         {
-          text: "Momento especiais pelo qual a localização pode estar passando. Ex: dominada pelo clã bandido/atormentada pelo dragão verde. Útil para deixar o mundo vivo e responsivo a eventos",
+          text: "Momento pelo qual a localização pode estar passando. Útil para deixar vivo e responsivo a eventos. Contextos na localização principal adicionam as criatruas a todas as localizações",
         },
+        { text: "Ex: dominada pelo clã bandido/atormentada pelo dragão verde" },
       ]}
       className="ModalManageContext-container"
       onClickToClose={onClose}
