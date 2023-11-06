@@ -363,7 +363,7 @@ function ModalTravelResults({
     return true;
   }
 
-  async function OpenModalExport(creature, onClose) {
+  async function OpenModalExport(creature, onClose = () => setModal(null)) {
     setModal(<ModalExport creature={creature} showDetails={true} onClose={onClose} />);
   }
 
