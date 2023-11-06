@@ -367,18 +367,22 @@ function ModalTravelResults({
   }
 
   async function OpenModalDetails() {
-    setModal(
-      <ModalWarning
-        title="Detalhes"
-        messages={[lh.GetCurrentContext(newLocation).details]}
-        actions={[
-          {
-            text: "Fechar",
-            click: () => setModal(null),
-          },
-        ]}
-      />
-    );
+    const newLocContext = lh.GetCurrentContext(newLocation);
+
+    if (newLocContext.details) {
+      setModal(
+        <ModalWarning
+          title="Detalhes"
+          messages={[newLocContext.details]}
+          actions={[
+            {
+              text: "Fechar",
+              click: () => setModal(null),
+            },
+          ]}
+        />
+      );
+    }
   }
 
   return (
