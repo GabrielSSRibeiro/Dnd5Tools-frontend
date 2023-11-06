@@ -14,6 +14,7 @@ import Location from "./components/Location";
 import ModalTravelResults from "./components/ModalTravelResults";
 import ModalSuggestions from "./components/ModalSuggestions";
 import ModalWarning from "../../../../components/ModalWarning";
+import ModalExport from "../../../../components/ModalExport";
 
 import "./styles.css";
 
@@ -323,6 +324,8 @@ function Map({
           },
         ];
 
+        const clickedLoc = map[newCurrentNode.locId] ? map[newCurrentNode.locId].data : combatConfig.world;
+
         // node
         if (node) {
           actions = [
@@ -352,7 +355,6 @@ function Map({
         }
         // loc
         else {
-          const clickedLoc = map[newCurrentNode.locId] ? map[newCurrentNode.locId].data : combatConfig.world;
           messages.push(clickedLoc.name);
 
           const details = clickedLoc.contexts.find((c) => c.isCurrent).details;
@@ -390,12 +392,46 @@ function Map({
           }
         }
 
-        setModal(<ModalWarning title={title} messages={messages} actions={actions} onClose />);
+        OpenModalDetails(clickedLoc, title, messages, actions);
       }
     } else {
       HandleSetCurrentNode(newCurrentNode);
       HandleSaveCombatConfig();
     }
+  }
+
+  async function OpenModalExport(creature, onClose) {
+    setModal(<ModalExport creature={creature} showDetails={true} onClose={onClose} />);
+  }
+
+  async function OpenModalDetails(clickedLoc, title, messages, actions) {
+    setModal(
+      <ModalWarning title="Detalhes" messages={[messages]} actions={actions}>
+        <div className="creature-list">
+          {clickedLoc.creatures.length > 0 &&
+            clickedLoc.creatures.map((ec) => {
+              const creature = creatures.find((c) => c._id === ec.creatureId);
+
+              return (
+                <div
+                  className="df encounter-creature"
+                  onClick={() => OpenModalExport(creature, () => OpenModalDetails(clickedLoc, title, messages, actions))}
+                  key={ec.creatureId}
+                >
+                  <img
+                    className="creature-avatar"
+                    style={{
+                      borderColor: cc.GetRarity(creature.rarity).color,
+                    }}
+                    src={creature.image}
+                    alt="creature-avatar"
+                  />
+                </div>
+              );
+            })}
+        </div>
+      </ModalWarning>
+    );
   }
 
   function HandleSetCurrentNode(newCurrentNode) {

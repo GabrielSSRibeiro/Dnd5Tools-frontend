@@ -363,25 +363,45 @@ function ModalTravelResults({
     return true;
   }
 
-  async function OpenModalExport(creature) {
-    setModal(<ModalExport creature={creature} showDetails={true} onClose={setModal} />);
+  async function OpenModalExport(creature, onClose) {
+    setModal(<ModalExport creature={creature} showDetails={true} onClose={onClose} />);
   }
 
   async function OpenModalDetails() {
-    const newLocContext = lh.GetCurrentContext(newLocation);
+    const locContext = lh.GetCurrentContext(newLocation);
 
-    if (newLocContext.details) {
+    if (locContext.details) {
       setModal(
         <ModalWarning
           title="Detalhes"
-          messages={[newLocContext.details]}
+          messages={[locContext.details]}
           actions={[
             {
               text: "Fechar",
               click: () => setModal(null),
             },
           ]}
-        ></ModalWarning>
+        >
+          <div className="creature-list">
+            {newLocation.creatures.length > 0 &&
+              newLocation.creatures.map((ec) => {
+                const creature = creatures.find((c) => c._id === ec.creatureId);
+
+                return (
+                  <div className="df encounter-creature" onClick={() => OpenModalExport(creature, OpenModalDetails)} key={ec.creatureId}>
+                    <img
+                      className="creature-avatar"
+                      style={{
+                        borderColor: cc.GetRarity(creature.rarity).color,
+                      }}
+                      src={creature.image}
+                      alt="creature-avatar"
+                    />
+                  </div>
+                );
+              })}
+          </div>
+        </ModalWarning>
       );
     }
   }
