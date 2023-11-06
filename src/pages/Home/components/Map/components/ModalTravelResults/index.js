@@ -75,7 +75,7 @@ function ModalTravelResults({
   const [timePassed, setTimePassed] = useState(
     travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY ? 0 : lc.GetRestTime(restTime).timeInMin
   );
-  const hasAnyCreature = useRef(encounterLocation.current.creatures.length === 0 && (!shouldlAddWorldCreatures || world.creatures.length === 0));
+  const hasAnyCreature = useRef(encounterLocation.current.creatures.length > 0 || (shouldlAddWorldCreatures && world.creatures.length > 0));
   const isEncounter = useRef(
     hasAnyCreature.current &&
       (encounterLocation.current.creatures.some(
@@ -245,7 +245,7 @@ function ModalTravelResults({
   function GetLocationCreatures() {
     const differentCreatureProb = 0.1;
 
-    if (hasAnyCreature.current) {
+    if (!hasAnyCreature.current) {
       return [];
     }
 
