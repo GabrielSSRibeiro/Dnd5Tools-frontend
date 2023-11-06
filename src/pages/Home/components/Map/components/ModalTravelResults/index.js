@@ -99,6 +99,7 @@ function ModalTravelResults({
           id: nc.creatureId,
           color: cc.GetRarity(creature.rarity).color,
           size: cc.GetSize(creature.size).display,
+          type: cc.GetType(creature.type).display,
           number: nc.number,
           creature,
         };
@@ -363,7 +364,7 @@ function ModalTravelResults({
   }
 
   async function OpenModalExport(creature) {
-    setModal(<ModalExport creature={creature} onClose={setModal} />);
+    setModal(<ModalExport creature={creature} showDetails={true} onClose={setModal} />);
   }
 
   async function OpenModalDetails() {
@@ -380,7 +381,7 @@ function ModalTravelResults({
               click: () => setModal(null),
             },
           ]}
-        />
+        ></ModalWarning>
       );
     }
   }
@@ -474,8 +475,8 @@ function ModalTravelResults({
                       contents={[
                         { text: c.creature.name },
                         { text: "" },
-                        { text: `Tamanho: ${c.size}` },
-                        { text: "" },
+                        { text: `${c.type} ${c.size}` },
+                        { text: "..." },
                         { text: "[Exportar]", icon: "fas fa-upload" },
                       ]}
                       tooltipOnly={true}

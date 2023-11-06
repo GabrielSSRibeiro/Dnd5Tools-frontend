@@ -1,10 +1,13 @@
 .ModalExport-container.modal-body {
   width: 500px;
+  max-height: 70%;
   height: fit-content;
 }
 
-.ModalExport-container .version {
+.ModalExport-container .details {
   margin-bottom: 25px;
+  white-space: break-spaces;
+  overflow: auto;
 }
 
 .ModalExport-container .divider {

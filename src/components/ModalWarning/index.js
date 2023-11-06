@@ -5,7 +5,7 @@ import Button from "../Button";
 
 import "./styles.css";
 
-function ModalWarning({ title = "", messages = [], actions = [] }) {
+function ModalWarning({ title = "", messages = [], actions = [], children }) {
   return (
     <Modal title={title} className="ModalWarning-container" onClickToClose={actions.length === 1 ? actions[0].click : () => {}}>
       {messages.length > 0 && (
@@ -15,6 +15,7 @@ function ModalWarning({ title = "", messages = [], actions = [] }) {
               {message}
             </span>
           ))}
+          {children}
         </div>
       )}
       <footer className="warning-actions-wrapper">
