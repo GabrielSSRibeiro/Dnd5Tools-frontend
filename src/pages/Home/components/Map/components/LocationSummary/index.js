@@ -167,6 +167,14 @@ function LocationSummary({
                   />
                 ))}
               </div>
+              {creaturesForDisplay.length > 0 && (
+                <span className="env-type">
+                  Prob encontro:
+                  <span className="name">
+                    {utils.turnValueIntoPercentageString(lc.GetHazardousness(currentContext.hazardousness).probability)}/hora
+                  </span>
+                </span>
+              )}
             </>
           )}
         </footer>

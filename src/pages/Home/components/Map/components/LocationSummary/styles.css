@@ -19,7 +19,7 @@
   justify-content: center;
 }
 
-.LocationSummary-container .header .name {
+.LocationSummary-container .name {
   padding: 3px;
   flex: 1;
   font-weight: 600;
