@@ -242,9 +242,9 @@ export const HAZARDOUSNESS = {
   EXTREME: 40,
 };
 export const hazardousness = [
-  { display: "Baixa (5% por hora de exploraçao)", value: HAZARDOUSNESS.LOW, color: cc.GetRarity(HAZARDOUSNESS.LOW).color, probability: 0.05 },
-  { display: "Média (10% por hora de exploraçao)", value: HAZARDOUSNESS.MEDIUM, color: cc.GetRarity(HAZARDOUSNESS.MEDIUM).color, probability: 0.1 },
-  { display: "Alta (15% por hora de exploraçao)", value: HAZARDOUSNESS.HIGH, color: cc.GetRarity(HAZARDOUSNESS.HIGH).color, probability: 0.15 },
+  { display: "Baixa (10% por hora de exploraçao)", value: HAZARDOUSNESS.LOW, color: cc.GetRarity(HAZARDOUSNESS.LOW).color, probability: 0.1 },
+  { display: "Média (15% por hora de exploraçao)", value: HAZARDOUSNESS.MEDIUM, color: cc.GetRarity(HAZARDOUSNESS.MEDIUM).color, probability: 0.15 },
+  { display: "Alta (20% por hora de exploraçao)", value: HAZARDOUSNESS.HIGH, color: cc.GetRarity(HAZARDOUSNESS.HIGH).color, probability: 0.2 },
   {
     display: "Extrema (25% por hora de exploraçao)",
     value: HAZARDOUSNESS.EXTREME,
