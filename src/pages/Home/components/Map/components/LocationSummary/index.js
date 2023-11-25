@@ -170,7 +170,7 @@ function LocationSummary({
               </div>
               {canTravelToPoint && distance?.encounterProb && creaturesForDisplay.length > 0 && (
                 <span className="env-type">
-                  Prob encontro:
+                  Chance encontro:
                   <span className="name">{utils.turnValueIntoPercentageString(distance.encounterProb)}</span>
                 </span>
               )}
