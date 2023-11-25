@@ -34,6 +34,8 @@ function ModalTravelResults({
   HandleSetCurrentNode,
   HandleAddTravelNode,
   HandleSaveCombatConfig,
+  addAction,
+  editAction,
 }) {
   const viewingCurrent = useMemo(
     () => !hasMoved && travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY,
@@ -523,6 +525,16 @@ function ModalTravelResults({
       <div className="divider"></div>
 
       <footer>
+        <div className="df df-jc-fs df-cg-20 df-f1">
+          <button className="df df-cg-5 button-simple" onClick={addAction}>
+            <i className="fas fa-plus"></i>
+            Adicionar
+          </button>
+          <button className="df df-cg-5 button-simple" onClick={editAction}>
+            <i className="fas fa-pen"></i>
+            Editar
+          </button>
+        </div>
         <aside className="footer-actions">
           <button className="button-simple" onClick={() => onClose()}>
             Cancelar

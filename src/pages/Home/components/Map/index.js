@@ -15,7 +15,6 @@ import ModalTravelResults from "./components/ModalTravelResults";
 import ModalSuggestions from "./components/ModalSuggestions";
 import ModalWarning from "../../../../components/ModalWarning";
 import ModalExport from "../../../../components/ModalExport";
-import Info from "../../../../components/Info";
 
 import "./styles.css";
 
@@ -293,6 +292,14 @@ function Map({
             HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
             HandleAddTravelNode={node ? null : () => HandleAddTravelNode(newCurrentNode)}
             HandleSaveCombatConfig={HandleSaveCombatConfig}
+            addAction={() => {
+              setLocationToEdit(lc.GetNewLocation(newLocation._id ?? userId));
+              setModal(null);
+            }}
+            editAction={() => {
+              setLocationToEdit(newLocation);
+              setModal(null);
+            }}
           />
         );
       }
