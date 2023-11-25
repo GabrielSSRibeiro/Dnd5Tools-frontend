@@ -73,7 +73,7 @@ export function SortArrayOfObjByStringProperty(arrayOfObj, property, isDescendin
 }
 
 export function turnValueIntoPercentageString(value) {
-  return value * 100 + "%";
+  return Math.round(value * 100) + "%";
 }
 
 function getKeyDetails(key) {
@@ -258,5 +258,18 @@ export const ProbabilityCheckWithRatio = (probability, ratio) => {
 
   const ratioChecked = probChecked / probability;
 
-  return { probabilityCheck, ratioChecked };
+  return {
+    probabilityCheck,
+    ratioChecked,
+    finalProb: getProbabilityOfTwoIndependent(getProbabilityOfOneSuccess(probability, fullProbs), probability * parcialProb),
+  };
 };
+
+function getProbabilityOfOneSuccess(p, n) {
+  return 1 - Math.pow(1 - p, n);
+}
+
+function getProbabilityOfTwoIndependent(p1, p2) {
+  const p1Andp2 = p1 * p2;
+  return p1 + p2 - p1Andp2;
+}

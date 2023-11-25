@@ -175,6 +175,7 @@
   padding: 10px;
   background-color: rgba(249, 249, 249, 0.85);
   border: 2px solid var(--black);
+  cursor: default;
 
   display: flex;
   flex-direction: column;

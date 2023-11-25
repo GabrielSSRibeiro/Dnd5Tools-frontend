@@ -68,7 +68,11 @@ function ModalTravelResults({
         ? newLocation.interaction.isHazardous
         : element.current?.hazardousness && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
   );
-  const encounterLocation = useRef(isPointOfInterest && exteriorLocation && hasMoved ? exteriorLocation : newLocation);
+  const encounterLocation = useRef(
+    isPointOfInterest && exteriorLocation && hasMoved && !lh.HasCertainCreature(newLocation, GetCreatureCurrentRoutine)
+      ? exteriorLocation
+      : newLocation
+  );
   const currentContext = useRef(lh.GetCurrentContext(encounterLocation.current));
   const worldContext = useRef(lh.GetCurrentContext(world));
   const shouldlAddWorldCreatures = useRef(world.name !== encounterLocation.current.name && worldContext.current.name !== lc.DEFAULT_CONTEXT_NAME);
@@ -78,9 +82,7 @@ function ModalTravelResults({
   const hasAnyCreature = useRef(encounterLocation.current.creatures.length > 0 || (shouldlAddWorldCreatures && world.creatures.length > 0));
   const isEncounter = useRef(
     hasAnyCreature.current &&
-      (encounterLocation.current.creatures.some(
-        (c) => GetCreatureCurrentRoutine(c, currentContext.current)?.encounterFrequency === lc.ENCOUNTER_FREQUENCIES.CERTAIN
-      ) ||
+      (lh.HasCertainCreature(encounterLocation.current, GetCreatureCurrentRoutine) ||
         ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(currentContext.current.hazardousness).probability, true))
   );
   const nodeCreatures = useRef(!viewingCurrent ? GetLocationCreatures() : newCurrentNode.creatures);
@@ -233,7 +235,6 @@ function ModalTravelResults({
   function ProbUpdatedByTravelTimeModCheck(probability, updateTimePassed = false) {
     const travelTimeMod = (hasMoved ? locHoverData.distance.travelTimeInMin : timePassed) / 60;
     const check = utils.ProbabilityCheckWithRatio(probability, travelTimeMod);
-
     const updatedTimePassed = Math.round(check.ratioChecked * 60);
 
     if (updateTimePassed && updatedTimePassed !== timePassed) {

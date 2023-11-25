@@ -15,6 +15,7 @@ import ModalTravelResults from "./components/ModalTravelResults";
 import ModalSuggestions from "./components/ModalSuggestions";
 import ModalWarning from "../../../../components/ModalWarning";
 import ModalExport from "../../../../components/ModalExport";
+import Info from "../../../../components/Info";
 
 import "./styles.css";
 
@@ -283,15 +284,7 @@ function Map({
             travel={combatConfig.travel}
             restTime={restTime}
             isNightTime={isNightTime}
-            GetCreatureCurrentRoutine={(locationCreature, currentContext) =>
-              lh.GetCreatureCurrentRoutine(
-                locationCreature,
-                isNightTime ? lc.ROUTINE_SCHEDULES.NIGHT : lc.ROUTINE_SCHEDULES.DAY,
-                isPrecipitating ? lc.ROUTINE_PRECIPITATIONS.PRECIPITATING : lc.ROUTINE_PRECIPITATIONS.CLEAR,
-                isExtremeTemp ? lc.ROUTINE_TEMPERATURES.EXTREME : lc.ROUTINE_TEMPERATURES.NORMAL,
-                currentContext?.name
-              )
-            }
+            GetCreatureCurrentRoutine={GetCreatureCurrentRoutine}
             level={combatConfig.level}
             creatures={creatures}
             world={combatConfig.world}
@@ -398,6 +391,16 @@ function Map({
       HandleSetCurrentNode(newCurrentNode);
       HandleSaveCombatConfig();
     }
+  }
+
+  function GetCreatureCurrentRoutine(locationCreature, currentContext) {
+    return lh.GetCreatureCurrentRoutine(
+      locationCreature,
+      isNightTime ? lc.ROUTINE_SCHEDULES.NIGHT : lc.ROUTINE_SCHEDULES.DAY,
+      isPrecipitating ? lc.ROUTINE_PRECIPITATIONS.PRECIPITATING : lc.ROUTINE_PRECIPITATIONS.CLEAR,
+      isExtremeTemp ? lc.ROUTINE_TEMPERATURES.EXTREME : lc.ROUTINE_TEMPERATURES.NORMAL,
+      currentContext?.name
+    );
   }
 
   async function OpenModalExport(creature, onClose) {
@@ -686,7 +689,6 @@ function Map({
     return schedule;
   }
 
-  // let timer = useRef(null);
   function HandleLocHover(e, location, node) {
     let distance = { centerOffset: GetCenterOffset(e) };
     distance.isVisible = distance.centerOffset.value <= visionRadius / 4;
@@ -697,14 +699,41 @@ function Map({
 
       distance.travelTimeInMin = lh.GetTravelTimeInMin(distanceInScale, combatConfig.travel);
       distance.timeInUnits = utils.MinutesToTimeInUnits(distance.travelTimeInMin);
+
+      if (location) {
+        distance.encounterProb = GetFinalProb(location, distance.travelTimeInMin);
+      }
     }
+
     setLocHoverData({ top: e.clientY, left: e.clientX, location, node, distance });
-    // clearTimeout(timer.current);
-    // timer.current = setTimeout(() => {
-    //   if (location) {
-    //     setLocHoverData(null);
-    //   }
-    // }, 500);
+  }
+
+  function GetFinalProb(location, travelTimeInMin) {
+    const exteriorLocation = map[location.exteriorLocationId] ? map[location.exteriorLocationId].data : null;
+    const encounterLocation =
+      location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && exteriorLocation && !lh.HasCertainCreature(location, GetCreatureCurrentRoutine)
+        ? exteriorLocation
+        : location;
+    const locationContext = lh.GetCurrentContext(encounterLocation);
+    const worldContext = lh.GetCurrentContext(combatConfig.world);
+
+    const shouldlAddWorldCreatures = combatConfig.world.name !== encounterLocation.name && worldContext.name !== lc.DEFAULT_CONTEXT_NAME;
+    let allCreatures = shouldlAddWorldCreatures ? [...encounterLocation.creatures, ...combatConfig.world.creatures] : encounterLocation.creatures;
+    let isCertain = allCreatures.some((c) => {
+      const routine = GetCreatureCurrentRoutine(c, locationContext?.name) ?? GetCreatureCurrentRoutine(c, worldContext?.name);
+
+      if (!routine) {
+        return false;
+      }
+
+      const probability = lc.GetEncounterFrequency(routine.encounterFrequency).probability;
+
+      return probability === 1;
+    });
+
+    return isCertain
+      ? 1
+      : utils.ProbabilityCheckWithRatio(lc.GetHazardousness(locationContext.hazardousness).probability, travelTimeInMin / 60).finalProb;
   }
 
   function AdjustCoodernate(coodernate) {
@@ -869,6 +898,7 @@ function Map({
                 precipitation={isPrecipitating ? lc.ROUTINE_PRECIPITATIONS.PRECIPITATING : lc.ROUTINE_PRECIPITATIONS.CLEAR}
                 temperature={isExtremeTemp ? lc.ROUTINE_TEMPERATURES.EXTREME : lc.ROUTINE_TEMPERATURES.NORMAL}
                 distance={locHoverData.distance}
+                canTravelToPoint={canTravelToPoint}
               />
             )}
             {locHoverData.node?.name && (
@@ -911,7 +941,17 @@ function Map({
                       optionDisplay={(o) => o.display}
                       optionValue={(o) => o.value}
                     />
-                    <Button text="Descansar" onClick={() => OpenModalTravelResults(currentNode, true)} />
+                    <Button
+                      text={combatConfig.travel.pace === lc.TRAVEL_PACES.REST ? "Descansar" : "Começar"}
+                      info={[
+                        {
+                          text: `Chance encontro: ${utils.turnValueIntoPercentageString(
+                            GetFinalProb(map[currentNode.locId]?.data ?? combatConfig.world, lc.GetRestTime(restTime).timeInMin)
+                          )}`,
+                        },
+                      ]}
+                      onClick={() => OpenModalTravelResults(currentNode, true)}
+                    />
                   </div>
                 ) : (
                   <>

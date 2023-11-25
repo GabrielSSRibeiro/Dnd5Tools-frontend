@@ -20,6 +20,7 @@ function LocationSummary({
   precipitation,
   temperature,
   distance = null,
+  canTravelToPoint,
 }) {
   const [modal, setModal] = useState(null);
 
@@ -167,12 +168,10 @@ function LocationSummary({
                   />
                 ))}
               </div>
-              {creaturesForDisplay.length > 0 && (
+              {canTravelToPoint && distance?.encounterProb && creaturesForDisplay.length > 0 && (
                 <span className="env-type">
                   Prob encontro:
-                  <span className="name">
-                    {utils.turnValueIntoPercentageString(lc.GetHazardousness(currentContext.hazardousness).probability)}/hora
-                  </span>
+                  <span className="name">{utils.turnValueIntoPercentageString(distance.encounterProb)}</span>
                 </span>
               )}
             </>

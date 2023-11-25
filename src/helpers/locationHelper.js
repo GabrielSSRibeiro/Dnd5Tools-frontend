@@ -142,3 +142,9 @@ export const GetLocationDataForExport = (location, creatures) => {
 
   return locationDataForExport;
 };
+
+export const HasCertainCreature = (location, GetCreatureCurrentRoutine) => {
+  const context = GetCurrentContext(location);
+
+  return location.creatures.some((c) => GetCreatureCurrentRoutine(c, context)?.encounterFrequency === lc.ENCOUNTER_FREQUENCIES.CERTAIN);
+};

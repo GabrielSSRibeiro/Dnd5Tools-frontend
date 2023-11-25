@@ -1,8 +1,10 @@
 import React from "react";
 
+import Info from "../Info";
+
 import "./styles.css";
 
-function Button({ text, icon = null, onClick = () => {}, isDisabled, className = "" }) {
+function Button({ text, icon = null, info = null, onClick = () => {}, isDisabled, className = "" }) {
   function HandleClick() {
     onClick();
   }
@@ -12,6 +14,7 @@ function Button({ text, icon = null, onClick = () => {}, isDisabled, className =
       <div>
         {icon && <i className={icon}></i>}
         {text && <h5>{text}</h5>}
+        {info && <Info className="button-info" contents={info} />}
       </div>
     </div>
   );
