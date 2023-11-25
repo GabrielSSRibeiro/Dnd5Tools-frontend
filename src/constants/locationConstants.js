@@ -433,7 +433,7 @@ export const elementAlterations = [
   { display: "Tamanho", value: ELEMENT_ALTERATIONS.SIZE },
   { display: "Quantidade", value: ELEMENT_ALTERATIONS.NUMBER },
   { display: "Forma", value: ELEMENT_ALTERATIONS.SHAPE },
-  { display: "Condição", value: ELEMENT_ALTERATIONS.CONDITION },
+  { display: "Condiçao", value: ELEMENT_ALTERATIONS.CONDITION },
 ];
 export const GetElementAlteration = (value) => elementAlterations.find((a) => a.value === value);
 

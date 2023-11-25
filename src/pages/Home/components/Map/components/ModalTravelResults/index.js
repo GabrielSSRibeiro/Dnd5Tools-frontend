@@ -142,8 +142,8 @@ function ModalTravelResults({
       (isPointOfInterest
         ? null
         : element.current
-        ? `…com modificação de "${utils.randomItemFromArray(lc.elementAlterations.map((a) => a.display))}"`
-        : "Nenhum ponto chama a atenção…")
+        ? `…com modificaçao de "${utils.randomItemFromArray(lc.elementAlterations.map((a) => a.display))}"`
+        : "Nenhum ponto chama a atençao…")
   );
   const timeInUnits = useMemo(() => {
     if (!locHoverData) {
@@ -454,7 +454,7 @@ function ModalTravelResults({
           <button className="button-simple" onClick={OpenModalDetails}>
             {newLocation.name}
           </button>
-          <TextInput placeholder="Nomear ponto" value={name} onChange={setName} />
+          <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={setName} />
           <TextInput placeholder="Notas..." value={notes} onChange={setNotes} />
           {(materialRarityDisplay.current || isHazardous.current) && (
             <div className="material">
