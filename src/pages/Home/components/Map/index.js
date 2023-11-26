@@ -416,7 +416,7 @@ function Map({
 
   async function OpenModalDetails(clickedLoc, title, messages, actions) {
     setModal(
-      <ModalWarning title="Detalhes" messages={[messages]} actions={actions}>
+      <ModalWarning title="Detalhes" messages={messages} actions={actions}>
         <div className="creature-list">
           {clickedLoc.creatures.length > 0 &&
             clickedLoc.creatures.map((ec) => {
