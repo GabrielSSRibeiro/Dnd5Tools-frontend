@@ -235,7 +235,8 @@ function Map({
     }
 
     if (nodeToMove) {
-      let originalNode = combatConfig.travel.travelNodes.find((tn) => tn.x !== nodeToMove.x && tn.y !== nodeToMove.y);
+      let originalNode = combatConfig.travel.travelNodes.find((tn) => tn.name === nodeToMove.name);
+      console.log(nodeToMove, combatConfig.travel.travelNodes, originalNode);
       originalNode.x = AdjustCoodernate(locHoverData.distance.centerOffset.x + (centerOffset.x - defaultCenter.x)) * -1;
       originalNode.y = AdjustCoodernate(locHoverData.distance.centerOffset.y - (centerOffset.y - defaultCenter.y));
       originalNode.angle = locHoverData.distance.centerOffset.angle;
