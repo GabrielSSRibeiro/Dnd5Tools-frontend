@@ -37,6 +37,7 @@ function ModalTravelResults({
   addAction,
   editAction,
 }) {
+  const defaultNotes = useRef("Nenhum ponto chama a atençao…");
   const viewingCurrent = useMemo(
     () => !hasMoved && travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY,
     [hasMoved, travel.pace]
@@ -147,7 +148,7 @@ function ModalTravelResults({
         ? null
         : element.current
         ? `…com modificaçao de "${utils.randomItemFromArray(lc.elementAlterations.map((a) => a.display))}"`
-        : "Nenhum ponto chama a atençao…")
+        : defaultNotes.current)
   );
   const timeInUnits = useMemo(() => {
     if (!locHoverData) {
@@ -409,6 +410,14 @@ function ModalTravelResults({
     }
   }
 
+  function HandleNameChange(newValue) {
+    if (notes === defaultNotes.current) {
+      setNotes(null);
+    }
+
+    setName(newValue);
+  }
+
   return (
     <Modal title="Resultado da Marcha" className="ModalTravelResults-container df">
       {modal}
@@ -457,7 +466,7 @@ function ModalTravelResults({
           <button className="button-simple" onClick={OpenModalDetails}>
             {newLocation.name}
           </button>
-          <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={setName} />
+          <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={HandleNameChange} />
           <TextInput placeholder="Notas..." value={notes} onChange={setNotes} />
           {(materialRarityDisplay.current || isHazardous.current) && (
             <div className="material">
