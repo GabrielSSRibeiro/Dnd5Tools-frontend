@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import * as utils from "../../../../../../utils";
-import { creatureTypes } from "../../../../../../constants/creatureConstants";
+import { creatureEnvironments, CREATURE_ENVIRONMENTS, creatureTypes } from "../../../../../../constants/creatureConstants";
 
 import Modal from "../../../../../../components/Modal";
 import Button from "../../../../../../components/Button";
@@ -36,6 +36,11 @@ function ModalSuggestions({ notes, onClose }) {
   const [tempNotes, setTempNotes] = useState(notes);
   const [randomType, setRandomType] = useState(null);
 
+  function HandleSuggestionModeChange(mode) {
+    setRandomType(null);
+    setSuggestionMode(mode);
+  }
+
   return (
     <Modal title={"Proposta de Criação"} className="ModalSuggestions-container df" onClickToClose={onClose}>
       <main className="content df df-fd-c df-jf-sb df-rg-10">
@@ -68,21 +73,33 @@ function ModalSuggestions({ notes, onClose }) {
       </main>
       <div className="divider"></div>
       <footer className="df">
-        {suggestionMode === ideaSuggestion.current && (
-          <aside className="suggestion-actions df df-cg-20">
+        <aside className="suggestion-actions df df-cg-20">
+          {suggestionMode === ideaSuggestion.current && (
             <button title="Limpar" className=" button-simple" onClick={() => setTempNotes(null)}>
               <i className="fas fa-trash"></i>
             </button>
-            <button title="Aleatório" className=" button-simple" onClick={() => setRandomType(utils.randomItemFromArray(creatureTypes).display)}>
-              <i className="fas fa-random"></i>
-            </button>
-            <span>{randomType}</span>
-          </aside>
-        )}
+          )}
+          <button
+            title="Aleatório"
+            className=" button-simple"
+            onClick={() =>
+              setRandomType(
+                utils.randomItemFromArray(
+                  suggestionMode === ideaSuggestion.current
+                    ? creatureTypes
+                    : creatureEnvironments.filter((e) => e.value !== CREATURE_ENVIRONMENTS.ALL)
+                ).display
+              )
+            }
+          >
+            <i className="fas fa-random"></i>
+          </button>
+          <span>{randomType}</span>
+        </aside>
         <Button text="Fechar" onClick={() => onClose(tempNotes)} />
         <aside className="suggestion-modes df">
           {suggestionModes.current.map((m) => (
-            <SelectButton isSelected={m === suggestionMode} text={m} onClick={() => setSuggestionMode(m)} key={m} />
+            <SelectButton isSelected={m === suggestionMode} text={m} onClick={() => HandleSuggestionModeChange(m)} key={m} />
           ))}
         </aside>
       </footer>
