@@ -331,7 +331,7 @@ function Home() {
   return !isReadyToLoad ? (
     <div className="backend-loading">
       <i className="fas fa-spinner fa-spin"></i>
-      <h2 style={{ opacity: showLoadingText ? 1 : 0 }}>Por favor aguarde enquanto tiramos o site de inativade. Isso pode lever até 30 segundos...</h2>
+      <h2 style={{ opacity: showLoadingText ? 1 : 0 }}>Por favor aguarde enquanto tiramos o site de inativade. Isso pode levar até 30 segundos...</h2>
     </div>
   ) : (
     <>
