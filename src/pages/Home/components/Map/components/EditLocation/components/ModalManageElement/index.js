@@ -60,7 +60,7 @@ function ModalManageElement({ element, elements, onClose }) {
 
   return (
     <Modal
-      title="Elemento"
+      title="Elemento de Travessia"
       className="ModalManageElement-container"
       onClickToClose={onClose}
       info={[

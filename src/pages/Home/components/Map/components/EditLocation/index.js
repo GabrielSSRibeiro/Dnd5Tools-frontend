@@ -492,7 +492,7 @@ function EditLocation({
             {location.exteriorLocationId != null && (
               <div className="location-detail-group">
                 <div className="location-row location-detail-group-title">
-                  <span className={location.traversal.elements.length === 0 ? `lacking-data` : ""}>Elementos</span>
+                  <span className={location.traversal.elements.length === 0 ? `lacking-data` : ""}>Elementos de Travessia</span>
                   <button onClick={() => OpenModalManageElement()} disabled={location.traversal.elements.length === 6}>
                     <i className="fas fa-plus"></i>
                   </button>
