@@ -1104,9 +1104,9 @@ export const DIFFICULTY_CLASSES = {
 };
 export const difficultyClasses = [
   { display: "Baixa", value: DIFFICULTY_CLASSES.LOW, weight: 1, baseOutput: 10 },
-  { display: "Média", value: DIFFICULTY_CLASSES.MEDIUM, weight: 2, baseOutput: 12 },
-  { display: "Alta", value: DIFFICULTY_CLASSES.HIGH, weight: 3, baseOutput: 14 },
-  { display: "Extrema", value: DIFFICULTY_CLASSES.EXTREME, weight: 4, baseOutput: 16 },
+  { display: "Média", value: DIFFICULTY_CLASSES.MEDIUM, weight: 2, baseOutput: 13 },
+  { display: "Alta", value: DIFFICULTY_CLASSES.HIGH, weight: 3, baseOutput: 16 },
+  { display: "Extrema", value: DIFFICULTY_CLASSES.EXTREME, weight: 4, baseOutput: 19 },
 ];
 export const GetDifficultyClass = (value) => difficultyClasses.find((i) => i.value === value);
 

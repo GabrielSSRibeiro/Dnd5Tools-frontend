@@ -19,7 +19,7 @@ function SkillCheck({ resultText, level }) {
   const [condition, setCondition] = useState(null);
   const [conditionDuration, setConditionDuration] = useState(null);
 
-  const generatedSkillCheck = getSkillCheck(level, checkDifficulty, damageIntensity, condition, conditionDuration);
+  const generatedSkillCheck = getSkillCheck(null, checkDifficulty, damageIntensity, condition, conditionDuration);
 
   function HandleSetCondition(value) {
     if (value === null) {
@@ -32,7 +32,7 @@ function SkillCheck({ resultText, level }) {
   return (
     <div className="SkillCheck-container">
       <section>
-        <Panel title="Dificuldade" info={[{ text: `Dificuldade é baseada em Nível e mínima é: ${MIN_DIFICULTY}` }]}>
+        <Panel title="Dificuldade">
           <main className="panel-select">
             {difficultyClasses.map((option) => (
               <SelectButton
@@ -42,6 +42,22 @@ function SkillCheck({ resultText, level }) {
                 isSelected={checkDifficulty === option.value}
                 text={option.display}
                 onClick={() => setCheckDifficulty(option.value)}
+              />
+            ))}
+          </main>
+        </Panel>
+      </section>
+      <section>
+        <Panel title="Intensidade do Dano" info={[{ text: "Intensidade é baseada em Nível" }]}>
+          <main className="panel-select">
+            {[{ display: "Nenhuma", value: null }, ...damageIntensities].map((option) => (
+              <SelectButton
+                key={option.value}
+                isLarge={false}
+                isLong={false}
+                isSelected={damageIntensity === option.value}
+                text={option.display}
+                onClick={() => setDamageIntensity(option.value)}
               />
             ))}
           </main>
@@ -69,22 +85,6 @@ function SkillCheck({ resultText, level }) {
               optionValue={(o) => o.value}
               isDisabled={!condition}
             />
-          </main>
-        </Panel>
-      </section>
-      <section>
-        <Panel title="Intensidade do Dano" info={[{ text: "Intensidade é baseada em Nível" }]}>
-          <main className="panel-select">
-            {[{ display: "Nenhuma", value: null }, ...damageIntensities].map((option) => (
-              <SelectButton
-                key={option.value}
-                isLarge={false}
-                isLong={false}
-                isSelected={damageIntensity === option.value}
-                text={option.display}
-                onClick={() => setDamageIntensity(option.value)}
-              />
-            ))}
           </main>
         </Panel>
       </section>

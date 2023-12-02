@@ -154,9 +154,9 @@ export const GetActionReachValue = (reach, type) => {
   return baseOutput;
 };
 
-export const GetDCValue = (difficultyClass, level) => {
+export const GetDCValue = (difficultyClass, level = null) => {
   const baseValue = cc.GetDifficultyClass(difficultyClass).baseOutput;
-  return Math.max(MIN_DIFICULTY, utils.randomValueFromVarianceInt(baseValue, 1) + GetProfByLevel(level));
+  return Math.max(MIN_DIFICULTY, utils.randomValueFromVarianceInt(baseValue, 1) + GetProfByLevel(level ?? 10));
 };
 
 export const GetConditionDurationValue = (conditionDuration) => {

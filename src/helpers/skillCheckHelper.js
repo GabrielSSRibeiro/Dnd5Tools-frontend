@@ -5,19 +5,19 @@ import { GetConditionDurationValue, GetDCValue } from "../helpers/creatureHelper
 const rand = utils.randomIntFromInterval;
 const variance = utils.randomValueFromVariancePercentage;
 
-export const getDamage = (level, damageIntensity) => {
+export const getDamage = (damageIntensity, level = null) => {
   const numberOfIteractions = 10;
-  const iteractionsList = utils.createArrayFromInt(numberOfIteractions).map((item) => getDamageValue(level, damageIntensity));
+  const iteractionsList = utils.createArrayFromInt(numberOfIteractions).map((_) => getDamageValue(damageIntensity, level));
   return Math.round(utils.averageOfArray(iteractionsList));
 };
 
-const getDamageValue = (level, damageIntensity) => {
+const getDamageValue = (damageIntensity, level) => {
   const damageIndex = damageIntensities.findIndex((di) => di.value === damageIntensity);
   const intensityFactor = 2;
   const damageMultiplier = Math.pow(intensityFactor, damageIndex + 1 - intensityFactor); // 2^-1, 2^0, 2^1, 2^2
-  const damageVariance = 0.1;
+  const damageVariance = 0.15;
 
-  const baseDamage = rand(1, 4) + level;
+  const baseDamage = rand(1, 4) + (level ?? 10);
   let damage = baseDamage * damageMultiplier;
   return variance(damage, damageVariance);
 };
@@ -29,7 +29,7 @@ export const getSkillCheck = (level, checkDifficulty, damageIntensity, condition
   skillCheck.push({ value: difficulty, name: "Dificuldade" });
 
   if (damageIntensity) {
-    const damage = getDamage(level, damageIntensity);
+    const damage = getDamage(damageIntensity, level);
     skillCheck.push({ value: damage, name: "Dano" });
   }
 
