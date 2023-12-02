@@ -1279,7 +1279,7 @@ function Map({
                       <>
                         <div
                           className={`vision floating-details ${isNightTime ? "night-vision" : "day-vision"}`}
-                          style={{ width: visionRadius / 2, height: visionRadius / 2 }}
+                          style={{ width: visionRadius / 4, height: visionRadius / 4 }}
                         ></div>
                         <div className="direction-arrow floating-details" style={arrowStyles}>
                           <div className="pointer"></div>

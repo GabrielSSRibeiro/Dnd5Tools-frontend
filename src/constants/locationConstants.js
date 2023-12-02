@@ -1,10 +1,10 @@
 import * as cc from "./creatureConstants";
 
 export const POINT_OF_INTEREST_RADIUS = 20;
-export const BASE_VISION_IN_M = 5000;
-export const BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M = 2500; //5000;
+export const BASE_VISION_IN_M = 10000;
+export const BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M = 2500;
 export const MAXIMUM_SEQUENTIAL_EXPLORATION_HOURS = 8;
-export const BASE_PX_IN_M_SCALE = 25;
+export const BASE_PX_IN_M_SCALE = 50;
 
 export const DEFAULT_CONTEXT_NAME = "Normal";
 
@@ -375,11 +375,11 @@ export const TRAVEL_PACES = {
   HASTEN: 50,
 };
 export const travelPaces = [
-  { display: "Descanso (x0)", value: TRAVEL_PACES.REST, mobility: 0, fatigue: 0, encounterProbMod: 1, resultDisplay: "Descanso" },
-  { display: "Atividade (x0.5)", value: TRAVEL_PACES.ACTIVITY, mobility: 0.5, fatigue: 1, encounterProbMod: 0.5, resultDisplay: "Atividade" },
-  { display: "Devagar (x0.5)", value: TRAVEL_PACES.SLOW, mobility: 0.5, fatigue: 1, encounterProbMod: 0.5 },
-  { display: "Normal (x1)", value: TRAVEL_PACES.NORMAL, mobility: 1, fatigue: 1, encounterProbMod: 1 },
-  { display: "Apressado (x2)", value: TRAVEL_PACES.HASTEN, mobility: 2, fatigue: 3, encounterProbMod: 1.5 },
+  { display: "Descanso", value: TRAVEL_PACES.REST, mobility: 0, fatigue: 0, imminentEncounterProbMod: 1, resultDisplay: "Descanso" },
+  { display: "Atividade (x0)", value: TRAVEL_PACES.ACTIVITY, mobility: 0, fatigue: 1, imminentEncounterProbMod: 0.5, resultDisplay: "Atividade" },
+  { display: "Devagar (x0.5)", value: TRAVEL_PACES.SLOW, mobility: 0.5, fatigue: 0.5, imminentEncounterProbMod: 0 },
+  { display: "Normal (x1)", value: TRAVEL_PACES.NORMAL, mobility: 1, fatigue: 1, imminentEncounterProbMod: 1 },
+  { display: "Apressado (x1.5)", value: TRAVEL_PACES.HASTEN, mobility: 1.5, fatigue: 2, imminentEncounterProbMod: 10 },
 ];
 export const GetTravelPace = (value) => travelPaces.find((a) => a.value === value);
 
@@ -391,11 +391,11 @@ export const TRAVEL_MOUNTS = {
   VERY_FAST: 50,
 };
 export const travelMounts = [
-  { display: "Nenhuma (x1)", value: TRAVEL_MOUNTS.NONE, mobility: 1, fatigue: 1 },
-  { display: "Devagar (x1)", value: TRAVEL_MOUNTS.SLOW, mobility: 1, fatigue: 0.5 },
+  { display: "Nenhuma", value: TRAVEL_MOUNTS.NONE, mobility: 1, fatigue: 1 },
+  { display: "Devagar (x0.5)", value: TRAVEL_MOUNTS.SLOW, mobility: 0.5, fatigue: 0.5 },
   { display: "Normal (x1.5)", value: TRAVEL_MOUNTS.NORMAL, mobility: 1.5, fatigue: 0.5 },
   { display: "Rápida (x2)", value: TRAVEL_MOUNTS.FAST, mobility: 2, fatigue: 0.5 },
-  { display: "Muito rápida (x3)", value: TRAVEL_MOUNTS.VERY_FAST, mobility: 3, fatigue: 0.5 },
+  // { display: "Muito rápida (x3)", value: TRAVEL_MOUNTS.VERY_FAST, mobility: 3, fatigue: 0.5 },
 ];
 export const GetTravelMount = (value) => travelMounts.find((a) => a.value === value);
 
@@ -405,9 +405,9 @@ export const TRAVEL_LOADS = {
   HIGH: 30,
 };
 export const travelLoads = [
-  { display: "Baixa (< 1/3 max)", value: TRAVEL_LOADS.LOW, mobility: 1, fatigue: 1 },
+  { display: "Baixa (< 1/3 max)", value: TRAVEL_LOADS.LOW, mobility: 1, fatigue: 0.5 },
   { display: "Média (1/3 - 2/3 max)", value: TRAVEL_LOADS.MEDIUM, mobility: 0.67, fatigue: 1 },
-  { display: "Alta (> 2/3 max)", value: TRAVEL_LOADS.HIGH, mobility: 0.33, fatigue: 1 },
+  { display: "Alta (> 2/3 max)", value: TRAVEL_LOADS.HIGH, mobility: 0.33, fatigue: 1.5 },
 ];
 export const GetTravelLoad = (value) => travelLoads.find((a) => a.value === value);
 

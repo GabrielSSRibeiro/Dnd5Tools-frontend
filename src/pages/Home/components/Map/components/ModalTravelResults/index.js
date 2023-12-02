@@ -117,7 +117,7 @@ function ModalTravelResults({
         .map((nc) => {
           const creature = creatures.find((c) => c._id === nc.creatureId);
           const goldPiecesQuantity = cc.GetRarity(creature.rarity).goldPiecesQuantity;
-          const goldPiecesMod = 0.1;
+          const goldPiecesMod = 0.5;
 
           return th.getGoldPiecesAmount(goldPiecesQuantity) * goldPiecesMod;
         })
@@ -314,10 +314,14 @@ function ModalTravelResults({
   function GetCreatureCondition() {
     const dayTimeImminentEncounterProb = 0.5;
     const nightTimeImminentEncounterProb = 1;
-    const imminentEncounterProb = isNightTime ? nightTimeImminentEncounterProb : dayTimeImminentEncounterProb;
 
     return isEncounter.current
-      ? utils.ProbabilityCheck(Math.min(imminentEncounterProb * lc.GetTravelPace(travel.pace).encounterProbMod, 1))
+      ? utils.ProbabilityCheck(
+          Math.min(
+            isNightTime ? nightTimeImminentEncounterProb : dayTimeImminentEncounterProb * lc.GetTravelPace(travel.pace).imminentEncounterProbMod,
+            1
+          )
+        )
         ? lc.NODE_CREATURE_CONDITIONS.IMMINENT
         : lc.NODE_CREATURE_CONDITIONS.NEAR
       : ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(currentContext.current.hazardousness).probability)
