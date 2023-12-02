@@ -1259,7 +1259,7 @@ function Map({
             {/* travel */}
             {mapMode === lc.MAP_MODES.TRAVEL &&
               travelNodes.map((n, index) => {
-                const updatedStyles = { ...nodeStyles, translate: `${n.x * -1}px ${n.y * -1}px` };
+                let updatedStyles = { ...nodeStyles, translate: `${n.x * -1}px ${n.y * -1}px` };
                 if (n.isNodeToMove) {
                   updatedStyles.backgroundColor = "white";
                 } else if (n.needsReposition) {

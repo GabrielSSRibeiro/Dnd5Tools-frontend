@@ -1,10 +1,10 @@
 import * as utils from "../utils";
 import * as lc from "../constants/locationConstants";
 
-export const GetNormalizedValue = (value, pxInMScale) => {
+export const GetNormalizedValue = (multiplier, pxInMScale) => {
   const baseRaius = lc.BASE_VISION_IN_M;
 
-  return Math.round((baseRaius * value) / pxInMScale);
+  return Math.round((baseRaius * multiplier) / pxInMScale);
 };
 
 export const GetRadius = (location, pxInMScale) => {

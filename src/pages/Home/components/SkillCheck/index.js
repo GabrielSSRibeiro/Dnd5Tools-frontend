@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { getSkillCheck } from "../../../../helpers/skillCheckHelper";
-import { MIN_DIFICULTY } from "../../../../constants/skillCheckConstants";
 import { conditions, conditionDurations, DAMAGE_INTENSITIES, damageIntensities, difficultyClasses } from "../../../../constants/creatureConstants";
 
 import Panel from "../../../../components/Panel";
@@ -48,7 +47,7 @@ function SkillCheck({ resultText, level }) {
         </Panel>
       </section>
       <section>
-        <Panel title="Intensidade do Dano" info={[{ text: "Intensidade é baseada em Nível" }]}>
+        <Panel title="Intensidade do Dano">
           <main className="panel-select">
             {[{ display: "Nenhuma", value: null }, ...damageIntensities].map((option) => (
               <SelectButton
