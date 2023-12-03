@@ -58,7 +58,7 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
   }
 
   function CheckFinalButtonValid() {
-    if (!tempContext.name || invalidNames.includes(tempContext.name) || !tempContext.firstImpressions) {
+    if (!tempContext.name || invalidNames.includes(tempContext.name)) {
       return false;
     }
 
