@@ -285,6 +285,18 @@ function ModalTravelResults({
     let possibleEncounterCreatures = locationCreatures.filter((c) => c.isEncounter);
     if (possibleEncounterCreatures.length > 0) {
       let addToEncounter = true;
+
+      let certainCreatures = possibleEncounterCreatures.filter((c) => c.encounterFrequency === lc.ENCOUNTER_FREQUENCIES.CERTAIN);
+      if (certainCreatures.length > 0) {
+        certainCreatures.forEach((c) => {
+          c.condition = GetCreatureCondition();
+        });
+
+        if (!utils.ProbabilityCheck(differentCreatureProb)) {
+          addToEncounter = false;
+        }
+      }
+
       while (addToEncounter) {
         let creatures = possibleEncounterCreatures.filter((c) => c.condition == null);
         if (creatures.length > 0) {
