@@ -29,7 +29,7 @@ function ModalSuggestions({ notes, onClose }) {
   const mapSuggestions = useRef([
     "Quando começando em um mar ou área aberta, tente criar primeiro, de forma simples, uma localização que engloba tudo que terá ali dentro, como por exemplo um continente ou planície",
     "Quando criando uma localização, que tem outras dentro dela, tente criar localizações de tipos de terreno diferentes",
-    "Quando terminar de criar uma localização, ande por dentro dela, em condições normais, e perceba se existem muitas horas de viagem sem elementos do mapa a vista, considerando marcar pontos únicos você mesmo",
+    "Quando terminar de criar uma localização, prepare uma marcha com ritmo normal, nenhuma montaria e peso medio. A duracao recomendada de uma marcha direta entre marcos importantes sob essas condiçoes é de aproximadamente 8 horas",
     "Quando colocar pontos em uma localização, considere possíveis detalhes ou até mesmo mensagens sobre o local que poderiam ter sido deixadas ali",
   ]);
   const [suggestionMode, setSuggestionMode] = useState(ideaSuggestion.current);
