@@ -262,6 +262,7 @@ function Home() {
         setCombatConfig({
           owner: currentUser.uid,
           notes: null,
+          sandbox: null,
           level: 1,
           characterGroups: [],
           inactiveGroup: [],
@@ -350,6 +351,7 @@ function Home() {
           setIsPartyOpen={setIsPartyOpen}
           isBestiaryOpen={isBestiaryOpen}
           setIsBestiaryOpen={setIsBestiaryOpen}
+          combatConfig={combatConfig}
           HandleSaveCombatConfig={HandleSaveCombatConfig}
           level={level}
           setLevel={setLevel}

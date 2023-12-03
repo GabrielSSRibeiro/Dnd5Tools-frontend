@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import SelectButton from "../SelectButton";
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
+import ModalTextArea from "../../components/ModalTextArea";
 import Party from "./components/Party";
 import Bestiary from "./components/Bestiary";
 
@@ -26,6 +27,7 @@ function NaviBar({
   setIsPartyOpen,
   isBestiaryOpen,
   setIsBestiaryOpen,
+  combatConfig,
   HandleSaveCombatConfig,
   level,
   setLevel,
@@ -53,7 +55,7 @@ function NaviBar({
 
   async function OpenModalMenu() {
     setModal(
-      <Modal title="Versao 1.7" onClickToClose={() => setModal(null)} className="menu-modal-body">
+      <Modal title="Versao 2.0" onClickToClose={() => setModal(null)} className="menu-modal-body">
         <div style={{ display: "flex", flexDirection: "column" }}>
           <p>Motivaçoes</p>
           <span>Subir o piso de mestrar uma sessao. Rapido de criar, facil de editar</span>
@@ -84,6 +86,16 @@ function NaviBar({
     );
   }
 
+  function OpenModalDetails() {
+    setModal(<ModalTextArea title={"Notas"} text={combatConfig.notes} onClose={HandleCloseModalTextArea} />);
+  }
+  function HandleCloseModalTextArea(tempNotes) {
+    combatConfig.notes = tempNotes;
+    HandleSaveCombatConfig();
+
+    setModal(null);
+  }
+
   // function HandleCombatTabClick(combatNumber) {
   //   if (openTab !== combatNumber) {
   //     setOpenTab(combatNumber);
@@ -101,9 +113,14 @@ function NaviBar({
           <h3>SCENDANCE</h3>
           <h4>Ferramentas D&amp;D 5</h4>
         </div>
-        <button className="button-simple menu" onClick={OpenModalMenu}>
-          Menu
-        </button>
+        <div>
+          <button title="Notas" className="button-simple df df-cg-10" onClick={OpenModalDetails}>
+            <i className="fas fa-book"></i>
+          </button>
+          <button className="button-simple menu" onClick={OpenModalMenu}>
+            Menu
+          </button>
+        </div>
       </section>
       {!creatureToEdit && (
         <section>

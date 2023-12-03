@@ -219,9 +219,9 @@ function Map({
   function OpenModalSuggestions() {
     setModal(
       <ModalSuggestions
-        notes={combatConfig.notes}
+        notes={combatConfig.sandbox}
         onClose={(tempNotes) => {
-          combatConfig.notes = tempNotes;
+          combatConfig.sandbox = tempNotes;
           HandleSaveCombatConfig();
           setModal(null);
         }}
