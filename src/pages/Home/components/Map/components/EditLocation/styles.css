@@ -101,7 +101,3 @@
   justify-content: flex-end;
   column-gap: 25px;
 }
-
-.EditLocation-container .lacking-data {
-  color: var(--warningColor);
-}

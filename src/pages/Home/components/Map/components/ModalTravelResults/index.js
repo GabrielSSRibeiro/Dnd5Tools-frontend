@@ -378,11 +378,27 @@ function ModalTravelResults({
   async function OpenModalDetails() {
     const locContext = lh.GetCurrentContext(newLocation);
 
+    let messages = [];
+
     if (locContext.details) {
+      messages.push(locContext.details);
+    }
+
+    if (locContext.rumors) {
+      messages.push("- Rumores -");
+      messages.push(locContext.rumors);
+    }
+
+    if (locContext.secrets) {
+      messages.push("- Segredos -");
+      messages.push(locContext.secrets);
+    }
+
+    if (messages.length > 0) {
       setModal(
         <ModalWarning
-          title="Detalhes"
-          messages={[locContext.details]}
+          title={newLocation.name}
+          messages={messages}
           actions={[
             {
               text: "Fechar",

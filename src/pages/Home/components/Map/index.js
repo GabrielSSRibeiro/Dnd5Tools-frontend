@@ -269,7 +269,7 @@ function Map({
         };
 
     if (currentNode) {
-      //exploration
+      //march
       if (mapMode === lc.MAP_MODES.TRAVEL && (canTravelToPoint || isRest)) {
         const newLocation = map[newCurrentNode.locId]?.data;
 
@@ -304,7 +304,7 @@ function Map({
           />
         );
       }
-      //free
+      //safe
       else {
         let title = "Mover Grupo";
         let messages = [];
@@ -356,11 +356,21 @@ function Map({
         }
         // loc
         else {
-          messages.push(clickedLoc.name);
+          title = clickedLoc.name;
+          const context = clickedLoc.contexts.find((c) => c.isCurrent);
 
-          const details = clickedLoc.contexts.find((c) => c.isCurrent).details;
-          if (details) {
-            messages.push(details);
+          if (context.details) {
+            messages.push(context.details);
+          }
+
+          if (context.rumors) {
+            messages.push("- Rumores -");
+            messages.push(context.rumors);
+          }
+
+          if (context.secrets) {
+            messages.push("- Segredos -");
+            messages.push(context.secrets);
           }
 
           let addAction = {
@@ -387,7 +397,6 @@ function Map({
             editAction.className = "node-modal-left-action";
             actions = [addAction, editAction, ...actions];
           } else {
-            title = "Localização";
             editAction.className = "node-modal-left-action";
             actions = [addAction, editAction, cancelAction];
           }
@@ -417,7 +426,7 @@ function Map({
 
   async function OpenModalDetails(clickedLoc, title, messages, actions) {
     setModal(
-      <ModalWarning title="Detalhes" messages={messages} actions={actions}>
+      <ModalWarning title={title} messages={messages} actions={actions}>
         <div className="creature-list">
           {clickedLoc.creatures.length > 0 &&
             clickedLoc.creatures.map((ec) => {

@@ -135,6 +135,10 @@ button {
   visibility: hidden !important;
 }
 
+.lacking-data {
+  color: var(--warningColor);
+}
+
 .df {
   display: flex;
   justify-content: center;

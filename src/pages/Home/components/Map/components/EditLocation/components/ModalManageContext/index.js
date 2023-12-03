@@ -20,6 +20,8 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
           name: null,
           firstImpressions: null,
           details: null,
+          rumors: null,
+          secrets: null,
           precipitationFrequency: lc.PRECIPITATION_FREQUENCIES.LOW,
           intenseTemperatureFrequency: null,
           panoramicVision: lc.PANORAMIC_VISIONS.MEDIUM,
@@ -36,12 +38,19 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
     onClose(tempContext);
   }
 
-  function OpenModalDetails() {
-    setModal(<ModalTextArea title="Descrição" text={tempContext.details} onClose={HandleCloseModalTextArea} />);
+  function OpenModalDetails(property, title, placeholder) {
+    setModal(
+      <ModalTextArea
+        title={title}
+        text={tempContext[property]}
+        placeholder={placeholder}
+        onClose={(tempTextArea) => HandleCloseModalTextArea(tempTextArea, property)}
+      />
+    );
   }
-  function HandleCloseModalTextArea(tempTextArea) {
+  function HandleCloseModalTextArea(tempTextArea, property) {
     if (tempTextArea != null) {
-      tempContext.details = tempTextArea;
+      tempContext[property] = tempTextArea;
       setTempContext({ ...tempContext });
     }
 
@@ -78,26 +87,6 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
           disabled={isDefault}
           className={isDefault ? "element-disabled" : ""}
         />
-        <TextInput
-          label="Primeiras Impressões"
-          info={[
-            {
-              text: "O que quem se aproxima a primeira vez desse local experiencia",
-            },
-            {
-              text: "Recomendado 1 entre: O que sentem, o que veem, o que cheiram, o que ouvem",
-            },
-          ]}
-          value={tempContext}
-          valuePropertyPath="firstImpressions"
-          onChange={setTempContext}
-        />
-        <div className="details-wrapper">
-          <button className="details-blocker" onClick={OpenModalDetails}>
-            <i className="fas fa-pencil-alt"></i>
-          </button>
-          <TextInput label="Detalhes (opcional)" isMultiLine={true} value={tempContext} valuePropertyPath="details" onChange={setTempContext} />
-        </div>
         <Select
           label={"Chance de Precipitação"}
           extraWidth={250}
@@ -179,11 +168,37 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
           optionValue={(o) => o.value}
         />
       </div>
-      <footer>
-        <button className="button-simple" onClick={HandleCancel}>
-          Cancelar
-        </button>
-        <Button text="Salvar" onClick={HandleConfirm} isDisabled={!CheckFinalButtonValid()} />
+      <footer className="df df-jc-sb">
+        <div className="df df-jc-sb df-cg-15">
+          <button
+            title="Primeiras Impressões"
+            className={`button-simple${!tempContext.firstImpressions ? " lacking-data" : ""}`}
+            onClick={() =>
+              OpenModalDetails(
+                "firstImpressions",
+                "Primeiras Impressões",
+                "O que quem se aproxima a primeira vez desse local experiencia. Algo entre o que sentem, o que veem, o que cheiram, o que ouvem..."
+              )
+            }
+          >
+            <i className="fas fa-eye"></i>
+          </button>
+          <button title="Detalhes" className="button-simple" onClick={() => OpenModalDetails("details", "Descrição", "Descrição")}>
+            <i className="fas fa-info-circle"></i>
+          </button>
+          <button title="Rumores" className="button-simple" onClick={() => OpenModalDetails("rumors", "Rumores", "Rumores")}>
+            <i className="fas fa-assistive-listening-systems"></i>
+          </button>
+          <button title="Segredos" className="button-simple" onClick={() => OpenModalDetails("secrets", "Segredos", "Segredos")}>
+            <i className="fas fa-mask"></i>
+          </button>
+        </div>
+        <div className="df df-jc-sb df-cg-15">
+          <button className="button-simple" onClick={HandleCancel}>
+            Cancelar
+          </button>
+          <Button text="Salvar" onClick={HandleConfirm} isDisabled={!CheckFinalButtonValid()} />
+        </div>
       </footer>
     </Modal>
   );

@@ -6,7 +6,7 @@ import Modal from "../Modal";
 
 import "./styles.css";
 
-function ModalTextArea({ title, text, onClose }) {
+function ModalTextArea({ title, text, info = null, placeholder = null, onClose }) {
   const [tempText, SetTempText] = useState(text);
 
   function HandleCancel() {
@@ -18,8 +18,8 @@ function ModalTextArea({ title, text, onClose }) {
   }
 
   return (
-    <Modal className="ModalTextArea-container" title={title} onClickToClose={onClose}>
-      <TextInput value={tempText} onChange={SetTempText} isMultiLine={true} className="description" />
+    <Modal className="ModalTextArea-container" title={title} info={info} onClickToClose={onClose}>
+      <TextInput value={tempText} onChange={SetTempText} isMultiLine={true} placeholder={placeholder} className="description" />
       <footer>
         <button className="button-simple" onClick={HandleCancel}>
           Cancelar
