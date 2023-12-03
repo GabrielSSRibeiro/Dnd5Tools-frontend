@@ -708,7 +708,7 @@ function Map({
 
   function HandleLocHover(e, location, node) {
     let distance = { centerOffset: GetCenterOffset(e) };
-    distance.isVisible = distance.centerOffset.value <= visionRadius / 4;
+    distance.isVisible = distance.centerOffset.value <= visionRadius / 8;
 
     if (currentNode && mapMode === lc.MAP_MODES.TRAVEL) {
       const distanceInScale = Math.round(distance.centerOffset.value * pxInMScale);
