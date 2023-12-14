@@ -25,6 +25,7 @@ function ModalCalcXp({ level, onClose }) {
     <Modal className="ModalCalcXp-container df" title={`Calcular XP`} onClickToClose={onClose}>
       <div className="df df-fd-c df-rg-25">
         <h3>Quao significativo foi o feito do grupo (nível {level})?</h3>
+        <h6>(Se mais que Extremo, pensar como seria se tivesse mais gente no grupo)</h6>
         <div className="df options">
           {cc.combatDifficulties.map((option) => (
             <SelectButton
