@@ -43,7 +43,7 @@ export const GetAttackBonusValue = (attack, level) => {
 export const GetHPValue = (level, HP, con) => {
   const conValue = cc.creatureAttributes.find((a) => a.value === con).baseOutput;
 
-  const baseHp = sch.getDamage(level, HP);
+  const baseHp = sch.getDamage(HP, level);
   const balanceFactor = 3;
   let hp = (baseHp * conValue) / balanceFactor;
   const hpVariance = 0.1;

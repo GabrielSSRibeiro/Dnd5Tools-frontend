@@ -711,7 +711,7 @@ const GetActionDamageParts = (action, level) => {
   if (action.damageIntensity != null) {
     let part = [];
 
-    const damage = sch.getDamage(level, action.damageIntensity);
+    const damage = sch.getDamage(action.damageIntensity, level);
     part.push(utils.GetValueAsDiceString(damage, true));
 
     if (action.type !== cc.CREATURE_ACTION_TYPES.HEALING) {

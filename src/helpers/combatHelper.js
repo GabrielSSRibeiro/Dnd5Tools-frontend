@@ -252,7 +252,7 @@ export const GetActionDamangeAndConditionString = (action, level, htmlTag) => {
   }
 
   if (action.damageIntensity != null) {
-    const damage = sch.getDamage(level, action.damageIntensity);
+    const damage = sch.getDamage(action.damageIntensity, level);
     let damageString = `${open}${utils.GetValueAsDiceString(damage, true, 1, true)}${close}`;
     if (action.type !== cc.CREATURE_ACTION_TYPES.HEALING) {
       damageString += ` ${cc.GetDamageType(action.damageType)?.display}`;
