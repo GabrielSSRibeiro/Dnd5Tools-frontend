@@ -332,6 +332,7 @@ function Map({
           actions = [
             {
               text: "Deletar",
+              icon: "fas fa-trash",
               click: () => {
                 combatConfig.travel.travelNodes = combatConfig.travel.travelNodes.filter(
                   (tn) => tn.x !== newCurrentNode.x && tn.y !== newCurrentNode.y
@@ -343,6 +344,7 @@ function Map({
             },
             {
               text: "Mover Marcação",
+              icon: "fas fa-exchange-alt",
               className: "node-modal-action",
               click: () => {
                 node.isNodeToMove = true;
