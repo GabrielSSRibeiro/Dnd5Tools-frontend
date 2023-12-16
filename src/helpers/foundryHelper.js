@@ -1152,7 +1152,7 @@ const GetFoundryExportReaction = (reaction, attack, str, level) => {
   };
 };
 const GetFoundryExportTreasure = (treasure, actions, level) => {
-  let name = `${treasure.name} (${cc.GetActionFrequency(treasure.frequency).display})`;
+  let name = `${treasure.name} (${cc.GetActionFrequency(treasure.frequency).rewardDisplay})`;
   let description = "";
   let img = "";
 
