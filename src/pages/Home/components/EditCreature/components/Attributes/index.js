@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 
 import {
   creatureAttributes,
   creatureHitPoints,
   creatureAttacks,
+  CREATURE_ATTACK_VARIANCE,
   creatureArmorClasses,
   creatureInitiatives,
 } from "../../../../../../constants/creatureConstants";
+import * as ch from "../../../../../../helpers/creatureHelper";
 
 import CheckInput from "../../../../../../components/CheckInput";
 import Select from "../../../../../../components/Select";
@@ -16,6 +18,24 @@ import "./styles.css";
 
 function Attributes({ creature, setCreature }) {
   const [hasWeakSpots, setHasWeakSpots] = useState(creature.weakSpots.length > 0);
+  const creatureHPUpdated = useMemo(
+    () =>
+      creatureHitPoints.map((a) => {
+        let hp = ch.GetHPValue(ch.GetAverageLevel(creature.rarity), a.value, creature.attributes.constitution);
+
+        return { ...a, display: `${a.display} (~${hp})` };
+      }),
+    [creature.attributes.constitution, creature.rarity]
+  );
+  const creatureAttacksUpdated = useMemo(
+    () =>
+      creatureAttacks.map((a) => {
+        let attackValue = ch.GetAttackBonusValue(a.value, ch.GetAverageLevel(creature.rarity));
+
+        return { ...a, display: `${a.display} +(${attackValue - CREATURE_ATTACK_VARIANCE}-${attackValue + CREATURE_ATTACK_VARIANCE})` };
+      }),
+    [creature.rarity]
+  );
 
   const numberOfWeakSpots = 4;
 
@@ -115,7 +135,7 @@ function Attributes({ creature, setCreature }) {
           value={creature}
           valuePropertyPath="hitPoints"
           onSelect={setCreature}
-          options={creatureHitPoints}
+          options={creatureHPUpdated}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />
@@ -125,7 +145,7 @@ function Attributes({ creature, setCreature }) {
           value={creature}
           valuePropertyPath="attack"
           onSelect={setCreature}
-          options={creatureAttacks}
+          options={creatureAttacksUpdated}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />

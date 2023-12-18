@@ -8,6 +8,7 @@ import {
   // GetCreatureDifficultyRatio,
   GetCreaturePowerScale,
 } from "../../../../../../helpers/combatHelper";
+import * as ch from "../../../../../../helpers/creatureHelper";
 
 import Button from "../../../../../../components/Button";
 import Info from "../../../../../../components/Info";
@@ -23,6 +24,18 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
 
   const creatureOffensiveRatio = useMemo(() => GetCreatureOffensiveRatio(creature), [creature]);
   const creatureDefensiveRatio = useMemo(() => GetCreatureDefensiveRatio(creature), [creature]);
+  const creatureHPUpdated = useMemo(() => {
+    let hitPoints = cc.GetHitPoints(creature.hitPoints);
+    let hp = ch.GetHPValue(ch.GetAverageLevel(creature.rarity), hitPoints.value, creature.attributes.constitution);
+
+    return `${hitPoints.display} (~${hp})`;
+  }, [creature.attributes.constitution, creature.hitPoints, creature.rarity]);
+  const creatureAttacksUpdated = useMemo(() => {
+    let attackBonus = cc.GetAttackBonus(creature.attack);
+    let attackValue = ch.GetAttackBonusValue(attackBonus.value, ch.GetAverageLevel(creature.rarity));
+
+    return `${attackBonus.display} +(${attackValue - cc.CREATURE_ATTACK_VARIANCE}-${attackValue + cc.CREATURE_ATTACK_VARIANCE})`;
+  }, [creature.attack, creature.rarity]);
 
   const summaryRows = [
     {
@@ -83,8 +96,8 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
         {
           header: "Valores Básicos",
           items: [
-            { title: "Vida (PV)", value: cc.GetHitPoints(creature.hitPoints).display },
-            { title: "Ataque", value: cc.GetAttackBonus(creature.attack).display },
+            { title: "Vida (PV)", value: creatureHPUpdated },
+            { title: "Ataque", value: creatureAttacksUpdated },
             { title: "CA", value: cc.GetArmorClass(creature.armorClass).display },
             { title: "Iniciativa", value: cc.GetInitiative(creature.initiative).display },
           ],

@@ -760,6 +760,7 @@ export const creatureAttacks = [
   { display: "Extremo", value: CREATURE_ATTACKS.EXTREME, weight: 4, baseOutput: 8 },
 ];
 export const GetAttackBonus = (value) => creatureAttacks.find((a) => a.value === value);
+export const CREATURE_ATTACK_VARIANCE = 1;
 
 export const CREATURE_ARMOR_CLASSES = {
   LOW: 10,
@@ -774,6 +775,7 @@ export const creatureArmorClasses = [
   { display: "Extrema (22-24)", value: CREATURE_ARMOR_CLASSES.EXTREME, weight: 4, baseOutput: 23 },
 ];
 export const GetArmorClass = (value) => creatureArmorClasses.find((a) => a.value === value);
+export const CREATURE_ARMOR_CLASS_VARIANCE = 1;
 
 export const CREATURE_INITIATIVES = {
   LOW: 10,
@@ -782,12 +784,13 @@ export const CREATURE_INITIATIVES = {
   EXTREME: 40,
 };
 export const creatureInitiatives = [
-  { display: "Baixa", value: CREATURE_INITIATIVES.LOW, weight: 1, baseOutput: -2 },
-  { display: "Média", value: CREATURE_INITIATIVES.MEDIUM, weight: 2, baseOutput: 2 },
-  { display: "Alta", value: CREATURE_INITIATIVES.HIGH, weight: 3, baseOutput: 6 },
-  { display: "Extrema", value: CREATURE_INITIATIVES.EXTREME, weight: 4, baseOutput: 10 },
+  { display: "Baixa +(-4-0)", value: CREATURE_INITIATIVES.LOW, weight: 1, baseOutput: -2 },
+  { display: "Média +(0-4)", value: CREATURE_INITIATIVES.MEDIUM, weight: 2, baseOutput: 2 },
+  { display: "Alta +(4-8)", value: CREATURE_INITIATIVES.HIGH, weight: 3, baseOutput: 6 },
+  { display: "Extrema +(8-12)", value: CREATURE_INITIATIVES.EXTREME, weight: 4, baseOutput: 10 },
 ];
 export const GetInitiative = (value) => creatureInitiatives.find((a) => a.value === value);
+export const CREATURE_INITIATIVE_VARIANCE = 2;
 
 export const DAMAGES_EFFECTIVENESS = {
   VULNERABLE: 10,

@@ -32,12 +32,12 @@ export const GetAttributeValue = (attribute) => {
 
 export const GetACValue = (armorClass) => {
   const baseValue = cc.GetArmorClass(armorClass).baseOutput;
-  return Math.max(10, utils.randomValueFromVarianceInt(baseValue, 1));
+  return Math.max(10, utils.randomValueFromVarianceInt(baseValue, cc.CREATURE_ARMOR_CLASS_VARIANCE));
 };
 
 export const GetAttackBonusValue = (attack, level) => {
   const baseValue = cc.GetAttackBonus(attack).baseOutput;
-  return utils.randomValueFromVarianceInt(baseValue, 1) + GetProfByLevel(level);
+  return utils.randomValueFromVarianceInt(baseValue, cc.CREATURE_ATTACK_VARIANCE) + GetProfByLevel(level);
 };
 
 export const GetHPValue = (level, HP, con) => {
@@ -61,7 +61,7 @@ export const GetHPValue = (level, HP, con) => {
 
 export const GetInitiativeValue = (initiative) => {
   const baseValue = cc.GetInitiative(initiative).baseOutput;
-  return utils.randomValueFromVarianceInt(baseValue, 2);
+  return utils.randomValueFromVarianceInt(baseValue, cc.CREATURE_INITIATIVE_VARIANCE);
 };
 
 export const GetSpeedValue = (speed) => {
