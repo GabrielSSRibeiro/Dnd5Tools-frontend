@@ -7,6 +7,7 @@ import {
   GetCreatureDefensiveRatio,
   // GetCreatureDifficultyRatio,
   GetCreaturePowerScale,
+  GetActionDamangeAndConditionString,
 } from "../../../../../../helpers/combatHelper";
 import * as ch from "../../../../../../helpers/creatureHelper";
 
@@ -22,6 +23,7 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
   const [isBusy, setIsBusy] = useState(false);
   const [modal, setModal] = useState(null);
 
+  const averageLevel = useMemo(() => ch.GetAverageLevel(creature.rarity), [creature]);
   const creatureOffensiveRatio = useMemo(() => GetCreatureOffensiveRatio(creature), [creature]);
   const creatureDefensiveRatio = useMemo(() => GetCreatureDefensiveRatio(creature), [creature]);
   const creatureHPUpdated = useMemo(() => {
@@ -32,10 +34,26 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
   }, [creature.attributes.constitution, creature.hitPoints, creature.rarity]);
   const creatureAttacksUpdated = useMemo(() => {
     let attackBonus = cc.GetAttackBonus(creature.attack);
-    let attackValue = ch.GetAttackBonusValue(attackBonus.value, ch.GetAverageLevel(creature.rarity));
+    let attackValue = ch.GetAttackBonusValue(attackBonus.value, averageLevel);
 
     return `${attackBonus.display} +(${attackValue - cc.CREATURE_ATTACK_VARIANCE}-${attackValue + cc.CREATURE_ATTACK_VARIANCE})`;
-  }, [creature.attack, creature.rarity]);
+  }, [averageLevel, creature.attack]);
+  const actionItems = useMemo(
+    () =>
+      creature.actions.map((a) => ({
+        title: `${a.name} (${cc.GetActionFrequency(a.frequency).display})`,
+        value: ch.GetActionReachValue(a.reach, a.type) + GetActionDamangeAndConditionString(a, averageLevel),
+      })),
+    [averageLevel, creature.actions]
+  );
+  const reactionItems = useMemo(
+    () =>
+      creature.reactions.map((a) => ({
+        title: `${a.name} (${cc.GetActionFrequency(a.frequency).display})`,
+        value: ch.GetActionReachValue(a.reach, a.type) + GetActionDamangeAndConditionString(a, averageLevel),
+      })),
+    [averageLevel, creature.reactions]
+  );
 
   const summaryRows = [
     {
@@ -168,7 +186,7 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
       boxes: [
         {
           header: "Açoes",
-          items: creature.actions.map((a) => ({ title: a.name, value: cc.GetActionFrequency(a.frequency).display })),
+          items: actionItems,
         },
       ],
     },
@@ -176,7 +194,7 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
       boxes: [
         {
           header: "Reaçoes",
-          items: creature.reactions.map((a) => ({ title: a.name, value: cc.GetActionFrequency(a.frequency).display })),
+          items: reactionItems,
         },
         {
           header: "Aura",
