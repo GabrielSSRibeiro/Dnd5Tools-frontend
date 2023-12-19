@@ -319,6 +319,7 @@ function Map({
             text: "Mover Seguramente",
             click: () => {
               HandleSetCurrentNode(newCurrentNode);
+              combatConfig.travel.cummulativeEncounterChance = 0;
               HandleSaveCombatConfig();
               setModal(null);
             },
