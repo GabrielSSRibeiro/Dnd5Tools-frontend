@@ -89,9 +89,10 @@ function ModalTravelResults({
   const hasAnyCreature = useRef(encounterLocation.current.creatures.length > 0 || (shouldlAddWorldCreatures && world.creatures.length > 0));
   const isEncounter = useRef(
     hasAnyCreature.current &&
-      (travel.cummulativeEncounterChance === 1 ||
+      (ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(currentContext.current.hazardousness).probability, true) ||
         lh.HasCertainCreature(encounterLocation.current, GetCreatureCurrentRoutine) ||
-        ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(currentContext.current.hazardousness).probability, true))
+        encounterProb === 1 ||
+        utils.ProbabilityCheck(travel.cummulativeEncounterChance))
   );
   const nodeCreatures = useRef(!viewingCurrent ? GetLocationCreatures() : newCurrentNode.creatures);
   const creaturesForDisplay = useRef({
@@ -241,15 +242,19 @@ function ModalTravelResults({
   }
 
   function ProbUpdatedByTravelTimeModCheck(probability, updateTimePassed = false) {
-    const travelTimeMod = (hasMoved ? locHoverData.distance.travelTimeInMin : timePassed) / 60;
-    const check = utils.ProbabilityCheckWithRatio(probability, travelTimeMod);
-    const updatedTimePassed = Math.round(check.ratioChecked * 60);
+    try {
+      const travelTimeMod = (hasMoved ? locHoverData.distance.travelTimeInMin : timePassed) / 60;
+      const check = utils.ProbabilityCheckWithRatio(probability, travelTimeMod);
+      const updatedTimePassed = Math.round(check.ratioChecked * 60);
 
-    if (updateTimePassed && updatedTimePassed !== timePassed) {
-      setTimePassed(updatedTimePassed);
+      if (updateTimePassed && updatedTimePassed !== timePassed) {
+        setTimePassed(updatedTimePassed);
+      }
+
+      return check.probabilityCheck;
+    } catch (error) {
+      return false;
     }
-
-    return check.probabilityCheck;
   }
 
   function GetLocationCreatures() {

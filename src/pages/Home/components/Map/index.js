@@ -721,9 +721,6 @@ function Map({
 
       if (location) {
         distance.encounterProb = GetFinalProb(location, distance.travelTimeInMin);
-        if (distance.encounterProb + combatConfig.travel.cummulativeEncounterChance >= 1) {
-          distance.encounterProb = 1;
-        }
       }
     }
 
@@ -753,9 +750,12 @@ function Map({
       return probability === 1;
     });
 
-    return isCertain
-      ? 1
-      : utils.ProbabilityCheckWithRatio(lc.GetHazardousness(locationContext.hazardousness).probability, travelTimeInMin / 60).finalProb;
+    if (isCertain) {
+      return 1;
+    }
+
+    const finalProb = utils.ProbabilityCheckWithRatio(lc.GetHazardousness(locationContext.hazardousness).probability, travelTimeInMin / 60).finalProb;
+    return Math.min(1, utils.getProbabilityOfTwoIndependent(finalProb, combatConfig.travel.cummulativeEncounterChance));
   }
 
   function AdjustCoodernate(coodernate) {

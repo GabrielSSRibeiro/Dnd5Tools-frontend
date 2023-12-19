@@ -240,10 +240,10 @@ export const MinutesToTimeFormat = (minutes) => {
 };
 
 export const ProbabilityCheckWithRatio = (probability, ratio) => {
-  const fullProbs = Math.floor(ratio);
+  const fullProbTimes = Math.floor(ratio);
   const parcialProb = ratio % 1;
 
-  let probArray = createArrayFromInt(fullProbs).map((_) => probability);
+  let probArray = createArrayFromInt(fullProbTimes).map((_) => probability);
   if (parcialProb > 0) {
     probArray.push(probability * parcialProb);
   }
@@ -261,15 +261,15 @@ export const ProbabilityCheckWithRatio = (probability, ratio) => {
   return {
     probabilityCheck,
     ratioChecked,
-    finalProb: getProbabilityOfTwoIndependent(getProbabilityOfOneSuccess(probability, fullProbs), probability * parcialProb),
+    finalProb: getProbabilityOfTwoIndependent(getProbabilityOfOneSuccess(probability, fullProbTimes), probability * parcialProb),
   };
 };
 
-function getProbabilityOfOneSuccess(p, n) {
+export function getProbabilityOfOneSuccess(p, n) {
   return 1 - Math.pow(1 - p, n);
 }
 
-function getProbabilityOfTwoIndependent(p1, p2) {
+export function getProbabilityOfTwoIndependent(p1, p2) {
   const p1Andp2 = p1 * p2;
   return p1 + p2 - p1Andp2;
 }
