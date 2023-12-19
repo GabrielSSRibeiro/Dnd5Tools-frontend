@@ -265,6 +265,10 @@ export const GetActionDamangeAndConditionString = (action, level, htmlTag) => {
     }
   }
 
+  if (action.repetitions) {
+    pieces.push(` (x${cc.GetActionRepetitions(action.repetitions).multiplier})`);
+  }
+
   let fianlString = pieces.join(", ");
   if (fianlString) {
     fianlString = `, ${fianlString}`;
