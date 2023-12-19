@@ -34,6 +34,7 @@ function ModalTravelResults({
   HandleSetCurrentNode,
   HandleAddTravelNode,
   HandleSaveCombatConfig,
+  encounterProb,
   addAction,
   editAction,
 }) {
@@ -72,7 +73,10 @@ function ModalTravelResults({
         : element.current?.hazardousness && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
   );
   const encounterLocation = useRef(
-    isPointOfInterest && exteriorLocation && hasMoved && !lh.HasCertainCreature(newLocation, GetCreatureCurrentRoutine)
+    isPointOfInterest &&
+      exteriorLocation &&
+      (hasMoved || newLocation.creatures.length === 0) &&
+      !lh.HasCertainCreature(newLocation, GetCreatureCurrentRoutine)
       ? exteriorLocation
       : newLocation
   );
@@ -85,7 +89,8 @@ function ModalTravelResults({
   const hasAnyCreature = useRef(encounterLocation.current.creatures.length > 0 || (shouldlAddWorldCreatures && world.creatures.length > 0));
   const isEncounter = useRef(
     hasAnyCreature.current &&
-      (lh.HasCertainCreature(encounterLocation.current, GetCreatureCurrentRoutine) ||
+      (travel.cummulativeEncounterChance === 1 ||
+        lh.HasCertainCreature(encounterLocation.current, GetCreatureCurrentRoutine) ||
         ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(currentContext.current.hazardousness).probability, true))
   );
   const nodeCreatures = useRef(!viewingCurrent ? GetLocationCreatures() : newCurrentNode.creatures);
@@ -309,8 +314,13 @@ function ModalTravelResults({
           addToEncounter = false;
         }
       }
-      //add 1 creature
-    } else if (isEncounter.current) {
+    }
+
+    //add 1 creature if needed
+    if (
+      isEncounter.current &&
+      !locationCreatures.some((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT || c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR)
+    ) {
       locationCreatures.sort((a, b) => b.encounterFrequency - a.encounterFrequency);
       const moreCommonCreatures = locationCreatures.filter((c) => c.encounterFrequency === locationCreatures[0].encounterFrequency);
       utils.randomItemFromArray(moreCommonCreatures).condition = GetCreatureCondition();
@@ -372,6 +382,12 @@ function ModalTravelResults({
       travel.exhaustionTimer += timePassed * lc.GetTravelPace(travel.pace).fatigue;
     } else {
       travel.exhaustionTimer += Math.round(locHoverData.distance.travelTimeInMin * lh.GetTravelFatigueModifier(travel));
+    }
+
+    if (isEncounter.current) {
+      travel.cummulativeEncounterChance = 0;
+    } else {
+      travel.cummulativeEncounterChance = Math.min(1, travel.cummulativeEncounterChance + encounterProb);
     }
   }
 

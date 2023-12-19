@@ -278,6 +278,7 @@ function Home() {
             precipitation: 1,
             temperature: 1,
             nextConditionsUpdate: null,
+            cummulativeEncounterChance: 0,
             currentNode: null,
             travelNodes: [],
           },

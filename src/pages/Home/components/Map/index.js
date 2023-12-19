@@ -236,7 +236,6 @@ function Map({
 
     if (nodeToMove) {
       let originalNode = combatConfig.travel.travelNodes.find((tn) => tn.name === nodeToMove.name);
-      console.log(nodeToMove, combatConfig.travel.travelNodes, originalNode);
       originalNode.x = AdjustCoodernate(locHoverData.distance.centerOffset.x + (centerOffset.x - defaultCenter.x)) * -1;
       originalNode.y = AdjustCoodernate(locHoverData.distance.centerOffset.y - (centerOffset.y - defaultCenter.y));
       originalNode.angle = locHoverData.distance.centerOffset.angle;
@@ -293,6 +292,7 @@ function Map({
             HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
             HandleAddTravelNode={node ? null : () => HandleAddTravelNode(newCurrentNode)}
             HandleSaveCombatConfig={HandleSaveCombatConfig}
+            encounterProb={locHoverData.distance.encounterProb}
             addAction={() => {
               setLocationToEdit(lc.GetNewLocation(newLocation._id ?? userId));
               setModal(null);
@@ -721,6 +721,9 @@ function Map({
 
       if (location) {
         distance.encounterProb = GetFinalProb(location, distance.travelTimeInMin);
+        if (distance.encounterProb + combatConfig.travel.cummulativeEncounterChance >= 1) {
+          distance.encounterProb = 1;
+        }
       }
     }
 
