@@ -148,6 +148,12 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
             {
               text: "Essa escolha também decide a chance de encontrar corpos com recompensas",
             },
+            {
+              text: "",
+            },
+            {
+              text: "Essa chance cresce até que um encontro aconteça, depois zera",
+            },
           ]}
           extraWidth={250}
           value={tempContext}
