@@ -134,6 +134,14 @@ export const GetLocationDataForExport = (location, creatures) => {
     locationDataForExport.push(location.contexts[0].details);
   }
 
+  if (location.contexts[0].rumors) {
+    locationDataForExport.push(location.contexts[0].rumors);
+  }
+
+  if (location.contexts[0].secrets) {
+    locationDataForExport.push(location.contexts[0].secrets);
+  }
+
   if (location.creatures.length > 0) {
     locationDataForExport.push(location.creatures.map((lc) => creatures.find((c) => c._id === lc.creatureId).name).join(", "));
   }
