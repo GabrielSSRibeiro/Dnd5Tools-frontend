@@ -425,6 +425,69 @@ function EditLocation({
       <main className="location-fields">
         <TextInput label="Nome" value={location} valuePropertyPath="name" onChange={setLocation} />
 
+        {/* reference */}
+        {!isWorld && !isFirstOfArea && (
+          <>
+            <div className="divider"></div>
+            <Select
+              label={"Localização Referência"}
+              extraWidth={250}
+              value={location}
+              valuePropertyPath="reference.location"
+              onSelect={HandleSelectRefLocation}
+              nothingSelected="-"
+              options={referenceLocations}
+              optionDisplay={(o) => o.refListName}
+              optionValue={(o) => o._id}
+            />
+            <div className="location-row df df-jc-sb">
+              <Select
+                label={"Distância"}
+                extraWidth={15}
+                value={location}
+                valuePropertyPath="reference.distance"
+                onSelect={HandleSelectRefDistance}
+                nothingSelected="-"
+                options={lc.referenceDistances} //.filter((d) => d.value !== lc.REFERENCE_DISTANCES.ADJACENT || !map[location.exteriorLocationId])}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+              <Select
+                label={"Direção"}
+                extraWidth={30}
+                value={location}
+                valuePropertyPath="reference.direction"
+                onSelect={HandleSelectRefDirection}
+                nothingSelected="-"
+                options={lc.directions}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+              <Select
+                label={"Conecção"}
+                extraWidth={0}
+                value={location}
+                valuePropertyPath="reference.connectionType"
+                onSelect={setLocation}
+                nothingSelected="Nada"
+                options={lc.locationConnectionTypes}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+                // isDisabled={
+                //   location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST
+                //   &&
+                //   (!location._id ||
+                //     !map[location._id] ||
+                //     !Object.keys(map[location._id]?.interiorLocs).some(
+                //       (id) => !map[id].data.isHidden && map[id].data.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && !map[id].data.reference.location
+                //     ))
+                // }
+              />
+            </div>
+          </>
+        )}
+        <div className="divider"></div>
+
         {location.exteriorLocationId != null && (
           <Select
             label={"Tamanho"}
@@ -432,14 +495,13 @@ function EditLocation({
             extraWidth={250}
             value={location}
             valuePropertyPath="size"
+            optionsAtATime={6}
             onSelect={HandleSelectSize}
             options={locationSizes}
             optionDisplay={(o) => o.display}
             optionValue={(o) => o.value}
           />
         )}
-
-        <div className="divider"></div>
 
         {(location.size && location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST) || location.exteriorLocationId == null ? (
           <>
@@ -552,67 +614,6 @@ function EditLocation({
           </>
         )}
 
-        {/* reference */}
-        {!isWorld && !isFirstOfArea && (
-          <>
-            <div className="divider"></div>
-            <Select
-              label={"Localização Referência"}
-              extraWidth={250}
-              value={location}
-              valuePropertyPath="reference.location"
-              onSelect={HandleSelectRefLocation}
-              nothingSelected="-"
-              options={referenceLocations}
-              optionDisplay={(o) => o.refListName}
-              optionValue={(o) => o._id}
-            />
-            <div className="location-row df df-jc-sb">
-              <Select
-                label={"Distância"}
-                extraWidth={15}
-                value={location}
-                valuePropertyPath="reference.distance"
-                onSelect={HandleSelectRefDistance}
-                nothingSelected="-"
-                options={lc.referenceDistances} //.filter((d) => d.value !== lc.REFERENCE_DISTANCES.ADJACENT || !map[location.exteriorLocationId])}
-                optionDisplay={(o) => o.display}
-                optionValue={(o) => o.value}
-              />
-              <Select
-                label={"Direção"}
-                extraWidth={30}
-                value={location}
-                valuePropertyPath="reference.direction"
-                onSelect={HandleSelectRefDirection}
-                nothingSelected="-"
-                options={lc.directions}
-                optionDisplay={(o) => o.display}
-                optionValue={(o) => o.value}
-              />
-              <Select
-                label={"Conecção"}
-                extraWidth={0}
-                value={location}
-                valuePropertyPath="reference.connectionType"
-                onSelect={setLocation}
-                nothingSelected="Nada"
-                options={lc.locationConnectionTypes}
-                optionDisplay={(o) => o.display}
-                optionValue={(o) => o.value}
-                // isDisabled={
-                //   location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST
-                //   &&
-                //   (!location._id ||
-                //     !map[location._id] ||
-                //     !Object.keys(map[location._id]?.interiorLocs).some(
-                //       (id) => !map[id].data.isHidden && map[id].data.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && !map[id].data.reference.location
-                //     ))
-                // }
-              />
-            </div>
-          </>
-        )}
         <div className="divider"></div>
 
         <div className="location-detail-group">

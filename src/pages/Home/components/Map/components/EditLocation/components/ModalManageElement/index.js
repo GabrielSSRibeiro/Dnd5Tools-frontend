@@ -108,6 +108,7 @@ function ModalManageElement({ element, elements, onClose }) {
           onSelect={setTempElement}
           nothingSelected="Nenhum"
           options={lc.materialExtractionDifficulties}
+          optionsAtATime={6}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />

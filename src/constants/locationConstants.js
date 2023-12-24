@@ -349,12 +349,14 @@ export const MATERIAL_EXTRACTION_DIFFICULTIES = {
   MEDIUM: 20,
   HIGH: 30,
   EXTREME: 40,
+  CERTAIN: 50,
 };
 export const materialExtractionDifficulties = [
-  { display: "Baixa", value: MATERIAL_EXTRACTION_DIFFICULTIES.LOW },
-  { display: "Média", value: MATERIAL_EXTRACTION_DIFFICULTIES.MEDIUM },
-  { display: "Alta", value: MATERIAL_EXTRACTION_DIFFICULTIES.HIGH },
-  { display: "Extrema", value: MATERIAL_EXTRACTION_DIFFICULTIES.EXTREME },
+  { display: "Baixa (10%)", value: MATERIAL_EXTRACTION_DIFFICULTIES.LOW, probability: 0.1 },
+  { display: "Média (25%)", value: MATERIAL_EXTRACTION_DIFFICULTIES.MEDIUM, probability: 0.25 },
+  { display: "Alta (50%)", value: MATERIAL_EXTRACTION_DIFFICULTIES.HIGH, probability: 0.5 },
+  { display: "Extrema (75%)", value: MATERIAL_EXTRACTION_DIFFICULTIES.EXTREME, probability: 0.75 },
+  { display: "Certa (100%)", value: MATERIAL_EXTRACTION_DIFFICULTIES.CERTAIN, probability: 1 },
 ];
 export const GetMaterialExtractionDifficulty = (value) => materialExtractionDifficulties.find((a) => a.value === value);
 

@@ -70,7 +70,7 @@ function ModalTravelResults({
     newCurrentNode.isHazardous ??
       (isPointOfInterest
         ? newLocation.interaction.isHazardous
-        : element.current?.hazardousness && utils.ProbabilityCheck(lc.GetHazardousness(element.current.hazardousness).probability))
+        : element.current?.hazardousness && utils.ProbabilityCheck(lc.GetMaterialExtractionDifficulty(element.current.hazardousness).probability))
   );
   const encounterLocation = useRef(
     isPointOfInterest &&
