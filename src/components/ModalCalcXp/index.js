@@ -1,45 +1,80 @@
-import React, { useState } from "react";
-import * as cc from "../../constants/combatConstants";
-import { creatureXpThresholds } from "../../constants/creatureConstants";
+import React, { useState, useRef } from "react";
+import * as creaC from "../../constants/creatureConstants";
+import * as combC from "../../constants/combatConstants";
+import { creatureXps } from "../../constants/creatureConstants";
+import { GetAverageLevel } from "../../helpers/creatureHelper";
 
 import SelectButton from "../SelectButton";
 import Button from "../Button";
+import Select from "../Select";
 import Modal from "../Modal";
 
 import "./styles.css";
 
 function ModalCalcXp({ level, onClose }) {
-  const [difficulty, setDifficulty] = useState(cc.COMBAT_DIFFICULTIES.MEDIUM);
+  const splits = useRef([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  const [achievement, setAchievement] = useState(null);
+  const [rarity, setRarity] = useState(null);
+  const [split, setSplit] = useState(splits.current[0]);
   const [result, setResult] = useState(null);
 
-  function HandleChange(value) {
-    setDifficulty(value);
-    setResult(null);
+  function CalcXp() {
+    const avgLvl = GetAverageLevel(rarity);
+    const xp = creatureXps[avgLvl - 1] ?? creatureXps[creatureXps.length - 1];
+    const multiplier = combC.GetCombatAchievement(achievement).multiplier;
+    setResult(Math.round((xp * multiplier) / split));
   }
 
-  function calcXp() {
-    setResult(creatureXpThresholds[level - 1][difficulty]);
+  function HandleChange(func) {
+    setResult();
+    func();
   }
 
   return (
     <Modal className="ModalCalcXp-container df" title={`Calcular XP`} onClickToClose={onClose}>
       <div className="df df-fd-c df-rg-25">
-        <h3>Quao significativo foi o feito do grupo (nível {level})?</h3>
-        <h6>(Se mais que Extremo, pensar como seria se tivesse mais gente no grupo)</h6>
+        <h4>Qual o feito?</h4>
         <div className="df options">
-          {cc.combatDifficulties.map((option) => (
+          {combC.combatAchievements.map((option) => (
             <SelectButton
+              isLong={true}
               key={option.value}
-              isSelected={difficulty === option.value}
+              isSelected={achievement === option.value}
               text={option.display}
-              onClick={() => HandleChange(option.value)}
+              onClick={() => HandleChange(() => setAchievement(option.value))}
             />
           ))}
         </div>
-        {result && <h3 className="result">{result} XP por personagem</h3>}
+        <h4>Qual a raridade?</h4>
+        <div className="df options">
+          {creaC.creatureRarities.map((option) => (
+            <SelectButton
+              key={option.value}
+              isSelected={rarity === option.value}
+              text={option.treasureDisplay}
+              onClick={() => HandleChange(() => setRarity(option.value))}
+            />
+          ))}
+        </div>
+        <h3 className="result">{result ? `${result} XP` : "-"}</h3>
       </div>
       <div className="divider"></div>
-      <Button text="Calcular" onClick={calcXp} isDisabled={result != null} />
+      <footer className="df df-jc-sb df-cg-10">
+        <Select
+          label="Dividir entre grupo de"
+          value={split}
+          extraWidth={60}
+          onSelect={(value) => HandleChange(() => setSplit(value))}
+          options={splits.current}
+          optionsAtATime={8}
+        />
+        <div className="df df-cg-20">
+          <button className="button-simple" onClick={onClose}>
+            Cancelar
+          </button>
+          <Button text="Calcular" isDisabled={!achievement || !rarity} onClick={CalcXp} />
+        </div>
+      </footer>
     </Modal>
   );
 }

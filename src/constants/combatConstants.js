@@ -41,3 +41,33 @@ export const combatDifficulties = [
   },
 ];
 export const GetDifficulty = (value) => combatDifficulties.find((a) => a.value === value);
+
+export const COMBAT_ACHIEVEMENTS = {
+  OVERCOME_CHALLANGE: 10,
+  NEUTRALIZE_CREATURE: 20,
+  UNCOVER_SECRET: 30,
+  COMPLETE_QUEST: 40,
+};
+export const combatAchievements = [
+  {
+    display: "Superar desafio",
+    value: COMBAT_ACHIEVEMENTS.OVERCOME_CHALLANGE,
+    multiplier: 0.1,
+  },
+  {
+    display: "Anular criatura",
+    value: COMBAT_ACHIEVEMENTS.NEUTRALIZE_CREATURE,
+    multiplier: 0.5,
+  },
+  {
+    display: "Descobrir segredo",
+    value: COMBAT_ACHIEVEMENTS.UNCOVER_SECRET,
+    multiplier: 1,
+  },
+  {
+    display: "Completar missao",
+    value: COMBAT_ACHIEVEMENTS.COMPLETE_QUEST,
+    multiplier: 1.5,
+  },
+];
+export const GetCombatAchievement = (value) => combatAchievements.find((a) => a.value === value);
