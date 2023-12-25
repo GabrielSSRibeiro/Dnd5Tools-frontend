@@ -488,6 +488,33 @@ function EditLocation({
         )}
         <div className="divider"></div>
 
+        <div className="location-detail-group">
+          <div className="location-row location-detail-group-title">
+            <span>Contextos</span>
+            <button onClick={() => OpenModalManageContext()}>
+              <i className="fas fa-plus"></i>
+            </button>
+          </div>
+          {location.contexts.map((c, index) => (
+            <div className="location-row location-detail-group-item" key={c.name}>
+              <div className="df df-cg-10">
+                <CheckInput isSelected={c.isCurrent} onClick={() => HandleSelectContext(c)} />
+                <span className={!c.firstImpressions ? `lacking-data` : ""}>{c.name}</span>
+              </div>
+              <div className="group-item-actions">
+                <button onClick={() => OpenModalManageContext(c)}>
+                  <i className="fas fa-pencil-alt"></i>
+                </button>
+                <button onClick={() => DeleteContext(c)} disabled={index === 0}>
+                  <i className="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="divider"></div>
+
         {location.exteriorLocationId != null && (
           <Select
             label={"Tamanho"}
@@ -613,33 +640,6 @@ function EditLocation({
             )}
           </>
         )}
-
-        <div className="divider"></div>
-
-        <div className="location-detail-group">
-          <div className="location-row location-detail-group-title">
-            <span>Contextos</span>
-            <button onClick={() => OpenModalManageContext()}>
-              <i className="fas fa-plus"></i>
-            </button>
-          </div>
-          {location.contexts.map((c, index) => (
-            <div className="location-row location-detail-group-item" key={c.name}>
-              <div className="df df-cg-10">
-                <CheckInput isSelected={c.isCurrent} onClick={() => HandleSelectContext(c)} />
-                <span className={!c.firstImpressions ? `lacking-data` : ""}>{c.name}</span>
-              </div>
-              <div className="group-item-actions">
-                <button onClick={() => OpenModalManageContext(c)}>
-                  <i className="fas fa-pencil-alt"></i>
-                </button>
-                <button onClick={() => DeleteContext(c)} disabled={index === 0}>
-                  <i className="fas fa-trash"></i>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
 
         <div className="divider"></div>
 
