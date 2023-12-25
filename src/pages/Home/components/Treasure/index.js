@@ -365,7 +365,10 @@ function Treasure({ resultText, level }) {
                     <span className="label">Acessórios: </span>Ferramentas de joalheiro
                   </span>
                   <span>
-                    <span className="label">Consumíveis: </span>Suprimentos de Alquimista
+                    <span className="label">Poçoes: </span>Suprimentos de Alquimista
+                  </span>
+                  <span>
+                    <span className="label">Pergaminho de magia: </span>Suprimentos de Caligrafia
                   </span>
                 </div>
               </footer>
