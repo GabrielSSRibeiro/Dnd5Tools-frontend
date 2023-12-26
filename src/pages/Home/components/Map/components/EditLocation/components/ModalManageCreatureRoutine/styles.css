@@ -11,6 +11,9 @@
   justify-content: flex-start;
   row-gap: 10px;
   margin-bottom: 25px;
+
+  overflow-y: auto;
+  height: 350px;
 }
 
 .ModalManageCreatureRoutine-container footer {

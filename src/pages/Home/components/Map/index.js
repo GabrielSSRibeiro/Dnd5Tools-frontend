@@ -390,7 +390,7 @@ function Map({
             text: "Editar",
             icon: "fas fa-pen",
             click: () => {
-              setLocationToEdit(clickedLoc);
+              setLocationToEdit(utils.clone(clickedLoc));
               setModal(null);
             },
             isSimple: true,
