@@ -12,7 +12,8 @@ import "./styles.css";
 function ModalSuggestions({ notes, onClose }) {
   const ideaSuggestion = useRef("Ideas");
   const mapSuggestion = useRef("Mapa");
-  const suggestionModes = useRef([ideaSuggestion.current, mapSuggestion.current]);
+  const dungeonSuggestion = useRef("Masmorra");
+  const suggestionModes = useRef([ideaSuggestion.current, mapSuggestion.current, dungeonSuggestion.current]);
 
   const ideaSuggestions = useRef([
     "Escolha uma criatura, quem ela é e qual seu nome e alcunha?",
@@ -31,6 +32,11 @@ function ModalSuggestions({ notes, onClose }) {
     "Quando criando uma localização, que tem outras dentro dela, tente criar localizações de tipos de terreno diferentes",
     "Quando terminar de criar uma localização, prepare uma marcha com ritmo normal, nenhuma montaria e peso medio. A duracao recomendada de uma marcha direta entre marcos importantes sob essas condiçoes é de aproximadamente 8 horas",
     "Quando colocar pontos em uma localização, considere possíveis detalhes ou até mesmo mensagens sobre o local que poderiam ter sido deixadas ali",
+  ]);
+  const dungeonSuggestions = useRef([
+    "Propósito da masmorra? Toda masmorra deve ter um tema que representa ela toda e seus perigos básicos",
+    "Quais os habitantes? Como as criaturas interagem umas com as outras? Existem Sub regiões na masmorra? A entrada de cada sub região, incluindo a entrada principal, pode ser bloqueada com alguma lógica que se repete pela masmorra e impede a passagem fácil ou a modifica",
+    "Proporçao de 1/3 criaturas, 1/3 vazios, 1/3 tesouros e armadilhas",
   ]);
   const [suggestionMode, setSuggestionMode] = useState(ideaSuggestion.current);
   const [tempNotes, setTempNotes] = useState(notes);
@@ -65,7 +71,7 @@ function ModalSuggestions({ notes, onClose }) {
           </div>
         ) : (
           <aside className="map-suggestions df df-fd-c df-jc-fs df-ai-fs df-rg-20">
-            {mapSuggestions.current.map((message, index) => (
+            {(suggestionMode === mapSuggestion.current ? mapSuggestions.current : dungeonSuggestions.current).map((message, index) => (
               <h3 key={index}>{message}</h3>
             ))}
           </aside>
