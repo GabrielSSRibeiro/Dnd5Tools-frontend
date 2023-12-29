@@ -15,6 +15,7 @@ function ModalCalcXp({ level, onClose }) {
   const splits = useRef([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
   const [achievement, setAchievement] = useState(null);
   const [rarity, setRarity] = useState(null);
+  const [times, setTimes] = useState(splits.current[0]);
   const [split, setSplit] = useState(splits.current[0]);
   const [result, setResult] = useState(null);
 
@@ -22,7 +23,7 @@ function ModalCalcXp({ level, onClose }) {
     const avgLvl = GetAverageLevel(rarity);
     const xp = creatureXps[avgLvl - 1] ?? creatureXps[creatureXps.length - 1];
     const multiplier = combC.GetCombatAchievement(achievement).multiplier;
-    setResult(Math.round((xp * multiplier) / split));
+    setResult(times * Math.round((xp * multiplier) / split));
   }
 
   function HandleChange(func) {
@@ -60,14 +61,24 @@ function ModalCalcXp({ level, onClose }) {
       </div>
       <div className="divider"></div>
       <footer className="df df-jc-sb df-cg-10">
-        <Select
-          label="Dividir entre grupo de"
-          value={split}
-          extraWidth={60}
-          onSelect={(value) => HandleChange(() => setSplit(value))}
-          options={splits.current}
-          optionsAtATime={8}
-        />
+        <div className="df df-cg-10">
+          <Select
+            label="Multiplicar por"
+            value={times}
+            extraWidth={60}
+            onSelect={(value) => HandleChange(() => setTimes(value))}
+            options={splits.current}
+            optionsAtATime={8}
+          />
+          <Select
+            label="Dividir entre grupo de"
+            value={split}
+            extraWidth={60}
+            onSelect={(value) => HandleChange(() => setSplit(value))}
+            options={splits.current}
+            optionsAtATime={8}
+          />
+        </div>
         <div className="df df-cg-20">
           <button className="button-simple" onClick={onClose}>
             Cancelar

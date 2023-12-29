@@ -44,6 +44,7 @@ export const GetDifficulty = (value) => combatDifficulties.find((a) => a.value =
 
 export const COMBAT_ACHIEVEMENTS = {
   OVERCOME_CHALLANGE: 10,
+  NEUTRALIZE_SMALL_CREATURE: 15,
   NEUTRALIZE_CREATURE: 20,
   UNCOVER_SECRET: 30,
   COMPLETE_QUEST: 40,
@@ -55,7 +56,12 @@ export const combatAchievements = [
     multiplier: 0.1,
   },
   {
-    display: "Anular criatura",
+    display: "Criatura menor",
+    value: COMBAT_ACHIEVEMENTS.NEUTRALIZE_SMALL_CREATURE,
+    multiplier: 0.25,
+  },
+  {
+    display: "Criatura maior",
     value: COMBAT_ACHIEVEMENTS.NEUTRALIZE_CREATURE,
     multiplier: 0.5,
   },
