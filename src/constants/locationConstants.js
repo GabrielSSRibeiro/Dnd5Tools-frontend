@@ -408,8 +408,8 @@ export const TRAVEL_LOADS = {
 };
 export const travelLoads = [
   { display: "Baixa (< 1/3 max)", value: TRAVEL_LOADS.LOW, mobility: 1, fatigue: 0.5 },
-  { display: "Média (1/3 - 2/3 max)", value: TRAVEL_LOADS.MEDIUM, mobility: 0.67, fatigue: 1 },
-  { display: "Alta (> 2/3 max)", value: TRAVEL_LOADS.HIGH, mobility: 0.33, fatigue: 1.5 },
+  { display: "Média (1/3 - 2/3 max)", value: TRAVEL_LOADS.MEDIUM, mobility: 1, fatigue: 1 },
+  { display: "Alta (> 2/3 max)", value: TRAVEL_LOADS.HIGH, mobility: 1, fatigue: 1.5 },
 ];
 export const GetTravelLoad = (value) => travelLoads.find((a) => a.value === value);
 
