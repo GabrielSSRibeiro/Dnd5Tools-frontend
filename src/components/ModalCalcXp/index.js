@@ -3,6 +3,7 @@ import * as creaC from "../../constants/creatureConstants";
 import * as combC from "../../constants/combatConstants";
 import { creatureXps } from "../../constants/creatureConstants";
 import { GetAverageLevel } from "../../helpers/creatureHelper";
+import * as utils from "../../utils";
 
 import SelectButton from "../SelectButton";
 import Button from "../Button";
@@ -12,7 +13,7 @@ import Modal from "../Modal";
 import "./styles.css";
 
 function ModalCalcXp({ level, onClose }) {
-  const splits = useRef([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  const splits = useRef(utils.createArrayFromInt(20).map((_, i) => i + 1));
   const [achievement, setAchievement] = useState(null);
   const [rarity, setRarity] = useState(null);
   const [times, setTimes] = useState(splits.current[0]);
@@ -68,7 +69,7 @@ function ModalCalcXp({ level, onClose }) {
             extraWidth={60}
             onSelect={(value) => HandleChange(() => setTimes(value))}
             options={splits.current}
-            optionsAtATime={8}
+            optionsAtATime={4}
           />
           <Select
             label="Dividir entre grupo de"
@@ -76,7 +77,7 @@ function ModalCalcXp({ level, onClose }) {
             extraWidth={60}
             onSelect={(value) => HandleChange(() => setSplit(value))}
             options={splits.current}
-            optionsAtATime={8}
+            optionsAtATime={4}
           />
         </div>
         <div className="df df-cg-20">

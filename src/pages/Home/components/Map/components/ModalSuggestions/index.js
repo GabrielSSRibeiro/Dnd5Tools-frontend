@@ -36,6 +36,7 @@ function ModalSuggestions({ notes, onClose }) {
   const dungeonSuggestions = useRef([
     "Propósito da masmorra? Toda masmorra deve ter um tema que representa ela toda e seus perigos básicos",
     "Quais os habitantes? Como as criaturas interagem umas com as outras? Existem Sub regiões na masmorra? A entrada de cada sub região, incluindo a entrada principal, pode ser bloqueada com alguma lógica que se repete pela masmorra e impede a passagem fácil ou a modifica",
+    "Defina uma planta. Arrudeios e caminhos alternativos podem ser interessantes e as vezes secretos",
     "Proporçao de 1/3 criaturas, 1/3 vazios, 1/3 tesouros e armadilhas",
   ]);
   const [suggestionMode, setSuggestionMode] = useState(ideaSuggestion.current);
