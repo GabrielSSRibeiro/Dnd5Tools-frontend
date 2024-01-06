@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { LEVELS } from "../../../../constants/combatConstants";
 import { MAX_CHARACTERS_ALLOWED } from "../../../../constants/combatConstants";
@@ -35,6 +35,7 @@ function Party({
   const [selectedCharactersInGroup, setSelectedCharactersInGroup] = useState([]);
   const [tempSelectedCharacters, setTempSelectedCharacters] = useState(selectedCharacters);
 
+  const maxNumberOfCharacters = useRef(100);
   const numberOfCharacters = groups.reduce((acc, current) => acc.concat(current), []).length;
   let groupOptions = groups.map((group, index) => `Grupo ${index + 1}`);
 
@@ -276,7 +277,11 @@ function Party({
             {!isSelecting &&
               (!isNewCharacterOpen ? (
                 <aside>
-                  <Button text="Adicionar Personagem" onClick={() => setIsNewCharacterOpen(true)} />
+                  <Button
+                    text="Adicionar Personagem"
+                    onClick={() => setIsNewCharacterOpen(true)}
+                    isDisabled={numberOfCharacters >= maxNumberOfCharacters}
+                  />
                 </aside>
               ) : (
                 <div className="add-new-container">
@@ -320,6 +325,12 @@ function Party({
                         <CheckInput isSelected={tempSelectedCharacters.some((selectedCharacter) => group.includes(selectedCharacter))} />
                       )}
                       <h5>Grupo {groupIndex + 1}</h5>
+                      {/* <h5> / Nível X</h5> */}
+                      {/* {!isSelecting && selectedCharactersInGroup.length === 0 && (
+                        <button className="group-feats" onClick={() => {}}>
+                          FEITOS
+                        </button>
+                      )} */}
                     </header>
                     {selectedCharactersInGroup.length > 0 && AllowToSelect(groupIndex) && (
                       <div className="header-options">
