@@ -327,14 +327,8 @@ function Treasure({ resultText, level }) {
                   resultBackgroundColumn={true}
                   values={getItemCraftBuyPrices(materialPriceInflation).map((item, index) => ({
                     label: null,
-                    top: item() + " PO / " + GetDCValue(creatureRarities[index].value, 10) + " / " + ITEMS_CRAFT_TIMES[index]() + " d",
-                    bottom:
-                      getItemCraftSellPrices()[index]() +
-                      " PO / " +
-                      GetDCValue(creatureRarities[index].value, 10) +
-                      " / " +
-                      ITEMS_CRAFT_TIMES[index]() +
-                      " d",
+                    top: item() + " PO / CD " + GetDCValue(creatureRarities[index].value, 10) + " / " + ITEMS_CRAFT_TIMES[index]() + " d",
+                    bottom: getItemCraftSellPrices()[index]() + " PO",
                   }))}
                 />
               </div>
