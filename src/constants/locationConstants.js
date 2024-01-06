@@ -381,7 +381,7 @@ export const travelPaces = [
   { display: "Atividade (x0)", value: TRAVEL_PACES.ACTIVITY, mobility: 0, fatigue: 1, imminentEncounterProbMod: 0.5, resultDisplay: "Atividade" },
   { display: "Devagar (x0.5)", value: TRAVEL_PACES.SLOW, mobility: 0.5, fatigue: 0.5, imminentEncounterProbMod: 0 },
   { display: "Normal (x1)", value: TRAVEL_PACES.NORMAL, mobility: 1, fatigue: 1, imminentEncounterProbMod: 1 },
-  { display: "Apressado (x1.5)", value: TRAVEL_PACES.HASTEN, mobility: 1.5, fatigue: 2, imminentEncounterProbMod: 10 },
+  { display: "Apressado (x1.5)", value: TRAVEL_PACES.HASTEN, mobility: 1.5, fatigue: 2, imminentEncounterProbMod: 2 },
 ];
 export const GetTravelPace = (value) => travelPaces.find((a) => a.value === value);
 
