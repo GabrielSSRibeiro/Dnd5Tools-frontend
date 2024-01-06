@@ -359,10 +359,13 @@ function ModalTravelResults({
   function UpdateData() {
     //for not oriented, travel is modified randomly by 10%
     if (!travel.oriented && travel.pace !== lc.TRAVEL_PACES.REST) {
-      const modifier = 0.5;
-      newCurrentNode.angle = utils.randomValueFromVariancePercentage(newCurrentNode.angle, modifier);
-      newCurrentNode.x = utils.randomValueFromVariancePercentage(newCurrentNode.x, modifier);
-      newCurrentNode.y = utils.randomValueFromVariancePercentage(newCurrentNode.y, modifier);
+      const angleModifier = 22.5;
+      const newAngle = newCurrentNode.angle + utils.randomIntFromInterval(angleModifier * -1, angleModifier);
+      const distance = utils.GetDistanceByCoordinates(travel.currentNode, newCurrentNode);
+      const newCoordinates = utils.GetCoordinatesByDistance(travel.currentNode, distance.value, newAngle);
+      newCurrentNode.angle = newAngle;
+      newCurrentNode.x = newCoordinates.x;
+      newCurrentNode.y = newCoordinates.y;
     }
 
     newCurrentNode.name = name;
