@@ -1,6 +1,6 @@
 import * as utils from "../utils";
 import * as cc from "../constants/creatureConstants";
-import { MIN_DIFICULTY } from "../constants/skillCheckConstants";
+import { MIN_DIFICULTY, DAMANE_MOD } from "../constants/skillCheckConstants";
 import * as sch from "./skillCheckHelper";
 
 export function IsBasicPack(owner) {
@@ -43,7 +43,7 @@ export const GetAttackBonusValue = (attack, level) => {
 export const GetHPValue = (level, HP, con) => {
   const conValue = cc.creatureAttributes.find((a) => a.value === con).baseOutput;
 
-  const baseHp = sch.getDamage(HP, level);
+  const baseHp = sch.getDamage(HP, level) - DAMANE_MOD;
   const balanceFactor = 3;
   let hp = (baseHp * conValue) / balanceFactor;
   const hpVariance = 0.1;

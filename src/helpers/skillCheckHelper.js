@@ -1,14 +1,15 @@
 import * as utils from "../utils";
 import { GetCondition, damageIntensities } from "../constants/creatureConstants";
 import { GetConditionDurationValue, GetDCValue } from "../helpers/creatureHelper";
+import { DAMANE_MOD } from "../constants/skillCheckConstants";
 
 const rand = utils.randomIntFromInterval;
 const variance = utils.randomValueFromVariancePercentage;
 
 export const getDamage = (damageIntensity, level = null) => {
-  const numberOfIteractions = 10;
-  const iteractionsList = utils.createArrayFromInt(numberOfIteractions).map((_) => getDamageValue(damageIntensity, level));
-  return Math.round(utils.averageOfArray(iteractionsList));
+  const numberOfIterations = 10;
+  const iterationsList = utils.createArrayFromInt(numberOfIterations).map((_) => getDamageValue(damageIntensity, level));
+  return Math.round(utils.averageOfArray(iterationsList));
 };
 
 const getDamageValue = (damageIntensity, level) => {
@@ -19,7 +20,7 @@ const getDamageValue = (damageIntensity, level) => {
 
   const baseDamage = rand(1, 4) + (level ?? 10);
   let damage = baseDamage * damageMultiplier;
-  return variance(damage, damageVariance);
+  return variance(damage, damageVariance) + DAMANE_MOD;
 };
 
 export const getSkillCheck = (level, checkDifficulty, damageIntensity, condition, conditionDuration) => {
