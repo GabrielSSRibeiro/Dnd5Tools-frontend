@@ -221,6 +221,10 @@ function Home() {
     if (locations && creatures) {
       locations.forEach((l) => {
         l.creatures = l.creatures.filter((lc) => creatures.some((c) => c._id === lc.creatureId));
+
+        l.interaction.rooms.forEach((r) => {
+          r.creatures = r.creatures.filter((lc) => creatures.some((c) => c._id === lc.creatureId));
+        });
       });
     }
   }, [locations, creatures]);

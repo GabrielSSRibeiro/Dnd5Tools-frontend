@@ -15,7 +15,18 @@ import TextInput from "../../../../../../../../components/TextInput";
 
 import "./styles.css";
 
-function ModalManageDungeonRoom({ room, isEntrance, contexts, creatures, isPointOfInterest, HandleSelectCreatures, onClose }) {
+function ModalManageDungeonRoom({
+  title,
+  info,
+  room,
+  isEntrance,
+  contexts,
+  creatures,
+  isPointOfInterest,
+  HandleSelectCreatures,
+  DeleteDungeonRoom,
+  onClose,
+}) {
   const [tempRoom, setTempRoom] = useState(
     room
       ? utils.clone(room)
@@ -23,6 +34,7 @@ function ModalManageDungeonRoom({ room, isEntrance, contexts, creatures, isPoint
           purpose: null,
           firstImpressions: null,
           secrets: null,
+          size: lc.ROOM_SIZES.MEDIUM,
           type: lc.ELEMENT_TYPES.STRUCTURE,
           isHazardous: false,
           rarity: null,
@@ -108,22 +120,23 @@ function ModalManageDungeonRoom({ room, isEntrance, contexts, creatures, isPoint
   }, [tempRoom, tempRoom.type]);
 
   return (
-    <Modal
-      title="Sala"
-      className="ModalManageDungeonRoom-container"
-      onClickToClose={onClose}
-      info={[
-        {
-          text: "salas de masmorra ou pontos em vilas",
-        },
-      ]}
-    >
+    <Modal title={title} className="ModalManageDungeonRoom-container" onClickToClose={onClose} info={info}>
       {modal}
       <div className="new-room-wrapper">
         {!isEntrance && (
-          <div>
+          <>
             <TextInput label="Propósito" value={tempRoom} valuePropertyPath="purpose" onChange={setTempRoom} />
-          </div>
+            <Select
+              label={"Tamanho"}
+              extraWidth={250}
+              value={tempRoom}
+              valuePropertyPath="size"
+              onSelect={setTempRoom}
+              options={lc.roomSizes}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+          </>
         )}
         <div className="df df-ai-fs df-cg-15 room-row">
           <Select
@@ -229,6 +242,9 @@ function ModalManageDungeonRoom({ room, isEntrance, contexts, creatures, isPoint
         <div className="df df-jc-sb df-cg-15">
           {!isEntrance && (
             <>
+              <button title="Deletar" className="button-simple" onClick={DeleteDungeonRoom}>
+                <i className="fas fa-trash"></i>
+              </button>
               <button
                 title="Primeiras Impressões"
                 className={`button-simple${!tempRoom.firstImpressions ? " lacking-data" : ""}`}

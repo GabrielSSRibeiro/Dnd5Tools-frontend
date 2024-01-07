@@ -375,12 +375,19 @@ function EditLocation({
 
     setModal(
       <ModalManageDungeonRoom
+        title={isEntrance ? "Entrada" : "Sala"}
+        info={[
+          {
+            text: "salas de masmorra ou pontos em vilas",
+          },
+        ]}
         room={roomToManage}
         isEntrance={isEntrance}
         contexts={location.contexts}
         creatures={creatures}
         isPointOfInterest={isPointOfInterest}
         HandleSelectCreatures={(creaturesObj, setter) => HandleSelectCreatures(creaturesObj, setter)}
+        DeleteDungeonRoom={() => DeleteDungeonRoom(index)}
         onClose={(tempRoom) => HandleCloseModalManageDungeonRoom(index, tempRoom, isEntrance)}
       />
     );
@@ -401,6 +408,11 @@ function EditLocation({
       }
     }
 
+    setModal(null);
+  }
+  function DeleteDungeonRoom(index) {
+    location.interaction.rooms.splice(index, 1);
+    setLocation({ ...location });
     setModal(null);
   }
 
@@ -484,6 +496,25 @@ function EditLocation({
     utils.downloadData(content.join("\n\n"), `${world.name}.txt`);
   }
 
+  function GetRoomTooltip(purpose, creatures) {
+    let roomTooltip = [];
+
+    if (purpose) {
+      roomTooltip.push({ text: purpose });
+    }
+
+    if (purpose && creatures.length > 0) {
+      roomTooltip.push({ text: "" });
+    }
+
+    if (creatures.length > 0) {
+      creatures.forEach((c) => {
+        roomTooltip.push(c);
+      });
+    }
+
+    return roomTooltip;
+  }
   return (
     <div className="EditLocation-container">
       {modal}
@@ -697,33 +728,35 @@ function EditLocation({
                 className={`room${location.creatures.length === 0 ? ` lacking-data` : ""}`}
                 onClick={() => OpenModalManageDungeonRoom(null, null, true)}
               >
-                <Info
-                  contents={[
-                    { text: "Entrada" },
-                    { text: "" },
-                    ...location.creatures.map((lc) => ({ text: creatures.find((c) => c._id === lc.creatureId).name })),
-                  ]}
-                  tooltipOnly={true}
-                />
+                {location.creatures.length > 0 && (
+                  <Info
+                    contents={GetRoomTooltip(
+                      "Entrada",
+                      location.creatures.map((lc) => ({ text: creatures.find((c) => c._id === lc.creatureId).name }))
+                    )}
+                    tooltipOnly={true}
+                  />
+                )}
                 Entrada
               </button>
             </div>
             <div className="location-row df dungeon">
               {location.interaction.rooms.length > 0 ? (
                 location.interaction.rooms.map((r, i) => (
-                  <button className="room dungeon-room" onClick={() => OpenModalManageDungeonRoom(r, i)} key={i}>
-                    <Info
-                      contents={[
-                        { text: r.purpose },
-                        { text: "" },
-                        ...r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId).name })),
-                      ]}
-                      tooltipOnly={true}
-                    />
+                  <button className="room df dungeon-room" onClick={() => OpenModalManageDungeonRoom(r, i)} key={i}>
+                    {(r.purpose || r.creatures.length > 0) && (
+                      <Info
+                        contents={GetRoomTooltip(
+                          r.purpose,
+                          r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId).name }))
+                        )}
+                        tooltipOnly={true}
+                      />
+                    )}
                   </button>
                 ))
               ) : (
-                <button className="room dungeon-room" onClick={() => OpenModalManageDungeonRoom()}>
+                <button className="room df dungeon-room" onClick={() => OpenModalManageDungeonRoom()}>
                   <i className="fas fa-plus"></i>
                 </button>
               )}
