@@ -96,12 +96,31 @@ function ModalFastBuild({ creature, onClose }) {
   }
 
   function HandleConfirm() {
-    const repetitions = REPETITIONS.find((r) => r.rarity === tempCreature.rarity).value;
+    const repetitionsIndex = REPETITIONS.findIndex((r) => r.rarity === tempCreature.rarity);
     const reach = REACHES.find((r) => r.size === tempCreature.size);
 
     if (hasMeleeAction) {
+      if (repetitionsIndex === 0) {
+        tempCreature.actions.push({
+          name: "Ataque próximo rápido",
+          description: null,
+          type: CREATURE_ACTION_TYPES.ATTACK,
+          reach: reach.melee,
+          frequency: CREATURE_ACTION_FREQUENCIES.UNCOMMON,
+          damageIntensity: DAMAGE_INTENSITIES.LOW,
+          damageType: DAMAGE_TYPES.SLASHING,
+          condition: null,
+          conditionDuration: null,
+          difficultyClass: null,
+          savingThrowAttribute: null,
+          associatedWeakSpot: null,
+          isSpell: false,
+          repetitions: REPETITIONS[repetitionsIndex + 1].value,
+        });
+      }
+
       tempCreature.actions.push({
-        name: "Ataque Corco a Corpo",
+        name: "Ataque próximo",
         description: null,
         type: CREATURE_ACTION_TYPES.ATTACK,
         reach: reach.melee,
@@ -114,13 +133,49 @@ function ModalFastBuild({ creature, onClose }) {
         savingThrowAttribute: null,
         associatedWeakSpot: null,
         isSpell: false,
-        repetitions,
+        repetitions: REPETITIONS[repetitionsIndex].value,
+      });
+
+      tempCreature.actions.push({
+        name: "Ataque próximo pesado",
+        description: null,
+        type: CREATURE_ACTION_TYPES.ATTACK,
+        reach: reach.melee,
+        frequency: CREATURE_ACTION_FREQUENCIES.RARE,
+        damageIntensity: DAMAGE_INTENSITIES.HIGH,
+        damageType: DAMAGE_TYPES.SLASHING,
+        condition: null,
+        conditionDuration: null,
+        difficultyClass: null,
+        savingThrowAttribute: null,
+        associatedWeakSpot: null,
+        isSpell: false,
+        repetitions: REPETITIONS[Math.floor(repetitionsIndex / 2)].value,
       });
     }
 
     if (hasRangedAction) {
+      if (repetitionsIndex === 0) {
+        tempCreature.actions.push({
+          name: "Ataque a distância rápido",
+          description: null,
+          type: CREATURE_ACTION_TYPES.ATTACK,
+          reach: reach.ranged,
+          frequency: CREATURE_ACTION_FREQUENCIES.UNCOMMON,
+          damageIntensity: DAMAGE_INTENSITIES.LOW,
+          damageType: DAMAGE_TYPES.PIERCING,
+          condition: null,
+          conditionDuration: null,
+          difficultyClass: null,
+          savingThrowAttribute: null,
+          associatedWeakSpot: null,
+          isSpell: false,
+          repetitions: REPETITIONS[repetitionsIndex + 1].value,
+        });
+      }
+
       tempCreature.actions.push({
-        name: "Ataque a Distância",
+        name: "Ataque a distância",
         description: null,
         type: CREATURE_ACTION_TYPES.ATTACK,
         reach: reach.ranged,
@@ -133,7 +188,24 @@ function ModalFastBuild({ creature, onClose }) {
         savingThrowAttribute: null,
         associatedWeakSpot: null,
         isSpell: false,
-        repetitions,
+        repetitions: REPETITIONS[repetitionsIndex].value,
+      });
+
+      tempCreature.actions.push({
+        name: "Ataque a distância pesado",
+        description: null,
+        type: CREATURE_ACTION_TYPES.ATTACK,
+        reach: reach.ranged,
+        frequency: CREATURE_ACTION_FREQUENCIES.RARE,
+        damageIntensity: DAMAGE_INTENSITIES.HIGH,
+        damageType: DAMAGE_TYPES.PIERCING,
+        condition: null,
+        conditionDuration: null,
+        difficultyClass: null,
+        savingThrowAttribute: null,
+        associatedWeakSpot: null,
+        isSpell: false,
+        repetitions: REPETITIONS[Math.floor(repetitionsIndex / 2)].value,
       });
     }
 

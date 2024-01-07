@@ -260,7 +260,7 @@ function ModalTravelResults({
   }
 
   function GetLocationCreatures() {
-    const differentCreatureProb = 0.1;
+    const differentCreatureProb = 0.5;
 
     if (!hasAnyCreature.current) {
       return [];
