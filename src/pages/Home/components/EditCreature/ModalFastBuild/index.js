@@ -18,6 +18,7 @@ import {
   DAMAGE_INTENSITIES,
   DAMAGE_TYPES,
   CREATURE_ACTION_REPETITIONS,
+  CREATURE_ARMOR_CLASSES,
 } from "../../../../../constants/creatureConstants";
 
 import "./styles.css";
@@ -27,30 +28,35 @@ function ModalFastBuild({ creature, onClose }) {
   const [hasMeleeAction, setHasMeleeAction] = useState(false);
   const [hasRangedAction, setHasRangedAction] = useState(false);
 
-  const REPETITIONS = [
+  const ACTION_DETAILS = [
     {
       rarity: CREATURE_RARITIES.COMMON,
-      value: CREATURE_ACTION_REPETITIONS.NORMAL,
+      repetitions: CREATURE_ACTION_REPETITIONS.NORMAL,
+      armorClass: CREATURE_ARMOR_CLASSES.LOW,
     },
     {
       rarity: CREATURE_RARITIES.UNCOMMON,
-      value: CREATURE_ACTION_REPETITIONS.MULTIACTION_COMMOM,
+      repetitions: CREATURE_ACTION_REPETITIONS.MULTIACTION_COMMOM,
+      armorClass: CREATURE_ARMOR_CLASSES.MEDIUM,
     },
     {
       rarity: CREATURE_RARITIES.RARE,
-      value: CREATURE_ACTION_REPETITIONS.MULTIACTION_COMMOM,
+      repetitions: CREATURE_ACTION_REPETITIONS.MULTIACTION_COMMOM,
+      armorClass: CREATURE_ARMOR_CLASSES.MEDIUM,
     },
     {
       rarity: CREATURE_RARITIES.VERY_RARE,
-      value: CREATURE_ACTION_REPETITIONS.MULTIACTION_EXTRA,
+      repetitions: CREATURE_ACTION_REPETITIONS.MULTIACTION_EXTRA,
+      armorClass: CREATURE_ARMOR_CLASSES.HIGH,
     },
     {
       rarity: CREATURE_RARITIES.LEGENDARY,
-      value: CREATURE_ACTION_REPETITIONS.MULTIACTION_EXTREME,
+      repetitions: CREATURE_ACTION_REPETITIONS.MULTIACTION_EXTREME,
+      armorClass: CREATURE_ARMOR_CLASSES.EXTREME,
     },
   ];
 
-  const REACHES = [
+  const ACTION_REACHES = [
     {
       size: CREATURE_SIZES.TINY,
       melee: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
@@ -96,11 +102,12 @@ function ModalFastBuild({ creature, onClose }) {
   }
 
   function HandleConfirm() {
-    const repetitionsIndex = REPETITIONS.findIndex((r) => r.rarity === tempCreature.rarity);
-    const reach = REACHES.find((r) => r.size === tempCreature.size);
+    const actionDetailsIndex = ACTION_DETAILS.findIndex((r) => r.rarity === tempCreature.rarity);
+    const reach = ACTION_REACHES.find((r) => r.size === tempCreature.size);
+    tempCreature.armorClass = ACTION_DETAILS[Math.floor(actionDetailsIndex)].armorClass;
 
     if (hasMeleeAction) {
-      if (repetitionsIndex === 0) {
+      if (actionDetailsIndex === 0) {
         tempCreature.actions.push({
           name: "Ataque próximo rápido",
           description: null,
@@ -115,7 +122,7 @@ function ModalFastBuild({ creature, onClose }) {
           savingThrowAttribute: null,
           associatedWeakSpot: null,
           isSpell: false,
-          repetitions: REPETITIONS[repetitionsIndex + 1].value,
+          repetitions: ACTION_DETAILS[actionDetailsIndex + 1].repetitions,
         });
       }
 
@@ -133,7 +140,7 @@ function ModalFastBuild({ creature, onClose }) {
         savingThrowAttribute: null,
         associatedWeakSpot: null,
         isSpell: false,
-        repetitions: REPETITIONS[repetitionsIndex].value,
+        repetitions: ACTION_DETAILS[actionDetailsIndex].repetitions,
       });
 
       tempCreature.actions.push({
@@ -150,12 +157,12 @@ function ModalFastBuild({ creature, onClose }) {
         savingThrowAttribute: null,
         associatedWeakSpot: null,
         isSpell: false,
-        repetitions: REPETITIONS[Math.floor(repetitionsIndex / 2)].value,
+        repetitions: ACTION_DETAILS[Math.floor(actionDetailsIndex / 2)].repetitions,
       });
     }
 
     if (hasRangedAction) {
-      if (repetitionsIndex === 0) {
+      if (actionDetailsIndex === 0) {
         tempCreature.actions.push({
           name: "Ataque a distância rápido",
           description: null,
@@ -170,7 +177,7 @@ function ModalFastBuild({ creature, onClose }) {
           savingThrowAttribute: null,
           associatedWeakSpot: null,
           isSpell: false,
-          repetitions: REPETITIONS[repetitionsIndex + 1].value,
+          repetitions: ACTION_DETAILS[actionDetailsIndex + 1].repetitions,
         });
       }
 
@@ -188,7 +195,7 @@ function ModalFastBuild({ creature, onClose }) {
         savingThrowAttribute: null,
         associatedWeakSpot: null,
         isSpell: false,
-        repetitions: REPETITIONS[repetitionsIndex].value,
+        repetitions: ACTION_DETAILS[actionDetailsIndex].repetitions,
       });
 
       tempCreature.actions.push({
@@ -205,7 +212,7 @@ function ModalFastBuild({ creature, onClose }) {
         savingThrowAttribute: null,
         associatedWeakSpot: null,
         isSpell: false,
-        repetitions: REPETITIONS[Math.floor(repetitionsIndex / 2)].value,
+        repetitions: ACTION_DETAILS[Math.floor(actionDetailsIndex / 2)].repetitions,
       });
     }
 
