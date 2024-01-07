@@ -4,6 +4,7 @@ import * as lc from "../../../../../../constants/locationConstants";
 import { CREATURE_ENVIRONMENTS, creatureEnvironments } from "../../../../../../constants/creatureConstants";
 import * as lh from "../../../../../../helpers/locationHelper";
 
+import Info from "../../../../../../components/Info";
 import Button from "../../../../../../components/Button";
 import TextInput from "../../../../../../components/TextInput";
 import Select from "../../../../../../components/Select";
@@ -362,7 +363,7 @@ function EditLocation({
     setter({ ...creaturesObj });
   }
 
-  function OpenModalManageDungeonRoom(room, isEntrance) {
+  function OpenModalManageDungeonRoom(room, index, isEntrance) {
     const roomToManage = isEntrance
       ? {
           type: location.interaction.type,
@@ -375,15 +376,16 @@ function EditLocation({
     setModal(
       <ModalManageDungeonRoom
         room={roomToManage}
+        isEntrance={isEntrance}
         contexts={location.contexts}
         creatures={creatures}
         isPointOfInterest={isPointOfInterest}
         HandleSelectCreatures={(creaturesObj, setter) => HandleSelectCreatures(creaturesObj, setter)}
-        onClose={(tempRoom) => HandleCloseModalManageDungeonRoom(roomToManage, tempRoom, isEntrance)}
+        onClose={(tempRoom) => HandleCloseModalManageDungeonRoom(index, tempRoom, isEntrance)}
       />
     );
   }
-  function HandleCloseModalManageDungeonRoom(room, tempRoom, isEntrance) {
+  function HandleCloseModalManageDungeonRoom(index, tempRoom, isEntrance) {
     if (tempRoom) {
       if (isEntrance) {
         location.interaction.type = tempRoom.type;
@@ -391,13 +393,11 @@ function EditLocation({
         location.interaction.rarity = tempRoom.rarity;
         location.creatures = tempRoom.creatures;
       } else {
-        // if (room) {
-        //   //use 2d index
-        //   let index = location.interaction.rooms.findIndex((r) => false);
-        //   location.interaction.rooms.splice(index, 1, tempRoom);
-        // } else {
-        //   location.interaction.rooms.push(tempRoom);
-        // }
+        if (index != null) {
+          location.interaction.rooms.splice(index, 1, tempRoom);
+        } else {
+          location.interaction.rooms.push(tempRoom);
+        }
       }
     }
 
@@ -686,20 +686,47 @@ function EditLocation({
           </div>
         )}
 
+        {/* dungeon */}
         {location.size && location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
           <div className="location-detail-group">
             <div className="location-row location-detail-group-title">
               <span>Disposição</span>
             </div>
             <div className="location-row df dungeon-entrance">
-              <button className={location.creatures.length === 0 ? `lacking-data` : ""} onClick={() => OpenModalManageDungeonRoom(null, true)}>
+              <button
+                className={`room${location.creatures.length === 0 ? ` lacking-data` : ""}`}
+                onClick={() => OpenModalManageDungeonRoom(null, null, true)}
+              >
+                <Info
+                  contents={[
+                    { text: "Entrada" },
+                    { text: "" },
+                    ...location.creatures.map((lc) => ({ text: creatures.find((c) => c._id === lc.creatureId).name })),
+                  ]}
+                  tooltipOnly={true}
+                />
                 Entrada
               </button>
             </div>
             <div className="location-row df dungeon">
-              <button className="dungeon-room" disabled={true}>
-                <i className="fas fa-plus"></i>
-              </button>
+              {location.interaction.rooms.length > 0 ? (
+                location.interaction.rooms.map((r, i) => (
+                  <button className="room dungeon-room" onClick={() => OpenModalManageDungeonRoom(r, i)} key={i}>
+                    <Info
+                      contents={[
+                        { text: r.purpose },
+                        { text: "" },
+                        ...r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId).name })),
+                      ]}
+                      tooltipOnly={true}
+                    />
+                  </button>
+                ))
+              ) : (
+                <button className="room dungeon-room" onClick={() => OpenModalManageDungeonRoom()}>
+                  <i className="fas fa-plus"></i>
+                </button>
+              )}
             </div>
           </div>
         ) : (

@@ -163,10 +163,11 @@ function ModalTravelResults({
       return utils.MinutesToTimeInUnits(0);
     }
 
-    return utils.ProbabilityCheck(lc.GetIrregularTerrainFrequency(newLocation.traversal.irregularTerrainFrequency).probability)
-      ? utils.MinutesToTimeInUnits(Math.round(locHoverData.distance.travelTimeInMin * 1.25))
-      : locHoverData.distance.timeInUnits;
-  }, [locHoverData, newLocation.traversal.irregularTerrainFrequency]);
+    return locHoverData.distance.timeInUnits;
+    // return utils.ProbabilityCheck(lc.GetIrregularTerrainFrequency(newLocation.traversal.irregularTerrainFrequency).probability)
+    //   ? utils.MinutesToTimeInUnits(Math.round(locHoverData.distance.travelTimeInMin * 1.25))
+    //   : locHoverData.distance.timeInUnits;
+  }, [locHoverData]);
   const timeRestedDisplay = useMemo(
     () => `${utils.MinutesToTimeInUnits(timePassed)} passado(s) em ${lc.GetTravelPace(travel.pace).resultDisplay}`,
     [timePassed, travel.pace]

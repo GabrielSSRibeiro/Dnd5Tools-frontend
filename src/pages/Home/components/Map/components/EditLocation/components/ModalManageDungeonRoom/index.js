@@ -7,17 +7,22 @@ import * as utils from "../../../../../../../../utils";
 
 import Modal from "../../../../../../../../components/Modal";
 import ModalManageCreatureRoutine from "../ModalManageCreatureRoutine";
+import ModalTextArea from "../../../../../../../../components/ModalTextArea";
 import Button from "../../../../../../../../components/Button";
 import Select from "../../../../../../../../components/Select";
 import CheckInput from "../../../../../../../../components/CheckInput";
+import TextInput from "../../../../../../../../components/TextInput";
 
 import "./styles.css";
 
-function ModalManageDungeonRoom({ room, contexts, creatures, isPointOfInterest, HandleSelectCreatures, onClose }) {
+function ModalManageDungeonRoom({ room, isEntrance, contexts, creatures, isPointOfInterest, HandleSelectCreatures, onClose }) {
   const [tempRoom, setTempRoom] = useState(
     room
       ? utils.clone(room)
       : {
+          purpose: null,
+          firstImpressions: null,
+          secrets: null,
           type: lc.ELEMENT_TYPES.STRUCTURE,
           isHazardous: false,
           rarity: null,
@@ -63,6 +68,25 @@ function ModalManageDungeonRoom({ room, contexts, creatures, isPointOfInterest, 
     setTempRoom({ ...tempRoom, creatures: tempRoom.creatures });
   }
 
+  function OpenModalDetails(property, title, placeholder) {
+    setModal(
+      <ModalTextArea
+        title={title}
+        text={tempRoom[property]}
+        placeholder={placeholder}
+        onClose={(tempTextArea) => HandleCloseModalTextArea(tempTextArea, property)}
+      />
+    );
+  }
+  function HandleCloseModalTextArea(tempTextArea, property) {
+    if (tempTextArea != null) {
+      tempRoom[property] = tempTextArea;
+      setTempRoom({ ...tempRoom });
+    }
+
+    setModal(null);
+  }
+
   function CheckFinalButtonValid() {
     if (!tempRoom.type) {
       return false;
@@ -96,6 +120,11 @@ function ModalManageDungeonRoom({ room, contexts, creatures, isPointOfInterest, 
     >
       {modal}
       <div className="new-room-wrapper">
+        {!isEntrance && (
+          <div>
+            <TextInput label="Propósito" value={tempRoom} valuePropertyPath="purpose" onChange={setTempRoom} />
+          </div>
+        )}
         <div className="df df-ai-fs df-cg-15 room-row">
           <Select
             label={"Tipo"}
@@ -196,11 +225,35 @@ function ModalManageDungeonRoom({ room, contexts, creatures, isPointOfInterest, 
           })}
         </div>
       </div>
-      <footer>
-        <button className="button-simple" onClick={HandleCancel}>
-          Cancelar
-        </button>
-        <Button text="Salvar" onClick={HandleConfirm} isDisabled={!CheckFinalButtonValid()} />
+      <footer className="df df-jc-sb">
+        <div className="df df-jc-sb df-cg-15">
+          {!isEntrance && (
+            <>
+              <button
+                title="Primeiras Impressões"
+                className={`button-simple${!tempRoom.firstImpressions ? " lacking-data" : ""}`}
+                onClick={() =>
+                  OpenModalDetails(
+                    "firstImpressions",
+                    "Primeiras Impressões",
+                    "O que quem se aproxima a primeira vez desse local experiencia. Algo entre o que sentem, o que veem, o que cheiram, o que ouvem..."
+                  )
+                }
+              >
+                <i className="fas fa-eye"></i>
+              </button>
+              <button title="Segredos" className="button-simple" onClick={() => OpenModalDetails("secrets", "Segredos", "Segredos")}>
+                <i className="fas fa-mask"></i>
+              </button>
+            </>
+          )}
+        </div>
+        <div className="df df-jc-sb df-cg-15">
+          <button className="button-simple" onClick={HandleCancel}>
+            Cancelar
+          </button>
+          <Button text="Salvar" onClick={HandleConfirm} isDisabled={!CheckFinalButtonValid()} />
+        </div>
       </footer>
     </Modal>
   );
