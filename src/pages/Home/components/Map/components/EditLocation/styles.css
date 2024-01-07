@@ -2,6 +2,7 @@
   width: 100%;
   height: 100%;
 
+  cursor: default;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -122,4 +123,25 @@
   align-items: center;
   justify-content: flex-end;
   column-gap: 25px;
+}
+
+.EditLocation-container .group-item-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 5px;
+}
+
+.EditLocation-container .dungeon-entrance {
+  background-color: var(--white);
+  border-top: 1px solid var(--black);
+}
+
+.EditLocation-container .dungeon {
+  background-color: var(--white);
+}
+
+.EditLocation-container .dungeon .dungeon-room {
+  width: 20px;
+  height: 20px;
 }

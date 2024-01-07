@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef } from "react";
 import * as utils from "../../../../../../utils";
 import * as lc from "../../../../../../constants/locationConstants";
-import { creatureRarities, CREATURE_ENVIRONMENTS, creatureEnvironments } from "../../../../../../constants/creatureConstants";
+import { CREATURE_ENVIRONMENTS, creatureEnvironments } from "../../../../../../constants/creatureConstants";
 import * as lh from "../../../../../../helpers/locationHelper";
 
 import Button from "../../../../../../components/Button";
@@ -15,6 +15,7 @@ import ModalManageElement from "./components/ModalManageElement";
 import ModalManageContext from "./components/ModalManageContext";
 // import ModalManageCreature from "./components/ModalManageCreature";
 import ModalManageCreatureRoutine from "./components/ModalManageCreatureRoutine";
+import ModalManageDungeonRoom from "./components/ModalManageDungeonRoom";
 
 import "./styles.css";
 
@@ -49,7 +50,7 @@ function EditLocation({
     locationSizes
       .filter((s) => s.value !== lc.LOCATION_SIZES.POINT_OF_INTEREST)
       .forEach((s) => {
-        s.display += ` (raio de ${utils.MInUnits(lc.BASE_VISION_IN_M * s.baseRadiusMultiplier)})`;
+        s.display += ` (raio ${utils.MInUnits(lc.BASE_VISION_IN_M * s.baseRadiusMultiplier)})`;
       });
 
     return locationSizes;
@@ -331,20 +332,20 @@ function EditLocation({
     setLocation({ ...location, creatures: location.creatures });
   }
 
-  function HandleSelectCreatures() {
-    setSelectedCreatures(creatures.filter((c) => location.creatures.some((lc) => lc.creatureId === c._id)));
-    HandleSelectFromBestiary(HandleSelectedCreatures);
+  function HandleSelectCreatures(creaturesObj, setter) {
+    setSelectedCreatures(creatures.filter((c) => creaturesObj.creatures.some((lc) => lc.creatureId === c._id)));
+    HandleSelectFromBestiary((tempSelectedCreatures) => HandleSelectedCreatures(creaturesObj, setter, tempSelectedCreatures));
   }
 
-  function HandleSelectedCreatures(tempSelectedCreatures) {
+  function HandleSelectedCreatures(creaturesObj, setter, tempSelectedCreatures) {
     //remove removed creatures
-    location.creatures = location.creatures.filter((lc) => tempSelectedCreatures.some((sc) => sc._id === lc.creatureId));
+    creaturesObj.creatures = creaturesObj.creatures.filter((lc) => tempSelectedCreatures.some((sc) => sc._id === lc.creatureId));
 
     //Add new creatures
     tempSelectedCreatures
-      .filter((sc) => !location.creatures.some((lc) => lc.creatureId === sc._id))
+      .filter((sc) => !creaturesObj.creatures.some((lc) => lc.creatureId === sc._id))
       .forEach((sc) => {
-        location.creatures.push({
+        creaturesObj.creatures.push({
           creatureId: sc._id,
           routines: [
             {
@@ -358,7 +359,49 @@ function EditLocation({
           ],
         });
       });
-    setLocation({ ...location });
+    setter({ ...creaturesObj });
+  }
+
+  function OpenModalManageDungeonRoom(room, isEntrance) {
+    const roomToManage = isEntrance
+      ? {
+          type: location.interaction.type,
+          isHazardous: location.interaction.isHazardous,
+          rarity: location.interaction.rarity,
+          creatures: location.creatures,
+        }
+      : room;
+
+    setModal(
+      <ModalManageDungeonRoom
+        room={roomToManage}
+        contexts={location.contexts}
+        creatures={creatures}
+        isPointOfInterest={isPointOfInterest}
+        HandleSelectCreatures={(creaturesObj, setter) => HandleSelectCreatures(creaturesObj, setter)}
+        onClose={(tempRoom) => HandleCloseModalManageDungeonRoom(roomToManage, tempRoom, isEntrance)}
+      />
+    );
+  }
+  function HandleCloseModalManageDungeonRoom(room, tempRoom, isEntrance) {
+    if (tempRoom) {
+      if (isEntrance) {
+        location.interaction.type = tempRoom.type;
+        location.interaction.isHazardous = tempRoom.isHazardous;
+        location.interaction.rarity = tempRoom.rarity;
+        location.creatures = tempRoom.creatures;
+      } else {
+        // if (room) {
+        //   //use 2d index
+        //   let index = location.interaction.rooms.findIndex((r) => false);
+        //   location.interaction.rooms.splice(index, 1, tempRoom);
+        // } else {
+        //   location.interaction.rooms.push(tempRoom);
+        // }
+      }
+    }
+
+    setModal(null);
   }
 
   function IsLocationValid() {
@@ -560,33 +603,31 @@ function EditLocation({
             optionValue={(o) => o.value}
           />
         )}
-
         {(location.size && location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST) || location.exteriorLocationId == null ? (
-          <>
-            <div className="location-row df df-jc-sb">
-              <Select
-                label={"Tipo"}
-                extraWidth={60}
-                value={location}
-                valuePropertyPath="traversal.type"
-                onSelect={setLocation}
-                options={creatureEnvironments.filter((e) => e.value !== CREATURE_ENVIRONMENTS.URBAN && e.value !== CREATURE_ENVIRONMENTS.ALL)}
-                optionDisplay={(o) => o.display}
-                optionValue={(o) => o.value}
-              />
-              <Select
-                label={"Prob. Terreno Irregular"}
-                info={[{ text: "Aumentar tempo de marcha em 25%" }]}
-                extraWidth={85}
-                value={location}
-                valuePropertyPath="traversal.irregularTerrainFrequency"
-                onSelect={setLocation}
-                options={lc.irregularTerrainFrequencies}
-                optionDisplay={(o) => o.display}
-                optionValue={(o) => o.value}
-              />
-            </div>
-            {/* {location.exteriorLocationId != null && (
+          <Select
+            label={"Tipo"}
+            extraWidth={250}
+            value={location}
+            valuePropertyPath="traversal.type"
+            onSelect={setLocation}
+            options={creatureEnvironments.filter((e) => e.value !== CREATURE_ENVIRONMENTS.URBAN && e.value !== CREATURE_ENVIRONMENTS.ALL)}
+            optionDisplay={(o) => o.display}
+            optionValue={(o) => o.value}
+          />
+        ) : (
+          <Select
+            label={"Tipo"}
+            extraWidth={250}
+            value={location}
+            valuePropertyPath="interaction.type"
+            onSelect={setLocation}
+            options={lc.elementTypes}
+            optionDisplay={(o) => o.display}
+            optionValue={(o) => o.value}
+          />
+        )}
+
+        {/* {location.exteriorLocationId != null && (
               <div className="location-detail-group">
                 <div className="location-row location-detail-group-title">
                   <span>Partições</span>
@@ -609,137 +650,126 @@ function EditLocation({
                 ))}
               </div>
             )} */}
-            {location.exteriorLocationId != null && (
-              <div className="location-detail-group">
-                <div className="location-row location-detail-group-title">
-                  <span className={location.traversal.elements.length === 0 ? `lacking-data` : ""}>Elementos de Travessia</span>
-                  <button onClick={() => OpenModalManageElement()} disabled={location.traversal.elements.length === 6}>
-                    <i className="fas fa-plus"></i>
-                  </button>
-                </div>
-                {location.traversal.elements.map((e) => (
-                  <div className="location-row location-detail-group-item" key={e.type}>
-                    <span>{lc.GetElementType(e.type).display}</span>
-                    <div className="group-item-actions">
-                      <button onClick={() => OpenModalManageElement(e)}>
-                        <i className="fas fa-pencil-alt"></i>
-                      </button>
-                      <button onClick={() => DeleteElement(e)}>
-                        <i className="fas fa-trash"></i>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            <div className="location-row df df-jc-sb df-ai-fs">
-              <Select
-                label={"Tipo"}
-                extraWidth={60}
+        {/* <Select
+                label={"Prob. Terreno Irregular"}
+                info={[{ text: "Aumentar tempo de marcha em 25%" }]}
+                extraWidth={85}
                 value={location}
-                valuePropertyPath="interaction.type"
+                valuePropertyPath="traversal.irregularTerrainFrequency"
                 onSelect={setLocation}
-                options={lc.elementTypes}
+                options={lc.irregularTerrainFrequencies}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-              />
-              <CheckInput
-                label="Toque Perigoso"
-                info={[
-                  { text: "Ravinas profundas, lagos poluidos, estruturas desmoronantes, rochas afiadas, plantas venenosas, objetos armadilhas" },
-                ]}
-                onClick={() => setLocation({ ...location, interaction: { ...location.interaction, isHazardous: !location.interaction.isHazardous } })}
-                isSelected={location.interaction.isHazardous}
-                className="interaction"
-              />
+              /> */}
+
+        {location.size && location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST && location.exteriorLocationId != null && (
+          <div className="location-detail-group">
+            <div className="location-row location-detail-group-title">
+              <span className={location.traversal.elements.length === 0 ? `lacking-data` : ""}>Elementos de Travessia</span>
+              <button onClick={() => OpenModalManageElement()} disabled={location.traversal.elements.length === lc.elementTypes.length}>
+                <i className="fas fa-plus"></i>
+              </button>
             </div>
-            {lc.GetElementType(location.interaction.type)?.canBeMaterial && (
-              <Select
-                label={"Raridade de Material"}
-                extraWidth={250}
-                value={location}
-                valuePropertyPath="interaction.rarity"
-                onSelect={setLocation}
-                nothingSelected="Nenhuma"
-                options={creatureRarities}
-                optionDisplay={(o) => o.treasureDisplay}
-                optionValue={(o) => o.value}
-              />
-            )}
-          </>
+            {location.traversal.elements.map((e) => (
+              <div className="location-row location-detail-group-item" key={e.type}>
+                <span>{lc.GetElementType(e.type).display}</span>
+                <div className="group-item-actions">
+                  <button onClick={() => OpenModalManageElement(e)}>
+                    <i className="fas fa-pencil-alt"></i>
+                  </button>
+                  <button onClick={() => DeleteElement(e)}>
+                    <i className="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
 
-        <div className="divider"></div>
-
-        <div className="location-detail-group">
-          <div className="location-row location-detail-group-title">
-            <span className={location.creatures.length === 0 ? `lacking-data` : ""}>Criaturas</span>
-            <button onClick={() => HandleSelectCreatures()}>
-              <i className="fas fa-retweet"></i>
-            </button>
+        {location.size && location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
+          <div className="location-detail-group">
+            <div className="location-row location-detail-group-title">
+              <span>Disposição</span>
+            </div>
+            <div className="location-row df dungeon-entrance">
+              <button className={location.creatures.length === 0 ? `lacking-data` : ""} onClick={() => OpenModalManageDungeonRoom(null, true)}>
+                Entrada
+              </button>
+            </div>
+            <div className="location-row df dungeon">
+              <button className="dungeon-room" disabled={true}>
+                <i className="fas fa-plus"></i>
+              </button>
+            </div>
           </div>
-          {location.creatures.map((locC, cIndex) => {
-            const name = creatures.find((c) => c._id === locC.creatureId).name;
+        ) : (
+          <div className="location-detail-group">
+            <div className="location-row location-detail-group-title">
+              <span className={location.creatures.length === 0 ? `lacking-data` : ""}>Criaturas</span>
+              <button onClick={() => HandleSelectCreatures(location, setLocation)}>
+                <i className="fas fa-retweet"></i>
+              </button>
+            </div>
+            {location.creatures.map((locC, cIndex) => {
+              const name = creatures.find((c) => c._id === locC.creatureId).name;
 
-            return (
-              <div className="location-row location-detail-group-item df-fd-c location-creature" key={locC.creatureId}>
-                <div className="group-item-actions">
-                  <span>{name}</span>
-                  <button onClick={() => OpenModalManageRoutine(locC)}>
-                    <i className="fas fa-plus"></i>
-                  </button>
-                  {/* <button onClick={() => OpenModalManageCreature(lc, name)}>
+              return (
+                <div className="location-row location-detail-group-item df-fd-c location-creature" key={locC.creatureId}>
+                  <div className="group-item-actions">
+                    <span>{name}</span>
+                    <button onClick={() => OpenModalManageRoutine(locC)}>
+                      <i className="fas fa-plus"></i>
+                    </button>
+                    {/* <button onClick={() => OpenModalManageCreature(lc, name)}>
                     <i className="fas fa-pencil-alt"></i>
                   </button>
                   <button onClick={() => DeleteCreature(lc)}>
                     <i className="fas fa-trash"></i>
                   </button> */}
-                </div>
-                {locC.routines.map((r, rIndex) => {
-                  const rContextIndex = location.contexts.findIndex((c) => c.name === r.context);
+                  </div>
+                  {locC.routines.map((r, rIndex) => {
+                    const rContextIndex = location.contexts.findIndex((c) => c.name === r.context);
 
-                  return (
-                    <div className="routine df df-jc-sb df-cg-5" key={r.encounterFrequency + rIndex}>
-                      <span>
-                        {lc.GetGroupSize(r.groupSize).routineDisplay} <i className="fas fa-dragon"></i>
-                      </span>
-                      <div className="df df-cg-5">
-                        {rContextIndex >= 0 && <span>{rContextIndex + 1}.</span>}
-                        {r.schedule && (
-                          <span>
-                            <i className={lc.GetRoutineSchedule(r.schedule).icon}></i>
-                          </span>
-                        )}
-                        {r.precipitation && (
-                          <span>
-                            <i className={lc.GetRoutinePrecipitation(r.precipitation).icon}></i>
-                          </span>
-                        )}
-                        {r.temperature && (
-                          <span>
-                            <i className={lc.GetRoutineTemperature(r.temperature).icon}></i>
-                          </span>
-                        )}
-                        <span>{utils.turnValueIntoPercentageString(lc.GetEncounterFrequency(r.encounterFrequency).probability)}</span>
-                        <div className="group-item-actions">
-                          <button onClick={() => OpenModalManageRoutine(locC, r)}>
-                            <i className="fas fa-pencil-alt"></i>
-                          </button>
-                          <button onClick={() => DeleteRoutine(locC, cIndex, r)} disabled={locC.routines.length === 1}>
-                            <i className="fas fa-trash"></i>
-                          </button>
+                    return (
+                      <div className="routine df df-jc-sb df-cg-5" key={r.encounterFrequency + rIndex}>
+                        <span>
+                          {lc.GetGroupSize(r.groupSize).routineDisplay} <i className="fas fa-dragon"></i>
+                        </span>
+                        <div className="df df-cg-5">
+                          {rContextIndex >= 0 && <span>{rContextIndex + 1}.</span>}
+                          {r.schedule && (
+                            <span>
+                              <i className={lc.GetRoutineSchedule(r.schedule).icon}></i>
+                            </span>
+                          )}
+                          {r.precipitation && (
+                            <span>
+                              <i className={lc.GetRoutinePrecipitation(r.precipitation).icon}></i>
+                            </span>
+                          )}
+                          {r.temperature && (
+                            <span>
+                              <i className={lc.GetRoutineTemperature(r.temperature).icon}></i>
+                            </span>
+                          )}
+                          <span>{utils.turnValueIntoPercentageString(lc.GetEncounterFrequency(r.encounterFrequency).probability)}</span>
+                          <div className="group-item-actions">
+                            <button onClick={() => OpenModalManageRoutine(locC, r)}>
+                              <i className="fas fa-pencil-alt"></i>
+                            </button>
+                            <button onClick={() => DeleteRoutine(locC, cIndex, r)} disabled={locC.routines.length === 1}>
+                              <i className="fas fa-trash"></i>
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </main>
       <footer className="action-buttons">
         {HandleDelete ? (

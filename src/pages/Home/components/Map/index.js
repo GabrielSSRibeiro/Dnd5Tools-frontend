@@ -292,13 +292,13 @@ function Map({
             HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
             HandleAddTravelNode={node ? null : () => HandleAddTravelNode(newCurrentNode)}
             HandleSaveCombatConfig={HandleSaveCombatConfig}
-            encounterProb={locHoverData.distance.encounterProb}
+            encounterProb={locHoverData?.distance.encounterProb ?? 0}
             addAction={() => {
               setLocationToEdit(lc.GetNewLocation(newLocation._id ?? userId));
               setModal(null);
             }}
             editAction={() => {
-              setLocationToEdit(newLocation);
+              setLocationToEdit(utils.clone(newLocation));
               setModal(null);
             }}
           />

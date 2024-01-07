@@ -102,6 +102,7 @@ function ModalManageElement({ element, elements, onClose }) {
         /> */}
         <Select
           label={"Chance de ser Perigoso"}
+          info={[{ text: "Ravinas profundas, lagos poluidos, estruturas desmoronantes, rochas afiadas, plantas venenosas, objetos armadilhas" }]}
           extraWidth={250}
           value={tempElement}
           valuePropertyPath="hazardousness"

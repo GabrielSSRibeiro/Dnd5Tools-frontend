@@ -243,7 +243,11 @@ export const ProbabilityCheckWithRatio = (probability, ratio) => {
   const fullProbTimes = Math.floor(ratio);
   const parcialProb = ratio % 1;
 
-  let probArray = createArrayFromInt(fullProbTimes).map((_) => probability);
+  //checks every 1 hour / split since full prob is per hour
+  const hourCheckSplit = 6;
+
+  let probArray = createArrayFromInt(fullProbTimes * hourCheckSplit).map((_) => probability / hourCheckSplit);
+
   if (parcialProb > 0) {
     probArray.push(probability * parcialProb);
   }

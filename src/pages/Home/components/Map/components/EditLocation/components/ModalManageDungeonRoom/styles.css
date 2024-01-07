@@ -1,0 +1,33 @@
+.ModalManageDungeonRoom-container.modal-body {
+  width: fit-content;
+  height: 450px;
+  margin-top: 200px;
+}
+
+.ModalManageDungeonRoom-container .new-room-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  row-gap: 10px;
+  margin-bottom: 25px;
+
+  overflow-y: auto;
+  height: 350px;
+}
+
+.ModalManageDungeonRoom-container .new-room-wrapper .room-row {
+  width: 100%;
+}
+
+.ModalManageDungeonRoom-container .new-room-wrapper .room-row .interaction {
+  margin-top: 23px;
+}
+
+.ModalManageDungeonRoom-container footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 15px;
+}

@@ -16,7 +16,7 @@ function ModalManageCreatureRoutine({ routine, contexts, isPointOfInterest, onCl
           schedule: null,
           precipitation: null,
           temperature: null,
-          context: null,
+          context: contexts[0],
           groupSize: lc.GROUP_SIZES.SOLO,
           encounterFrequency: null,
         }
