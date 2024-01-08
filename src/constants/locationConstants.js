@@ -469,3 +469,31 @@ export const roomSizes = [
   { display: "Extremo", value: ROOM_SIZES.EXTREME, meters: 36 },
 ];
 export const GetRoomSize = (value) => roomSizes.find((a) => a.value === value);
+
+export const ROOM_HEIGHTS = {
+  LOW: 10,
+  MEDIUM: 20,
+  HIGH: 30,
+  EXTREME: 40,
+};
+export const roomHeights = [
+  { display: "Baixa", value: ROOM_HEIGHTS.LOW, meters: 1.5 },
+  { display: "Média", value: ROOM_HEIGHTS.MEDIUM, meters: 3 },
+  { display: "Alta", value: ROOM_HEIGHTS.HIGH, meters: 6 },
+  { display: "Extrema", value: ROOM_HEIGHTS.EXTREME, meters: 9 },
+];
+export const GetRoomHeights = (value) => roomHeights.find((a) => a.value === value);
+
+export const ROOM_CONNECTIONS = {
+  NONE: 10,
+  BLOCKED: 20,
+  DOOR: 30,
+  OPEN: 40,
+};
+export const roomConnections = [
+  { display: "Nenhuma", value: ROOM_CONNECTIONS.NONE },
+  { display: "Bloqueada", value: ROOM_CONNECTIONS.BLOCKED },
+  { display: "Porta", value: ROOM_CONNECTIONS.DOOR },
+  { display: "Aberta", value: ROOM_CONNECTIONS.OPEN },
+];
+export const GetRoomConnection = (value) => roomConnections.find((a) => a.value === value);

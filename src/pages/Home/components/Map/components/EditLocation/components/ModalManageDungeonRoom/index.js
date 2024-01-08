@@ -35,6 +35,13 @@ function ModalManageDungeonRoom({
           firstImpressions: null,
           secrets: null,
           size: lc.ROOM_SIZES.MEDIUM,
+          height: lc.ROOM_HEIGHTS.MEDIUM,
+          top: lc.ROOM_CONNECTIONS.NONE,
+          bottom: lc.ROOM_CONNECTIONS.NONE,
+          left: lc.ROOM_CONNECTIONS.NONE,
+          right: lc.ROOM_CONNECTIONS.NONE,
+          floor: lc.ROOM_CONNECTIONS.NONE,
+          ceiling: lc.ROOM_CONNECTIONS.NONE,
           type: lc.ELEMENT_TYPES.STRUCTURE,
           isHazardous: false,
           rarity: null,
@@ -126,16 +133,94 @@ function ModalManageDungeonRoom({
         {!isEntrance && (
           <>
             <TextInput label="Propósito" value={tempRoom} valuePropertyPath="purpose" onChange={setTempRoom} />
-            <Select
-              label={"Tamanho"}
-              extraWidth={250}
-              value={tempRoom}
-              valuePropertyPath="size"
-              onSelect={setTempRoom}
-              options={lc.roomSizes}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-            />
+            <div className="df df-ai-fs df-cg-10 room-row">
+              <Select
+                label={"Tamanho"}
+                extraWidth={70}
+                value={tempRoom}
+                valuePropertyPath="size"
+                onSelect={setTempRoom}
+                options={lc.roomSizes}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+              <Select
+                label={"Altura"}
+                extraWidth={70}
+                value={tempRoom}
+                valuePropertyPath="height"
+                onSelect={setTempRoom}
+                options={lc.roomHeights}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+            </div>
+            <div className="df df-ai-fs df-cg-10 room-row">
+              <Select
+                label={"Frente"}
+                extraWidth={70}
+                value={tempRoom}
+                valuePropertyPath="top"
+                onSelect={setTempRoom}
+                options={lc.roomConnections}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+              <Select
+                label={"Atrás"}
+                extraWidth={70}
+                value={tempRoom}
+                valuePropertyPath="bottom"
+                onSelect={setTempRoom}
+                options={lc.roomConnections}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+            </div>
+            <div className="df df-ai-fs df-cg-10 room-row">
+              <Select
+                label={"Esquerda"}
+                extraWidth={70}
+                value={tempRoom}
+                valuePropertyPath="left"
+                onSelect={setTempRoom}
+                options={lc.roomConnections}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+              <Select
+                label={"Direita"}
+                extraWidth={70}
+                value={tempRoom}
+                valuePropertyPath="right"
+                onSelect={setTempRoom}
+                options={lc.roomConnections}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+            </div>
+            <div className="df df-ai-fs df-cg-10 room-row">
+              <Select
+                label={"Piso"}
+                extraWidth={70}
+                value={tempRoom}
+                valuePropertyPath="floor"
+                onSelect={setTempRoom}
+                options={lc.roomConnections}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+              <Select
+                label={"Teto"}
+                extraWidth={70}
+                value={tempRoom}
+                valuePropertyPath="ceiling"
+                onSelect={setTempRoom}
+                options={lc.roomConnections}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+            </div>
           </>
         )}
         <div className="df df-ai-fs df-cg-15 room-row">
