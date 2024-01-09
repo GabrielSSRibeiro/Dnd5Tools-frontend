@@ -135,10 +135,15 @@
 .EditLocation-container .dungeon-entrance {
   background-color: var(--white);
   border-top: 1px solid var(--black);
+  padding: 5px;
+}
+.EditLocation-container .dungeon-entrance > button {
+  padding: 3px;
 }
 
 .EditLocation-container .dungeon {
   background-color: var(--white);
+  flex-wrap: wrap;
 }
 
 .EditLocation-container .room {
@@ -148,4 +153,5 @@
 .EditLocation-container .dungeon .dungeon-room {
   width: 20px;
   height: 20px;
+  margin: 5px;
 }

@@ -83,6 +83,7 @@ function EditLocation({
     () => referenceLocations.length === 0 || !referenceLocations.some((l) => !l.reference.location),
     [referenceLocations]
   );
+  const roomsPerRow = useRef(11);
 
   function HandleSaveLocation() {
     //if ref is possible, but not selected, flag as hidden loc
@@ -393,6 +394,14 @@ function EditLocation({
     );
   }
   function HandleCloseModalManageDungeonRoom(index, tempRoom, isEntrance) {
+    const addNewRow = () => {
+      location.interaction.rooms.push(...Array(roomsPerRow.current));
+      let scrollableElement = document.getElementById("EditLocation-scroll");
+      setTimeout(() => {
+        scrollableElement.scrollTop = scrollableElement.scrollHeight;
+      }, 100);
+    };
+
     if (tempRoom) {
       if (isEntrance) {
         location.interaction.type = tempRoom.type;
@@ -402,8 +411,17 @@ function EditLocation({
       } else {
         if (index != null) {
           location.interaction.rooms.splice(index, 1, tempRoom);
-        } else {
-          location.interaction.rooms.push(tempRoom);
+
+          //add new row if needed
+          if (location.interaction.rooms.length < index + roomsPerRow.current) {
+            addNewRow();
+          }
+        }
+        //if empty
+        else {
+          addNewRow();
+          location.interaction.rooms[Math.floor(roomsPerRow.current / 2)] = tempRoom;
+          addNewRow();
         }
       }
     }
@@ -411,9 +429,62 @@ function EditLocation({
     setModal(null);
   }
   function DeleteDungeonRoom(index) {
-    location.interaction.rooms.splice(index, 1);
+    location.interaction.rooms[index] = null;
+
+    //clear if empty
+    if (location.interaction.rooms.every((r) => !r)) {
+      location.interaction.rooms = [];
+    }
     setLocation({ ...location });
     setModal(null);
+  }
+
+  function CanBeNewRoom(i) {
+    const isLeftCorner = i % roomsPerRow.current === 0;
+    const isRightCorner = i !== 0 && i % (roomsPerRow.current - 1) === 0;
+
+    const topLeftIndex = i - roomsPerRow.current - 1;
+    const topLeft = location.interaction.rooms[topLeftIndex];
+    const hasValidTopLeft = topLeft && !isLeftCorner;
+
+    const toptIndex = i - roomsPerRow.current;
+    const topt = location.interaction.rooms[toptIndex];
+    const hasValidTop = topt;
+
+    const topRightIndex = i - roomsPerRow.current + 1;
+    const topRight = location.interaction.rooms[topRightIndex];
+    const hasValidTopRight = topRight && !isRightCorner;
+
+    const leftIndex = i - 1;
+    const left = location.interaction.rooms[leftIndex];
+    const hasValidLeft = left && !isLeftCorner;
+
+    const rightIndex = i + 1;
+    const right = location.interaction.rooms[rightIndex];
+    const hasValidRight = right && !isRightCorner;
+
+    const bottomLeftIndex = i + roomsPerRow.current - 1;
+    const bottomLeft = location.interaction.rooms[bottomLeftIndex];
+    const hasValidBottomLeft = bottomLeft && !isLeftCorner;
+
+    const bottomIndex = i + roomsPerRow.current;
+    const bottom = location.interaction.rooms[bottomIndex];
+    const hasValidBottom = bottom && location.interaction.rooms[bottomIndex % roomsPerRow.current];
+
+    const bottomRightIndex = i + roomsPerRow.current + 1;
+    const bottomRight = location.interaction.rooms[bottomRightIndex];
+    const hasValidBottomRight = bottomRight && !isRightCorner;
+
+    return (
+      hasValidTopLeft ||
+      hasValidTop ||
+      hasValidTopRight ||
+      hasValidLeft ||
+      hasValidRight ||
+      hasValidBottomLeft ||
+      hasValidBottom ||
+      hasValidBottomRight
+    );
   }
 
   function IsLocationValid() {
@@ -525,7 +596,7 @@ function EditLocation({
           <input type="file" onChange={ImportAscendance} ref={inputRef} hidden={true} accept="application/JSON" />
         </button>
       </div>
-      <main className="location-fields">
+      <main id="EditLocation-scroll" className="location-fields">
         <TextInput label="Nome" value={location} valuePropertyPath="name" onChange={setLocation} />
 
         {/* reference */}
@@ -742,19 +813,29 @@ function EditLocation({
             </div>
             <div className="location-row df dungeon">
               {location.interaction.rooms.length > 0 ? (
-                location.interaction.rooms.map((r, i) => (
-                  <button className="room df dungeon-room" onClick={() => OpenModalManageDungeonRoom(r, i)} key={i}>
-                    {(r.purpose || r.creatures.length > 0) && (
-                      <Info
-                        contents={GetRoomTooltip(
-                          r.purpose,
-                          r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId).name }))
-                        )}
-                        tooltipOnly={true}
-                      />
-                    )}
-                  </button>
-                ))
+                location.interaction.rooms.map((r, i) =>
+                  r ? (
+                    <button className="room df dungeon-room" onClick={() => OpenModalManageDungeonRoom(r, i)} key={i}>
+                      {(r.purpose || r.creatures.length > 0) && (
+                        <Info
+                          contents={GetRoomTooltip(
+                            r.purpose,
+                            r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId).name }))
+                          )}
+                          tooltipOnly={true}
+                        />
+                      )}
+                    </button>
+                  ) : (
+                    <button
+                      className={`room df dungeon-room${CanBeNewRoom(i) ? "" : " invisible"}`}
+                      onClick={() => OpenModalManageDungeonRoom(r, i)}
+                      key={i}
+                    >
+                      <i className="fas fa-plus"></i>
+                    </button>
+                  )
+                )
               ) : (
                 <button className="room df dungeon-room" onClick={() => OpenModalManageDungeonRoom()}>
                   <i className="fas fa-plus"></i>

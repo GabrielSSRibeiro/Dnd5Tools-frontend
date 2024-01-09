@@ -222,9 +222,11 @@ function Home() {
       locations.forEach((l) => {
         l.creatures = l.creatures.filter((lc) => creatures.some((c) => c._id === lc.creatureId));
 
-        l.interaction.rooms.forEach((r) => {
-          r.creatures = r.creatures.filter((lc) => creatures.some((c) => c._id === lc.creatureId));
-        });
+        l.interaction.rooms
+          .filter((r) => r)
+          .forEach((r) => {
+            r.creatures = r.creatures.filter((lc) => creatures.some((c) => c._id === lc.creatureId));
+          });
       });
     }
   }, [locations, creatures]);
