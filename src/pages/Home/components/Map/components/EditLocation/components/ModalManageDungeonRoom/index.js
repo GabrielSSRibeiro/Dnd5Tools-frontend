@@ -24,6 +24,7 @@ function ModalManageDungeonRoom({
   creatures,
   isPointOfInterest,
   HandleSelectCreatures,
+  SwapDungeonRoom,
   DeleteDungeonRoom,
   onClose,
 }) {
@@ -328,9 +329,14 @@ function ModalManageDungeonRoom({
           {!isEntrance && (
             <>
               {room && (
-                <button title="Deletar" className="button-simple" onClick={DeleteDungeonRoom}>
-                  <i className="fas fa-trash"></i>
-                </button>
+                <>
+                  <button title="Deletar" className="button-simple" onClick={DeleteDungeonRoom}>
+                    <i className="fas fa-trash"></i>
+                  </button>
+                  <button title="Trocar" className="button-simple" onClick={SwapDungeonRoom}>
+                    <i className="fas fa-retweet"></i>
+                  </button>
+                </>
               )}
               <button
                 title="Primeiras Impressões"

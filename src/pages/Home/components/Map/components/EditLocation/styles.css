@@ -135,7 +135,7 @@
 .EditLocation-container .dungeon-entrance {
   background-color: var(--white);
   border-top: 1px solid var(--black);
-  padding: 10px;
+  padding: 7px;
 }
 .EditLocation-container .dungeon-entrance > button {
   padding: 3px;
@@ -144,33 +144,34 @@
 .EditLocation-container .dungeon {
   background-color: var(--white);
   flex-wrap: wrap;
-  row-gap: 10px;
-  column-gap: 10px;
-  padding-bottom: 10px;
-}
-
-.EditLocation-container .dungeon .dungeon-room {
-  width: 40px;
-  height: 40px;
+  row-gap: 5px;
+  column-gap: 7px;
+  padding: 0 7px 7px;
 }
 
 .EditLocation-container .room {
   position: relative;
 }
 
+.EditLocation-container .is-swapping-room {
+  background-color: var(--white);
+}
+
 .EditLocation-container .dungeon .corridor {
+  width: 5px;
+  height: 5px;
+}
+.EditLocation-container .dungeon .small {
   width: 10px;
   height: 10px;
 }
-.EditLocation-container .dungeon .small {
+.EditLocation-container .dungeon .medium {
+  width: 15px;
+  height: 15px;
+}
+.EditLocation-container .dungeon .large,
+.EditLocation-container .dungeon .dungeon-room {
   width: 20px;
   height: 20px;
-}
-.EditLocation-container .dungeon .medium {
-  width: 30px;
-  height: 30px;
-}
-.EditLocation-container .dungeon .large {
-  width: 40px;
-  height: 40px;
+  cursor: pointer;
 }

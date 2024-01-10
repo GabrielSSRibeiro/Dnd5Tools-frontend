@@ -38,6 +38,7 @@ function EditLocation({
   let inputRef = useRef(null);
   const [location, setLocation] = useState(locationToEdit);
   const [willAdjustMap, setWillAdjustMap] = useState(false);
+  const [roomToSwap, setRoomToSwap] = useState(null);
   const [modal, setModal] = useState(null);
 
   const locationSizes = useMemo(() => {
@@ -83,7 +84,7 @@ function EditLocation({
     () => referenceLocations.length === 0 || !referenceLocations.some((l) => !l.reference.location),
     [referenceLocations]
   );
-  const roomsPerRow = useRef(7);
+  const roomsPerRow = useRef(13);
 
   function HandleSaveLocation() {
     //if ref is possible, but not selected, flag as hidden loc
@@ -365,6 +366,15 @@ function EditLocation({
   }
 
   function OpenModalManageDungeonRoom(room, index, isEntrance) {
+    if (roomToSwap != null) {
+      [location.interaction.rooms[index], location.interaction.rooms[roomToSwap]] = [
+        location.interaction.rooms[roomToSwap],
+        location.interaction.rooms[index],
+      ];
+      setRoomToSwap(null);
+      return;
+    }
+
     const roomToManage = isEntrance
       ? {
           type: location.interaction.type,
@@ -388,6 +398,7 @@ function EditLocation({
         creatures={creatures}
         isPointOfInterest={isPointOfInterest}
         HandleSelectCreatures={(creaturesObj, setter) => HandleSelectCreatures(creaturesObj, setter)}
+        SwapDungeonRoom={() => SwapDungeonRoom(index)}
         DeleteDungeonRoom={() => DeleteDungeonRoom(index)}
         onClose={(tempRoom) => HandleCloseModalManageDungeonRoom(index, tempRoom, isEntrance)}
       />
@@ -426,6 +437,10 @@ function EditLocation({
       }
     }
 
+    setModal(null);
+  }
+  function SwapDungeonRoom(index) {
+    setRoomToSwap(index);
     setModal(null);
   }
   function DeleteDungeonRoom(index) {
@@ -670,6 +685,7 @@ function EditLocation({
         )}
         <div className="divider"></div>
 
+        {/* contexts */}
         <div className="location-detail-group">
           <div className="location-row location-detail-group-title">
             <span>Contextos</span>
@@ -772,6 +788,7 @@ function EditLocation({
                 optionValue={(o) => o.value}
               /> */}
 
+        {/* elements */}
         {location.size && location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST && location.exteriorLocationId != null && (
           <div className="location-detail-group">
             <div className="location-row location-detail-group-title">
@@ -802,10 +819,12 @@ function EditLocation({
             <div className="location-row location-detail-group-title">
               <span>Disposição</span>
             </div>
+            {/* entrance */}
             <div className="location-row df dungeon-entrance">
               <button
                 className={`room${location.creatures.length === 0 ? ` lacking-data` : ""}`}
                 onClick={() => OpenModalManageDungeonRoom(null, null, true)}
+                disabled={roomToSwap != null}
               >
                 {location.creatures.length > 0 && (
                   <Info
@@ -819,27 +838,28 @@ function EditLocation({
                 Entrada
               </button>
             </div>
+            {/* rooms */}
             <div className="location-row df dungeon">
               {location.interaction.rooms.length > 0 ? (
                 location.interaction.rooms.map((r, i) =>
                   r ? (
-                    <div className="df dungeon-room" key={i}>
-                      <button className={`room df ${lc.GetRoomSize(r.size).cssClass}`} onClick={() => OpenModalManageDungeonRoom(r, i)}>
-                        {(r.purpose || r.creatures.length > 0) && (
-                          <Info
-                            contents={GetRoomTooltip(
-                              r.purpose,
-                              r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId).name }))
-                            )}
-                            tooltipOnly={true}
-                          />
-                        )}
-                      </button>
+                    <div className="df room dungeon-room" onClick={() => OpenModalManageDungeonRoom(r, i)} key={i}>
+                      {(r.purpose || r.creatures.length > 0) && (
+                        <Info
+                          contents={GetRoomTooltip(
+                            r.purpose,
+                            r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId).name }))
+                          )}
+                          tooltipOnly={true}
+                        />
+                      )}
+                      <button className={`df ${lc.GetRoomSize(r.size).cssClass}${roomToSwap != null ? " is-swapping-room" : ""}`}></button>
                     </div>
                   ) : (
                     <button
-                      className={`room df dungeon-room${CanBeNewRoom(i) ? "" : " invisible"}`}
+                      className={`df dungeon-room${CanBeNewRoom(i) ? "" : " invisible"}${roomToSwap != null ? " element-disabled" : ""}`}
                       onClick={() => OpenModalManageDungeonRoom(r, i)}
+                      disabled={roomToSwap != null}
                       key={i}
                     >
                       <i className="fas fa-plus"></i>
@@ -847,13 +867,14 @@ function EditLocation({
                   )
                 )
               ) : (
-                <button className="room df dungeon-room" onClick={() => OpenModalManageDungeonRoom()}>
+                <button className="df dungeon-room" onClick={() => OpenModalManageDungeonRoom()}>
                   <i className="fas fa-plus"></i>
                 </button>
               )}
             </div>
           </div>
         ) : (
+          // creatures
           <div className="location-detail-group">
             <div className="location-row location-detail-group-title">
               <span className={location.creatures.length === 0 ? `lacking-data` : ""}>Criaturas</span>

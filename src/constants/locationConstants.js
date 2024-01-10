@@ -308,10 +308,10 @@ export const GROUP_SIZES = {
 };
 export const groupSizes = [
   { display: "Solitário", value: GROUP_SIZES.SOLO, routineDisplay: "1", min: 1, max: 1 },
-  { display: "Pequeno (1-2)", value: GROUP_SIZES.SMALL, routineDisplay: "1-2", min: 1, max: 2 },
-  { display: "Médio (2-3)", value: GROUP_SIZES.MEDIUM, routineDisplay: "2-3", min: 2, max: 3 },
-  { display: "Grande (3-4)", value: GROUP_SIZES.LARGE, routineDisplay: "3-4", min: 3, max: 4 },
-  { display: "Muito Grande (4-5)", value: GROUP_SIZES.EXTREME, routineDisplay: "4-5", min: 4, max: 5 },
+  { display: "Pequeno (2)", value: GROUP_SIZES.SMALL, routineDisplay: "2", min: 2, max: 2 },
+  { display: "Médio (3)", value: GROUP_SIZES.MEDIUM, routineDisplay: "3", min: 3, max: 3 },
+  { display: "Grande (4-6)", value: GROUP_SIZES.LARGE, routineDisplay: "4-6", min: 4, max: 6 },
+  { display: "Muito Grande (7-10)", value: GROUP_SIZES.EXTREME, routineDisplay: "7-10", min: 7, max: 10 },
 ];
 export const GetGroupSize = (value) => groupSizes.find((a) => a.value === value);
 

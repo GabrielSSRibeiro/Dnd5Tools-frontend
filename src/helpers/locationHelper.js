@@ -143,8 +143,32 @@ export const GetLocationDataForExport = (location, creatures) => {
   }
 
   if (location.creatures.length > 0) {
+    if (location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST) {
+      locationDataForExport.push("Entrada");
+    }
+
     locationDataForExport.push(location.creatures.map((lc) => creatures.find((c) => c._id === lc.creatureId).name).join(", "));
   }
+
+  location.interaction?.rooms
+    .filter((r) => r)
+    .forEach((r) => {
+      if (r.purpose) {
+        locationDataForExport.push(r.purpose);
+      }
+
+      if (r.firstImpressions) {
+        locationDataForExport.push(r.firstImpressions);
+      }
+
+      if (r.secrets) {
+        locationDataForExport.push(r.secrets);
+      }
+
+      if (r.creatures.length > 0) {
+        locationDataForExport.push(r.creatures.map((rc) => creatures.find((c) => c._id === rc.creatureId).name).join(", "));
+      }
+    });
 
   locationDataForExport.push("---------------------------------");
 
