@@ -327,9 +327,11 @@ function ModalManageDungeonRoom({
         <div className="df df-jc-sb df-cg-15">
           {!isEntrance && (
             <>
-              <button title="Deletar" className="button-simple" onClick={DeleteDungeonRoom}>
-                <i className="fas fa-trash"></i>
-              </button>
+              {room && (
+                <button title="Deletar" className="button-simple" onClick={DeleteDungeonRoom}>
+                  <i className="fas fa-trash"></i>
+                </button>
+              )}
               <button
                 title="Primeiras Impressões"
                 className={`button-simple${!tempRoom.firstImpressions ? " lacking-data" : ""}`}

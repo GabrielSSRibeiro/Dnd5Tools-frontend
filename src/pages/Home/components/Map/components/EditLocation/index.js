@@ -431,10 +431,17 @@ function EditLocation({
   function DeleteDungeonRoom(index) {
     location.interaction.rooms[index] = null;
 
-    //clear if empty
-    if (location.interaction.rooms.every((r) => !r)) {
-      location.interaction.rooms = [];
+    //if last of row, remove row
+    const lastRows = location.interaction.rooms.slice(-roomsPerRow.current * 2);
+    if (lastRows.every((r) => !r)) {
+      location.interaction.rooms.splice(location.interaction.rooms.length - roomsPerRow.current, roomsPerRow.current);
+
+      //if empty, clear
+      if (location.interaction.rooms.every((r) => !r)) {
+        location.interaction.rooms = [];
+      }
     }
+
     setLocation({ ...location });
     setModal(null);
   }
@@ -448,8 +455,8 @@ function EditLocation({
     const hasValidTopLeft = topLeft && !isLeftCorner;
 
     const toptIndex = i - roomsPerRow.current;
-    const topt = location.interaction.rooms[toptIndex];
-    const hasValidTop = topt;
+    const top = location.interaction.rooms[toptIndex];
+    const hasValidTop = top;
 
     const topRightIndex = i - roomsPerRow.current + 1;
     const topRight = location.interaction.rooms[topRightIndex];
@@ -469,7 +476,7 @@ function EditLocation({
 
     const bottomIndex = i + roomsPerRow.current;
     const bottom = location.interaction.rooms[bottomIndex];
-    const hasValidBottom = bottom && location.interaction.rooms[bottomIndex % roomsPerRow.current];
+    const hasValidBottom = bottom;
 
     const bottomRightIndex = i + roomsPerRow.current + 1;
     const bottomRight = location.interaction.rooms[bottomRightIndex];
