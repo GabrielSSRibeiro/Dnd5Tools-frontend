@@ -83,7 +83,7 @@ function EditLocation({
     () => referenceLocations.length === 0 || !referenceLocations.some((l) => !l.reference.location),
     [referenceLocations]
   );
-  const roomsPerRow = useRef(11);
+  const roomsPerRow = useRef(7);
 
   function HandleSaveLocation() {
     //if ref is possible, but not selected, flag as hidden loc
@@ -593,6 +593,7 @@ function EditLocation({
 
     return roomTooltip;
   }
+
   return (
     <div className="EditLocation-container">
       {modal}
@@ -822,17 +823,19 @@ function EditLocation({
               {location.interaction.rooms.length > 0 ? (
                 location.interaction.rooms.map((r, i) =>
                   r ? (
-                    <button className="room df dungeon-room" onClick={() => OpenModalManageDungeonRoom(r, i)} key={i}>
-                      {(r.purpose || r.creatures.length > 0) && (
-                        <Info
-                          contents={GetRoomTooltip(
-                            r.purpose,
-                            r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId).name }))
-                          )}
-                          tooltipOnly={true}
-                        />
-                      )}
-                    </button>
+                    <div className="df dungeon-room" key={i}>
+                      <button className={`room df ${lc.GetRoomSize(r.size).cssClass}`} onClick={() => OpenModalManageDungeonRoom(r, i)}>
+                        {(r.purpose || r.creatures.length > 0) && (
+                          <Info
+                            contents={GetRoomTooltip(
+                              r.purpose,
+                              r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId).name }))
+                            )}
+                            tooltipOnly={true}
+                          />
+                        )}
+                      </button>
+                    </div>
                   ) : (
                     <button
                       className={`room df dungeon-room${CanBeNewRoom(i) ? "" : " invisible"}`}

@@ -457,16 +457,16 @@ export const nodeCreatureConditions = [
 export const GetNodeCreatureCondition = (value) => nodeCreatureConditions.find((a) => a.value === value);
 
 export const ROOM_SIZES = {
+  CORRIDOR: 5,
   SMALL: 10,
   MEDIUM: 20,
   LARGE: 30,
-  EXTREME: 40,
 };
 export const roomSizes = [
-  { display: "Pequeno", value: ROOM_SIZES.SMALL, meters: 4.5 },
-  { display: "Médio", value: ROOM_SIZES.MEDIUM, meters: 9 },
-  { display: "Grande", value: ROOM_SIZES.LARGE, meters: 18 },
-  { display: "Extremo", value: ROOM_SIZES.EXTREME, meters: 36 },
+  { display: "Corredor", value: ROOM_SIZES.CORRIDOR, cssClass: "corridor", meters: null },
+  { display: "Pequeno", value: ROOM_SIZES.SMALL, cssClass: "small", meters: 9 },
+  { display: "Médio", value: ROOM_SIZES.MEDIUM, cssClass: "medium", meters: 18 },
+  { display: "Grande", value: ROOM_SIZES.LARGE, cssClass: "large", meters: 36 },
 ];
 export const GetRoomSize = (value) => roomSizes.find((a) => a.value === value);
 
