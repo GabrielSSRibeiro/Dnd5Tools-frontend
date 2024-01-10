@@ -589,12 +589,16 @@ function EditLocation({
     utils.downloadData(content.join("\n\n"), `${world.name}.txt`);
   }
 
-  function GetRoomTooltip(purpose, creatures) {
+  function GetRoomTooltip(purpose, creatures, size) {
     let roomTooltip = [];
 
     if (purpose) {
       roomTooltip.push({ text: purpose });
+      roomTooltip.push({ text: "" });
     }
+
+    const sizeInMeters = lc.GetRoomSize(size).meters;
+    roomTooltip.push({ text: `${sizeInMeters} x ${sizeInMeters}m` });
 
     if (purpose && creatures.length > 0) {
       roomTooltip.push({ text: "" });
@@ -844,15 +848,14 @@ function EditLocation({
                 location.interaction.rooms.map((r, i) =>
                   r ? (
                     <div className="df room dungeon-room" onClick={() => OpenModalManageDungeonRoom(r, i)} key={i}>
-                      {(r.purpose || r.creatures.length > 0) && (
-                        <Info
-                          contents={GetRoomTooltip(
-                            r.purpose,
-                            r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId).name }))
-                          )}
-                          tooltipOnly={true}
-                        />
-                      )}
+                      <Info
+                        contents={GetRoomTooltip(
+                          r.purpose,
+                          r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId).name })),
+                          r.size
+                        )}
+                        tooltipOnly={true}
+                      />
                       <button className={`df ${lc.GetRoomSize(r.size).cssClass}${roomToSwap != null ? " is-swapping-room" : ""}`}></button>
                     </div>
                   ) : (
