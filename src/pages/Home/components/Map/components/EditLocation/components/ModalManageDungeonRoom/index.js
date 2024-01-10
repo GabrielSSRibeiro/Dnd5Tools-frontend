@@ -66,6 +66,7 @@ function ModalManageDungeonRoom({
         routine={routine}
         contexts={contexts.map((c) => c.name)}
         isPointOfInterest={isPointOfInterest}
+        isRoom={true}
         onClose={(tempRoutine) => HandleCloseModalManageRoutine(creature, routine, tempRoutine)}
       />
     );

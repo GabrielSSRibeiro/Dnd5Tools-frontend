@@ -356,7 +356,7 @@ function EditLocation({
               precipitation: null,
               temperature: null,
               context: null,
-              encounterFrequency: lc.ENCOUNTER_FREQUENCIES.MEDIUM,
+              encounterFrequency: isPointOfInterest ? lc.ENCOUNTER_FREQUENCIES.CERTAIN : lc.ENCOUNTER_FREQUENCIES.MEDIUM,
               groupSize: lc.GROUP_SIZES.SOLO,
             },
           ],
@@ -594,7 +594,6 @@ function EditLocation({
 
     if (purpose) {
       roomTooltip.push({ text: purpose });
-      roomTooltip.push({ text: "" });
     }
 
     const sizeInMeters = lc.GetRoomSize(size).meters;

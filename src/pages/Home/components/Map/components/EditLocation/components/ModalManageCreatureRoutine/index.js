@@ -8,7 +8,7 @@ import Select from "../../../../../../../../components/Select";
 
 import "./styles.css";
 
-function ModalManageCreatureRoutine({ routine, contexts, isPointOfInterest, onClose }) {
+function ModalManageCreatureRoutine({ routine, contexts, isPointOfInterest, isRoom, onClose }) {
   const [tempRoutine, setTempRoutine] = useState(
     routine
       ? utils.clone(routine)
@@ -121,6 +121,7 @@ function ModalManageCreatureRoutine({ routine, contexts, isPointOfInterest, onCl
           options={encounterFrequencies}
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
+          isDisabled={isRoom}
         />
       </div>
       <footer>
