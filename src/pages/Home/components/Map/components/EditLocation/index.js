@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef } from "react";
 import * as utils from "../../../../../../utils";
 import * as lc from "../../../../../../constants/locationConstants";
-import { CREATURE_ENVIRONMENTS, creatureEnvironments } from "../../../../../../constants/creatureConstants";
+import { GetRarity, CREATURE_ENVIRONMENTS, creatureEnvironments } from "../../../../../../constants/creatureConstants";
 import * as lh from "../../../../../../helpers/locationHelper";
 
 import Info from "../../../../../../components/Info";
@@ -589,15 +589,24 @@ function EditLocation({
     utils.downloadData(content.join("\n\n"), `${world.name}.txt`);
   }
 
-  function GetRoomTooltip(purpose, creatures, size) {
+  function GetRoomTooltip(purpose, creatures, room = null) {
     let roomTooltip = [];
 
     if (purpose) {
       roomTooltip.push({ text: purpose });
     }
 
-    const sizeInMeters = lc.GetRoomSize(size).meters;
-    roomTooltip.push({ text: `${sizeInMeters} x ${sizeInMeters}m` });
+    if (room) {
+      const sizeInMeters = lc.GetRoomSize(room.size).meters;
+      roomTooltip.push({ text: `${sizeInMeters} x ${sizeInMeters}m` });
+
+      roomTooltip.push({ text: "" });
+      roomTooltip.push({ text: `${lc.GetElementType(room.type).display}${room.isHazardous ? " (perigoso)" : ""}` });
+
+      if (room.rarity) {
+        roomTooltip.push({ text: `Material ${GetRarity(room.rarity).treasureDisplay}` });
+      }
+    }
 
     if (purpose && creatures.length > 0) {
       roomTooltip.push({ text: "" });
@@ -851,7 +860,7 @@ function EditLocation({
                         contents={GetRoomTooltip(
                           r.purpose,
                           r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId).name })),
-                          r.size
+                          r
                         )}
                         tooltipOnly={true}
                       />
