@@ -462,51 +462,52 @@ function EditLocation({
   }
 
   function CanBeNewRoom(i) {
-    const isLeftCorner = i % roomsPerRow.current === 0;
-    const isRightCorner = i !== 0 && i % (roomsPerRow.current - 1) === 0;
+    return true;
+    // const isLeftCorner = i % roomsPerRow.current === 0;
+    // const isRightCorner = i !== 0 && i % (roomsPerRow.current - 1) === 0;
 
-    const topLeftIndex = i - roomsPerRow.current - 1;
-    const topLeft = location.interaction.rooms[topLeftIndex];
-    const hasValidTopLeft = topLeft && !isLeftCorner;
+    // const topLeftIndex = i - roomsPerRow.current - 1;
+    // const topLeft = location.interaction.rooms[topLeftIndex];
+    // const hasValidTopLeft = topLeft && !isLeftCorner;
 
-    const toptIndex = i - roomsPerRow.current;
-    const top = location.interaction.rooms[toptIndex];
-    const hasValidTop = top;
+    // const toptIndex = i - roomsPerRow.current;
+    // const top = location.interaction.rooms[toptIndex];
+    // const hasValidTop = top;
 
-    const topRightIndex = i - roomsPerRow.current + 1;
-    const topRight = location.interaction.rooms[topRightIndex];
-    const hasValidTopRight = topRight && !isRightCorner;
+    // const topRightIndex = i - roomsPerRow.current + 1;
+    // const topRight = location.interaction.rooms[topRightIndex];
+    // const hasValidTopRight = topRight && !isRightCorner;
 
-    const leftIndex = i - 1;
-    const left = location.interaction.rooms[leftIndex];
-    const hasValidLeft = left && !isLeftCorner;
+    // const leftIndex = i - 1;
+    // const left = location.interaction.rooms[leftIndex];
+    // const hasValidLeft = left && !isLeftCorner;
 
-    const rightIndex = i + 1;
-    const right = location.interaction.rooms[rightIndex];
-    const hasValidRight = right && !isRightCorner;
+    // const rightIndex = i + 1;
+    // const right = location.interaction.rooms[rightIndex];
+    // const hasValidRight = right && !isRightCorner;
 
-    const bottomLeftIndex = i + roomsPerRow.current - 1;
-    const bottomLeft = location.interaction.rooms[bottomLeftIndex];
-    const hasValidBottomLeft = bottomLeft && !isLeftCorner;
+    // const bottomLeftIndex = i + roomsPerRow.current - 1;
+    // const bottomLeft = location.interaction.rooms[bottomLeftIndex];
+    // const hasValidBottomLeft = bottomLeft && !isLeftCorner;
 
-    const bottomIndex = i + roomsPerRow.current;
-    const bottom = location.interaction.rooms[bottomIndex];
-    const hasValidBottom = bottom;
+    // const bottomIndex = i + roomsPerRow.current;
+    // const bottom = location.interaction.rooms[bottomIndex];
+    // const hasValidBottom = bottom;
 
-    const bottomRightIndex = i + roomsPerRow.current + 1;
-    const bottomRight = location.interaction.rooms[bottomRightIndex];
-    const hasValidBottomRight = bottomRight && !isRightCorner;
+    // const bottomRightIndex = i + roomsPerRow.current + 1;
+    // const bottomRight = location.interaction.rooms[bottomRightIndex];
+    // const hasValidBottomRight = bottomRight && !isRightCorner;
 
-    return (
-      hasValidTopLeft ||
-      hasValidTop ||
-      hasValidTopRight ||
-      hasValidLeft ||
-      hasValidRight ||
-      hasValidBottomLeft ||
-      hasValidBottom ||
-      hasValidBottomRight
-    );
+    // return (
+    //   hasValidTopLeft ||
+    //   hasValidTop ||
+    //   hasValidTopRight ||
+    //   hasValidLeft ||
+    //   hasValidRight ||
+    //   hasValidBottomLeft ||
+    //   hasValidBottom ||
+    //   hasValidBottomRight
+    // );
   }
 
   function IsLocationValid() {

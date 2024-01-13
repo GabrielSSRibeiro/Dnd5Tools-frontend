@@ -261,7 +261,7 @@ const GetCurrency = (creature) => {
 const GetSkills = (creature) => {
   const skills = {
     acr: {
-      value: 0,
+      value: 1,
       ability: "dex",
       bonuses: {
         check: 0,
@@ -269,7 +269,7 @@ const GetSkills = (creature) => {
       },
     },
     ani: {
-      value: 0,
+      value: 1,
       ability: "wis",
       bonuses: {
         check: 0,
@@ -277,7 +277,7 @@ const GetSkills = (creature) => {
       },
     },
     arc: {
-      value: 0,
+      value: 1,
       ability: "int",
       bonuses: {
         check: 0,
@@ -285,7 +285,7 @@ const GetSkills = (creature) => {
       },
     },
     ath: {
-      value: 0,
+      value: 1,
       ability: "str",
       bonuses: {
         check: 0,
@@ -293,7 +293,7 @@ const GetSkills = (creature) => {
       },
     },
     dec: {
-      value: 0,
+      value: 1,
       ability: "cha",
       bonuses: {
         check: 0,
@@ -301,7 +301,7 @@ const GetSkills = (creature) => {
       },
     },
     his: {
-      value: 0,
+      value: 1,
       ability: "int",
       bonuses: {
         check: 0,
@@ -309,7 +309,7 @@ const GetSkills = (creature) => {
       },
     },
     ins: {
-      value: 0,
+      value: 1,
       ability: "wis",
       bonuses: {
         check: 0,
@@ -317,7 +317,7 @@ const GetSkills = (creature) => {
       },
     },
     itm: {
-      value: 0,
+      value: 1,
       ability: "cha",
       bonuses: {
         check: 0,
@@ -325,7 +325,7 @@ const GetSkills = (creature) => {
       },
     },
     inv: {
-      value: 0,
+      value: 1,
       ability: "int",
       bonuses: {
         check: 0,
@@ -333,7 +333,7 @@ const GetSkills = (creature) => {
       },
     },
     med: {
-      value: 0,
+      value: 1,
       ability: "wis",
       bonuses: {
         check: 0,
@@ -341,7 +341,7 @@ const GetSkills = (creature) => {
       },
     },
     nat: {
-      value: 0,
+      value: 1,
       ability: "int",
       bonuses: {
         check: 0,
@@ -349,7 +349,7 @@ const GetSkills = (creature) => {
       },
     },
     prc: {
-      value: 0,
+      value: 1,
       ability: "wis",
       bonuses: {
         check: 0,
@@ -357,7 +357,7 @@ const GetSkills = (creature) => {
       },
     },
     prf: {
-      value: 0,
+      value: 1,
       ability: "cha",
       bonuses: {
         check: 0,
@@ -365,7 +365,7 @@ const GetSkills = (creature) => {
       },
     },
     per: {
-      value: 0,
+      value: 1,
       ability: "cha",
       bonuses: {
         check: 0,
@@ -373,7 +373,7 @@ const GetSkills = (creature) => {
       },
     },
     rel: {
-      value: 0,
+      value: 1,
       ability: "int",
       bonuses: {
         check: 0,
@@ -381,7 +381,7 @@ const GetSkills = (creature) => {
       },
     },
     slt: {
-      value: 0,
+      value: 1,
       ability: "dex",
       bonuses: {
         check: 0,
@@ -389,7 +389,7 @@ const GetSkills = (creature) => {
       },
     },
     ste: {
-      value: 0,
+      value: 1,
       ability: "dex",
       bonuses: {
         check: 0,
@@ -397,7 +397,7 @@ const GetSkills = (creature) => {
       },
     },
     sur: {
-      value: 0,
+      value: 1,
       ability: "wis",
       bonuses: {
         check: 0,

@@ -1046,7 +1046,7 @@ export const creatureActionSavingThrowReaches = [
   { display: "Linha, 3m", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_CLOSE, weight: 1 },
   { display: "Linha, 9m", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_MEDIUM, weight: 2 },
   { display: "Linha, 18m", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_FAR, weight: 3 },
-  { display: "Cone, 1,5m", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_SHORT, weight: 1 },
+  { display: "Cone, 3m", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_SHORT, weight: 1 },
   { display: "Cone, 4,5m", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_MEDIUM, weight: 2 },
   { display: "Cone, 9m", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_LARGE, weight: 3 },
   { display: "Esfera, 1,5m", value: CREATURE_ACTION_SAVING_THROW_REACHES.SPHERE_SMALL, weight: 2 },

@@ -395,7 +395,7 @@ export const TRAVEL_MOUNTS = {
 };
 export const travelMounts = [
   { display: "Nenhuma", value: TRAVEL_MOUNTS.NONE, mobility: 1, fatigue: 1 },
-  { display: "Devagar (x0.5)", value: TRAVEL_MOUNTS.SLOW, mobility: 0.5, fatigue: 0.5 },
+  { display: "Devagar (x1)", value: TRAVEL_MOUNTS.SLOW, mobility: 1, fatigue: 0.5 },
   { display: "Normal (x1.5)", value: TRAVEL_MOUNTS.NORMAL, mobility: 1.5, fatigue: 0.5 },
   { display: "Rápida (x2)", value: TRAVEL_MOUNTS.FAST, mobility: 2, fatigue: 0.5 },
   // { display: "Muito rápida (x3)", value: TRAVEL_MOUNTS.VERY_FAST, mobility: 3, fatigue: 0.5 },
