@@ -12,6 +12,7 @@ import {
   creatureRarities,
   creatureSizes,
   creatureTypes,
+  CREATURE_MOVEMENTS,
   CREATURE_ACTION_TYPES,
   CREATURE_ACTION_ATTACK_REACHES,
   CREATURE_ACTION_FREQUENCIES,
@@ -56,34 +57,40 @@ function ModalFastBuild({ creature, onClose }) {
     },
   ];
 
-  const ACTION_REACHES = [
+  const SIZE_DETAILS = [
     {
       size: CREATURE_SIZES.TINY,
+      speed: CREATURE_MOVEMENTS.LOW,
       melee: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
       ranged: CREATURE_ACTION_ATTACK_REACHES.RANGED_CLOSE,
     },
     {
       size: CREATURE_SIZES.SMALL,
+      speed: CREATURE_MOVEMENTS.MEDIUM,
       melee: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
       ranged: CREATURE_ACTION_ATTACK_REACHES.RANGED_CLOSE,
     },
     {
       size: CREATURE_SIZES.MEDIUM,
+      speed: CREATURE_MOVEMENTS.MEDIUM,
       melee: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
       ranged: CREATURE_ACTION_ATTACK_REACHES.RANGED_CLOSE,
     },
     {
       size: CREATURE_SIZES.LARGE,
+      speed: CREATURE_MOVEMENTS.HIGH,
       melee: CREATURE_ACTION_ATTACK_REACHES.MELEE_EXTRA,
       ranged: CREATURE_ACTION_ATTACK_REACHES.RANGED_EXTRA,
     },
     {
       size: CREATURE_SIZES.HUGE,
+      speed: CREATURE_MOVEMENTS.HIGH,
       melee: CREATURE_ACTION_ATTACK_REACHES.MELEE_EXTRA,
       ranged: CREATURE_ACTION_ATTACK_REACHES.RANGED_EXTRA,
     },
     {
       size: CREATURE_SIZES.GARGANTUAN,
+      speed: CREATURE_MOVEMENTS.EXTREME,
       melee: CREATURE_ACTION_ATTACK_REACHES.MELEE_FAR,
       ranged: CREATURE_ACTION_ATTACK_REACHES.RANGED_FAR,
     },
@@ -103,8 +110,9 @@ function ModalFastBuild({ creature, onClose }) {
 
   function HandleConfirm() {
     const actionDetailsIndex = ACTION_DETAILS.findIndex((r) => r.rarity === tempCreature.rarity);
-    const reach = ACTION_REACHES.find((r) => r.size === tempCreature.size);
+    const sizeDetails = SIZE_DETAILS.find((r) => r.size === tempCreature.size);
     tempCreature.armorClass = ACTION_DETAILS[Math.floor(actionDetailsIndex)].armorClass;
+    tempCreature.movements.speed = sizeDetails.speed;
 
     if (hasMeleeAction) {
       if (actionDetailsIndex === 0) {
@@ -112,7 +120,7 @@ function ModalFastBuild({ creature, onClose }) {
           name: "Ataque próximo rápido",
           description: null,
           type: CREATURE_ACTION_TYPES.ATTACK,
-          reach: reach.melee,
+          reach: sizeDetails.melee,
           frequency: CREATURE_ACTION_FREQUENCIES.UNCOMMON,
           damageIntensity: DAMAGE_INTENSITIES.LOW,
           damageType: DAMAGE_TYPES.SLASHING,
@@ -130,7 +138,7 @@ function ModalFastBuild({ creature, onClose }) {
         name: "Ataque próximo",
         description: null,
         type: CREATURE_ACTION_TYPES.ATTACK,
-        reach: reach.melee,
+        reach: sizeDetails.melee,
         frequency: CREATURE_ACTION_FREQUENCIES.COMMON,
         damageIntensity: DAMAGE_INTENSITIES.MEDIUM,
         damageType: DAMAGE_TYPES.SLASHING,
@@ -147,7 +155,7 @@ function ModalFastBuild({ creature, onClose }) {
         name: "Ataque próximo pesado",
         description: null,
         type: CREATURE_ACTION_TYPES.ATTACK,
-        reach: reach.melee,
+        reach: sizeDetails.melee,
         frequency: CREATURE_ACTION_FREQUENCIES.RARE,
         damageIntensity: DAMAGE_INTENSITIES.HIGH,
         damageType: DAMAGE_TYPES.SLASHING,
@@ -167,7 +175,7 @@ function ModalFastBuild({ creature, onClose }) {
           name: "Ataque a distância rápido",
           description: null,
           type: CREATURE_ACTION_TYPES.ATTACK,
-          reach: reach.ranged,
+          reach: sizeDetails.ranged,
           frequency: CREATURE_ACTION_FREQUENCIES.UNCOMMON,
           damageIntensity: DAMAGE_INTENSITIES.LOW,
           damageType: DAMAGE_TYPES.PIERCING,
@@ -185,7 +193,7 @@ function ModalFastBuild({ creature, onClose }) {
         name: "Ataque a distância",
         description: null,
         type: CREATURE_ACTION_TYPES.ATTACK,
-        reach: reach.ranged,
+        reach: sizeDetails.ranged,
         frequency: CREATURE_ACTION_FREQUENCIES.COMMON,
         damageIntensity: DAMAGE_INTENSITIES.MEDIUM,
         damageType: DAMAGE_TYPES.PIERCING,
@@ -202,7 +210,7 @@ function ModalFastBuild({ creature, onClose }) {
         name: "Ataque a distância pesado",
         description: null,
         type: CREATURE_ACTION_TYPES.ATTACK,
-        reach: reach.ranged,
+        reach: sizeDetails.ranged,
         frequency: CREATURE_ACTION_FREQUENCIES.RARE,
         damageIntensity: DAMAGE_INTENSITIES.HIGH,
         damageType: DAMAGE_TYPES.PIERCING,
