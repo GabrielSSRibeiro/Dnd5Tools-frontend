@@ -35,12 +35,12 @@ function ModalExport({ creature, showDetails = false, onClose }) {
       .createArrayFromInt(rarity.current.baseOutputMax + 1)
       .slice(rarity.current.baseOutputMin)
       .map((level, index) => ({ display: `${versionText[index] ?? extremeVersion} (Nível ${level})`, value: level }));
-
+    console.log(exportVersions);
     return exportVersions;
   }
 
-  function HandleFoundryExport() {
-    const foundryFormattedCreature = GetFoundryFormattedCreature(creature, exportLevel);
+  function HandleFoundryExport(exportLvl) {
+    const foundryFormattedCreature = GetFoundryFormattedCreature(creature, exportLvl);
     utils.downloadData(JSON.stringify(foundryFormattedCreature), `Foundry Export - ${creature.name}.json`);
   }
 
@@ -53,7 +53,7 @@ function ModalExport({ creature, showDetails = false, onClose }) {
   }
 
   function HandleExport() {
-    exportPlatform.method();
+    exportPlatform.method(exportLevel);
   }
 
   return (
