@@ -35,7 +35,7 @@ function ModalExport({ creature, showDetails = false, onClose }) {
       .createArrayFromInt(rarity.current.baseOutputMax + 1)
       .slice(rarity.current.baseOutputMin)
       .map((level, index) => ({ display: `${versionText[index] ?? extremeVersion} (Nível ${level})`, value: level }));
-    console.log(exportVersions);
+
     return exportVersions;
   }
 
