@@ -273,7 +273,9 @@ function ModalTravelResults({
     //setup
     let locationCreatures = allCreatures
       .map((c) => {
-        const routine = GetCreatureCurrentRoutine(c, currentContext.current) ?? GetCreatureCurrentRoutine(c, worldContext.current);
+        const routine = encounterLocation.current.creatures.some((lc) => lc.creatureId === c.creatureId)
+          ? GetCreatureCurrentRoutine(c, currentContext.current)
+          : GetCreatureCurrentRoutine(c, worldContext.current);
         if (!routine) {
           return null;
         }

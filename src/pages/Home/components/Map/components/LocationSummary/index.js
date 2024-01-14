@@ -69,9 +69,9 @@ function LocationSummary({
     let creaturesForDisplay = allCreatures
       .map((locationCreature) => ({
         creature: creatures.find((c) => c._id === locationCreature.creatureId),
-        routine:
-          lh.GetCreatureCurrentRoutine(locationCreature, schedule, precipitation, temperature, currentContext?.name) ??
-          lh.GetCreatureCurrentRoutine(locationCreature, schedule, precipitation, temperature, worldContext?.name),
+        routine: location.creatures.some((lc) => lc.creatureId === locationCreature.creatureId)
+          ? lh.GetCreatureCurrentRoutine(locationCreature, schedule, precipitation, temperature, currentContext?.name)
+          : lh.GetCreatureCurrentRoutine(locationCreature, schedule, precipitation, temperature, worldContext?.name),
       }))
       .filter((c) => c.routine)
       .map((c) => {

@@ -740,7 +740,9 @@ function Map({
     const shouldlAddWorldCreatures = combatConfig.world.name !== encounterLocation.name && worldContext.name !== lc.DEFAULT_CONTEXT_NAME;
     let allCreatures = shouldlAddWorldCreatures ? [...encounterLocation.creatures, ...combatConfig.world.creatures] : encounterLocation.creatures;
     let isCertain = allCreatures.some((c) => {
-      const routine = GetCreatureCurrentRoutine(c, locationContext?.name) ?? GetCreatureCurrentRoutine(c, worldContext?.name);
+      const routine = encounterLocation.creatures.some((lc) => lc.creatureId === c.creatureId)
+        ? GetCreatureCurrentRoutine(c, locationContext?.name)
+        : GetCreatureCurrentRoutine(c, worldContext?.name);
 
       if (!routine) {
         return false;
