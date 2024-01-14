@@ -1185,6 +1185,10 @@ const GetFoundryExportTreasure = (treasure, actions, level) => {
       }
       description += ` (Ação, ${th.GetEquipAbilityDailyCharges(action.frequency)} carga(s) por dia)</p>`;
       description += `<p>${ch.GetActionReachValue(action.reach, action.type)}${GetActionDamangeAndConditionString(action, level, "strong")}</p>`;
+
+      if (action.description) {
+        description += `<p>${action.description}</p>`;
+      }
     }
     img = "modules/plutonium/media/icon/breastplate.svg";
   }
