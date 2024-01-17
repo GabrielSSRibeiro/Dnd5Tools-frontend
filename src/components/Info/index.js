@@ -14,7 +14,7 @@ function Info({ contents, tooltipOnly = false, className = "" }) {
   return (
     <div className={`Info-container${tooltipOnly ? " tooltip-only" : ""} ${className}`} onMouseOver={GetComponentPositions}>
       <i className="fas fa-info"></i>
-      <Tooltip contents={contents} top={positions.top} left={positions.left + positions.width / 2} className="tooltip-hover" />
+      {contents && <Tooltip contents={contents} top={positions.top} left={positions.left + positions.width / 2} className="tooltip-hover" />}
     </div>
   );
 }

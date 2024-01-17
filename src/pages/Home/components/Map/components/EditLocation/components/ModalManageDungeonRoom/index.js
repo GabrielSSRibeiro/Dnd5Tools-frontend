@@ -37,12 +37,18 @@ function ModalManageDungeonRoom({
           secrets: null,
           size: lc.ROOM_SIZES.MEDIUM,
           height: lc.ROOM_HEIGHTS.MEDIUM,
-          top: lc.ROOM_CONNECTIONS.NONE,
-          bottom: lc.ROOM_CONNECTIONS.NONE,
-          left: lc.ROOM_CONNECTIONS.NONE,
-          right: lc.ROOM_CONNECTIONS.NONE,
-          floor: lc.ROOM_CONNECTIONS.NONE,
-          ceiling: lc.ROOM_CONNECTIONS.NONE,
+          top: null,
+          bottom: null,
+          left: null,
+          right: null,
+          floor: {
+            connection: null,
+            direction: null,
+          },
+          ceiling: {
+            connection: null,
+            direction: null,
+          },
           type: lc.ELEMENT_TYPES.STRUCTURE,
           isHazardous: false,
           rarity: null,
@@ -108,6 +114,30 @@ function ModalManageDungeonRoom({
     setModal(null);
   }
 
+  function HandleSelectType(newValue) {
+    if (!canBeMaterial) {
+      newValue.rarity = null;
+    }
+
+    setTempRoom(newValue);
+  }
+
+  function HandleSelectFloor(newValue) {
+    if (!newValue.floor.connection) {
+      newValue.floor.direction = null;
+    }
+
+    setTempRoom(newValue);
+  }
+
+  function HandleSelectCeiling(newValue) {
+    if (!newValue.ceiling.connection) {
+      newValue.ceiling.direction = null;
+    }
+
+    setTempRoom(newValue);
+  }
+
   function CheckFinalButtonValid() {
     if (!tempRoom.type) {
       return false;
@@ -135,31 +165,20 @@ function ModalManageDungeonRoom({
         {!isEntrance && (
           <>
             <TextInput label="Propósito" value={tempRoom} valuePropertyPath="purpose" onChange={setTempRoom} />
+            <Select
+              label={"Tamanho"}
+              extraWidth={250}
+              value={tempRoom}
+              valuePropertyPath="size"
+              onSelect={setTempRoom}
+              options={lc.roomSizes}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+
             <div className="df df-ai-fs df-cg-10 room-row">
               <Select
-                label={"Tamanho"}
-                extraWidth={70}
-                value={tempRoom}
-                valuePropertyPath="size"
-                onSelect={setTempRoom}
-                options={lc.roomSizes}
-                optionDisplay={(o) => o.display}
-                optionValue={(o) => o.value}
-              />
-              <Select
-                label={"Altura"}
-                extraWidth={70}
-                value={tempRoom}
-                valuePropertyPath="height"
-                onSelect={setTempRoom}
-                options={lc.roomHeights}
-                optionDisplay={(o) => o.display}
-                optionValue={(o) => o.value}
-              />
-            </div>
-            <div className="df df-ai-fs df-cg-10 room-row">
-              <Select
-                label={"Frente"}
+                label={"Cima ↑"}
                 extraWidth={70}
                 value={tempRoom}
                 valuePropertyPath="top"
@@ -167,9 +186,10 @@ function ModalManageDungeonRoom({
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
+                nothingSelected="Nenhuma"
               />
               <Select
-                label={"Atrás"}
+                label={"Baixo ↓"}
                 extraWidth={70}
                 value={tempRoom}
                 valuePropertyPath="bottom"
@@ -177,11 +197,12 @@ function ModalManageDungeonRoom({
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
+                nothingSelected="Nenhuma"
               />
             </div>
             <div className="df df-ai-fs df-cg-10 room-row">
               <Select
-                label={"Esquerda"}
+                label={"Esquerda ←"}
                 extraWidth={70}
                 value={tempRoom}
                 valuePropertyPath="left"
@@ -189,9 +210,10 @@ function ModalManageDungeonRoom({
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
+                nothingSelected="Nenhuma"
               />
               <Select
-                label={"Direita"}
+                label={"Direita →"}
                 extraWidth={70}
                 value={tempRoom}
                 valuePropertyPath="right"
@@ -199,28 +221,67 @@ function ModalManageDungeonRoom({
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
+                nothingSelected="Nenhuma"
               />
             </div>
+            <Select
+              label={"Altura"}
+              extraWidth={250}
+              value={tempRoom}
+              valuePropertyPath="height"
+              onSelect={setTempRoom}
+              options={lc.roomHeights}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
             <div className="df df-ai-fs df-cg-10 room-row">
               <Select
                 label={"Piso"}
                 extraWidth={70}
                 value={tempRoom}
-                valuePropertyPath="floor"
-                onSelect={setTempRoom}
+                valuePropertyPath="floor.connection"
+                onSelect={HandleSelectFloor}
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
+                nothingSelected="Nenhuma"
               />
+              <Select
+                label={"Direção conexão"}
+                extraWidth={70}
+                value={tempRoom}
+                valuePropertyPath="floor.direction"
+                onSelect={setTempRoom}
+                options={lc.roomConnectionDirections.filter((d) => d.value !== tempRoom.ceiling.direction)}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+                nothingSelected="Nenhuma"
+                isDisabled={!tempRoom.floor.connection}
+              />
+            </div>
+            <div className="df df-ai-fs df-cg-10 room-row">
               <Select
                 label={"Teto"}
                 extraWidth={70}
                 value={tempRoom}
-                valuePropertyPath="ceiling"
-                onSelect={setTempRoom}
+                valuePropertyPath="ceiling.connection"
+                onSelect={HandleSelectCeiling}
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
+                nothingSelected="Nenhuma"
+              />
+              <Select
+                label={"Direção conexão"}
+                extraWidth={70}
+                value={tempRoom}
+                valuePropertyPath="ceiling.direction"
+                onSelect={setTempRoom}
+                options={lc.roomConnectionDirections.filter((d) => d.value !== tempRoom.floor.direction)}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+                nothingSelected="Nenhuma"
+                isDisabled={!tempRoom.ceiling.connection}
               />
             </div>
           </>
@@ -231,7 +292,7 @@ function ModalManageDungeonRoom({
             extraWidth={50}
             value={tempRoom}
             valuePropertyPath="type"
-            onSelect={setTempRoom}
+            onSelect={HandleSelectType}
             options={lc.elementTypes}
             optionDisplay={(o) => o.display}
             optionValue={(o) => o.value}

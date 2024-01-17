@@ -485,15 +485,27 @@ export const roomHeights = [
 export const GetRoomHeights = (value) => roomHeights.find((a) => a.value === value);
 
 export const ROOM_CONNECTIONS = {
-  NONE: 10,
   BLOCKED: 20,
   DOOR: 30,
   OPEN: 40,
 };
 export const roomConnections = [
-  { display: "Nenhuma", value: ROOM_CONNECTIONS.NONE },
   { display: "Bloqueada", value: ROOM_CONNECTIONS.BLOCKED },
   { display: "Porta", value: ROOM_CONNECTIONS.DOOR },
   { display: "Aberta", value: ROOM_CONNECTIONS.OPEN },
 ];
 export const GetRoomConnection = (value) => roomConnections.find((a) => a.value === value);
+
+export const ROOM_CONNECTION_DIRECTIONS = {
+  TOP_LEFT: 10,
+  TOP_RIGHT: 20,
+  BOTTOM_LEFT: 30,
+  BOTTOM_RIGHT: 40,
+};
+export const roomConnectionDirections = [
+  { display: "Cima esquerdo ↖", value: ROOM_CONNECTION_DIRECTIONS.TOP_LEFT },
+  { display: "Cima direito ↗", value: ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT },
+  { display: "Baixo esquerdo ↙", value: ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT },
+  { display: "Baixo direito ↘", value: ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT },
+];
+export const GetRoomConnectionDirection = (value) => roomConnectionDirections.find((a) => a.value === value);

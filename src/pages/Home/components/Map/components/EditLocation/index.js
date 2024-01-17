@@ -84,7 +84,7 @@ function EditLocation({
     () => referenceLocations.length === 0 || !referenceLocations.some((l) => !l.reference.location),
     [referenceLocations]
   );
-  const roomsPerRow = useRef(13);
+  const roomsPerRow = useRef(9);
 
   function HandleSaveLocation() {
     //if ref is possible, but not selected, flag as hidden loc
@@ -591,6 +591,10 @@ function EditLocation({
   }
 
   function GetRoomTooltip(purpose, creatures, room = null) {
+    if (room?.size === lc.ROOM_SIZES.CORRIDOR) {
+      return null;
+    }
+
     let roomTooltip = [];
 
     if (purpose) {
@@ -599,7 +603,9 @@ function EditLocation({
 
     if (room) {
       const sizeInMeters = lc.GetRoomSize(room.size).meters;
-      roomTooltip.push({ text: `${sizeInMeters} x ${sizeInMeters}m` });
+      if (sizeInMeters) {
+        roomTooltip.push({ text: `${sizeInMeters} x ${sizeInMeters}m` });
+      }
 
       roomTooltip.push({ text: "" });
       roomTooltip.push({ text: `${lc.GetElementType(room.type).display}${room.isHazardous ? " (perigoso)" : ""}` });
@@ -835,20 +841,19 @@ function EditLocation({
             {/* entrance */}
             <div className="location-row df dungeon-entrance">
               <button
-                className={`room${location.creatures.length === 0 ? ` lacking-data` : ""}`}
+                className={`df room${location.interaction.isHazardous ? " danger" : ""}`}
                 onClick={() => OpenModalManageDungeonRoom(null, null, true)}
                 disabled={roomToSwap != null}
               >
-                {location.creatures.length > 0 && (
-                  <Info
-                    contents={GetRoomTooltip(
-                      "Entrada",
-                      location.creatures.map((lc) => ({ text: creatures.find((c) => c._id === lc.creatureId).name }))
-                    )}
-                    tooltipOnly={true}
-                  />
-                )}
-                Entrada
+                <Info
+                  contents={GetRoomTooltip(
+                    "Entrada",
+                    location.creatures.map((lc) => ({ text: creatures.find((c) => c._id === lc.creatureId)?.name }))
+                  )}
+                  tooltipOnly={true}
+                />
+                <i className={`fas fa-dungeon ${location.creatures.length > 0 ? "creatures" : ""}`}></i>
+                {location.interaction.rarity && <i className={`fas fa-gem treasure`}></i>}
               </button>
             </div>
             {/* rooms */}
@@ -857,25 +862,117 @@ function EditLocation({
                 location.interaction.rooms.map((r, i) =>
                   r ? (
                     <div className="df room dungeon-room" onClick={() => OpenModalManageDungeonRoom(r, i)} key={i}>
+                      {(r.left || r.right) && (
+                        <div className="df room-connection horizontal">
+                          {r.left && <div className="first-piece"></div>}
+                          {r.right && <div className="last-piece"></div>}
+                        </div>
+                      )}
+
+                      {(r.top || r.bottom) && (
+                        <div className="df room-connection vertical">
+                          {r.top && <div className="first-piece"></div>}
+                          {r.bottom && <div className="last-piece"></div>}
+                        </div>
+                      )}
+
+                      {[r.floor.direction, r.ceiling.direction].some((d) =>
+                        [lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT, lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT].includes(d)
+                      ) && (
+                        <div className="df room-connection main-diagonal">
+                          {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT) && (
+                            <div
+                              className={`first-piece ${r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT ? "floor" : "ceiling"}`}
+                            ></div>
+                          )}
+                          {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT) && (
+                            <div
+                              className={`last-piece ${r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT ? "floor" : "ceiling"}`}
+                            ></div>
+                          )}
+                        </div>
+                      )}
+
+                      {[r.floor.direction, r.ceiling.direction].some((d) =>
+                        [lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT, lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT].includes(d)
+                      ) && (
+                        <div className="df room-connection diagonal">
+                          {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT) && (
+                            <div
+                              className={`first-piece ${r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT ? "floor" : "ceiling"}`}
+                            ></div>
+                          )}
+                          {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT) && (
+                            <div
+                              className={`last-piece ${r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT ? "floor" : "ceiling"}`}
+                            ></div>
+                          )}
+                        </div>
+                      )}
+
                       <Info
                         contents={GetRoomTooltip(
                           r.purpose,
-                          r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId).name })),
+                          r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId)?.name })),
                           r
                         )}
                         tooltipOnly={true}
                       />
-                      <button className={`df ${lc.GetRoomSize(r.size).cssClass}${roomToSwap != null ? " is-swapping-room" : ""}`}></button>
+                      <button
+                        className={`df room-area ${lc.GetRoomSize(r.size).cssClass}${r.isHazardous ? " danger" : ""}${
+                          roomToSwap != null ? " is-swapping-room" : ""
+                        }`}
+                      >
+                        {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT) && (
+                          <div
+                            className={`connection-base top-left ${
+                              r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT ? "floor" : "ceiling"
+                            }`}
+                          ></div>
+                        )}
+                        {r.top && <div className="connection-base top"></div>}
+                        {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT) && (
+                          <div
+                            className={`connection-base top-right ${
+                              r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT ? "floor" : "ceiling"
+                            }`}
+                          ></div>
+                        )}
+                        {r.left && <div className="connection-base left"></div>}
+                        {r.right && <div className="connection-base right"></div>}
+                        {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT) && (
+                          <div
+                            className={`connection-base bottom-left ${
+                              r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT ? "floor" : "ceiling"
+                            }`}
+                          ></div>
+                        )}
+                        {r.bottom && <div className="connection-base bottom"></div>}
+                        {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT) && (
+                          <div
+                            className={`connection-base bottom-right ${
+                              r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT ? "floor" : "ceiling"
+                            }`}
+                          ></div>
+                        )}
+
+                        {(r.rarity || r.creatures.length > 0) && (
+                          <div className="df room-content">
+                            {r.creatures.length > 0 ? (
+                              <i className={`fas fa-skull ${r.rarity ? "treasure" : "creatures"}`}></i>
+                            ) : (
+                              <i className="fas fa-gem treasure"></i>
+                            )}
+                          </div>
+                        )}
+                      </button>
                     </div>
                   ) : (
-                    <button
-                      className={`df dungeon-room${CanBeNewRoom(i) ? "" : " invisible"}${roomToSwap != null ? " element-disabled" : ""}`}
-                      onClick={() => OpenModalManageDungeonRoom(r, i)}
-                      disabled={roomToSwap != null}
-                      key={i}
-                    >
-                      <i className="fas fa-plus"></i>
-                    </button>
+                    <div className="dungeon-room" onClick={() => OpenModalManageDungeonRoom(r, i)} key={i}>
+                      <button className={`df dungeon-room${CanBeNewRoom(i) ? "" : " invisible"}${roomToSwap != null ? " is-swapping-room" : ""}`}>
+                        <i className="fas fa-plus"></i>
+                      </button>
+                    </div>
                   )
                 )
               ) : (
