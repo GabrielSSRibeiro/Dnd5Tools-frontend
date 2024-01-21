@@ -78,7 +78,7 @@ function NaviBar({
           <span>No Foundry, tokens sao genericos, por enquanto</span>
           <p>-</p>
           <p>Próximas Funcionalidades</p>
-          <span>Gerenciador de Combates, Gerador de Mapa de Batalha, Gerador de Masmorra</span>
+          <span>Gerenciador de Combates, Gerador de Mapa de Batalha</span>
         </div>
         <div className="divider"></div>
         <Button text="Sair" onClick={HandleLogout} />

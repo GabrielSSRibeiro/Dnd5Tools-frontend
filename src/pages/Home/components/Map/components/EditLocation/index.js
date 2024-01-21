@@ -61,7 +61,9 @@ function EditLocation({
     let refLocations = [];
 
     locations
-      .filter((l) => l._id !== location._id && l.exteriorLocationId === location.exteriorLocationId && !l.isHidden)
+      .filter(
+        (l) => l._id !== location._id && l.exteriorLocationId === location.exteriorLocationId && !l.isHidden && l.reference.location !== location._id
+      )
       .forEach((rl) => {
         const interiorLocs = GetAllInteriorLocs(rl);
         if (interiorLocs.length > 0) {
