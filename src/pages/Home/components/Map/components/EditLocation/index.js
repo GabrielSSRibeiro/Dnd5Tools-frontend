@@ -593,9 +593,9 @@ function EditLocation({
   }
 
   function GetRoomTooltip(purpose, creatures, room = null) {
-    if (room?.size === lc.ROOM_SIZES.CORRIDOR) {
-      return null;
-    }
+    // if (room?.size === lc.ROOM_SIZES.CORRIDOR) {
+    //   return null;
+    // }
 
     let roomTooltip = [];
 
