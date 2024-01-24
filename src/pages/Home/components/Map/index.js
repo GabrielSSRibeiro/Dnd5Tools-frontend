@@ -1011,7 +1011,7 @@ function Map({
                           })
                         }
                         isSelected={combatConfig.travel.oriented}
-                        info={[{ text: "Chance de se perder, desviar da direcao para um dos lados" }]}
+                        info={[{ text: "Chance de desviar da direçao passivamente para um dos lados até 90 graus" }]}
                       />
                       <CheckInput
                         label="Local Alto"
