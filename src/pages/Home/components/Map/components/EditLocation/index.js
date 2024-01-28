@@ -40,6 +40,7 @@ function EditLocation({
   const [willAdjustMap, setWillAdjustMap] = useState(false);
   const [roomToSwap, setRoomToSwap] = useState(null);
   const [modal, setModal] = useState(null);
+  const [roomToolTip, setRoomToolTip] = useState(null);
 
   const locationSizes = useMemo(() => {
     let locationSizes = utils.clone(lc.locationSizes);
@@ -593,23 +594,24 @@ function EditLocation({
   }
 
   function GetRoomTooltip(purpose, creatures, room = null) {
-    // if (room?.size === lc.ROOM_SIZES.CORRIDOR) {
-    //   return null;
-    // }
-
     let roomTooltip = [];
 
     if (purpose) {
       roomTooltip.push({ text: purpose });
+
+      if (room) {
+        roomTooltip.push({ text: "" });
+      }
     }
 
     if (room) {
       const sizeInMeters = lc.GetRoomSize(room.size).meters;
       if (sizeInMeters) {
-        roomTooltip.push({ text: `${sizeInMeters} x ${sizeInMeters}m` });
+        roomTooltip.push({ text: `${sizeInMeters}m x ${sizeInMeters}m x ${lc.GetRoomHeight(room.height).metersDisplay} (altura)` });
+      } else {
+        roomTooltip.push({ text: `${lc.GetRoomHeight(room.height).metersDisplay} (altura)` });
       }
 
-      roomTooltip.push({ text: "" });
       roomTooltip.push({ text: `${lc.GetElementType(room.type).display}${room.isHazardous ? " (perigoso)" : ""}` });
 
       if (room.rarity) {
@@ -617,7 +619,7 @@ function EditLocation({
       }
     }
 
-    if (purpose && creatures.length > 0) {
+    if (creatures.length > 0) {
       roomTooltip.push({ text: "" });
     }
 
@@ -628,6 +630,34 @@ function EditLocation({
     }
 
     return roomTooltip;
+  }
+
+  function GetRoomConnectionToolTip(room, connection, description = null) {
+    let roomConnectionTooltip = [];
+
+    if (description) {
+      roomConnectionTooltip.push({ text: `${description}` });
+    } else {
+      roomConnectionTooltip.push({ text: `${lc.GetRoomSize(room.size).corridorDisplay}` });
+    }
+
+    if (connection === lc.ROOM_CONNECTIONS.BLOCKED) {
+      roomConnectionTooltip.push({ text: `Bloqueado` });
+    } else if (connection === lc.ROOM_CONNECTIONS.UNBLOCKED) {
+      roomConnectionTooltip.push({ text: `Desbloqueado` });
+    }
+
+    return roomConnectionTooltip;
+  }
+
+  function ToggleBlock(connection, toggleFunc) {
+    if (connection === lc.ROOM_CONNECTIONS.BLOCKED) {
+      toggleFunc(lc.ROOM_CONNECTIONS.UNBLOCKED);
+    } else if (connection === lc.ROOM_CONNECTIONS.UNBLOCKED) {
+      toggleFunc(lc.ROOM_CONNECTIONS.BLOCKED);
+    }
+
+    setLocation({ ...location });
   }
 
   return (
@@ -774,41 +804,6 @@ function EditLocation({
           />
         )}
 
-        {/* {location.exteriorLocationId != null && (
-              <div className="location-detail-group">
-                <div className="location-row location-detail-group-title">
-                  <span>Partições</span>
-                  <button onClick={() => OpenModalManagePartition()} disabled={location.traversal.partitions.length === 2}>
-                    <i className="fas fa-plus"></i>
-                  </button>
-                </div>
-                {location.traversal.partitions.map((p) => (
-                  <div className="location-row location-detail-group-item" key={p.type}>
-                    <span>{lc.GetPartitionType(p.type).display}</span>
-                    <div className="group-item-actions">
-                      <button onClick={() => OpenModalManagePartition(p)}>
-                        <i className="fas fa-pencil-alt"></i>
-                      </button>
-                      <button onClick={() => DeletePartition(p)}>
-                        <i className="fas fa-trash"></i>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )} */}
-        {/* <Select
-                label={"Prob. Terreno Irregular"}
-                info={[{ text: "Aumentar tempo de marcha em 25%" }]}
-                extraWidth={85}
-                value={location}
-                valuePropertyPath="traversal.irregularTerrainFrequency"
-                onSelect={setLocation}
-                options={lc.irregularTerrainFrequencies}
-                optionDisplay={(o) => o.display}
-                optionValue={(o) => o.value}
-              /> */}
-
         {/* elements */}
         {location.size && location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST && location.exteriorLocationId != null && (
           <div className="location-detail-group">
@@ -848,6 +843,7 @@ function EditLocation({
                 disabled={roomToSwap != null}
               >
                 <Info
+                  className="dungeon-tooltip"
                   contents={GetRoomTooltip(
                     "Entrada",
                     location.creatures.map((lc) => ({ text: creatures.find((c) => c._id === lc.creatureId)?.name }))
@@ -863,97 +859,319 @@ function EditLocation({
               {location.interaction.rooms.length > 0 ? (
                 location.interaction.rooms.map((r, i) =>
                   r ? (
-                    <div className="df room dungeon-room" onClick={() => OpenModalManageDungeonRoom(r, i)} key={i}>
-                      {(r.left || r.right) && (
-                        <div className="df room-connection horizontal">
-                          {r.left && <div className="first-piece"></div>}
-                          {r.right && <div className="last-piece"></div>}
-                        </div>
-                      )}
-
-                      {(r.top || r.bottom) && (
-                        <div className="df room-connection vertical">
-                          {r.top && <div className="first-piece"></div>}
-                          {r.bottom && <div className="last-piece"></div>}
-                        </div>
-                      )}
-
-                      {[r.floor.direction, r.ceiling.direction].some((d) =>
-                        [lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT, lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT].includes(d)
-                      ) && (
-                        <div className="df room-connection main-diagonal">
-                          {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT) && (
-                            <div
-                              className={`first-piece ${r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT ? "floor" : "ceiling"}`}
-                            ></div>
-                          )}
-                          {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT) && (
-                            <div
-                              className={`last-piece ${r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT ? "floor" : "ceiling"}`}
-                            ></div>
-                          )}
-                        </div>
-                      )}
-
-                      {[r.floor.direction, r.ceiling.direction].some((d) =>
-                        [lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT, lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT].includes(d)
-                      ) && (
-                        <div className="df room-connection diagonal">
-                          {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT) && (
-                            <div
-                              className={`first-piece ${r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT ? "floor" : "ceiling"}`}
-                            ></div>
-                          )}
-                          {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT) && (
-                            <div
-                              className={`last-piece ${r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT ? "floor" : "ceiling"}`}
-                            ></div>
-                          )}
-                        </div>
-                      )}
-
-                      <Info
-                        contents={GetRoomTooltip(
-                          r.purpose,
-                          r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId)?.name })),
-                          r
+                    <div className="df room dungeon-room" key={i}>
+                      {/* room connections */}
+                      <Info className="dungeon-tooltip room-connection-tooltip" contents={roomToolTip} tooltipOnly={true}>
+                        {/* horizontal */}
+                        {(r.left || r.right) && (
+                          <div className="df room-connection horizontal">
+                            {r.left && (
+                              <div
+                                className="first-piece"
+                                onClick={() =>
+                                  ToggleBlock(r.left, (c) => {
+                                    r.left = c;
+                                  })
+                                }
+                                onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.left))}
+                                onMouseLeave={(e) => setRoomToolTip(null)}
+                              ></div>
+                            )}
+                            {r.right && (
+                              <div
+                                className="last-piece"
+                                onClick={() =>
+                                  ToggleBlock(r.right, (c) => {
+                                    r.right = c;
+                                  })
+                                }
+                                onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.right))}
+                                onMouseLeave={(e) => setRoomToolTip(null)}
+                              ></div>
+                            )}
+                          </div>
                         )}
-                        tooltipOnly={true}
-                      />
+
+                        {/* vertical */}
+                        {(r.top || r.bottom) && (
+                          <div className="df room-connection vertical">
+                            {r.top && (
+                              <div
+                                className="first-piece"
+                                onClick={() =>
+                                  ToggleBlock(r.top, (c) => {
+                                    r.top = c;
+                                  })
+                                }
+                                onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.top))}
+                                onMouseLeave={(e) => setRoomToolTip(null)}
+                              ></div>
+                            )}
+                            {r.bottom && (
+                              <div
+                                className="last-piece"
+                                onClick={() =>
+                                  ToggleBlock(r.bottom, (c) => {
+                                    r.bottom = c;
+                                  })
+                                }
+                                onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.bottom))}
+                                onMouseLeave={(e) => setRoomToolTip(null)}
+                              ></div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* main-diagonal */}
+                        {[r.floor.direction, r.ceiling.direction].some((d) =>
+                          [lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT, lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT].includes(d)
+                        ) && (
+                          <div className="df room-connection main-diagonal">
+                            {/* top left */}
+                            {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT) &&
+                              (r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT ? (
+                                <div
+                                  className={`first-piece floor`}
+                                  onClick={() =>
+                                    ToggleBlock(r.floor.connection, (c) => {
+                                      r.floor.connection = c;
+                                    })
+                                  }
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.floor.connection, "descida (piso)"))}
+                                  onMouseLeave={(e) => setRoomToolTip(null)}
+                                ></div>
+                              ) : (
+                                <div
+                                  className={`first-piece ceiling`}
+                                  onClick={() =>
+                                    ToggleBlock(r.ceiling.connection, (c) => {
+                                      r.ceiling.connection = c;
+                                    })
+                                  }
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.ceiling.connection, "subida (teto)"))}
+                                  onMouseLeave={(e) => setRoomToolTip(null)}
+                                ></div>
+                              ))}
+
+                            {/* bottom right */}
+                            {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT) &&
+                              (r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT ? (
+                                <div
+                                  className={`last-piece floor`}
+                                  onClick={() =>
+                                    ToggleBlock(r.floor.connection, (c) => {
+                                      r.floor.connection = c;
+                                    })
+                                  }
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.floor.connection, "descida (piso)"))}
+                                  onMouseLeave={(e) => setRoomToolTip(null)}
+                                ></div>
+                              ) : (
+                                <div
+                                  className={`last-piece ceiling`}
+                                  onClick={() =>
+                                    ToggleBlock(r.ceiling.connection, (c) => {
+                                      r.ceiling.connection = c;
+                                    })
+                                  }
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.ceiling.connection, "subida (teto)"))}
+                                  onMouseLeave={(e) => setRoomToolTip(null)}
+                                ></div>
+                              ))}
+                          </div>
+                        )}
+
+                        {/* diagonal */}
+                        {[r.floor.direction, r.ceiling.direction].some((d) =>
+                          [lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT, lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT].includes(d)
+                        ) && (
+                          <div className="df room-connection diagonal">
+                            {/* bottom left */}
+                            {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT) &&
+                              (r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT ? (
+                                <div
+                                  className={`first-piece floor`}
+                                  onClick={() =>
+                                    ToggleBlock(r.floor.connection, (c) => {
+                                      r.floor.connection = c;
+                                    })
+                                  }
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.floor.connection, "descida (piso)"))}
+                                  onMouseLeave={(e) => setRoomToolTip(null)}
+                                ></div>
+                              ) : (
+                                <div
+                                  className={`first-piece ceiling`}
+                                  onClick={() =>
+                                    ToggleBlock(r.ceiling.connection, (c) => {
+                                      r.ceiling.connection = c;
+                                    })
+                                  }
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.ceiling.connection, "subida (teto)"))}
+                                  onMouseLeave={(e) => setRoomToolTip(null)}
+                                ></div>
+                              ))}
+
+                            {/* top right */}
+                            {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT) &&
+                              (r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT ? (
+                                <div
+                                  className={`last-piece floor`}
+                                  onClick={() =>
+                                    ToggleBlock(r.floor.connection, (c) => {
+                                      r.floor.connection = c;
+                                    })
+                                  }
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.floor.connection, "descida (piso)"))}
+                                  onMouseLeave={(e) => setRoomToolTip(null)}
+                                ></div>
+                              ) : (
+                                <div
+                                  className={`last-piece ceiling`}
+                                  onClick={() =>
+                                    ToggleBlock(r.ceiling.connection, (c) => {
+                                      r.ceiling.connection = c;
+                                    })
+                                  }
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.ceiling.connection, "subida (teto)"))}
+                                  onMouseLeave={(e) => setRoomToolTip(null)}
+                                ></div>
+                              ))}
+                          </div>
+                        )}
+                      </Info>
+
+                      {/* room area */}
                       <button
                         className={`df room-area ${lc.GetRoomSize(r.size).cssClass}${r.isHazardous ? " danger" : ""}${
                           roomToSwap != null ? " is-swapping-room" : ""
                         }`}
+                        onClick={() => OpenModalManageDungeonRoom(r, i)}
+                        onMouseMove={(e) =>
+                          setRoomToolTip(
+                            GetRoomTooltip(
+                              r.purpose,
+                              r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId)?.name })),
+                              r
+                            )
+                          )
+                        }
+                        onMouseLeave={(e) => setRoomToolTip(null)}
                       >
+                        <Info className="dungeon-tooltip room-tooltip" contents={roomToolTip} tooltipOnly={true} />
+
+                        {/* connection bases */}
                         {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT) && (
                           <div
                             className={`connection-base top-left ${
-                              r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT ? "floor" : "ceiling"
+                              r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT
+                                ? r.floor.connection === lc.ROOM_CONNECTIONS.BLOCKED
+                                  ? "blocked-connection"
+                                  : r.floor.connection === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                  ? "unblocked-connection"
+                                  : "floor"
+                                : r.ceiling.connection === lc.ROOM_CONNECTIONS.BLOCKED
+                                ? "blocked-connection"
+                                : r.ceiling.connection === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                ? "unblocked-connection"
+                                : "ceiling"
                             }`}
                           ></div>
                         )}
-                        {r.top && <div className="connection-base top"></div>}
+                        {r.top && (
+                          <div
+                            className={`connection-base top${
+                              r.top === lc.ROOM_CONNECTIONS.BLOCKED
+                                ? " blocked-connection"
+                                : r.top === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                ? " unblocked-connection"
+                                : ""
+                            }`}
+                          ></div>
+                        )}
                         {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT) && (
                           <div
                             className={`connection-base top-right ${
-                              r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT ? "floor" : "ceiling"
+                              r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT
+                                ? r.floor.connection === lc.ROOM_CONNECTIONS.BLOCKED
+                                  ? "blocked-connection"
+                                  : r.floor.connection === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                  ? "unblocked-connection"
+                                  : "floor"
+                                : r.ceiling.connection === lc.ROOM_CONNECTIONS.BLOCKED
+                                ? "blocked-connection"
+                                : r.ceiling.connection === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                ? "unblocked-connection"
+                                : "ceiling"
                             }`}
                           ></div>
                         )}
-                        {r.left && <div className="connection-base left"></div>}
-                        {r.right && <div className="connection-base right"></div>}
+
+                        {r.left && (
+                          <div
+                            className={`connection-base left${
+                              r.left === lc.ROOM_CONNECTIONS.BLOCKED
+                                ? " blocked-connection"
+                                : r.left === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                ? " unblocked-connection"
+                                : ""
+                            }`}
+                          ></div>
+                        )}
+                        {r.right && (
+                          <div
+                            className={`connection-base right${
+                              r.right === lc.ROOM_CONNECTIONS.BLOCKED
+                                ? " blocked-connection"
+                                : r.right === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                ? " unblocked-connection"
+                                : ""
+                            }`}
+                          ></div>
+                        )}
+
                         {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT) && (
                           <div
                             className={`connection-base bottom-left ${
-                              r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT ? "floor" : "ceiling"
+                              r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT
+                                ? r.floor.connection === lc.ROOM_CONNECTIONS.BLOCKED
+                                  ? "blocked-connection"
+                                  : r.floor.connection === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                  ? "unblocked-connection"
+                                  : "floor"
+                                : r.ceiling.connection === lc.ROOM_CONNECTIONS.BLOCKED
+                                ? "blocked-connection"
+                                : r.ceiling.connection === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                ? "unblocked-connection"
+                                : "ceiling"
                             }`}
                           ></div>
                         )}
-                        {r.bottom && <div className="connection-base bottom"></div>}
+                        {r.bottom && (
+                          <div
+                            className={`connection-base bottom${
+                              r.bottom === lc.ROOM_CONNECTIONS.BLOCKED
+                                ? " blocked-connection"
+                                : r.bottom === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                ? " unblocked-connection"
+                                : ""
+                            }`}
+                          ></div>
+                        )}
                         {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT) && (
                           <div
                             className={`connection-base bottom-right ${
-                              r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT ? "floor" : "ceiling"
+                              r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT
+                                ? r.floor.connection === lc.ROOM_CONNECTIONS.BLOCKED
+                                  ? "blocked-connection"
+                                  : r.floor.connection === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                  ? "unblocked-connection"
+                                  : "floor"
+                                : r.ceiling.connection === lc.ROOM_CONNECTIONS.BLOCKED
+                                ? "blocked-connection"
+                                : r.ceiling.connection === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                ? "unblocked-connection"
+                                : "ceiling"
                             }`}
                           ></div>
                         )}

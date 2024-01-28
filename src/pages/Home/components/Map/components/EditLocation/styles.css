@@ -154,13 +154,17 @@
   padding: 0 7px 7px;
 }
 
+.EditLocation-container .room-wrapper {
+  position: relative;
+}
+
 .EditLocation-container .room {
   position: relative;
 }
 
 .EditLocation-container .dungeon-room button {
   z-index: 1;
-  pointer-events: none;
+  /* pointer-events: none; */
   background-color: var(--white);
   border: 1px solid var(--black);
   border-radius: 0;
@@ -210,11 +214,13 @@
   rotate: -45deg;
 }
 
-.EditLocation-container .room .room-connection .floor {
-  background-color: var(--gray1);
+.EditLocation-container .room .room-connection .floor,
+.EditLocation-container .connection-base.floor {
+  background-color: var(--gray1) !important;
 }
-.EditLocation-container .room .room-connection .ceiling {
-  background-color: var(--gray2);
+.EditLocation-container .room .room-connection .ceiling,
+.EditLocation-container .connection-base.ceiling {
+  background-color: var(--gray2) !important;
 }
 
 .EditLocation-container .is-swapping-room {
@@ -270,7 +276,7 @@
 .EditLocation-container .room .treasure {
   color: var(--defensiveColor);
 }
-.EditLocation-container .room .treasure {
+.EditLocation-container .dungeon-entrance .treasure {
   position: absolute;
   font-size: 6px;
   bottom: 1px;
@@ -281,6 +287,7 @@
   height: 3px;
   background-color: var(--white);
   position: absolute;
+  pointer-events: none;
 }
 .EditLocation-container .room-area .connection-base.top-left {
   top: 0px;
@@ -290,7 +297,7 @@
 }
 .EditLocation-container .room-area .connection-base.top {
   top: 0px;
-  translate: 0 -50%;
+  translate: 0 -75%;
 }
 .EditLocation-container .room-area .connection-base.top-right {
   top: 0px;
@@ -300,11 +307,11 @@
 }
 .EditLocation-container .room-area .connection-base.left {
   left: 0px;
-  translate: -50% 0;
+  translate: -75% 0;
 }
 .EditLocation-container .room-area .connection-base.right {
   right: 0px;
-  translate: 50% 0;
+  translate: 75% 0;
 }
 .EditLocation-container .room-area .connection-base.bottom-left {
   bottom: 0px;
@@ -314,11 +321,34 @@
 }
 .EditLocation-container .room-area .connection-base.bottom {
   bottom: 0px;
-  translate: 0 50%;
+  translate: 0 75%;
 }
 .EditLocation-container .room-area .connection-base.bottom-right {
   bottom: 0px;
   right: 0px;
   translate: 50% 50%;
   rotate: 45deg;
+}
+
+.EditLocation-container .connection-base.blocked-connection {
+  background-color: var(--offensiveColor) !important;
+  width: 5px;
+  height: 5px;
+}
+.EditLocation-container .connection-base.unblocked-connection {
+  background-color: var(--defensiveColor) !important;
+  width: 5px;
+  height: 5px;
+}
+
+.EditLocation-container .dungeon-tooltip {
+  border-radius: 0;
+}
+.EditLocation-container .room-tooltip {
+  min-width: 20px !important;
+  min-height: 20px !important;
+}
+.EditLocation-container .room-connection-tooltip {
+  width: 40px !important;
+  height: 40px !important;
 }

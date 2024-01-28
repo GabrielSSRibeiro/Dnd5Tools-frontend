@@ -463,10 +463,10 @@ export const ROOM_SIZES = {
   LARGE: 30,
 };
 export const roomSizes = [
-  { display: "Corredor", value: ROOM_SIZES.CORRIDOR, cssClass: "corridor", meters: null },
-  { display: "Pequeno", value: ROOM_SIZES.SMALL, cssClass: "small", meters: 9 },
-  { display: "Médio", value: ROOM_SIZES.MEDIUM, cssClass: "medium", meters: 18 },
-  { display: "Grande", value: ROOM_SIZES.LARGE, cssClass: "large", meters: 36 },
+  { display: "Corredor", value: ROOM_SIZES.CORRIDOR, cssClass: "corridor", meters: null, corridorDisplay: "4,5m" },
+  { display: "Pequeno", value: ROOM_SIZES.SMALL, cssClass: "small", meters: 9, corridorDisplay: "4,5m" },
+  { display: "Médio", value: ROOM_SIZES.MEDIUM, cssClass: "medium", meters: 18, corridorDisplay: "3m" },
+  { display: "Grande", value: ROOM_SIZES.LARGE, cssClass: "large", meters: 36, corridorDisplay: "1,5m" },
 ];
 export const GetRoomSize = (value) => roomSizes.find((a) => a.value === value);
 
@@ -477,21 +477,21 @@ export const ROOM_HEIGHTS = {
   EXTREME: 40,
 };
 export const roomHeights = [
-  { display: "Baixa", value: ROOM_HEIGHTS.LOW, meters: 1.5 },
-  { display: "Média", value: ROOM_HEIGHTS.MEDIUM, meters: 3 },
-  { display: "Alta", value: ROOM_HEIGHTS.HIGH, meters: 6 },
-  { display: "Extrema", value: ROOM_HEIGHTS.EXTREME, meters: 9 },
+  { display: "Baixa (1,5m)", value: ROOM_HEIGHTS.LOW, metersDisplay: "1,5m", meters: 1.5 },
+  { display: "Média (3m)", value: ROOM_HEIGHTS.MEDIUM, metersDisplay: "3m", meters: 3 },
+  { display: "Alta (6m)", value: ROOM_HEIGHTS.HIGH, metersDisplay: "6m", meters: 6 },
+  { display: "Extrema (9m)", value: ROOM_HEIGHTS.EXTREME, metersDisplay: "9m", meters: 9 },
 ];
-export const GetRoomHeights = (value) => roomHeights.find((a) => a.value === value);
+export const GetRoomHeight = (value) => roomHeights.find((a) => a.value === value);
 
 export const ROOM_CONNECTIONS = {
   BLOCKED: 20,
-  DOOR: 30,
+  UNBLOCKED: 30,
   OPEN: 40,
 };
 export const roomConnections = [
   { display: "Bloqueada", value: ROOM_CONNECTIONS.BLOCKED },
-  { display: "Porta", value: ROOM_CONNECTIONS.DOOR },
+  { display: "Desbloqueada", value: ROOM_CONNECTIONS.UNBLOCKED },
   { display: "Aberta", value: ROOM_CONNECTIONS.OPEN },
 ];
 export const GetRoomConnection = (value) => roomConnections.find((a) => a.value === value);
