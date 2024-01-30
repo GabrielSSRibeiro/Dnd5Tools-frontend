@@ -615,10 +615,10 @@ function ModalTravelResults({
           {HandleAddTravelNode ? (
             <>
               <Button text="Marcar no Mapa" icon="fas fa-bookmark" onClick={HandleSave} isDisabled={!CheckSaveValid()} />
-              <Button text="Continuar sem Marcar" onClick={HandleContinue} />
+              <Button text="Continuar e Salvar" onClick={HandleContinue} />
             </>
           ) : (
-            <Button text="Continuar" onClick={HandleContinue} />
+            <Button text="Continuar e Salvar" onClick={HandleContinue} />
           )}
         </aside>
       </footer>
