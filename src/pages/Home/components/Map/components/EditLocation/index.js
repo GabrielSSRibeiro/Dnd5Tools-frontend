@@ -15,6 +15,7 @@ import ModalMoveLocation from "./components/ModalMoveLocation";
 import ModalManageElement from "./components/ModalManageElement";
 import ModalManageContext from "./components/ModalManageContext";
 // import ModalManageCreature from "./components/ModalManageCreature";
+import ModalManageCreaturePopulation from "./components/ModalManageCreaturePopulation";
 import ModalManageCreatureRoutine from "./components/ModalManageCreatureRoutine";
 import ModalManageDungeonRoom from "./components/ModalManageDungeonRoom";
 
@@ -183,34 +184,6 @@ function EditLocation({
     setLocation({ ...location });
   }
 
-  // function OpenModalManagePartition(partition) {
-  //   setModal(
-  //     <ModalManagePartition
-  //       partition={partition}
-  //       partitions={location.traversal.partitions}
-  //       onClose={(tempPartition) => HandleCloseModalManagePartition(partition, tempPartition)}
-  //     />
-  //   );
-  // }
-  // function HandleCloseModalManagePartition(partition, tempPartition) {
-  //   if (tempPartition) {
-  //     if (partition) {
-  //       let index = location.traversal.partitions.findIndex((p) => p.type === partition.type);
-  //       location.traversal.partitions.splice(index, 1, tempPartition);
-  //     } else {
-  //       location.traversal.partitions.push(tempPartition);
-  //     }
-
-  //     setLocation({ ...location });
-  //   }
-
-  //   setModal(null);
-  // }
-  // function DeletePartition(partition) {
-  //   location.traversal.partitions = location.traversal.partitions.filter((p) => p.type !== partition.type);
-  //   setLocation({ ...location });
-  // }
-
   function OpenModalManageElement(element) {
     setModal(
       <ModalManageElement
@@ -280,36 +253,6 @@ function EditLocation({
     setLocation({ ...location });
   }
 
-  // function OpenModalManageCreature(creature, name) {
-  //   setModal(
-  //     <ModalManageCreature
-  //       name={name}
-  //       creature={creature}
-  //       contexts={location.contexts.map((c) => c.name)}
-  //       isPointOfInterest={isPointOfInterest}
-  //       onClose={(tempCreature) => HandleCloseModalManageCreature(creature, tempCreature)}
-  //     />
-  //   );
-  // }
-  // function HandleCloseModalManageCreature(creature, tempCreature) {
-  //   if (tempCreature) {
-  //     if (creature) {
-  //       let index = location.creatures.findIndex((p) => p.creatureId === creature.creatureId);
-  //       location.creatures.splice(index, 1, tempCreature);
-  //     } else {
-  //       location.creatures.push(tempCreature);
-  //     }
-
-  //     setLocation({ ...location });
-  //   }
-
-  //   setModal(null);
-  // }
-  // function DeleteCreature(creature) {
-  //   location.creatures = location.creatures.filter((p) => p.creatureId !== creature.creatureId);
-  //   setLocation({ ...location });
-  // }
-
   function OpenModalManageRoutine(creature, routine) {
     setModal(
       <ModalManageCreatureRoutine
@@ -353,6 +296,7 @@ function EditLocation({
       .forEach((sc) => {
         creaturesObj.creatures.push({
           creatureId: sc._id,
+          population: null,
           routines: [
             {
               schedule: null,
@@ -366,6 +310,19 @@ function EditLocation({
         });
       });
     setter({ ...creaturesObj });
+  }
+
+  function OpenModalManageCreaturePopulation(creature) {
+    setModal(
+      <ModalManageCreaturePopulation
+        population={creature.population}
+        onClose={(tempPopulation) => HandleCloseModalManageCreaturePopulation(creature, tempPopulation)}
+      />
+    );
+  }
+  function HandleCloseModalManageCreaturePopulation(creature, tempPopulation) {
+    creature.population = tempPopulation;
+    setModal(null);
   }
 
   function OpenModalManageDungeonRoom(room, index, isEntrance) {
@@ -1217,16 +1174,16 @@ function EditLocation({
               return (
                 <div className="location-row location-detail-group-item df-fd-c location-creature" key={locC.creatureId}>
                   <div className="group-item-actions">
-                    <span>{name}</span>
-                    <button onClick={() => OpenModalManageRoutine(locC)}>
-                      <i className="fas fa-plus"></i>
-                    </button>
-                    {/* <button onClick={() => OpenModalManageCreature(lc, name)}>
-                    <i className="fas fa-pencil-alt"></i>
-                  </button>
-                  <button onClick={() => DeleteCreature(lc)}>
-                    <i className="fas fa-trash"></i>
-                  </button> */}
+                    <span>{name.slice(0, 40)}</span>
+                    <span className="df df-cg-5">
+                      {locC.population ? `${locC.population.current} / ${locC.population.value}` : <i className="fas fa-infinity"></i>}
+                      <button onClick={() => OpenModalManageCreaturePopulation(locC)}>
+                        <i className="fas fa-pencil-alt"></i>
+                      </button>
+                      <button onClick={() => OpenModalManageRoutine(locC)}>
+                        <i className="fas fa-plus"></i>
+                      </button>
+                    </span>
                   </div>
                   {locC.routines.map((r, rIndex) => {
                     const rContextIndex = location.contexts.findIndex((c) => c.name === r.context);

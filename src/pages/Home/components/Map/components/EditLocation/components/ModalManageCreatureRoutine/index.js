@@ -8,7 +8,7 @@ import Select from "../../../../../../../../components/Select";
 
 import "./styles.css";
 
-function ModalManageCreatureRoutine({ routine, contexts, isPointOfInterest, isRoom, onClose }) {
+function ModalManageCreatureRoutine({ routine, contexts, isPointOfInterest, onClose }) {
   const [tempRoutine, setTempRoutine] = useState(
     routine
       ? utils.clone(routine)
@@ -111,18 +111,19 @@ function ModalManageCreatureRoutine({ routine, contexts, isPointOfInterest, isRo
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />
-        <Select
-          label={"Frequência de Encontro"}
-          info={[{ text: "Quando um encontro é sorteado para acontecer na localização, qual a chance de essa criatura aparecer" }]}
-          extraWidth={250}
-          value={tempRoutine}
-          valuePropertyPath="encounterFrequency"
-          onSelect={setTempRoutine}
-          options={encounterFrequencies}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-          isDisabled={isRoom}
-        />
+        {!isPointOfInterest && (
+          <Select
+            label={"Frequência de Encontro"}
+            info={[{ text: "Quando um encontro é sorteado para acontecer na localização, qual a chance de essa criatura aparecer" }]}
+            extraWidth={250}
+            value={tempRoutine}
+            valuePropertyPath="encounterFrequency"
+            onSelect={setTempRoutine}
+            options={encounterFrequencies}
+            optionDisplay={(o) => o.display}
+            optionValue={(o) => o.value}
+          />
+        )}
       </div>
       <footer>
         <button className="button-simple" onClick={HandleCancel}>

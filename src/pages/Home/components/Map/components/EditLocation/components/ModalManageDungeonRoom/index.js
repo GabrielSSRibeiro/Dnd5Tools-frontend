@@ -336,12 +336,6 @@ function ModalManageDungeonRoom({
                   <button onClick={() => OpenModalManageRoutine(locC)}>
                     <i className="fas fa-plus"></i>
                   </button>
-                  {/* <button onClick={() => OpenModalManageCreature(lc, name)}>
-                    <i className="fas fa-pencil-alt"></i>
-                  </button>
-                  <button onClick={() => DeleteCreature(lc)}>
-                    <i className="fas fa-trash"></i>
-                  </button> */}
                 </div>
                 {locC.routines.map((r, rIndex) => {
                   const rContextIndex = contexts.findIndex((c) => c.name === r.context);

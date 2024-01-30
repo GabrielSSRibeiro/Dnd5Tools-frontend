@@ -17,7 +17,6 @@ export const GetNewLocation = (exteriorLocationId) => ({
   traversal: {
     type: null,
     irregularTerrainFrequency: IRREGULAR_TERRAIN_FREQUENCIES.LOW,
-    partitions: [],
     elements: [],
   },
   interaction: {

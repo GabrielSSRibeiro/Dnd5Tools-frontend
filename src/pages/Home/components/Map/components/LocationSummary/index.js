@@ -67,6 +67,7 @@ function LocationSummary({
     let allCreatures = shouldlAddWorldCreatures ? [...location.creatures, ...world.creatures] : location.creatures;
 
     let creaturesForDisplay = allCreatures
+      .filter((c) => !c.population || c.population > 0)
       .map((locationCreature) => ({
         creature: creatures.find((c) => c._id === locationCreature.creatureId),
         routine: location.creatures.some((lc) => lc.creatureId === locationCreature.creatureId)
@@ -168,7 +169,7 @@ function LocationSummary({
                   />
                 ))}
               </div>
-              {canTravelToPoint && distance?.encounterProb && creaturesForDisplay.length > 0 && (
+              {canTravelToPoint && distance?.encounterProb != null && creaturesForDisplay.length > 0 && (
                 <span className="env-type">
                   Chance encontro:
                   <span className="name">{utils.turnValueIntoPercentageString(distance.encounterProb)}</span>
