@@ -624,7 +624,7 @@ function EditLocation({
         title="Resetar Masmorra"
         messages={[
           "Deletar versao atual da masmorra?",
-          "Isso fará com que rotinas sejam reavalidas quando interagido durante exploraçao, criando uma nova versao",
+          "Isso bloqueará saidas bloqueáveis e fará com que rotinas sejam reavalidas quando interagido durante exploraçao, criando uma nova versao",
         ]}
         actions={[
           {
@@ -642,9 +642,35 @@ function EditLocation({
   }
   function HandleCloneModalReset() {
     location.interaction.currentCreatures = null;
-    location.interaction.rooms.forEach((r) => {
-      r.currentCreatures = null;
-    });
+    location.interaction.rooms
+      .filter((r) => r)
+      .forEach((r) => {
+        if (r.top === lc.ROOM_CONNECTIONS.UNBLOCKED) {
+          r.top = lc.ROOM_CONNECTIONS.BLOCKED;
+        }
+
+        if (r.bottom === lc.ROOM_CONNECTIONS.UNBLOCKED) {
+          r.bottom = lc.ROOM_CONNECTIONS.BLOCKED;
+        }
+
+        if (r.left === lc.ROOM_CONNECTIONS.UNBLOCKED) {
+          r.left = lc.ROOM_CONNECTIONS.BLOCKED;
+        }
+
+        if (r.right === lc.ROOM_CONNECTIONS.UNBLOCKED) {
+          r.right = lc.ROOM_CONNECTIONS.BLOCKED;
+        }
+
+        if (r.floor.connection === lc.ROOM_CONNECTIONS.UNBLOCKED) {
+          r.floor.connection = lc.ROOM_CONNECTIONS.BLOCKED;
+        }
+
+        if (r.ceiling.connection === lc.ROOM_CONNECTIONS.UNBLOCKED) {
+          r.ceiling.connection = lc.ROOM_CONNECTIONS.BLOCKED;
+        }
+
+        r.currentCreatures = null;
+      });
     setModal(null);
   }
 
