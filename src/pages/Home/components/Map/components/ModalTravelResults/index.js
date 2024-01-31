@@ -589,7 +589,6 @@ function ModalTravelResults({
               </div>
             </>
           )}
-          {/* <Button text="Combate" onClick={() => {}} isDisabled={true} /> */}
         </aside>
       </main>
 
@@ -612,14 +611,10 @@ function ModalTravelResults({
           </button>
         </aside>
         <aside className="footer-actions">
-          {HandleAddTravelNode ? (
-            <>
-              <Button text="Marcar no Mapa" icon="fas fa-bookmark" onClick={HandleSave} isDisabled={!CheckSaveValid()} />
-              <Button text="Continuar e Salvar" onClick={HandleContinue} />
-            </>
-          ) : (
-            <Button text="Continuar e Salvar" onClick={HandleContinue} />
+          {HandleAddTravelNode && !isPointOfInterest && (
+            <Button text="Marcar no Mapa" icon="fas fa-bookmark" onClick={HandleSave} isDisabled={!CheckSaveValid()} />
           )}
+          <Button text="Continuar e Salvar" onClick={HandleContinue} />
         </aside>
       </footer>
     </Modal>

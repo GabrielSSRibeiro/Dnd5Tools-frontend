@@ -18,6 +18,7 @@ import ModalManageContext from "./components/ModalManageContext";
 import ModalManageCreaturePopulation from "./components/ModalManageCreaturePopulation";
 import ModalManageCreatureRoutine from "./components/ModalManageCreatureRoutine";
 import ModalManageDungeonRoom from "./components/ModalManageDungeonRoom";
+import ModalWarning from "../../../../../../components/ModalWarning";
 
 import "./styles.css";
 
@@ -617,6 +618,36 @@ function EditLocation({
     setLocation({ ...location });
   }
 
+  function OpenModalConfirmReset() {
+    setModal(
+      <ModalWarning
+        title="Resetar Masmorra"
+        messages={[
+          "Deletar versao atual da masmorra?",
+          "Isso fará com que rotinas sejam reavalidas quando interagido durante exploraçao, criando uma nova versao",
+        ]}
+        actions={[
+          {
+            text: "Cancelar",
+            click: () => setModal(null),
+            isSimple: true,
+          },
+          {
+            text: "Resetar",
+            click: HandleCloneModalReset,
+          },
+        ]}
+      />
+    );
+  }
+  function HandleCloneModalReset() {
+    location.interaction.currentCreatures = null;
+    location.interaction.rooms.forEach((r) => {
+      r.currentCreatures = null;
+    });
+    setModal(null);
+  }
+
   return (
     <div className="EditLocation-container">
       {modal}
@@ -791,6 +822,11 @@ function EditLocation({
           <div className="location-detail-group">
             <div className="location-row location-detail-group-title">
               <span>Disposição</span>
+              {HandleDelete && (
+                <button onClick={OpenModalConfirmReset}>
+                  <i className="fas fa-undo-alt"></i>
+                </button>
+              )}
             </div>
             {/* entrance */}
             <div className="location-row df dungeon-entrance">

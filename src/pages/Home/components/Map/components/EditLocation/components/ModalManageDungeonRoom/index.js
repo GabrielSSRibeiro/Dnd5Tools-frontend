@@ -53,6 +53,7 @@ function ModalManageDungeonRoom({
           isHazardous: false,
           rarity: null,
           creatures: [],
+          currentCreatures: [],
         }
   );
   const [canBeMaterial, setCanBeMaterial] = useState(false);

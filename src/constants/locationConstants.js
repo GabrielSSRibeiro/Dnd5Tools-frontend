@@ -23,6 +23,7 @@ export const GetNewLocation = (exteriorLocationId) => ({
     type: null,
     isHazardous: false,
     rarity: null,
+    currentCreatures: [],
     rooms: [],
   },
   reference: {
