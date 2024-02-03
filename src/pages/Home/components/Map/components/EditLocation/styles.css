@@ -223,6 +223,10 @@
   background-color: var(--gray2) !important;
 }
 
+.EditLocation-container .room-connection .regular-corridor {
+  cursor: default !important;
+}
+
 .EditLocation-container .is-swapping-room {
   background-color: var(--white);
 }

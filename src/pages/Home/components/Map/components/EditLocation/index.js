@@ -616,6 +616,9 @@ function EditLocation({
     return roomConnectionTooltip;
   }
 
+  function CanToggleCon(connection) {
+    return connection === lc.ROOM_CONNECTIONS.BLOCKED || connection === lc.ROOM_CONNECTIONS.UNBLOCKED;
+  }
   function ToggleBlock(connection, toggleFunc) {
     if (connection === lc.ROOM_CONNECTIONS.BLOCKED) {
       toggleFunc(lc.ROOM_CONNECTIONS.UNBLOCKED);
@@ -894,7 +897,7 @@ function EditLocation({
                           <div className="df room-connection horizontal">
                             {r.left && (
                               <div
-                                className="first-piece"
+                                className={`first-piece${CanToggleCon(r.left) ? "" : " regular-corridor"}`}
                                 onClick={() =>
                                   ToggleBlock(r.left, (c) => {
                                     r.left = c;
@@ -906,7 +909,7 @@ function EditLocation({
                             )}
                             {r.right && (
                               <div
-                                className="last-piece"
+                                className={`last-piece${CanToggleCon(r.right) ? "" : " regular-corridor"}`}
                                 onClick={() =>
                                   ToggleBlock(r.right, (c) => {
                                     r.right = c;
@@ -924,7 +927,7 @@ function EditLocation({
                           <div className="df room-connection vertical">
                             {r.top && (
                               <div
-                                className="first-piece"
+                                className={`first-piece${CanToggleCon(r.top) ? "" : " regular-corridor"}`}
                                 onClick={() =>
                                   ToggleBlock(r.top, (c) => {
                                     r.top = c;
@@ -936,7 +939,7 @@ function EditLocation({
                             )}
                             {r.bottom && (
                               <div
-                                className="last-piece"
+                                className={`last-piece${CanToggleCon(r.bottom) ? "" : " regular-corridor"}`}
                                 onClick={() =>
                                   ToggleBlock(r.bottom, (c) => {
                                     r.bottom = c;
@@ -958,7 +961,7 @@ function EditLocation({
                             {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT) &&
                               (r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_LEFT ? (
                                 <div
-                                  className={`first-piece floor`}
+                                  className={`first-piece floor${CanToggleCon(r.floor.connection) ? "" : " regular-corridor"}`}
                                   onClick={() =>
                                     ToggleBlock(r.floor.connection, (c) => {
                                       r.floor.connection = c;
@@ -969,7 +972,7 @@ function EditLocation({
                                 ></div>
                               ) : (
                                 <div
-                                  className={`first-piece ceiling`}
+                                  className={`first-piece ceiling${CanToggleCon(r.ceiling.connection) ? "" : " regular-corridor"}`}
                                   onClick={() =>
                                     ToggleBlock(r.ceiling.connection, (c) => {
                                       r.ceiling.connection = c;
@@ -984,7 +987,7 @@ function EditLocation({
                             {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT) &&
                               (r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT ? (
                                 <div
-                                  className={`last-piece floor`}
+                                  className={`last-piece floor${CanToggleCon(r.floor.connection) ? "" : " regular-corridor"}`}
                                   onClick={() =>
                                     ToggleBlock(r.floor.connection, (c) => {
                                       r.floor.connection = c;
@@ -995,7 +998,7 @@ function EditLocation({
                                 ></div>
                               ) : (
                                 <div
-                                  className={`last-piece ceiling`}
+                                  className={`last-piece ceiling${CanToggleCon(r.ceiling.connection) ? "" : " regular-corridor"}`}
                                   onClick={() =>
                                     ToggleBlock(r.ceiling.connection, (c) => {
                                       r.ceiling.connection = c;
@@ -1017,7 +1020,7 @@ function EditLocation({
                             {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT) &&
                               (r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT ? (
                                 <div
-                                  className={`first-piece floor`}
+                                  className={`first-piece floor${CanToggleCon(r.floor.connection) ? "" : " regular-corridor"}`}
                                   onClick={() =>
                                     ToggleBlock(r.floor.connection, (c) => {
                                       r.floor.connection = c;
@@ -1028,7 +1031,7 @@ function EditLocation({
                                 ></div>
                               ) : (
                                 <div
-                                  className={`first-piece ceiling`}
+                                  className={`first-piece ceiling${CanToggleCon(r.ceiling.connection) ? "" : " regular-corridor"}`}
                                   onClick={() =>
                                     ToggleBlock(r.ceiling.connection, (c) => {
                                       r.ceiling.connection = c;
@@ -1043,7 +1046,7 @@ function EditLocation({
                             {[r.floor.direction, r.ceiling.direction].includes(lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT) &&
                               (r.floor.direction === lc.ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT ? (
                                 <div
-                                  className={`last-piece floor`}
+                                  className={`last-piece floor${CanToggleCon(r.floor.connection) ? "" : " regular-corridor"}`}
                                   onClick={() =>
                                     ToggleBlock(r.floor.connection, (c) => {
                                       r.floor.connection = c;
@@ -1054,7 +1057,7 @@ function EditLocation({
                                 ></div>
                               ) : (
                                 <div
-                                  className={`last-piece ceiling`}
+                                  className={`last-piece ceiling${CanToggleCon(r.ceiling.connection) ? "" : " regular-corridor"}`}
                                   onClick={() =>
                                     ToggleBlock(r.ceiling.connection, (c) => {
                                       r.ceiling.connection = c;
