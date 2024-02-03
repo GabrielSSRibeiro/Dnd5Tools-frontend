@@ -270,15 +270,16 @@ function Map({
     if (currentNode) {
       //march
       if (mapMode === lc.MAP_MODES.TRAVEL && (canTravelToPoint || isRest)) {
-        const newLocation = map[newCurrentNode.locId]?.data;
+        const nodeLoc = map[newCurrentNode.locId]?.data;
+        const newLocation = nodeLoc ?? combatConfig.world;
 
         setModal(
           <ModalTravelResults
             onClose={setModal}
             hasMoved={combatConfig.travel.currentNode.x !== newCurrentNode.x && combatConfig.travel.currentNode.y !== newCurrentNode.y}
             newCurrentNode={newCurrentNode}
-            newLocation={newLocation ?? combatConfig.world}
-            exteriorLocation={newLocation && map[newLocation.exteriorLocationId] ? map[newLocation.exteriorLocationId].data : null}
+            newLocation={utils.clone(newLocation)}
+            exteriorLocation={nodeLoc && map[nodeLoc.exteriorLocationId] ? utils.clone(map[nodeLoc.exteriorLocationId].data) : null}
             locHoverData={locHoverData}
             travel={combatConfig.travel}
             restTime={restTime}
@@ -292,13 +293,14 @@ function Map({
             HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
             HandleAddTravelNode={node ? null : () => HandleAddTravelNode(newCurrentNode)}
             HandleSaveCombatConfig={HandleSaveCombatConfig}
+            HandleSaveLoc={(updatedLoc) => HandleSave(updatedLoc, false)}
             encounterProb={locHoverData?.distance.encounterProb ?? 0}
             addAction={() => {
-              setLocationToEdit(lc.GetNewLocation(newLocation._id ?? userId));
+              setLocationToEdit(lc.GetNewLocation(nodeLoc?._id ?? userId));
               setModal(null);
             }}
             editAction={() => {
-              setLocationToEdit(utils.clone(newLocation));
+              setLocationToEdit(utils.clone(nodeLoc));
               setModal(null);
             }}
           />

@@ -34,6 +34,7 @@ function ModalTravelResults({
   HandleSetCurrentNode,
   HandleAddTravelNode,
   HandleSaveCombatConfig,
+  HandleSaveLoc,
   encounterProb,
   addAction,
   editAction,
@@ -229,8 +230,9 @@ function ModalTravelResults({
     UpdateData();
 
     HandleSetCurrentNode();
-
+    UpdateLocData();
     HandleSaveCombatConfig();
+
     onClose();
   }
 
@@ -239,8 +241,9 @@ function ModalTravelResults({
 
     HandleAddTravelNode();
     HandleSetCurrentNode();
-
+    UpdateLocData();
     HandleSaveCombatConfig();
+
     onClose();
   }
 
@@ -403,6 +406,11 @@ function ModalTravelResults({
     } else {
       travel.cummulativeEncounterChance = Math.min(1, travel.cummulativeEncounterChance + encounterProb);
     }
+  }
+
+  function UpdateLocData() {
+    //update current creatures and population data
+    HandleSaveLoc(newLocation);
   }
 
   function CheckSaveValid() {
