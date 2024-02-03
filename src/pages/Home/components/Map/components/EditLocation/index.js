@@ -555,14 +555,22 @@ function EditLocation({
     let roomTooltip = [];
 
     if (purpose) {
-      roomTooltip.push({ text: purpose });
-
-      if (room) {
-        roomTooltip.push({ text: "" });
-      }
+      roomTooltip.push({ text: `(${purpose})` });
     }
 
     if (room) {
+      if (room.firstImpressions) {
+        roomTooltip.push({ text: room.firstImpressions });
+      }
+
+      if (room.secrets) {
+        roomTooltip.push({ text: room.secrets });
+      }
+
+      if (roomTooltip.length > 0) {
+        roomTooltip.push({ text: "" });
+      }
+
       const sizeInMeters = lc.GetRoomSize(room.size).meters;
       if (sizeInMeters) {
         roomTooltip.push({ text: `${sizeInMeters}m x ${sizeInMeters}m x ${lc.GetRoomHeight(room.height).metersDisplay} (altura)` });

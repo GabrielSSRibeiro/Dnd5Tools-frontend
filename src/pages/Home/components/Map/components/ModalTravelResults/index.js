@@ -409,7 +409,7 @@ function ModalTravelResults({
   }
 
   function UpdateLocData() {
-    //update current creatures and population data
+    //update current creatures, doors and population data
     HandleSaveLoc(newLocation);
   }
 
