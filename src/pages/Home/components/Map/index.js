@@ -436,9 +436,9 @@ function Map({
   async function OpenModalDetails(clickedLoc, title, messages, actions) {
     setModal(
       <ModalWarning title={title} messages={messages} actions={actions}>
-        <div className="creature-list">
-          {clickedLoc.creatures.length > 0 &&
-            clickedLoc.creatures.map((ec) => {
+        {clickedLoc.creatures.length > 0 && (
+          <div className="creature-list">
+            {clickedLoc.creatures.map((ec) => {
               const creature = creatures.find((c) => c._id === ec.creatureId);
 
               return (
@@ -458,7 +458,8 @@ function Map({
                 </div>
               );
             })}
-        </div>
+          </div>
+        )}
       </ModalWarning>
     );
   }
