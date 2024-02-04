@@ -133,6 +133,7 @@ button {
 
 .invisible {
   visibility: hidden !important;
+  /* cursor: default !important; */
 }
 
 .lacking-data {

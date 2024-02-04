@@ -272,11 +272,15 @@ function Map({
       if (mapMode === lc.MAP_MODES.TRAVEL && (canTravelToPoint || isRest)) {
         const nodeLoc = map[newCurrentNode.locId]?.data;
         const newLocation = nodeLoc ?? combatConfig.world;
+        const hasMoved =
+          newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && combatConfig.travel.currentNode.locId === newLocation._id
+            ? false
+            : combatConfig.travel.currentNode.x !== newCurrentNode.x && combatConfig.travel.currentNode.y !== newCurrentNode.y;
 
         setModal(
           <ModalTravelResults
             onClose={setModal}
-            hasMoved={combatConfig.travel.currentNode.x !== newCurrentNode.x && combatConfig.travel.currentNode.y !== newCurrentNode.y}
+            hasMoved={hasMoved}
             newCurrentNode={newCurrentNode}
             newLocation={utils.clone(newLocation)}
             exteriorLocation={nodeLoc && map[nodeLoc.exteriorLocationId] ? utils.clone(map[nodeLoc.exteriorLocationId].data) : null}

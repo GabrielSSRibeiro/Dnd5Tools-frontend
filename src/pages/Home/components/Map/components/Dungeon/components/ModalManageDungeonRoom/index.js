@@ -6,7 +6,7 @@ import * as cc from "../../../../../../../../constants/creatureConstants";
 import * as utils from "../../../../../../../../utils";
 
 import Modal from "../../../../../../../../components/Modal";
-import ModalManageCreatureRoutine from "../ModalManageCreatureRoutine";
+import ModalManageCreatureRoutine from "../../../ModalManageCreatureRoutine";
 import ModalTextArea from "../../../../../../../../components/ModalTextArea";
 import Button from "../../../../../../../../components/Button";
 import Select from "../../../../../../../../components/Select";
@@ -22,7 +22,6 @@ function ModalManageDungeonRoom({
   isEntrance,
   contexts,
   creatures,
-  isPointOfInterest,
   HandleSelectCreatures,
   SwapDungeonRoom,
   DeleteDungeonRoom,
@@ -86,7 +85,7 @@ function ModalManageDungeonRoom({
       <ModalManageCreatureRoutine
         routine={routine}
         contexts={contexts.map((c) => c.name)}
-        isPointOfInterest={isPointOfInterest}
+        isPointOfInterest={true}
         isRoom={true}
         onClose={(tempRoutine) => HandleCloseModalManageRoutine(creature, routine, tempRoutine)}
       />

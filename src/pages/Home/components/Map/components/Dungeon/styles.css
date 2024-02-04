@@ -1,0 +1,227 @@
+.Dungeon-container.exploration-container {
+  border: 1px solid var(--black);
+}
+
+.Dungeon-container .dungeon-entrance {
+  background-color: var(--white);
+  padding: 7px;
+}
+.Dungeon-container .dungeon-entrance > button {
+  padding: 3px;
+  background-color: var(--white);
+  border: 1px solid var(--black);
+  width: 35px;
+  height: 35px;
+  font-size: 18px;
+}
+
+.Dungeon-container .dungeon {
+  background-color: var(--white);
+  flex-wrap: wrap;
+  row-gap: 10px;
+  column-gap: 10px;
+  padding: 0 7px 7px;
+}
+
+.Dungeon-container .room-wrapper {
+  position: relative;
+}
+
+.Dungeon-container .room {
+  position: relative;
+}
+
+.Dungeon-container .dungeon-room button {
+  z-index: 1;
+  /* pointer-events: none; */
+  background-color: var(--white);
+  border: 1px solid var(--black);
+  border-radius: 0;
+}
+
+.Dungeon-container .room .room-connection {
+  position: absolute;
+  height: 5px;
+}
+
+.Dungeon-container .room .room-connection .first-piece {
+  background-color: var(--white);
+  border: 1px solid var(--black);
+  border-left: none;
+  border-right: none;
+
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  left: 0;
+}
+.Dungeon-container .room .room-connection .last-piece {
+  background-color: var(--white);
+  border: 1px solid var(--black);
+  border-left: none;
+  border-right: none;
+
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  right: 0;
+}
+
+.Dungeon-container .room .room-connection.horizontal {
+  width: 40px;
+}
+.Dungeon-container .room .room-connection.vertical {
+  width: 40px;
+  rotate: 90deg;
+}
+.Dungeon-container .room .room-connection.main-diagonal {
+  width: 56.57px;
+  rotate: 45deg;
+}
+.Dungeon-container .room .room-connection.diagonal {
+  width: 56.57px;
+  rotate: -45deg;
+}
+
+.Dungeon-container .room .room-connection .floor,
+.Dungeon-container .connection-base.floor {
+  background-color: var(--gray1) !important;
+}
+.Dungeon-container .room .room-connection .ceiling,
+.Dungeon-container .connection-base.ceiling {
+  background-color: var(--gray2) !important;
+}
+
+.Dungeon-container .room-connection .regular-corridor {
+  cursor: default !important;
+}
+
+.Dungeon-container .is-swapping-room {
+  background-color: var(--white);
+}
+
+.Dungeon-container .dungeon-room {
+  border: none !important;
+  background-color: transparent;
+}
+
+.Dungeon-container .dungeon .corridor {
+  width: 5px;
+  height: 5px;
+}
+.Dungeon-container .dungeon .small {
+  width: 20px;
+  height: 20px;
+}
+.Dungeon-container .dungeon .medium {
+  width: 25px;
+  height: 25px;
+}
+.Dungeon-container .dungeon .large,
+.Dungeon-container .dungeon .dungeon-room {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  position: relative;
+}
+
+.Dungeon-container .room-area {
+  position: relative;
+}
+
+.Dungeon-container .room-area.danger,
+.Dungeon-container .room.danger {
+  position: relative;
+  border-color: var(--offensiveColor);
+}
+.Dungeon-container .room-area .room-content {
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  background-color: white;
+  font-size: 8px;
+}
+.Dungeon-container .room-area .creatures,
+.Dungeon-container .room .creatures {
+  color: var(--offensiveColor);
+}
+.Dungeon-container .room-area .treasure,
+.Dungeon-container .room .treasure {
+  color: var(--defensiveColor);
+}
+.Dungeon-container .dungeon-entrance .treasure {
+  position: absolute;
+  font-size: 6px;
+  bottom: 1px;
+}
+
+.Dungeon-container .room-area .connection-base {
+  width: 3px;
+  height: 3px;
+  background-color: var(--white);
+  position: absolute;
+  pointer-events: none;
+}
+.Dungeon-container .room-area .connection-base.top-left {
+  top: 0px;
+  left: 0px;
+  translate: -50% -50%;
+  rotate: 45deg;
+}
+.Dungeon-container .room-area .connection-base.top {
+  top: 0px;
+  translate: 0 -75%;
+}
+.Dungeon-container .room-area .connection-base.top-right {
+  top: 0px;
+  right: 0px;
+  translate: 50% -50%;
+  rotate: 45deg;
+}
+.Dungeon-container .room-area .connection-base.left {
+  left: 0px;
+  translate: -75% 0;
+}
+.Dungeon-container .room-area .connection-base.right {
+  right: 0px;
+  translate: 75% 0;
+}
+.Dungeon-container .room-area .connection-base.bottom-left {
+  bottom: 0px;
+  left: 0px;
+  translate: -50% 50%;
+  rotate: 45deg;
+}
+.Dungeon-container .room-area .connection-base.bottom {
+  bottom: 0px;
+  translate: 0 75%;
+}
+.Dungeon-container .room-area .connection-base.bottom-right {
+  bottom: 0px;
+  right: 0px;
+  translate: 50% 50%;
+  rotate: 45deg;
+}
+
+.Dungeon-container .connection-base.blocked-connection {
+  background-color: var(--offensiveColor) !important;
+  width: 5px;
+  height: 5px;
+}
+.Dungeon-container .connection-base.unblocked-connection {
+  background-color: var(--defensiveColor) !important;
+  width: 5px;
+  height: 5px;
+}
+
+.Dungeon-container .dungeon-tooltip {
+  border-radius: 0;
+}
+.Dungeon-container .room-tooltip {
+  min-width: 20px !important;
+  min-height: 20px !important;
+}
+.Dungeon-container .room-connection-tooltip {
+  width: 40px !important;
+  height: 40px !important;
+}

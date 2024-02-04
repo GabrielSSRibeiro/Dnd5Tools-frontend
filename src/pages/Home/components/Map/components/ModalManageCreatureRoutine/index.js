@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from "react";
-import * as lc from "../../../../../../../../constants/locationConstants";
-import * as utils from "../../../../../../../../utils";
+import * as lc from "../../../../../../constants/locationConstants";
+import * as utils from "../../../../../../utils";
 
-import Modal from "../../../../../../../../components/Modal";
-import Button from "../../../../../../../../components/Button";
-import Select from "../../../../../../../../components/Select";
+import Modal from "../../../../../../components/Modal";
+import Button from "../../../../../../components/Button";
+import Select from "../../../../../../components/Select";
 
 import "./styles.css";
 

@@ -6,6 +6,7 @@ import * as ch from "../../../../../../helpers/creatureHelper";
 import * as lh from "../../../../../../helpers/locationHelper";
 import * as th from "../../../../../../helpers/treasureHelper";
 
+import Dungeon from "../Dungeon";
 import Info from "../../../../../../components/Info";
 import TextInput from "../../../../../../components/TextInput";
 import Button from "../../../../../../components/Button";
@@ -44,6 +45,7 @@ function ModalTravelResults({
     () => !hasMoved && travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY,
     [hasMoved, travel.pace]
   );
+  const [location, setLocation] = useState(utils.clone(newLocation));
   const isPointOfInterest = useMemo(() => newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST, [newLocation.size]);
   const element = useRef(
     HandleAddTravelNode && !isPointOfInterest && newLocation.traversal.elements
@@ -410,7 +412,7 @@ function ModalTravelResults({
 
   function UpdateLocData() {
     //update current creatures, doors and population data
-    HandleSaveLoc(newLocation);
+    HandleSaveLoc(location);
   }
 
   function CheckSaveValid() {
@@ -496,7 +498,7 @@ function ModalTravelResults({
         <aside className="details-wrapper df df-fd-c df-jc-fs">
           <h3>Mundo</h3>
           {viewingCurrent ? (
-            <span>-</span>
+            !isPointOfInterest && <span>-</span>
           ) : (
             <div className="movement">
               {hasMoved ? (
@@ -529,6 +531,8 @@ function ModalTravelResults({
                 : "A temperatura piorou"}
             </h4>
           )}
+
+          {isPointOfInterest && <Dungeon location={location} setLocation={setLocation} creatures={creatures} isEdit={false} />}
         </aside>
 
         {/* loc */}

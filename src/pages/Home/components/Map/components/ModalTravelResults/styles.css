@@ -1,7 +1,7 @@
 .ModalTravelResults-container.modal-body {
   width: fit-content;
   height: fit-content;
-  max-height: 450px;
+  /* max-height: 450px; */
 }
 
 .ModalTravelResults-container .content {
