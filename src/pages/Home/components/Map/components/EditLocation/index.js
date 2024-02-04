@@ -598,18 +598,23 @@ function EditLocation({
     return roomTooltip;
   }
 
-  function GetRoomConnectionToolTip(room, connection, description = null) {
+  function GetRoomConnectionToolTip(room, roomObj, extraDescription = null) {
     let roomConnectionTooltip = [];
 
-    if (description) {
-      roomConnectionTooltip.push({ text: `${description}` });
+    if (roomObj.description) {
+      roomConnectionTooltip.push({ text: `${roomObj.description}` });
+      roomConnectionTooltip.push({ text: "" });
+    }
+
+    if (extraDescription) {
+      roomConnectionTooltip.push({ text: `${extraDescription}` });
     } else {
       roomConnectionTooltip.push({ text: `${lc.GetRoomSize(room.size).corridorDisplay}` });
     }
 
-    if (connection === lc.ROOM_CONNECTIONS.BLOCKED) {
+    if (roomObj.connection === lc.ROOM_CONNECTIONS.BLOCKED) {
       roomConnectionTooltip.push({ text: `Bloqueado` });
-    } else if (connection === lc.ROOM_CONNECTIONS.UNBLOCKED) {
+    } else if (roomObj.connection === lc.ROOM_CONNECTIONS.UNBLOCKED) {
       roomConnectionTooltip.push({ text: `Desbloqueado` });
     }
 
@@ -656,20 +661,20 @@ function EditLocation({
     location.interaction.rooms
       .filter((r) => r)
       .forEach((r) => {
-        if (r.top === lc.ROOM_CONNECTIONS.UNBLOCKED) {
-          r.top = lc.ROOM_CONNECTIONS.BLOCKED;
+        if (r.top.connection === lc.ROOM_CONNECTIONS.UNBLOCKED) {
+          r.top.connection = lc.ROOM_CONNECTIONS.BLOCKED;
         }
 
-        if (r.bottom === lc.ROOM_CONNECTIONS.UNBLOCKED) {
-          r.bottom = lc.ROOM_CONNECTIONS.BLOCKED;
+        if (r.bottom.connection === lc.ROOM_CONNECTIONS.UNBLOCKED) {
+          r.bottom.connection = lc.ROOM_CONNECTIONS.BLOCKED;
         }
 
-        if (r.left === lc.ROOM_CONNECTIONS.UNBLOCKED) {
-          r.left = lc.ROOM_CONNECTIONS.BLOCKED;
+        if (r.left.connection === lc.ROOM_CONNECTIONS.UNBLOCKED) {
+          r.left.connection = lc.ROOM_CONNECTIONS.BLOCKED;
         }
 
-        if (r.right === lc.ROOM_CONNECTIONS.UNBLOCKED) {
-          r.right = lc.ROOM_CONNECTIONS.BLOCKED;
+        if (r.right.connection === lc.ROOM_CONNECTIONS.UNBLOCKED) {
+          r.right.connection = lc.ROOM_CONNECTIONS.BLOCKED;
         }
 
         if (r.floor.connection === lc.ROOM_CONNECTIONS.UNBLOCKED) {
@@ -893,26 +898,26 @@ function EditLocation({
                       {/* room connections */}
                       <Info className="dungeon-tooltip room-connection-tooltip" contents={roomToolTip} tooltipOnly={true}>
                         {/* horizontal */}
-                        {(r.left || r.right) && (
+                        {(r.left.connection || r.right.connection) && (
                           <div className="df room-connection horizontal">
-                            {r.left && (
+                            {r.left.connection && (
                               <div
-                                className={`first-piece${CanToggleCon(r.left) ? "" : " regular-corridor"}`}
+                                className={`first-piece${CanToggleCon(r.left.connection) ? "" : " regular-corridor"}`}
                                 onClick={() =>
-                                  ToggleBlock(r.left, (c) => {
-                                    r.left = c;
+                                  ToggleBlock(r.left.connection, (c) => {
+                                    r.left.connection = c;
                                   })
                                 }
                                 onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.left))}
                                 onMouseLeave={(e) => setRoomToolTip(null)}
                               ></div>
                             )}
-                            {r.right && (
+                            {r.right.connection && (
                               <div
-                                className={`last-piece${CanToggleCon(r.right) ? "" : " regular-corridor"}`}
+                                className={`last-piece${CanToggleCon(r.right.connection) ? "" : " regular-corridor"}`}
                                 onClick={() =>
-                                  ToggleBlock(r.right, (c) => {
-                                    r.right = c;
+                                  ToggleBlock(r.right.connection, (c) => {
+                                    r.right.connection = c;
                                   })
                                 }
                                 onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.right))}
@@ -923,26 +928,26 @@ function EditLocation({
                         )}
 
                         {/* vertical */}
-                        {(r.top || r.bottom) && (
+                        {(r.top.connection || r.bottom.connection) && (
                           <div className="df room-connection vertical">
-                            {r.top && (
+                            {r.top.connection && (
                               <div
-                                className={`first-piece${CanToggleCon(r.top) ? "" : " regular-corridor"}`}
+                                className={`first-piece${CanToggleCon(r.top.connection) ? "" : " regular-corridor"}`}
                                 onClick={() =>
-                                  ToggleBlock(r.top, (c) => {
-                                    r.top = c;
+                                  ToggleBlock(r.top.connection, (c) => {
+                                    r.top.connection = c;
                                   })
                                 }
                                 onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.top))}
                                 onMouseLeave={(e) => setRoomToolTip(null)}
                               ></div>
                             )}
-                            {r.bottom && (
+                            {r.bottom.connection && (
                               <div
-                                className={`last-piece${CanToggleCon(r.bottom) ? "" : " regular-corridor"}`}
+                                className={`last-piece${CanToggleCon(r.bottom.connection) ? "" : " regular-corridor"}`}
                                 onClick={() =>
-                                  ToggleBlock(r.bottom, (c) => {
-                                    r.bottom = c;
+                                  ToggleBlock(r.bottom.connection, (c) => {
+                                    r.bottom.connection = c;
                                   })
                                 }
                                 onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.bottom))}
@@ -967,7 +972,7 @@ function EditLocation({
                                       r.floor.connection = c;
                                     })
                                   }
-                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.floor.connection, "descida (piso)"))}
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.floor, "descida (piso)"))}
                                   onMouseLeave={(e) => setRoomToolTip(null)}
                                 ></div>
                               ) : (
@@ -978,7 +983,7 @@ function EditLocation({
                                       r.ceiling.connection = c;
                                     })
                                   }
-                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.ceiling.connection, "subida (teto)"))}
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.ceiling, "subida (teto)"))}
                                   onMouseLeave={(e) => setRoomToolTip(null)}
                                 ></div>
                               ))}
@@ -993,7 +998,7 @@ function EditLocation({
                                       r.floor.connection = c;
                                     })
                                   }
-                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.floor.connection, "descida (piso)"))}
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.floor, "descida (piso)"))}
                                   onMouseLeave={(e) => setRoomToolTip(null)}
                                 ></div>
                               ) : (
@@ -1004,7 +1009,7 @@ function EditLocation({
                                       r.ceiling.connection = c;
                                     })
                                   }
-                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.ceiling.connection, "subida (teto)"))}
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.ceiling, "subida (teto)"))}
                                   onMouseLeave={(e) => setRoomToolTip(null)}
                                 ></div>
                               ))}
@@ -1026,7 +1031,7 @@ function EditLocation({
                                       r.floor.connection = c;
                                     })
                                   }
-                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.floor.connection, "descida (piso)"))}
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.floor, "descida (piso)"))}
                                   onMouseLeave={(e) => setRoomToolTip(null)}
                                 ></div>
                               ) : (
@@ -1037,7 +1042,7 @@ function EditLocation({
                                       r.ceiling.connection = c;
                                     })
                                   }
-                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.ceiling.connection, "subida (teto)"))}
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.ceiling, "subida (teto)"))}
                                   onMouseLeave={(e) => setRoomToolTip(null)}
                                 ></div>
                               ))}
@@ -1052,7 +1057,7 @@ function EditLocation({
                                       r.floor.connection = c;
                                     })
                                   }
-                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.floor.connection, "descida (piso)"))}
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.floor, "descida (piso)"))}
                                   onMouseLeave={(e) => setRoomToolTip(null)}
                                 ></div>
                               ) : (
@@ -1063,7 +1068,7 @@ function EditLocation({
                                       r.ceiling.connection = c;
                                     })
                                   }
-                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.ceiling.connection, "subida (teto)"))}
+                                  onMouseMove={(e) => setRoomToolTip(GetRoomConnectionToolTip(r, r.ceiling, "subida (teto)"))}
                                   onMouseLeave={(e) => setRoomToolTip(null)}
                                 ></div>
                               ))}
@@ -1108,12 +1113,12 @@ function EditLocation({
                             }`}
                           ></div>
                         )}
-                        {r.top && (
+                        {r.top.connection && (
                           <div
                             className={`connection-base top${
-                              r.top === lc.ROOM_CONNECTIONS.BLOCKED
+                              r.top.connection === lc.ROOM_CONNECTIONS.BLOCKED
                                 ? " blocked-connection"
-                                : r.top === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                : r.top.connection === lc.ROOM_CONNECTIONS.UNBLOCKED
                                 ? " unblocked-connection"
                                 : ""
                             }`}
@@ -1137,23 +1142,23 @@ function EditLocation({
                           ></div>
                         )}
 
-                        {r.left && (
+                        {r.left.connection && (
                           <div
                             className={`connection-base left${
-                              r.left === lc.ROOM_CONNECTIONS.BLOCKED
+                              r.left.connection === lc.ROOM_CONNECTIONS.BLOCKED
                                 ? " blocked-connection"
-                                : r.left === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                : r.left.connection === lc.ROOM_CONNECTIONS.UNBLOCKED
                                 ? " unblocked-connection"
                                 : ""
                             }`}
                           ></div>
                         )}
-                        {r.right && (
+                        {r.right.connection && (
                           <div
                             className={`connection-base right${
-                              r.right === lc.ROOM_CONNECTIONS.BLOCKED
+                              r.right.connection === lc.ROOM_CONNECTIONS.BLOCKED
                                 ? " blocked-connection"
-                                : r.right === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                : r.right.connection === lc.ROOM_CONNECTIONS.UNBLOCKED
                                 ? " unblocked-connection"
                                 : ""
                             }`}
@@ -1177,12 +1182,12 @@ function EditLocation({
                             }`}
                           ></div>
                         )}
-                        {r.bottom && (
+                        {r.bottom.connection && (
                           <div
                             className={`connection-base bottom${
-                              r.bottom === lc.ROOM_CONNECTIONS.BLOCKED
+                              r.bottom.connection === lc.ROOM_CONNECTIONS.BLOCKED
                                 ? " blocked-connection"
-                                : r.bottom === lc.ROOM_CONNECTIONS.UNBLOCKED
+                                : r.bottom.connection === lc.ROOM_CONNECTIONS.UNBLOCKED
                                 ? " unblocked-connection"
                                 : ""
                             }`}

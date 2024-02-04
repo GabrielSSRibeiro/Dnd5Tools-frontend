@@ -37,16 +37,30 @@ function ModalManageDungeonRoom({
           secrets: null,
           size: lc.ROOM_SIZES.MEDIUM,
           height: lc.ROOM_HEIGHTS.MEDIUM,
-          top: null,
-          bottom: null,
-          left: null,
-          right: null,
+          top: {
+            connection: null,
+            description: null,
+          },
+          bottom: {
+            connection: null,
+            description: null,
+          },
+          left: {
+            connection: null,
+            description: null,
+          },
+          right: {
+            connection: null,
+            description: null,
+          },
           floor: {
             connection: null,
+            description: null,
             direction: null,
           },
           ceiling: {
             connection: null,
+            description: null,
             direction: null,
           },
           type: lc.ELEMENT_TYPES.STRUCTURE,
@@ -96,19 +110,38 @@ function ModalManageDungeonRoom({
     setTempRoom({ ...tempRoom, creatures: tempRoom.creatures });
   }
 
-  function OpenModalDetails(property, title, placeholder) {
+  function OpenModalRoomDetails(property, title, placeholder) {
     setModal(
       <ModalTextArea
         title={title}
         text={tempRoom[property]}
         placeholder={placeholder}
-        onClose={(tempTextArea) => HandleCloseModalTextArea(tempTextArea, property)}
+        onClose={(tempTextArea) => HandleCloseModalRoomDetails(tempTextArea, property)}
       />
     );
   }
-  function HandleCloseModalTextArea(tempTextArea, property) {
+  function HandleCloseModalRoomDetails(tempTextArea, property) {
     if (tempTextArea != null) {
       tempRoom[property] = tempTextArea;
+      setTempRoom({ ...tempRoom });
+    }
+
+    setModal(null);
+  }
+
+  function OpenModalRoomConnectionDetails(property) {
+    setModal(
+      <ModalTextArea
+        title="Descriçao"
+        text={tempRoom[property].description}
+        placeholder="Descriçao da conexao"
+        onClose={(tempTextArea) => HandleCloseModalRoomConnectionDetails(tempTextArea, property)}
+      />
+    );
+  }
+  function HandleCloseModalRoomConnectionDetails(tempTextArea, property) {
+    if (tempTextArea != null) {
+      tempRoom[property].description = tempTextArea;
       setTempRoom({ ...tempRoom });
     }
 
@@ -123,17 +156,10 @@ function ModalManageDungeonRoom({
     setTempRoom(newValue);
   }
 
-  function HandleSelectFloor(newValue) {
-    if (!newValue.floor.connection) {
-      newValue.floor.direction = null;
-    }
-
-    setTempRoom(newValue);
-  }
-
-  function HandleSelectCeiling(newValue) {
-    if (!newValue.ceiling.connection) {
-      newValue.ceiling.direction = null;
+  function HandleSelectConnection(newValue, property) {
+    if (!newValue[property].connection) {
+      newValue[property].direction = null;
+      newValue[property].description = null;
     }
 
     setTempRoom(newValue);
@@ -177,53 +203,91 @@ function ModalManageDungeonRoom({
               optionValue={(o) => o.value}
             />
 
-            <div className="df df-ai-fs df-cg-10 room-row">
+            <div className="df df-cg-10 room-row">
               <Select
                 label={"Cima ↑"}
-                extraWidth={70}
+                extraWidth={45}
                 value={tempRoom}
-                valuePropertyPath="top"
-                onSelect={setTempRoom}
+                valuePropertyPath="top.connection"
+                onSelect={(d) => HandleSelectConnection(d, "top")}
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
                 nothingSelected="Nenhuma"
               />
+              <button
+                title="Descriçao"
+                className={`button-simple${!tempRoom.top.description ? " lacking-data" : ""}${!tempRoom.top.connection ? " element-disabled" : ""} `}
+                onClick={() => OpenModalRoomConnectionDetails("top")}
+                disabled={!tempRoom.top.connection}
+              >
+                <i className="fas fa-eye"></i>
+              </button>
               <Select
                 label={"Baixo ↓"}
-                extraWidth={70}
+                extraWidth={45}
                 value={tempRoom}
-                valuePropertyPath="bottom"
-                onSelect={setTempRoom}
+                valuePropertyPath="bottom.connection"
+                onSelect={(d) => HandleSelectConnection(d, "bottom")}
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
                 nothingSelected="Nenhuma"
               />
+              <button
+                title="Descriçao"
+                className={`button-simple${!tempRoom.bottom.description ? " lacking-data" : ""}${
+                  !tempRoom.bottom.connection ? " element-disabled" : ""
+                } `}
+                onClick={() => OpenModalRoomConnectionDetails("bottom")}
+                disabled={!tempRoom.bottom.connection}
+              >
+                <i className="fas fa-eye"></i>
+              </button>
             </div>
-            <div className="df df-ai-fs df-cg-10 room-row">
+            <div className="df  df-cg-10 room-row">
               <Select
                 label={"Esquerda ←"}
-                extraWidth={70}
+                extraWidth={45}
                 value={tempRoom}
-                valuePropertyPath="left"
-                onSelect={setTempRoom}
+                valuePropertyPath="left.connection"
+                onSelect={(d) => HandleSelectConnection(d, "left")}
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
                 nothingSelected="Nenhuma"
               />
+              <button
+                title="Descriçao"
+                className={`button-simple${!tempRoom.left.description ? " lacking-data" : ""}${
+                  !tempRoom.left.connection ? " element-disabled" : ""
+                } `}
+                onClick={() => OpenModalRoomConnectionDetails("left")}
+                disabled={!tempRoom.left.connection}
+              >
+                <i className="fas fa-eye"></i>
+              </button>
               <Select
                 label={"Direita →"}
-                extraWidth={70}
+                extraWidth={45}
                 value={tempRoom}
-                valuePropertyPath="right"
-                onSelect={setTempRoom}
+                valuePropertyPath="right.connection"
+                onSelect={(d) => HandleSelectConnection(d, "right")}
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
                 nothingSelected="Nenhuma"
               />
+              <button
+                title="Descriçao"
+                className={`button-simple${!tempRoom.right.description ? " lacking-data" : ""}${
+                  !tempRoom.right.connection ? " element-disabled" : ""
+                } `}
+                onClick={() => OpenModalRoomConnectionDetails("right")}
+                disabled={!tempRoom.right.connection}
+              >
+                <i className="fas fa-eye"></i>
+              </button>
             </div>
             <Select
               label={"Altura"}
@@ -235,13 +299,13 @@ function ModalManageDungeonRoom({
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
             />
-            <div className="df df-ai-fs df-cg-10 room-row">
+            <div className="df df-cg-10 room-row">
               <Select
                 label={"Piso"}
-                extraWidth={70}
+                extraWidth={40}
                 value={tempRoom}
                 valuePropertyPath="floor.connection"
-                onSelect={HandleSelectFloor}
+                onSelect={(d) => HandleSelectConnection(d, "floor")}
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
@@ -259,14 +323,24 @@ function ModalManageDungeonRoom({
                 nothingSelected="Nenhuma"
                 isDisabled={!tempRoom.floor.connection}
               />
+              <button
+                title="Descriçao"
+                className={`button-simple${!tempRoom.floor.description ? " lacking-data" : ""}${
+                  !tempRoom.floor.connection ? " element-disabled" : ""
+                } `}
+                onClick={() => OpenModalRoomConnectionDetails("floor")}
+                disabled={!tempRoom.floor.connection}
+              >
+                <i className="fas fa-eye"></i>
+              </button>
             </div>
-            <div className="df df-ai-fs df-cg-10 room-row">
+            <div className="df df-cg-10 room-row">
               <Select
                 label={"Teto"}
-                extraWidth={70}
+                extraWidth={40}
                 value={tempRoom}
                 valuePropertyPath="ceiling.connection"
-                onSelect={HandleSelectCeiling}
+                onSelect={(d) => HandleSelectConnection(d, "ceiling")}
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
@@ -284,6 +358,16 @@ function ModalManageDungeonRoom({
                 nothingSelected="Nenhuma"
                 isDisabled={!tempRoom.ceiling.connection}
               />
+              <button
+                title="Descriçao"
+                className={`button-simple${!tempRoom.ceiling.description ? " lacking-data" : ""}${
+                  !tempRoom.ceiling.connection ? " element-disabled" : ""
+                } `}
+                onClick={() => OpenModalRoomConnectionDetails("ceiling")}
+                disabled={!tempRoom.ceiling.connection}
+              >
+                <i className="fas fa-eye"></i>
+              </button>
             </div>
           </>
         )}
@@ -327,6 +411,8 @@ function ModalManageDungeonRoom({
               <i className="fas fa-retweet"></i>
             </button>
           </div>
+
+          {/* creatures */}
           {tempRoom.creatures.map((locC, cIndex) => {
             const name = creatures.find((c) => c._id === locC.creatureId).name;
 
@@ -399,7 +485,7 @@ function ModalManageDungeonRoom({
                 title="Primeiras Impressões"
                 className={`button-simple${!tempRoom.firstImpressions ? " lacking-data" : ""}`}
                 onClick={() =>
-                  OpenModalDetails(
+                  OpenModalRoomDetails(
                     "firstImpressions",
                     "Primeiras Impressões",
                     "O que quem se aproxima a primeira vez desse local experiencia. Algo entre o que sentem, o que veem, o que cheiram, o que ouvem..."
@@ -408,7 +494,7 @@ function ModalManageDungeonRoom({
               >
                 <i className="fas fa-eye"></i>
               </button>
-              <button title="Segredos" className="button-simple" onClick={() => OpenModalDetails("secrets", "Segredos", "Segredos")}>
+              <button title="Segredos" className="button-simple" onClick={() => OpenModalRoomDetails("secrets", "Segredos", "Segredos")}>
                 <i className="fas fa-mask"></i>
               </button>
             </>
