@@ -24,6 +24,7 @@
   align-items: flex-start;
   justify-content: center;
   white-space: break-spaces;
+  width: 100%;
 }
 
 .Tooltip-container .tooltip-contents .content-wrapper {
@@ -31,6 +32,8 @@
   align-items: center;
   justify-content: center;
   column-gap: 10px;
+  width: 100%;
+  text-align: left;
 }
 
 .Tooltip-container .tooltip-contents .content-wrapper i {
@@ -39,6 +42,7 @@
 
 .Tooltip-container span {
   color: var(--white);
+  width: 100%;
 }
 
 .Tooltip-container .arrow {

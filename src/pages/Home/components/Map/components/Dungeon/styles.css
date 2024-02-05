@@ -1,5 +1,6 @@
 .Dungeon-container.exploration-container {
   border: 1px solid var(--black);
+  width: 100%;
 }
 
 .Dungeon-container .dungeon-entrance {

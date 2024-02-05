@@ -11,6 +11,11 @@
   margin-bottom: 25px;
   white-space: break-spaces;
   overflow: auto;
+  width: 100%;
+}
+
+.ModalWarning-container .messages-wrapper .warning-message {
+  width: 100%;
 }
 
 .ModalWarning-container .warning-actions-wrapper {

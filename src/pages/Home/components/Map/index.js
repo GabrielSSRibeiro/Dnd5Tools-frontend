@@ -373,12 +373,12 @@ function Map({
           }
 
           if (context.rumors) {
-            messages.push("- Rumores -");
+            messages.push("-------------------------------- Rumores");
             messages.push(context.rumors);
           }
 
           if (context.secrets) {
-            messages.push("- Segredos -");
+            messages.push("-------------------------------- Segredos");
             messages.push(context.secrets);
           }
 

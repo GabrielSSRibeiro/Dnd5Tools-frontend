@@ -437,12 +437,12 @@ function ModalTravelResults({
     }
 
     if (locContext.rumors) {
-      messages.push("- Rumores -");
+      messages.push("-------------------------------- Rumores");
       messages.push(locContext.rumors);
     }
 
     if (locContext.secrets) {
-      messages.push("- Segredos -");
+      messages.push("-------------------------------- Segredos");
       messages.push(locContext.secrets);
     }
 
