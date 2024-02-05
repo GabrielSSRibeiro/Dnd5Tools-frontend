@@ -184,6 +184,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, isEd
       }
 
       if (room.secrets) {
+        roomTooltip.push({ text: "-------------------------------- Segredos" });
         roomTooltip.push({ text: room.secrets });
       }
 
