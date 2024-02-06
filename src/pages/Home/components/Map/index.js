@@ -14,7 +14,6 @@ import Location from "./components/Location";
 import ModalTravelResults from "./components/ModalTravelResults";
 import ModalSuggestions from "./components/ModalSuggestions";
 import ModalWarning from "../../../../components/ModalWarning";
-import ModalExport from "../../../../components/ModalExport";
 
 import "./styles.css";
 
@@ -268,151 +267,74 @@ function Map({
         };
 
     if (currentNode) {
-      //march
-      if (mapMode === lc.MAP_MODES.TRAVEL && (canTravelToPoint || isRest)) {
-        const nodeLoc = map[newCurrentNode.locId]?.data;
-        const newLocation = nodeLoc ?? combatConfig.world;
-        const hasMoved =
-          newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && combatConfig.travel.currentNode.locId === newLocation._id
-            ? false
-            : combatConfig.travel.currentNode.x !== newCurrentNode.x && combatConfig.travel.currentNode.y !== newCurrentNode.y;
+      const nodeLoc = map[newCurrentNode.locId]?.data;
+      const newLocation = nodeLoc ?? combatConfig.world;
+      const isSameNode = combatConfig.travel.currentNode.x === newCurrentNode.x && combatConfig.travel.currentNode.y === newCurrentNode.y;
+      const hasMoved =
+        newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && combatConfig.travel.currentNode.locId === newLocation._id ? false : !isSameNode;
 
-        setModal(
-          <ModalTravelResults
-            onClose={setModal}
-            hasMoved={hasMoved}
-            newCurrentNode={newCurrentNode}
-            newLocation={utils.clone(newLocation)}
-            exteriorLocation={nodeLoc && map[nodeLoc.exteriorLocationId] ? utils.clone(map[nodeLoc.exteriorLocationId].data) : null}
-            locHoverData={locHoverData}
-            travel={combatConfig.travel}
-            restTime={restTime}
-            isNightTime={isNightTime}
-            GetCreatureCurrentRoutine={GetCreatureCurrentRoutine}
-            level={combatConfig.level}
-            creatures={creatures}
-            world={combatConfig.world}
-            mapConditionLevels={mapConditionLevels}
-            GetUpdatedSchedule={GetUpdatedSchedule}
-            HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
-            HandleAddTravelNode={node ? null : () => HandleAddTravelNode(newCurrentNode)}
-            HandleSaveCombatConfig={HandleSaveCombatConfig}
-            HandleSaveLoc={(updatedLoc) => HandleSave(updatedLoc, false)}
-            encounterProb={locHoverData?.distance.encounterProb ?? 0}
-            addAction={() => {
-              setLocationToEdit(lc.GetNewLocation(nodeLoc?._id ?? userId));
-              setModal(null);
-            }}
-            editAction={() => {
-              setLocationToEdit(utils.clone(nodeLoc));
-              setModal(null);
-            }}
-          />
-        );
-      }
-      //safe
-      else {
-        let title = "Mover Grupo";
-        let messages = [];
-        let cancelAction = {
-          text: "Cancelar",
-          click: () => setModal(null),
-          isSimple: true,
-        };
-        let actions = [
-          cancelAction,
-          {
-            text: "Mover Seguramente",
-            click: () => {
-              HandleSetCurrentNode(newCurrentNode);
-              combatConfig.travel.cummulativeEncounterChance = 0;
-              HandleSaveCombatConfig();
-              setModal(null);
-            },
-          },
-        ];
-
-        const clickedLoc = map[newCurrentNode.locId] ? map[newCurrentNode.locId].data : combatConfig.world;
-
-        // node
-        if (node) {
-          actions = [
-            {
-              text: "Deletar",
-              icon: "fas fa-trash",
-              click: () => {
-                combatConfig.travel.travelNodes = combatConfig.travel.travelNodes.filter(
-                  (tn) => tn.x !== newCurrentNode.x && tn.y !== newCurrentNode.y
-                );
-                HandleSaveCombatConfig();
-                setModal(null);
-              },
-              isSimple: true,
-            },
-            {
-              text: "Mover Marcação",
-              icon: "fas fa-exchange-alt",
-              className: "node-modal-action",
-              click: () => {
-                node.isNodeToMove = true;
-                setNodeToMove(node);
-                setModal(null);
-              },
-              isSimple: true,
-            },
-            ...actions,
-          ];
-        }
-        // loc
-        else {
-          title = clickedLoc.name;
-          const context = clickedLoc.contexts.find((c) => c.isCurrent);
-
-          if (context.details) {
-            messages.push(context.details);
+      setModal(
+        <ModalTravelResults
+          isSafe={mapMode !== lc.MAP_MODES.TRAVEL || (!canTravelToPoint && !isRest)}
+          mapMode={mapMode}
+          onClose={setModal}
+          hasMoved={hasMoved}
+          newCurrentNode={newCurrentNode}
+          newLocation={utils.clone(newLocation)}
+          exteriorLocation={nodeLoc && map[nodeLoc.exteriorLocationId] ? utils.clone(map[nodeLoc.exteriorLocationId].data) : null}
+          locHoverData={locHoverData}
+          travel={combatConfig.travel}
+          restTime={restTime}
+          isNightTime={isNightTime}
+          GetCreatureCurrentRoutine={GetCreatureCurrentRoutine}
+          level={combatConfig.level}
+          creatures={creatures}
+          world={combatConfig.world}
+          mapConditionLevels={mapConditionLevels}
+          GetUpdatedSchedule={GetUpdatedSchedule}
+          HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
+          HandleAddTravelNode={node ? null : () => HandleAddTravelNode(newCurrentNode)}
+          HandleSaveCombatConfig={HandleSaveCombatConfig}
+          HandleSaveLoc={(updatedLoc) => HandleSave(updatedLoc, false)}
+          encounterProb={locHoverData?.distance.encounterProb ?? 0}
+          addAction={
+            node && !isSameNode
+              ? null
+              : () => {
+                  setLocationToEdit(lc.GetNewLocation(nodeLoc?._id ?? userId));
+                  setModal(null);
+                }
           }
-
-          if (context.rumors) {
-            messages.push("-------------------------------- Rumores");
-            messages.push(context.rumors);
+          editAction={
+            node && !isSameNode
+              ? null
+              : () => {
+                  setLocationToEdit(utils.clone(nodeLoc));
+                  setModal(null);
+                }
           }
-
-          if (context.secrets) {
-            messages.push("-------------------------------- Segredos");
-            messages.push(context.secrets);
+          deleteNodeAction={
+            node && !isSameNode
+              ? () => {
+                  combatConfig.travel.travelNodes = combatConfig.travel.travelNodes.filter(
+                    (tn) => tn.x !== newCurrentNode.x && tn.y !== newCurrentNode.y
+                  );
+                  HandleSaveCombatConfig();
+                  setModal(null);
+                }
+              : null
           }
-
-          let addAction = {
-            text: "Adicionar",
-            icon: "fas fa-plus",
-            click: () => {
-              setLocationToEdit(lc.GetNewLocation(clickedLoc._id ?? userId));
-              setModal(null);
-            },
-            isSimple: true,
-            // disabled: clickedLoc.reference?.distance === lc.REFERENCE_DISTANCES.ADJACENT,
-          };
-          let editAction = {
-            text: "Editar",
-            icon: "fas fa-pen",
-            click: () => {
-              setLocationToEdit(utils.clone(clickedLoc));
-              setModal(null);
-            },
-            isSimple: true,
-          };
-
-          if (mapMode === lc.MAP_MODES.TRAVEL) {
-            editAction.className = "node-modal-left-action";
-            actions = [addAction, editAction, ...actions];
-          } else {
-            editAction.className = "node-modal-left-action";
-            actions = [addAction, editAction, cancelAction];
+          moveNodeAction={
+            node && !isSameNode
+              ? () => {
+                  node.isNodeToMove = true;
+                  setNodeToMove(node);
+                  setModal(null);
+                }
+              : null
           }
-        }
-
-        OpenModalDetails(clickedLoc, title, messages, actions);
-      }
+        />
+      );
     } else {
       HandleSetCurrentNode(newCurrentNode);
       HandleSaveCombatConfig();
@@ -426,41 +348,6 @@ function Map({
       isPrecipitating ? lc.ROUTINE_PRECIPITATIONS.PRECIPITATING : lc.ROUTINE_PRECIPITATIONS.CLEAR,
       isExtremeTemp ? lc.ROUTINE_TEMPERATURES.EXTREME : lc.ROUTINE_TEMPERATURES.NORMAL,
       currentContext?.name
-    );
-  }
-
-  async function OpenModalExport(creature, onClose) {
-    setModal(<ModalExport creature={creature} showDetails={true} onClose={onClose} />);
-  }
-
-  async function OpenModalDetails(clickedLoc, title, messages, actions) {
-    setModal(
-      <ModalWarning title={title} messages={messages} actions={actions}>
-        {clickedLoc.creatures.length > 0 && (
-          <div className="creature-list">
-            {clickedLoc.creatures.map((ec) => {
-              const creature = creatures.find((c) => c._id === ec.creatureId);
-
-              return (
-                <div
-                  className="df encounter-creature"
-                  onClick={() => OpenModalExport(creature, () => OpenModalDetails(clickedLoc, title, messages, actions))}
-                  key={ec.creatureId}
-                >
-                  <img
-                    className="creature-avatar"
-                    style={{
-                      borderColor: cc.GetRarity(creature.rarity).color,
-                    }}
-                    src={creature.image}
-                    alt="creature-avatar"
-                  />
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </ModalWarning>
     );
   }
 

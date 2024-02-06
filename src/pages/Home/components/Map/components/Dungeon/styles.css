@@ -145,14 +145,17 @@
   border-radius: 100%;
   background-color: white;
   font-size: 8px;
+  pointer-events: none;
 }
 .Dungeon-container .room-area .creatures,
 .Dungeon-container .room .creatures {
   color: var(--offensiveColor);
+  z-index: 1;
 }
 .Dungeon-container .room-area .treasure,
 .Dungeon-container .room .treasure {
   color: var(--defensiveColor);
+  z-index: 1;
 }
 .Dungeon-container .dungeon-entrance .treasure {
   position: absolute;

@@ -17,6 +17,8 @@ import ModalExport from "../../../../../../components/ModalExport";
 import "./styles.css";
 
 function ModalTravelResults({
+  isSafe,
+  mapMode,
   onClose,
   hasMoved,
   newCurrentNode,
@@ -39,6 +41,8 @@ function ModalTravelResults({
   encounterProb,
   addAction,
   editAction,
+  deleteNodeAction,
+  moveNodeAction,
 }) {
   const DETAILS_VIEWS = useRef({
     MARCH: 0,
@@ -62,7 +66,7 @@ function ModalTravelResults({
   const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
   const isPointOfInterest = useMemo(() => newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST, [newLocation.size]);
   const element = useRef(
-    HandleAddTravelNode && !isPointOfInterest && newLocation.traversal.elements
+    HandleAddTravelNode && !isPointOfInterest && !isSafe && newLocation.traversal.elements
       ? utils.randomItemFromArray(
           newLocation.traversal.elements.filter((e) => ProbUpdatedByTravelTimeModCheck(lc.GetEncounterFrequency(e.frequency).probability))
         )
@@ -298,44 +302,53 @@ function ModalTravelResults({
     [currentContext.details, currentContext.firstImpressions, currentContext.rumors, currentContext.secrets, locDetails, location.creatures.length]
   );
   const roomDetailsViews = useMemo(
-    () => [
-      {
-        text: isPointOfInterest ? "Sala" : "Arredores",
-        icon: null,
-        onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.ROOM),
-        isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.ROOM,
-        isDisabled: false,
-        marginLeft: 4,
-        className: null,
-      },
-      {
-        text: null,
-        icon: "fas fa-eye",
-        onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.FIRST_IMPRESSIONS),
-        isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.FIRST_IMPRESSIONS,
-        isDisabled: location.interaction.rooms.length === 0,
-        marginLeft: -128,
-        className: "icon-view",
-      },
-      {
-        text: null,
-        icon: "fas fa-mask",
-        onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.SECRETS),
-        isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.SECRETS,
-        isDisabled: location.interaction.rooms.length === 0,
-        marginLeft: -128,
-        className: "icon-view",
-      },
-    ],
-    [isPointOfInterest, locRoomDetails, location.interaction.rooms.length]
+    () =>
+      location.interaction
+        ? [
+            {
+              text: isPointOfInterest ? "Sala" : "Arredores",
+              icon: null,
+              onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.ROOM),
+              isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.ROOM,
+              isDisabled: isSafe,
+              marginLeft: 4,
+              className: null,
+            },
+            {
+              text: null,
+              icon: "fas fa-eye",
+              onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.FIRST_IMPRESSIONS),
+              isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.FIRST_IMPRESSIONS,
+              isDisabled: true || location.interaction?.rooms.length === 0,
+              marginLeft: -128,
+              className: "icon-view",
+            },
+            {
+              text: null,
+              icon: "fas fa-mask",
+              onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.SECRETS),
+              isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.SECRETS,
+              isDisabled: true || location.interaction?.rooms.length === 0,
+              marginLeft: -128,
+              className: "icon-view",
+            },
+          ]
+        : null,
+    [isPointOfInterest, isSafe, locRoomDetails, location.interaction]
   );
 
   function HandleContinue() {
-    UpdateData();
+    if (isSafe) {
+      HandleSetCurrentNode(newCurrentNode);
+      travel.cummulativeEncounterChance = 0;
+      HandleSaveCombatConfig();
+    } else {
+      UpdateData();
 
-    HandleSetCurrentNode();
-    UpdateLocData();
-    HandleSaveCombatConfig();
+      HandleSetCurrentNode();
+      UpdateLocData();
+      HandleSaveCombatConfig();
+    }
 
     onClose();
   }
@@ -548,44 +561,47 @@ function ModalTravelResults({
               </div>
             ))}
           </div>
-          {locDetails === DETAILS_VIEWS.current.MARCH && (
-            <>
-              {viewingCurrent ? (
-                <span>-</span>
-              ) : (
-                <div className="movement">
-                  {hasMoved ? (
-                    <>
-                      <span className="bold">{locHoverData.distance.valueInUnits}</span>
-                      <span> percorrido(s) em </span>
-                      <span className="bold">{timeInUnits}</span>
-                    </>
-                  ) : (
-                    <span>{timeRestedDisplay}</span>
-                  )}
-                </div>
-              )}
+          {locDetails === DETAILS_VIEWS.current.MARCH &&
+            (isSafe ? (
+              <span>Grupo movido seguramente sem marcha</span>
+            ) : (
+              <>
+                {viewingCurrent ? (
+                  <span>-</span>
+                ) : (
+                  <div className="movement">
+                    {hasMoved ? (
+                      <>
+                        <span className="bold">{locHoverData.distance.valueInUnits}</span>
+                        <span> percorrido(s) em </span>
+                        <span className="bold">{timeInUnits}</span>
+                      </>
+                    ) : (
+                      <span>{timeRestedDisplay}</span>
+                    )}
+                  </div>
+                )}
 
-              {newPreciptation !== travel.precipitation && (
-                <h4>
-                  {newPreciptation === mapConditionLevels.current.length - 1
-                    ? "Tempo está precipitando"
-                    : newPreciptation < travel.precipitation
-                    ? "O tempo melhorou"
-                    : "O tempo piorou"}
-                </h4>
-              )}
-              {newTemperature !== travel.temperature && (
-                <h4>
-                  {newTemperature === mapConditionLevels.current.length - 1
-                    ? "Temperatura está intensa"
-                    : newTemperature < travel.temperature
-                    ? "A temperatura melhorou"
-                    : "A temperatura piorou"}
-                </h4>
-              )}
-            </>
-          )}
+                {newPreciptation !== travel.precipitation && (
+                  <h4>
+                    {newPreciptation === mapConditionLevels.current.length - 1
+                      ? "Tempo está precipitando"
+                      : newPreciptation < travel.precipitation
+                      ? "O tempo melhorou"
+                      : "O tempo piorou"}
+                  </h4>
+                )}
+                {newTemperature !== travel.temperature && (
+                  <h4>
+                    {newTemperature === mapConditionLevels.current.length - 1
+                      ? "Temperatura está intensa"
+                      : newTemperature < travel.temperature
+                      ? "A temperatura melhorou"
+                      : "A temperatura piorou"}
+                  </h4>
+                )}
+              </>
+            ))}
           {locDetails === DETAILS_VIEWS.current.FIRST_IMPRESSIONS && <span> {currentContext.firstImpressions} </span>}
           {locDetails === DETAILS_VIEWS.current.DETAILS && <span> {currentContext.details} </span>}
           {locDetails === DETAILS_VIEWS.current.RUMORS && <span> {currentContext.rumors} </span>}
@@ -621,16 +637,20 @@ function ModalTravelResults({
           ) : (
             <>
               <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={setName} />
-              <h6>Encontrar Recursos: CD {findResourcesDifficulty.current}</h6>
-              {tracksForDisplay.current.length > 0 && (
-                <span>
-                  Rastros de: <span className="bold">"{tracksForDisplay.current.join(", ")}"</span>
-                </span>
-              )}
-              {remainsForDisplay.current > 0 && (
-                <span>
-                  Restos mortais com o equivalente a <span className="bold">{remainsForDisplay.current}</span> PO
-                </span>
+              {!isSafe && (
+                <>
+                  <h6>Encontrar Recursos: CD {findResourcesDifficulty.current}</h6>
+                  {tracksForDisplay.current.length > 0 && (
+                    <span>
+                      Rastros de: <span className="bold">"{tracksForDisplay.current.join(", ")}"</span>
+                    </span>
+                  )}
+                  {remainsForDisplay.current > 0 && (
+                    <span>
+                      Restos mortais com o equivalente a <span className="bold">{remainsForDisplay.current}</span> PO
+                    </span>
+                  )}
+                </>
               )}
             </>
           )}
@@ -638,71 +658,79 @@ function ModalTravelResults({
 
         {/* surroundings */}
         <aside className="details-wrapper df df-fd-c df-jc-fs">
-          <div className="df df-cg-5" style={{ zIndex: 1 }}>
-            {roomDetailsViews.map((d, index) => (
-              <div key={index} style={{ zIndex: -1 - index, marginLeft: d.marginLeft }}>
-                <SelectButton
-                  text={d.text}
-                  icon={d.icon}
-                  isDisabled={d.isDisabled}
-                  onClick={d.onClick}
-                  isSelected={d.isSelected}
-                  className={`details-views${d.className ? ` ${d.className}` : ""}`}
-                />
-              </div>
-            ))}
-          </div>
-          {locRoomDetails === ROOM_DETAILS_VIEWS.current.ROOM && (
-            <div className="df df-jc-fs df-fd-c df-rg-10 room-data">
-              {(materialRarityDisplay.current || isHazardous.current) && (
-                <div className="df surroundings">
-                  <div className="material">
-                    {materialRarityDisplay.current && <span>Material {materialRarityDisplay.current}</span>}
-                    {materialRarityDisplay.current && isHazardous.current && <span> - </span>}
-                    {isHazardous.current && <span>Interação Perigosa</span>}
-                  </div>
+          {roomDetailsViews && (
+            <div className="df df-cg-5" style={{ zIndex: 1 }}>
+              {roomDetailsViews.map((d, index) => (
+                <div key={index} style={{ zIndex: -1 - index, marginLeft: d.marginLeft }}>
+                  <SelectButton
+                    text={d.text}
+                    icon={d.icon}
+                    isDisabled={d.isDisabled}
+                    onClick={d.onClick}
+                    isSelected={d.isSelected}
+                    className={`details-views${d.className ? ` ${d.className}` : ""}`}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+          {isSafe ? (
+            <span>-</span>
+          ) : (
+            <>
+              {locRoomDetails === ROOM_DETAILS_VIEWS.current.ROOM && (
+                <div className="df df-jc-fs df-fd-c df-rg-10 room-data">
+                  {(materialRarityDisplay.current || isHazardous.current) && (
+                    <div className="df surroundings">
+                      <div className="material">
+                        {materialRarityDisplay.current && <span>Material {materialRarityDisplay.current}</span>}
+                        {materialRarityDisplay.current && isHazardous.current && <span> - </span>}
+                        {isHazardous.current && <span>Interação Perigosa</span>}
+                      </div>
+                    </div>
+                  )}
+
+                  {creaturesForDisplay.current.creatures.length > 0 ? (
+                    <>
+                      <div className="df df-cg-5">
+                        <span className={creaturesForDisplay.current.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
+                          {lc.GetNodeCreatureCondition(creaturesForDisplay.current.condition).display}
+                        </span>
+                        <Info contents={[{ text: "Combate não é obrigatório e pode ser ignorado por estar voando/escondido" }]} />
+                      </div>
+                      <div className="creature-list">
+                        {creaturesForDisplay.current.creatures.map((c) =>
+                          utils.createArrayFromInt(c.number).map((_, i) => {
+                            let contents = [{ text: c.creature.name }, { text: `${c.type} ${c.size}` }];
+
+                            if (c.creature.description) {
+                              contents.push({ text: "" });
+                              contents.push({ text: c.creature.description.slice(0, 200) + "..." });
+                            }
+
+                            return (
+                              <div className="df encounter-creature" onClick={() => {}} key={c.id + i}>
+                                <Info contents={contents} tooltipOnly={true} />
+                                <img
+                                  className="creature-avatar"
+                                  style={{
+                                    borderColor: c.color,
+                                  }}
+                                  src={c.creature.image}
+                                  alt="creature-avatar"
+                                />
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <span>-</span>
+                  )}
                 </div>
               )}
-
-              {creaturesForDisplay.current.creatures.length > 0 ? (
-                <>
-                  <div className="df df-cg-5">
-                    <span className={creaturesForDisplay.current.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
-                      {lc.GetNodeCreatureCondition(creaturesForDisplay.current.condition).display}
-                    </span>
-                    <Info contents={[{ text: "Combate não é obrigatório e pode ser ignorado por estar voando/escondido" }]} />
-                  </div>
-                  <div className="creature-list">
-                    {creaturesForDisplay.current.creatures.map((c) =>
-                      utils.createArrayFromInt(c.number).map((_, i) => {
-                        let contents = [{ text: c.creature.name }, { text: `${c.type} ${c.size}` }];
-
-                        if (c.creature.description) {
-                          contents.push({ text: "" });
-                          contents.push({ text: c.creature.description.slice(0, 200) + "..." });
-                        }
-
-                        return (
-                          <div className="df encounter-creature" onClick={() => {}} key={c.id + i}>
-                            <Info contents={contents} tooltipOnly={true} />
-                            <img
-                              className="creature-avatar"
-                              style={{
-                                borderColor: c.color,
-                              }}
-                              src={c.creature.image}
-                              alt="creature-avatar"
-                            />
-                          </div>
-                        );
-                      })
-                    )}
-                  </div>
-                </>
-              ) : (
-                <span>-</span>
-              )}
-            </div>
+            </>
           )}
         </aside>
       </main>
@@ -711,14 +739,31 @@ function ModalTravelResults({
 
       <footer>
         <div className="df df-jc-fs df-cg-20 df-f1">
-          <button className="df df-cg-5 button-simple" onClick={addAction}>
-            <i className="fas fa-plus"></i>
-            Adicionar
-          </button>
-          <button className="df df-cg-5 button-simple" onClick={editAction}>
-            <i className="fas fa-pen"></i>
-            Editar
-          </button>
+          {addAction && (
+            <button className="df df-cg-5 button-simple" onClick={addAction}>
+              <i className="fas fa-plus"></i>
+              Adicionar
+            </button>
+          )}
+          {editAction && (
+            <button className="df df-cg-5 button-simple" onClick={editAction}>
+              <i className="fas fa-pen"></i>
+              Editar
+            </button>
+          )}
+
+          {deleteNodeAction && (
+            <button className="df df-cg-5 button-simple" onClick={deleteNodeAction}>
+              <i className="fas fa-trash"></i>
+              Deletar
+            </button>
+          )}
+          {moveNodeAction && (
+            <button className="df df-cg-5 button-simple" onClick={moveNodeAction}>
+              <i className="fas fa-exchange-alt"></i>
+              Mover Marcação
+            </button>
+          )}
         </div>
         <aside className="footer-actions">
           <button className="button-simple" onClick={() => onClose()}>
@@ -726,10 +771,10 @@ function ModalTravelResults({
           </button>
         </aside>
         <aside className="footer-actions">
-          {HandleAddTravelNode && !isPointOfInterest && (
+          {HandleAddTravelNode && !isPointOfInterest && !isSafe && (
             <Button text="Marcar no Mapa" icon="fas fa-bookmark" onClick={HandleSave} isDisabled={!CheckSaveValid()} />
           )}
-          <Button text="Continuar e Salvar" onClick={HandleContinue} />
+          {mapMode === lc.MAP_MODES.TRAVEL && <Button text="Continuar e Salvar" onClick={HandleContinue} />}
         </aside>
       </footer>
     </Modal>
