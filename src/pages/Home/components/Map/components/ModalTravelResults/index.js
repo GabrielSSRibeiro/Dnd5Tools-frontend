@@ -563,7 +563,10 @@ function ModalTravelResults({
           </div>
           {locDetails === DETAILS_VIEWS.current.MARCH &&
             (isSafe ? (
-              <span>Grupo movido seguramente sem marcha</span>
+              <>
+                <span>Grupo movido seguramente sem marcha</span>
+                <span>Tempo não é passado e outros fatores não são afetados</span>
+              </>
             ) : (
               <>
                 {viewingCurrent ? (
