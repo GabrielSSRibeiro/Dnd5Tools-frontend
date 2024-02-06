@@ -272,17 +272,18 @@ function Map({
       const isSameNode = combatConfig.travel.currentNode.x === newCurrentNode.x && combatConfig.travel.currentNode.y === newCurrentNode.y;
       const hasMoved =
         newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && combatConfig.travel.currentNode.locId === newLocation._id ? false : !isSameNode;
+      const isSafe = mapMode !== lc.MAP_MODES.TRAVEL || (!canTravelToPoint && !isRest);
 
       setModal(
         <ModalTravelResults
-          isSafe={mapMode !== lc.MAP_MODES.TRAVEL || (!canTravelToPoint && !isRest)}
+          isSafe={isSafe}
           mapMode={mapMode}
           onClose={setModal}
           hasMoved={hasMoved}
           newCurrentNode={newCurrentNode}
           newLocation={utils.clone(newLocation)}
           exteriorLocation={nodeLoc && map[nodeLoc.exteriorLocationId] ? utils.clone(map[nodeLoc.exteriorLocationId].data) : null}
-          locHoverData={locHoverData}
+          locHoverData={isSafe ? null : locHoverData}
           travel={combatConfig.travel}
           restTime={restTime}
           isNightTime={isNightTime}
