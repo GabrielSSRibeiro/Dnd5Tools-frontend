@@ -1,6 +1,10 @@
 .Dungeon-container.exploration-container {
   border: 1px solid var(--black);
   width: 100%;
+  overflow: auto;
+  flex: 1;
+  min-height: 250px;
+  background-color: var(--white);
 }
 
 .Dungeon-container .dungeon-entrance {

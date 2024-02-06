@@ -622,18 +622,17 @@ function ModalTravelResults({
             <>
               <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={setName} />
               <h6>Encontrar Recursos: CD {findResourcesDifficulty.current}</h6>
+              {tracksForDisplay.current.length > 0 && (
+                <span>
+                  Rastros de: <span className="bold">"{tracksForDisplay.current.join(", ")}"</span>
+                </span>
+              )}
+              {remainsForDisplay.current > 0 && (
+                <span>
+                  Restos mortais com o equivalente a <span className="bold">{remainsForDisplay.current}</span> PO
+                </span>
+              )}
             </>
-          )}
-
-          {tracksForDisplay.current.length > 0 && (
-            <span>
-              Rastros de: <span className="bold">"{tracksForDisplay.current.join(", ")}"</span>
-            </span>
-          )}
-          {remainsForDisplay.current > 0 && (
-            <span>
-              Restos mortais com o equivalente a <span className="bold">{remainsForDisplay.current}</span> PO
-            </span>
           )}
         </aside>
 
@@ -654,7 +653,7 @@ function ModalTravelResults({
             ))}
           </div>
           {locRoomDetails === ROOM_DETAILS_VIEWS.current.ROOM && (
-            <>
+            <div className="df df-jc-fs df-fd-c df-rg-10 room-data">
               {(materialRarityDisplay.current || isHazardous.current) && (
                 <div className="df surroundings">
                   <div className="material">
@@ -703,7 +702,7 @@ function ModalTravelResults({
               ) : (
                 <span>-</span>
               )}
-            </>
+            </div>
           )}
         </aside>
       </main>

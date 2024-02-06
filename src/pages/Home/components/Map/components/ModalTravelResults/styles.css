@@ -6,14 +6,19 @@
 
 .ModalTravelResults-container .content {
   position: relative;
-  column-gap: 15px;
-  overflow: auto;
+  column-gap: 25px;
 }
 
 .ModalTravelResults-container .details-wrapper {
   height: 100%;
   width: 400px;
   row-gap: 10px;
+  max-height: 250px;
+}
+
+.ModalTravelResults-container .details-wrapper:first-child span {
+  white-space: break-spaces;
+  overflow: auto;
 }
 
 .ModalTravelResults-container .details-wrapper h3 {
@@ -33,6 +38,10 @@
 
 .ModalTravelResults-container .content .material span {
   font-size: 12px;
+}
+
+.ModalTravelResults-container .details-wrapper .room-data {
+  overflow: auto;
 }
 
 .ModalTravelResults-container .details-wrapper .surroundings {
