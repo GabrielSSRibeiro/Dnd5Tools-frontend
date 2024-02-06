@@ -2,7 +2,16 @@ import React from "react";
 
 import "./styles.css";
 
-function SelectButton({ isLarge = false, isSelected = false, isLong = false, text = "", onClick = () => {}, isDisabled = false, className = "" }) {
+function SelectButton({
+  isLarge = false,
+  isSelected = false,
+  isLong = false,
+  text = "",
+  icon = null,
+  onClick = () => {},
+  isDisabled = false,
+  className = "",
+}) {
   const containerWidth = 160;
   const containerHeight = 27;
   const containerLongExtra = 35;
@@ -84,6 +93,7 @@ function SelectButton({ isLarge = false, isSelected = false, isLong = false, tex
               className={`
           text-${isSelected ? "selected" : "default"} `}
             >
+              {icon && <i className={icon}></i>}
               {text}
             </h5>
           ) : (
@@ -91,6 +101,7 @@ function SelectButton({ isLarge = false, isSelected = false, isLong = false, tex
               className={`
           text-${isSelected ? "selected" : "default"} `}
             >
+              {icon && <i className={icon}></i>}
               {text}
             </h6>
           )}

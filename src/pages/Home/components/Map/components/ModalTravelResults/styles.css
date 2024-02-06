@@ -20,6 +20,13 @@
   line-height: 1;
 }
 
+.ModalTravelResults-container .details-wrapper .details-views.icon-view i {
+  margin-left: 100px;
+}
+.ModalTravelResults-container .details-wrapper .details-views.creatures-view h6 {
+  translate: 28% -112%;
+}
+
 .ModalTravelResults-container .content .movement span {
   font-size: 15px;
 }
@@ -51,7 +58,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 5px;
   flex-wrap: wrap;
 }
 

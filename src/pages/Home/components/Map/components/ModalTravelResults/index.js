@@ -8,11 +8,11 @@ import * as th from "../../../../../../helpers/treasureHelper";
 
 import Dungeon from "../Dungeon";
 import Info from "../../../../../../components/Info";
+import SelectButton from "../../../../../../components/SelectButton";
 import TextInput from "../../../../../../components/TextInput";
 import Button from "../../../../../../components/Button";
 import Modal from "../../../../../../components/Modal";
 import ModalExport from "../../../../../../components/ModalExport";
-import ModalWarning from "../../../../../../components/ModalWarning";
 
 import "./styles.css";
 
@@ -40,12 +40,26 @@ function ModalTravelResults({
   addAction,
   editAction,
 }) {
+  const DETAILS_VIEWS = useRef({
+    MARCH: 0,
+    FIRST_IMPRESSIONS: 1,
+    DETAILS: 2,
+    RUMORS: 3,
+    SECRETS: 4,
+    CREATURES: 5,
+  });
+  const ROOM_DETAILS_VIEWS = useRef({
+    ROOM: 0,
+    FIRST_IMPRESSIONS: 1,
+    SECRETS: 2,
+  });
   const defaultNotes = useRef("Nenhum ponto chama a atençao…");
   const viewingCurrent = useMemo(
     () => !hasMoved && travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY,
     [hasMoved, travel.pace]
   );
   const [location, setLocation] = useState(utils.clone(newLocation));
+  const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
   const isPointOfInterest = useMemo(() => newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST, [newLocation.size]);
   const element = useRef(
     HandleAddTravelNode && !isPointOfInterest && newLocation.traversal.elements
@@ -59,16 +73,19 @@ function ModalTravelResults({
       ch.GetDCValue(lc.GetResourceEasiness(newLocation.contexts.find((c) => c.isCurrent).resourceEasiness).difficult, level)
   );
   const materialRarity = useRef(
+    //if can save
     HandleAddTravelNode
-      ? (
-          element.current?.material.probability &&
-          utils.ProbabilityCheck(lc.GetElementMaterialFrequency(element.current.material.probability).probability)
-            ? element.current.material.rarity
-            : isPointOfInterest
-        )
+      ? //if can check
+        element.current?.material.probability &&
+        utils.ProbabilityCheck(lc.GetElementMaterialFrequency(element.current.material.probability).probability)
+        ? element.current.material.rarity
+        : //othewise, if point of interest
+        isPointOfInterest
         ? newLocation.interaction.rarity
-        : null
-      : newCurrentNode.materialRarity
+        : //otherwise null
+          null
+      : //otherwise current
+        newCurrentNode.materialRarity
   );
   const materialRarityDisplay = useRef(materialRarity.current ? cc.GetRarity(materialRarity.current).treasureDisplay : null);
   const isHazardous = useRef(
@@ -85,7 +102,7 @@ function ModalTravelResults({
       ? exteriorLocation
       : newLocation
   );
-  const currentContext = useRef(lh.GetCurrentContext(encounterLocation.current));
+  const encounterLocContext = useRef(lh.GetCurrentContext(encounterLocation.current));
   const worldContext = useRef(lh.GetCurrentContext(world));
   const shouldlAddWorldCreatures = useRef(world.name !== encounterLocation.current.name && worldContext.current.name !== lc.DEFAULT_CONTEXT_NAME);
   const [timePassed, setTimePassed] = useState(
@@ -94,7 +111,7 @@ function ModalTravelResults({
   const hasAnyCreature = useRef(encounterLocation.current.creatures.length > 0 || (shouldlAddWorldCreatures && world.creatures.length > 0));
   const isEncounter = useRef(
     hasAnyCreature.current &&
-      (ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(currentContext.current.hazardousness).probability, true) ||
+      (ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(encounterLocContext.current.hazardousness).probability, true) ||
         lh.HasCertainCreature(encounterLocation.current, GetCreatureCurrentRoutine) ||
         encounterProb === 1 ||
         utils.ProbabilityCheck(travel.cummulativeEncounterChance))
@@ -145,20 +162,14 @@ function ModalTravelResults({
       })
   );
   const [modal, setModal] = useState(null);
+  const [locDetails, setLocDetails] = useState(DETAILS_VIEWS.current.MARCH);
+  const [locRoomDetails, setLocRoomDetails] = useState(ROOM_DETAILS_VIEWS.current.ROOM);
   const [name, setName] = useState(
     newCurrentNode.name ??
       (isPointOfInterest
         ? lc.GetElementType(newLocation.interaction.type).display
         : element.current
-        ? `${lc.GetElementType(element.current.type).display}...`
-        : null)
-  );
-  const [notes, setNotes] = useState(
-    newCurrentNode.notes ??
-      (isPointOfInterest
-        ? null
-        : element.current
-        ? `…com modificaçao de "${utils.randomItemFromArray(lc.elementAlterations.map((a) => a.display))}"`
+        ? `${lc.GetElementType(element.current.type).display}...variando "${utils.randomItemFromArray(lc.elementAlterations.map((a) => a.display))}"`
         : defaultNotes.current)
   );
   const timeInUnits = useMemo(() => {
@@ -227,6 +238,97 @@ function ModalTravelResults({
 
     return newTemperature;
   }, [mapConditionLevels, newLocation.contexts, shoudUpdateConditions, travel.temperature]);
+  const detailsViews = useMemo(
+    () => [
+      {
+        text: "Marcha",
+        icon: null,
+        onClick: () => setLocDetails(DETAILS_VIEWS.current.MARCH),
+        isSelected: locDetails === DETAILS_VIEWS.current.MARCH,
+        isDisabled: false,
+        marginLeft: 0,
+        className: null,
+      },
+      {
+        text: null,
+        icon: "fas fa-eye",
+        onClick: () => setLocDetails(DETAILS_VIEWS.current.FIRST_IMPRESSIONS),
+        isSelected: locDetails === DETAILS_VIEWS.current.FIRST_IMPRESSIONS,
+        isDisabled: !currentContext.firstImpressions,
+        marginLeft: -130,
+        className: "icon-view",
+      },
+      {
+        text: null,
+        icon: "fas fa-info-circle",
+        onClick: () => setLocDetails(DETAILS_VIEWS.current.DETAILS),
+        isSelected: locDetails === DETAILS_VIEWS.current.DETAILS,
+        isDisabled: !currentContext.details,
+        marginLeft: -130,
+        className: "icon-view",
+      },
+      {
+        text: null,
+        icon: "fas fa-assistive-listening-systems",
+        onClick: () => setLocDetails(DETAILS_VIEWS.current.RUMORS),
+        isSelected: locDetails === DETAILS_VIEWS.current.RUMORS,
+        isDisabled: !currentContext.rumors,
+        marginLeft: -130,
+        className: "icon-view",
+      },
+      {
+        text: null,
+        icon: "fas fa-mask",
+        onClick: () => setLocDetails(DETAILS_VIEWS.current.SECRETS),
+        isSelected: locDetails === DETAILS_VIEWS.current.SECRETS,
+        isDisabled: !currentContext.secrets,
+        marginLeft: -130,
+        className: "icon-view",
+      },
+      {
+        text: "Criaturas",
+        icon: null,
+        onClick: () => setLocDetails(DETAILS_VIEWS.current.CREATURES),
+        isSelected: locDetails === DETAILS_VIEWS.current.CREATURES,
+        isDisabled: location.creatures.length === 0,
+        marginLeft: -80,
+        className: "creatures-view",
+      },
+    ],
+    [currentContext.details, currentContext.firstImpressions, currentContext.rumors, currentContext.secrets, locDetails, location.creatures.length]
+  );
+  const roomDetailsViews = useMemo(
+    () => [
+      {
+        text: isPointOfInterest ? "Sala" : "Arredores",
+        icon: null,
+        onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.ROOM),
+        isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.ROOM,
+        isDisabled: false,
+        marginLeft: 4,
+        className: null,
+      },
+      {
+        text: null,
+        icon: "fas fa-eye",
+        onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.FIRST_IMPRESSIONS),
+        isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.FIRST_IMPRESSIONS,
+        isDisabled: location.interaction.rooms.length === 0,
+        marginLeft: -128,
+        className: "icon-view",
+      },
+      {
+        text: null,
+        icon: "fas fa-mask",
+        onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.SECRETS),
+        isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.SECRETS,
+        isDisabled: location.interaction.rooms.length === 0,
+        marginLeft: -128,
+        className: "icon-view",
+      },
+    ],
+    [isPointOfInterest, locRoomDetails, location.interaction.rooms.length]
+  );
 
   function HandleContinue() {
     UpdateData();
@@ -280,7 +382,7 @@ function ModalTravelResults({
       .filter((c) => !c.population || c.population > 0)
       .map((c) => {
         const routine = encounterLocation.current.creatures.some((lc) => lc.creatureId === c.creatureId)
-          ? GetCreatureCurrentRoutine(c, currentContext.current)
+          ? GetCreatureCurrentRoutine(c, encounterLocContext.current)
           : GetCreatureCurrentRoutine(c, worldContext.current);
         if (!routine) {
           return null;
@@ -362,7 +464,7 @@ function ModalTravelResults({
         )
         ? lc.NODE_CREATURE_CONDITIONS.IMMINENT
         : lc.NODE_CREATURE_CONDITIONS.NEAR
-      : ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(currentContext.current.hazardousness).probability)
+      : ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(encounterLocContext.current.hazardousness).probability)
       ? lc.NODE_CREATURE_CONDITIONS.REMAINS
       : lc.NODE_CREATURE_CONDITIONS.TRACKS;
   }
@@ -380,7 +482,6 @@ function ModalTravelResults({
     }
 
     newCurrentNode.name = name;
-    newCurrentNode.notes = notes;
     newCurrentNode.findResourcesDifficulty = findResourcesDifficulty.current;
     newCurrentNode.materialRarity = materialRarity.current;
     newCurrentNode.isHazardous = isHazardous.current;
@@ -416,139 +517,114 @@ function ModalTravelResults({
   }
 
   function CheckSaveValid() {
-    if (!name) {
+    if (!name || name === defaultNotes.current) {
       return false;
     }
 
     return true;
   }
 
-  async function OpenModalExport(creature, onClose = () => setModal(null)) {
-    setModal(<ModalExport creature={creature} showDetails={true} onClose={onClose} />);
-  }
-
-  async function OpenModalDetails() {
-    const locContext = lh.GetCurrentContext(newLocation);
-
-    let messages = [];
-
-    if (locContext.details) {
-      messages.push(locContext.details);
-    }
-
-    if (locContext.rumors) {
-      messages.push("-------------------------------- Rumores");
-      messages.push(locContext.rumors);
-    }
-
-    if (locContext.secrets) {
-      messages.push("-------------------------------- Segredos");
-      messages.push(locContext.secrets);
-    }
-
-    if (messages.length > 0) {
-      setModal(
-        <ModalWarning
-          title={newLocation.name}
-          messages={messages}
-          actions={[
-            {
-              text: "Fechar",
-              click: () => setModal(null),
-            },
-          ]}
-        >
-          <div className="creature-list">
-            {newLocation.creatures.length > 0 &&
-              newLocation.creatures.map((ec) => {
-                const creature = creatures.find((c) => c._id === ec.creatureId);
-
-                return (
-                  <div className="df encounter-creature" onClick={() => OpenModalExport(creature, OpenModalDetails)} key={ec.creatureId}>
-                    <img
-                      className="creature-avatar"
-                      style={{
-                        borderColor: cc.GetRarity(creature.rarity).color,
-                      }}
-                      src={creature.image}
-                      alt="creature-avatar"
-                    />
-                  </div>
-                );
-              })}
-          </div>
-        </ModalWarning>
-      );
-    }
-  }
-
-  function HandleNameChange(newValue) {
-    if (notes === defaultNotes.current) {
-      setNotes(null);
-    }
-
-    setName(newValue);
+  async function OpenModalExport(creature) {
+    setModal(<ModalExport creature={creature} showDetails={true} onClose={() => setModal(null)} />);
   }
 
   return (
-    <Modal title="Resultado da Marcha" className="ModalTravelResults-container df">
+    <Modal title={newLocation.name} className="ModalTravelResults-container df">
       {modal}
       <main className="content df df-jc-c df-ai-fs df-f1">
         {/* world */}
         <aside className="details-wrapper df df-fd-c df-jc-fs">
-          <h3>Mundo</h3>
-          {viewingCurrent ? (
-            !isPointOfInterest && <span>-</span>
-          ) : (
-            <div className="movement">
-              {hasMoved ? (
-                <>
-                  <span className="bold">{locHoverData.distance.valueInUnits}</span>
-                  <span> percorrido(s) em </span>
-                  <span className="bold">{timeInUnits}</span>
-                </>
+          <div className="df df-cg-5" style={{ zIndex: 1 }}>
+            {detailsViews.map((d, index) => (
+              <div key={index} style={{ zIndex: -1 - index, marginLeft: d.marginLeft }}>
+                <SelectButton
+                  text={d.text}
+                  icon={d.icon}
+                  isDisabled={d.isDisabled}
+                  onClick={d.onClick}
+                  isSelected={d.isSelected}
+                  className={`details-views${d.className ? ` ${d.className}` : ""}`}
+                />
+              </div>
+            ))}
+          </div>
+          {locDetails === DETAILS_VIEWS.current.MARCH && (
+            <>
+              {viewingCurrent ? (
+                <span>-</span>
               ) : (
-                <span>{timeRestedDisplay}</span>
+                <div className="movement">
+                  {hasMoved ? (
+                    <>
+                      <span className="bold">{locHoverData.distance.valueInUnits}</span>
+                      <span> percorrido(s) em </span>
+                      <span className="bold">{timeInUnits}</span>
+                    </>
+                  ) : (
+                    <span>{timeRestedDisplay}</span>
+                  )}
+                </div>
               )}
+
+              {newPreciptation !== travel.precipitation && (
+                <h4>
+                  {newPreciptation === mapConditionLevels.current.length - 1
+                    ? "Tempo está precipitando"
+                    : newPreciptation < travel.precipitation
+                    ? "O tempo melhorou"
+                    : "O tempo piorou"}
+                </h4>
+              )}
+              {newTemperature !== travel.temperature && (
+                <h4>
+                  {newTemperature === mapConditionLevels.current.length - 1
+                    ? "Temperatura está intensa"
+                    : newTemperature < travel.temperature
+                    ? "A temperatura melhorou"
+                    : "A temperatura piorou"}
+                </h4>
+              )}
+            </>
+          )}
+          {locDetails === DETAILS_VIEWS.current.FIRST_IMPRESSIONS && <span> {currentContext.firstImpressions} </span>}
+          {locDetails === DETAILS_VIEWS.current.DETAILS && <span> {currentContext.details} </span>}
+          {locDetails === DETAILS_VIEWS.current.RUMORS && <span> {currentContext.rumors} </span>}
+          {locDetails === DETAILS_VIEWS.current.SECRETS && <span> {currentContext.secrets} </span>}
+          {locDetails === DETAILS_VIEWS.current.CREATURES && (
+            <div className="creature-list">
+              {newLocation.creatures.length > 0 &&
+                newLocation.creatures.map((ec) => {
+                  const creature = creatures.find((c) => c._id === ec.creatureId);
+
+                  return (
+                    <div className="df encounter-creature" onClick={() => OpenModalExport(creature)} key={ec.creatureId}>
+                      <Info contents={[{ text: creature.name }, { text: "..." }, { text: "[Exportar]", icon: "fas fa-upload" }]} tooltipOnly={true} />
+                      <img
+                        className="creature-avatar"
+                        style={{
+                          borderColor: cc.GetRarity(creature.rarity).color,
+                        }}
+                        src={creature.image}
+                        alt="creature-avatar"
+                      />
+                    </div>
+                  );
+                })}
             </div>
           )}
-
-          {newPreciptation !== travel.precipitation && (
-            <h4>
-              {newPreciptation === mapConditionLevels.current.length - 1
-                ? "Tempo está precipitando"
-                : newPreciptation < travel.precipitation
-                ? "O tempo melhorou"
-                : "O tempo piorou"}
-            </h4>
-          )}
-          {newTemperature !== travel.temperature && (
-            <h4>
-              {newTemperature === mapConditionLevels.current.length - 1
-                ? "Temperatura está intensa"
-                : newTemperature < travel.temperature
-                ? "A temperatura melhorou"
-                : "A temperatura piorou"}
-            </h4>
-          )}
-
-          {isPointOfInterest && <Dungeon location={location} setLocation={setLocation} creatures={creatures} isEdit={false} />}
         </aside>
 
         {/* loc */}
         <aside className="details-wrapper df df-fd-c df-jc-fs">
-          <button className="button-simple" onClick={OpenModalDetails}>
-            {newLocation.name}
-          </button>
-          <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={HandleNameChange} />
-          <TextInput placeholder="Notas..." value={notes} onChange={setNotes} />
-          {(materialRarityDisplay.current || isHazardous.current) && (
-            <div className="material">
-              {materialRarityDisplay.current && <span>Material {materialRarityDisplay.current}</span>}
-              {materialRarityDisplay.current && isHazardous.current && <span>, </span>}
-              {isHazardous.current && <span>Interação Perigosa</span>}
-            </div>
+          {isPointOfInterest ? (
+            <Dungeon location={location} setLocation={setLocation} creatures={creatures} isEdit={false} />
+          ) : (
+            <>
+              <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={setName} />
+              <h6>Encontrar Recursos: CD {findResourcesDifficulty.current}</h6>
+            </>
           )}
+
           {tracksForDisplay.current.length > 0 && (
             <span>
               Rastros de: <span className="bold">"{tracksForDisplay.current.join(", ")}"</span>
@@ -563,42 +639,70 @@ function ModalTravelResults({
 
         {/* surroundings */}
         <aside className="details-wrapper df df-fd-c df-jc-fs">
-          <div className="df surroundings">
-            <h3>Arredores</h3>
-            <Info contents={[{ text: "Combate não é obrigatório e pode ser ignorado por estar voando/escondido" }]} />
-          </div>
-          <h6>Encontrar Recursos: CD {findResourcesDifficulty.current}</h6>
-
-          {creaturesForDisplay.current.creatures.length > 0 && (
-            <>
-              <span className={creaturesForDisplay.current.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
-                {lc.GetNodeCreatureCondition(creaturesForDisplay.current.condition).display}
-              </span>
-              <div className="creature-list">
-                {creaturesForDisplay.current.creatures.map((c) => (
-                  <div className="df encounter-creature" onClick={() => OpenModalExport(c.creature)} key={c.id}>
-                    <Info
-                      contents={[
-                        { text: c.creature.name },
-                        { text: "" },
-                        { text: `${c.type} ${c.size}` },
-                        { text: "..." },
-                        { text: "[Exportar]", icon: "fas fa-upload" },
-                      ]}
-                      tooltipOnly={true}
-                    />
-                    <img
-                      className="creature-avatar"
-                      style={{
-                        borderColor: c.color,
-                      }}
-                      src={c.creature.image}
-                      alt="creature-avatar"
-                    />
-                    <span>x{c.number}</span>
-                  </div>
-                ))}
+          <div className="df df-cg-5" style={{ zIndex: 1 }}>
+            {roomDetailsViews.map((d, index) => (
+              <div key={index} style={{ zIndex: -1 - index, marginLeft: d.marginLeft }}>
+                <SelectButton
+                  text={d.text}
+                  icon={d.icon}
+                  isDisabled={d.isDisabled}
+                  onClick={d.onClick}
+                  isSelected={d.isSelected}
+                  className={`details-views${d.className ? ` ${d.className}` : ""}`}
+                />
               </div>
+            ))}
+          </div>
+          {locRoomDetails === ROOM_DETAILS_VIEWS.current.ROOM && (
+            <>
+              {(materialRarityDisplay.current || isHazardous.current) && (
+                <div className="df surroundings">
+                  <div className="material">
+                    {materialRarityDisplay.current && <span>Material {materialRarityDisplay.current}</span>}
+                    {materialRarityDisplay.current && isHazardous.current && <span> - </span>}
+                    {isHazardous.current && <span>Interação Perigosa</span>}
+                  </div>
+                </div>
+              )}
+
+              {creaturesForDisplay.current.creatures.length > 0 ? (
+                <>
+                  <div className="df df-cg-5">
+                    <span className={creaturesForDisplay.current.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
+                      {lc.GetNodeCreatureCondition(creaturesForDisplay.current.condition).display}
+                    </span>
+                    <Info contents={[{ text: "Combate não é obrigatório e pode ser ignorado por estar voando/escondido" }]} />
+                  </div>
+                  <div className="creature-list">
+                    {creaturesForDisplay.current.creatures.map((c) =>
+                      utils.createArrayFromInt(c.number).map((_, i) => {
+                        let contents = [{ text: c.creature.name }, { text: `${c.type} ${c.size}` }];
+
+                        if (c.creature.description) {
+                          contents.push({ text: "" });
+                          contents.push({ text: c.creature.description.slice(0, 200) + "..." });
+                        }
+
+                        return (
+                          <div className="df encounter-creature" onClick={() => {}} key={c.id + i}>
+                            <Info contents={contents} tooltipOnly={true} />
+                            <img
+                              className="creature-avatar"
+                              style={{
+                                borderColor: c.color,
+                              }}
+                              src={c.creature.image}
+                              alt="creature-avatar"
+                            />
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                </>
+              ) : (
+                <span>-</span>
+              )}
             </>
           )}
         </aside>

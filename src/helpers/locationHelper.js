@@ -9,7 +9,7 @@ export const GetNormalizedValue = (multiplier, pxInMScale) => {
 
 export const GetRadius = (location, pxInMScale) => {
   const PoIRadiusMultiplier = lc.POINT_OF_INTEREST_RADIUS / 300;
-  return GetNormalizedValue(location.radiusMultiplier ?? PoIRadiusMultiplier, pxInMScale);
+  return GetNormalizedValue(location.radiusMultiplier > 0 ? location.radiusMultiplier : PoIRadiusMultiplier, pxInMScale);
   // return location.radiusMultiplier ? GetNormalizedValue(location.radiusMultiplier, pxInMScale) : lc.POINT_OF_INTEREST_RADIUS;
 };
 
