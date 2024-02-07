@@ -201,6 +201,23 @@ function Map({
 
     return visionRadius;
   }, [combatConfig.travel.currentNode, combatConfig.travel.isOverlook, combatConfig.world, map, pxInMScale]);
+  const maxVisionRadius = useMemo(() => {
+    if (!combatConfig.travel.currentNode) {
+      return 0;
+    }
+
+    const baseVision = lc.BASE_VISION_IN_M / pxInMScale;
+    let visionRadius = baseVision;
+
+    const modifier = lc.GetPanoramicVision(lc.PANORAMIC_VISIONS.EXTREME).modifier;
+    visionRadius *= modifier;
+
+    if (combatConfig.travel.isOverlook) {
+      visionRadius += baseVision;
+    }
+
+    return visionRadius;
+  }, [combatConfig.travel.currentNode, combatConfig.travel.isOverlook, pxInMScale]);
   const canTravelToPoint = useMemo(() => locHoverData?.distance.isVisible, [locHoverData?.distance.isVisible]);
   const paceMove = useMemo(
     () => combatConfig.travel.pace !== lc.TRAVEL_PACES.REST && combatConfig.travel.pace !== lc.TRAVEL_PACES.ACTIVITY,
@@ -606,7 +623,7 @@ function Map({
 
   function HandleLocHover(e, location, node) {
     let distance = { centerOffset: GetCenterOffset(e) };
-    distance.isVisible = distance.centerOffset.value <= visionRadius / 8;
+    distance.isVisible = distance.centerOffset.value <= maxVisionRadius / 8;
 
     if (currentNode && mapMode === lc.MAP_MODES.TRAVEL) {
       const distanceInScale = Math.round(distance.centerOffset.value * pxInMScale);
@@ -1189,9 +1206,12 @@ function Map({
                   >
                     {n.isCurrent && (
                       <>
+                        {!isNightTime && (
+                          <div className="vision floating-details day-vision" style={{ width: visionRadius / 4, height: visionRadius / 4 }}></div>
+                        )}
                         <div
-                          className={`vision floating-details ${isNightTime ? "night-vision" : "day-vision"}`}
-                          style={{ width: visionRadius / 4, height: visionRadius / 4 }}
+                          className="vision floating-details night-vision"
+                          style={{ width: maxVisionRadius / 4, height: maxVisionRadius / 4 }}
                         ></div>
                         <div className="direction-arrow floating-details" style={arrowStyles}>
                           <div className="pointer"></div>

@@ -339,16 +339,22 @@ function ModalTravelResults({
 
   function HandleContinue() {
     if (isSafe) {
-      HandleSetCurrentNode(newCurrentNode);
-      travel.cummulativeEncounterChance = 0;
-      HandleSaveCombatConfig();
+      HandleSafeContinue();
     } else {
       UpdateData();
 
       HandleSetCurrentNode();
       UpdateLocData();
       HandleSaveCombatConfig();
+
+      onClose();
     }
+  }
+
+  function HandleSafeContinue() {
+    HandleSetCurrentNode(newCurrentNode);
+    travel.cummulativeEncounterChance = 0;
+    HandleSaveCombatConfig();
 
     onClose();
   }
@@ -764,7 +770,7 @@ function ModalTravelResults({
           {moveNodeAction && (
             <button className="df df-cg-5 button-simple" onClick={moveNodeAction}>
               <i className="fas fa-exchange-alt"></i>
-              Mover Marcação
+              Reposicionar
             </button>
           )}
         </div>
@@ -773,12 +779,15 @@ function ModalTravelResults({
             Cancelar
           </button>
         </aside>
-        <aside className="footer-actions">
-          {HandleAddTravelNode && !isPointOfInterest && !isSafe && (
-            <Button text="Marcar no Mapa" icon="fas fa-bookmark" onClick={HandleSave} isDisabled={!CheckSaveValid()} />
-          )}
-          {mapMode === lc.MAP_MODES.TRAVEL && <Button text="Continuar e Salvar" onClick={HandleContinue} />}
-        </aside>
+        {mapMode === lc.MAP_MODES.TRAVEL && (
+          <aside className="footer-actions">
+            {HandleAddTravelNode && !isPointOfInterest && !isSafe && (
+              <Button text="Marcar no Mapa" icon="fas fa-bookmark" onClick={HandleSave} isDisabled={!CheckSaveValid()} />
+            )}
+            {(HandleAddTravelNode || moveNodeAction) && <Button text="Mover seguro" icon="fas fa-location-arrow" onClick={HandleSafeContinue} />}
+            {!isSafe && <Button text="Continuar e Salvar" onClick={HandleContinue} />}
+          </aside>
+        )}
       </footer>
     </Modal>
   );
