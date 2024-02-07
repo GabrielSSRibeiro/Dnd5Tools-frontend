@@ -64,6 +64,21 @@ function ModalTravelResults({
   );
   const [location, setLocation] = useState(utils.clone(newLocation));
   const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
+  const allLocationCreatures = useMemo(() => {
+    let allLocationCreatures = newLocation.creatures;
+
+    newLocation.interaction?.rooms
+      .filter((r) => r)
+      .forEach((r) => {
+        r.creatures.forEach((c) => {
+          if (!allLocationCreatures.some((lc) => lc.creatureId === c.creatureId)) {
+            allLocationCreatures.push(c);
+          }
+        });
+      });
+
+    return newLocation.creatures;
+  }, [newLocation.creatures, newLocation.interaction]);
   const isPointOfInterest = useMemo(() => newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST, [newLocation.size]);
   const element = useRef(
     HandleAddTravelNode && !isPointOfInterest && !isSafe && newLocation.traversal.elements
@@ -294,12 +309,12 @@ function ModalTravelResults({
         icon: null,
         onClick: () => setLocDetails(DETAILS_VIEWS.current.CREATURES),
         isSelected: locDetails === DETAILS_VIEWS.current.CREATURES,
-        isDisabled: location.creatures.length === 0,
+        isDisabled: allLocationCreatures.length === 0,
         marginLeft: -80,
         className: "creatures-view",
       },
     ],
-    [currentContext.details, currentContext.firstImpressions, currentContext.rumors, currentContext.secrets, locDetails, location.creatures.length]
+    [allLocationCreatures.length, currentContext.details, currentContext.firstImpressions, currentContext.rumors, currentContext.secrets, locDetails]
   );
   const roomDetailsViews = useMemo(
     () =>
@@ -617,8 +632,8 @@ function ModalTravelResults({
           {locDetails === DETAILS_VIEWS.current.SECRETS && <span> {currentContext.secrets} </span>}
           {locDetails === DETAILS_VIEWS.current.CREATURES && (
             <div className="creature-list">
-              {newLocation.creatures.length > 0 &&
-                newLocation.creatures.map((ec) => {
+              {allLocationCreatures.length > 0 &&
+                allLocationCreatures.map((ec) => {
                   const creature = creatures.find((c) => c._id === ec.creatureId);
 
                   return (
@@ -640,7 +655,7 @@ function ModalTravelResults({
         </aside>
 
         {/* loc */}
-        <aside className="details-wrapper df df-fd-c df-jc-fs">
+        <aside className="details-wrapper df df-fd-c df-jc-fs" style={{ zIndex: 2 }}>
           {isPointOfInterest ? (
             <Dungeon location={location} setLocation={setLocation} creatures={creatures} isEdit={false} />
           ) : (
