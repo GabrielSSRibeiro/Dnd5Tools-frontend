@@ -7,6 +7,10 @@
   background-color: var(--white);
 }
 
+.Dungeon-container .selected-room {
+  box-shadow: 0 0 3px 5px rgba(0, 0, 0, 0.5);
+}
+
 .Dungeon-container .dungeon-entrance {
   background-color: var(--white);
   padding: 7px;

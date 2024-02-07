@@ -7,7 +7,7 @@ import ModalManageDungeonRoom from "./components/ModalManageDungeonRoom";
 
 import "./styles.css";
 
-function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, isEdit }) {
+function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, roomSelect, currentRoomIndex = null }) {
   const [modal, setModal] = useState(null);
   const [roomToSwap, setRoomToSwap] = useState(null);
   const [roomToolTip, setRoomToolTip] = useState(null);
@@ -16,17 +16,20 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, isEd
   const rooms = useMemo(() => {
     let rooms = location.interaction.rooms;
 
-    //if edit and last row is empty, remove row
+    //if not edit and last row is empty, remove row
     const lastRows = rooms.slice(-roomsPerRow.current);
-    if (!isEdit && lastRows.every((r) => !r)) {
+    if (roomSelect && lastRows.every((r) => !r)) {
       rooms.splice(rooms.length - roomsPerRow.current, roomsPerRow.current);
     }
 
     return rooms;
-  }, [isEdit, location.interaction.rooms]);
+  }, [roomSelect, location.interaction.rooms]);
 
   function OpenModalManageDungeonRoom(room, index, isEntrance) {
-    if (!isEdit) return;
+    if (roomSelect) {
+      roomSelect(index ?? -1);
+      return;
+    }
 
     if (roomToSwap != null) {
       [location.interaction.rooms[index], location.interaction.rooms[roomToSwap]] = [
@@ -123,7 +126,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, isEd
   }
 
   function CanBeNewRoom(i) {
-    return isEdit;
+    return !roomSelect;
     // const isLeftCorner = i % roomsPerRow.current === 0;
     // const isRightCorner = i !== 0 && i % (roomsPerRow.current - 1) === 0;
 
@@ -256,12 +259,12 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, isEd
   }
 
   return (
-    <div className={`Dungeon-container${isEdit ? "" : " exploration-container"}`}>
+    <div className={`Dungeon-container${!roomSelect ? "" : " exploration-container"}`}>
       {modal}
       {/* entrance */}
       <div className="location-row df dungeon-entrance">
         <button
-          className={`df room${location.interaction.isHazardous ? " danger" : ""}`}
+          className={`df room${location.interaction.isHazardous ? " danger" : ""}${currentRoomIndex === -1 ? " selected-room" : ""}`}
           onClick={() => OpenModalManageDungeonRoom(null, null, true)}
           disabled={roomToSwap != null}
         >
@@ -278,7 +281,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, isEd
         </button>
       </div>
       {/* rooms */}
-      {(isEdit || rooms.length > 0) && (
+      {(!roomSelect || rooms.length > 0) && (
         <div className="location-row df dungeon">
           {rooms.length > 0 ? (
             rooms.map((r, i) =>
@@ -468,8 +471,8 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, isEd
                   {/* room area */}
                   <button
                     className={`df room-area ${lc.GetRoomSize(r.size).cssClass}${r.isHazardous ? " danger" : ""}${
-                      roomToSwap != null ? " is-swapping-room" : ""
-                    }`}
+                      currentRoomIndex === i ? " selected-room" : ""
+                    }${roomToSwap != null ? " is-swapping-room" : ""}`}
                     onClick={() => OpenModalManageDungeonRoom(r, i)}
                     onMouseMove={(e) =>
                       setRoomToolTip(

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import * as utils from "../../../../../../utils";
 import * as cc from "../../../../../../constants/creatureConstants";
 import * as lc from "../../../../../../constants/locationConstants";
@@ -80,6 +80,28 @@ function ModalTravelResults({
     return newLocation.creatures;
   }, [newLocation.creatures, newLocation.interaction]);
   const isPointOfInterest = useMemo(() => newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST, [newLocation.size]);
+  const [roomIndex, SetRoomIndex] = useState(
+    newCurrentNode.roomIndex != null && location.interaction?.rooms.some((_, i) => i === newCurrentNode.roomIndex)
+      ? newCurrentNode.roomIndex
+      : isPointOfInterest
+      ? -1
+      : null
+  );
+  const room = useMemo(
+    () => (roomIndex != null ? (roomIndex === -1 ? location.interaction : location.interaction.rooms[roomIndex]) : null),
+    [location.interaction, roomIndex]
+  );
+  const roomDimentions = useMemo(() => {
+    if (!room || !room.size) return null;
+
+    const sizeInMeters = lc.GetRoomSize(room.size).meters;
+    if (sizeInMeters) {
+      return `${sizeInMeters}m x ${sizeInMeters}m x ${lc.GetRoomHeight(room.height).metersDisplay} (altura)`;
+    } else {
+      return `${lc.GetRoomHeight(room.height).metersDisplay} (altura)`;
+    }
+  }, [room]);
+
   const element = useRef(
     HandleAddTravelNode && !isPointOfInterest && !isSafe && newLocation.traversal.elements
       ? utils.randomItemFromArray(
@@ -100,7 +122,7 @@ function ModalTravelResults({
         ? element.current.material.rarity
         : //othewise, if point of interest
         isPointOfInterest
-        ? newLocation.interaction.rarity
+        ? room.rarity
         : //otherwise null
           null
       : //otherwise current
@@ -110,17 +132,18 @@ function ModalTravelResults({
   const isHazardous = useRef(
     newCurrentNode.isHazardous ??
       (isPointOfInterest
-        ? newLocation.interaction.isHazardous
+        ? room.isHazardous
         : element.current?.hazardousness && utils.ProbabilityCheck(lc.GetMaterialExtractionDifficulty(element.current.hazardousness).probability))
   );
   const encounterLocation = useRef(
     isPointOfInterest &&
       exteriorLocation &&
-      (hasMoved || newLocation.creatures.length === 0) &&
-      !lh.HasCertainCreature(newLocation, GetCreatureCurrentRoutine)
+      (hasMoved || location.creatures.length === 0) &&
+      !lh.HasCertainCreature(location, GetCreatureCurrentRoutine)
       ? exteriorLocation
-      : newLocation
+      : location
   );
+
   const encounterLocContext = useRef(lh.GetCurrentContext(encounterLocation.current));
   const worldContext = useRef(lh.GetCurrentContext(world));
   const shouldlAddWorldCreatures = useRef(world.name !== encounterLocation.current.name && worldContext.current.name !== lc.DEFAULT_CONTEXT_NAME);
@@ -130,6 +153,7 @@ function ModalTravelResults({
   const hasAnyCreature = useRef(encounterLocation.current.creatures.length > 0 || (shouldlAddWorldCreatures && world.creatures.length > 0));
   const isEncounter = useRef(
     hasAnyCreature.current &&
+      !(roomIndex > 0) &&
       (ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(encounterLocContext.current.hazardousness).probability, true) ||
         lh.HasCertainCreature(encounterLocation.current, GetCreatureCurrentRoutine) ||
         encounterProb === 1 ||
@@ -334,7 +358,7 @@ function ModalTravelResults({
               icon: "fas fa-eye",
               onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.FIRST_IMPRESSIONS),
               isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.FIRST_IMPRESSIONS,
-              isDisabled: true || location.interaction?.rooms.length === 0,
+              isDisabled: room == null || !room.firstImpressions,
               marginLeft: -128,
               className: "icon-view",
             },
@@ -343,13 +367,13 @@ function ModalTravelResults({
               icon: "fas fa-mask",
               onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.SECRETS),
               isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.SECRETS,
-              isDisabled: true || location.interaction?.rooms.length === 0,
+              isDisabled: room == null || !room.secrets,
               marginLeft: -128,
               className: "icon-view",
             },
           ]
         : null,
-    [isPointOfInterest, isSafe, locRoomDetails, location.interaction]
+    [isPointOfInterest, isSafe, locRoomDetails, location.interaction, room]
   );
 
   function HandleContinue() {
@@ -515,11 +539,12 @@ function ModalTravelResults({
       newCurrentNode.y = newCoordinates.y;
     }
 
-    newCurrentNode.name = name;
+    newCurrentNode.name = !isPointOfInterest ? name : null;
     newCurrentNode.findResourcesDifficulty = findResourcesDifficulty.current;
     newCurrentNode.materialRarity = materialRarity.current;
     newCurrentNode.isHazardous = isHazardous.current;
     newCurrentNode.creatures = nodeCreatures.current;
+    newCurrentNode.roomIndex = roomIndex;
 
     travel.schedule = newScheduleUpdated;
     if (shoudUpdateConditions) {
@@ -560,6 +585,11 @@ function ModalTravelResults({
 
   async function OpenModalExport(creature) {
     setModal(<ModalExport creature={creature} showDetails={true} onClose={() => setModal(null)} />);
+  }
+
+  function HandleSelectRoomIndex(index) {
+    SetRoomIndex(index);
+    setLocRoomDetails(ROOM_DETAILS_VIEWS.current.ROOM);
   }
 
   return (
@@ -657,7 +687,13 @@ function ModalTravelResults({
         {/* loc */}
         <aside className="details-wrapper df df-fd-c df-jc-fs" style={{ zIndex: 2 }}>
           {isPointOfInterest ? (
-            <Dungeon location={location} setLocation={setLocation} creatures={creatures} isEdit={false} />
+            <Dungeon
+              location={location}
+              setLocation={setLocation}
+              roomSelect={HandleSelectRoomIndex}
+              creatures={creatures}
+              currentRoomIndex={roomIndex}
+            />
           ) : (
             <>
               <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={setName} />
@@ -704,6 +740,8 @@ function ModalTravelResults({
             <>
               {locRoomDetails === ROOM_DETAILS_VIEWS.current.ROOM && (
                 <div className="df df-jc-fs df-fd-c df-rg-10 room-data">
+                  {room?.purpose && <span> {room.purpose} </span>}
+                  {roomDimentions && <span> {roomDimentions} </span>}
                   {(materialRarityDisplay.current || isHazardous.current) && (
                     <div className="df surroundings">
                       <div className="material">
@@ -754,6 +792,8 @@ function ModalTravelResults({
                   )}
                 </div>
               )}
+              {locRoomDetails === ROOM_DETAILS_VIEWS.current.FIRST_IMPRESSIONS && <span> {room.firstImpressions} </span>}
+              {locRoomDetails === ROOM_DETAILS_VIEWS.current.SECRETS && <span> {room.secrets} </span>}
             </>
           )}
         </aside>
