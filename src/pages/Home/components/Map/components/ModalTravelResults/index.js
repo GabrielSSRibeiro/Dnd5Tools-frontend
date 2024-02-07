@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import * as utils from "../../../../../../utils";
 import * as cc from "../../../../../../constants/creatureConstants";
 import * as lc from "../../../../../../constants/locationConstants";
