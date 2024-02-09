@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useCallback } from "react";
 import * as utils from "../../../../../../utils";
 import * as cc from "../../../../../../constants/creatureConstants";
 import * as lc from "../../../../../../constants/locationConstants";
@@ -44,6 +44,27 @@ function ModalTravelResults({
   deleteNodeAction,
   moveNodeAction,
 }) {
+  const [timePassed, setTimePassed] = useState(
+    travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY ? 0 : lc.GetRestTime(restTime).timeInMin
+  );
+  const ProbUpdatedByTravelTimeModCheck = useCallback(
+    (probability, updateTimePassed = false) => {
+      try {
+        const travelTimeMod = (hasMoved ? locHoverData.distance.travelTimeInMin : timePassed) / 60;
+        const check = utils.ProbabilityCheckWithRatio(probability, travelTimeMod);
+        const updatedTimePassed = Math.round(check.ratioChecked * 60);
+
+        if (updateTimePassed && updatedTimePassed !== timePassed) {
+          setTimePassed(updatedTimePassed);
+        }
+
+        return check.probabilityCheck;
+      } catch (error) {
+        return false;
+      }
+    },
+    [hasMoved, locHoverData.distance.travelTimeInMin, timePassed]
+  );
   const DETAILS_VIEWS = useRef({
     MARCH: 0,
     FIRST_IMPRESSIONS: 1,
@@ -62,7 +83,7 @@ function ModalTravelResults({
     () => !hasMoved && travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY,
     [hasMoved, travel.pace]
   );
-  const [location, setLocation] = useState(utils.clone(newLocation));
+  const [location, setLocation] = useState(GetModalLocation());
   const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
   const allLocationCreatures = useMemo(() => {
     let allLocationCreatures = newLocation.creatures;
@@ -154,9 +175,7 @@ function ModalTravelResults({
   const encounterLocContext = useRef(lh.GetCurrentContext(encounterLocation.current));
   const worldContext = useRef(lh.GetCurrentContext(world));
   const shouldlAddWorldCreatures = useRef(world.name !== encounterLocation.current.name && worldContext.current.name !== lc.DEFAULT_CONTEXT_NAME);
-  const [timePassed, setTimePassed] = useState(
-    travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY ? 0 : lc.GetRestTime(restTime).timeInMin
-  );
+
   const hasAnyCreature = useRef(encounterLocation.current.creatures.length > 0 || (shouldlAddWorldCreatures && world.creatures.length > 0));
   const isEncounter = useRef(
     hasAnyCreature.current &&
@@ -166,31 +185,158 @@ function ModalTravelResults({
         encounterProb === 1 ||
         utils.ProbabilityCheck(travel.cummulativeEncounterChance))
   );
-  const nodeCreatures = useRef(!viewingCurrent ? GetLocationCreatures() : newCurrentNode.creatures);
-  const creaturesForDisplay = useRef({
-    condition:
-      nodeCreatures.current.filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT).length >
-      nodeCreatures.current.filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR).length
-        ? lc.NODE_CREATURE_CONDITIONS.IMMINENT
-        : lc.NODE_CREATURE_CONDITIONS.NEAR,
-    creatures: nodeCreatures.current
-      .filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT || c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR)
-      .map((nc) => {
-        const creature = creatures.find((c) => c._id === nc.creatureId);
+  const nodeCreatures = useMemo(() => {
+    function GetCreatureCondition() {
+      const dayTimeImminentEncounterProb = 0.5;
+      const nightTimeImminentEncounterProb = 1;
 
-        return {
-          id: nc.creatureId,
-          color: cc.GetRarity(creature.rarity).color,
-          size: cc.GetSize(creature.size).display,
-          type: cc.GetType(creature.type).display,
-          number: nc.number,
-          creature,
-        };
-      }),
-  });
+      return isEncounter.current
+        ? utils.ProbabilityCheck(
+            Math.min(
+              isNightTime ? nightTimeImminentEncounterProb : dayTimeImminentEncounterProb * lc.GetTravelPace(travel.pace).imminentEncounterProbMod,
+              1
+            )
+          )
+          ? lc.NODE_CREATURE_CONDITIONS.IMMINENT
+          : lc.NODE_CREATURE_CONDITIONS.NEAR
+        : ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(encounterLocContext.current.hazardousness).probability)
+        ? lc.NODE_CREATURE_CONDITIONS.REMAINS
+        : lc.NODE_CREATURE_CONDITIONS.TRACKS;
+    }
+
+    function GetLocationCreatures() {
+      const differentCreatureProb = 0.5;
+
+      if (!hasAnyCreature.current) {
+        return [];
+      }
+
+      //add world context creatues
+      let allCreatures = shouldlAddWorldCreatures
+        ? [...encounterLocation.current.creatures, ...world.creatures]
+        : encounterLocation.current.creatures;
+
+      //setup
+      let locationCreatures = allCreatures
+        .filter((c) => !c.population || c.population > 0)
+        .map((c) => {
+          const routine = encounterLocation.current.creatures.some((lc) => lc.creatureId === c.creatureId)
+            ? GetCreatureCurrentRoutine(c, encounterLocContext.current)
+            : GetCreatureCurrentRoutine(c, worldContext.current);
+          if (!routine) {
+            return null;
+          }
+
+          const groupSize = lc.GetGroupSize(routine.groupSize);
+          const probability = lc.GetEncounterFrequency(routine.encounterFrequency).probability;
+
+          return {
+            creatureId: c.creatureId,
+            number: utils.randomIntFromInterval(groupSize.min, groupSize.max),
+            encounterFrequency: routine.encounterFrequency,
+            isEncounter: isEncounter.current ? utils.ProbabilityCheck(probability) : ProbUpdatedByTravelTimeModCheck(probability),
+          };
+        })
+        .filter((c) => c);
+
+      if (locationCreatures.length === 0) {
+        return [];
+      }
+
+      //add creatures
+      let possibleEncounterCreatures = locationCreatures.filter((c) => c.isEncounter);
+      if (possibleEncounterCreatures.length > 0) {
+        let addToEncounter = true;
+
+        let certainCreatures = possibleEncounterCreatures.filter((c) => c.encounterFrequency === lc.ENCOUNTER_FREQUENCIES.CERTAIN);
+        if (certainCreatures.length > 0) {
+          certainCreatures.forEach((c) => {
+            c.condition = GetCreatureCondition();
+          });
+
+          if (!utils.ProbabilityCheck(differentCreatureProb)) {
+            addToEncounter = false;
+          }
+        }
+
+        while (addToEncounter) {
+          let creatures = possibleEncounterCreatures.filter((c) => c.condition == null);
+          if (creatures.length > 0) {
+            utils.randomItemFromArray(creatures).condition = GetCreatureCondition();
+
+            if (!utils.ProbabilityCheck(differentCreatureProb)) {
+              addToEncounter = false;
+            }
+          } else {
+            addToEncounter = false;
+          }
+        }
+      }
+
+      //add 1 creature if needed
+      if (
+        isEncounter.current &&
+        !locationCreatures.some((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT || c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR)
+      ) {
+        locationCreatures.sort((a, b) => b.encounterFrequency - a.encounterFrequency);
+        const moreCommonCreatures = locationCreatures.filter((c) => c.encounterFrequency === locationCreatures[0].encounterFrequency);
+        utils.randomItemFromArray(moreCommonCreatures).condition = GetCreatureCondition();
+      }
+
+      return locationCreatures.map((c) => ({
+        creatureId: c.creatureId,
+        number: c.number,
+        condition: c.condition ?? lc.NODE_CREATURE_CONDITIONS.NONE,
+      }));
+    }
+
+    function GetRoomCreatures() {
+      let roomCreatures = room.currentCreatures;
+      return roomCreatures.map((c) => ({
+        creatureId: c.creatureId,
+        number: c.current,
+      }));
+    }
+
+    return viewingCurrent ? (roomIndex != null ? GetRoomCreatures() : newCurrentNode.creatures) : GetLocationCreatures();
+  }, [
+    GetCreatureCurrentRoutine,
+    ProbUpdatedByTravelTimeModCheck,
+    isNightTime,
+    newCurrentNode.creatures,
+    room.currentCreatures,
+    roomIndex,
+    travel.pace,
+    viewingCurrent,
+    world.creatures,
+  ]);
+  const creaturesForDisplay = useMemo(
+    () => ({
+      condition:
+        nodeCreatures.filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT).length >
+        nodeCreatures.filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR).length
+          ? lc.NODE_CREATURE_CONDITIONS.IMMINENT
+          : lc.NODE_CREATURE_CONDITIONS.NEAR,
+      creatures: nodeCreatures
+        .filter((c) => !c.condition || c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT || c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR)
+        .map((nc) => {
+          const creature = creatures.find((c) => c._id === nc.creatureId);
+
+          return {
+            id: nc.creatureId,
+            color: cc.GetRarity(creature.rarity).color,
+            size: cc.GetSize(creature.size).display,
+            type: cc.GetType(creature.type).display,
+            number: nc.number,
+            creature,
+          };
+        }),
+    }),
+    [creatures, nodeCreatures]
+  );
   const remainsForDisplay = useRef(
     Math.round(
-      nodeCreatures.current
+      nodeCreatures
         .filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.REMAINS)
         .map((nc) => {
           const creature = creatures.find((c) => c._id === nc.creatureId);
@@ -203,7 +349,7 @@ function ModalTravelResults({
     )
   );
   const tracksForDisplay = useRef(
-    nodeCreatures.current
+    nodeCreatures
       .filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.TRACKS)
       .map((nc) => {
         const creature = creatures.find((c) => c._id === nc.creatureId);
@@ -383,6 +529,41 @@ function ModalTravelResults({
     [isSafe, locRoomDetails, location.interaction, room]
   );
 
+  function GetBaseRoomCreatures(creatures, context) {
+    return creatures
+      .map((c) => {
+        const routine = GetCreatureCurrentRoutine(c, context);
+        if (!routine) return null;
+
+        const groupSize = lc.GetGroupSize(routine.groupSize);
+
+        return {
+          creatureId: c.creatureId,
+          current: utils.randomIntFromInterval(groupSize.min, groupSize.max),
+        };
+      })
+      .filter((c) => c);
+  }
+
+  function GetModalLocation() {
+    let modalLocation = utils.clone(newLocation);
+    if (!modalLocation.interaction) return modalLocation;
+
+    const modalLocContext = lh.GetCurrentContext(modalLocation);
+
+    if (!modalLocation.interaction.currentCreatures) {
+      modalLocation.interaction.currentCreatures = GetBaseRoomCreatures(modalLocation.creatures, modalLocContext);
+    }
+
+    modalLocation.interaction.rooms
+      .filter((r) => r && !r.currentCreatures)
+      .forEach((r) => {
+        r.currentCreatures = GetBaseRoomCreatures(r.creatures, modalLocContext);
+      });
+
+    return modalLocation;
+  }
+
   function HandleContinue() {
     if (isSafe) {
       HandleSafeContinue();
@@ -416,124 +597,6 @@ function ModalTravelResults({
     onClose();
   }
 
-  function ProbUpdatedByTravelTimeModCheck(probability, updateTimePassed = false) {
-    try {
-      const travelTimeMod = (hasMoved ? locHoverData.distance.travelTimeInMin : timePassed) / 60;
-      const check = utils.ProbabilityCheckWithRatio(probability, travelTimeMod);
-      const updatedTimePassed = Math.round(check.ratioChecked * 60);
-
-      if (updateTimePassed && updatedTimePassed !== timePassed) {
-        setTimePassed(updatedTimePassed);
-      }
-
-      return check.probabilityCheck;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  function GetLocationCreatures() {
-    const differentCreatureProb = 0.5;
-
-    if (!hasAnyCreature.current) {
-      return [];
-    }
-
-    //add world context creatues
-    let allCreatures = shouldlAddWorldCreatures ? [...encounterLocation.current.creatures, ...world.creatures] : encounterLocation.current.creatures;
-
-    //setup
-    let locationCreatures = allCreatures
-      .filter((c) => !c.population || c.population > 0)
-      .map((c) => {
-        const routine = encounterLocation.current.creatures.some((lc) => lc.creatureId === c.creatureId)
-          ? GetCreatureCurrentRoutine(c, encounterLocContext.current)
-          : GetCreatureCurrentRoutine(c, worldContext.current);
-        if (!routine) {
-          return null;
-        }
-
-        const groupSize = lc.GetGroupSize(routine.groupSize);
-        const probability = lc.GetEncounterFrequency(routine.encounterFrequency).probability;
-
-        return {
-          creatureId: c.creatureId,
-          number: utils.randomIntFromInterval(groupSize.min, groupSize.max),
-          encounterFrequency: routine.encounterFrequency,
-          isEncounter: isEncounter.current ? utils.ProbabilityCheck(probability) : ProbUpdatedByTravelTimeModCheck(probability),
-        };
-      })
-      .filter((c) => c);
-
-    if (locationCreatures.length === 0) {
-      return [];
-    }
-
-    //add creatures
-    let possibleEncounterCreatures = locationCreatures.filter((c) => c.isEncounter);
-    if (possibleEncounterCreatures.length > 0) {
-      let addToEncounter = true;
-
-      let certainCreatures = possibleEncounterCreatures.filter((c) => c.encounterFrequency === lc.ENCOUNTER_FREQUENCIES.CERTAIN);
-      if (certainCreatures.length > 0) {
-        certainCreatures.forEach((c) => {
-          c.condition = GetCreatureCondition();
-        });
-
-        if (!utils.ProbabilityCheck(differentCreatureProb)) {
-          addToEncounter = false;
-        }
-      }
-
-      while (addToEncounter) {
-        let creatures = possibleEncounterCreatures.filter((c) => c.condition == null);
-        if (creatures.length > 0) {
-          utils.randomItemFromArray(creatures).condition = GetCreatureCondition();
-
-          if (!utils.ProbabilityCheck(differentCreatureProb)) {
-            addToEncounter = false;
-          }
-        } else {
-          addToEncounter = false;
-        }
-      }
-    }
-
-    //add 1 creature if needed
-    if (
-      isEncounter.current &&
-      !locationCreatures.some((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT || c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR)
-    ) {
-      locationCreatures.sort((a, b) => b.encounterFrequency - a.encounterFrequency);
-      const moreCommonCreatures = locationCreatures.filter((c) => c.encounterFrequency === locationCreatures[0].encounterFrequency);
-      utils.randomItemFromArray(moreCommonCreatures).condition = GetCreatureCondition();
-    }
-
-    return locationCreatures.map((c) => ({
-      creatureId: c.creatureId,
-      number: c.number,
-      condition: c.condition ?? lc.NODE_CREATURE_CONDITIONS.NONE,
-    }));
-  }
-
-  function GetCreatureCondition() {
-    const dayTimeImminentEncounterProb = 0.5;
-    const nightTimeImminentEncounterProb = 1;
-
-    return isEncounter.current
-      ? utils.ProbabilityCheck(
-          Math.min(
-            isNightTime ? nightTimeImminentEncounterProb : dayTimeImminentEncounterProb * lc.GetTravelPace(travel.pace).imminentEncounterProbMod,
-            1
-          )
-        )
-        ? lc.NODE_CREATURE_CONDITIONS.IMMINENT
-        : lc.NODE_CREATURE_CONDITIONS.NEAR
-      : ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(encounterLocContext.current.hazardousness).probability)
-      ? lc.NODE_CREATURE_CONDITIONS.REMAINS
-      : lc.NODE_CREATURE_CONDITIONS.TRACKS;
-  }
-
   function UpdateData() {
     //for not oriented, travel is modified randomly by 10%
     if (!travel.oriented && travel.pace !== lc.TRAVEL_PACES.REST) {
@@ -550,7 +613,7 @@ function ModalTravelResults({
     newCurrentNode.findResourcesDifficulty = findResourcesDifficulty.current;
     newCurrentNode.materialRarity = materialRarity;
     newCurrentNode.isHazardous = isHazardous.current;
-    newCurrentNode.creatures = nodeCreatures.current;
+    newCurrentNode.creatures = nodeCreatures;
     newCurrentNode.roomIndex = roomIndex;
 
     travel.schedule = newScheduleUpdated;
@@ -760,16 +823,18 @@ function ModalTravelResults({
                     </div>
                   )}
 
-                  {creaturesForDisplay.current.creatures.length > 0 ? (
+                  {creaturesForDisplay.creatures.length > 0 ? (
                     <>
-                      <div className="df df-cg-5">
-                        <span className={creaturesForDisplay.current.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
-                          {lc.GetNodeCreatureCondition(creaturesForDisplay.current.condition).display}
-                        </span>
-                        <Info contents={[{ text: "Combate não é obrigatório e pode ser ignorado por estar voando/escondido" }]} />
-                      </div>
+                      {!isPointOfInterest && (
+                        <div className="df df-cg-5">
+                          <span className={creaturesForDisplay.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
+                            {lc.GetNodeCreatureCondition(creaturesForDisplay.condition).display}
+                          </span>
+                          <Info contents={[{ text: "Combate não é obrigatório e pode ser ignorado por estar voando/escondido" }]} />
+                        </div>
+                      )}
                       <div className="creature-list">
-                        {creaturesForDisplay.current.creatures.map((c) =>
+                        {creaturesForDisplay.creatures.map((c) =>
                           utils.createArrayFromInt(c.number).map((_, i) => {
                             let contents = [{ text: c.creature.name }, { text: `${c.type} ${c.size}` }];
 

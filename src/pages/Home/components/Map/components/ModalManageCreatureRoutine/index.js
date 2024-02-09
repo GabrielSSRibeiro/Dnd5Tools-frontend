@@ -18,7 +18,7 @@ function ModalManageCreatureRoutine({ routine, contexts, isPointOfInterest, onCl
           temperature: null,
           context: contexts[0],
           groupSize: lc.GROUP_SIZES.SOLO,
-          encounterFrequency: null,
+          encounterFrequency: lc.ENCOUNTER_FREQUENCIES.MEDIUM,
         }
   );
   const encounterFrequencies = useMemo(() => {
@@ -111,19 +111,17 @@ function ModalManageCreatureRoutine({ routine, contexts, isPointOfInterest, onCl
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />
-        {!isPointOfInterest && (
-          <Select
-            label={"Frequência de Encontro"}
-            info={[{ text: "Quando um encontro é sorteado para acontecer na localização, qual a chance de essa criatura aparecer" }]}
-            extraWidth={250}
-            value={tempRoutine}
-            valuePropertyPath="encounterFrequency"
-            onSelect={setTempRoutine}
-            options={encounterFrequencies}
-            optionDisplay={(o) => o.display}
-            optionValue={(o) => o.value}
-          />
-        )}
+        <Select
+          label={"Frequência de Encontro"}
+          info={[{ text: "Quando um encontro é sorteado para acontecer na localização, qual a chance de essa criatura aparecer" }]}
+          extraWidth={250}
+          value={tempRoutine}
+          valuePropertyPath="encounterFrequency"
+          onSelect={setTempRoutine}
+          options={encounterFrequencies}
+          optionDisplay={(o) => o.display}
+          optionValue={(o) => o.value}
+        />
       </div>
       <footer>
         <button className="button-simple" onClick={HandleCancel}>

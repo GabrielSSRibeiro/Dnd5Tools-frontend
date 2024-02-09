@@ -13,7 +13,7 @@
 
 .Dungeon-container .dungeon-entrance {
   background-color: var(--white);
-  padding: 7px;
+  padding: 10px 7px;
 }
 .Dungeon-container .dungeon-entrance > button {
   padding: 3px;
@@ -33,7 +33,7 @@
   flex-wrap: wrap;
   row-gap: 10px;
   column-gap: 10px;
-  padding: 0 7px 7px;
+  padding: 0 7px 10px;
 }
 
 .Dungeon-container .room-wrapper {
