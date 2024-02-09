@@ -174,7 +174,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
     // );
   }
 
-  function GetRoomTooltip(purpose, creatures, room = null) {
+  function GetRoomTooltip(purpose, roomCreatures, currentCreatures, room = null) {
     let roomTooltip = [];
 
     if (purpose) {
@@ -209,13 +209,11 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
       }
     }
 
-    if (creatures.length > 0) {
+    const roomCurrentCreatures = roomSelect ? currentCreatures : roomCreatures;
+    if (roomCurrentCreatures.length > 0) {
       roomTooltip.push({ text: "" });
-    }
-
-    if (creatures.length > 0) {
-      creatures.forEach((c) => {
-        roomTooltip.push(c);
+      roomCurrentCreatures.forEach((rc) => {
+        roomTooltip.push({ text: `${creatures.find((c) => c._id === rc.creatureId)?.name}${roomSelect ? ` (x${rc.current})` : ""}` });
       });
     }
 
@@ -270,10 +268,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
         >
           <Info
             className="dungeon-tooltip"
-            contents={GetRoomTooltip(
-              "Entrada",
-              location.creatures.map((lc) => ({ text: creatures.find((c) => c._id === lc.creatureId)?.name }))
-            )}
+            contents={GetRoomTooltip("Entrada", location.creatures, location.interaction.currentCreatures)}
             tooltipOnly={true}
           />
           <div className="df entrance-contents">
@@ -476,15 +471,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
                       currentRoomIndex === i ? " selected-room" : ""
                     }${roomToSwap != null ? " is-swapping-room" : ""}`}
                     onClick={() => OpenModalManageDungeonRoom(r, i)}
-                    onMouseMove={(e) =>
-                      setRoomToolTip(
-                        GetRoomTooltip(
-                          r.purpose,
-                          r.creatures.map((rc) => ({ text: creatures.find((c) => c._id === rc.creatureId)?.name })),
-                          r
-                        )
-                      )
-                    }
+                    onMouseMove={(e) => setRoomToolTip(GetRoomTooltip(r.purpose, r.creatures, r.currentCreatures, r))}
                     onMouseLeave={(e) => setRoomToolTip(null)}
                   >
                     <Info className="dungeon-tooltip room-tooltip" contents={roomToolTip} tooltipOnly={true} />
