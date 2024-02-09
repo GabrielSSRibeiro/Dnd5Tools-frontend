@@ -796,7 +796,7 @@ function ModalTravelResults({
                       </div>
                     </>
                   ) : (
-                    !room && !materialRarityDisplay && !isHazardous.current && <span>-</span>
+                    !room?.purpose && !roomDimentions && !materialRarityDisplay && !isHazardous.current && <span>-</span>
                   )}
                 </div>
               )}
