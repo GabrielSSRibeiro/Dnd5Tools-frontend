@@ -276,8 +276,10 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
             )}
             tooltipOnly={true}
           />
-          <i className={`fas fa-dungeon ${location.creatures.length > 0 ? "creatures" : ""}`}></i>
-          {location.interaction.rarity && <i className={`fas fa-gem treasure`}></i>}
+          <div className="df entrance-contents">
+            <i className={`fas fa-dungeon ${location.creatures.length > 0 ? "creatures" : ""}`}></i>
+            {location.interaction.rarity && <i className={`fas fa-gem treasure`}></i>}
+          </div>
         </button>
       </div>
       {/* rooms */}

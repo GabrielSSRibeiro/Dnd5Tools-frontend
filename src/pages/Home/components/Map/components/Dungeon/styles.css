@@ -24,6 +24,10 @@
   font-size: 18px;
 }
 
+.Dungeon-container .dungeon-entrance > button .entrance-contents {
+  pointer-events: none;
+}
+
 .Dungeon-container .dungeon {
   background-color: var(--white);
   flex-wrap: wrap;

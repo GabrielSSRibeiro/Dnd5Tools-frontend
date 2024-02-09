@@ -101,6 +101,11 @@ function ModalTravelResults({
       return `${lc.GetRoomHeight(room.height).metersDisplay} (altura)`;
     }
   }, [room]);
+  const roomType = useMemo(() => {
+    if (!room || !room.size) return null;
+
+    return `${lc.GetElementType(room.type).display}${room.isHazardous ? " (perigoso)" : ""}`;
+  }, [room]);
 
   const element = useRef(
     HandleAddTravelNode && !isPointOfInterest && !isSafe && newLocation.traversal.elements
@@ -113,22 +118,24 @@ function ModalTravelResults({
     newCurrentNode.findResourcesDifficulty ??
       ch.GetDCValue(lc.GetResourceEasiness(newLocation.contexts.find((c) => c.isCurrent).resourceEasiness).difficult, level)
   );
-  const materialRarity = useRef(
-    //if can save
-    HandleAddTravelNode
-      ? //if can check
-        element.current?.material.probability &&
-        utils.ProbabilityCheck(lc.GetElementMaterialFrequency(element.current.material.probability).probability)
-        ? element.current.material.rarity
-        : //othewise, if point of interest
-        isPointOfInterest
-        ? room.rarity
-        : //otherwise null
-          null
-      : //otherwise current
-        newCurrentNode.materialRarity
+  const materialRarity = useMemo(
+    () =>
+      //if can save
+      HandleAddTravelNode
+        ? //if can check
+          element.current?.material.probability &&
+          utils.ProbabilityCheck(lc.GetElementMaterialFrequency(element.current.material.probability).probability)
+          ? element.current.material.rarity
+          : //othewise, if point of interest
+          isPointOfInterest
+          ? room?.rarity
+          : //otherwise null
+            null
+        : //otherwise current
+          newCurrentNode.materialRarity,
+    [HandleAddTravelNode, isPointOfInterest, newCurrentNode.materialRarity, room]
   );
-  const materialRarityDisplay = useRef(materialRarity.current ? cc.GetRarity(materialRarity.current).treasureDisplay : null);
+  const materialRarityDisplay = useMemo(() => (materialRarity ? cc.GetRarity(materialRarity).treasureDisplay : null), [materialRarity]);
   const isHazardous = useRef(
     newCurrentNode.isHazardous ??
       (isPointOfInterest
@@ -345,7 +352,7 @@ function ModalTravelResults({
       location.interaction
         ? [
             {
-              text: isPointOfInterest ? "Sala" : "Arredores",
+              text: "Área",
               icon: null,
               onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.ROOM),
               isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.ROOM,
@@ -373,7 +380,7 @@ function ModalTravelResults({
             },
           ]
         : null,
-    [isPointOfInterest, isSafe, locRoomDetails, location.interaction, room]
+    [isSafe, locRoomDetails, location.interaction, room]
   );
 
   function HandleContinue() {
@@ -541,7 +548,7 @@ function ModalTravelResults({
 
     newCurrentNode.name = !isPointOfInterest ? name : null;
     newCurrentNode.findResourcesDifficulty = findResourcesDifficulty.current;
-    newCurrentNode.materialRarity = materialRarity.current;
+    newCurrentNode.materialRarity = materialRarity;
     newCurrentNode.isHazardous = isHazardous.current;
     newCurrentNode.creatures = nodeCreatures.current;
     newCurrentNode.roomIndex = roomIndex;
@@ -742,11 +749,12 @@ function ModalTravelResults({
                 <div className="df df-jc-fs df-fd-c df-rg-10 room-data">
                   {room?.purpose && <span> {room.purpose} </span>}
                   {roomDimentions && <span> {roomDimentions} </span>}
-                  {(materialRarityDisplay.current || isHazardous.current) && (
+                  {roomType && <span> {roomType} </span>}
+                  {(materialRarityDisplay || isHazardous.current) && (
                     <div className="df surroundings">
                       <div className="material">
-                        {materialRarityDisplay.current && <span>Material {materialRarityDisplay.current}</span>}
-                        {materialRarityDisplay.current && isHazardous.current && <span> - </span>}
+                        {materialRarityDisplay && <span>Material {materialRarityDisplay}</span>}
+                        {materialRarityDisplay && isHazardous.current && <span> - </span>}
                         {isHazardous.current && <span>Interação Perigosa</span>}
                       </div>
                     </div>
@@ -788,7 +796,7 @@ function ModalTravelResults({
                       </div>
                     </>
                   ) : (
-                    <span>-</span>
+                    !room && !materialRarityDisplay && !isHazardous.current && <span>-</span>
                   )}
                 </div>
               )}
