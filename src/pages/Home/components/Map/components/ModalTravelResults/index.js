@@ -304,7 +304,7 @@ function ModalTravelResults({
     ProbUpdatedByTravelTimeModCheck,
     isNightTime,
     newCurrentNode.creatures,
-    room.currentCreatures,
+    room,
     roomIndex,
     travel.pace,
     viewingCurrent,

@@ -174,7 +174,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
     // );
   }
 
-  function GetRoomTooltip(purpose, roomCreatures, currentCreatures, room = null) {
+  function GetRoomTooltip(purpose, roomCurrentCreatures, room = null) {
     let roomTooltip = [];
 
     if (purpose) {
@@ -209,7 +209,6 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
       }
     }
 
-    const roomCurrentCreatures = roomSelect ? currentCreatures : roomCreatures;
     if (roomCurrentCreatures.length > 0) {
       roomTooltip.push({ text: "" });
       roomCurrentCreatures.forEach((rc) => {
@@ -268,7 +267,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
         >
           <Info
             className="dungeon-tooltip"
-            contents={GetRoomTooltip("Entrada", location.creatures, location.interaction.currentCreatures)}
+            contents={GetRoomTooltip("Entrada", roomSelect ? location.interaction.currentCreatures : location.creatures)}
             tooltipOnly={true}
           />
           <div className="df entrance-contents">
@@ -281,8 +280,8 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
       {(!roomSelect || rooms.length > 0) && (
         <div className="location-row df dungeon">
           {rooms.length > 0 ? (
-            rooms.map((r, i) =>
-              r ? (
+            rooms.map((r, i) => {
+              return r ? (
                 <div className="df room dungeon-room" key={i}>
                   {/* room connections */}
                   <Info className="dungeon-tooltip room-connection-tooltip" contents={roomToolTip} tooltipOnly={true}>
@@ -471,7 +470,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
                       currentRoomIndex === i ? " selected-room" : ""
                     }${roomToSwap != null ? " is-swapping-room" : ""}`}
                     onClick={() => OpenModalManageDungeonRoom(r, i)}
-                    onMouseMove={(e) => setRoomToolTip(GetRoomTooltip(r.purpose, r.creatures, r.currentCreatures, r))}
+                    onMouseMove={(e) => setRoomToolTip(GetRoomTooltip(r.purpose, roomSelect ? r.currentCreatures : r.creatures, r))}
                     onMouseLeave={(e) => setRoomToolTip(null)}
                   >
                     <Info className="dungeon-tooltip room-tooltip" contents={roomToolTip} tooltipOnly={true} />
@@ -609,8 +608,8 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
                     <i className="fas fa-plus"></i>
                   </button>
                 </div>
-              )
-            )
+              );
+            })
           ) : (
             <button className="df dungeon-room" onClick={() => OpenModalManageDungeonRoom()}>
               <i className="fas fa-plus"></i>
