@@ -44,6 +44,13 @@
   overflow: auto;
 }
 
+.ModalTravelResults-container .details-wrapper .room-data .kill {
+  color: var(--offensiveColor);
+}
+.ModalTravelResults-container .details-wrapper .room-data .save {
+  color: var(--defensiveColor);
+}
+
 .ModalTravelResults-container .details-wrapper .surroundings {
   column-gap: 10px;
 }
@@ -74,6 +81,10 @@
 .ModalTravelResults-container .creature-list .encounter-creature {
   position: relative;
   cursor: pointer;
+}
+
+.ModalTravelResults-container .creature-list .selected-creature {
+  box-shadow: 0 0 2px 3px rgba(0, 0, 0, 0.5);
 }
 
 .ModalTravelResults-container .creature-list .creature-avatar {

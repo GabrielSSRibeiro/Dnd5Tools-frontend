@@ -63,7 +63,7 @@ function ModalTravelResults({
         return false;
       }
     },
-    [hasMoved, locHoverData.distance.travelTimeInMin, timePassed]
+    [hasMoved, locHoverData, timePassed]
   );
   const DETAILS_VIEWS = useRef({
     MARCH: 0,
@@ -662,6 +662,10 @@ function ModalTravelResults({
     setLocRoomDetails(ROOM_DETAILS_VIEWS.current.ROOM);
   }
 
+  function ToggleCreatureSelection(creature) {
+    creature.isSelected = !creature.isSelected;
+  }
+
   return (
     <Modal title={newLocation.name} className="ModalTravelResults-container df">
       {modal}
@@ -825,7 +829,19 @@ function ModalTravelResults({
 
                   {creaturesForDisplay.creatures.length > 0 ? (
                     <>
-                      {!isPointOfInterest && (
+                      {isPointOfInterest ? (
+                        <div className="df df-cg-25">
+                          <button title="Matar" className={`button-simple kill${" element-disabled"}`} onClick={() => {}} disabled={true}>
+                            <i className="fas fa-skull"></i>
+                          </button>
+                          <button title="Salvar" className={`button-simple save${" element-disabled"}`} onClick={() => {}} disabled={true}>
+                            <i className="fas fa-heart"></i>
+                          </button>
+                          <button title="Mover" className={`button-simple move${" element-disabled"}`} onClick={() => {}} disabled={true}>
+                            <i className="fas fa-exchange-alt"></i>
+                          </button>
+                        </div>
+                      ) : (
                         <div className="df df-cg-5">
                           <span className={creaturesForDisplay.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
                             {lc.GetNodeCreatureCondition(creaturesForDisplay.condition).display}
@@ -833,6 +849,7 @@ function ModalTravelResults({
                           <Info contents={[{ text: "Combate não é obrigatório e pode ser ignorado por estar voando/escondido" }]} />
                         </div>
                       )}
+                      {/* creatures */}
                       <div className="creature-list">
                         {creaturesForDisplay.creatures.map((c) =>
                           utils.createArrayFromInt(c.number).map((_, i) => {
@@ -844,10 +861,10 @@ function ModalTravelResults({
                             }
 
                             return (
-                              <div className="df encounter-creature" onClick={() => {}} key={c.id + i}>
+                              <div className="df encounter-creature" onClick={() => ToggleCreatureSelection(c)} key={c.id + i}>
                                 <Info contents={contents} tooltipOnly={true} />
                                 <img
-                                  className="creature-avatar"
+                                  className={`creature-avatar${c.isSelected ? " selected-creature" : ""}`}
                                   style={{
                                     borderColor: c.color,
                                   }}
