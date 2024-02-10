@@ -296,8 +296,11 @@ function ModalTravelResults({
       return nodeCreatures;
     }
 
+    if (!location) return [];
+
     return roomIndex != null ? room.currentCreatures : viewingCurrent ? newCurrentNode.creatures : GetNodeCreatures();
   }, [
+    location,
     GetCreatureCurrentRoutine,
     ProbUpdatedByTravelTimeModCheck,
     isNightTime,
@@ -672,8 +675,29 @@ function ModalTravelResults({
   }
 
   function HandleSelectRoomIndex(index) {
-    SetRoomIndex(index);
-    setLocRoomDetails(ROOM_DETAILS_VIEWS.current.ROOM);
+    if (hasSelectedCreature) {
+      let creaturesToMove = [];
+      room.currentCreatures = room.currentCreatures.filter((cc) => {
+        if (cc.isSelected) {
+          cc.isSelected = false;
+          creaturesToMove.push(cc);
+          return false;
+        }
+
+        return true;
+      });
+
+      //add to new room
+      if (index === -1) {
+        location.interaction.currentCreatures.push(...creaturesToMove);
+      } else {
+        location.interaction.rooms[index].currentCreatures.push(...creaturesToMove);
+      }
+      setLocation({ ...location });
+    } else {
+      SetRoomIndex(index);
+      setLocRoomDetails(ROOM_DETAILS_VIEWS.current.ROOM);
+    }
   }
 
   function ToggleCreatureSelection(index) {
@@ -686,15 +710,6 @@ function ModalTravelResults({
       .filter((cc) => cc.isSelected)
       .forEach((cc) => {
         cc.isDead = isDead;
-        cc.isSelected = false;
-      });
-    setLocation({ ...location });
-  }
-
-  function MoveCreatures() {
-    room.currentCreatures
-      .filter((cc) => cc.isSelected)
-      .forEach((cc) => {
         cc.isSelected = false;
       });
     setLocation({ ...location });
@@ -801,6 +816,7 @@ function ModalTravelResults({
               roomSelect={HandleSelectRoomIndex}
               creatures={creatures}
               currentRoomIndex={roomIndex}
+              isMovingCreatures={hasSelectedCreature}
             />
           ) : (
             <>
@@ -864,8 +880,8 @@ function ModalTravelResults({
                   {finalCreatures.creatures.length > 0 ? (
                     <>
                       {/* label and actions */}
-                      {isPointOfInterest ? (
-                        <fieldset className="df df-cg-25" disabled={!hasSelectedCreature}>
+                      <div className="df df-cg-5">
+                        <fieldset className="df df-cg-10" disabled={!hasSelectedCreature}>
                           <button
                             title="Matar"
                             className={`button-simple kill${!hasSelectedCreature ? " element-disabled" : ""}`}
@@ -880,22 +896,17 @@ function ModalTravelResults({
                           >
                             <i className="fas fa-heart"></i>
                           </button>
-                          <button
-                            title="Mover"
-                            className={`button-simple move${!hasSelectedCreature ? " element-disabled" : ""}`}
-                            onClick={MoveCreatures}
-                          >
-                            <i className="fas fa-exchange-alt"></i>
-                          </button>
                         </fieldset>
-                      ) : (
-                        <div className="df df-cg-5">
+                        <span> - </span>
+                        {isPointOfInterest ? (
+                          <span className="imminent"> {lc.GetNodeCreatureCondition(lc.NODE_CREATURE_CONDITIONS.IMMINENT).display}</span>
+                        ) : (
                           <span className={finalCreatures.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
                             {lc.GetNodeCreatureCondition(finalCreatures.condition).display}
                           </span>
-                          <Info contents={[{ text: "Combate não é obrigatório e pode ser ignorado por estar voando/escondido" }]} />
-                        </div>
-                      )}
+                        )}
+                        <Info contents={[{ text: "Combate não é obrigatório e pode ser evitado" }]} />
+                      </div>
                       {/* list */}
                       <div className="creature-list">
                         {finalCreatures.creatures.map((c, index) => {

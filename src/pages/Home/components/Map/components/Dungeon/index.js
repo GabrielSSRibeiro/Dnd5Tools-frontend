@@ -8,7 +8,7 @@ import ModalManageDungeonRoom from "./components/ModalManageDungeonRoom";
 
 import "./styles.css";
 
-function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, roomSelect, currentRoomIndex = null }) {
+function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, roomSelect, currentRoomIndex = null, isMovingCreatures = false }) {
   const [modal, setModal] = useState(null);
   const [roomToSwap, setRoomToSwap] = useState(null);
   const [roomToolTip, setRoomToolTip] = useState(null);
@@ -25,7 +25,10 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
 
     return rooms;
   }, [roomSelect, location.interaction.rooms]);
-
+  const entranceCreatures = useMemo(
+    () => (roomSelect ? location.interaction.currentCreatures : location.creatures),
+    [location.creatures, location.interaction.currentCreatures, roomSelect]
+  );
   function OpenModalManageDungeonRoom(room, index, isEntrance) {
     if (roomSelect) {
       roomSelect(index ?? -1);
@@ -260,23 +263,27 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
     setLocation({ ...location });
   }
 
+  function GetRoomCreatures(r) {
+    if (!r) return null;
+
+    return roomSelect ? r.currentCreatures : r.creatures;
+  }
+
   return (
     <div className={`Dungeon-container${!roomSelect ? "" : " exploration-container"}`}>
       {modal}
       {/* entrance */}
       <div className="location-row df dungeon-entrance">
         <button
-          className={`df room${location.interaction.isHazardous ? " danger" : ""}${currentRoomIndex === -1 ? " selected-room" : ""}`}
+          className={`df room${location.interaction.isHazardous ? " danger" : ""}${
+            currentRoomIndex === -1 && !isMovingCreatures ? " selected-room" : ""
+          }${isMovingCreatures ? " is-swapping-room" : ""}`}
           onClick={() => OpenModalManageDungeonRoom(null, null, true)}
           disabled={roomToSwap != null}
         >
-          <Info
-            className="dungeon-tooltip"
-            contents={GetRoomTooltip("Entrada", roomSelect ? location.interaction.currentCreatures : location.creatures)}
-            tooltipOnly={true}
-          />
+          <Info className="dungeon-tooltip" contents={GetRoomTooltip("Entrada", entranceCreatures)} tooltipOnly={true} />
           <div className="df entrance-contents">
-            <i className={`fas fa-dungeon ${location.creatures.length > 0 ? "creatures" : ""}`}></i>
+            <i className={`fas fa-dungeon ${entranceCreatures.length > 0 ? "creatures" : ""}`}></i>
             {location.interaction.rarity && <i className={`fas fa-gem treasure`}></i>}
           </div>
         </button>
@@ -286,6 +293,8 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
         <div className="location-row df dungeon">
           {rooms.length > 0 ? (
             rooms.map((r, i) => {
+              const roomCreatures = GetRoomCreatures(r);
+
               return r ? (
                 <div className="df room dungeon-room" key={i}>
                   {/* room connections */}
@@ -473,9 +482,9 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
                   <button
                     className={`df room-area ${lc.GetRoomSize(r.size).cssClass}${r.isHazardous ? " danger" : ""}${
                       currentRoomIndex === i ? " selected-room" : ""
-                    }${roomToSwap != null ? " is-swapping-room" : ""}`}
+                    }${roomToSwap != null || isMovingCreatures ? " is-swapping-room" : ""}`}
                     onClick={() => OpenModalManageDungeonRoom(r, i)}
-                    onMouseMove={(e) => setRoomToolTip(GetRoomTooltip(r.purpose, roomSelect ? r.currentCreatures : r.creatures, r))}
+                    onMouseMove={(e) => setRoomToolTip(GetRoomTooltip(r.purpose, roomCreatures, r))}
                     onMouseLeave={(e) => setRoomToolTip(null)}
                   >
                     <Info className="dungeon-tooltip room-tooltip" contents={roomToolTip} tooltipOnly={true} />
@@ -596,9 +605,9 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
                       ></div>
                     )}
 
-                    {(r.rarity || r.creatures.length > 0) && (
+                    {(r.rarity || roomCreatures.length > 0) && (
                       <div className="df room-content">
-                        {r.creatures.length > 0 ? (
+                        {roomCreatures.length > 0 ? (
                           <i className={`fas fa-skull ${r.rarity ? "treasure" : "creatures"}`}></i>
                         ) : (
                           <i className="fas fa-gem treasure"></i>

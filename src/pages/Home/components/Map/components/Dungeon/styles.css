@@ -13,7 +13,7 @@
 
 .Dungeon-container .dungeon-entrance {
   background-color: var(--white);
-  padding: 10px 7px;
+  padding: 10px 7px !important;
 }
 .Dungeon-container .dungeon-entrance > button {
   padding: 3px;
@@ -33,7 +33,7 @@
   flex-wrap: wrap;
   row-gap: 10px;
   column-gap: 10px;
-  padding: 0 7px 10px;
+  padding: 0 7px 10px !important;
 }
 
 .Dungeon-container .room-wrapper {
@@ -44,9 +44,13 @@
   position: relative;
 }
 
+.Dungeon-container .dungeon-room .dungeon-room {
+  border: none;
+  background-color: transparent;
+}
+
 .Dungeon-container .dungeon-room button {
   z-index: 1;
-  /* pointer-events: none; */
   background-color: var(--white);
   border: 1px solid var(--black);
   border-radius: 0;
@@ -110,12 +114,7 @@
 }
 
 .Dungeon-container .is-swapping-room {
-  background-color: var(--white);
-}
-
-.Dungeon-container .dungeon-room {
-  border: none !important;
-  background-color: transparent;
+  border: 2px dotted var(--black) !important;
 }
 
 .Dungeon-container .dungeon .corridor {
