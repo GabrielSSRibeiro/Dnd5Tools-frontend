@@ -188,25 +188,25 @@ function ModalTravelResults({
         utils.ProbabilityCheck(travel.cummulativeEncounterChance))
   );
   const nodeCreatures = useMemo(() => {
-    function GetCreatureCondition() {
-      const dayTimeImminentEncounterProb = 0.5;
-      const nightTimeImminentEncounterProb = 1;
+    function GetNodeCreatures() {
+      function GetCreatureCondition() {
+        const dayTimeImminentEncounterProb = 0.5;
+        const nightTimeImminentEncounterProb = 1;
 
-      return isEncounter.current
-        ? utils.ProbabilityCheck(
-            Math.min(
-              isNightTime ? nightTimeImminentEncounterProb : dayTimeImminentEncounterProb * lc.GetTravelPace(travel.pace).imminentEncounterProbMod,
-              1
+        return isEncounter.current
+          ? utils.ProbabilityCheck(
+              Math.min(
+                isNightTime ? nightTimeImminentEncounterProb : dayTimeImminentEncounterProb * lc.GetTravelPace(travel.pace).imminentEncounterProbMod,
+                1
+              )
             )
-          )
-          ? lc.NODE_CREATURE_CONDITIONS.IMMINENT
-          : lc.NODE_CREATURE_CONDITIONS.NEAR
-        : ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(encounterLocContext.current.hazardousness).probability)
-        ? lc.NODE_CREATURE_CONDITIONS.REMAINS
-        : lc.NODE_CREATURE_CONDITIONS.TRACKS;
-    }
+            ? lc.NODE_CREATURE_CONDITIONS.IMMINENT
+            : lc.NODE_CREATURE_CONDITIONS.NEAR
+          : ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(encounterLocContext.current.hazardousness).probability)
+          ? lc.NODE_CREATURE_CONDITIONS.REMAINS
+          : lc.NODE_CREATURE_CONDITIONS.TRACKS;
+      }
 
-    function GetLocationCreatures() {
       const differentCreatureProb = 0.5;
 
       if (!hasAnyCreature.current) {
@@ -241,6 +241,7 @@ function ModalTravelResults({
         })
         .filter((c) => c);
 
+      //if no creatures, return empty
       if (locationCreatures.length === 0) {
         return [];
       }
@@ -285,22 +286,17 @@ function ModalTravelResults({
         utils.randomItemFromArray(moreCommonCreatures).condition = GetCreatureCondition();
       }
 
-      return locationCreatures.map((c) => ({
-        creatureId: c.creatureId,
-        number: c.number,
-        condition: c.condition ?? lc.NODE_CREATURE_CONDITIONS.NONE,
-      }));
+      let nodeCreatures = [];
+      locationCreatures.forEach((locC) => {
+        utils.createArrayFromInt(locC.number).forEach((_) => {
+          nodeCreatures.push({ creatureId: locC.creatureId, isDead: false, condition: locC.condition ?? lc.NODE_CREATURE_CONDITIONS.NONE });
+        });
+      });
+
+      return nodeCreatures;
     }
 
-    function GetRoomCreatures() {
-      let roomCreatures = room.currentCreatures;
-      return roomCreatures.map((c) => ({
-        creatureId: c.creatureId,
-        number: c.current,
-      }));
-    }
-
-    return viewingCurrent ? (roomIndex != null ? GetRoomCreatures() : newCurrentNode.creatures) : GetLocationCreatures();
+    return roomIndex != null ? room.currentCreatures : viewingCurrent ? newCurrentNode.creatures : GetNodeCreatures();
   }, [
     GetCreatureCurrentRoutine,
     ProbUpdatedByTravelTimeModCheck,
@@ -329,9 +325,9 @@ function ModalTravelResults({
             color: cc.GetRarity(creature.rarity).color,
             size: cc.GetSize(creature.size).display,
             type: cc.GetType(creature.type).display,
-            number: nc.number,
             creature,
-            isSelected: false,
+            isDead: nc.isDead ?? false,
+            isSelected: nc.isSelected ?? false,
           };
         }),
     }),
@@ -533,19 +529,23 @@ function ModalTravelResults({
   );
 
   function GetBaseRoomCreatures(creatures, context) {
-    return creatures
-      .map((c) => {
-        const routine = GetCreatureCurrentRoutine(c, context);
-        if (!routine) return null;
+    let baseRoomCreatures = [];
 
-        const groupSize = lc.GetGroupSize(routine.groupSize);
+    creatures.forEach((c) => {
+      const routine = GetCreatureCurrentRoutine(c, context);
+      if (routine) {
+        const probability = lc.GetEncounterFrequency(routine.encounterFrequency).probability;
+        if (utils.ProbabilityCheck(probability)) {
+          const groupSize = lc.GetGroupSize(routine.groupSize);
+          const number = utils.randomIntFromInterval(groupSize.min, groupSize.max);
+          utils.createArrayFromInt(number).forEach((_) => {
+            baseRoomCreatures.push({ creatureId: c.creatureId, isDead: false });
+          });
+        }
+      }
+    });
 
-        return {
-          creatureId: c.creatureId,
-          current: utils.randomIntFromInterval(groupSize.min, groupSize.max),
-        };
-      })
-      .filter((c) => c);
+    return baseRoomCreatures;
   }
 
   function GetModalLocation() {
@@ -855,30 +855,28 @@ function ModalTravelResults({
                       )}
                       {/* list */}
                       <div className="creature-list">
-                        {creaturesForDisplay.creatures.map((c) =>
-                          utils.createArrayFromInt(c.number).map((_, i) => {
-                            let contents = [{ text: c.creature.name }, { text: `${c.type} ${c.size}` }];
+                        {creaturesForDisplay.creatures.map((c, index) => {
+                          let contents = [{ text: c.creature.name }, { text: `${c.type} ${c.size}` }];
 
-                            if (c.creature.description) {
-                              contents.push({ text: "" });
-                              contents.push({ text: c.creature.description.slice(0, 200) + "..." });
-                            }
+                          if (c.creature.description) {
+                            contents.push({ text: "" });
+                            contents.push({ text: c.creature.description.slice(0, 200) + "..." });
+                          }
 
-                            return (
-                              <div className="df encounter-creature" onClick={() => ToggleCreatureSelection(c)} key={c.id + i}>
-                                <Info contents={contents} tooltipOnly={true} />
-                                <img
-                                  className={`creature-avatar${c.isSelected ? " selected-creature" : ""}`}
-                                  style={{
-                                    borderColor: c.color,
-                                  }}
-                                  src={c.creature.image}
-                                  alt="creature-avatar"
-                                />
-                              </div>
-                            );
-                          })
-                        )}
+                          return (
+                            <div className="df encounter-creature" onClick={() => ToggleCreatureSelection(c)} key={index}>
+                              <Info contents={contents} tooltipOnly={true} />
+                              <img
+                                className={`creature-avatar${c.isSelected ? " selected-creature" : ""}`}
+                                style={{
+                                  borderColor: c.color,
+                                }}
+                                src={c.creature.image}
+                                alt="creature-avatar"
+                              />
+                            </div>
+                          );
+                        })}
                       </div>
                     </>
                   ) : (

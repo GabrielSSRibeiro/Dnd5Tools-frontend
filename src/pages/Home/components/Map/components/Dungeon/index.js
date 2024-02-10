@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef } from "react";
+import * as utils from "../../../../../../utils";
 import * as lc from "../../../../../../constants/locationConstants";
 import { GetRarity } from "../../../../../../constants/creatureConstants";
 
@@ -211,8 +212,12 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
 
     if (roomCurrentCreatures.length > 0) {
       roomTooltip.push({ text: "" });
-      roomCurrentCreatures.forEach((rc) => {
-        roomTooltip.push({ text: `${creatures.find((c) => c._id === rc.creatureId)?.name}${roomSelect ? ` (x${rc.current})` : ""}` });
+
+      Object.values(utils.GroupArrayBy(roomCurrentCreatures, "creatureId")).forEach((creatureList) => {
+        const id = creatureList[0].creatureId;
+        const number = creatureList.length;
+
+        roomTooltip.push({ text: `${creatures.find((c) => c._id === id)?.name}${roomSelect ? ` (x${number})` : ""}` });
       });
     }
 
