@@ -308,8 +308,18 @@ function ModalTravelResults({
     viewingCurrent,
     world.creatures,
   ]);
-  const creaturesForDisplay = useMemo(
-    () => ({
+  const uniqueNodeCreatures = useMemo(() => {
+    let uniqueNodeCreatures = [];
+    Object.values(utils.GroupArrayBy(nodeCreatures, "creatureId")).forEach((creatureList) => {
+      uniqueNodeCreatures.push(creatureList[0]);
+    });
+
+    return uniqueNodeCreatures;
+  }, [nodeCreatures]);
+  const GetRoomCreatures = useCallback(() => {
+    if (!location) return [];
+
+    return {
       condition:
         nodeCreatures.filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT).length >
         nodeCreatures.filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR).length
@@ -330,12 +340,13 @@ function ModalTravelResults({
             isSelected: nc.isSelected ?? false,
           };
         }),
-    }),
-    [creatures, nodeCreatures]
-  );
+    };
+  }, [location, creatures, nodeCreatures]);
+  const finalCreatures = useMemo(() => GetRoomCreatures(), [GetRoomCreatures]);
+  const hasSelectedCreature = useMemo(() => finalCreatures.creatures.some((c) => c.isSelected), [finalCreatures]);
   const remainsForDisplay = useRef(
     Math.round(
-      nodeCreatures
+      uniqueNodeCreatures
         .filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.REMAINS)
         .map((nc) => {
           const creature = creatures.find((c) => c._id === nc.creatureId);
@@ -348,7 +359,7 @@ function ModalTravelResults({
     )
   );
   const tracksForDisplay = useRef(
-    nodeCreatures
+    uniqueNodeCreatures
       .filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.TRACKS)
       .map((nc) => {
         const creature = creatures.find((c) => c._id === nc.creatureId);
@@ -665,8 +676,28 @@ function ModalTravelResults({
     setLocRoomDetails(ROOM_DETAILS_VIEWS.current.ROOM);
   }
 
-  function ToggleCreatureSelection(creature) {
-    creature.isSelected = !creature.isSelected;
+  function ToggleCreatureSelection(index) {
+    room.currentCreatures[index].isSelected = !room.currentCreatures[index].isSelected;
+    setLocation({ ...location });
+  }
+
+  function SetCreaturesStatus(isDead) {
+    room.currentCreatures
+      .filter((cc) => cc.isSelected)
+      .forEach((cc) => {
+        cc.isDead = isDead;
+        cc.isSelected = false;
+      });
+    setLocation({ ...location });
+  }
+
+  function MoveCreatures() {
+    room.currentCreatures
+      .filter((cc) => cc.isSelected)
+      .forEach((cc) => {
+        cc.isSelected = false;
+      });
+    setLocation({ ...location });
   }
 
   return (
@@ -830,32 +861,44 @@ function ModalTravelResults({
                     </div>
                   )}
                   {/* creatures */}
-                  {creaturesForDisplay.creatures.length > 0 ? (
+                  {finalCreatures.creatures.length > 0 ? (
                     <>
                       {/* label and actions */}
                       {isPointOfInterest ? (
-                        <div className="df df-cg-25">
-                          <button title="Matar" className={`button-simple kill${" element-disabled"}`} onClick={() => {}} disabled={true}>
+                        <fieldset className="df df-cg-25" disabled={!hasSelectedCreature}>
+                          <button
+                            title="Matar"
+                            className={`button-simple kill${!hasSelectedCreature ? " element-disabled" : ""}`}
+                            onClick={() => SetCreaturesStatus(true)}
+                          >
                             <i className="fas fa-skull"></i>
                           </button>
-                          <button title="Salvar" className={`button-simple save${" element-disabled"}`} onClick={() => {}} disabled={true}>
+                          <button
+                            title="Salvar"
+                            className={`button-simple save${!hasSelectedCreature ? " element-disabled" : ""}`}
+                            onClick={() => SetCreaturesStatus(false)}
+                          >
                             <i className="fas fa-heart"></i>
                           </button>
-                          <button title="Mover" className={`button-simple move${" element-disabled"}`} onClick={() => {}} disabled={true}>
+                          <button
+                            title="Mover"
+                            className={`button-simple move${!hasSelectedCreature ? " element-disabled" : ""}`}
+                            onClick={MoveCreatures}
+                          >
                             <i className="fas fa-exchange-alt"></i>
                           </button>
-                        </div>
+                        </fieldset>
                       ) : (
                         <div className="df df-cg-5">
-                          <span className={creaturesForDisplay.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
-                            {lc.GetNodeCreatureCondition(creaturesForDisplay.condition).display}
+                          <span className={finalCreatures.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
+                            {lc.GetNodeCreatureCondition(finalCreatures.condition).display}
                           </span>
                           <Info contents={[{ text: "Combate não é obrigatório e pode ser ignorado por estar voando/escondido" }]} />
                         </div>
                       )}
                       {/* list */}
                       <div className="creature-list">
-                        {creaturesForDisplay.creatures.map((c, index) => {
+                        {finalCreatures.creatures.map((c, index) => {
                           let contents = [{ text: c.creature.name }, { text: `${c.type} ${c.size}` }];
 
                           if (c.creature.description) {
@@ -864,16 +907,21 @@ function ModalTravelResults({
                           }
 
                           return (
-                            <div className="df encounter-creature" onClick={() => ToggleCreatureSelection(c)} key={index}>
-                              <Info contents={contents} tooltipOnly={true} />
+                            <div
+                              className={`df encounter-creature${c.isSelected ? " selected-creature" : ""}`}
+                              onClick={() => ToggleCreatureSelection(index)}
+                              key={index}
+                            >
                               <img
-                                className={`creature-avatar${c.isSelected ? " selected-creature" : ""}`}
+                                className={`creature-avatar${c.isDead ? " dead-creature" : ""}`}
                                 style={{
                                   borderColor: c.color,
                                 }}
                                 src={c.creature.image}
                                 alt="creature-avatar"
                               />
+                              {c.isDead && <i className="fas fa-skull dead-icon"></i>}
+                              <Info contents={contents} tooltipOnly={true} />
                             </div>
                           );
                         })}

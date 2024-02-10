@@ -81,10 +81,19 @@
 .ModalTravelResults-container .creature-list .encounter-creature {
   position: relative;
   cursor: pointer;
+  border-radius: 100%;
 }
 
-.ModalTravelResults-container .creature-list .selected-creature {
+.ModalTravelResults-container .encounter-creature.selected-creature {
   box-shadow: 0 0 2px 3px rgba(0, 0, 0, 0.5);
+}
+.ModalTravelResults-container .creature-list .dead-creature {
+  opacity: 0.5;
+}
+.ModalTravelResults-container .creature-list .dead-icon {
+  position: absolute;
+  font-size: 24px;
+  color: var(--offensiveColor);
 }
 
 .ModalTravelResults-container .creature-list .creature-avatar {

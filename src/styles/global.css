@@ -43,6 +43,10 @@ body,
   height: 100%;
 }
 
+fieldset {
+  border: none;
+}
+
 h1 {
   font-size: 30px;
   font-family: var(--primaryFont);
