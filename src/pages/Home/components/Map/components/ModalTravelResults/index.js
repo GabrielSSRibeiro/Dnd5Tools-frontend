@@ -123,7 +123,7 @@ function ModalTravelResults({
     }
   }, [room]);
   const roomType = useMemo(() => {
-    if (!room || !room.size) return null;
+    if (!room || !room.type) return null;
 
     return `${lc.GetElementType(room.type).display}${room.isHazardous ? " (perigoso)" : ""}`;
   }, [room]);
@@ -157,11 +157,13 @@ function ModalTravelResults({
     [HandleAddTravelNode, isPointOfInterest, newCurrentNode.materialRarity, room]
   );
   const materialRarityDisplay = useMemo(() => (materialRarity ? cc.GetRarity(materialRarity).treasureDisplay : null), [materialRarity]);
-  const isHazardous = useRef(
-    newCurrentNode.isHazardous ??
-      (isPointOfInterest
-        ? room.isHazardous
-        : element.current?.hazardousness && utils.ProbabilityCheck(lc.GetMaterialExtractionDifficulty(element.current.hazardousness).probability))
+  const isHazardous = useMemo(
+    () =>
+      isPointOfInterest
+        ? null
+        : newCurrentNode.isHazardous ??
+          (element.current?.hazardousness && utils.ProbabilityCheck(lc.GetMaterialExtractionDifficulty(element.current.hazardousness).probability)),
+    [isPointOfInterest, newCurrentNode.isHazardous]
   );
   const encounterLocation = useRef(
     isPointOfInterest &&
@@ -329,6 +331,7 @@ function ModalTravelResults({
             type: cc.GetType(creature.type).display,
             number: nc.number,
             creature,
+            isSelected: false,
           };
         }),
     }),
@@ -612,7 +615,7 @@ function ModalTravelResults({
     newCurrentNode.name = !isPointOfInterest ? name : null;
     newCurrentNode.findResourcesDifficulty = findResourcesDifficulty.current;
     newCurrentNode.materialRarity = materialRarity;
-    newCurrentNode.isHazardous = isHazardous.current;
+    newCurrentNode.isHazardous = isHazardous;
     newCurrentNode.creatures = nodeCreatures;
     newCurrentNode.roomIndex = roomIndex;
 
@@ -817,18 +820,19 @@ function ModalTravelResults({
                   {room?.purpose && <span> {room.purpose} </span>}
                   {roomDimentions && <span> {roomDimentions} </span>}
                   {roomType && <span> {roomType} </span>}
-                  {(materialRarityDisplay || isHazardous.current) && (
+                  {(materialRarityDisplay || isHazardous) && (
                     <div className="df surroundings">
                       <div className="material">
                         {materialRarityDisplay && <span>Material {materialRarityDisplay}</span>}
-                        {materialRarityDisplay && isHazardous.current && <span> - </span>}
-                        {isHazardous.current && <span>Interação Perigosa</span>}
+                        {materialRarityDisplay && isHazardous && <span> - </span>}
+                        {isHazardous && <span>Interação Perigosa</span>}
                       </div>
                     </div>
                   )}
-
+                  {/* creatures */}
                   {creaturesForDisplay.creatures.length > 0 ? (
                     <>
+                      {/* label and actions */}
                       {isPointOfInterest ? (
                         <div className="df df-cg-25">
                           <button title="Matar" className={`button-simple kill${" element-disabled"}`} onClick={() => {}} disabled={true}>
@@ -849,7 +853,7 @@ function ModalTravelResults({
                           <Info contents={[{ text: "Combate não é obrigatório e pode ser ignorado por estar voando/escondido" }]} />
                         </div>
                       )}
-                      {/* creatures */}
+                      {/* list */}
                       <div className="creature-list">
                         {creaturesForDisplay.creatures.map((c) =>
                           utils.createArrayFromInt(c.number).map((_, i) => {
@@ -878,7 +882,7 @@ function ModalTravelResults({
                       </div>
                     </>
                   ) : (
-                    !room?.purpose && !roomDimentions && !materialRarityDisplay && !isHazardous.current && <span>-</span>
+                    !room?.purpose && !roomDimentions && !materialRarityDisplay && !isHazardous && <span>-</span>
                   )}
                 </div>
               )}
