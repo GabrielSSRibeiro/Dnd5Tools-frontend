@@ -595,6 +595,8 @@ function ModalTravelResults({
 
     const modalLocContext = lh.GetCurrentContext(modalLocation);
 
+    console.log("encounterProb", encounterProb);
+
     if (!modalLocation.interaction.currentCreatures) {
       modalLocation.interaction.currentCreatures = GetBaseRoomCreatures(modalLocation.creatures, modalLocContext);
     }

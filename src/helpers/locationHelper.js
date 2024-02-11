@@ -180,5 +180,7 @@ export const GetLocationDataForExport = (location, creatures) => {
 export const HasCertainCreature = (location, GetCreatureCurrentRoutine) => {
   const context = GetCurrentContext(location);
 
-  return location.creatures.some((c) => GetCreatureCurrentRoutine(c, context)?.encounterFrequency === lc.ENCOUNTER_FREQUENCIES.CERTAIN);
+  return location.interaction?.currentCreatures
+    ? location.interaction.currentCreatures.filter((cc) => !cc.isDead).length > 0
+    : location.creatures.some((c) => GetCreatureCurrentRoutine(c, context)?.encounterFrequency === lc.ENCOUNTER_FREQUENCIES.CERTAIN);
 };

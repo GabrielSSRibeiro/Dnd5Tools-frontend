@@ -63,14 +63,19 @@ function LocationSummary({
       return [];
     }
 
+    const currentLocCreatures =
+      location.interaction && location.interaction.currentCreatures
+        ? location.creatures.filter((c) => location.interaction.currentCreatures.some((cc) => cc.creatureId === c.creatureId && !cc.isDead))
+        : location.creatures;
+
     //add world context creatues
-    let allCreatures = shouldlAddWorldCreatures ? [...location.creatures, ...world.creatures] : location.creatures;
+    let allCreatures = shouldlAddWorldCreatures ? [...currentLocCreatures, ...world.creatures] : currentLocCreatures;
 
     let creaturesForDisplay = allCreatures
       .filter((c) => !c.population || c.population.current > 0)
       .map((locationCreature) => ({
         creature: creatures.find((c) => c._id === locationCreature.creatureId),
-        routine: location.creatures.some((lc) => lc.creatureId === locationCreature.creatureId)
+        routine: currentLocCreatures.some((lc) => lc.creatureId === locationCreature.creatureId)
           ? lh.GetCreatureCurrentRoutine(locationCreature, schedule, precipitation, temperature, currentContext?.name)
           : lh.GetCreatureCurrentRoutine(locationCreature, schedule, precipitation, temperature, worldContext?.name),
       }))
@@ -100,8 +105,9 @@ function LocationSummary({
     return sortedCreaturesForDisplay.filter((_, i) => i < SHOW_AT_A_TIME);
   }, [
     creatures,
-    shouldlAddWorldCreatures,
+    location.interaction,
     location.creatures,
+    shouldlAddWorldCreatures,
     world.creatures,
     schedule,
     precipitation,
