@@ -646,27 +646,29 @@ function Map({
       location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && exteriorLocation && !lh.HasCertainCreature(location, GetCreatureCurrentRoutine)
         ? exteriorLocation
         : location;
+    const isPointOfInterest = encounterLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
 
     const locationContext = lh.GetCurrentContext(encounterLocation);
     const worldContext = lh.GetCurrentContext(combatConfig.world);
 
     const shouldlAddWorldCreatures = combatConfig.world.name !== encounterLocation.name && worldContext.name !== lc.DEFAULT_CONTEXT_NAME;
     let allCreatures = shouldlAddWorldCreatures ? [...encounterLocation.creatures, ...combatConfig.world.creatures] : encounterLocation.creatures;
-    let isCertain = encounterLocation.interaction?.currentCreatures
-      ? encounterLocation.interaction.currentCreatures.filter((cc) => !cc.isDead).length > 0
-      : allCreatures.some((c) => {
-          const routine = encounterLocation.creatures.some((lc) => lc.creatureId === c.creatureId)
-            ? GetCreatureCurrentRoutine(c, locationContext?.name)
-            : GetCreatureCurrentRoutine(c, worldContext?.name);
+    let isCertain =
+      isPointOfInterest && encounterLocation.interaction?.currentCreatures
+        ? encounterLocation.interaction.currentCreatures.filter((cc) => !cc.isDead).length > 0
+        : allCreatures.some((c) => {
+            const routine = encounterLocation.creatures.some((lc) => lc.creatureId === c.creatureId)
+              ? GetCreatureCurrentRoutine(c, locationContext?.name)
+              : GetCreatureCurrentRoutine(c, worldContext?.name);
 
-          if (!routine) {
-            return false;
-          }
+            if (!routine) {
+              return false;
+            }
 
-          const probability = lc.GetEncounterFrequency(routine.encounterFrequency).probability;
+            const probability = lc.GetEncounterFrequency(routine.encounterFrequency).probability;
 
-          return probability === 1;
-        });
+            return probability === 1;
+          });
 
     if (isCertain) {
       return 1;

@@ -101,6 +101,7 @@ function ModalTravelResults({
     return newLocation.creatures;
   }, [newLocation.creatures, newLocation.interaction]);
   const isPointOfInterest = useMemo(() => newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST, [newLocation.size]);
+  const [addExteriorCreatures, setAddExteriorCreatures] = useState(hasMoved && isPointOfInterest);
   const [roomIndex, SetRoomIndex] = useState(
     newCurrentNode.roomIndex != null && location.interaction?.rooms.some((_, i) => i === newCurrentNode.roomIndex)
       ? newCurrentNode.roomIndex
@@ -308,9 +309,16 @@ function ModalTravelResults({
 
     if (!location) return [];
 
-    return roomIndex != null ? room.currentCreatures : viewingCurrent ? newCurrentNode.creatures : GetNodeCreatures();
+    return roomIndex != null
+      ? roomIndex === -1 && addExteriorCreatures
+        ? GetNodeCreatures()
+        : room.currentCreatures
+      : viewingCurrent
+      ? newCurrentNode.creatures
+      : GetNodeCreatures();
   }, [
     location,
+    addExteriorCreatures,
     GetCreatureCurrentRoutine,
     ProbUpdatedByTravelTimeModCheck,
     isNightTime,
@@ -356,7 +364,18 @@ function ModalTravelResults({
         }),
     };
   }, [location, isPointOfInterest, nodeCreatures, creatures, killedCreaturesIndeces]);
-  const finalCreatures = useMemo(() => GetRoomCreatures(), [GetRoomCreatures]);
+  const finalCreatures = useMemo(() => {
+    const finalCreatures = GetRoomCreatures();
+
+    if (addExteriorCreatures) {
+      finalCreatures.creatures.forEach((fc) => {
+        location.interaction.currentCreatures.push({ creatureId: fc.id, isDead: fc.isDead });
+      });
+      setAddExteriorCreatures(false);
+    }
+
+    return finalCreatures;
+  }, [GetRoomCreatures, addExteriorCreatures, location]);
   const hasSelectedCreature = useMemo(() => finalCreatures.creatures.some((c) => c.isSelected), [finalCreatures]);
   const remainsForDisplay = useRef(
     Math.round(
@@ -407,7 +426,7 @@ function ModalTravelResults({
     [timePassed, travel.pace]
   );
   const elmentsForDisplay = useMemo(() => {
-    if (isPointOfInterest) return null;
+    if (isPointOfInterest || !location.traversal.elements) return null;
 
     const elements = location.traversal.elements.filter((e) => e.type !== element.current?.type);
 
@@ -594,8 +613,6 @@ function ModalTravelResults({
     if (!modalLocation.interaction) return modalLocation;
 
     const modalLocContext = lh.GetCurrentContext(modalLocation);
-
-    console.log("encounterProb", encounterProb);
 
     if (!modalLocation.interaction.currentCreatures) {
       modalLocation.interaction.currentCreatures = GetBaseRoomCreatures(modalLocation.creatures, modalLocContext);
@@ -878,7 +895,7 @@ function ModalTravelResults({
         {/* loc */}
         <aside className="details-wrapper df df-fd-c df-jc-fs" style={{ zIndex: 2 }}>
           {isPointOfInterest ? (
-            <fieldset disabled={isSafe}>
+            <fieldset className="df dungeon-wrapper" disabled={isSafe}>
               <Dungeon
                 location={location}
                 setLocation={setLocation}

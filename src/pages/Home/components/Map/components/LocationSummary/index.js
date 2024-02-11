@@ -64,7 +64,7 @@ function LocationSummary({
     }
 
     const currentLocCreatures =
-      location.interaction && location.interaction.currentCreatures
+      location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && location.interaction?.currentCreatures
         ? location.creatures.filter((c) => location.interaction.currentCreatures.some((cc) => cc.creatureId === c.creatureId && !cc.isDead))
         : location.creatures;
 
@@ -105,6 +105,7 @@ function LocationSummary({
     return sortedCreaturesForDisplay.filter((_, i) => i < SHOW_AT_A_TIME);
   }, [
     creatures,
+    location.size,
     location.interaction,
     location.creatures,
     shouldlAddWorldCreatures,
