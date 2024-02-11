@@ -67,7 +67,7 @@ function LocationSummary({
     let allCreatures = shouldlAddWorldCreatures ? [...location.creatures, ...world.creatures] : location.creatures;
 
     let creaturesForDisplay = allCreatures
-      .filter((c) => !c.population || c.population > 0)
+      .filter((c) => !c.population || c.population.current > 0)
       .map((locationCreature) => ({
         creature: creatures.find((c) => c._id === locationCreature.creatureId),
         routine: location.creatures.some((lc) => lc.creatureId === locationCreature.creatureId)

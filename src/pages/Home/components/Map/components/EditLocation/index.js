@@ -311,12 +311,12 @@ function EditLocation({
     setModal(
       <ModalManageCreaturePopulation
         population={creature.population}
-        onClose={(tempPopulation) => HandleCloseModalManageCreaturePopulation(creature, tempPopulation)}
+        onClose={(tempPopulation, isInfinity) => HandleCloseModalManageCreaturePopulation(creature, tempPopulation, isInfinity)}
       />
     );
   }
-  function HandleCloseModalManageCreaturePopulation(creature, tempPopulation) {
-    creature.population = tempPopulation;
+  function HandleCloseModalManageCreaturePopulation(creature, tempPopulation, isInfinity) {
+    if (tempPopulation || (!tempPopulation && isInfinity)) creature.population = tempPopulation;
     setModal(null);
   }
 

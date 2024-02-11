@@ -23,7 +23,8 @@ function ModalManageCreaturePopulation({ population, onClose }) {
   }
 
   function HandleConfirm() {
-    onClose(tempPopulation.value != null ? tempPopulation : null);
+    const isInfinity = tempPopulation.value == null;
+    onClose(isInfinity ? null : tempPopulation, isInfinity);
   }
 
   function HandleChangeValue(newValue) {
@@ -61,12 +62,12 @@ function ModalManageCreaturePopulation({ population, onClose }) {
             <Button
               icon="fas fa-minus-square"
               onClick={() => setTempPopulation({ ...tempPopulation, current: 0 })}
-              isDisabled={tempPopulation.current === 0}
+              isDisabled={!tempPopulation.value || tempPopulation.current === 0}
             />
             <Button
               icon="fas fa-minus"
               onClick={() => setTempPopulation({ ...tempPopulation, current: tempPopulation.current - 1 })}
-              isDisabled={tempPopulation.current === 0}
+              isDisabled={!tempPopulation.value || tempPopulation.current === 0}
             />
           </div>
           <h2>{tempPopulation.value ? `${tempPopulation.current} / ${tempPopulation.value}` : <i className="fas fa-infinity"></i>}</h2>
@@ -74,12 +75,12 @@ function ModalManageCreaturePopulation({ population, onClose }) {
             <Button
               icon="fas fa-plus"
               onClick={() => setTempPopulation({ ...tempPopulation, current: tempPopulation.current + 1 })}
-              isDisabled={tempPopulation.current === tempPopulation.value}
+              isDisabled={!tempPopulation.value || tempPopulation.current === tempPopulation.value}
             />
             <Button
               icon="fas fa-plus-square"
               onClick={() => setTempPopulation({ ...tempPopulation, current: tempPopulation.value })}
-              isDisabled={tempPopulation.current === tempPopulation.value}
+              isDisabled={!tempPopulation.value || tempPopulation.current === tempPopulation.value}
             />
           </div>
         </div>

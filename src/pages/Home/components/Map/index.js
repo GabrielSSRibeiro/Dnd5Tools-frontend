@@ -307,7 +307,7 @@ function Map({
           GetCreatureCurrentRoutine={GetCreatureCurrentRoutine}
           level={combatConfig.level}
           creatures={creatures}
-          world={combatConfig.world}
+          world={utils.clone(combatConfig.world)}
           mapConditionLevels={mapConditionLevels}
           GetUpdatedSchedule={GetUpdatedSchedule}
           HandleSetCurrentNode={() => HandleSetCurrentNode(newCurrentNode)}
