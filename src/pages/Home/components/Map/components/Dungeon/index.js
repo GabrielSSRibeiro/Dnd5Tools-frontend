@@ -625,7 +625,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
               );
             })
           ) : (
-            <button className="df dungeon-room" onClick={() => OpenModalManageDungeonRoom()}>
+            <button className="df dungeon-room no-rooms" onClick={() => OpenModalManageDungeonRoom()}>
               <i className="fas fa-plus"></i>
             </button>
           )}

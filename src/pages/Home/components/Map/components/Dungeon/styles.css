@@ -44,7 +44,8 @@
   position: relative;
 }
 
-.Dungeon-container .dungeon-room .dungeon-room {
+.Dungeon-container .dungeon-room .dungeon-room,
+.Dungeon-container .dungeon-room.no-rooms {
   border: none;
   background-color: transparent;
 }
