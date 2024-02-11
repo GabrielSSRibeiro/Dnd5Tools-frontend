@@ -59,6 +59,10 @@
   font-weight: 600;
 }
 
+.ModalTravelResults-container .details-wrapper .elements-display {
+  text-align: center;
+}
+
 .ModalTravelResults-container .details-wrapper .imminent {
   color: red;
   font-weight: 600;

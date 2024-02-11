@@ -233,11 +233,12 @@ function ModalTravelResults({
             }
 
             const groupSize = lc.GetGroupSize(routine.groupSize);
+            const number = utils.randomIntFromInterval(groupSize.min, groupSize.max);
             const probability = lc.GetEncounterFrequency(routine.encounterFrequency).probability;
 
             return {
               creatureId: c.creatureId,
-              number: utils.randomIntFromInterval(groupSize.min, groupSize.max),
+              number: c.population ? Math.min(c.population.current, number) : number,
               encounterFrequency: routine.encounterFrequency,
               isEncounter: isEncounter.current ? utils.ProbabilityCheck(probability) : ProbUpdatedByTravelTimeModCheck(probability),
             };
@@ -405,6 +406,22 @@ function ModalTravelResults({
     () => `${utils.MinutesToTimeInUnits(timePassed)} passado(s) em ${lc.GetTravelPace(travel.pace).resultDisplay}`,
     [timePassed, travel.pace]
   );
+  const elmentsForDisplay = useMemo(() => {
+    if (isPointOfInterest) return null;
+
+    const elements = location.traversal.elements.filter((e) => e.type !== element.current?.type);
+
+    if (elements.length === 0) return null;
+
+    return (
+      "Terreno: " +
+      elements
+        .map(
+          (e) => `${lc.GetElementType(e.type).display} (${utils.turnValueIntoPercentageString(lc.GetEncounterFrequency(e.frequency).probability)})`
+        )
+        .join(", ")
+    );
+  }, [isPointOfInterest, location.traversal.elements]);
   const newSchedule = useMemo(() => {
     if (!locHoverData) {
       return travel.schedule;
@@ -874,7 +891,9 @@ function ModalTravelResults({
               <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={setName} />
               {!isSafe && (
                 <>
-                  <h6>Encontrar Recursos: CD {findResourcesDifficulty.current}</h6>
+                  {isEncounter && elmentsForDisplay && <span className="elements-display">{elmentsForDisplay}</span>}
+
+                  <span>Encontrar Recursos: CD {findResourcesDifficulty.current}</span>
                   {tracksForDisplay.current.length > 0 && (
                     <span>
                       Rastros de: <span className="bold">"{tracksForDisplay.current.join(", ")}"</span>
@@ -966,6 +985,7 @@ function ModalTravelResults({
                           ]}
                         />
                       </div>
+
                       {/* list */}
                       <div className="creature-list">
                         {finalCreatures.creatures.map((c, index) => {
