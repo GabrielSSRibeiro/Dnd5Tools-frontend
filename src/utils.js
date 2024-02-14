@@ -277,3 +277,12 @@ export function getProbabilityOfTwoIndependent(p1, p2) {
   const p1Andp2 = p1 * p2;
   return p1 + p2 - p1Andp2;
 }
+
+export function sortByCustomOrder(array, customOrder) {
+  array.sort((a, b) => {
+    const indexA = customOrder.indexOf(a);
+    const indexB = customOrder.indexOf(b);
+
+    return indexA - indexB;
+  });
+}

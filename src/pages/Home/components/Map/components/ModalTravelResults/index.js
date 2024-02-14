@@ -429,17 +429,24 @@ function ModalTravelResults({
     if (isPointOfInterest || !location.traversal.elements) return null;
 
     const elements = location.traversal.elements.filter((e) => e.type !== element.current?.type);
-
     if (elements.length === 0) return null;
 
-    return (
-      "Terreno: " +
-      elements
-        .map(
-          (e) => `${lc.GetElementType(e.type).display} (${utils.turnValueIntoPercentageString(lc.GetEncounterFrequency(e.frequency).probability)})`
-        )
-        .join(", ")
-    );
+    return elements
+      .map((e) => {
+        const prob = lc.GetEncounterFrequency(e.frequency).probability;
+        const options = ["cima esquerda", "cima", "cima direita", "esquerda", "direita", "baixo esquerda", "baixo", "baixo direita"];
+        let elements = [];
+        while (utils.ProbabilityCheck(prob)) {
+          elements.push(utils.randomItemFromArray(options));
+        }
+
+        if (elements.length === 0) return null;
+        utils.sortByCustomOrder(elements, options);
+
+        return `${lc.GetElementType(e.type).display} (${elements.join(", ")})`;
+      })
+      .filter((e) => e)
+      .join(", ");
   }, [isPointOfInterest, location.traversal.elements]);
   const newSchedule = useMemo(() => {
     if (!locHoverData) {
