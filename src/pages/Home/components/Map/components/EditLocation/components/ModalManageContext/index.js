@@ -119,13 +119,19 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
               text: "",
             },
             {
-              text: "É representada por uma area ao redor do grupo no mapa, clicar dentro dessa área realiza uma MARCHA",
+              text: "É representada por uma área ao redor do grupo no mapa. A noite a visao panorâmica é sempre 0",
             },
             {
               text: "",
             },
             {
-              text: "A noite a visao panorâmica é sempre 0, tendo apenas a área de marcha sinalizada",
+              text: "A visao máxima é sempre uma área pontilhada. Mesmo se nao visíveis, pontos dentro dessa área podem ser refenreciados ou rastrados pelo grupo",
+            },
+            {
+              text: "",
+            },
+            {
+              text: "Clicar dentro dessa área realiza uma MARCHA",
             },
           ]}
           extraWidth={250}

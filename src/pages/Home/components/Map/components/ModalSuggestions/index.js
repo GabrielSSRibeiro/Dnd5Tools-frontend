@@ -34,7 +34,7 @@ function ModalSuggestions({ notes, onClose }) {
     "Quando colocar pontos em uma localização, considere possíveis detalhes ou até mesmo mensagens sobre o local que poderiam ter sido deixadas ali",
   ]);
   const dungeonSuggestions = useRef([
-    "As salas serem boas eh o segredo. Os encontros tem distância pra dar tempo de fazer estratégias e raramente vai ser de fato próximo e sem jeito",
+    "As salas serem boas é o segredo. Os encontros tem distância pra dar tempo de fazer estratégias e raramente vai ser de fato próximo e sem jeito",
     "Propósito da masmorra? Toda masmorra deve ter um tema que representa ela toda e seus perigos básicos",
     "Quais os habitantes? Como as criaturas interagem umas com as outras? Existem Sub regiões na masmorra? A entrada de cada sub região, incluindo a entrada principal, pode ser bloqueada com alguma lógica que se repete pela masmorra e impede a passagem fácil ou a modifica",
     "Defina uma disposição. Arrudeios e caminhos alternativos podem ser interessantes e as vezes secretos",
