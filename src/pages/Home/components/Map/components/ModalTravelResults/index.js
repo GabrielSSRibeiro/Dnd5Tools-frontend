@@ -101,7 +101,15 @@ function ModalTravelResults({
     return newLocation.creatures;
   }, [newLocation.creatures, newLocation.interaction]);
   const isPointOfInterest = useMemo(() => newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST, [newLocation.size]);
-  const [addExteriorCreatures, setAddExteriorCreatures] = useState(hasMoved && isPointOfInterest);
+  const encounterLocation = useRef(
+    isPointOfInterest &&
+      exteriorLocation &&
+      (hasMoved || location.creatures.length === 0) &&
+      !lh.HasCertainCreature(location, GetCreatureCurrentRoutine)
+      ? exteriorLocation
+      : location
+  );
+  const [addExteriorCreatures, setAddExteriorCreatures] = useState(hasMoved && isPointOfInterest && encounterLocation.current._id !== location._id);
   const [roomIndex, SetRoomIndex] = useState(
     newCurrentNode.roomIndex != null && location.interaction?.rooms.some((_, i) => i === newCurrentNode.roomIndex)
       ? newCurrentNode.roomIndex
@@ -165,14 +173,6 @@ function ModalTravelResults({
         : newCurrentNode.isHazardous ??
           (element.current?.hazardousness && utils.ProbabilityCheck(lc.GetMaterialExtractionDifficulty(element.current.hazardousness).probability)),
     [isPointOfInterest, newCurrentNode.isHazardous]
-  );
-  const encounterLocation = useRef(
-    isPointOfInterest &&
-      exteriorLocation &&
-      (hasMoved || location.creatures.length === 0) &&
-      !lh.HasCertainCreature(location, GetCreatureCurrentRoutine)
-      ? exteriorLocation
-      : location
   );
 
   const encounterLocContext = useRef(lh.GetCurrentContext(encounterLocation.current));
@@ -312,7 +312,7 @@ function ModalTravelResults({
     return roomIndex != null
       ? roomIndex === -1 && addExteriorCreatures
         ? GetNodeCreatures()
-        : room.currentCreatures
+        : room?.currentCreatures ?? []
       : viewingCurrent
       ? newCurrentNode.creatures
       : GetNodeCreatures();
@@ -616,22 +616,21 @@ function ModalTravelResults({
   }
 
   function GetModalLocation() {
-    let modalLocation = newLocation;
-    if (!modalLocation.interaction) return modalLocation;
+    if (!newLocation.interaction) return newLocation;
 
-    const modalLocContext = lh.GetCurrentContext(modalLocation);
+    const modalLocContext = lh.GetCurrentContext(newLocation);
 
-    if (!modalLocation.interaction.currentCreatures) {
-      modalLocation.interaction.currentCreatures = GetBaseRoomCreatures(modalLocation.creatures, modalLocContext);
+    if (!newLocation.interaction.currentCreatures) {
+      newLocation.interaction.currentCreatures = GetBaseRoomCreatures(newLocation.creatures, modalLocContext);
     }
 
-    modalLocation.interaction.rooms
+    newLocation.interaction.rooms
       .filter((r) => r && !r.currentCreatures)
       .forEach((r) => {
         r.currentCreatures = GetBaseRoomCreatures(r.creatures, modalLocContext);
       });
 
-    return modalLocation;
+    return newLocation;
   }
 
   function HandleContinue() {
