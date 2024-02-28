@@ -22,6 +22,7 @@
 
 .ModalTravelResults-container .details-wrapper:first-child span {
   white-space: break-spaces;
+  word-break: break-word;
   overflow: auto;
 }
 
