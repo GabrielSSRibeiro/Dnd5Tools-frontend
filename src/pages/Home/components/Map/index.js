@@ -32,7 +32,7 @@ function Map({
   userId,
   shouldRender,
 }) {
-  const centerMoveRatio = useRef(0.05);
+  // const centerMoveRatio = useRef(0.05);
   const mapConditionLevels = useRef(lc.hazardousness.map((h) => h.color));
   const exhaustionThreshold = useRef(8);
   const dayTimeThreshold = useRef(6 * 60);
@@ -57,6 +57,10 @@ function Map({
   const [nodeToMove, setNodeToMove] = useState(null);
   const [mapMode, setMapMode] = useState(currentNode ? lc.MAP_MODES.TRAVEL : lc.MAP_MODES.FREE);
   const [defaultCenter, setDefaultCenter] = useState(currentNode ? { x: currentNode.x, y: currentNode.y } : { x: 0, y: 0 });
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [isMouseDragging, setIsMouseDragging] = useState(false);
+  const [dragPosition, setDragPosition] = useState(defaultCenter);
+  const [initialDragPosition, setInitialDragPosition] = useState(defaultCenter);
   const [locationToEdit, setLocationToEdit] = useState(null);
   const [mapLoading, setMapLoading] = useState(false);
   const [centerOffset, setCenterOffset] = useState(defaultCenter);
@@ -232,6 +236,23 @@ function Map({
     return nodeStyles;
   }, [paceMove]);
 
+  const handleMouseDownDrag = (e) => {
+    setIsMouseDown(true);
+    setInitialDragPosition({
+      x: e.clientX - dragPosition.x,
+      y: e.clientY - dragPosition.y,
+    });
+  };
+  const handleMouseMoveDrag = (e) => {
+    if (!isMouseDown) return;
+
+    setIsMouseDragging(true);
+    setDragPosition({
+      x: e.clientX - initialDragPosition.x,
+      y: e.clientY - initialDragPosition.y,
+    });
+  };
+
   function OpenModalSuggestions() {
     setModal(
       <ModalSuggestions
@@ -246,7 +267,9 @@ function Map({
   }
 
   function OpenModalTravelResults(node, isRest) {
-    if (locations.length === 0 || (!isRest && !paceMove)) {
+    setIsMouseDown(false);
+    if (locations.length === 0 || (!isRest && !paceMove) || isMouseDragging) {
+      setIsMouseDragging(false);
       return;
     }
 
@@ -391,13 +414,13 @@ function Map({
     combatConfig.travel.travelNodes.push(newCurrentNode);
   }
 
-  function GetOffsetRatioValue() {
-    const locationsDiv = document.getElementById(locationsContainerId);
-    const widthOffset = locationsDiv.offsetWidth * centerMoveRatio.current;
-    const heightOffset = locationsDiv.offsetHeight * centerMoveRatio.current;
+  // function GetOffsetRatioValue() {
+  //   const locationsDiv = document.getElementById(locationsContainerId);
+  //   const widthOffset = locationsDiv.offsetWidth * centerMoveRatio.current;
+  //   const heightOffset = locationsDiv.offsetHeight * centerMoveRatio.current;
 
-    return { x: widthOffset, y: heightOffset };
-  }
+  //   return { x: widthOffset, y: heightOffset };
+  // }
 
   function HandleCancel() {
     setLocationToEdit(null);
@@ -709,7 +732,7 @@ function Map({
   }
 
   function HandleChangeMapType(newMapMode) {
-    setDefaultCenter(newMapMode === lc.MAP_MODES.TRAVEL && currentNode ? { x: currentNode.x, y: currentNode.y } : { x: 0, y: 0 });
+    // setDefaultCenter(newMapMode === lc.MAP_MODES.TRAVEL && currentNode ? { x: currentNode.x, y: currentNode.y } : { x: 0, y: 0 });
 
     setMapMode(newMapMode);
   }
@@ -784,6 +807,7 @@ function Map({
 
   useEffect(() => {
     setCenterOffset(defaultCenter);
+    setDragPosition({ x: 0, y: 0 });
   }, [defaultCenter]);
 
   useEffect(() => {
@@ -825,7 +849,7 @@ function Map({
         )}
 
         {/* hover */}
-        {locations.length > 0 && locHoverData && paceMove && (
+        {locations.length > 0 && locHoverData && paceMove && !isMouseDragging && (
           <div className="location-details floating-details" style={{ ...locHoverData.style, top: locHoverData.top, left: locHoverData.left }}>
             {locHoverData.location && (
               <LocationSummary
@@ -988,6 +1012,29 @@ function Map({
             )}
             <aside className="map-zoom floating-details">
               <div className="stat-section">
+                {/* <button onClick={() => setCenterOffset({ ...centerOffset, y: centerOffset.y + GetOffsetRatioValue().y * 2 })}>
+                  <i className="fas fa-caret-up"></i>
+                </button>
+                <button onClick={() => setCenterOffset({ ...centerOffset, x: centerOffset.x + GetOffsetRatioValue().x })}>
+                  <i className="fas fa-caret-left"></i>
+                </button> */}
+                <button
+                  title="Centrar"
+                  onClick={() => {
+                    setCenterOffset(defaultCenter);
+                    setDragPosition({ x: 0, y: 0 });
+                  }}
+                >
+                  <i className="fas fa-crosshairs"></i>
+                </button>
+                {/* <button onClick={() => setCenterOffset({ ...centerOffset, x: centerOffset.x - GetOffsetRatioValue().x })}>
+                  <i className="fas fa-caret-right"></i>
+                </button>
+                <button onClick={() => setCenterOffset({ ...centerOffset, y: centerOffset.y - GetOffsetRatioValue().y * 2 })}>
+                  <i className="fas fa-caret-down"></i>
+                </button> */}
+              </div>
+              <div className="stat-section">
                 <button onClick={() => MapLoadingWrapper(() => UpdateZoom(minZoom))} disabled={isMinZoom}>
                   <i className="fas fa-minus-square"></i>
                 </button>
@@ -1015,23 +1062,6 @@ function Map({
                 </button>
                 <button onClick={() => MapLoadingWrapper(() => UpdateZoom(maxZoom))} disabled={isMaxZoom}>
                   <i className="fas fa-plus-square"></i>
-                </button>
-              </div>
-              <div className="stat-section">
-                <button onClick={() => setCenterOffset({ ...centerOffset, y: centerOffset.y + GetOffsetRatioValue().y * 2 })}>
-                  <i className="fas fa-caret-up"></i>
-                </button>
-                <button onClick={() => setCenterOffset({ ...centerOffset, x: centerOffset.x + GetOffsetRatioValue().x })}>
-                  <i className="fas fa-caret-left"></i>
-                </button>
-                <button title="Centrar" onClick={() => setCenterOffset(defaultCenter)}>
-                  <i className="fas fa-crosshairs"></i>
-                </button>
-                <button onClick={() => setCenterOffset({ ...centerOffset, x: centerOffset.x - GetOffsetRatioValue().x })}>
-                  <i className="fas fa-caret-right"></i>
-                </button>
-                <button onClick={() => setCenterOffset({ ...centerOffset, y: centerOffset.y - GetOffsetRatioValue().y * 2 })}>
-                  <i className="fas fa-caret-down"></i>
                 </button>
               </div>
               {/* <div className="compass">N</div> */}
@@ -1184,7 +1214,19 @@ function Map({
         )}
 
         {!mapLoading && (
-          <div id={locationsContainerId} className="locations" style={{ translate: `${centerOffset.x}px ${centerOffset.y}px` }}>
+          <div
+            id={locationsContainerId}
+            className="locations"
+            style={{
+              translate: `${centerOffset.x}px ${centerOffset.y}px`,
+              left: dragPosition.x + "px",
+              top: dragPosition.y + "px",
+              cursor: isMouseDragging ? "move" : "",
+            }}
+            onMouseDown={handleMouseDownDrag}
+            onMouseMove={handleMouseMoveDrag}
+            onMouseLeave={() => setIsMouseDown(false)}
+          >
             {/* time filter */}
             {mapMode === lc.MAP_MODES.TRAVEL && (isNearDayOrNightTime || isNightTime) && (
               <div className={`max-dimentions time-filter${isNearDayOrNightTime ? " near-night-or-day" : " night"}`}></div>
