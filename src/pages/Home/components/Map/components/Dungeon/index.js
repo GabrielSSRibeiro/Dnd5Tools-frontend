@@ -105,6 +105,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
       }
     }
 
+    setLocation({ ...location });
     setModal(null);
   }
   function SwapDungeonRoom(index) {
