@@ -303,11 +303,11 @@ function Bestiary({
             {!isSelecting && <h5>BESTIÁRIO</h5>}
           </header>
           <main>
-            {!isSelecting && (
-              <aside>
-                <Button text="Adicionar Criatura" onClick={HandleEditNewCreature} isDisabled={creatures.length >= maxNumberOfCreatures} />
-              </aside>
-            )}{" "}
+            {/* {!isSelecting && ( */}
+            <aside>
+              <Button text="Adicionar Criatura" onClick={HandleEditNewCreature} isDisabled={creatures.length >= maxNumberOfCreatures} />
+            </aside>
+            {/* )} */}
             <div className="bestiary-filters">
               <h5>Filtrar Por</h5>
               <div className="filter-text">
