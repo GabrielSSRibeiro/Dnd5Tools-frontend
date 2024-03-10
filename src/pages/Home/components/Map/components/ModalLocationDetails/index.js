@@ -39,7 +39,7 @@ function ModalLocationDetails({
         temp = locations.filter(
           (l) =>
             //if location name starts with filter
-            l.name.toLowerCase().startsWith(nameFilter.toLowerCase()) ||
+            l.name.toLowerCase().includes(nameFilter.toLowerCase()) ||
             //if the name of any location creature starts with filter
             l.creatures.some((lc) =>
               creatures
