@@ -111,7 +111,9 @@ function ModalLocationDetails({
         {context.details && (
           <aside className="details-wrapper df df-fd-c df-jc-fs">
             <h3>Detalhes</h3>
-            <div className="details ">{context.details}</div>
+            <div className="details">
+              <span>{context.details}</span>
+            </div>
           </aside>
         )}
         <aside className="details-wrapper df df-fd-c df-jc-fs">
