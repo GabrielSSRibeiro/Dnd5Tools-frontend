@@ -23,6 +23,7 @@
   width: 300px;
   text-align: justify;
   text-indent: 25px;
+  word-break: break-word;
 }
 
 .ModalLocationDetails-container .location-filters {
