@@ -26,8 +26,8 @@ import "./styles.css";
 
 function ModalFastBuild({ creature, onClose }) {
   const [tempCreature, setTempCreature] = useState(utils.clone(creature));
-  const [hasMeleeAction, setHasMeleeAction] = useState(false);
-  const [hasRangedAction, setHasRangedAction] = useState(false);
+  const [hasMeleeAction, setHasMeleeAction] = useState(true);
+  const [hasRangedAction, setHasRangedAction] = useState(true);
 
   const ACTION_DETAILS = [
     {

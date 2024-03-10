@@ -28,7 +28,7 @@ export const GetDistanceMultiplier = (distance) => {
 
 export const GetDistanceAngle = (direction) => {
   const baseValue = lc.GetDirection(direction).baseAngle;
-  const variance = 10;
+  const variance = 0;
   return utils.randomValueFromVarianceInt(baseValue, variance);
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import * as utils from "../../../../../../utils";
 import * as lc from "../../../../../../constants/locationConstants";
 import { CREATURE_ENVIRONMENTS, creatureEnvironments } from "../../../../../../constants/creatureConstants";
@@ -461,11 +461,6 @@ function EditLocation({
       });
     setModal(null);
   }
-
-  useEffect(() => {
-    console.log("BBBBB");
-    // UpdateLocation(location);
-  }, [UpdateLocation, location]);
 
   return (
     <div className="EditLocation-container">
