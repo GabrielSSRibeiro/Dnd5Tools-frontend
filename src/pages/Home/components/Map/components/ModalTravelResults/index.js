@@ -340,12 +340,26 @@ function ModalTravelResults({
   const GetRoomCreatures = useCallback(() => {
     if (!location) return [];
 
+    //calc dist
+    const nearCreatures = nodeCreatures.filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR).length;
+    const maxNearDist = 36;
+    const midDist = 18;
+    const imminentCreatures = nodeCreatures.filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT).length;
+    const maxImminentDist = 9;
+
+    const isImminent = imminentCreatures > nearCreatures;
+    const isBase = nearCreatures === 0 || imminentCreatures === 0;
+    const maxDist = isBase ? (isImminent ? maxImminentDist : maxNearDist) : (maxNearDist - maxImminentDist) * (nearCreatures / imminentCreatures);
+    const minValue = 1;
+    const maxValue = 8;
+    const numberOfReducers = maxDist === maxNearDist ? 3 : maxDist >= midDist ? 2 : 1;
+    const reducerList = utils.createArrayFromInt(numberOfReducers).map((_) => utils.randomIntFromInterval(minValue, maxValue));
+    const totalReducer = reducerList.reduce((acc, curr) => acc + curr, 0);
+    const finalDistance = maxDist - totalReducer;
+
     return {
-      condition:
-        nodeCreatures.filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT).length >
-        nodeCreatures.filter((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR).length
-          ? lc.NODE_CREATURE_CONDITIONS.IMMINENT
-          : lc.NODE_CREATURE_CONDITIONS.NEAR,
+      condition: isImminent ? lc.NODE_CREATURE_CONDITIONS.IMMINENT : lc.NODE_CREATURE_CONDITIONS.NEAR,
+      distance: `(${finalDistance}m)`,
       creatures: nodeCreatures
         .filter((c) => !c.condition || c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT || c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR)
         .map((nc, index) => {
@@ -999,7 +1013,7 @@ function ModalTravelResults({
                           <span className="imminent"> {lc.GetNodeCreatureCondition(lc.NODE_CREATURE_CONDITIONS.IMMINENT).display}</span>
                         ) : (
                           <span className={finalCreatures.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
-                            {lc.GetNodeCreatureCondition(finalCreatures.condition).display}
+                            {`${lc.GetNodeCreatureCondition(finalCreatures.condition).display} ${finalCreatures.distance}`}
                           </span>
                         )}
                         <Info
