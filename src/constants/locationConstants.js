@@ -29,6 +29,7 @@ export const GetNewLocation = (exteriorLocationId) => ({
   reference: {
     distance: null,
     direction: null,
+    directionMod: null,
     location: null,
     connectionType: null,
   },

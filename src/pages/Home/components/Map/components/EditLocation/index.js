@@ -36,6 +36,7 @@ function EditLocation({
   isNewLoc,
 }) {
   let inputRef = useRef(null);
+  const directionMods = useRef(utils.createArrayFromInt(44).map((_, i) => ({ value: i + 1, display: `${i + 1}°` })));
   const [location, setLocation] = useState(utils.clone(locationToEdit));
   const [willAdjustMap, setWillAdjustMap] = useState(false);
   const [modal, setModal] = useState(null);
@@ -167,7 +168,15 @@ function EditLocation({
   }
 
   function HandleSelectRefDirection(updatedValue) {
-    location.distanceAngle = updatedValue.reference.direction ? lh.GetDistanceAngle(updatedValue.reference.direction) : null;
+    location.reference.directionMod = null;
+
+    HandleSelectRefDirectionMod(updatedValue);
+  }
+
+  function HandleSelectRefDirectionMod(updatedValue) {
+    location.distanceAngle = updatedValue.reference.direction
+      ? lh.GetDistanceAngle(updatedValue.reference.direction, updatedValue.reference.directionMod)
+      : null;
 
     setWillAdjustMap(true);
     HandleUpdateOnSelect();
@@ -479,17 +488,39 @@ function EditLocation({
         {!isWorld && !isFirstOfArea && (
           <>
             <div className="divider"></div>
-            <Select
-              label={"Localização Referência"}
-              extraWidth={250}
-              value={location}
-              valuePropertyPath="reference.location"
-              onSelect={HandleSelectRefLocation}
-              nothingSelected="-"
-              options={referenceLocations}
-              optionDisplay={(o) => o.refListName}
-              optionValue={(o) => o._id}
-            />
+            <div className="location-row df df-jc-sb">
+              <Select
+                label={"Localização Referência"}
+                extraWidth={150}
+                value={location}
+                valuePropertyPath="reference.location"
+                onSelect={HandleSelectRefLocation}
+                nothingSelected="-"
+                options={referenceLocations}
+                optionDisplay={(o) => o.refListName}
+                optionValue={(o) => o._id}
+              />
+              <Select
+                label={"Conecção"}
+                extraWidth={0}
+                value={location}
+                valuePropertyPath="reference.connectionType"
+                onSelect={HandleUpdateOnSelect}
+                nothingSelected="Nada"
+                options={lc.locationConnectionTypes}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+                // isDisabled={
+                //   location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST
+                //   &&
+                //   (!location._id ||
+                //     !map[location._id] ||
+                //     !Object.keys(map[location._id]?.interiorLocs).some(
+                //       (id) => !map[id].data.isHidden && map[id].data.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && !map[id].data.reference.location
+                //     ))
+                // }
+              />
+            </div>
             <div className="location-row df df-jc-sb">
               <Select
                 label={"Distância"}
@@ -514,24 +545,16 @@ function EditLocation({
                 optionValue={(o) => o.value}
               />
               <Select
-                label={"Conecção"}
+                label={"Modificador"}
                 extraWidth={0}
                 value={location}
-                valuePropertyPath="reference.connectionType"
-                onSelect={HandleUpdateOnSelect}
-                nothingSelected="Nada"
-                options={lc.locationConnectionTypes}
+                valuePropertyPath="reference.directionMod"
+                onSelect={HandleSelectRefDirectionMod}
+                nothingSelected="0°"
+                options={directionMods.current}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                // isDisabled={
-                //   location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST
-                //   &&
-                //   (!location._id ||
-                //     !map[location._id] ||
-                //     !Object.keys(map[location._id]?.interiorLocs).some(
-                //       (id) => !map[id].data.isHidden && map[id].data.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && !map[id].data.reference.location
-                //     ))
-                // }
+                isDisabled={!location.reference.direction}
               />
             </div>
           </>
