@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import * as utils from "../../../../../../utils";
 import * as lc from "../../../../../../constants/locationConstants";
 import { CREATURE_ENVIRONMENTS, creatureEnvironments } from "../../../../../../constants/creatureConstants";
@@ -21,6 +21,7 @@ import "./styles.css";
 
 function EditLocation({
   locationToEdit,
+  UpdateLocation,
   HandleSave,
   HandleMove,
   HandleDelete,
@@ -35,7 +36,7 @@ function EditLocation({
   isNewLoc,
 }) {
   let inputRef = useRef(null);
-  const [location, setLocation] = useState(locationToEdit);
+  const [location, setLocation] = useState(utils.clone(locationToEdit));
   const [willAdjustMap, setWillAdjustMap] = useState(false);
   const [modal, setModal] = useState(null);
 
@@ -148,28 +149,33 @@ function EditLocation({
 
   function HandleSelectSize(updatedValue) {
     location.radiusMultiplier = lh.GetRadiusMultiplier(updatedValue.size);
-    location.reference.connectionType = null;
-    setLocation({ ...location });
+    // location.reference.connectionType = null;
     setWillAdjustMap(true);
+    HandleUpdateOnSelect();
   }
 
-  function HandleSelectRefLocation(updatedValue) {
-    setLocation({ ...location });
+  function HandleSelectRefLocation() {
     setWillAdjustMap(true);
+    HandleUpdateOnSelect();
   }
 
   function HandleSelectRefDistance(updatedValue) {
     location.distanceMultiplier = updatedValue.reference.distance ? lh.GetDistanceMultiplier(updatedValue.reference.distance) : null;
 
-    setLocation({ ...location });
     setWillAdjustMap(true);
+    HandleUpdateOnSelect();
   }
 
   function HandleSelectRefDirection(updatedValue) {
     location.distanceAngle = updatedValue.reference.direction ? lh.GetDistanceAngle(updatedValue.reference.direction) : null;
 
-    setLocation({ ...location });
     setWillAdjustMap(true);
+    HandleUpdateOnSelect();
+  }
+
+  function HandleUpdateOnSelect() {
+    setLocation({ ...location });
+    UpdateLocation(location);
   }
 
   function HandleSelectContext(context) {
@@ -456,6 +462,11 @@ function EditLocation({
     setModal(null);
   }
 
+  useEffect(() => {
+    console.log("BBBBB");
+    // UpdateLocation(location);
+  }, [UpdateLocation, location]);
+
   return (
     <div className="EditLocation-container">
       {modal}
@@ -512,7 +523,7 @@ function EditLocation({
                 extraWidth={0}
                 value={location}
                 valuePropertyPath="reference.connectionType"
-                onSelect={setLocation}
+                onSelect={HandleUpdateOnSelect}
                 nothingSelected="Nada"
                 options={lc.locationConnectionTypes}
                 optionDisplay={(o) => o.display}
@@ -582,7 +593,7 @@ function EditLocation({
             extraWidth={250}
             value={location}
             valuePropertyPath="traversal.type"
-            onSelect={setLocation}
+            onSelect={HandleUpdateOnSelect}
             options={creatureEnvironments.filter((e) => e.value !== CREATURE_ENVIRONMENTS.URBAN && e.value !== CREATURE_ENVIRONMENTS.ALL)}
             optionDisplay={(o) => o.display}
             optionValue={(o) => o.value}
@@ -593,7 +604,7 @@ function EditLocation({
             extraWidth={250}
             value={location}
             valuePropertyPath="interaction.type"
-            onSelect={setLocation}
+            onSelect={HandleUpdateOnSelect}
             options={lc.elementTypes}
             optionDisplay={(o) => o.display}
             optionValue={(o) => o.value}

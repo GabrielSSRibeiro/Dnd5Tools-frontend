@@ -18,6 +18,7 @@ import ModalWarning from "../../../../components/ModalWarning";
 import "./styles.css";
 
 function Map({
+  UpdateLocation,
   HandleSaveLocation,
   HandleUpdateLocations,
   HandleDeleteLocations,
@@ -423,6 +424,7 @@ function Map({
   // }
 
   function HandleCancel() {
+    UpdateEditLoc(locationToEdit);
     setLocationToEdit(null);
   }
 
@@ -786,6 +788,12 @@ function Map({
 
     let radius = GetAllFirstLocRadius(location);
     return radius / 2;
+  }
+
+  function UpdateEditLoc(loc) {
+    if (loc._id) {
+      MapLoadingWrapper(() => UpdateLocation(loc));
+    }
   }
 
   async function MapLoadingWrapper(func, timer = 100) {
@@ -1327,6 +1335,7 @@ function Map({
             <div className="edit-location">
               <EditLocation
                 locationToEdit={locationToEdit}
+                UpdateLocation={UpdateEditLoc}
                 HandleSave={HandleSave}
                 HandleMove={HandleMove}
                 HandleDelete={locationToEdit.owner ? HandleDelete : null}

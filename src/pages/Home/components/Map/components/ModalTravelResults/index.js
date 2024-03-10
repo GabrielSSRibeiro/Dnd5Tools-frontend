@@ -1072,7 +1072,7 @@ function ModalTravelResults({
 
       <footer>
         <div className="df df-jc-fs df-cg-20 df-f1">
-          {addAction && (
+          {addAction && !isPointOfInterest && (
             <button className="df df-cg-5 button-simple" onClick={addAction}>
               <i className="fas fa-plus"></i>
               Adicionar

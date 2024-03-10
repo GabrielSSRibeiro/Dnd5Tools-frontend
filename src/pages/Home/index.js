@@ -79,6 +79,15 @@ function Home() {
     setCreatureToEdit(null);
   }
 
+  async function UpdateLocation(location) {
+    if (location._id) {
+      let index = locations.findIndex((l) => l._id === location._id);
+      locations.splice(index, 1, location);
+
+      setLocations([...locations]);
+    }
+  }
+
   async function HandleSaveLocation(locationToSave) {
     if (locationToSave.exteriorLocationId != null) {
       if (!locationToSave.owner) {
@@ -389,6 +398,7 @@ function Home() {
           </div>
           <div className={`section-wrapper ${openTab !== MAIN_TABS.MAP ? "hidden" : ""}`}>
             <Map
+              UpdateLocation={UpdateLocation}
               HandleSaveLocation={HandleSaveLocation}
               HandleUpdateLocations={HandleUpdateLocations}
               HandleDeleteLocations={HandleDeleteLocations}
