@@ -168,9 +168,15 @@ function ModalLocationDetails({
                     <i className="fas fa-plus"></i>
                   </button>
                   <span>{loc.name}</span>
-                  <button title="Abrir Detalhes" onClick={() => OpenModalLocationDetails(loc, loc._id, false)}>
-                    <i className="fas fa-book"></i>
-                  </button>
+                  {loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
+                    <button title="Editar" onClick={() => HandleEditLocation(loc)}>
+                      <i className="fas fa-pen"></i>
+                    </button>
+                  ) : (
+                    <button title="Abrir Detalhes" onClick={() => OpenModalLocationDetails(loc, loc._id, false)}>
+                      <i className="fas fa-book"></i>
+                    </button>
+                  )}
                 </div>
                 {loc.exteriorLocationId === id && filteredLocations[i + 1] && filteredLocations[i + 1].exteriorLocationId !== id && (
                   <div className="level-divider"></div>
