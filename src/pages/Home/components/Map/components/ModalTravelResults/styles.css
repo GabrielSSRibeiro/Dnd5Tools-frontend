@@ -16,6 +16,10 @@
   max-height: 250px;
 }
 
+.ModalTravelResults-container .details-wrapper.dungeon {
+  overflow: auto;
+}
+
 .ModalTravelResults-container .details-wrapper .dungeon-wrapper {
   width: 100%;
 }

@@ -558,8 +558,14 @@ function Map({
     HandleLocUpdate();
     HandleSaveCombatConfig();
 
-    MapLoadingWrapper(async () => await HandleUpdateLocations(updateLocationsReq), 200);
     setLocationToEdit(null);
+    MapLoadingWrapper(
+      async () =>
+        await HandleUpdateLocations(updateLocationsReq).then(() => {
+          setLocationToEdit(locations.find((l) => l._id === location._id));
+        }),
+      200
+    );
   }
 
   async function HandleDelete(location, deleteInteriorLocs) {

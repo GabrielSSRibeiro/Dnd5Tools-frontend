@@ -913,7 +913,7 @@ function ModalTravelResults({
         </aside>
 
         {/* loc */}
-        <aside className="details-wrapper df df-fd-c df-jc-fs" style={{ zIndex: 2 }}>
+        <aside className="details-wrapper dungeon df df-fd-c df-jc-fs" style={{ zIndex: 2 }}>
           {isPointOfInterest ? (
             <fieldset className="df dungeon-wrapper" disabled={isSafe}>
               <Dungeon
