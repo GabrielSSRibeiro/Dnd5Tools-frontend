@@ -52,11 +52,23 @@ function EditLocation({
     locationSizes
       .filter((s) => s.value !== lc.LOCATION_SIZES.POINT_OF_INTEREST)
       .forEach((s) => {
-        s.display += ` (raio ${utils.MInUnits(lc.BASE_VISION_IN_M * s.baseRadiusMultiplier)})`;
+        s.display += ` (raio ${utils.MInUnits((lc.BASE_VISION_IN_M * s.baseRadiusMultiplier) / 2)})`;
       });
 
     return locationSizes;
   }, [location._id, map]);
+  const referenceDistances = useMemo(() => {
+    let referenceDistances = utils.clone(lc.referenceDistances);
+
+    //add real value to display
+    referenceDistances
+      .filter((r) => r.value !== lc.REFERENCE_DISTANCES.ADJACENT)
+      .forEach((r) => {
+        r.display += ` (${utils.MInUnits((lc.BASE_VISION_IN_M * r.baseDistanceMultiplier) / 2)})`;
+      });
+
+    return referenceDistances;
+  }, []);
   const referenceLocations = useMemo(() => {
     let refLocations = [];
 
@@ -524,18 +536,18 @@ function EditLocation({
             <div className="location-row df df-jc-sb">
               <Select
                 label={"Distância"}
-                extraWidth={15}
+                extraWidth={50}
                 value={location}
                 valuePropertyPath="reference.distance"
                 onSelect={HandleSelectRefDistance}
                 nothingSelected="-"
-                options={lc.referenceDistances} //.filter((d) => d.value !== lc.REFERENCE_DISTANCES.ADJACENT || !map[location.exteriorLocationId])}
+                options={referenceDistances}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
               />
               <Select
                 label={"Direção"}
-                extraWidth={30}
+                extraWidth={0}
                 value={location}
                 valuePropertyPath="reference.direction"
                 onSelect={HandleSelectRefDirection}

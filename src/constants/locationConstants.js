@@ -64,8 +64,8 @@ export const locationSizes = [
   { display: "Médio", value: LOCATION_SIZES.MEDIUM, baseRadiusMultiplier: 2 },
   { display: "Grande", value: LOCATION_SIZES.LARGE, baseRadiusMultiplier: 3 },
   { display: "Extremo", value: LOCATION_SIZES.EXTREME, baseRadiusMultiplier: 5 },
-  { display: "Extremo 2", value: LOCATION_SIZES.EXTREME2, baseRadiusMultiplier: 7 },
-  { display: "Extremo 3", value: LOCATION_SIZES.EXTREME3, baseRadiusMultiplier: 10 },
+  { display: "Extremo", value: LOCATION_SIZES.EXTREME2, baseRadiusMultiplier: 7 },
+  { display: "Extremo", value: LOCATION_SIZES.EXTREME3, baseRadiusMultiplier: 10 },
 ];
 export const GetLocationSize = (value) => locationSizes.find((a) => a.value === value);
 
@@ -160,8 +160,8 @@ export const referenceDistances = [
   { display: "Média", value: REFERENCE_DISTANCES.MEDIUM, baseDistanceMultiplier: 2 },
   { display: "Grande", value: REFERENCE_DISTANCES.LARGE, baseDistanceMultiplier: 3 },
   { display: "Extrema", value: REFERENCE_DISTANCES.EXTREME, baseDistanceMultiplier: 5 },
-  { display: "Extrema 2", value: REFERENCE_DISTANCES.EXTREME2, baseDistanceMultiplier: 7 },
-  { display: "Extrema 3", value: REFERENCE_DISTANCES.EXTREME3, baseDistanceMultiplier: 10 },
+  { display: "Extrema", value: REFERENCE_DISTANCES.EXTREME2, baseDistanceMultiplier: 7 },
+  { display: "Extrema", value: REFERENCE_DISTANCES.EXTREME3, baseDistanceMultiplier: 10 },
 ];
 export const GetReferenceDistance = (value) => referenceDistances.find((a) => a.value === value);
 
@@ -188,14 +188,14 @@ export const DIRECTIONS = {
   NORTH_WEST: 80,
 };
 export const directions = [
-  { display: "Norte ↑", value: DIRECTIONS.NORTH, baseAngle: 90 },
-  { display: "Nordeste ↗", value: DIRECTIONS.NORTH_EAST, baseAngle: 45 },
-  { display: "Leste →", value: DIRECTIONS.EAST, baseAngle: 0 },
-  { display: "Sudeste ↘", value: DIRECTIONS.SOUTH_EAST, baseAngle: 315 },
-  { display: "Sul ↓", value: DIRECTIONS.SOUTH, baseAngle: 270 },
-  { display: "Sudoeste ↙", value: DIRECTIONS.SOUTH_WEST, baseAngle: 225 },
-  { display: "Oeste ←", value: DIRECTIONS.WEST, baseAngle: 180 },
-  { display: "Noroeste ↖", value: DIRECTIONS.NORTH_WEST, baseAngle: 135 },
+  { display: "→ (0°)", value: DIRECTIONS.EAST, baseAngle: 0 },
+  { display: "↗ (45°)", value: DIRECTIONS.NORTH_EAST, baseAngle: 45 },
+  { display: "↑ (90°)", value: DIRECTIONS.NORTH, baseAngle: 90 },
+  { display: "↖ (135°)", value: DIRECTIONS.NORTH_WEST, baseAngle: 135 },
+  { display: "← (180°)", value: DIRECTIONS.WEST, baseAngle: 180 },
+  { display: "↙ (225°)", value: DIRECTIONS.SOUTH_WEST, baseAngle: 225 },
+  { display: "↓ (270°)", value: DIRECTIONS.SOUTH, baseAngle: 270 },
+  { display: "↘ (315°)", value: DIRECTIONS.SOUTH_EAST, baseAngle: 315 },
 ];
 export const GetDirection = (value) => directions.find((a) => a.value === value);
 
