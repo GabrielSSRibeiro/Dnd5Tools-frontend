@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useRef } from "react";
 
 import * as utils from "../../../../../../../../utils";
 import {
   CREATURE_ACTION_TYPES,
   creatureActionTypes,
-  creatureActionPowerTotalPercentages,
+  // creatureActionPowerTotalPercentages,
   CREATURE_ACTION_FREQUENCIES,
   CREATURE_ACTION_ATTACK_REACHES,
   creatureActionFrequencies,
   damageIntensities,
   damageTypes,
+  CONDITIONS,
   conditions,
   conditionDurations,
   difficultyClasses,
@@ -29,6 +30,13 @@ import Modal from "../../../../../../../../components/Modal";
 import "./styles.css";
 
 function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose }) {
+  const nonDurationConditions = useRef([
+    CONDITIONS.SINK_TERRAIN,
+    CONDITIONS.RISE_TERRAIN,
+    CONDITIONS.PUSHED,
+    CONDITIONS.PULLED,
+    CONDITIONS.EXTRA_DAMAGE,
+  ]);
   const [tempReaction, setTempReaction] = useState(
     reaction
       ? utils.clone(reaction)
@@ -50,6 +58,10 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
           associatedWeakSpot: null,
           isSpell: false,
         }
+  );
+  const actionConditions = useMemo(
+    () => conditions.filter((c) => (c.value !== CONDITIONS.EXTRA_DAMAGE && c.value !== CONDITIONS.VULNERABILITY) || tempReaction.damageIntensity),
+    [tempReaction.damageIntensity]
   );
 
   function HandleSelectType(updatedValue) {
@@ -86,14 +98,30 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
   function HandleSelectDamageIntensity(updatedValue) {
     if (!updatedValue.damageIntensity) {
       updatedValue.damageType = null;
+
+      if (tempReaction.condition === CONDITIONS.EXTRA_DAMAGE || tempReaction.condition === CONDITIONS.VULNERABILITY) {
+        updatedValue.condition = null;
+      }
+
+      if (tempReaction.persistence === CONDITIONS.EXTRA_DAMAGE || tempReaction.persistence === CONDITIONS.VULNERABILITY) {
+        updatedValue.persistence = null;
+      }
     }
 
     setTempReaction(updatedValue);
   }
 
   function HandleSelectCondition(updatedValue) {
-    if (!updatedValue.condition) {
+    if (!updatedValue.condition || nonDurationConditions.current.includes(updatedValue.condition)) {
       updatedValue.conditionDuration = null;
+    }
+
+    setTempReaction(updatedValue);
+  }
+
+  function HandleSelectPersistence(updatedValue) {
+    if (!updatedValue.persistence || nonDurationConditions.current.includes(updatedValue.persistence)) {
+      updatedValue.persistenceDuration = null;
     }
 
     setTempReaction(updatedValue);
@@ -144,7 +172,7 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
       return false;
     }
 
-    if (tempReaction.difficultyClass && !tempReaction.damageIntensity && !tempReaction.condition) {
+    if (tempReaction.difficultyClass && !tempReaction.damageIntensity && !tempReaction.condition && !tempReaction.persistence) {
       return false;
     }
 
@@ -217,21 +245,16 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
             <aside>
               <section className="action-row">
                 <Select
-                  label={"Multiplicador (Efeito)"}
-                  info={[
-                    { text: "Porcetagem que esse efeito representa de uma açao com Poder Total" },
-                    { text: "" },
-                    { text: "Usado para calcular a dificuldade da criatura" },
-                  ]}
+                  label={"Alcance"}
                   extraWidth={100}
                   isLarge={true}
                   value={tempReaction}
-                  valuePropertyPath="creatureActionPowerTotalPercentage"
+                  valuePropertyPath="reach"
                   onSelect={setTempReaction}
-                  options={creatureActionPowerTotalPercentages}
+                  options={creatureActionTypes.find((t) => t.value === tempReaction.type).reaches}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
-                  className="invisible"
+                  optionsAtATime={4}
                 />
                 <Select
                   label={"Classe de Dificuldade (CD)"}
@@ -274,14 +297,14 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
                   optionValue={(o) => o.value}
                 />
                 <Select
-                  label={"Condição"}
+                  label={"Efeito"}
                   extraWidth={100}
                   isLarge={true}
-                  nothingSelected="Nenhuma"
+                  nothingSelected="Nenhum"
                   value={tempReaction}
                   valuePropertyPath="condition"
                   onSelect={HandleSelectCondition}
-                  options={conditions}
+                  options={actionConditions}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
                   optionsAtATime={4}
@@ -303,6 +326,7 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
                   optionValue={(o) => o.value}
                   className={
                     !tempReaction.condition ||
+                    nonDurationConditions.current.includes(tempReaction.condition) ||
                     tempReaction.type === CREATURE_ACTION_TYPES.EFFECT ||
                     tempReaction.type === CREATURE_ACTION_TYPES.HEALING
                       ? "invisible"
@@ -334,25 +358,6 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
             />
-            <Select
-              label={"Alcance"}
-              extraWidth={100}
-              isLarge={true}
-              value={tempReaction}
-              valuePropertyPath="reach"
-              onSelect={setTempReaction}
-              options={creatureActionTypes.find((t) => t.value === tempReaction.type).reaches}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-              optionsAtATime={4}
-            />
-            <TextInput
-              label="Descrição (Gatilho)"
-              value={tempReaction}
-              valuePropertyPath="triggerDescription"
-              onChange={setTempReaction}
-              className={`shorter-input${tempReaction.trigger !== CREATURE_REACTION_TRIGGERS.OTHER ? " invisible" : ""}`}
-            />
             <CheckInput
               label="Origem Mágica"
               info={[
@@ -363,6 +368,70 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
               onClick={() => setTempReaction({ ...tempReaction, isSpell: !tempReaction.isSpell })}
               isSelected={tempReaction.isSpell}
               className="row-check-box"
+            />
+            {/* <Select
+              label={"Multiplicador (Efeito)"}
+              info={[
+                { text: "Porcetagem que esse efeito representa de uma açao com Poder Total" },
+                { text: "" },
+                { text: "Usado para calcular a dificuldade da criatura" },
+              ]}
+              extraWidth={100}
+              isLarge={true}
+              value={tempReaction}
+              valuePropertyPath="creatureActionPowerTotalPercentage"
+              onSelect={setTempReaction}
+              options={creatureActionPowerTotalPercentages}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+              className="invisible"
+            /> */}
+            <TextInput
+              label="Descrição (Gatilho)"
+              value={tempReaction}
+              valuePropertyPath="triggerDescription"
+              onChange={setTempReaction}
+              className={`shorter-input${tempReaction.trigger !== CREATURE_REACTION_TRIGGERS.OTHER ? " invisible" : ""}`}
+            />
+            <Select
+              label={"Persistencia"}
+              info={[
+                { text: "Efeito extra de mesma CD que permanance na área de efeito por duraçao" },
+                { text: "" },
+                { text: "Ativa a primeira vez que entra em um turno se já nao foi alvo da origem do efeito esse turno" },
+                { text: "" },
+                { text: "Pode ser removida a depender da situação" },
+              ]}
+              extraWidth={100}
+              isLarge={true}
+              nothingSelected="Nenhuma"
+              value={tempReaction}
+              valuePropertyPath="persistence"
+              onSelect={HandleSelectPersistence}
+              options={actionConditions}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+              optionsAtATime={4}
+              className={tempReaction.type !== CREATURE_ACTION_TYPES.SAVING_THROW ? "invisible" : ""}
+            />
+            <Select
+              label={"Duração"}
+              extraWidth={100}
+              isLarge={true}
+              value={tempReaction}
+              valuePropertyPath="persistenceDuration"
+              onSelect={setTempReaction}
+              nothingSelected="Nenhuma"
+              options={conditionDurations}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+              className={
+                !tempReaction.persistence ||
+                nonDurationConditions.current.includes(tempReaction.persistence) ||
+                tempReaction.type !== CREATURE_ACTION_TYPES.SAVING_THROW
+                  ? "invisible"
+                  : ""
+              }
             />
           </section>
           <footer>

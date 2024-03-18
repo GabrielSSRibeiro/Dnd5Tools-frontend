@@ -1,6 +1,6 @@
 import React from "react";
 
-import { damageTypes, conditions } from "../../../../../../constants/creatureConstants";
+import { damageTypes, nonActionConditions } from "../../../../../../constants/creatureConstants";
 
 import CheckInput from "../../../../../../components/CheckInput";
 import SelectButton from "../../../../../../components/SelectButton";
@@ -50,7 +50,7 @@ function Resistencies({ creature, setCreature }) {
       <div className="conditions">
         <h2>Imune a Condições</h2>
         <div className="conditions-wrapper">
-          {conditions.map((c) => (
+          {nonActionConditions.map((c) => (
             <React.Fragment key={c.value}>
               <div className="conditions-options">
                 <CheckInput

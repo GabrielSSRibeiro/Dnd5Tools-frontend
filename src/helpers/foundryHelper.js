@@ -651,7 +651,7 @@ const GetItems = (creature, level, str) => {
 
   return items;
 };
-const GetActionName = (name, reach, repetitions, frequency, weakSpot) => {
+const GetActionName = (name, reach, repetitions, persistence, frequency, weakSpot) => {
   let actionName = name;
 
   // if (repetitions > 1) {
@@ -659,8 +659,11 @@ const GetActionName = (name, reach, repetitions, frequency, weakSpot) => {
   // } else {
   //   actionName += ` (${reach})`;
   // }
-  if (repetitions > 1) {
-    actionName += ` (Multiaçao x${repetitions})`;
+  if (repetitions > 1 || persistence) {
+    const persistenceDisplay = persistence ? "persistente" : "";
+    const repetitionsDisplay = repetitions > 1 ? "Multiaçao x" + repetitions : "";
+
+    actionName += ` (${persistenceDisplay}${persistenceDisplay && repetitionsDisplay ? ", " : ""}${repetitionsDisplay})`;
   }
 
   if (frequency || weakSpot) {
@@ -893,7 +896,7 @@ const GetFoundryExportAura = (aura, attack, str, level) => {
 
   return {
     _id: "custom",
-    name: GetActionName(aura.name, ch.GetAuraReachValue(aura.reach), null, null, null, aura.associatedWeakSpot),
+    name: GetActionName(aura.name, ch.GetAuraReachValue(aura.reach), null, null, null, null, aura.associatedWeakSpot),
     type: "feat",
     img: actionTypeAndIcon.icon,
     data: {
@@ -968,9 +971,30 @@ const GetFoundryExportAura = (aura, attack, str, level) => {
 };
 const GetFoundryExportAction = (action, attack, str, level) => {
   let description = "";
+
   if (action.isSpell) {
     description += `(Magia de Nível ${ch.GetActionSpellValue(action.frequency, level)} - V,S)<br />`;
   }
+
+  if (action.persistence) {
+    description += "Efeito";
+
+    if (action.persistenceDuration != null) {
+      description += `(${ch.GetConditionDurationValue(action.persistenceDuration)})`;
+    }
+
+    description += `: `;
+    if (action.persistence !== cc.CONDITIONS.SINK_TERRAIN && action.persistence !== cc.CONDITIONS.RISE_TERRAIN) {
+      description += `CD ${ch.GetDCValue(action.difficultyClass, level)} ${cc.GetSavingThrowAttribute(action.savingThrowAttribute).display} ou `;
+    }
+
+    description += `${cc.GetCondition(action.persistence).display}`;
+    if (action.persistenceDuration != null) {
+      description += ` por ${ch.GetConditionDurationValue(action.persistenceDuration)}`;
+    }
+    description += `<br />`;
+  }
+
   description += `${ch.GetActionReachValue(action.reach, action.type)}${GetActionDamangeAndConditionString(action, level, "strong")}`;
 
   const actionTypeAndIcon = GetActionTypeAndIcon(action.type, action.reach, action.isSpell);
@@ -981,6 +1005,7 @@ const GetFoundryExportAction = (action, attack, str, level) => {
       action.name,
       ch.GetActionReachValue(action.reach, action.type),
       cc.GetActionRepetitions(action.repetitions).multiplier,
+      action.persistence,
       cc.GetActionFrequency(action.frequency).display,
       action.associatedWeakSpot
     ),
@@ -1058,9 +1083,30 @@ const GetFoundryExportAction = (action, attack, str, level) => {
 };
 const GetFoundryExportReaction = (reaction, attack, str, level) => {
   let description = "";
+
   if (reaction.isSpell) {
     description += `(Magia de Nível ${ch.GetActionSpellValue(reaction.frequency, level)} - V,S)<br />`;
   }
+
+  if (reaction.persistence) {
+    description += "Efeito";
+
+    if (reaction.persistenceDuration != null) {
+      description += `(${ch.GetConditionDurationValue(reaction.persistenceDuration)})`;
+    }
+
+    description += `: `;
+    if (reaction.persistence !== cc.CONDITIONS.SINK_TERRAIN && reaction.persistence !== cc.CONDITIONS.RISE_TERRAIN) {
+      description += `CD ${ch.GetDCValue(reaction.difficultyClass, level)} ${cc.GetSavingThrowAttribute(reaction.savingThrowAttribute).display} ou `;
+    }
+
+    description += `${cc.GetCondition(reaction.persistence).display}`;
+    if (reaction.persistenceDuration != null) {
+      description += ` por ${ch.GetConditionDurationValue(reaction.persistenceDuration)}`;
+    }
+    description += `<br />`;
+  }
+
   description += `${reaction.triggerDescription ?? cc.GetReactionTrigger(reaction.trigger).display}, ${ch.GetActionReachValue(
     reaction.reach,
     reaction.type
@@ -1074,6 +1120,7 @@ const GetFoundryExportReaction = (reaction, attack, str, level) => {
       reaction.name,
       `${cc.GetReactionTrigger(reaction.trigger).display}, ${ch.GetActionReachValue(reaction.reach, reaction.type)}`,
       1,
+      reaction.persistence,
       cc.GetActionFrequency(reaction.frequency).display,
       reaction.associatedWeakSpot
     ),

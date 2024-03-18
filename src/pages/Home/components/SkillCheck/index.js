@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { getSkillCheck } from "../../../../helpers/skillCheckHelper";
-import { conditions, conditionDurations, DAMAGE_INTENSITIES, damageIntensities, difficultyClasses } from "../../../../constants/creatureConstants";
+import {
+  nonActionConditions,
+  conditionDurations,
+  DAMAGE_INTENSITIES,
+  damageIntensities,
+  difficultyClasses,
+} from "../../../../constants/creatureConstants";
 
 import Panel from "../../../../components/Panel";
 import Modal from "../../../../components/Modal";
@@ -70,9 +76,10 @@ function SkillCheck({ resultText, level }) {
               value={condition}
               onSelect={HandleSetCondition}
               nothingSelected={"Nenhuma"}
-              options={conditions}
+              options={nonActionConditions}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
+              dropUp
             />
             <Select
               extraWidth={150}

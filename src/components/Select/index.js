@@ -93,11 +93,11 @@ function Select({
           }}
         >
           {selectOptions.map((option) => (
-            <div key={option === nothingSelected ? nothingSelected : optionDisplay(option)}>
+            <div key={option === nothingSelected ? nothingSelected : optionDisplay(option)} style={{ padding: "0 10px" }}>
               <li
                 className="select-item"
                 style={{
-                  width: (selectWidth + extraWidth) * 0.7,
+                  width: (selectWidth + extraWidth) * 1,
                   height: height,
                   fontSize: isLarge ? 14 : 12,
                 }}

@@ -266,8 +266,11 @@ export const GetActionDamangeAndConditionString = (action, level, htmlTag) => {
     }
   }
 
-  if (action.repetitions) {
-    pieces.push(` (x${cc.GetActionRepetitions(action.repetitions).multiplier})`);
+  if (action.repetitions || action.persistence) {
+    const persistence = action.persistence ? "persistente" : "";
+    const repetitions = action.repetitions ? "x" + cc.GetActionRepetitions(action.repetitions).multiplier : "";
+
+    pieces.push(` (${persistence}${persistence && repetitions ? ", " : ""}${repetitions})`);
   }
 
   let fianlString = pieces.join(", ");

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useRef } from "react";
 
 import * as utils from "../../../../../../../../utils";
 import {
@@ -9,6 +9,7 @@ import {
   creatureAuraReaches,
   damageIntensities,
   damageTypes,
+  CONDITIONS,
   conditions,
   conditionDurations,
   difficultyClasses,
@@ -25,6 +26,13 @@ import Modal from "../../../../../../../../components/Modal";
 import "./styles.css";
 
 function ModalManageAura({ level, aura, weakSpots, onClose }) {
+  const nonDurationConditions = useRef([
+    CONDITIONS.SINK_TERRAIN,
+    CONDITIONS.RISE_TERRAIN,
+    CONDITIONS.PUSHED,
+    CONDITIONS.PULLED,
+    CONDITIONS.EXTRA_DAMAGE,
+  ]);
   const [tempAura, setTempAura] = useState(
     aura
       ? utils.clone(aura)
@@ -42,6 +50,10 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
           savingThrowAttribute: null,
           associatedWeakSpot: null,
         }
+  );
+  const actionConditions = useMemo(
+    () => conditions.filter((c) => (c.value !== CONDITIONS.EXTRA_DAMAGE && c.value !== CONDITIONS.VULNERABILITY) || tempAura.damageIntensity),
+    [tempAura.damageIntensity]
   );
 
   function HandleSelectType(updatedValue) {
@@ -72,13 +84,17 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
   function HandleSelectDamageIntensity(updatedValue) {
     if (!updatedValue.damageIntensity) {
       updatedValue.damageType = null;
+
+      if (tempAura.condition === CONDITIONS.EXTRA_DAMAGE || tempAura.condition === CONDITIONS.VULNERABILITY) {
+        updatedValue.condition = null;
+      }
     }
 
     setTempAura(updatedValue);
   }
 
   function HandleSelectCondition(updatedValue) {
-    if (!updatedValue.condition) {
+    if (!updatedValue.condition || nonDurationConditions.current.includes(updatedValue.condition)) {
       updatedValue.conditionDuration = null;
     }
 
@@ -197,22 +213,18 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
             <aside>
               <section className="action-row">
                 <Select
-                  label={"Multiplicador (Efeito)"}
-                  info={[
-                    { text: "Porcetagem que esse efeito representa de uma açao com Poder Total" },
-                    { text: "" },
-                    { text: "Usado para calcular a dificuldade da criatura" },
-                  ]}
+                  label={"Alcance"}
                   extraWidth={100}
                   isLarge={true}
                   value={tempAura}
-                  valuePropertyPath="creatureActionPowerTotalPercentage"
+                  valuePropertyPath="reach"
                   onSelect={setTempAura}
-                  options={creatureActionPowerTotalPercentages}
+                  options={creatureAuraReaches}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
-                  className="invisible"
+                  optionsAtATime={4}
                 />
+
                 <Select
                   label={"Classe de Dificuldade (CD)"}
                   extraWidth={100}
@@ -243,14 +255,14 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
               <section className="action-row">
                 <Select label={"Gatilho"} extraWidth={100} isLarge={true} className={"invisible"} />
                 <Select
-                  label={"Condição"}
+                  label={"Efeito"}
                   extraWidth={100}
                   isLarge={true}
-                  nothingSelected="Nenhuma"
+                  nothingSelected="Nenhum"
                   value={tempAura}
                   valuePropertyPath="condition"
                   onSelect={HandleSelectCondition}
-                  options={conditions}
+                  options={actionConditions}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
                   optionsAtATime={4}
@@ -269,7 +281,10 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
                   className={
-                    !tempAura.condition || tempAura.type === CREATURE_ACTION_TYPES.EFFECT || tempAura.type === CREATURE_ACTION_TYPES.HEALING
+                    !tempAura.condition ||
+                    nonDurationConditions.current.includes(tempAura.condition) ||
+                    tempAura.type === CREATURE_ACTION_TYPES.EFFECT ||
+                    tempAura.type === CREATURE_ACTION_TYPES.HEALING
                       ? "invisible"
                       : ""
                   }
@@ -279,16 +294,21 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
           </section>
           <section className="action-row">
             <Select
-              label={"Alcance"}
+              label={"Multiplicador (Efeito)"}
+              info={[
+                { text: "Porcetagem que esse efeito representa de uma açao com Poder Total" },
+                { text: "" },
+                { text: "Usado para calcular a dificuldade da criatura" },
+              ]}
               extraWidth={100}
               isLarge={true}
               value={tempAura}
-              valuePropertyPath="reach"
+              valuePropertyPath="creatureActionPowerTotalPercentage"
               onSelect={setTempAura}
-              options={creatureAuraReaches}
+              options={creatureActionPowerTotalPercentages}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
-              optionsAtATime={4}
+              className="invisible"
             />
           </section>
           <footer>

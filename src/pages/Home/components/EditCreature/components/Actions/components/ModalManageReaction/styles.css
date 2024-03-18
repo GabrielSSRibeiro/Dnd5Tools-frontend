@@ -23,8 +23,9 @@
 }
 
 .ModalManageReaction-container .modal-action .new-action-wrapper .action-row .row-check-box {
-  margin-left: 215px;
-  align-self: flex-end;
+  margin-top: 23px;
+  align-self: flex-start;
+  margin-right: 20px;
 }
 
 .ModalManageReaction-container .modal-action .new-action-wrapper .action-row aside {

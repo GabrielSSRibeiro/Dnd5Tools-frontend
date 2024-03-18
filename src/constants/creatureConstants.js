@@ -851,6 +851,10 @@ export const regenerationNoBreakDamange = { value: null, weight: 4 };
 export const GetDamageType = (value) => damageTypes.find((i) => i.value === value);
 
 export const CONDITIONS = {
+  SINK_TERRAIN: 6,
+  RISE_TERRAIN: 7,
+  PUSHED: 8,
+  PULLED: 9,
   GRAPPLED: 10,
   PRONE: 20,
   BLINDED: 30,
@@ -862,9 +866,15 @@ export const CONDITIONS = {
   PARALYZED: 80,
   PETRIFIED: 90,
   UNCONSCIOUS: 100,
+  EXTRA_DAMAGE: 108,
+  VULNERABILITY: 109,
   EXHAUSTION: 110,
 };
 export const conditions = [
+  { display: "Afundar espaço 1,5m", value: CONDITIONS.SINK_TERRAIN, weight: 1 },
+  { display: "Elevar espaço 1,5m", value: CONDITIONS.RISE_TERRAIN, weight: 1 },
+  { display: "Empurrado 1,5m", value: CONDITIONS.PUSHED, weight: 1 },
+  { display: "Puxado 1,5m", value: CONDITIONS.PULLED, weight: 1 },
   { display: "Agarrado", value: CONDITIONS.GRAPPLED, weight: 1 },
   { display: "Derrubado", value: CONDITIONS.PRONE, weight: 2 },
   { display: "Cego/Surdo", value: CONDITIONS.BLINDED, weight: 3 },
@@ -875,8 +885,21 @@ export const conditions = [
   { display: "Enfeitiçado", value: CONDITIONS.CHARMED, weight: 7 },
   { display: "Paralizado", value: CONDITIONS.PARALYZED, weight: 8 },
   { display: "Petrificado", value: CONDITIONS.PETRIFIED, weight: 9 },
+  { display: "Dano extra (metade)", value: CONDITIONS.EXTRA_DAMAGE, weight: 10 },
+  { display: "Vulnerabilidade", value: CONDITIONS.VULNERABILITY, weight: 10 },
   { display: "Exaustao", value: CONDITIONS.EXHAUSTION, weight: 10 },
 ];
+export const nonActionConditions = conditions.filter(
+  (c) =>
+    ![
+      CONDITIONS.SINK_TERRAIN,
+      CONDITIONS.RISE_TERRAIN,
+      CONDITIONS.PUSHED,
+      CONDITIONS.PULLED,
+      CONDITIONS.EXTRA_DAMAGE,
+      CONDITIONS.VULNERABILITY,
+    ].includes(c.value)
+);
 export const GetCondition = (value) => conditions.find((i) => i.value === value);
 
 export const CONDITION_DURATIONS = {
@@ -1017,6 +1040,7 @@ export const CREATURE_ACTION_ATTACK_REACHES = {
   MELEE_CLOSE: 10,
   MELEE_EXTRA: 20,
   MELEE_FAR: 30,
+  RANGED_VERY_CLOSE: 35,
   RANGED_CLOSE: 40,
   RANGED_EXTRA: 50,
   RANGED_FAR: 60,
@@ -1025,6 +1049,7 @@ export const creatureActionAttackReaches = [
   { display: "Corpo a Corpo, 1,5m", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE, weight: 1, isMelee: true },
   { display: "Corpo a Corpo, 3m", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_EXTRA, weight: 2, isMelee: true },
   { display: "Corpo a Corpo, 4,5m", value: CREATURE_ACTION_ATTACK_REACHES.MELEE_FAR, weight: 3, isMelee: true },
+  { display: "Distância, 4,5m", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_VERY_CLOSE, weight: 3, isMelee: false },
   { display: "Distância, 9m", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_CLOSE, weight: 4, isMelee: false },
   { display: "Distância, 18m", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_EXTRA, weight: 5, isMelee: false },
   { display: "Distância, 36-90m", value: CREATURE_ACTION_ATTACK_REACHES.RANGED_FAR, weight: 6, isMelee: false },
@@ -1067,7 +1092,7 @@ export const creatureActionTypes = [
   { display: "Ataque", value: CREATURE_ACTION_TYPES.ATTACK, weight: 0, reaches: creatureActionAttackReaches },
   { display: "Teste de Resistência", value: CREATURE_ACTION_TYPES.SAVING_THROW, weight: 0, reaches: creatureActionSavingThrowReaches },
   { display: "Cura", value: CREATURE_ACTION_TYPES.HEALING, weight: 0, reaches: creatureActionHealingReaches },
-  { display: "Efeito", value: CREATURE_ACTION_TYPES.EFFECT, weight: 0, reaches: creatureActionHealingReaches },
+  { display: "Especial", value: CREATURE_ACTION_TYPES.EFFECT, weight: 0, reaches: creatureActionHealingReaches },
 ];
 export const GetCreatureActionType = (value) => creatureActionTypes.find((i) => i.value === value);
 
