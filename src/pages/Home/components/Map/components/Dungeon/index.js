@@ -190,7 +190,9 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
       roomTooltip.push({ text: `${roomHeight} (altura)` });
     }
 
-    roomTooltip.push({ text: `${lc.GetElementType(type).display}${isHazardous ? " (perigoso)" : ""}` });
+    if (type) {
+      roomTooltip.push({ text: `${lc.GetElementType(type).display}${isHazardous ? " (perigoso)" : ""}` });
+    }
 
     if (rarity) {
       roomTooltip.push({ text: `Material ${GetRarity(rarity).treasureDisplay}` });
