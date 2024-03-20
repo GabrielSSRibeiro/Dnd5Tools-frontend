@@ -476,12 +476,16 @@ export const ROOM_HEIGHTS = {
   MEDIUM: 20,
   HIGH: 30,
   EXTREME: 40,
+  EXTREME2: 50,
+  EXTREME3: 60,
 };
 export const roomHeights = [
   { display: "Baixa (1,5m)", value: ROOM_HEIGHTS.LOW, metersDisplay: "1,5m", meters: 1.5 },
   { display: "Média (3m)", value: ROOM_HEIGHTS.MEDIUM, metersDisplay: "3m", meters: 3 },
   { display: "Alta (6m)", value: ROOM_HEIGHTS.HIGH, metersDisplay: "6m", meters: 6 },
   { display: "Extrema (9m)", value: ROOM_HEIGHTS.EXTREME, metersDisplay: "9m", meters: 9 },
+  { display: "Extrema (18m)", value: ROOM_HEIGHTS.EXTREME2, metersDisplay: "18m", meters: 18 },
+  { display: "Extrema (36m)", value: ROOM_HEIGHTS.EXTREME3, metersDisplay: "36m", meters: 36 },
 ];
 export const GetRoomHeight = (value) => roomHeights.find((a) => a.value === value);
 
