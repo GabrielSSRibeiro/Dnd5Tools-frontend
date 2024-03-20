@@ -21,6 +21,7 @@ export const GetNewLocation = (exteriorLocationId) => ({
   },
   interaction: {
     type: null,
+    height: null,
     isHazardous: false,
     rarity: null,
     currentCreatures: null,

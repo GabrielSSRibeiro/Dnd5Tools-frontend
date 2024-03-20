@@ -204,6 +204,42 @@ function ModalManageDungeonRoom({
 
             <div className="df df-cg-10 room-row">
               <Select
+                label={"Piso"}
+                extraWidth={40}
+                value={tempRoom}
+                valuePropertyPath="floor.connection"
+                onSelect={(d) => HandleSelectConnection(d, "floor")}
+                options={lc.roomConnections}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+                nothingSelected="Nenhuma"
+              />
+              <Select
+                label={"Direção conexão"}
+                extraWidth={70}
+                value={tempRoom}
+                valuePropertyPath="floor.direction"
+                onSelect={setTempRoom}
+                options={lc.roomConnectionDirections.filter((d) => d.value !== tempRoom.ceiling.direction)}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+                nothingSelected="Nenhuma"
+                isDisabled={!tempRoom.floor.connection}
+              />
+              <button
+                title="Descriçao"
+                className={`button-simple${!tempRoom.floor.description ? " lacking-data" : ""}${
+                  !tempRoom.floor.connection ? " element-disabled" : ""
+                } `}
+                onClick={() => OpenModalRoomConnectionDetails("floor")}
+                disabled={!tempRoom.floor.connection}
+              >
+                <i className="fas fa-eye"></i>
+              </button>
+            </div>
+
+            <div className="df df-cg-10 room-row">
+              <Select
                 label={"Cima ↑"}
                 extraWidth={45}
                 value={tempRoom}
@@ -288,51 +324,6 @@ function ModalManageDungeonRoom({
                 <i className="fas fa-eye"></i>
               </button>
             </div>
-            <Select
-              label={"Altura"}
-              extraWidth={250}
-              value={tempRoom}
-              valuePropertyPath="height"
-              onSelect={setTempRoom}
-              options={lc.roomHeights}
-              optionDisplay={(o) => o.display}
-              optionValue={(o) => o.value}
-            />
-            <div className="df df-cg-10 room-row">
-              <Select
-                label={"Piso"}
-                extraWidth={40}
-                value={tempRoom}
-                valuePropertyPath="floor.connection"
-                onSelect={(d) => HandleSelectConnection(d, "floor")}
-                options={lc.roomConnections}
-                optionDisplay={(o) => o.display}
-                optionValue={(o) => o.value}
-                nothingSelected="Nenhuma"
-              />
-              <Select
-                label={"Direção conexão"}
-                extraWidth={70}
-                value={tempRoom}
-                valuePropertyPath="floor.direction"
-                onSelect={setTempRoom}
-                options={lc.roomConnectionDirections.filter((d) => d.value !== tempRoom.ceiling.direction)}
-                optionDisplay={(o) => o.display}
-                optionValue={(o) => o.value}
-                nothingSelected="Nenhuma"
-                isDisabled={!tempRoom.floor.connection}
-              />
-              <button
-                title="Descriçao"
-                className={`button-simple${!tempRoom.floor.description ? " lacking-data" : ""}${
-                  !tempRoom.floor.connection ? " element-disabled" : ""
-                } `}
-                onClick={() => OpenModalRoomConnectionDetails("floor")}
-                disabled={!tempRoom.floor.connection}
-              >
-                <i className="fas fa-eye"></i>
-              </button>
-            </div>
             <div className="df df-cg-10 room-row">
               <Select
                 label={"Teto"}
@@ -370,6 +361,16 @@ function ModalManageDungeonRoom({
             </div>
           </>
         )}
+        <Select
+          label={"Altura"}
+          extraWidth={250}
+          value={tempRoom}
+          valuePropertyPath="height"
+          onSelect={setTempRoom}
+          options={lc.roomHeights}
+          optionDisplay={(o) => o.display}
+          optionValue={(o) => o.value}
+        />
         <div className="df df-ai-fs df-cg-15 room-row">
           <Select
             label={"Tipo"}

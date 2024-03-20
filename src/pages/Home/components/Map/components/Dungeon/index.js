@@ -47,6 +47,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
     const roomToManage = isEntrance
       ? {
           type: location.interaction.type,
+          height: location.interaction.height,
           isHazardous: location.interaction.isHazardous,
           rarity: location.interaction.rarity,
           creatures: location.creatures,
@@ -84,6 +85,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
     if (tempRoom) {
       if (isEntrance) {
         location.interaction.type = tempRoom.type;
+        location.interaction.height = tempRoom.height;
         location.interaction.isHazardous = tempRoom.isHazardous;
         location.interaction.rarity = tempRoom.rarity;
         location.creatures = tempRoom.creatures;
@@ -179,6 +181,22 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
     // );
   }
 
+  function AddRoomDetails(roomTooltip, type, size, height, isHazardous, rarity) {
+    const sizeInMeters = size ? lc.GetRoomSize(size).meters : null;
+    const roomHeight = height ? lc.GetRoomHeight(height).metersDisplay : null;
+    if (sizeInMeters && roomHeight) {
+      roomTooltip.push({ text: `${sizeInMeters}m x ${sizeInMeters}m x ${roomHeight} (altura)` });
+    } else if (roomHeight) {
+      roomTooltip.push({ text: `${roomHeight} (altura)` });
+    }
+
+    roomTooltip.push({ text: `${lc.GetElementType(type).display}${isHazardous ? " (perigoso)" : ""}` });
+
+    if (rarity) {
+      roomTooltip.push({ text: `Material ${GetRarity(rarity).treasureDisplay}` });
+    }
+  }
+
   function GetRoomTooltip(purpose, roomCurrentCreatures, room = null) {
     let roomTooltip = [];
 
@@ -200,18 +218,17 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
         roomTooltip.push({ text: "" });
       }
 
-      const sizeInMeters = lc.GetRoomSize(room.size).meters;
-      if (sizeInMeters) {
-        roomTooltip.push({ text: `${sizeInMeters}m x ${sizeInMeters}m x ${lc.GetRoomHeight(room.height).metersDisplay} (altura)` });
-      } else {
-        roomTooltip.push({ text: `${lc.GetRoomHeight(room.height).metersDisplay} (altura)` });
-      }
-
-      roomTooltip.push({ text: `${lc.GetElementType(room.type).display}${room.isHazardous ? " (perigoso)" : ""}` });
-
-      if (room.rarity) {
-        roomTooltip.push({ text: `Material ${GetRarity(room.rarity).treasureDisplay}` });
-      }
+      AddRoomDetails(roomTooltip, room.type, room.size, room.height, room.isHazardous, room.rarity);
+    } else {
+      roomTooltip.push({ text: "" });
+      AddRoomDetails(
+        roomTooltip,
+        location.interaction.type,
+        null,
+        location.interaction.height,
+        location.interaction.isHazardous,
+        location.interaction.rarity
+      );
     }
 
     if (roomCurrentCreatures.length > 0) {
