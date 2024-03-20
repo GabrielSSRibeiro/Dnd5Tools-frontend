@@ -563,6 +563,7 @@ function EditLocation({
                 valuePropertyPath="reference.directionMod"
                 onSelect={HandleSelectRefDirectionMod}
                 nothingSelected="0°"
+                optionsAtATime={10}
                 options={directionMods.current}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
