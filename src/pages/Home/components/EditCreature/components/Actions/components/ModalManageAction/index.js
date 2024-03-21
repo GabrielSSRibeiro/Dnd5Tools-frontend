@@ -380,7 +380,7 @@ function ModalManageAction({ level, action, invalidNames, weakSpots, onClose }) 
               info={[
                 { text: "Efeito extra de mesma CD que permanance na área de efeito por duraçao" },
                 { text: "" },
-                { text: "Ativa a primeira vez que entra em um turno se já nao foi alvo da origem do efeito esse turno" },
+                { text: "Ativa a primeira vez que entra em um turno se já nao foi alvo da origem do efeito essa rodada" },
                 { text: "" },
                 { text: "Pode ser removida a depender da situação" },
               ]}
