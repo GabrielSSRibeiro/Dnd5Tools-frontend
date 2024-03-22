@@ -84,6 +84,22 @@
   border-top: 1px solid var(--black);
 }
 
+.EditLocation-container .location-detail-group-item.location-creature {
+  padding: 5px 10px;
+  column-gap: 5px;
+}
+
+.EditLocation-container .location-detail-group-item.location-creature .position-arrow-up {
+  translate: 0 20%;
+  width: 10px;
+  height: 100%;
+}
+.EditLocation-container .location-detail-group-item.location-creature .position-arrow-down {
+  translate: 0 -20%;
+  width: 10px;
+  height: 100%;
+}
+
 .EditLocation-container .location-detail-group-item.location-creature > span {
   width: 100%;
 }

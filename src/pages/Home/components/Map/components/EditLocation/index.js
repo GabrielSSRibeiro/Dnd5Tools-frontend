@@ -483,6 +483,11 @@ function EditLocation({
     setModal(null);
   }
 
+  function SwapCreatures(index1, index2) {
+    utils.SwapElementsInArray(location.creatures, index1, index2);
+    setLocation({ ...location });
+  }
+
   return (
     <div className="EditLocation-container">
       {modal}
@@ -699,57 +704,67 @@ function EditLocation({
               const name = creatures.find((c) => c._id === locC.creatureId).name;
 
               return (
-                <div className="location-row location-detail-group-item df-fd-c location-creature" key={locC.creatureId}>
-                  <div className="group-item-actions">
-                    <span>{name.slice(0, 40)}</span>
-                    <span className="df df-cg-5">
-                      {locC.population ? `${locC.population.current} / ${locC.population.value}` : <i className="fas fa-infinity"></i>}
-                      <button onClick={() => OpenModalManageCreaturePopulation(locC)}>
-                        <i className="fas fa-pencil-alt"></i>
-                      </button>
-                      <button onClick={() => OpenModalManageRoutine(locC)}>
-                        <i className="fas fa-plus"></i>
-                      </button>
-                    </span>
+                <div className="location-row location-detail-group-item location-creature" key={locC.creatureId}>
+                  <div className="df df-fd-c">
+                    <button className="df" onClick={() => SwapCreatures(cIndex, cIndex - 1)} disabled={cIndex === 0}>
+                      <i className="fas fa-sort-up position-arrow-up"></i>
+                    </button>
+                    <button className="df" onClick={() => SwapCreatures(cIndex, cIndex + 1)} disabled={location.creatures.length - 1 === cIndex}>
+                      <i className="fas fa-sort-down position-arrow-down"></i>
+                    </button>
                   </div>
-                  {locC.routines.map((r, rIndex) => {
-                    const rContextIndex = location.contexts.findIndex((c) => c.name === r.context);
+                  <div className="df df-fd-c full-width">
+                    <div className="group-item-actions full-width">
+                      <span>{name.slice(0, 40)}</span>
+                      <span className="df df-cg-5">
+                        {locC.population ? `${locC.population.current} / ${locC.population.value}` : <i className="fas fa-infinity"></i>}
+                        <button onClick={() => OpenModalManageCreaturePopulation(locC)}>
+                          <i className="fas fa-pencil-alt"></i>
+                        </button>
+                        <button onClick={() => OpenModalManageRoutine(locC)}>
+                          <i className="fas fa-plus"></i>
+                        </button>
+                      </span>
+                    </div>
+                    {locC.routines.map((r, rIndex) => {
+                      const rContextIndex = location.contexts.findIndex((c) => c.name === r.context);
 
-                    return (
-                      <div className="routine df df-jc-sb df-cg-5" key={r.encounterFrequency + rIndex}>
-                        <span>
-                          {lc.GetGroupSize(r.groupSize).routineDisplay} <i className="fas fa-dragon"></i>
-                        </span>
-                        <div className="df df-cg-5">
-                          {rContextIndex >= 0 && <span>{rContextIndex + 1}.</span>}
-                          {r.schedule && (
-                            <span>
-                              <i className={lc.GetRoutineSchedule(r.schedule).icon}></i>
-                            </span>
-                          )}
-                          {r.precipitation && (
-                            <span>
-                              <i className={lc.GetRoutinePrecipitation(r.precipitation).icon}></i>
-                            </span>
-                          )}
-                          {r.temperature && (
-                            <span>
-                              <i className={lc.GetRoutineTemperature(r.temperature).icon}></i>
-                            </span>
-                          )}
-                          <span>{utils.turnValueIntoPercentageString(lc.GetEncounterFrequency(r.encounterFrequency).probability)}</span>
-                          <div className="group-item-actions">
-                            <button onClick={() => OpenModalManageRoutine(locC, r)}>
-                              <i className="fas fa-pencil-alt"></i>
-                            </button>
-                            <button onClick={() => DeleteRoutine(locC, cIndex, r)} disabled={locC.routines.length === 1}>
-                              <i className="fas fa-trash"></i>
-                            </button>
+                      return (
+                        <div className="routine df df-jc-sb df-cg-5" key={r.encounterFrequency + rIndex}>
+                          <span>
+                            {lc.GetGroupSize(r.groupSize).routineDisplay} <i className="fas fa-dragon"></i>
+                          </span>
+                          <div className="df df-cg-5">
+                            {rContextIndex >= 0 && <span>{rContextIndex + 1}.</span>}
+                            {r.schedule && (
+                              <span>
+                                <i className={lc.GetRoutineSchedule(r.schedule).icon}></i>
+                              </span>
+                            )}
+                            {r.precipitation && (
+                              <span>
+                                <i className={lc.GetRoutinePrecipitation(r.precipitation).icon}></i>
+                              </span>
+                            )}
+                            {r.temperature && (
+                              <span>
+                                <i className={lc.GetRoutineTemperature(r.temperature).icon}></i>
+                              </span>
+                            )}
+                            <span>{utils.turnValueIntoPercentageString(lc.GetEncounterFrequency(r.encounterFrequency).probability)}</span>
+                            <div className="group-item-actions">
+                              <button onClick={() => OpenModalManageRoutine(locC, r)}>
+                                <i className="fas fa-pencil-alt"></i>
+                              </button>
+                              <button onClick={() => DeleteRoutine(locC, cIndex, r)} disabled={locC.routines.length === 1}>
+                                <i className="fas fa-trash"></i>
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               );
             })}

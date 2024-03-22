@@ -286,3 +286,13 @@ export function sortByCustomOrder(array, customOrder) {
     return indexA - indexB;
   });
 }
+
+export function SwapElementsInArray(array, index1, index2) {
+  // Check if the provided indices are within the bounds of the array
+  if (index1 < 0 || index1 >= array.length || index2 < 0 || index2 >= array.length) {
+    return;
+  }
+
+  // Swap the elements using array destructuring
+  [array[index1], array[index2]] = [array[index2], array[index1]];
+}
