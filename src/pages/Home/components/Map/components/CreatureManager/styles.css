@@ -1,0 +1,27 @@
+.CreatureManager-container .location-detail-group-item.location-creature {
+  padding: 5px 10px;
+  column-gap: 5px;
+}
+
+.CreatureManager-container .location-detail-group-item.location-creature .position-arrow-up {
+  translate: 0 20%;
+  width: 10px;
+  height: 100%;
+}
+.CreatureManager-container .location-detail-group-item.location-creature .position-arrow-down {
+  translate: 0 -20%;
+  width: 10px;
+  height: 100%;
+}
+
+.CreatureManager-container .location-detail-group-item.location-creature > span {
+  width: 100%;
+}
+
+.CreatureManager-container .location-detail-group-item.location-creature .routine {
+  width: 100%;
+}
+
+.CreatureManager-container .location-detail-group-item.location-creature .routine .routine-variables {
+  flex: 1;
+}

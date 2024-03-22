@@ -6,12 +6,12 @@ import * as cc from "../../../../../../../../constants/creatureConstants";
 import * as utils from "../../../../../../../../utils";
 
 import Modal from "../../../../../../../../components/Modal";
-import ModalManageCreatureRoutine from "../../../ModalManageCreatureRoutine";
 import ModalTextArea from "../../../../../../../../components/ModalTextArea";
 import Button from "../../../../../../../../components/Button";
 import Select from "../../../../../../../../components/Select";
 import CheckInput from "../../../../../../../../components/CheckInput";
 import TextInput from "../../../../../../../../components/TextInput";
+import CreatureManager from "../../../CreatureManager";
 
 import "./styles.css";
 
@@ -78,35 +78,6 @@ function ModalManageDungeonRoom({
 
   function HandleConfirm() {
     onClose(tempRoom);
-  }
-
-  function OpenModalManageRoutine(creature, routine) {
-    setModal(
-      <ModalManageCreatureRoutine
-        routine={routine}
-        contexts={contexts.map((c) => c.name)}
-        isPointOfInterest={true}
-        isRoom={true}
-        onClose={(tempRoutine) => HandleCloseModalManageRoutine(creature, routine, tempRoutine)}
-      />
-    );
-  }
-  function HandleCloseModalManageRoutine(creature, routine, tempRoutine) {
-    if (tempRoutine) {
-      if (routine) {
-        let index = creature.routines.findIndex((r) => r.encounterFrequency === routine.encounterFrequency);
-        creature.routines.splice(index, 1, tempRoutine);
-      } else {
-        creature.routines.push(tempRoutine);
-      }
-    }
-
-    setModal(null);
-  }
-  function DeleteRoutine(creature, cIndex, routine) {
-    creature.routines = creature.routines.filter((r) => r.encounterFrequency !== routine.encounterFrequency);
-    tempRoom.creatures[cIndex] = creature;
-    setTempRoom({ ...tempRoom, creatures: tempRoom.creatures });
   }
 
   function OpenModalRoomDetails(property, title, placeholder) {
@@ -404,68 +375,15 @@ function ModalManageDungeonRoom({
           />
         )}
 
-        <div className="location-detail-group">
-          <div className="location-row location-detail-group-title">
-            <span className={tempRoom.creatures.length === 0 ? `lacking-data` : ""}>Criaturas</span>
-            <button onClick={() => HandleSelectCreatures(tempRoom, setTempRoom)}>
-              <i className="fas fa-retweet"></i>
-            </button>
-          </div>
-
-          {/* creatures */}
-          {tempRoom.creatures.map((locC, cIndex) => {
-            const name = creatures.find((c) => c._id === locC.creatureId).name;
-
-            return (
-              <div className="location-row location-detail-group-item df-fd-c location-creature" key={locC.creatureId}>
-                <div className="group-item-actions">
-                  <span>{name}</span>
-                  <button onClick={() => OpenModalManageRoutine(locC)}>
-                    <i className="fas fa-plus"></i>
-                  </button>
-                </div>
-                {locC.routines.map((r, rIndex) => {
-                  const rContextIndex = contexts.findIndex((c) => c.name === r.context);
-
-                  return (
-                    <div className="routine df df-jc-sb df-cg-5" key={r.encounterFrequency + rIndex}>
-                      <span>
-                        {lc.GetGroupSize(r.groupSize).routineDisplay} <i className="fas fa-dragon"></i>
-                      </span>
-                      <div className="df df-cg-5">
-                        {rContextIndex >= 0 && <span>{rContextIndex + 1}.</span>}
-                        {r.schedule && (
-                          <span>
-                            <i className={lc.GetRoutineSchedule(r.schedule).icon}></i>
-                          </span>
-                        )}
-                        {r.precipitation && (
-                          <span>
-                            <i className={lc.GetRoutinePrecipitation(r.precipitation).icon}></i>
-                          </span>
-                        )}
-                        {r.temperature && (
-                          <span>
-                            <i className={lc.GetRoutineTemperature(r.temperature).icon}></i>
-                          </span>
-                        )}
-                        <span>{utils.turnValueIntoPercentageString(lc.GetEncounterFrequency(r.encounterFrequency).probability)}</span>
-                        <div className="group-item-actions">
-                          <button onClick={() => OpenModalManageRoutine(locC, r)}>
-                            <i className="fas fa-pencil-alt"></i>
-                          </button>
-                          <button onClick={() => DeleteRoutine(locC, cIndex, r)} disabled={locC.routines.length === 1}>
-                            <i className="fas fa-trash"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
+        {/* creatures */}
+        <CreatureManager
+          data={tempRoom}
+          setData={setTempRoom}
+          contexts={contexts}
+          creatures={creatures}
+          HandleSelectCreatures={HandleSelectCreatures}
+          isPointOfInterest={true}
+        />
       </div>
       <footer className="df df-jc-sb">
         <div className="df df-jc-sb df-cg-15">

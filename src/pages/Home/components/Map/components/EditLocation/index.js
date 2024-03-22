@@ -12,9 +12,8 @@ import ModalDeleteLocation from "./components/ModalDeleteLocation";
 import ModalMoveLocation from "./components/ModalMoveLocation";
 import ModalManageElement from "./components/ModalManageElement";
 import ModalManageContext from "./components/ModalManageContext";
-import ModalManageCreaturePopulation from "./components/ModalManageCreaturePopulation";
-import ModalManageCreatureRoutine from "../ModalManageCreatureRoutine";
 import Dungeon from "../Dungeon";
+import CreatureManager from "../CreatureManager";
 import ModalWarning from "../../../../../../components/ModalWarning";
 
 import "./styles.css";
@@ -275,34 +274,6 @@ function EditLocation({
     setLocation({ ...location });
   }
 
-  function OpenModalManageRoutine(creature, routine) {
-    setModal(
-      <ModalManageCreatureRoutine
-        routine={routine}
-        contexts={location.contexts.map((c) => c.name)}
-        isPointOfInterest={isPointOfInterest}
-        onClose={(tempRoutine) => HandleCloseModalManageRoutine(creature, routine, tempRoutine)}
-      />
-    );
-  }
-  function HandleCloseModalManageRoutine(creature, routine, tempRoutine) {
-    if (tempRoutine) {
-      if (routine) {
-        let index = creature.routines.findIndex((r) => r.encounterFrequency === routine.encounterFrequency);
-        creature.routines.splice(index, 1, tempRoutine);
-      } else {
-        creature.routines.push(tempRoutine);
-      }
-    }
-
-    setModal(null);
-  }
-  function DeleteRoutine(creature, cIndex, routine) {
-    creature.routines = creature.routines.filter((r) => r.encounterFrequency !== routine.encounterFrequency);
-    location.creatures[cIndex] = creature;
-    setLocation({ ...location, creatures: location.creatures });
-  }
-
   function HandleSelectCreatures(creaturesObj, setter) {
     setSelectedCreatures(creatures.filter((c) => creaturesObj.creatures.some((lc) => lc.creatureId === c._id)));
     HandleSelectFromBestiary((tempSelectedCreatures) => HandleSelectedCreatures(creaturesObj, setter, tempSelectedCreatures));
@@ -332,19 +303,6 @@ function EditLocation({
         });
       });
     setter({ ...creaturesObj });
-  }
-
-  function OpenModalManageCreaturePopulation(creature) {
-    setModal(
-      <ModalManageCreaturePopulation
-        population={creature.population}
-        onClose={(tempPopulation, isInfinity) => HandleCloseModalManageCreaturePopulation(creature, tempPopulation, isInfinity)}
-      />
-    );
-  }
-  function HandleCloseModalManageCreaturePopulation(creature, tempPopulation, isInfinity) {
-    if (tempPopulation || (!tempPopulation && isInfinity)) creature.population = tempPopulation;
-    setModal(null);
   }
 
   function IsLocationValid() {
@@ -481,11 +439,6 @@ function EditLocation({
         r.currentCreatures = null;
       });
     setModal(null);
-  }
-
-  function SwapCreatures(index1, index2) {
-    utils.SwapElementsInArray(location.creatures, index1, index2);
-    setLocation({ ...location });
   }
 
   return (
@@ -693,82 +646,14 @@ function EditLocation({
           </div>
         ) : (
           // creatures
-          <div className="location-detail-group">
-            <div className="location-row location-detail-group-title">
-              <span className={location.creatures.length === 0 ? `lacking-data` : ""}>Criaturas</span>
-              <button onClick={() => HandleSelectCreatures(location, setLocation)}>
-                <i className="fas fa-retweet"></i>
-              </button>
-            </div>
-            {location.creatures.map((locC, cIndex) => {
-              const name = creatures.find((c) => c._id === locC.creatureId).name;
-
-              return (
-                <div className="location-row location-detail-group-item location-creature" key={locC.creatureId}>
-                  <div className="df df-fd-c">
-                    <button className="df" onClick={() => SwapCreatures(cIndex, cIndex - 1)} disabled={cIndex === 0}>
-                      <i className="fas fa-sort-up position-arrow-up"></i>
-                    </button>
-                    <button className="df" onClick={() => SwapCreatures(cIndex, cIndex + 1)} disabled={location.creatures.length - 1 === cIndex}>
-                      <i className="fas fa-sort-down position-arrow-down"></i>
-                    </button>
-                  </div>
-                  <div className="df df-fd-c full-width">
-                    <div className="group-item-actions full-width">
-                      <span>{name.slice(0, 40)}</span>
-                      <span className="df df-cg-5">
-                        {locC.population ? `${locC.population.current} / ${locC.population.value}` : <i className="fas fa-infinity"></i>}
-                        <button onClick={() => OpenModalManageCreaturePopulation(locC)}>
-                          <i className="fas fa-pencil-alt"></i>
-                        </button>
-                        <button onClick={() => OpenModalManageRoutine(locC)}>
-                          <i className="fas fa-plus"></i>
-                        </button>
-                      </span>
-                    </div>
-                    {locC.routines.map((r, rIndex) => {
-                      const rContextIndex = location.contexts.findIndex((c) => c.name === r.context);
-
-                      return (
-                        <div className="routine df df-jc-sb df-cg-5" key={r.encounterFrequency + rIndex}>
-                          <span>
-                            {lc.GetGroupSize(r.groupSize).routineDisplay} <i className="fas fa-dragon"></i>
-                          </span>
-                          <div className="df df-cg-5">
-                            {rContextIndex >= 0 && <span>{rContextIndex + 1}.</span>}
-                            {r.schedule && (
-                              <span>
-                                <i className={lc.GetRoutineSchedule(r.schedule).icon}></i>
-                              </span>
-                            )}
-                            {r.precipitation && (
-                              <span>
-                                <i className={lc.GetRoutinePrecipitation(r.precipitation).icon}></i>
-                              </span>
-                            )}
-                            {r.temperature && (
-                              <span>
-                                <i className={lc.GetRoutineTemperature(r.temperature).icon}></i>
-                              </span>
-                            )}
-                            <span>{utils.turnValueIntoPercentageString(lc.GetEncounterFrequency(r.encounterFrequency).probability)}</span>
-                            <div className="group-item-actions">
-                              <button onClick={() => OpenModalManageRoutine(locC, r)}>
-                                <i className="fas fa-pencil-alt"></i>
-                              </button>
-                              <button onClick={() => DeleteRoutine(locC, cIndex, r)} disabled={locC.routines.length === 1}>
-                                <i className="fas fa-trash"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <CreatureManager
+            data={location}
+            setData={setLocation}
+            contexts={location.contexts}
+            creatures={creatures}
+            HandleSelectCreatures={HandleSelectCreatures}
+            isPointOfInterest={false}
+          />
         )}
       </main>
       <footer className="action-buttons">
