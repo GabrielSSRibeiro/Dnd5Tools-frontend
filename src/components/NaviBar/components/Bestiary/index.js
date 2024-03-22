@@ -163,6 +163,10 @@ function Bestiary({
     setCreatureToEdit(utils.clone(creature));
   }
 
+  function ClearSelection() {
+    setTempSelectedCreatures([]);
+  }
+
   function HandleSelectCreature(creature) {
     const isAlreadySelected = tempSelectedCreatures.some((selectedCreature) => selectedCreature._id === creature._id);
     let newSelection = tempSelectedCreatures.filter((selectedCreature) => selectedCreature._id !== creature._id);
@@ -274,7 +278,7 @@ function Bestiary({
       {isBestiaryOpen && (
         <div className="bestiary-tab">
           <header className={isSelecting ? "selecting-header" : ""}>
-            <div>
+            <div className={isSelecting ? "full-width" : ""}>
               <div className="sharp-button" onClick={HandleClose}>
                 {/* border 2 */}
                 <div>
@@ -295,9 +299,14 @@ function Bestiary({
               {!isSelecting ? (
                 <h5>{creatures.length} Criaturas</h5>
               ) : (
-                <h5>
-                  {tempSelectedCreatures.length} de até {MAX_CREATURES_ALLOWED} criaturas selecionadas
-                </h5>
+                <div className="df df-jc-sb full-width">
+                  <h5>
+                    {tempSelectedCreatures.length} de até {MAX_CREATURES_ALLOWED} criaturas selecionadas
+                  </h5>
+                  <button className="button-simple clear-selection" onClick={ClearSelection}>
+                    Limpar
+                  </button>
+                </div>
               )}
             </div>
             {!isSelecting && <h5>BESTIÁRIO</h5>}
