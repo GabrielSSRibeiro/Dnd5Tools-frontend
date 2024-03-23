@@ -908,6 +908,7 @@ function Map({
                   options={lc.travelPaces}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
+                  optionsAtATime={8}
                   isDisabled={!currentNode}
                 />
                 {!paceMove ? (
@@ -936,16 +937,6 @@ function Map({
                 ) : (
                   <>
                     <Select
-                      label={"Montaria"}
-                      extraWidth={75}
-                      value={combatConfig}
-                      valuePropertyPath="travel.mount"
-                      onSelect={setCombatConfig}
-                      options={lc.travelMounts}
-                      optionDisplay={(o) => o.display}
-                      optionValue={(o) => o.value}
-                    />
-                    <Select
                       label={"Maior Carga"}
                       extraWidth={75}
                       value={combatConfig}
@@ -957,7 +948,6 @@ function Map({
                     />
                     <div className="df df-fd-c travel-options">
                       <CheckInput
-                        className="oriented"
                         label="Orientados"
                         onClick={() =>
                           setCombatConfig({
@@ -967,6 +957,17 @@ function Map({
                         }
                         isSelected={combatConfig.travel.oriented}
                         info={[{ text: "Chance de desviar da direçao passivamente para um dos lados até 90 graus" }]}
+                      />
+                      <CheckInput
+                        label="Montados"
+                        onClick={() =>
+                          setCombatConfig({
+                            ...combatConfig,
+                            travel: { ...combatConfig.travel, isMounted: !combatConfig.travel.isMounted },
+                          })
+                        }
+                        isSelected={combatConfig.travel.isMounted}
+                        info={[{ text: "Meduz fadiga em 50%" }]}
                       />
                       <CheckInput
                         label="Local Alto"

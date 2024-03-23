@@ -290,9 +290,9 @@ function Home() {
           zoom: defaultZoom.current,
           travel: {
             pace: lc.TRAVEL_PACES.NORMAL,
-            mount: lc.TRAVEL_MOUNTS.NONE,
             load: lc.TRAVEL_LOADS.LOW,
             oriented: true,
+            isMounted: false,
             isOverlook: false,
             schedule: 12 * 60,
             exhaustionTimer: 8 * 60,

@@ -186,6 +186,8 @@
 
 .Map-container .world-map .travel-details .travel-options {
   width: 100%;
+  margin-top: 5px;
+  row-gap: 5px;
 }
 
 .Map-container .world-map .travel-details .travel-options .CheckInput-container {
@@ -203,10 +205,6 @@
 
 .Map-container .world-map .travel-details .stat-section {
   background-color: transparent;
-}
-
-.Map-container .world-map .travel-details .oriented {
-  margin: 5px 0;
 }
 
 .Map-container .world-map .travel-details .divider {

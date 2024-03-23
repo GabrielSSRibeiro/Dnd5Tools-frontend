@@ -378,31 +378,19 @@ export const TRAVEL_PACES = {
   SLOW: 30,
   NORMAL: 40,
   HASTEN: 50,
+  VERY_HASTEN: 60,
+  VERY_HASTE2: 70,
 };
 export const travelPaces = [
   { display: "Descanso", value: TRAVEL_PACES.REST, mobility: 0, fatigue: 0, imminentEncounterProbMod: 1, resultDisplay: "Descanso" },
   { display: "Atividade (x0)", value: TRAVEL_PACES.ACTIVITY, mobility: 0, fatigue: 1, imminentEncounterProbMod: 0.5, resultDisplay: "Atividade" },
   { display: "Devagar (x0.5)", value: TRAVEL_PACES.SLOW, mobility: 0.5, fatigue: 0.5, imminentEncounterProbMod: 0 },
   { display: "Normal (x1)", value: TRAVEL_PACES.NORMAL, mobility: 1, fatigue: 1, imminentEncounterProbMod: 1 },
-  { display: "Apressado (x1.5)", value: TRAVEL_PACES.HASTEN, mobility: 1.5, fatigue: 2, imminentEncounterProbMod: 2 },
+  { display: "Rápido (x1.5)", value: TRAVEL_PACES.HASTEN, mobility: 1.5, fatigue: 2, imminentEncounterProbMod: 2 },
+  { display: "Muito Rápido (x2)", value: TRAVEL_PACES.VERY_HASTEN, mobility: 2, fatigue: 4, imminentEncounterProbMod: 4 },
+  { display: "Muito Rápido (x3)", value: TRAVEL_PACES.VERY_HASTE2, mobility: 3, fatigue: 8, imminentEncounterProbMod: 8 },
 ];
 export const GetTravelPace = (value) => travelPaces.find((a) => a.value === value);
-
-export const TRAVEL_MOUNTS = {
-  NONE: 10,
-  SLOW: 20,
-  NORMAL: 30,
-  FAST: 40,
-  VERY_FAST: 50,
-};
-export const travelMounts = [
-  { display: "Nenhuma", value: TRAVEL_MOUNTS.NONE, mobility: 1, fatigue: 1 },
-  { display: "Devagar (x1)", value: TRAVEL_MOUNTS.SLOW, mobility: 1, fatigue: 0.5 },
-  { display: "Normal (x1.5)", value: TRAVEL_MOUNTS.NORMAL, mobility: 1.5, fatigue: 0.5 },
-  { display: "Rápida (x2)", value: TRAVEL_MOUNTS.FAST, mobility: 2, fatigue: 0.5 },
-  // { display: "Muito rápida (x3)", value: TRAVEL_MOUNTS.VERY_FAST, mobility: 3, fatigue: 0.5 },
-];
-export const GetTravelMount = (value) => travelMounts.find((a) => a.value === value);
 
 export const TRAVEL_LOADS = {
   LOW: 10,

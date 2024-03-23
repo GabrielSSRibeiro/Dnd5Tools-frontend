@@ -104,10 +104,9 @@ export const sortLocsByRef = (locations) => {
 
 export const GetTravelTimeInMin = (distanceInScale, travel) => {
   const paceMob = lc.GetTravelPace(travel.pace).mobility;
-  const mountMob = lc.GetTravelMount(travel.mount).mobility;
   const loadMob = lc.GetTravelLoad(travel.load).mobility;
 
-  let travelDistancePerHourInM = lc.BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M * paceMob * mountMob * loadMob;
+  let travelDistancePerHourInM = lc.BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M * paceMob * loadMob;
   if (travelDistancePerHourInM === 0) {
     return 0;
   }
@@ -117,7 +116,7 @@ export const GetTravelTimeInMin = (distanceInScale, travel) => {
 
 export const GetTravelFatigueModifier = (travel) => {
   const paceFatigue = lc.GetTravelPace(travel.pace).fatigue;
-  const mountFatigue = lc.GetTravelMount(travel.mount).fatigue;
+  const mountFatigue = travel.isMounted ? 0.5 : 1;
   const loadFatigue = lc.GetTravelLoad(travel.load).fatigue;
 
   const travelFatigueModifier = paceFatigue * mountFatigue * loadFatigue;
