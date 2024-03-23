@@ -730,7 +730,7 @@ function ModalTravelResults({
     } else if (travel.pace === lc.TRAVEL_PACES.ACTIVITY) {
       travel.exhaustionTimer += timePassed * lc.GetTravelPace(travel.pace).fatigue;
     } else {
-      travel.exhaustionTimer += Math.round(locHoverData.distance.travelTimeInMin * lh.GetTravelFatigueModifier(travel));
+      travel.exhaustionTimer += locHoverData.distance.exhaustion;
     }
 
     if (isEncounter.current) {

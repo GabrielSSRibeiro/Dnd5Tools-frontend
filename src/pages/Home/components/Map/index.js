@@ -663,6 +663,9 @@ function Map({
       distance.travelTimeInMin = lh.GetTravelTimeInMin(distanceInScale, combatConfig.travel);
       distance.timeInUnits = utils.MinutesToTimeInUnits(distance.travelTimeInMin);
 
+      distance.exhaustion = Math.round(distance.travelTimeInMin * lh.GetTravelFatigueModifier(combatConfig.travel));
+      distance.exhaustionInUnits = utils.MinutesToTimeInUnits(distance.exhaustion);
+
       if (location) {
         distance.encounterProb = GetFinalProb(location, distance.travelTimeInMin);
       }

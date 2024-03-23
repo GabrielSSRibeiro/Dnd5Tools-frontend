@@ -152,6 +152,14 @@ function LocationSummary({
             {distance?.timeInUnits ? ` / ${distance.timeInUnits}` : ""}
           </span>
 
+          {/* exhaustion */}
+          {canTravelToPoint && (
+            <span className="exhaustion">
+              Desgaste:
+              <span className="name">{distance.exhaustionInUnits}</span>
+            </span>
+          )}
+
           {/* first impressions */}
           {lh.GetCurrentContext(location)?.firstImpressions && (
             <>
@@ -159,6 +167,7 @@ function LocationSummary({
               <span className="first-impressions">{location.contexts.find((c) => c.isCurrent).firstImpressions}</span>
             </>
           )}
+
           {creaturesForDisplay.length > 0 && (
             <>
               <div className="divider"></div>

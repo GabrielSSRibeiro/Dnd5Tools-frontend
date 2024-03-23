@@ -41,6 +41,11 @@
   font-size: 11px;
 }
 
+.LocationSummary-container footer .exhaustion {
+  padding-bottom: 3px;
+  font-size: 11px;
+}
+
 .LocationSummary-container footer .first-impressions {
   padding: 3px;
   font-size: 10px;
