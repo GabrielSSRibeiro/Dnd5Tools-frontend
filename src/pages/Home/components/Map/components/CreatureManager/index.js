@@ -76,7 +76,7 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
     //if both already bound
     if (creature1binding && creature2binding) {
       // console.log("if both already bound");
-      data.boundCreatures = data.boundCreatures.filter((b) => ![c1Id, c2Id].some((id) => b.includes(id)));
+      data.boundCreatures = data.boundCreatures.filter((b) => ![c1Id, c2Id].some((cId) => b.includes(cId)));
 
       //if the same binding, split into 2 and keep non empty bindings
       if (creature1binding === creature2binding) {
@@ -138,14 +138,14 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
             key={locC.creatureId}
           >
             {/* swap */}
-            <div className="df df-fd-c">
+            <fieldset className="df df-fd-c" disabled={data.boundCreatures.some((b) => b.includes(locC.creatureId))}>
               <button className="df" onClick={() => SwapCreatures(cIndex, cIndex - 1)} disabled={cIndex === 0}>
                 <i className="fas fa-sort-up position-arrow-up"></i>
               </button>
               <button className="df" onClick={() => SwapCreatures(cIndex, cIndex + 1)} disabled={data.creatures.length - 1 === cIndex}>
                 <i className="fas fa-sort-down position-arrow-down"></i>
               </button>
-            </div>
+            </fieldset>
             <div className="df df-fd-c full-width">
               <div className="group-item-actions full-width">
                 <span>{name.slice(0, 40)}</span>

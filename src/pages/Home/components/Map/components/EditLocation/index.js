@@ -302,6 +302,17 @@ function EditLocation({
           ],
         });
       });
+
+    //update bound creatures
+    let boundCreatures = [];
+    creaturesObj.boundCreatures.forEach((b) => {
+      b = b.filter((cId) => tempSelectedCreatures.some((sc) => sc._id === cId));
+      if (b.length > 1) {
+        boundCreatures.push(b);
+      }
+    });
+    creaturesObj.boundCreatures = boundCreatures;
+
     setter({ ...creaturesObj });
   }
 
