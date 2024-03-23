@@ -53,17 +53,20 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
   }
 
   function SwapCreatures(index1, isUp) {
-    let index2 = index1;
+    let index2 = isUp ? 0 : data.creatures.length - 1;
     if (isUp) {
-      index2 =
-        index1 -
-        1 -
-        data.creatures
-          .slice(0, index1)
-          .toReversed()
-          .findIndex((c) => !IsCreatureBound(c.creatureId));
+      const i = data.creatures
+        .slice(0, index1)
+        .toReversed()
+        .findIndex((c) => !IsCreatureBound(c.creatureId));
+      if (i > -1) {
+        index2 = index1 - 1 - i;
+      }
     } else {
-      index2 = index1 + 1 + data.creatures.slice(index1 + 1).findIndex((c) => !IsCreatureBound(c.creatureId));
+      const i = data.creatures.slice(index1 + 1).findIndex((c) => !IsCreatureBound(c.creatureId));
+      if (i > -1) {
+        index2 = index1 + 1 + i;
+      }
     }
 
     utils.SwapElementsInArray(data.creatures, index1, index2);
@@ -91,41 +94,51 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
 
     //if both already bound
     if (creature1binding && creature2binding) {
-      // console.log("if both already bound");
+      //console.log("if both already bound");
       data.boundCreatures = data.boundCreatures.filter((b) => ![c1Id, c2Id].some((cId) => b.includes(cId)));
 
       //if the same binding, split into 2 and keep non empty bindings
       if (creature1binding === creature2binding) {
         // console.log("if the same binding, split into 2 and keep non empty bindings");
-        const newC1Binding = [...creature1binding.filter((b) => b !== c2Id)];
-        const newC2Binding = [...creature2binding.filter((b) => b !== c1Id)];
+        //index of clicked creature
+        const indexInBind = creature2binding.findIndex((cId) => cId === c2Id);
+        const firstHalf = creature2binding.slice(0, indexInBind);
+        const secondHalf = creature2binding.slice(indexInBind);
+        // console.log(
+        //   "firstHalf",
+        //   firstHalf.map((d) => creatures.find((c) => c._id === d).name)
+        // );
+        // console.log(
+        //   "secondHalf",
+        //   secondHalf.map((d) => creatures.find((c) => c._id === d).name)
+        // );
 
-        if (newC1Binding.length > 1) {
-          data.boundCreatures.push(newC1Binding);
+        if (firstHalf.length > 1) {
+          data.boundCreatures.push(firstHalf);
         }
 
-        if (newC2Binding.length > 1) {
-          data.boundCreatures.push(newC2Binding);
+        if (secondHalf.length > 1) {
+          data.boundCreatures.push(secondHalf);
         }
       }
       //otherwise, join the two in a single binding
       else {
-        // console.log("otherwise, join the two in a single binding");
+        //console.log("otherwise, join the two in a single binding");
         data.boundCreatures.push([...creature1binding, ...creature2binding]);
       }
     }
     //if one already bound, add the other to the binding
     else if (creature1binding || creature2binding) {
-      // console.log("if one already bound, add the other to the binding");
+      //console.log("if one already bound, add the other to the binding");
       if (creature1binding) {
         creature1binding.push(c2Id);
       } else {
-        creature2binding.push(c1Id);
+        creature2binding.splice(0, 0, c1Id);
       }
     }
     //otherwize, add new binding for the two
     else {
-      // console.log("otherwize, add new binding for the two");
+      //console.log("otherwize, add new binding for the two");
       data.boundCreatures.push([c1Id, c2Id]);
     }
 
@@ -155,10 +168,21 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
           >
             {/* swap */}
             <fieldset className="df df-fd-c" disabled={IsCreatureBound(locC.creatureId)}>
-              <button className="df" onClick={() => SwapCreatures(cIndex, true)} disabled={cIndex === 0}>
+              <button
+                className="df"
+                onClick={() => SwapCreatures(cIndex, true)}
+                disabled={cIndex === 0 || data.creatures.slice(0, cIndex).every((c) => data.boundCreatures.some((b) => b.includes(c.creatureId)))}
+              >
                 <i className="fas fa-sort-up position-arrow-up"></i>
               </button>
-              <button className="df" onClick={() => SwapCreatures(cIndex, false)} disabled={data.creatures.length - 1 === cIndex}>
+              <button
+                className="df"
+                onClick={() => SwapCreatures(cIndex, false)}
+                disabled={
+                  data.creatures.length - 1 === cIndex ||
+                  data.creatures.slice(cIndex + 1).every((c) => data.boundCreatures.some((b) => b.includes(c.creatureId)))
+                }
+              >
                 <i className="fas fa-sort-down position-arrow-down"></i>
               </button>
             </fieldset>
