@@ -1,6 +1,11 @@
 .CreatureManager-container .location-detail-group-item.location-creature {
   padding: 5px 10px;
   column-gap: 5px;
+  position: relative;
+}
+
+.CreatureManager-container .location-detail-group-item.location-creature.bound-creature {
+  border-top: 1px dashed var(--gray2);
 }
 
 .CreatureManager-container .location-detail-group-item.location-creature .position-arrow-up {
@@ -24,4 +29,14 @@
 
 .CreatureManager-container .location-detail-group-item.location-creature .routine .routine-variables {
   flex: 1;
+}
+
+.CreatureManager-container .creature-lock {
+  background-color: var(--white);
+  border: none;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 1;
 }

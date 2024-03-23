@@ -51,6 +51,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
           isHazardous: location.interaction.isHazardous,
           rarity: location.interaction.rarity,
           creatures: location.creatures,
+          boundCreatures: location.boundCreatures,
         }
       : room;
 

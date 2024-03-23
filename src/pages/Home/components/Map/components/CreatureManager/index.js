@@ -58,6 +58,65 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
     setData({ ...data });
   }
 
+  function AreCreaturesBound(index) {
+    const c1Id = data.creatures[index - 1].creatureId;
+    const c2Id = data.creatures[index].creatureId;
+
+    return data.boundCreatures.some((b) => [c1Id, c2Id].every((id) => b.includes(id)));
+  }
+
+  function ToggleBind(index) {
+    const c1Id = data.creatures[index - 1].creatureId;
+    const c2Id = data.creatures[index].creatureId;
+    let creature1binding = data.boundCreatures.find((b) => b.includes(c1Id));
+    let creature2binding = data.boundCreatures.find((b) => b.includes(c2Id));
+
+    // console.log("current", ...data.boundCreatures.map((b) => b.map((id) => creatures.find((c) => c._id === id).name)));
+
+    //if both already bound
+    if (creature1binding && creature2binding) {
+      // console.log("if both already bound");
+      data.boundCreatures = data.boundCreatures.filter((b) => ![c1Id, c2Id].some((id) => b.includes(id)));
+
+      //if the same binding, split into 2 and keep non empty bindings
+      if (creature1binding === creature2binding) {
+        // console.log("if the same binding, split into 2 and keep non empty bindings");
+        const newC1Binding = [...creature1binding.filter((b) => b !== c2Id)];
+        const newC2Binding = [...creature2binding.filter((b) => b !== c1Id)];
+
+        if (newC1Binding.length > 1) {
+          data.boundCreatures.push(newC1Binding);
+        }
+
+        if (newC2Binding.length > 1) {
+          data.boundCreatures.push(newC2Binding);
+        }
+      }
+      //otherwise, join the two in a single binding
+      else {
+        // console.log("otherwise, join the two in a single binding");
+        data.boundCreatures.push([...creature1binding, ...creature2binding]);
+      }
+    }
+    //if one already bound, add the other to the binding
+    else if (creature1binding || creature2binding) {
+      // console.log("if one already bound, add the other to the binding");
+      if (creature1binding) {
+        creature1binding.push(c2Id);
+      } else {
+        creature2binding.push(c1Id);
+      }
+    }
+    //otherwize, add new binding for the two
+    else {
+      // console.log("otherwize, add new binding for the two");
+      data.boundCreatures.push([c1Id, c2Id]);
+    }
+
+    // console.log("new", ...data.boundCreatures.map((b) => b.map((id) => creatures.find((c) => c._id === id).name)));
+    setData({ ...data });
+  }
+
   return (
     <div className="CreatureManager-container location-detail-group">
       {modal}
@@ -67,11 +126,18 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
           <i className="fas fa-retweet"></i>
         </button>
       </div>
+      {/* creatures */}
       {data.creatures.map((locC, cIndex) => {
         const name = creatures.find((c) => c._id === locC.creatureId).name;
 
         return (
-          <div className="location-row location-detail-group-item location-creature" key={locC.creatureId}>
+          <div
+            className={`location-row location-detail-group-item location-creature${
+              cIndex !== 0 && AreCreaturesBound(cIndex) ? " bound-creature" : ""
+            }`}
+            key={locC.creatureId}
+          >
+            {/* swap */}
             <div className="df df-fd-c">
               <button className="df" onClick={() => SwapCreatures(cIndex, cIndex - 1)} disabled={cIndex === 0}>
                 <i className="fas fa-sort-up position-arrow-up"></i>
@@ -84,6 +150,7 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
               <div className="group-item-actions full-width">
                 <span>{name.slice(0, 40)}</span>
                 <span className="df df-cg-5">
+                  {/* population */}
                   {!isPointOfInterest && (
                     <>
                       {locC.population ? `${locC.population.current} / ${locC.population.value}` : <i className="fas fa-infinity"></i>}
@@ -97,6 +164,7 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
                   </button>
                 </span>
               </div>
+              {/* routines */}
               {locC.routines.map((r, rIndex) => {
                 const rContextIndex = contexts.findIndex((c) => c.name === r.context);
 
@@ -136,6 +204,11 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
                 );
               })}
             </div>
+            {cIndex !== 0 && (
+              <button className="df creature-lock" onClick={() => ToggleBind(cIndex)}>
+                {AreCreaturesBound(cIndex) ? <i className="fas fa-lock"></i> : <i className="fas fa-unlock"></i>}
+              </button>
+            )}
           </div>
         );
       })}

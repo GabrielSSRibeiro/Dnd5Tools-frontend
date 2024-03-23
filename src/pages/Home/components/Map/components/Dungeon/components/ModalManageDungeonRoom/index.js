@@ -66,6 +66,7 @@ function ModalManageDungeonRoom({
           isHazardous: false,
           rarity: null,
           creatures: [],
+          boundCreatures: [],
           currentCreatures: null,
         }
   );

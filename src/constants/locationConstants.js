@@ -48,6 +48,7 @@ export const GetNewLocation = (exteriorLocationId) => ({
     },
   ],
   creatures: [],
+  boundCreatures: [],
 });
 
 export const LOCATION_SIZES = {
