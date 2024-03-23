@@ -196,7 +196,8 @@ function ModalTravelResults({
         const nightTimeImminentEncounterProb = 1;
 
         return isEncounter.current
-          ? utils.ProbabilityCheck(
+          ? //emcounter conditions
+            utils.ProbabilityCheck(
               Math.min(
                 isNightTime ? nightTimeImminentEncounterProb : dayTimeImminentEncounterProb * lc.GetTravelPace(travel.pace).imminentEncounterProbMod,
                 1
@@ -204,9 +205,24 @@ function ModalTravelResults({
             )
             ? lc.NODE_CREATURE_CONDITIONS.IMMINENT
             : lc.NODE_CREATURE_CONDITIONS.NEAR
-          : ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(encounterLocContext.current.hazardousness).probability)
+          : //other
+          ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(encounterLocContext.current.hazardousness).probability)
           ? lc.NODE_CREATURE_CONDITIONS.REMAINS
           : lc.NODE_CREATURE_CONDITIONS.TRACKS;
+      }
+
+      function AddBoundCreatures(creature, locationCreatures) {
+        const locBinding = encounterLocation.current.boundCreatures.find((b) => b.includes(creature.creatureId));
+        const worldBinding = world.boundCreatures.find((b) => b.includes(creature.creatureId));
+        const binding = utils.randomItemFromArray(shouldlAddWorldCreatures && worldBinding ? [locBinding, worldBinding] : [locBinding]);
+
+        if (binding) {
+          locationCreatures
+            .filter((c) => c.condition == null && binding.includes(c.creatureId))
+            .forEach((c) => {
+              c.condition = GetCreatureCondition();
+            });
+        }
       }
 
       let newNodeCreatures = newCurrentNode.currentCreatures ?? [];
@@ -251,7 +267,7 @@ function ModalTravelResults({
           return [];
         }
 
-        //add creatures
+        //add creatures that isEncounter
         let possibleEncounterCreatures = locationCreatures.filter((c) => c.isEncounter);
         if (possibleEncounterCreatures.length > 0) {
           let addToEncounter = true;
@@ -270,7 +286,11 @@ function ModalTravelResults({
           while (addToEncounter) {
             let creatures = possibleEncounterCreatures.filter((c) => c.condition == null);
             if (creatures.length > 0) {
-              utils.randomItemFromArray(creatures).condition = GetCreatureCondition();
+              let creature = utils.randomItemFromArray(creatures);
+              creature.condition = GetCreatureCondition();
+
+              //add bound creatures
+              AddBoundCreatures(creature, locationCreatures);
 
               if (!utils.ProbabilityCheck(differentCreatureProb)) {
                 addToEncounter = false;
@@ -281,14 +301,18 @@ function ModalTravelResults({
           }
         }
 
-        //add 1 creature if needed
+        //if none isEncounter, add 1 creature
         if (
           isEncounter.current &&
           !locationCreatures.some((c) => c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT || c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR)
         ) {
           locationCreatures.sort((a, b) => b.encounterFrequency - a.encounterFrequency);
           const moreCommonCreatures = locationCreatures.filter((c) => c.encounterFrequency === locationCreatures[0].encounterFrequency);
-          utils.randomItemFromArray(moreCommonCreatures).condition = GetCreatureCondition();
+          let creature = utils.randomItemFromArray(moreCommonCreatures);
+          creature.condition = GetCreatureCondition();
+
+          //add bound creatures
+          AddBoundCreatures(creature, locationCreatures);
         }
 
         locationCreatures.forEach((locC) => {
@@ -310,12 +334,18 @@ function ModalTravelResults({
     if (!location) return [];
 
     return roomIndex != null
-      ? roomIndex === -1 && addExteriorCreatures
-        ? GetNodeCreatures()
-        : room?.currentCreatures ?? []
-      : viewingCurrent
-      ? newCurrentNode.creatures
-      : GetNodeCreatures();
+      ? //rooms
+        roomIndex === -1 && addExteriorCreatures
+        ? //entrance
+          GetNodeCreatures()
+        : //room
+          room?.currentCreatures ?? []
+      : //loc
+      viewingCurrent
+      ? //current node
+        newCurrentNode.creatures
+      : //new node
+        GetNodeCreatures();
   }, [
     location,
     addExteriorCreatures,
@@ -328,6 +358,7 @@ function ModalTravelResults({
     travel.pace,
     viewingCurrent,
     world.creatures,
+    world.boundCreatures,
   ]);
   const uniqueNodeCreatures = useMemo(() => {
     let uniqueNodeCreatures = [];

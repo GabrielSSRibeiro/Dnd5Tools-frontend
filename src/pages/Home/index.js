@@ -317,6 +317,7 @@ function Home() {
               },
             ],
             creatures: [],
+            boundCreatures: [],
           },
         });
         setLevel(1);

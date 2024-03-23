@@ -29,8 +29,7 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
       <ModalManageCreatureRoutine
         routine={routine}
         contexts={contexts.map((c) => c.name)}
-        isPointOfInterest={true}
-        isRoom={true}
+        isPointOfInterest={isPointOfInterest}
         onClose={(tempRoutine) => HandleCloseModalManageRoutine(creature, routine, tempRoutine)}
       />
     );
@@ -221,8 +220,8 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
                 );
               })}
             </div>
-            {cIndex !== 0 && (
-              <button className="df creature-lock" onClick={() => ToggleBind(cIndex)}>
+            {!isPointOfInterest && cIndex !== 0 && (
+              <button title="juntos se possível" className="df creature-lock" onClick={() => ToggleBind(cIndex)}>
                 {AreCreaturesBound(cIndex) ? <i className="fas fa-lock"></i> : <i className="fas fa-lock-open"></i>}
               </button>
             )}

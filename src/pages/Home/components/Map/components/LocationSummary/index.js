@@ -155,8 +155,7 @@ function LocationSummary({
           {/* exhaustion */}
           {canTravelToPoint && (
             <span className="exhaustion">
-              Desgaste:
-              <span className="name">{distance.exhaustionInUnits}</span>
+              Desgaste: +<span className="name">{distance.exhaustionInUnits}</span>
             </span>
           )}
 
