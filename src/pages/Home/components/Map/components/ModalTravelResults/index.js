@@ -217,10 +217,12 @@ function ModalTravelResults({
         const binding = utils.randomItemFromArray(shouldlAddWorldCreatures && worldBinding ? [locBinding, worldBinding] : [locBinding]);
 
         if (binding) {
+          creature.binding = binding;
           locationCreatures
             .filter((c) => c.condition == null && binding.includes(c.creatureId))
             .forEach((c) => {
               c.condition = GetCreatureCondition();
+              c.binding = binding;
             });
         }
       }
@@ -255,6 +257,7 @@ function ModalTravelResults({
 
             return {
               creatureId: c.creatureId,
+              binding: c.binding,
               number: c.population ? Math.min(c.population.current, number) : number,
               encounterFrequency: routine.encounterFrequency,
               isEncounter: isEncounter.current ? utils.ProbabilityCheck(probability) : ProbUpdatedByTravelTimeModCheck(probability),
@@ -316,9 +319,11 @@ function ModalTravelResults({
         }
 
         locationCreatures.forEach((locC) => {
-          utils.createArrayFromInt(locC.number).forEach((_) => {
+          utils.createArrayFromInt(locC.number).forEach((_, index, arr) => {
             newNodeCreatures.push({
               creatureId: locC.creatureId,
+              bindingFirst: locC.binding && locC.binding[0] === locC.creatureId && index === 0,
+              bindingLast: locC.binding && locC.binding[locC.binding.length - 1] === locC.creatureId && index === arr.length - 1,
               isDead: false,
               condition: locC.condition ?? lc.NODE_CREATURE_CONDITIONS.NONE,
             });
@@ -390,7 +395,7 @@ function ModalTravelResults({
 
     return {
       condition: isImminent ? lc.NODE_CREATURE_CONDITIONS.IMMINENT : lc.NODE_CREATURE_CONDITIONS.NEAR,
-      distance: `(${finalDistance}m)`,
+      distance: `(${Math.round(finalDistance)}m)`,
       creatures: nodeCreatures
         .filter((c) => !c.condition || c.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT || c.condition === lc.NODE_CREATURE_CONDITIONS.NEAR)
         .map((nc, index) => {
@@ -399,6 +404,8 @@ function ModalTravelResults({
 
           return {
             id: nc.creatureId,
+            bindingFirst: nc.bindingFirst,
+            bindingLast: nc.bindingLast,
             color: cc.GetRarity(creature.rarity).color,
             size: cc.GetSize(creature.size).display,
             type: cc.GetType(creature.type).display,
@@ -410,7 +417,7 @@ function ModalTravelResults({
     };
   }, [location, isPointOfInterest, nodeCreatures, creatures, killedCreaturesIndeces]);
   const finalCreatures = useMemo(() => {
-    const finalCreatures = GetRoomCreatures();
+    let finalCreatures = GetRoomCreatures();
 
     if (addExteriorCreatures) {
       finalCreatures.creatures.forEach((fc) => {
@@ -1067,21 +1074,24 @@ function ModalTravelResults({
                           }
 
                           return (
-                            <div
-                              className={`df encounter-creature${c.isSelected ? " selected-creature" : ""}`}
-                              onClick={() => ToggleCreatureSelection(index)}
-                              key={index}
-                            >
-                              <img
-                                className={`creature-avatar${c.isDead ? " dead-creature" : ""}`}
-                                style={{
-                                  borderColor: c.color,
-                                }}
-                                src={c.creature.image}
-                                alt="creature-avatar"
-                              />
-                              {c.isDead && <i className="fas fa-skull dead-icon"></i>}
-                              <Info contents={contents} tooltipOnly={true} />
+                            <div className="df df-cg-10" key={index}>
+                              {index > 0 && c.bindingFirst && <div> - </div>}
+                              <div
+                                className={`df encounter-creature${c.isSelected ? " selected-creature" : ""}`}
+                                onClick={() => ToggleCreatureSelection(index)}
+                              >
+                                <img
+                                  className={`creature-avatar${c.isDead ? " dead-creature" : ""}`}
+                                  style={{
+                                    borderColor: c.color,
+                                  }}
+                                  src={c.creature.image}
+                                  alt="creature-avatar"
+                                />
+                                {c.isDead && <i className="fas fa-skull dead-icon"></i>}
+                                <Info contents={contents} tooltipOnly={true} />
+                              </div>
+                              {index < finalCreatures.creatures.length - 1 && c.bindingLast && <div> - </div>}
                             </div>
                           );
                         })}
