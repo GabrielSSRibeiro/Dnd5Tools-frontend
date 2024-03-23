@@ -53,9 +53,26 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
     setData({ ...data, creatures: data.creatures });
   }
 
-  function SwapCreatures(index1, index2) {
+  function SwapCreatures(index1, isUp) {
+    let index2 = index1;
+    if (isUp) {
+      index2 =
+        index1 -
+        1 -
+        data.creatures
+          .slice(0, index1)
+          .toReversed()
+          .findIndex((c) => !IsCreatureBound(c.creatureId));
+    } else {
+      index2 = index1 + 1 + data.creatures.slice(index1 + 1).findIndex((c) => !IsCreatureBound(c.creatureId));
+    }
+
     utils.SwapElementsInArray(data.creatures, index1, index2);
     setData({ ...data });
+  }
+
+  function IsCreatureBound(id) {
+    return data.boundCreatures.some((b) => b.includes(id));
   }
 
   function AreCreaturesBound(index) {
@@ -138,11 +155,11 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
             key={locC.creatureId}
           >
             {/* swap */}
-            <fieldset className="df df-fd-c" disabled={data.boundCreatures.some((b) => b.includes(locC.creatureId))}>
-              <button className="df" onClick={() => SwapCreatures(cIndex, cIndex - 1)} disabled={cIndex === 0}>
+            <fieldset className="df df-fd-c" disabled={IsCreatureBound(locC.creatureId)}>
+              <button className="df" onClick={() => SwapCreatures(cIndex, true)} disabled={cIndex === 0}>
                 <i className="fas fa-sort-up position-arrow-up"></i>
               </button>
-              <button className="df" onClick={() => SwapCreatures(cIndex, cIndex + 1)} disabled={data.creatures.length - 1 === cIndex}>
+              <button className="df" onClick={() => SwapCreatures(cIndex, false)} disabled={data.creatures.length - 1 === cIndex}>
                 <i className="fas fa-sort-down position-arrow-down"></i>
               </button>
             </fieldset>
@@ -206,7 +223,7 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
             </div>
             {cIndex !== 0 && (
               <button className="df creature-lock" onClick={() => ToggleBind(cIndex)}>
-                {AreCreaturesBound(cIndex) ? <i className="fas fa-lock"></i> : <i className="fas fa-unlock"></i>}
+                {AreCreaturesBound(cIndex) ? <i className="fas fa-lock"></i> : <i className="fas fa-lock-open"></i>}
               </button>
             )}
           </div>
