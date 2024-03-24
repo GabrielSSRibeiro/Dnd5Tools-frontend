@@ -24,20 +24,19 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
     setModal(null);
   }
 
-  function OpenModalManageRoutine(creature, routine) {
+  function OpenModalManageRoutine(creature, routine, index) {
     setModal(
       <ModalManageCreatureRoutine
         routine={routine}
         contexts={contexts.map((c) => c.name)}
         isPointOfInterest={isPointOfInterest}
-        onClose={(tempRoutine) => HandleCloseModalManageRoutine(creature, routine, tempRoutine)}
+        onClose={(tempRoutine) => HandleCloseModalManageRoutine(creature, routine, tempRoutine, index)}
       />
     );
   }
-  function HandleCloseModalManageRoutine(creature, routine, tempRoutine) {
+  function HandleCloseModalManageRoutine(creature, routine, tempRoutine, index) {
     if (tempRoutine) {
       if (routine) {
-        let index = creature.routines.findIndex((r) => r.encounterFrequency === routine.encounterFrequency);
         creature.routines.splice(index, 1, tempRoutine);
       } else {
         creature.routines.push(tempRoutine);
@@ -232,7 +231,7 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
                       )}
                       <span>{utils.turnValueIntoPercentageString(lc.GetEncounterFrequency(r.encounterFrequency).probability)}</span>
                       <div className="group-item-actions">
-                        <button onClick={() => OpenModalManageRoutine(locC, r)}>
+                        <button onClick={() => OpenModalManageRoutine(locC, r, rIndex)}>
                           <i className="fas fa-pencil-alt"></i>
                         </button>
                         <button onClick={() => DeleteRoutine(locC, cIndex, r)} disabled={locC.routines.length === 1}>

@@ -68,13 +68,16 @@ export const GetCreatureCurrentRoutine = (creature, schedule, precipitation, tem
       //keep track of the highest
       highestPriority = Math.max(highestPriority, priority);
 
-      return { priority: `${priority}`, routine: r };
-    })
-    .filter((i) => i.priority === `${highestPriority}`);
+      return { priority, routine: r };
+    });
 
-  utils.SortArrayOfObjByStringProperty(currentRoutinesWithPriority, "priority");
+  //keep only highest priority
+  currentRoutinesWithPriority = currentRoutinesWithPriority.filter((i) => i.priority === highestPriority);
+  if (currentRoutinesWithPriority.length === 0) {
+    return null;
+  }
 
-  return currentRoutinesWithPriority[0]?.routine;
+  return utils.randomItemFromArray(currentRoutinesWithPriority).routine;
 };
 
 export const sortLocsByRef = (locations) => {
