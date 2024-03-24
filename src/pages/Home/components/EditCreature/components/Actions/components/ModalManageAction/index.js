@@ -12,6 +12,7 @@ import {
   damageTypes,
   CONDITIONS,
   conditions,
+  CONDITION_DURATIONS,
   conditionDurations,
   difficultyClasses,
   creatureAttributeNames,
@@ -37,6 +38,7 @@ function ModalManageAction({ level, action, invalidNames, weakSpots, onClose }) 
     CONDITIONS.PULLED,
     CONDITIONS.EXTRA_DAMAGE,
   ]);
+  const allDurationsConditions = useRef([CONDITIONS.GRAPPLED, CONDITIONS.PRONE]);
   const [tempAction, setTempAction] = useState(
     action
       ? utils.clone(action)
@@ -109,16 +111,28 @@ function ModalManageAction({ level, action, invalidNames, weakSpots, onClose }) 
   }
 
   function HandleSelectCondition(updatedValue) {
-    if (!updatedValue.condition || nonDurationConditions.current.includes(updatedValue.condition)) {
+    if (
+      !updatedValue.condition ||
+      nonDurationConditions.current.includes(updatedValue.condition) ||
+      allDurationsConditions.current.includes(updatedValue.condition)
+    ) {
       updatedValue.conditionDuration = null;
+    } else if (!updatedValue.conditionDuration) {
+      updatedValue.conditionDuration = CONDITION_DURATIONS.MEDIUM;
     }
 
     setTempAction(updatedValue);
   }
 
   function HandleSelectPersistence(updatedValue) {
-    if (!updatedValue.persistence || nonDurationConditions.current.includes(updatedValue.persistence)) {
+    if (
+      !updatedValue.persistence ||
+      nonDurationConditions.current.includes(updatedValue.persistence) ||
+      allDurationsConditions.current.includes(updatedValue.persistence)
+    ) {
       updatedValue.persistenceDuration = null;
+    } else if (!updatedValue.persistenceDuration) {
+      updatedValue.persistenceDuration = CONDITION_DURATIONS.MEDIUM;
     }
 
     setTempAction(updatedValue);
@@ -310,7 +324,7 @@ function ModalManageAction({ level, action, invalidNames, weakSpots, onClose }) 
                   valuePropertyPath="conditionDuration"
                   onSelect={setTempAction}
                   options={conditionDurations}
-                  nothingSelected="Nenhuma"
+                  nothingSelected={allDurationsConditions.current.includes(tempAction.condition) ? "-" : null}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
                   className={
@@ -403,7 +417,7 @@ function ModalManageAction({ level, action, invalidNames, weakSpots, onClose }) 
               value={tempAction}
               valuePropertyPath="persistenceDuration"
               onSelect={setTempAction}
-              nothingSelected="Nenhuma"
+              nothingSelected={allDurationsConditions.current.includes(tempAction.persistence) ? "-" : null}
               options={conditionDurations}
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}

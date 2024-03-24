@@ -11,6 +11,7 @@ import {
   damageTypes,
   CONDITIONS,
   conditions,
+  CONDITION_DURATIONS,
   conditionDurations,
   difficultyClasses,
   creatureAttributeNames,
@@ -33,6 +34,7 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
     CONDITIONS.PULLED,
     CONDITIONS.EXTRA_DAMAGE,
   ]);
+  const allDurationsConditions = useRef([CONDITIONS.GRAPPLED, CONDITIONS.PRONE]);
   const [tempAura, setTempAura] = useState(
     aura
       ? utils.clone(aura)
@@ -94,8 +96,14 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
   }
 
   function HandleSelectCondition(updatedValue) {
-    if (!updatedValue.condition || nonDurationConditions.current.includes(updatedValue.condition)) {
+    if (
+      !updatedValue.condition ||
+      nonDurationConditions.current.includes(updatedValue.condition) ||
+      allDurationsConditions.current.includes(updatedValue.condition)
+    ) {
       updatedValue.conditionDuration = null;
+    } else if (!updatedValue.conditionDuration) {
+      updatedValue.conditionDuration = CONDITION_DURATIONS.MEDIUM;
     }
 
     setTempAura(updatedValue);
@@ -277,7 +285,7 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
                   valuePropertyPath="conditionDuration"
                   onSelect={setTempAura}
                   options={conditionDurations}
-                  nothingSelected="Nenhuma"
+                  nothingSelected={allDurationsConditions.current.includes(tempAura.condition) ? "-" : null}
                   optionDisplay={(o) => o.display}
                   optionValue={(o) => o.value}
                   className={

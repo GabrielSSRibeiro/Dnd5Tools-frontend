@@ -910,7 +910,7 @@ export const CONDITION_DURATIONS = {
 };
 export const conditionDurations = [
   { display: "Baixa (1 turno)", value: CONDITION_DURATIONS.SHORT, weight: 1, baseOutput: "1 turno" },
-  { display: "Média (1 minuto)", value: CONDITION_DURATIONS.MEDIUM, weight: 2, baseOutput: "1 minuto" },
+  { display: "Normal (1 minuto)", value: CONDITION_DURATIONS.MEDIUM, weight: 2, baseOutput: "1 minuto" },
   { display: "Alta (1 hora)", value: CONDITION_DURATIONS.LONG, weight: 3, baseOutput: "1 hora" },
   { display: "Extrema (1 dia)", value: CONDITION_DURATIONS.EXTREME, weight: 4, baseOutput: "1 dia" },
 ];
