@@ -27,14 +27,8 @@ import Modal from "../../../../../../../../components/Modal";
 import "./styles.css";
 
 function ModalManageAura({ level, aura, weakSpots, onClose }) {
-  const nonDurationConditions = useRef([
-    CONDITIONS.SINK_TERRAIN,
-    CONDITIONS.RISE_TERRAIN,
-    CONDITIONS.PUSHED,
-    CONDITIONS.PULLED,
-    CONDITIONS.EXTRA_DAMAGE,
-  ]);
-  const allDurationsConditions = useRef([CONDITIONS.GRAPPLED, CONDITIONS.PRONE]);
+  const nonDurationConditions = useRef([CONDITIONS.SINK_TERRAIN, CONDITIONS.RISE_TERRAIN, CONDITIONS.PUSHED, CONDITIONS.PULLED]);
+  const allDurationsConditions = useRef([CONDITIONS.GRAPPLED, CONDITIONS.PRONE, CONDITIONS.EXTRA_DAMAGE]);
   const [tempAura, setTempAura] = useState(
     aura
       ? utils.clone(aura)

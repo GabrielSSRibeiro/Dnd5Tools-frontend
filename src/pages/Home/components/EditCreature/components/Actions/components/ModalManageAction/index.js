@@ -31,14 +31,8 @@ import Modal from "../../../../../../../../components/Modal";
 import "./styles.css";
 
 function ModalManageAction({ level, action, invalidNames, weakSpots, onClose }) {
-  const nonDurationConditions = useRef([
-    CONDITIONS.SINK_TERRAIN,
-    CONDITIONS.RISE_TERRAIN,
-    CONDITIONS.PUSHED,
-    CONDITIONS.PULLED,
-    CONDITIONS.EXTRA_DAMAGE,
-  ]);
-  const allDurationsConditions = useRef([CONDITIONS.GRAPPLED, CONDITIONS.PRONE]);
+  const nonDurationConditions = useRef([CONDITIONS.SINK_TERRAIN, CONDITIONS.RISE_TERRAIN, CONDITIONS.PUSHED, CONDITIONS.PULLED]);
+  const allDurationsConditions = useRef([CONDITIONS.GRAPPLED, CONDITIONS.PRONE, CONDITIONS.EXTRA_DAMAGE]);
   const [tempAction, setTempAction] = useState(
     action
       ? utils.clone(action)
