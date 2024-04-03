@@ -68,7 +68,7 @@ function Map({
   const [locHoverData, setLocHoverData] = useState(null);
   const [locationsRefs, setLocationsRefs] = useState([]);
   const [allLocationsRefs, setAllLocationsRefs] = useState([]);
-  const [restTime, setRestTime] = useState(lc.REST_TIMES.LONG);
+  const [restTime, setRestTime] = useState(lc.REST_TIMES.h1m0);
 
   const isNewLoc = useMemo(() => locationToEdit?.exteriorLocationId && !locationToEdit._id, [locationToEdit]);
   const isPrecipitating = useMemo(
@@ -970,7 +970,7 @@ function Map({
                           })
                         }
                         isSelected={combatConfig.travel.isMounted}
-                        info={[{ text: "Meduz fadiga em 50%" }]}
+                        info={[{ text: "Reduz fadiga em 50%" }]}
                       />
                       <CheckInput
                         label="Local Alto"

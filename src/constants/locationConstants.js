@@ -412,14 +412,42 @@ export const travelLoads = [
 export const GetTravelLoad = (value) => travelLoads.find((a) => a.value === value);
 
 export const REST_TIMES = {
-  SHORT: 10,
-  MEDIUM: 20,
-  LONG: 30,
+  h0m10: 10,
+  h0m30: 20,
+  h1m0: 30,
+  h1m30: 40,
+  h2m0: 50,
+  h2m30: 60,
+  h3m0: 70,
+  h3m30: 80,
+  h4m0: 90,
+  h4m30: 100,
+  h5m0: 110,
+  h5m30: 120,
+  h6m0: 130,
+  h6m30: 140,
+  h7m0: 150,
+  h7m30: 160,
+  h8m0: 170,
 };
 export const restTimes = [
-  { display: "10 minutos", value: REST_TIMES.SHORT, timeInMin: 10 },
-  { display: "1 hora", value: REST_TIMES.MEDIUM, timeInMin: 1 * 60 },
-  { display: "8 horas", value: REST_TIMES.LONG, timeInMin: 8 * 60 },
+  { display: "10 min", value: REST_TIMES.h0m10, timeInMin: 10 },
+  { display: "30 min", value: REST_TIMES.h0m30, timeInMin: 30 },
+  { display: "1 hora", value: REST_TIMES.h1m0, timeInMin: 1 * 60 },
+  { display: "1 hora e 30 min", value: REST_TIMES.h1m30, timeInMin: 1 * 60 + 30 },
+  { display: "2 horas", value: REST_TIMES.h2m0, timeInMin: 2 * 60 },
+  { display: "2 horas e 30 min", value: REST_TIMES.h2m30, timeInMin: 2 * 60 + 30 },
+  { display: "3 horas", value: REST_TIMES.h3m0, timeInMin: 3 * 60 },
+  { display: "3 horas e 30 min", value: REST_TIMES.h3m30, timeInMin: 3 * 60 + 30 },
+  { display: "4 horas", value: REST_TIMES.h4m0, timeInMin: 4 * 60 },
+  { display: "4 horas e 30 min", value: REST_TIMES.h4m30, timeInMin: 4 * 60 + 30 },
+  { display: "5 horas", value: REST_TIMES.h5m0, timeInMin: 5 * 60 },
+  { display: "5 horas e 30 min", value: REST_TIMES.h5m30, timeInMin: 5 * 60 + 30 },
+  { display: "6 horas", value: REST_TIMES.h6m0, timeInMin: 6 * 60 },
+  { display: "6 horas e 30 min", value: REST_TIMES.h6m30, timeInMin: 6 * 60 + 30 },
+  { display: "7 horas", value: REST_TIMES.h7m0, timeInMin: 7 * 60 },
+  { display: "7 horas e 30 min", value: REST_TIMES.h7m30, timeInMin: 7 * 60 + 30 },
+  { display: "8 horas", value: REST_TIMES.h8m0, timeInMin: 8 * 60 },
 ];
 export const GetRestTime = (value) => restTimes.find((a) => a.value === value);
 
