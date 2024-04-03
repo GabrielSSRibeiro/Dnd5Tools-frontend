@@ -18,6 +18,7 @@ import "./styles.css";
 
 function ModalTravelResults({
   isSafe,
+  isRestSafe,
   mapMode,
   onClose,
   hasMoved,
@@ -183,6 +184,7 @@ function ModalTravelResults({
   const isEncounter = useRef(
     hasAnyCreature.current &&
       !(roomIndex > 0) &&
+      !isRestSafe &&
       (ProbUpdatedByTravelTimeModCheck(lc.GetHazardousness(encounterLocContext.current.hazardousness).probability, true) ||
         lh.HasCertainCreature(encounterLocation.current, GetCreatureCurrentRoutine) ||
         encounterProb === 1 ||

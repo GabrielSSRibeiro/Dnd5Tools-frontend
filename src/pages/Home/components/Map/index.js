@@ -69,6 +69,7 @@ function Map({
   const [locationsRefs, setLocationsRefs] = useState([]);
   const [allLocationsRefs, setAllLocationsRefs] = useState([]);
   const [restTime, setRestTime] = useState(lc.REST_TIMES.h1m0);
+  const [isRestSafe, setIsRestSafe] = useState(false);
 
   const isNewLoc = useMemo(() => locationToEdit?.exteriorLocationId && !locationToEdit._id, [locationToEdit]);
   const isPrecipitating = useMemo(
@@ -318,6 +319,7 @@ function Map({
       setModal(
         <ModalTravelResults
           isSafe={isSafe}
+          isRestSafe={isRestSafe}
           mapMode={mapMode}
           onClose={setModal}
           hasMoved={hasMoved}
@@ -929,12 +931,22 @@ function Map({
                       text={combatConfig.travel.pace === lc.TRAVEL_PACES.REST ? "Descansar" : "Começar"}
                       info={[
                         {
-                          text: `Chance encontro: ${utils.turnValueIntoPercentageString(
-                            GetFinalProb(map[currentNode.locId]?.data ?? combatConfig.world, lc.GetRestTime(restTime).timeInMin)
-                          )}`,
+                          text: `Chance encontro: ${
+                            isRestSafe
+                              ? "-"
+                              : utils.turnValueIntoPercentageString(
+                                  GetFinalProb(map[currentNode.locId]?.data ?? combatConfig.world, lc.GetRestTime(restTime).timeInMin)
+                                )
+                          }`,
                         },
                       ]}
                       onClick={() => OpenModalTravelResults(currentNode, true)}
+                    />
+                    <CheckInput
+                      label="Tempo seguro"
+                      onClick={() => setIsRestSafe(!isRestSafe)}
+                      isSelected={isRestSafe}
+                      info={[{ text: "Não há chance de encontro" }]}
                     />
                   </div>
                 ) : (
