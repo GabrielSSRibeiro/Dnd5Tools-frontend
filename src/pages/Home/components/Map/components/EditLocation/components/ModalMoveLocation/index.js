@@ -22,7 +22,7 @@ function ModalMoveLocation({ world, locations, onClose, onSelect }) {
       if (nameFilter) {
         temp = locations.filter((l) =>
           //if location name starts with filter
-          l.name.toLowerCase().startsWith(nameFilter.toLowerCase())
+          l.name.toLowerCase().includes(nameFilter.toLowerCase())
         );
       }
 
