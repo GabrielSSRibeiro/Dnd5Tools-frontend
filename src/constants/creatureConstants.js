@@ -262,7 +262,7 @@ export const creatureTypes = [
   { display: "Celestial", value: CREATURE_TYPES.CELESTIAL, weight: 0 },
   { display: "Constructo", value: CREATURE_TYPES.CONSTRUCT, weight: 0 },
   { display: "Corruptor", value: CREATURE_TYPES.FIEND, weight: 0 },
-  { display: "Dragão", value: CREATURE_TYPES.DRAGON, weight: 0 },
+  { display: "Dragao", value: CREATURE_TYPES.DRAGON, weight: 0 },
   { display: "Elemental", value: CREATURE_TYPES.ELEMENTAL, weight: 0 },
   { display: "Fada", value: CREATURE_TYPES.FEY, weight: 0 },
   { display: "Gigante", value: CREATURE_TYPES.GIANT, weight: 0 },
