@@ -353,7 +353,7 @@ function Map({
             node && !isSameNode
               ? null
               : () => {
-                  setLocationToEdit(utils.clone(nodeLoc));
+                  setLocationToEdit(utils.clone(newLocation));
                   setModal(null);
                 }
           }
