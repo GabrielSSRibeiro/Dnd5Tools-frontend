@@ -67,11 +67,11 @@
 }
 
 .EditCreature-container .first-step-wrapper .creature-avatar {
-  width: 450px;
-  height: 450px;
-  background-color: var(--gray2);
+  background-color: var(--black);
+  border: 1px solid var(--white);
   position: relative;
   padding: 12px;
+  overflow: hidden;
 
   display: flex;
   align-items: flex-end;
@@ -82,10 +82,7 @@
   top: 0;
   left: 0;
   position: absolute;
-  object-fit: cover;
-  object-position: 0 top;
-  width: 450px;
-  height: 450px;
+  object-fit: contain;
 }
 
 .EditCreature-container .first-step-wrapper .creature-avatar > .fas {
@@ -226,13 +223,13 @@
 .EditCreature-container .edit-process-basic .creature-avatar {
   width: 300px;
   height: 300px;
+  overflow: hidden;
 
   margin-bottom: 15px;
 }
 
 .EditCreature-container .edit-process-basic .creature-avatar img {
-  width: 300px;
-  height: 300px;
+  object-fit: contain;
 }
 
 .EditCreature-container .edit-process-basic .creature-avatar .update-avatar-wrapper .img-url input {

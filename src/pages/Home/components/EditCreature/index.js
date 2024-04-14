@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import * as utils from "../../../../utils";
-import { CREATURE_ACTION_FREQUENCIES } from "../../../../constants/creatureConstants";
+import { DEFAULT_AVATAR_POSITION, DEFAULT_AVATAR_SCALE, CREATURE_ACTION_FREQUENCIES } from "../../../../constants/creatureConstants";
 import { IsBasicPack } from "../.../../../../../helpers/creatureHelper";
 
 import ModalTextArea from "../../../../components/ModalTextArea";
@@ -19,8 +19,12 @@ import "./styles.css";
 
 function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing }) {
   const [creature, setCreature] = useState(creatureToEdit);
+  const [dragging, setDragging] = useState(false);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [modal, setModal] = useState(null);
 
+  const avatarFirstStepProportion = useRef(450);
+  const avatarEditProportion = useRef(300);
   let inputRef = useRef(null);
   const progessBarSteps = useMemo(() => {
     function AreAllPreviousStepsValid() {
@@ -97,6 +101,7 @@ function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing 
       .find((s) => s.isValid).name
   );
 
+  const avatarProportion = useMemo(() => (isFirstStep ? avatarFirstStepProportion.current : avatarEditProportion.current), [isFirstStep]);
   const isBasicPack = useMemo(() => IsBasicPack(creature.owner), [creature.owner]);
 
   function UpdateAvatar() {
@@ -108,11 +113,48 @@ function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing 
       } else if (imgUrl === tempCreatureAvatar && imgUrl === creature.image) {
         setImgUrl(null);
         setIsImgValid(true);
+
+        creature.imageX = null;
+        creature.imageY = null;
+        creature.imageScale = null;
+        setCreature({ ...creature });
       } else {
         setTempCreatureAvatar(imgUrl);
       }
     }
   }
+
+  const handleMouseDown = (e) => {
+    setDragging(true);
+    console.log("AAAAA");
+    const offsetX = e.clientX - (creature.imageX != null ? creature.imageX * avatarProportion : DEFAULT_AVATAR_POSITION);
+    const offsetY = e.clientY - (creature.imageY != null ? creature.imageY * avatarProportion : DEFAULT_AVATAR_POSITION);
+    setOffset({ x: offsetX, y: offsetY });
+  };
+
+  const handleMouseMove = (e) => {
+    if (dragging) {
+      const x = e.clientX - offset.x;
+      const y = e.clientY - offset.y;
+
+      creature.imageX = x / avatarProportion;
+      creature.imageY = y / avatarProportion;
+      setCreature({ ...creature });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setDragging(false);
+  };
+
+  const handleWheel = (e) => {
+    const delta = e.deltaY > 0 ? -0.01 : 0.01; // Adjust the zoom speed as needed
+    const newScale = (creature.imageScale != null ? creature.imageScale : DEFAULT_AVATAR_SCALE) + delta;
+    // if (newScale >= 0.5 && newScale <= 2) {
+    creature.imageScale = newScale;
+    setCreature({ ...creature });
+    // }
+  };
 
   function HandleImgUrlOnChange(value) {
     setIsImgValid(true);
@@ -203,15 +245,30 @@ function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing 
           )}
         </div>
         <main>
-          <aside className="creature-avatar">
+          <aside className="creature-avatar" style={{ width: avatarProportion, height: avatarProportion }}>
             {tempCreatureAvatar ? (
               <>
                 <img
+                  draggable="false"
                   src={tempCreatureAvatar}
                   alt="creature-avatar"
                   className={`${isImgValid === false ? "invisible" : ""}`}
                   onLoad={HandleImgOnLoad}
                   onError={HandleImgOnError}
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                  onWheel={handleWheel}
+                  onMouseLeave={() => setDragging(false)}
+                  style={{
+                    width: avatarProportion,
+                    height: avatarProportion,
+                    left: creature.imageX != null ? creature.imageX * avatarProportion : DEFAULT_AVATAR_POSITION,
+                    top: creature.imageY != null ? creature.imageY * avatarProportion : DEFAULT_AVATAR_POSITION,
+                    transform: `scale(${creature.imageScale != null ? creature.imageScale : DEFAULT_AVATAR_SCALE})`,
+                    transformOrigin: "top left",
+                    cursor: dragging ? "grabbing" : "grab",
+                  }}
                 />
                 <i className={`fas fa-exclamation-triangle ${isImgValid ? "hidden" : ""}`}></i>
               </>

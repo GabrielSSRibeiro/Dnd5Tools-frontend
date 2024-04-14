@@ -1,22 +1,14 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import * as utils from "../../../../utils";
 import { useAuth } from "../../../../contexts/Auth";
 import {
+  GetNewCreature,
+  DEFAULT_AVATAR,
+  DEFAULT_AVATAR_POSITION,
+  DEFAULT_AVATAR_SCALE,
   CREATURE_RARITIES,
   GetRarity,
   creatureRarities,
-  CREATURE_MOVEMENTS,
-  CREATURE_PRIMARY_ALIGNMENTS,
-  CREATURE_SECONDARY_ALIGNMENTS,
-  CREATURE_ATTRIBUTES,
-  CREATURE_HIT_POINTS,
-  CREATURE_ATTACKS,
-  CREATURE_ARMOR_CLASSES,
-  CREATURE_INITIATIVES,
-  DAMAGES_EFFECTIVENESS,
-  DAMAGE_TYPES,
-  LANGUAGES,
-  CREATURE_REACTIONS_PER_ROUND,
   CREATURE_ENVIRONMENTS,
   creatureEnvironments,
   creatureSizes,
@@ -53,6 +45,7 @@ function Bestiary({
   setCreatureToEdit,
   creatures,
 }) {
+  const avatarProportion = useRef(180);
   const [nameFilter, setNameFilter] = useState(null);
   const [selectedRarity, setSelectedRarity] = useState(null);
   const [selectedEnv, setSelectedEnv] = useState(null);
@@ -88,73 +81,7 @@ function Bestiary({
   }
 
   function HandleEditNewCreature() {
-    const newCreature = {
-      owner: null,
-      name: null,
-      description: null,
-      image: "https://i.pinimg.com/736x/68/af/67/68af671bb6fb841bdd77c4cf2a534db8.jpg",
-      rarity: null,
-      environment: CREATURE_ENVIRONMENTS.ALL,
-      size: null,
-      type: null,
-      race: null,
-      class: null,
-      subClass: null,
-      secondaryClass: null,
-      secondarySubClass: null,
-      movements: {
-        speed: CREATURE_MOVEMENTS.MEDIUM,
-        flying: null,
-        swimming: null,
-        burrowing: null,
-      },
-      primaryAlignment: CREATURE_PRIMARY_ALIGNMENTS.NEUTRAL,
-      secondaryAlignment: CREATURE_SECONDARY_ALIGNMENTS.NEUTRAL,
-      attributes: {
-        strength: CREATURE_ATTRIBUTES.MEDIUM,
-        dexterity: CREATURE_ATTRIBUTES.MEDIUM,
-        constitution: CREATURE_ATTRIBUTES.MEDIUM,
-        intelligence: CREATURE_ATTRIBUTES.MEDIUM,
-        wisdom: CREATURE_ATTRIBUTES.MEDIUM,
-        charisma: CREATURE_ATTRIBUTES.MEDIUM,
-      },
-      hitPoints: CREATURE_HIT_POINTS.MEDIUM,
-      attack: CREATURE_ATTACKS.MEDIUM,
-      armorClass: CREATURE_ARMOR_CLASSES.MEDIUM,
-      initiative: CREATURE_INITIATIVES.MEDIUM,
-      weakSpots: [],
-      damagesEffectiveness: [
-        { type: DAMAGE_TYPES.SLASHING, value: DAMAGES_EFFECTIVENESS.NORMAL },
-        { type: DAMAGE_TYPES.PIERCING, value: DAMAGES_EFFECTIVENESS.NORMAL },
-        { type: DAMAGE_TYPES.BLUDGEONING, value: DAMAGES_EFFECTIVENESS.NORMAL },
-        { type: DAMAGE_TYPES.ACID, value: DAMAGES_EFFECTIVENESS.NORMAL },
-        { type: DAMAGE_TYPES.COLD, value: DAMAGES_EFFECTIVENESS.NORMAL },
-        { type: DAMAGE_TYPES.FIRE, value: DAMAGES_EFFECTIVENESS.NORMAL },
-        { type: DAMAGE_TYPES.FORCE, value: DAMAGES_EFFECTIVENESS.NORMAL },
-        { type: DAMAGE_TYPES.LIGHTNING, value: DAMAGES_EFFECTIVENESS.NORMAL },
-        { type: DAMAGE_TYPES.NECROTIC, value: DAMAGES_EFFECTIVENESS.NORMAL },
-        { type: DAMAGE_TYPES.POISON, value: DAMAGES_EFFECTIVENESS.NORMAL },
-        { type: DAMAGE_TYPES.PSYCHIC, value: DAMAGES_EFFECTIVENESS.NORMAL },
-        { type: DAMAGE_TYPES.RADIANT, value: DAMAGES_EFFECTIVENESS.NORMAL },
-        { type: DAMAGE_TYPES.THUNDER, value: DAMAGES_EFFECTIVENESS.NORMAL },
-      ],
-      conditionImmunities: [],
-      languages: [LANGUAGES.COMMON],
-      senses: {
-        darkVision: null,
-        tremorsense: null,
-        blindSight: null,
-        trueSight: null,
-      },
-      legendaryResistences: null,
-      regeneration: { amount: null, breakDamage: null },
-      customSpecials: [],
-      actions: [],
-      reactions: [],
-      reactionsPerRound: CREATURE_REACTIONS_PER_ROUND.NORMAL,
-      aura: null,
-      treasures: [],
-    };
+    const newCreature = GetNewCreature();
 
     setCreatureToEdit(newCreature);
   }
@@ -196,6 +123,13 @@ function Bestiary({
 
   function handleFilter(setValue, value) {
     setValue(value);
+  }
+
+  function HandleImgOnError(creature) {
+    creature.image = DEFAULT_AVATAR;
+    creature.imageX = null;
+    creature.imageY = null;
+    creature.imageScale = null;
   }
 
   filteredCreatures = useMemo(() => {
@@ -391,7 +325,27 @@ function Bestiary({
                     </div>
                   )}
                   <h6>{creature.name}</h6>
-                  <div className="creature-portrait">
+                  <div
+                    className="creature-portrait"
+                    style={{
+                      width: avatarProportion.current,
+                      height: avatarProportion.current,
+                    }}
+                  >
+                    <img
+                      className={`creature-avatar${IsBasicPack(creature.owner) ? " basic-pack" : ""}`}
+                      src={creature.image}
+                      alt="creature-avatar"
+                      onError={() => HandleImgOnError(creature)}
+                      style={{
+                        width: avatarProportion.current,
+                        height: avatarProportion.current,
+                        left: creature.imageX != null ? creature.imageX * avatarProportion.current : DEFAULT_AVATAR_POSITION,
+                        top: creature.imageY != null ? creature.imageY * avatarProportion.current : DEFAULT_AVATAR_POSITION,
+                        transform: `scale(${creature.imageScale != null ? creature.imageScale : DEFAULT_AVATAR_SCALE})`,
+                        transformOrigin: "top left",
+                      }}
+                    />
                     <div className="creature-gem">
                       <div className="gem-border">
                         <div className="placement">
@@ -400,11 +354,6 @@ function Bestiary({
                       </div>
                       <img src={rarityGems.find((rg) => rg.rarity === creature.rarity).gem} alt="creature-gem" />
                     </div>
-                    <img
-                      className={`creature-avatar${IsBasicPack(creature.owner) ? " basic-pack" : ""}`}
-                      src={creature.image}
-                      alt="creature-avatar"
-                    />
                   </div>
                   <div className="power-scale">
                     <div className="wrapper-with-icon">
