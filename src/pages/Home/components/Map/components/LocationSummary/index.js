@@ -146,6 +146,12 @@ function LocationSummary({
         <footer className="details">
           <div className="divider"></div>
 
+          {location.isDraft && (
+            <span className="df df-cg-5 env-type">
+              <i className="fas fa-pencil-ruler"></i>Rascunho
+            </span>
+          )}
+
           {/* type and dist */}
           <span className="env-type">
             {location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST

@@ -102,7 +102,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  column-gap: 25px;
+  column-gap: 12px;
 }
 
 .EditLocation-container .action-buttons .basic-actions {
@@ -110,7 +110,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  column-gap: 25px;
+  column-gap: 12px;
 }
 
 .EditLocation-container .group-item-actions {

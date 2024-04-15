@@ -98,7 +98,9 @@ function EditLocation({
     [referenceLocations]
   );
 
-  function HandleSaveLocation() {
+  function HandleSaveLocation(isDraft = false) {
+    location.isDraft = isDraft;
+
     //if ref is possible, but not selected, flag as hidden loc
     location.isHidden = !isWorld && !isFirstOfArea && !location.reference.distance && !location.reference.direction && !location.reference.location;
 
@@ -696,6 +698,7 @@ function EditLocation({
           <button className="button-simple" onClick={FinishEditing}>
             Cancelar
           </button>
+          <Button icon="fas fa-pencil-ruler" info={[{ text: "Rascunho" }]} onClick={() => HandleSaveLocation(true)} isDisabled={!IsLocationValid()} />
           <Button text={isNewLoc ? "Adicionar" : "Salvar"} onClick={HandleSaveLocation} isDisabled={!IsLocationValid()} />
         </div>
       </footer>
