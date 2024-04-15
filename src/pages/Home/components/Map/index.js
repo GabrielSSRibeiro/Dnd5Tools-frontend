@@ -1069,7 +1069,7 @@ function Map({
                   <i className="fas fa-minus-square"></i>
                 </button>
                 <button
-                  onClick={() => MapLoadingWrapper(() => UpdateZoom(combatConfig.zoom * 1.1 >= minZoom ? minZoom : combatConfig.zoom * 1.1))}
+                  onClick={() => MapLoadingWrapper(() => UpdateZoom(combatConfig.zoom * 1.2 >= minZoom ? minZoom : combatConfig.zoom * 1.2))}
                   disabled={isMinZoom}
                 >
                   <i className="fas fa-minus"></i>
@@ -1085,7 +1085,7 @@ function Map({
                   <i className="fas fa-search"></i>
                 </button>
                 <button
-                  onClick={() => MapLoadingWrapper(() => UpdateZoom(combatConfig.zoom * 0.9 <= maxZoom ? maxZoom : combatConfig.zoom * 0.9))}
+                  onClick={() => MapLoadingWrapper(() => UpdateZoom(combatConfig.zoom * 0.8 <= maxZoom ? maxZoom : combatConfig.zoom * 0.8))}
                   disabled={isMaxZoom}
                 >
                   <i className="fas fa-plus"></i>
