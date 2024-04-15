@@ -109,6 +109,7 @@ function ModalFastBuild({ creature, onClose }) {
   }
 
   function HandleConfirm() {
+    tempCreature.isDraft = true;
     const actionDetailsIndex = ACTION_DETAILS.findIndex((r) => r.rarity === tempCreature.rarity);
     const sizeDetails = SIZE_DETAILS.find((r) => r.size === tempCreature.size);
     tempCreature.armorClass = ACTION_DETAILS[Math.floor(actionDetailsIndex)].armorClass;
