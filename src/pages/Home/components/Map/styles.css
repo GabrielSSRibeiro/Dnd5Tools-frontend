@@ -361,13 +361,3 @@
   position: relative;
   cursor: pointer;
 }
-
-.Map-container .creature-list .creature-avatar {
-  bottom: 7px;
-  object-fit: cover;
-  object-position: 0 top;
-  width: 60px;
-  height: 60px;
-  border-radius: 100%;
-  border: 2px solid var(--white);
-}

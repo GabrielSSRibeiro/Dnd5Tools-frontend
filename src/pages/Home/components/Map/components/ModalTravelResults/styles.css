@@ -94,7 +94,11 @@
 .ModalTravelResults-container .creature-list .encounter-creature {
   position: relative;
   cursor: pointer;
+
+  overflow: hidden;
+  /* bottom: 7px; */
   border-radius: 100%;
+  border: 2px solid var(--white);
 }
 
 .ModalTravelResults-container .encounter-creature.selected-creature {
@@ -110,13 +114,8 @@
 }
 
 .ModalTravelResults-container .creature-list .creature-avatar {
-  bottom: 7px;
-  object-fit: cover;
-  object-position: 0 top;
-  width: 60px;
-  height: 60px;
-  border-radius: 100%;
-  border: 2px solid var(--white);
+  position: absolute;
+  object-fit: contain;
 }
 
 .ModalTravelResults-container > .divider {

@@ -66,12 +66,15 @@
   flex-wrap: wrap;
 }
 
-.LocationSummary-container .creature-list .creature-avatar {
-  bottom: 7px;
-  object-fit: cover;
-  object-position: 0 top;
-  width: 40px;
-  height: 40px;
+.LocationSummary-container .details .display-creature {
+  overflow: hidden;
+  position: relative;
+  /* bottom: 7px; */
   border-radius: 100%;
   border: 2px solid var(--white);
+}
+
+.LocationSummary-container .creature-list .creature-avatar {
+  position: absolute;
+  object-fit: contain;
 }

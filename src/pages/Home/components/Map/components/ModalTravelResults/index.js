@@ -45,6 +45,7 @@ function ModalTravelResults({
   deleteNodeAction,
   moveNodeAction,
 }) {
+  const avatarProportion = useRef(60);
   const [timePassed, setTimePassed] = useState(
     travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY ? 0 : lc.GetRestTime(restTime).timeInMin
   );
@@ -935,12 +936,26 @@ function ModalTravelResults({
                   const creature = creatures.find((c) => c._id === ec.creatureId);
 
                   return (
-                    <div className="df encounter-creature" onClick={() => OpenModalExport(creature)} key={ec.creatureId}>
+                    <div
+                      className="df encounter-creature"
+                      onClick={() => OpenModalExport(creature)}
+                      key={ec.creatureId}
+                      style={{
+                        width: avatarProportion.current,
+                        height: avatarProportion.current,
+                        borderColor: cc.GetRarity(creature.rarity).color,
+                      }}
+                    >
                       <Info contents={[{ text: creature.name }, { text: "..." }, { text: "[Exportar]", icon: "fas fa-upload" }]} tooltipOnly={true} />
                       <img
                         className="creature-avatar"
                         style={{
-                          borderColor: cc.GetRarity(creature.rarity).color,
+                          width: avatarProportion.current,
+                          height: avatarProportion.current,
+                          left: creature.imageX != null ? creature.imageX * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
+                          top: creature.imageY != null ? creature.imageY * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
+                          transform: `scale(${creature.imageScale != null ? creature.imageScale : cc.DEFAULT_AVATAR_SCALE})`,
+                          transformOrigin: "top left",
                         }}
                         src={creature.image}
                         alt="creature-avatar"
@@ -1081,11 +1096,21 @@ function ModalTravelResults({
                               <div
                                 className={`df encounter-creature${c.isSelected ? " selected-creature" : ""}`}
                                 onClick={() => ToggleCreatureSelection(index)}
+                                style={{
+                                  width: avatarProportion.current,
+                                  height: avatarProportion.current,
+                                  borderColor: c.color,
+                                }}
                               >
                                 <img
                                   className={`creature-avatar${c.isDead ? " dead-creature" : ""}`}
                                   style={{
-                                    borderColor: c.color,
+                                    width: avatarProportion.current,
+                                    height: avatarProportion.current,
+                                    left: c.creature.imageX != null ? c.creature.imageX * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
+                                    top: c.creature.imageY != null ? c.creature.imageY * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
+                                    transform: `scale(${c.creature.imageScale != null ? c.creature.imageScale : cc.DEFAULT_AVATAR_SCALE})`,
+                                    transformOrigin: "top left",
                                   }}
                                   src={c.creature.image}
                                   alt="creature-avatar"

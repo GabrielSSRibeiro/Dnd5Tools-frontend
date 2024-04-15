@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import * as utils from "../../../../../../utils";
 import * as cc from "../../../../../../constants/creatureConstants";
 import * as lc from "../../../../../../constants/locationConstants";
@@ -23,6 +23,7 @@ function LocationSummary({
   canTravelToPoint,
 }) {
   const [modal, setModal] = useState(null);
+  const avatarProportion = useRef(60);
 
   function OpenModalLocationDetails(loc, locId, defaultLevel) {
     setLocationToEdit(null);
@@ -88,6 +89,9 @@ function LocationSummary({
           color: rarity.color,
           opacity: `${lc.GetEncounterFrequency(parseInt(c.routine.encounterFrequency)).opacity}`,
           image: c.creature.image,
+          imageX: c.creature.imageX,
+          imageY: c.creature.imageY,
+          imageScale: c.creature.imageScale,
           baseOutputMax: rarity.baseOutputMax,
         };
       });
@@ -172,16 +176,30 @@ function LocationSummary({
               <div className="divider"></div>
               <div className="creature-list">
                 {creaturesForDisplay.map((c) => (
-                  <img
+                  <div
+                    className="df display-creature"
                     key={c.creatureId}
-                    className="creature-avatar"
                     style={{
+                      width: avatarProportion.current,
+                      height: avatarProportion.current,
                       borderColor: c.color,
                       opacity: c.opacity,
                     }}
-                    src={c.image}
-                    alt="creature-avatar"
-                  />
+                  >
+                    <img
+                      className="creature-avatar"
+                      style={{
+                        width: avatarProportion.current,
+                        height: avatarProportion.current,
+                        left: c.imageX != null ? c.imageX * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
+                        top: c.imageY != null ? c.imageY * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
+                        transform: `scale(${c.imageScale != null ? c.imageScale : cc.DEFAULT_AVATAR_SCALE})`,
+                        transformOrigin: "top left",
+                      }}
+                      src={c.image}
+                      alt="creature-avatar"
+                    />
+                  </div>
                 ))}
               </div>
               {canTravelToPoint && distance?.encounterProb != null && creaturesForDisplay.length > 0 && (
