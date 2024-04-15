@@ -355,25 +355,35 @@ function Bestiary({
                       <img src={rarityGems.find((rg) => rg.rarity === creature.rarity).gem} alt="creature-gem" />
                     </div>
                   </div>
+
                   <div className="power-scale">
-                    <div className="wrapper-with-icon">
-                      <i className="fas fa-khanda power-scale-icon"></i>
-                      <aside className="power-scale-bar">
-                        <div
-                          className="power-scale-fill offensive"
-                          style={{ width: GetCreaturePowerScale(GetCreatureOffensiveRatio(creature), creature.rarity) }}
-                        ></div>
-                      </aside>
-                    </div>
-                    <div className="wrapper-with-icon">
-                      <i className="fas fa-shield-alt power-scale-icon"></i>
-                      <aside className="power-scale-bar">
-                        <div
-                          className="power-scale-fill defensive"
-                          style={{ width: GetCreaturePowerScale(GetCreatureDefensiveRatio(creature), creature.rarity) }}
-                        ></div>
-                      </aside>
-                    </div>
+                    {creature.isDraft ? (
+                      <div className="df df-cg-5 draft">
+                        <i className="fas fa-pencil-ruler"></i>
+                        <span>Rascunho</span>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="wrapper-with-icon">
+                          <i className="fas fa-khanda power-scale-icon"></i>
+                          <aside className="power-scale-bar">
+                            <div
+                              className="power-scale-fill offensive"
+                              style={{ width: GetCreaturePowerScale(GetCreatureOffensiveRatio(creature), creature.rarity) }}
+                            ></div>
+                          </aside>
+                        </div>
+                        <div className="wrapper-with-icon">
+                          <i className="fas fa-shield-alt power-scale-icon"></i>
+                          <aside className="power-scale-bar">
+                            <div
+                              className="power-scale-fill defensive"
+                              style={{ width: GetCreaturePowerScale(GetCreatureDefensiveRatio(creature), creature.rarity) }}
+                            ></div>
+                          </aside>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}

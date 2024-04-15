@@ -403,6 +403,12 @@
   column-gap: 7px;
 }
 
+.Bestiary-container .draft {
+  color: var(--white);
+  font-size: 11px;
+  height: 10px;
+}
+
 .Bestiary-container .power-scale .power-scale-bar {
   transform: skew(-30deg);
   background: var(--gray2);

@@ -296,7 +296,9 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
     setModal();
   }
 
-  async function HandleSaveCreature() {
+  async function HandleSaveCreature(isDraft = false) {
+    creature.isDraft = isDraft;
+
     if (!isBasicPack) {
       setIsBusy(true);
       await onSave();
@@ -340,6 +342,13 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
               Deletar
             </button>
           )}
+          <Button
+            text={isBusy ? "Salvando" : "Rascunho"}
+            icon="fas fa-pencil-ruler"
+            onClick={() => HandleSaveCreature(true)}
+            isDisabled={isBusy || isBasicPack}
+            className="creature-save"
+          />
           <Button text={isBusy ? "Salvando" : "Salvar"} onClick={HandleSaveCreature} isDisabled={isBusy || isBasicPack} className="creature-save" />
         </div>
       </div>

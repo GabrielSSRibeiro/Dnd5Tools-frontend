@@ -70,12 +70,16 @@
 .Summary-container .power-scale-wrapper .power-scale-bar {
   transform: skew(-30deg);
   background: var(--gray2);
-  width: 250px;
-  height: 25px;
+  width: 200px;
+  height: 20px;
+}
+
+.Summary-container .power-scale-wrapper .power-scale-bar:first-of-type {
+  margin-right: -15px;
 }
 
 .Summary-container .power-scale-wrapper .power-scale-icon {
-  font-size: 22px;
+  font-size: 18px;
   color: var(--gray1);
   margin-right: -30px;
 }
