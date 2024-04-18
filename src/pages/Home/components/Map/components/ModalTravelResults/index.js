@@ -111,7 +111,9 @@ function ModalTravelResults({
       ? exteriorLocation
       : location
   );
-  const [addExteriorCreatures, setAddExteriorCreatures] = useState(hasMoved && isPointOfInterest && encounterLocation.current._id !== location._id);
+  const [addExteriorCreatures, setAddExteriorCreatures] = useState(
+    (hasMoved || timePassed) && isPointOfInterest && encounterLocation.current._id !== location._id
+  );
   const [roomIndex, SetRoomIndex] = useState(
     newCurrentNode.roomIndex != null && location.interaction?.rooms.some((_, i) => i === newCurrentNode.roomIndex)
       ? newCurrentNode.roomIndex
@@ -432,6 +434,7 @@ function ModalTravelResults({
     return finalCreatures;
   }, [GetRoomCreatures, addExteriorCreatures, location]);
   const hasSelectedCreature = useMemo(() => finalCreatures.creatures.some((c) => c.isSelected), [finalCreatures]);
+
   const remainsForDisplay = useRef(
     Math.round(
       uniqueNodeCreatures
