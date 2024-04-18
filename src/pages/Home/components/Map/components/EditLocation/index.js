@@ -305,17 +305,19 @@ function EditLocation({
         });
       });
 
-    //update bound creatures
+    UpdateBoundCreatures(creaturesObj);
+    setter({ ...creaturesObj });
+  }
+
+  function UpdateBoundCreatures(creaturesObj) {
     let boundCreatures = [];
     creaturesObj.boundCreatures.forEach((b) => {
-      b = b.filter((cId) => tempSelectedCreatures.some((sc) => sc._id === cId));
+      b = b.filter((cId) => creaturesObj.creatures.some((c) => c.creatureId === cId));
       if (b.length > 1) {
         boundCreatures.push(b);
       }
     });
     creaturesObj.boundCreatures = boundCreatures;
-
-    setter({ ...creaturesObj });
   }
 
   function IsLocationValid() {
@@ -665,6 +667,7 @@ function EditLocation({
             contexts={location.contexts}
             creatures={creatures}
             HandleSelectCreatures={HandleSelectCreatures}
+            UpdateBoundCreatures={UpdateBoundCreatures}
             isPointOfInterest={false}
           />
         )}

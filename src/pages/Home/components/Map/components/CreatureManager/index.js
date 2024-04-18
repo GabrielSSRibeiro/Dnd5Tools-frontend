@@ -8,7 +8,7 @@ import ModalManageCreatureRoutine from "./Components/ModalManageCreatureRoutine"
 
 import "./styles.css";
 
-function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreatures, isPointOfInterest }) {
+function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreatures, UpdateBoundCreatures, isPointOfInterest }) {
   const [modal, setModal] = useState(false);
 
   function OpenModalManageCreaturePopulation(creature) {
@@ -69,6 +69,12 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
     }
 
     utils.SwapElementsInArray(data.creatures, index1, index2);
+    setData({ ...data });
+  }
+
+  function DeleteCreature(creature) {
+    data.creatures = data.creatures.filter((lc) => lc.creatureId !== creature.creatureId);
+    UpdateBoundCreatures(data);
     setData({ ...data });
   }
 
@@ -200,6 +206,9 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
                   )}
                   <button onClick={() => OpenModalManageRoutine(locC)}>
                     <i className="fas fa-plus"></i>
+                  </button>
+                  <button onClick={() => DeleteCreature(locC)}>
+                    <i className="fas fa-trash"></i>
                   </button>
                 </span>
               </div>
