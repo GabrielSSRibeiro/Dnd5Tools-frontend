@@ -668,6 +668,8 @@ function EditLocation({
             creatures={creatures}
             HandleSelectCreatures={HandleSelectCreatures}
             UpdateBoundCreatures={UpdateBoundCreatures}
+            map={map}
+            isWorld={isWorld}
             isPointOfInterest={false}
           />
         )}

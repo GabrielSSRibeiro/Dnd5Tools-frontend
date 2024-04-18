@@ -8,8 +8,13 @@ import ModalManageCreatureRoutine from "./Components/ModalManageCreatureRoutine"
 
 import "./styles.css";
 
-function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreatures, UpdateBoundCreatures, isPointOfInterest }) {
+function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreatures, UpdateBoundCreatures, map, isWorld, isPointOfInterest }) {
   const [modal, setModal] = useState(false);
+
+  function HandleCopyFromExterior() {
+    data.creatures = utils.clone(map[data.exteriorLocationId].data.creatures);
+    setData({ ...data });
+  }
 
   function OpenModalManageCreaturePopulation(creature) {
     setModal(
@@ -156,9 +161,16 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
       {modal}
       <div className="location-row location-detail-group-title">
         <span className={data.creatures.length === 0 ? `lacking-data` : ""}>Criaturas</span>
-        <button onClick={() => HandleSelectCreatures(data, setData)}>
-          <i className="fas fa-retweet"></i>
-        </button>
+        <div className="df df-cg-5">
+          {!isPointOfInterest && !isWorld && (
+            <button title="Copiar de exterior" onClick={HandleCopyFromExterior}>
+              <i className="fas fa-clone"></i>
+            </button>
+          )}
+          <button title="Selecionar" onClick={() => HandleSelectCreatures(data, setData)}>
+            <i className="fas fa-retweet"></i>
+          </button>
+        </div>
       </div>
       {/* creatures */}
       {data.creatures.map((locC, cIndex) => {
