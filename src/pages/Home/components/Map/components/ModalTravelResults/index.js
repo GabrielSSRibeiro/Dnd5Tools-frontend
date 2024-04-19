@@ -181,9 +181,9 @@ function ModalTravelResults({
 
   const encounterLocContext = useRef(lh.GetCurrentContext(encounterLocation.current));
   const worldContext = useRef(lh.GetCurrentContext(world));
-  const shouldlAddWorldCreatures = useRef(world.name !== encounterLocation.current.name && worldContext.current.name !== lc.DEFAULT_CONTEXT_NAME);
+  const shouldAddWorldCreatures = useRef(world.name !== encounterLocation.current.name && worldContext.current.name !== lc.DEFAULT_CONTEXT_NAME);
 
-  const hasAnyCreature = useRef(encounterLocation.current.creatures.length > 0 || (shouldlAddWorldCreatures && world.creatures.length > 0));
+  const hasAnyCreature = useRef(encounterLocation.current.creatures.length > 0 || (shouldAddWorldCreatures.current && world.creatures.length > 0));
   const isEncounter = useRef(
     hasAnyCreature.current &&
       !(roomIndex > 0) &&
@@ -216,10 +216,26 @@ function ModalTravelResults({
           : lc.NODE_CREATURE_CONDITIONS.TRACKS;
       }
 
+      function GetHighestEncounterFrequencyCreaturesInBinding(binding, creatures, context) {
+        let creaturesWithProb = binding.map((b) => {
+          const routine = GetCreatureCurrentRoutine(
+            creatures.find((c) => c.creatureId === b),
+            context
+          );
+          return { id: b, probability: routine ? lc.GetEncounterFrequency(routine.encounterFrequency).probability : 0 };
+        });
+
+        creaturesWithProb.sort((a, b) => b.probability - a.probability);
+        const maxProbability = creaturesWithProb[0].probability;
+        creaturesWithProb = creaturesWithProb.filter((obj) => obj.probability === maxProbability);
+
+        return creaturesWithProb.map((obj) => obj.id);
+      }
+
       function AddBoundCreatures(creature, locationCreatures) {
         const locBinding = encounterLocation.current.boundCreatures.find((b) => b.includes(creature.creatureId));
         const worldBinding = world.boundCreatures.find((b) => b.includes(creature.creatureId));
-        const binding = utils.randomItemFromArray(shouldlAddWorldCreatures && worldBinding ? [locBinding, worldBinding] : [locBinding]);
+        const binding = utils.randomItemFromArray(shouldAddWorldCreatures.current && worldBinding ? [locBinding, worldBinding] : [locBinding]);
 
         if (binding) {
           creature.binding = binding;
@@ -240,32 +256,47 @@ function ModalTravelResults({
           return [];
         }
 
-        //add world context creatures
-        let allCreatures = shouldlAddWorldCreatures
+        let allCreatures = shouldAddWorldCreatures.current
           ? [...encounterLocation.current.creatures, ...world.creatures]
           : encounterLocation.current.creatures;
 
         //setup
         let locationCreatures = allCreatures
+          //keep only creatures that remain
           .filter((c) => !c.population || c.population.current > 0)
-          .map((c) => {
-            let routine = encounterLocation.current.creatures.some((lc) => lc.creatureId === c.creatureId)
-              ? GetCreatureCurrentRoutine(c, encounterLocContext.current)
-              : GetCreatureCurrentRoutine(c, worldContext.current);
-            if (!routine) {
+          .map((c, i, self) => {
+            let details = encounterLocation.current.creatures.some((lc) => lc.creatureId === c.creatureId)
+              ? {
+                  routine: GetCreatureCurrentRoutine(c, encounterLocContext.current),
+                  creatures: encounterLocation.current.creatures,
+                  context: encounterLocContext.current,
+                }
+              : { routine: GetCreatureCurrentRoutine(c, worldContext.current), creatures: world.creatures, context: encounterLocContext.current };
+            if (!details.routine) {
               return null;
             }
 
-            const groupSize = lc.GetGroupSize(routine.groupSize);
+            const groupSize = lc.GetGroupSize(details.routine.groupSize);
             const number = utils.randomIntFromInterval(groupSize.min, groupSize.max);
-            const probability = lc.GetEncounterFrequency(routine.encounterFrequency).probability;
+            const probability = lc.GetEncounterFrequency(details.routine.encounterFrequency).probability;
+
+            //check if no binding or this is the first creature with the highest encounter frequency in the binding
+            const binding =
+              encounterLocation.current.boundCreatures.find((b) => b.includes(c.creatureId)) ??
+              world.boundCreatures.find((b) => b.includes(c.creatureId));
+            const hefcib = binding ? GetHighestEncounterFrequencyCreaturesInBinding(binding, details.creatures, details.context) : [];
+            const isHighest = hefcib.includes(c.creatureId);
+            const previousCreatures = self.slice(0, i);
+            const shouldCheckProb =
+              !binding || (isHighest && (previousCreatures.length === 0 || !previousCreatures.some((sc) => hefcib.includes(sc.creatureId))));
 
             return {
               creatureId: c.creatureId,
               binding: c.binding,
               number: c.population ? Math.min(c.population.current, number) : number,
-              encounterFrequency: routine.encounterFrequency,
-              isEncounter: isEncounter.current ? utils.ProbabilityCheck(probability) : ProbUpdatedByTravelTimeModCheck(probability),
+              encounterFrequency: details.routine.encounterFrequency,
+              isEncounter:
+                isEncounter.current && shouldCheckProb ? utils.ProbabilityCheck(probability) : ProbUpdatedByTravelTimeModCheck(probability),
             };
           })
           .filter((c) => c);
