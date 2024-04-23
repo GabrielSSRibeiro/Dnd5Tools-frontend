@@ -971,7 +971,11 @@ function Map({
                           })
                         }
                         isSelected={combatConfig.travel.oriented}
-                        info={[{ text: "Chance de desviar da direçao passivamente para um dos lados até 90 graus" }]}
+                        info={[
+                          { text: "Ponto de referência visível para se guiar" },
+                          { text: "" },
+                          { text: "Chance de levemente desviar da direçao. Percepitível com o tempo" },
+                        ]}
                       />
                       <CheckInput
                         label="Montados"
@@ -1069,7 +1073,7 @@ function Map({
                   <i className="fas fa-minus-square"></i>
                 </button>
                 <button
-                  onClick={() => MapLoadingWrapper(() => UpdateZoom(combatConfig.zoom * 1.2 >= minZoom ? minZoom : combatConfig.zoom * 1.2))}
+                  onClick={() => MapLoadingWrapper(() => UpdateZoom(combatConfig.zoom * 1.3 >= minZoom ? minZoom : combatConfig.zoom * 1.3))}
                   disabled={isMinZoom}
                 >
                   <i className="fas fa-minus"></i>
@@ -1085,7 +1089,7 @@ function Map({
                   <i className="fas fa-search"></i>
                 </button>
                 <button
-                  onClick={() => MapLoadingWrapper(() => UpdateZoom(combatConfig.zoom * 0.8 <= maxZoom ? maxZoom : combatConfig.zoom * 0.8))}
+                  onClick={() => MapLoadingWrapper(() => UpdateZoom(combatConfig.zoom * 0.7 <= maxZoom ? maxZoom : combatConfig.zoom * 0.7))}
                   disabled={isMaxZoom}
                 >
                   <i className="fas fa-plus"></i>
