@@ -362,7 +362,10 @@ function Treasure({ resultText, level }) {
                     <span className="label">Poçoes: </span>Suprimentos de Alquimista
                   </span>
                   <span>
-                    <span className="label">Pergaminho de magia: </span>Suprimentos de Caligrafia
+                    <span className="label">Elixir de efeito: </span>Suprimentos de cervejeiro, suprimentos de Alquimista
+                  </span>
+                  <span>
+                    <span className="label">Pergaminho de magia: </span>Suprimentos de caligrafia, ferramentas de cartógrafo
                   </span>
                 </div>
               </footer>
