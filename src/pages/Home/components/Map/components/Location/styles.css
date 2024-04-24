@@ -36,6 +36,7 @@
   height: 2px;
   background-color: black;
   z-index: 1;
+  pointer-events: none;
 }
 
 .Location-container .connection-background {
