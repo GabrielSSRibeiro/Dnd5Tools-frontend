@@ -11,6 +11,8 @@
 
 .ModalLocationDetails-container .details-wrapper {
   overflow-y: auto;
+  white-space: break-spaces;
+  word-break: break-word;
   height: 100%;
 }
 
