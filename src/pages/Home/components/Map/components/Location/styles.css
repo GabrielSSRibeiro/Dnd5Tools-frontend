@@ -34,14 +34,8 @@
 .Location-container .connection {
   position: absolute;
   z-index: 1;
-  border: 1px solid var(--black);
   pointer-events: none;
-
-  /* width: 500px;
-  height: 100px;
-  border: solid 5px #000;
-  border-color: #000 transparent transparent transparent;
-  border-radius: 50%/100px 100px 0 0; */
+  height: 2px;
 }
 
 .Location-container .connection-background {

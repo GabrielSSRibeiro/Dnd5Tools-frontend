@@ -1,0 +1,15 @@
+.LocConnection-container {
+  width: 100%;
+  height: 100%;
+}
+
+.LocConnection-container.passage {
+  width: 100%;
+  height: 100%;
+  column-gap: 5px;
+}
+
+.LocConnection-container section {
+  width: 10%;
+  height: 100%;
+}

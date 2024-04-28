@@ -4,6 +4,8 @@ import * as lc from "../../../../../../constants/locationConstants";
 import * as cc from "../../../../../../constants/creatureConstants";
 import * as lh from "../../../../../../helpers/locationHelper";
 
+import LocConnection from "./components/LocConnection";
+
 import "./styles.css";
 
 function Location({
@@ -85,13 +87,8 @@ function Location({
 
     let connectionStyle = {
       rotate: `${loc.data.distanceAngle * -1}deg`,
-      borderColor: lc.GetElementType(lc.GetLocationConnectionType(loc.data.reference.connectionType).elementType).color,
       zIndex: areaLocs.length,
     };
-
-    if (loc.data.reference.connectionType === lc.LOCATION_CONNECTION_TYPES.PASSAGE) {
-      connectionStyle.borderStyle = "dashed";
-    }
 
     return connectionStyle;
   }, [areaLocs.length, loc.data.distanceAngle, loc.data.reference.connectionType]);
@@ -440,13 +437,9 @@ function Location({
     >
       {/* connection */}
       {connectionStyle && (
-        <div
-          id={`${loc.data._id}-connection`}
-          className="connection not-flat"
-          style={connectionStyle}
-          onMouseMove={(e) => HandleHover(e, loc.data)}
-          onMouseLeave={(e) => HandleHover(e)}
-        ></div>
+        <div id={`${loc.data._id}-connection`} className="connection not-flat" style={connectionStyle}>
+          <LocConnection type={loc.data.reference.connectionType} />
+        </div>
       )}
       {interiorLocs.length > 0 ? (
         interiorLocs.map((locationId) => (
@@ -499,7 +492,7 @@ function Location({
                 <div
                   name={`${l.name}-area`}
                   id={isLocArea ? `${l._id}-area` : null}
-                  className={`area${isPointOfInterest ? " point-of-interest" : ""} not-flat`}
+                  className={`area jagged-border${isPointOfInterest ? " point-of-interest" : ""} not-flat`}
                   style={{
                     width: areaStyles.width,
                     height: areaStyles.height,
