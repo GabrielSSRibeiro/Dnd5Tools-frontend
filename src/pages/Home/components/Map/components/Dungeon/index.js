@@ -626,14 +626,21 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
                       ></div>
                     )}
 
-                    {(r.rarity || roomCreatures.length > 0) && (
-                      <div className="df room-content">
-                        {roomCreatures.length > 0 ? (
-                          <i className={`fas fa-skull ${r.rarity ? "treasure" : "creatures"}`}></i>
-                        ) : (
-                          <i className="fas fa-gem treasure"></i>
-                        )}
+                    {r.size === lc.ROOM_SIZES.EXIT ? (
+                      <div className="df dungeon-exit">
+                        <i className={`fas fa-dungeon ${roomCreatures.length > 0 ? "creatures" : ""}`}></i>
+                        {r.rarity && <i className={`fas fa-gem treasure`}></i>}
                       </div>
+                    ) : (
+                      (r.rarity || roomCreatures.length > 0) && (
+                        <div className="df room-content">
+                          {roomCreatures.length > 0 ? (
+                            <i className={`fas fa-skull ${r.rarity ? "treasure" : "creatures"}`}></i>
+                          ) : (
+                            <i className="fas fa-gem treasure"></i>
+                          )}
+                        </div>
+                      )
                     )}
                   </button>
                 </div>

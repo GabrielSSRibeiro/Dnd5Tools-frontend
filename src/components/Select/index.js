@@ -16,6 +16,8 @@ function Select({
   optionDisplay = (o) => o,
   optionValue = (o) => o,
   label = null,
+  textIcon = null,
+  icon = null,
   info = null,
   nothingSelected = null,
   dropUp = false,
@@ -74,7 +76,13 @@ function Select({
     <div className={`Select-container ${className}`} tabIndex="-1" onBlur={() => setIsOpen(false)}>
       {(label || info) && (
         <div className={`label-wrapper ${label && info ? "label-and-info" : !info ? "label" : "info"}`}>
-          {label && <span>{label}</span>}
+          {(icon || textIcon || label) && (
+            <div className="df df-cg-5">
+              {textIcon && <span className="bold">{textIcon}</span>}
+              {icon && <i className={icon}></i>}
+              {label && <span>{label}</span>}
+            </div>
+          )}
           {info && <Info contents={info} />}
         </div>
       )}
@@ -90,6 +98,8 @@ function Select({
       >
         {selectedOption ? (
           <div className="df df-cg-5">
+            {selectedOption.textIcon && <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{selectedOption.textIcon}</h5>}
+
             {selectedOption.icon && <i className={selectedOption.icon}></i>}
 
             <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{optionDisplay(selectedOption)}</h5>
@@ -114,6 +124,7 @@ function Select({
                 value={option === nothingSelected ? nothingSelected : optionDisplay(option)}
                 onClick={() => HandleClick(option)}
               >
+                {option.textIcon && <span className="bold">{option.textIcon}</span>}
                 {option.icon && <i className={option.icon}></i>}
                 {option === nothingSelected ? nothingSelected : optionDisplay(option)}
                 {option.info && <Info contents={option.info} />}

@@ -28,7 +28,7 @@
   cursor: pointer;
   /* border-radius: 8px; */
   background-color: var(--white);
-  padding: 10px 10px 10px 15px;
+  padding: 10px;
 
   position: relative;
   display: flex;

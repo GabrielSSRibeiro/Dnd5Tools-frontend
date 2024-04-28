@@ -171,6 +171,12 @@
   bottom: 1px;
 }
 
+.Dungeon-container .dungeon-exit .treasure {
+  position: absolute;
+  font-size: 6px;
+  bottom: 1px;
+}
+
 .Dungeon-container .room-area .connection-base {
   width: 3px;
   height: 3px;

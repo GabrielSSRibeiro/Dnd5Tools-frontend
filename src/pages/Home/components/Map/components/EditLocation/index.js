@@ -491,7 +491,7 @@ function EditLocation({
                 value={location}
                 valuePropertyPath="reference.connectionType"
                 onSelect={HandleUpdateOnSelect}
-                nothingSelected="Nada"
+                nothingSelected="-"
                 options={lc.locationConnectionTypes}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}

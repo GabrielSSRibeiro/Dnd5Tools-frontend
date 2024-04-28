@@ -190,14 +190,14 @@ export const DIRECTIONS = {
   NORTH_WEST: 80,
 };
 export const directions = [
-  { display: "→ (0°)", value: DIRECTIONS.EAST, baseAngle: 0 },
-  { display: "↗ (45°)", value: DIRECTIONS.NORTH_EAST, baseAngle: 45 },
-  { display: "↑ (90°)", value: DIRECTIONS.NORTH, baseAngle: 90 },
-  { display: "↖ (135°)", value: DIRECTIONS.NORTH_WEST, baseAngle: 135 },
-  { display: "← (180°)", value: DIRECTIONS.WEST, baseAngle: 180 },
-  { display: "↙ (225°)", value: DIRECTIONS.SOUTH_WEST, baseAngle: 225 },
-  { display: "↓ (270°)", value: DIRECTIONS.SOUTH, baseAngle: 270 },
-  { display: "↘ (315°)", value: DIRECTIONS.SOUTH_EAST, baseAngle: 315 },
+  { display: "(0°)", textIcon: "→", value: DIRECTIONS.EAST, baseAngle: 0 },
+  { display: "(45°)", textIcon: "↗", value: DIRECTIONS.NORTH_EAST, baseAngle: 45 },
+  { display: "(90°)", textIcon: "↑", value: DIRECTIONS.NORTH, baseAngle: 90 },
+  { display: "(135°)", textIcon: "↖", value: DIRECTIONS.NORTH_WEST, baseAngle: 135 },
+  { display: "(180°)", textIcon: "←", value: DIRECTIONS.WEST, baseAngle: 180 },
+  { display: "(225°)", textIcon: "↙", value: DIRECTIONS.SOUTH_WEST, baseAngle: 225 },
+  { display: "(270°)", textIcon: "↓", value: DIRECTIONS.SOUTH, baseAngle: 270 },
+  { display: "(315°)", textIcon: "↘", value: DIRECTIONS.SOUTH_EAST, baseAngle: 315 },
 ];
 export const GetDirection = (value) => directions.find((a) => a.value === value);
 
@@ -491,22 +491,22 @@ export const nodeCreatureConditions = [
 export const GetNodeCreatureCondition = (value) => nodeCreatureConditions.find((a) => a.value === value);
 
 export const ROOM_SIZES = {
-  REF_EXIT: 3,
+  EXIT: 3,
   CORRIDOR: 5,
   SMALL: 10,
   MEDIUM: 20,
   LARGE: 30,
 };
 export const roomSizes = [
-  // {
-  //   display: "Saída",
-  //   icon: "fas fa-dungeon",
-  //   info: [{ text: "Saídas são sempre para a localizaçao referência" }],
-  //   value: ROOM_SIZES.REF_EXIT,
-  //   cssClass: "ref-exit",
-  //   meters: null,
-  //   corridorDisplay: null,
-  // },
+  {
+    display: "Saída",
+    icon: "fas fa-dungeon",
+    info: [{ text: "Use o mapa para se mover até outra localizaçao" }],
+    value: ROOM_SIZES.EXIT,
+    cssClass: "large",
+    meters: null,
+    corridorDisplay: null,
+  },
   { display: "Corredor", value: ROOM_SIZES.CORRIDOR, cssClass: "corridor", meters: null, corridorDisplay: "4,5m" },
   { display: "Pequeno", value: ROOM_SIZES.SMALL, cssClass: "small", meters: 9, corridorDisplay: "4,5m" },
   { display: "Médio", value: ROOM_SIZES.MEDIUM, cssClass: "medium", meters: 18, corridorDisplay: "3m" },
@@ -551,9 +551,9 @@ export const ROOM_CONNECTION_DIRECTIONS = {
   BOTTOM_RIGHT: 40,
 };
 export const roomConnectionDirections = [
-  { display: "↖ (cima esquerdo)", value: ROOM_CONNECTION_DIRECTIONS.TOP_LEFT },
-  { display: "Cima direito ↗", value: ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT },
-  { display: "Baixo esquerdo ↙", value: ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT },
-  { display: "Baixo direito ↘", value: ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT },
+  { display: "(cima esquerdo)", textIcon: "↖", value: ROOM_CONNECTION_DIRECTIONS.TOP_LEFT },
+  { display: "(cima direito)", textIcon: "↗", value: ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT },
+  { display: "(baixo esquerdo)", textIcon: "↙", value: ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT },
+  { display: "(baixo direito)", textIcon: "↘", value: ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT },
 ];
 export const GetRoomConnectionDirection = (value) => roomConnectionDirections.find((a) => a.value === value);

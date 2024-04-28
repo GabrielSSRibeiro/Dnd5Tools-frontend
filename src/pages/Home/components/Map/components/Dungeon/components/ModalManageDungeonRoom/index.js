@@ -212,7 +212,8 @@ function ModalManageDungeonRoom({
 
             <div className="df df-cg-10 room-row">
               <Select
-                label={"Cima ↑"}
+                label="(cima)"
+                textIcon="↑"
                 extraWidth={45}
                 value={tempRoom}
                 valuePropertyPath="top.connection"
@@ -231,7 +232,8 @@ function ModalManageDungeonRoom({
                 <i className="fas fa-eye"></i>
               </button>
               <Select
-                label={"Baixo ↓"}
+                label="(baixo)"
+                textIcon="↓"
                 extraWidth={45}
                 value={tempRoom}
                 valuePropertyPath="bottom.connection"
@@ -254,7 +256,8 @@ function ModalManageDungeonRoom({
             </div>
             <div className="df  df-cg-10 room-row">
               <Select
-                label={"Esquerda ←"}
+                label="(esquerda)"
+                textIcon="←"
                 extraWidth={45}
                 value={tempRoom}
                 valuePropertyPath="left.connection"
@@ -275,7 +278,8 @@ function ModalManageDungeonRoom({
                 <i className="fas fa-eye"></i>
               </button>
               <Select
-                label={"Direita →"}
+                label="(direita)"
+                textIcon="→"
                 extraWidth={45}
                 value={tempRoom}
                 valuePropertyPath="right.connection"
