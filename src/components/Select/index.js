@@ -28,6 +28,27 @@ function Select({
   const selectOptions = useMemo(() => (nothingSelected ? [nothingSelected, ...options] : options), [options, nothingSelected]);
   const selectWidth = 100;
   const height = isLarge ? 55 : 37;
+  const ulStyles = useMemo(() => {
+    let ulStyles = {
+      width: selectWidth + extraWidth,
+      height: height * selectOptions.length + 2,
+      maxHeight: height * optionsAtATime + 2,
+      overflow: selectOptions.length <= optionsAtATime ? "none" : "auto",
+      overflowX: selectOptions.length <= optionsAtATime ? "none" : "hidden",
+    };
+
+    if (dropUp) {
+      ulStyles.top = `calc(-1 * (${selectOptions.length}00% + ${(label ? (selectOptions.length + 1) * -23 : 0) + 5}px))`;
+    }
+
+    return ulStyles;
+  }, [dropUp, extraWidth, height, label, optionsAtATime, selectOptions.length]);
+  const selectedOption = useMemo(() => {
+    let selectedValue = (valuePropertyPath ? util.getObjPropertyValue(value, valuePropertyPath) : value) || nothingSelected;
+    let selectedOption = options.find((o) => optionValue(o) === selectedValue);
+
+    return selectedOption;
+  }, [nothingSelected, optionValue, options, value, valuePropertyPath]);
 
   function HandleClick(option) {
     setIsOpen(false);
@@ -49,13 +70,6 @@ function Select({
     }
   }
 
-  function GetSelectedValueDisplay() {
-    let selectedValue = (valuePropertyPath ? util.getObjPropertyValue(value, valuePropertyPath) : value) || nothingSelected;
-    let selectedOption = options.find((o) => optionValue(o) === selectedValue);
-
-    return selectedOption ? optionDisplay(selectedOption) : nothingSelected;
-  }
-
   return (
     <div className={`Select-container ${className}`} tabIndex="-1" onBlur={() => setIsOpen(false)}>
       {(label || info) && (
@@ -74,28 +88,24 @@ function Select({
         `}
         onClick={() => (!isDisabled ? setIsOpen(!isOpen) : {})}
       >
-        <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{GetSelectedValueDisplay()}</h5>
+        {selectedOption ? (
+          <div className="df df-cg-5">
+            {selectedOption.icon && <i className={selectedOption.icon}></i>}
+
+            <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{optionDisplay(selectedOption)}</h5>
+            {selectedOption.info && <Info contents={selectedOption.info} />}
+          </div>
+        ) : (
+          <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{nothingSelected}</h5>
+        )}
         <i className="fas fa-chevron-down"></i>
       </section>
       {isOpen && (
-        <ul
-          style={{
-            bottom: dropUp
-              ? `calc(${selectOptions.length <= 4 ? selectOptions.length + 1 : 6}00% + ${
-                  (label ? (selectOptions.length <= 4 ? selectOptions.length + 1 : 6) * -23 : 0) + 5
-                }px)`
-              : -5,
-            width: selectWidth + extraWidth,
-            height: height * selectOptions.length + 2,
-            maxHeight: height * optionsAtATime + 2,
-            overflow: selectOptions.length <= optionsAtATime ? "none" : "auto",
-            overflowX: selectOptions.length <= optionsAtATime ? "none" : "hidden",
-          }}
-        >
+        <ul style={ulStyles}>
           {selectOptions.map((option) => (
             <div key={option === nothingSelected ? nothingSelected : optionDisplay(option)} style={{ padding: "0 10px" }}>
               <li
-                className="select-item"
+                className="df df-cg-5 select-item"
                 style={{
                   width: (selectWidth + extraWidth) * 1,
                   height: height,
@@ -104,7 +114,9 @@ function Select({
                 value={option === nothingSelected ? nothingSelected : optionDisplay(option)}
                 onClick={() => HandleClick(option)}
               >
+                {option.icon && <i className={option.icon}></i>}
                 {option === nothingSelected ? nothingSelected : optionDisplay(option)}
+                {option.info && <Info contents={option.info} />}
               </li>
             </div>
           ))}

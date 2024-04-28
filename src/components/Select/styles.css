@@ -60,8 +60,7 @@
   border: solid 1px var(--gray1);
   background-color: var(--white);
   position: absolute;
-  transform: translate(0, 100%);
-  bottom: -5px;
+  top: calc(5px + 100%);
   z-index: 10;
   cursor: pointer;
 

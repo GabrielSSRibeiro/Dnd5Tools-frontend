@@ -611,7 +611,7 @@ function Map({
           },
         ];
 
-        //sice they all won't have a ref, they need to be hidden if more than one
+        //since they all won't have a ref, they need to be hidden if more than one
         if (refLocs.length > 1) {
           update.push({
             field: "isHidden",
@@ -905,7 +905,6 @@ function Map({
                 <div className="divider"></div>
                 <Select
                   label={"Ritmo de viagem"}
-                  info={[{ text: "Opção Descanso recupera desgaste" }]}
                   extraWidth={75}
                   value={combatConfig}
                   valuePropertyPath="travel.pace"

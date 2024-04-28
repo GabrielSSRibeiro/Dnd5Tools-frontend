@@ -389,7 +389,16 @@ export const TRAVEL_PACES = {
   VERY_HASTE2: 70,
 };
 export const travelPaces = [
-  { display: "Descanso", value: TRAVEL_PACES.REST, mobility: 0, fatigue: 0, imminentEncounterProbMod: 1, resultDisplay: "Descanso" },
+  {
+    display: "Descanso",
+    icon: "fas fa-bed",
+    info: [{ text: "Opção Descanso recupera desgaste" }],
+    value: TRAVEL_PACES.REST,
+    mobility: 0,
+    fatigue: 0,
+    imminentEncounterProbMod: 1,
+    resultDisplay: "Descanso",
+  },
   { display: "Atividade (x0)", value: TRAVEL_PACES.ACTIVITY, mobility: 0, fatigue: 1, imminentEncounterProbMod: 0.5, resultDisplay: "Atividade" },
   { display: "Devagar (x0.5)", value: TRAVEL_PACES.SLOW, mobility: 0.5, fatigue: 0.5, imminentEncounterProbMod: 0 },
   { display: "Normal (x1)", value: TRAVEL_PACES.NORMAL, mobility: 1, fatigue: 1, imminentEncounterProbMod: 1 },
@@ -482,12 +491,22 @@ export const nodeCreatureConditions = [
 export const GetNodeCreatureCondition = (value) => nodeCreatureConditions.find((a) => a.value === value);
 
 export const ROOM_SIZES = {
+  REF_EXIT: 3,
   CORRIDOR: 5,
   SMALL: 10,
   MEDIUM: 20,
   LARGE: 30,
 };
 export const roomSizes = [
+  // {
+  //   display: "Saída",
+  //   icon: "fas fa-dungeon",
+  //   info: [{ text: "Saídas são sempre para a localizaçao referência" }],
+  //   value: ROOM_SIZES.REF_EXIT,
+  //   cssClass: "ref-exit",
+  //   meters: null,
+  //   corridorDisplay: null,
+  // },
   { display: "Corredor", value: ROOM_SIZES.CORRIDOR, cssClass: "corridor", meters: null, corridorDisplay: "4,5m" },
   { display: "Pequeno", value: ROOM_SIZES.SMALL, cssClass: "small", meters: 9, corridorDisplay: "4,5m" },
   { display: "Médio", value: ROOM_SIZES.MEDIUM, cssClass: "medium", meters: 18, corridorDisplay: "3m" },
@@ -532,7 +551,7 @@ export const ROOM_CONNECTION_DIRECTIONS = {
   BOTTOM_RIGHT: 40,
 };
 export const roomConnectionDirections = [
-  { display: "Cima esquerdo ↖", value: ROOM_CONNECTION_DIRECTIONS.TOP_LEFT },
+  { display: "↖ (cima esquerdo)", value: ROOM_CONNECTION_DIRECTIONS.TOP_LEFT },
   { display: "Cima direito ↗", value: ROOM_CONNECTION_DIRECTIONS.TOP_RIGHT },
   { display: "Baixo esquerdo ↙", value: ROOM_CONNECTION_DIRECTIONS.BOTTOM_LEFT },
   { display: "Baixo direito ↘", value: ROOM_CONNECTION_DIRECTIONS.BOTTOM_RIGHT },
