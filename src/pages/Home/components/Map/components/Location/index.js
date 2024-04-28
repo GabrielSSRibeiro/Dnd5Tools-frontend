@@ -85,9 +85,13 @@ function Location({
 
     let connectionStyle = {
       rotate: `${loc.data.distanceAngle * -1}deg`,
-      backgroundColor: lc.GetElementType(lc.GetLocationConnectionType(loc.data.reference.connectionType).elementType).color,
+      borderColor: lc.GetElementType(lc.GetLocationConnectionType(loc.data.reference.connectionType).elementType).color,
       zIndex: areaLocs.length,
     };
+
+    if (loc.data.reference.connectionType === lc.LOCATION_CONNECTION_TYPES.PASSAGE) {
+      connectionStyle.borderStyle = "dashed";
+    }
 
     return connectionStyle;
   }, [areaLocs.length, loc.data.distanceAngle, loc.data.reference.connectionType]);
@@ -434,6 +438,7 @@ function Location({
       onClick={travel}
       key={rest.key}
     >
+      {/* connection */}
       {connectionStyle && (
         <div
           id={`${loc.data._id}-connection`}
@@ -473,6 +478,7 @@ function Location({
 
             return (
               <React.Fragment key={l._id}>
+                {/* connection Bg */}
                 {hasConnectionBg && (
                   <div
                     name={l._id}
@@ -487,11 +493,9 @@ function Location({
                     onMouseLeave={(e) => HandleHover(e)}
                   >
                     <aside className="con-bg-area corner needs-adjust" style={connectionAreaStyles}></aside>
-                    {/* <aside className="con-bg-area corner needs-adjust" style={connectionAreaStyles}></aside>
-                    <aside className="con-bg-area needs-adjust" style={{ ...connectionAreaStyles, height: refAreaDiameter }}></aside>
-                    <aside className="con-bg-area corner needs-adjust" style={connectionAreaStyles}></aside> */}
                   </div>
                 )}
+                {/* area */}
                 <div
                   name={`${l.name}-area`}
                   id={isLocArea ? `${l._id}-area` : null}

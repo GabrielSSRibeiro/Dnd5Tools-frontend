@@ -170,11 +170,14 @@ export const GetReferenceDistance = (value) => referenceDistances.find((a) => a.
 export const LOCATION_CONNECTION_TYPES = {
   ROAD: 10,
   RIVER: 20,
+  PASSAGE: 25,
   CHASM: 30,
 };
 export const locationConnectionTypes = [
+  // { display: "Elevaçao", value: LOCATION_CONNECTION_TYPES., elementType: ELEMENT_TYPES.ROCK },
   { display: "Estrada", value: LOCATION_CONNECTION_TYPES.ROAD, elementType: ELEMENT_TYPES.STRUCTURE },
   { display: "Rio", value: LOCATION_CONNECTION_TYPES.RIVER, elementType: ELEMENT_TYPES.LAKE },
+  { display: "Passagem", value: LOCATION_CONNECTION_TYPES.PASSAGE, elementType: ELEMENT_TYPES.STRUCTURE },
   { display: "Abismo", value: LOCATION_CONNECTION_TYPES.CHASM, elementType: ELEMENT_TYPES.PIT },
 ];
 export const GetLocationConnectionType = (value) => locationConnectionTypes.find((a) => a.value === value);
