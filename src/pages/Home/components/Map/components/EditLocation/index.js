@@ -495,6 +495,7 @@ function EditLocation({
                 options={lc.locationConnectionTypes}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
+                optionsAtATime={6}
                 // isDisabled={
                 //   location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST
                 //   &&

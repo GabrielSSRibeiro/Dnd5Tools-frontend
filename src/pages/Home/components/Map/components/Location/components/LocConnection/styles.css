@@ -6,7 +6,7 @@
 .LocConnection-container.passage {
   width: 100%;
   height: 100%;
-  column-gap: 5px;
+  opacity: 0.5;
 }
 
 .LocConnection-container section {
