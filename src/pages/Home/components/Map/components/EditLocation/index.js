@@ -180,10 +180,7 @@ function EditLocation({
   }
 
   function HandleSelectRefDirection(updatedValue) {
-    location.reference.directionMod = null;
-    location.distanceAngle = updatedValue.reference.direction
-      ? lh.GetDistanceAngle(updatedValue.reference.direction, updatedValue.reference.directionMod)
-      : null;
+    location.distanceAngle = updatedValue.reference.direction ? lh.GetDistanceAngle(updatedValue.reference.direction) : null;
 
     setWillAdjustMap(true);
     HandleUpdateOnSelect();
@@ -524,7 +521,7 @@ function EditLocation({
             <div className="location-row df df-jc-sb">
               <Select
                 label={"Distância"}
-                extraWidth={145}
+                extraWidth={125}
                 value={location}
                 valuePropertyPath="reference.distance"
                 onSelect={HandleSelectRefDistance}
@@ -536,7 +533,7 @@ function EditLocation({
               />
               <Select
                 label={"Direção"}
-                extraWidth={0}
+                extraWidth={20}
                 value={location}
                 valuePropertyPath="reference.direction"
                 onSelect={HandleSelectRefDirection}
