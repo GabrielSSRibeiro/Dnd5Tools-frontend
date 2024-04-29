@@ -35,7 +35,6 @@ function EditLocation({
   isNewLoc,
 }) {
   let inputRef = useRef(null);
-  const directionMods = useRef(utils.createArrayFromInt(44).map((_, i) => ({ value: i + 1, display: `${i + 1}°` })));
   const [location, setLocation] = useState(utils.clone(locationToEdit));
   const [willAdjustMap, setWillAdjustMap] = useState(false);
   const [modal, setModal] = useState(null);
@@ -51,7 +50,7 @@ function EditLocation({
     locationSizes
       .filter((s) => s.value !== lc.LOCATION_SIZES.POINT_OF_INTEREST)
       .forEach((s) => {
-        s.display += ` (raio ${utils.MInUnits((lc.BASE_VISION_IN_M * s.baseRadiusMultiplier) / 2)})`;
+        s.display += ` (raio ${utils.MInUnits((lc.BASE_VISION_IN_M * s.baseRadiusMultiplier) / 2, 1)})`;
       });
 
     return locationSizes;
@@ -63,7 +62,7 @@ function EditLocation({
     referenceDistances
       .filter((r) => r.value !== lc.REFERENCE_DISTANCES.ADJACENT)
       .forEach((r) => {
-        r.display += ` (${utils.MInUnits((lc.BASE_VISION_IN_M * r.baseDistanceMultiplier) / 2)})`;
+        r.display += ` (${utils.MInUnits((lc.BASE_VISION_IN_M * r.baseDistanceMultiplier) / 2, 1)})`;
       });
 
     return referenceDistances;
@@ -182,11 +181,6 @@ function EditLocation({
 
   function HandleSelectRefDirection(updatedValue) {
     location.reference.directionMod = null;
-
-    HandleSelectRefDirectionMod(updatedValue);
-  }
-
-  function HandleSelectRefDirectionMod(updatedValue) {
     location.distanceAngle = updatedValue.reference.direction
       ? lh.GetDistanceAngle(updatedValue.reference.direction, updatedValue.reference.directionMod)
       : null;
@@ -469,48 +463,68 @@ function EditLocation({
       <main id="EditLocation-scroll" className="location-fields">
         <TextInput label="Nome" value={location} valuePropertyPath="name" onChange={setLocation} />
 
+        {/* size */}
+        {location.exteriorLocationId != null && (
+          <Select
+            label={"Tamanho"}
+            icon="fas fa-dot-circle"
+            info={[{ text: "Exemplo ponto de interesse: Moradia de criatura" }]}
+            extraWidth={250}
+            value={location}
+            valuePropertyPath="size"
+            optionsAtATime={10}
+            onSelect={HandleSelectSize}
+            options={locationSizes}
+            optionDisplay={(o) => o.display}
+            optionValue={(o) => o.value}
+          />
+        )}
+        {(location.size && location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST) || location.exteriorLocationId == null ? (
+          <Select
+            label={"Tipo"}
+            extraWidth={250}
+            value={location}
+            valuePropertyPath="traversal.type"
+            onSelect={HandleUpdateOnSelect}
+            options={creatureEnvironments.filter((e) => e.value !== CREATURE_ENVIRONMENTS.URBAN && e.value !== CREATURE_ENVIRONMENTS.ALL)}
+            optionDisplay={(o) => o.display}
+            optionValue={(o) => o.value}
+          />
+        ) : (
+          <Select
+            label={"Tipo"}
+            extraWidth={250}
+            value={location}
+            valuePropertyPath="interaction.type"
+            onSelect={HandleUpdateOnSelect}
+            options={lc.elementTypes}
+            optionDisplay={(o) => o.display}
+            optionValue={(o) => o.value}
+          />
+        )}
+
         {/* reference */}
         {!isWorld && !isFirstOfArea && (
           <>
             <div className="divider"></div>
-            <div className="location-row df df-jc-sb">
-              <Select
-                label={"Localização Referência"}
-                extraWidth={150}
-                value={location}
-                valuePropertyPath="reference.location"
-                onSelect={HandleSelectRefLocation}
-                nothingSelected="-"
-                options={referenceLocations}
-                optionDisplay={(o) => o.refListName}
-                optionValue={(o) => o._id}
-              />
-              <Select
-                label={"Conecção"}
-                extraWidth={0}
-                value={location}
-                valuePropertyPath="reference.connectionType"
-                onSelect={HandleUpdateOnSelect}
-                nothingSelected="-"
-                options={lc.locationConnectionTypes}
-                optionDisplay={(o) => o.display}
-                optionValue={(o) => o.value}
-                optionsAtATime={6}
-                // isDisabled={
-                //   location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST
-                //   &&
-                //   (!location._id ||
-                //     !map[location._id] ||
-                //     !Object.keys(map[location._id]?.interiorLocs).some(
-                //       (id) => !map[id].data.isHidden && map[id].data.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && !map[id].data.reference.location
-                //     ))
-                // }
-              />
-            </div>
+            <Select
+              label={"Localização de Referência"}
+              icon="fas fa-map-marked-alt"
+              extraWidth={250}
+              value={location}
+              valuePropertyPath="reference.location"
+              onSelect={HandleSelectRefLocation}
+              nothingSelected="-"
+              options={referenceLocations}
+              optionDisplay={(o) => o.refListName}
+              optionValue={(o) => o._id}
+              optionsAtATime={10}
+            />
+
             <div className="location-row df df-jc-sb">
               <Select
                 label={"Distância"}
-                extraWidth={50}
+                extraWidth={145}
                 value={location}
                 valuePropertyPath="reference.distance"
                 onSelect={HandleSelectRefDistance}
@@ -518,6 +532,7 @@ function EditLocation({
                 options={referenceDistances}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
+                optionsAtATime={10}
               />
               <Select
                 label={"Direção"}
@@ -529,19 +544,47 @@ function EditLocation({
                 options={lc.directions}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-              />
-              <Select
-                label={"Modificador"}
-                extraWidth={0}
-                value={location}
-                valuePropertyPath="reference.directionMod"
-                onSelect={HandleSelectRefDirectionMod}
-                nothingSelected="0°"
                 optionsAtATime={10}
-                options={directionMods.current}
+              />
+            </div>
+            <div className="location-row df df-jc-sb">
+              <Select
+                label={"Conectado por"}
+                extraWidth={20}
+                value={location}
+                valuePropertyPath="reference.connectionType"
+                onSelect={HandleUpdateOnSelect}
+                nothingSelected="-"
+                options={lc.locationConnectionTypes}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                isDisabled={!location.reference.direction}
+                optionsAtATime={6}
+              />
+              <Select
+                label={"Ângulo"}
+                extraWidth={0}
+                value={location}
+                valuePropertyPath="reference.connectionAngle"
+                onSelect={HandleUpdateOnSelect}
+                nothingSelected="-"
+                options={lc.locationConnectionTypes}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+                optionsAtATime={10}
+                isDisabled={true}
+              />
+              <Select
+                label={"Origem"}
+                extraWidth={20}
+                value={location}
+                valuePropertyPath="reference.connectionAngleOrigin"
+                onSelect={HandleUpdateOnSelect}
+                nothingSelected="-"
+                options={lc.locationConnectionTypes}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+                optionsAtATime={6}
+                isDisabled={true}
               />
             </div>
           </>
@@ -576,70 +619,35 @@ function EditLocation({
           ))}
         </div>
 
-        <div className="divider"></div>
-
-        {location.exteriorLocationId != null && (
-          <Select
-            label={"Tamanho"}
-            info={[{ text: "Ex ponto de interesse: Moradia de criatura" }]}
-            extraWidth={250}
-            value={location}
-            valuePropertyPath="size"
-            optionsAtATime={6}
-            onSelect={HandleSelectSize}
-            options={locationSizes}
-            optionDisplay={(o) => o.display}
-            optionValue={(o) => o.value}
-          />
-        )}
-        {(location.size && location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST) || location.exteriorLocationId == null ? (
-          <Select
-            label={"Tipo"}
-            extraWidth={250}
-            value={location}
-            valuePropertyPath="traversal.type"
-            onSelect={HandleUpdateOnSelect}
-            options={creatureEnvironments.filter((e) => e.value !== CREATURE_ENVIRONMENTS.URBAN && e.value !== CREATURE_ENVIRONMENTS.ALL)}
-            optionDisplay={(o) => o.display}
-            optionValue={(o) => o.value}
-          />
-        ) : (
-          <Select
-            label={"Tipo"}
-            extraWidth={250}
-            value={location}
-            valuePropertyPath="interaction.type"
-            onSelect={HandleUpdateOnSelect}
-            options={lc.elementTypes}
-            optionDisplay={(o) => o.display}
-            optionValue={(o) => o.value}
-          />
-        )}
-
         {/* elements */}
         {location.size && location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST && location.exteriorLocationId != null && (
-          <div className="location-detail-group">
-            <div className="location-row location-detail-group-title">
-              <span className={location.traversal.elements.length === 0 ? `lacking-data` : ""}>Elementos de Travessia</span>
-              <button onClick={() => OpenModalManageElement()} disabled={location.traversal.elements.length === lc.elementTypes.length}>
-                <i className="fas fa-plus"></i>
-              </button>
-            </div>
-            {location.traversal.elements.map((e) => (
-              <div className="location-row location-detail-group-item" key={e.type}>
-                <span>{lc.GetElementType(e.type).display}</span>
-                <div className="group-item-actions">
-                  <button onClick={() => OpenModalManageElement(e)}>
-                    <i className="fas fa-pencil-alt"></i>
-                  </button>
-                  <button onClick={() => DeleteElement(e)}>
-                    <i className="fas fa-trash"></i>
-                  </button>
-                </div>
+          <>
+            <div className="divider"></div>
+            <div className="location-detail-group">
+              <div className="location-row location-detail-group-title">
+                <span className={location.traversal.elements.length === 0 ? `lacking-data` : ""}>Elementos de Travessia</span>
+                <button onClick={() => OpenModalManageElement()} disabled={location.traversal.elements.length === lc.elementTypes.length}>
+                  <i className="fas fa-plus"></i>
+                </button>
               </div>
-            ))}
-          </div>
+              {location.traversal.elements.map((e) => (
+                <div className="location-row location-detail-group-item" key={e.type}>
+                  <span>{lc.GetElementType(e.type).display}</span>
+                  <div className="group-item-actions">
+                    <button onClick={() => OpenModalManageElement(e)}>
+                      <i className="fas fa-pencil-alt"></i>
+                    </button>
+                    <button onClick={() => DeleteElement(e)}>
+                      <i className="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
+
+        <div className="divider"></div>
 
         {/* dungeon */}
         {location.size && location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (

@@ -15,15 +15,16 @@ export const GetRadius = (location, pxInMScale) => {
 
 export const GetRadiusMultiplier = (size) => {
   const baseValue = lc.GetLocationSize(size).baseRadiusMultiplier;
-  const variance = 0.1;
-
-  return utils.randomValueFromVariancePercentage(baseValue * 100, variance) / 100;
+  return baseValue;
+  // const variance = 0.1;
+  // return utils.randomValueFromVariancePercentage(baseValue * 100, variance) / 100;
 };
 
 export const GetDistanceMultiplier = (distance) => {
   const baseValue = lc.GetReferenceDistance(distance).baseDistanceMultiplier;
-  const variance = 0.1;
-  return utils.randomValueFromVariancePercentage(baseValue * 100, variance) / 100;
+  return baseValue;
+  // const variance = 0.1;
+  // return utils.randomValueFromVariancePercentage(baseValue * 100, variance) / 100;
 };
 
 export const GetDistanceAngle = (direction, mod = 0) => {

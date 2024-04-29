@@ -16,8 +16,8 @@ function Select({
   optionDisplay = (o) => o,
   optionValue = (o) => o,
   label = null,
-  textIcon = null,
   icon = null,
+  textIcon = null,
   info = null,
   nothingSelected = null,
   dropUp = false,
@@ -78,8 +78,8 @@ function Select({
         <div className={`label-wrapper ${label && info ? "label-and-info" : !info ? "label" : "info"}`}>
           {(icon || textIcon || label) && (
             <div className="df df-cg-5">
-              {textIcon && <span className="bold">{textIcon}</span>}
               {icon && <i className={icon}></i>}
+              {textIcon && <span className="bold">{textIcon}</span>}
               {label && <span>{label}</span>}
             </div>
           )}
@@ -98,10 +98,8 @@ function Select({
       >
         {selectedOption ? (
           <div className="df df-cg-5">
-            {selectedOption.textIcon && <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{selectedOption.textIcon}</h5>}
-
             {selectedOption.icon && <i className={selectedOption.icon}></i>}
-
+            {selectedOption.textIcon && <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{selectedOption.textIcon}</h5>}
             <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{optionDisplay(selectedOption)}</h5>
             {selectedOption.info && <Info contents={selectedOption.info} />}
           </div>
@@ -124,8 +122,8 @@ function Select({
                 value={option === nothingSelected ? nothingSelected : optionDisplay(option)}
                 onClick={() => HandleClick(option)}
               >
-                {option.textIcon && <span className="bold">{option.textIcon}</span>}
                 {option.icon && <i className={option.icon}></i>}
+                {option.textIcon && <span className="bold">{option.textIcon}</span>}
                 {option === nothingSelected ? nothingSelected : optionDisplay(option)}
                 {option.info && <Info contents={option.info} />}
               </li>

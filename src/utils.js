@@ -222,8 +222,13 @@ export const GetDistanceByCoordinates = (pA, pB) => {
   return { value, angle };
 };
 
-export const MInUnits = (m) => {
-  return m < 1000 ? `${m}m` : `${Math.round(m / 1000)}km`;
+export const MInUnits = (m, fixedValue = null) => {
+  if (m < 1000) {
+    return `${m}m`;
+  }
+
+  const adjustedValue = m < 1000 ? m : m / 1000;
+  return `${fixedValue ? adjustedValue.toFixed(fixedValue) : Math.round(adjustedValue)}km`;
 };
 
 export const MinutesToTimeInUnits = (minutes) => {
