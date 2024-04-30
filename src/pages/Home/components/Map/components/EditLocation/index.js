@@ -50,7 +50,7 @@ function EditLocation({
     locationSizes
       .filter((s) => s.value !== lc.LOCATION_SIZES.POINT_OF_INTEREST)
       .forEach((s) => {
-        s.display += ` (raio ${utils.MInUnits((lc.BASE_VISION_IN_M * s.baseRadiusMultiplier) / 2, 1)})`;
+        s.display += ` (raio ${utils.MInUnits((lc.BASE_VISION_IN_M * s.baseRadiusMultiplier) / 4, 1)})`;
       });
 
     return locationSizes;
