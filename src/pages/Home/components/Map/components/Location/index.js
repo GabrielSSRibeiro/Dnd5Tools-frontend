@@ -48,7 +48,6 @@ function Location({
 
     return areaLocs;
   }, [loc, map]);
-  // const anyConnectionBg = useMemo(() => areaLocs.some((_, index) => areaLocs[index + 1]?.reference.location), [areaLocs]);
   const connectionLoc = useMemo(() => {
     if (!isMapRendered) {
       return null;
@@ -57,7 +56,7 @@ function Location({
     const connectionLoc = areaLocs
       .toReversed()
       .filter((l) => l.offset)
-      .find((l) => l.offset.x !== 0 && l.offset.y !== 0);
+      .find((l) => l.offset.x !== 0 || l.offset.y !== 0);
 
     if (!connectionLoc) {
       return null;
@@ -213,11 +212,6 @@ function Location({
         //distance will be the largest between calc dist and all bg area radius
         const calcDist = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
         let distance = calcDist;
-        // if (location.reference.distance !== lc.REFERENCE_DISTANCES.BLEND) {
-        //distance = Math.max(calcDist, areaWrapperStyle.width - locDistFromCenter);
-        //   distance -= lc.POINT_OF_INTEREST_RADIUS;
-        // }
-
         const offsetDistance = refLocDistFromCenter + distance + locDistFromCenter;
 
         const coordinatesByDistance = utils.GetCoordinatesByDistance(refOffset, offsetDistance, location.distanceAngle);
@@ -269,30 +263,30 @@ function Location({
         offsetStyles.push({ key: "height", value: `${refAreaDiameter + refHeightAdditor}px` });
       }
 
-      Array.from(cbg.getElementsByClassName("con-bg-area")).forEach((bga) => {
-        if (bga.classList.contains("needs-adjust")) {
-          const isCorner = bga.classList.contains("corner");
+      // Array.from(cbg.getElementsByClassName("con-bg-area")).forEach((bga) => {
+      //   if (bga.classList.contains("needs-adjust")) {
+      //     const isCorner = bga.classList.contains("corner");
 
-          //adjust further
-          if (isRefSmaller && isCorner) {
-            bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
-          }
-          //adjust back if not last
-          else if (index !== cbgs.length - 1) {
-            //control how much should be adjusted by the ref size
-            const sliceIndex = refAreaDiameter > connectionLoc.radius / 2 ? index + 1 : index + 2;
+      //     //adjust further
+      //     if (isRefSmaller && isCorner) {
+      //       bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
+      //     }
+      //     //adjust back if not last
+      //     else if (index !== cbgs.length - 1) {
+      //       //control how much should be adjusted by the ref size
+      //       const sliceIndex = refAreaDiameter > connectionLoc.radius / 2 ? index + 1 : index + 2;
 
-            const modifier = cbgs.slice(sliceIndex).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
-            bga.style.width = `calc(100% - ${modifier / 2}px)`;
-          }
-          //still adjust further as last option
-          else if (isCorner) {
-            bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
-          }
+      //       const modifier = cbgs.slice(sliceIndex).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
+      //       bga.style.width = `calc(100% - ${modifier / 2}px)`;
+      //     }
+      //     //still adjust further as last option
+      //     else if (isCorner) {
+      //       bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
+      //     }
 
-          bga.classList.remove("needs-adjust");
-        }
-      });
+      //     bga.classList.remove("needs-adjust");
+      //   }
+      // });
 
       const connectionRatio = (distance - refAreaDiameter) / distance;
       offsetStyles.push({ key: "width", value: `${(distance - refAreaDiameter) / 2}px` });
@@ -492,11 +486,11 @@ function Location({
                 <div
                   name={`${l.name}-area`}
                   id={isLocArea ? `${l._id}-area` : null}
-                  className={`area jagged-border${isPointOfInterest ? " point-of-interest" : ""} not-flat`}
+                  className={`area${isPointOfInterest ? " point-of-interest" : ""} not-flat`}
                   style={{
                     width: areaStyles.width,
                     height: areaStyles.height,
-                    rotate: `${distanceAngle * -1}deg`,
+                    rotate: `${distanceAngle * (hasConnectionBg ? -1 : 1)}deg`,
                     zIndex: isPointOfInterest ? locations.length : index,
                   }}
                   onMouseMove={(e) => HandleHover(e, l)}
