@@ -200,7 +200,7 @@ function Location({
   //main setup
   useEffect(() => {
     function GetOffset(location) {
-      if (!location.reference.location || !map[location.reference.location]) {
+      if (!location.reference.location || !location.reference.distance || !location.reference.direction || !map[location.reference.location]) {
         return { x: 0, y: 0 };
       } else {
         const refOffset = GetOffset(map[location.reference.location].data);
@@ -459,7 +459,7 @@ function Location({
           {areaLocs.map((l, index) => {
             const isLocArea = index === areaLocs.length - 1;
             const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
-            const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location);
+            const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location && l.reference.distance && l.reference.direction);
             let areaStyles = GetAreaStyles(l, index, isLocArea, isPointOfInterest, hasConnectionBg);
             let connectionAreaStyles = { backgroundColor: areaStyles.backgroundColor, filter: areaStyles.filter };
 
