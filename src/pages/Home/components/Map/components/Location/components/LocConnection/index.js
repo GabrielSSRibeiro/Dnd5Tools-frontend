@@ -21,7 +21,7 @@ function LocConnection({ type, angle, angleOrigin }) {
   return (
     <div
       className={`LocConnection-container df${type === lc.LOCATION_CONNECTION_TYPES.PASSAGE ? " passage" : ""}${rotationOrigin}`}
-      style={{ rotate: `${rotation}deg` }}
+      style={{ rotate: `${rotation * -1}deg` }}
     >
       {conChunks.current.map((c, i) => (
         <section key={i} style={{ backgroundColor: color.current }}></section>
