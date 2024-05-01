@@ -296,9 +296,9 @@ export const LOCATION_CONNECTION_ANGLE_ORIGINS = {
   END: 30,
 };
 export const locationConnectionAngleOrigins = [
-  { display: "Começo", value: LOCATION_CONNECTION_ANGLE_ORIGINS.START },
-  { display: "Meio", value: LOCATION_CONNECTION_ANGLE_ORIGINS.CENTER },
-  { display: "Fim", value: LOCATION_CONNECTION_ANGLE_ORIGINS.END },
+  { display: "Começo", value: LOCATION_CONNECTION_ANGLE_ORIGINS.START, cssClass: "right" },
+  { display: "Meio", value: LOCATION_CONNECTION_ANGLE_ORIGINS.CENTER, cssClass: "center" },
+  { display: "Fim", value: LOCATION_CONNECTION_ANGLE_ORIGINS.END, cssClass: "left" },
 ];
 export const GetLocationConnectionAngleOrigin = (value) => locationConnectionAngleOrigins.find((a) => a.value === value);
 

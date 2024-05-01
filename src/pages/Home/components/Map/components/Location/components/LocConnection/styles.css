@@ -13,3 +13,13 @@
   width: 10%;
   height: 100%;
 }
+
+.LocConnection-container.left {
+  transform-origin: left;
+}
+.LocConnection-container.center {
+  transform-origin: center;
+}
+.LocConnection-container.right {
+  transform-origin: right;
+}
