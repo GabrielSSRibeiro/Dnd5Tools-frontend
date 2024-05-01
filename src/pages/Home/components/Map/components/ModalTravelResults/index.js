@@ -514,29 +514,8 @@ function ModalTravelResults({
     () => `${utils.MinutesToTimeInUnits(timePassed)} passado(s) em ${lc.GetTravelPace(travel.pace).resultDisplay}`,
     [timePassed, travel.pace]
   );
-  const elmentsForDisplay = useMemo(() => {
-    if (isPointOfInterest || !location.traversal.elements) return null;
+  const [elmentsForDisplay, setElmentsForDisplay] = useState(null);
 
-    const elements = location.traversal.elements.filter((e) => e.type !== element.current?.type);
-    if (elements.length === 0) return null;
-
-    return elements
-      .map((e) => {
-        const prob = lc.GetEncounterFrequency(e.frequency).probability;
-        const options = ["cima esquerda", "cima", "cima direita", "esquerda", "direita", "baixo esquerda", "baixo", "baixo direita"];
-        let elements = [];
-        while (utils.ProbabilityCheck(prob)) {
-          elements.push(utils.randomItemFromArray(options));
-        }
-
-        if (elements.length === 0) return null;
-        utils.sortByCustomOrder(elements, options);
-
-        return `${lc.GetElementType(e.type).display} (${elements.join(", ")})`;
-      })
-      .filter((e) => e)
-      .join(", ");
-  }, [isPointOfInterest, location.traversal.elements]);
   const newSchedule = useMemo(() => {
     if (!locHoverData) {
       return travel.schedule;
@@ -683,6 +662,32 @@ function ModalTravelResults({
         : null,
     [isSafe, locRoomDetails, location.interaction, room]
   );
+
+  function UpdateElements() {
+    if (isPointOfInterest || !isEncounter || !location.traversal.elements) setElmentsForDisplay(null);
+
+    const elements = location.traversal.elements.filter((e) => e.type !== element.current?.type);
+    if (elements.length === 0) return null;
+
+    const generatedElements = elements
+      .map((e) => {
+        const prob = lc.GetEncounterFrequency(e.frequency).probability;
+        const options = ["cima esquerda", "cima", "cima direita", "esquerda", "direita", "baixo esquerda", "baixo", "baixo direita"];
+        let elements = [];
+        while (utils.ProbabilityCheck(prob)) {
+          elements.push(utils.randomItemFromArray(options));
+        }
+
+        if (elements.length === 0) return null;
+        utils.sortByCustomOrder(elements, options);
+
+        return `${lc.GetElementType(e.type).display} (${elements.join(", ")})`;
+      })
+      .filter((e) => e)
+      .join(", ");
+
+    setElmentsForDisplay(generatedElements.length > 0 ? generatedElements : null);
+  }
 
   function GetBaseRoomCreatures(creatures, context) {
     let baseRoomCreatures = [];
@@ -1019,8 +1024,6 @@ function ModalTravelResults({
               <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={setName} />
               {!isSafe && (
                 <>
-                  {isEncounter && elmentsForDisplay && <span className="elements-display">{elmentsForDisplay}</span>}
-
                   <span>Encontrar Recursos: CD {findResourcesDifficulty.current}</span>
                   {tracksForDisplay.current.length > 0 && (
                     <span>
@@ -1032,6 +1035,14 @@ function ModalTravelResults({
                       Restos mortais com o equivalente a <span className="bold">{remainsForDisplay.current}</span> PO
                     </span>
                   )}
+
+                  <div className="df df-fd-c df-rg-5">
+                    <button className="df df-cg-5 button-simple" onClick={UpdateElements}>
+                      <i className="fas fa-retweet"></i>
+                      Elementos
+                    </button>
+                    <span className="elements-display">{elmentsForDisplay ?? "-"}</span>
+                  </div>
                 </>
               )}
             </>
