@@ -204,15 +204,12 @@ function Location({
         return { x: 0, y: 0 };
       } else {
         const refOffset = GetOffset(map[location.reference.location].data);
-
         const refLocDistFromCenter = GetLocRadiusForCalc(map[location.reference.location]);
-
         const locDistFromCenter = GetLocRadiusForCalc(map[location._id]);
 
         //distance will be the largest between calc dist and all bg area radius
         const calcDist = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
-        let distance = calcDist;
-        const offsetDistance = refLocDistFromCenter + distance + locDistFromCenter;
+        const offsetDistance = refLocDistFromCenter + calcDist / 2 + locDistFromCenter;
 
         const coordinatesByDistance = utils.GetCoordinatesByDistance(refOffset, offsetDistance, location.distanceAngle);
 

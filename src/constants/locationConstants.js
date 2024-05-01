@@ -290,21 +290,17 @@ export const locationConnectionTypes = [
 ];
 export const GetLocationConnectionType = (value) => locationConnectionTypes.find((a) => a.value === value);
 
-export const LOCATION_CONNECTION_ANGLES = {
-  ELEVATION: 5,
-  ROAD: 10,
-  RIVER: 20,
-  PASSAGE: 25,
-  CHASM: 30,
+export const LOCATION_CONNECTION_ANGLE_ORIGINS = {
+  START: 10,
+  CENTER: 20,
+  END: 30,
 };
-export const locationConnectionAngles = [
-  { display: "Elevaçao", value: LOCATION_CONNECTION_ANGLES.ELEVATION, elementType: ELEMENT_TYPES.ROCK },
-  { display: "Estrada", value: LOCATION_CONNECTION_ANGLES.ROAD, elementType: ELEMENT_TYPES.STRUCTURE },
-  { display: "Rio", value: LOCATION_CONNECTION_ANGLES.RIVER, elementType: ELEMENT_TYPES.LAKE },
-  { display: "Passagem", value: LOCATION_CONNECTION_ANGLES.PASSAGE, elementType: ELEMENT_TYPES.STRUCTURE },
-  { display: "Abismo", value: LOCATION_CONNECTION_ANGLES.CHASM, elementType: ELEMENT_TYPES.PIT },
+export const locationConnectionAngleOrigins = [
+  { display: "Começo", value: LOCATION_CONNECTION_ANGLE_ORIGINS.START },
+  { display: "Meio", value: LOCATION_CONNECTION_ANGLE_ORIGINS.CENTER },
+  { display: "Fim", value: LOCATION_CONNECTION_ANGLE_ORIGINS.END },
 ];
-export const GetLocationConnectionAngle = (value) => locationConnectionAngles.find((a) => a.value === value);
+export const GetLocationConnectionAngleOrigin = (value) => locationConnectionAngleOrigins.find((a) => a.value === value);
 
 export const DIRECTIONS = {
   NORTH: 10,

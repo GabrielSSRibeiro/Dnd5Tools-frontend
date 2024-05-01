@@ -62,7 +62,7 @@ function EditLocation({
     referenceDistances
       .filter((r) => r.value !== lc.REFERENCE_DISTANCES.ADJACENT)
       .forEach((r) => {
-        r.display += ` (${utils.MInUnits((lc.BASE_VISION_IN_M * r.baseDistanceMultiplier) / 2, 1)})`;
+        r.display += ` (${utils.MInUnits((lc.BASE_VISION_IN_M * r.baseDistanceMultiplier) / 4, 1)})`;
       });
 
     return referenceDistances;
@@ -181,6 +181,25 @@ function EditLocation({
 
   function HandleSelectRefDirection(updatedValue) {
     location.distanceAngle = updatedValue.reference.direction ? lh.GetDistanceAngle(updatedValue.reference.direction) : null;
+
+    setWillAdjustMap(true);
+    HandleUpdateOnSelect();
+  }
+
+  function HandleSelectRefCon(updatedValue) {
+    if (!updatedValue.reference.connectionType) {
+      location.reference.connectionAngle = null;
+      location.reference.connectionAngleOrigin = null;
+    }
+
+    setWillAdjustMap(true);
+    HandleUpdateOnSelect();
+  }
+
+  function HandleSelectRefConAngle(updatedValue) {
+    if (!updatedValue.reference.connectionAngle) {
+      location.reference.connectionAngleOrigin = null;
+    }
 
     setWillAdjustMap(true);
     HandleUpdateOnSelect();
@@ -328,6 +347,13 @@ function EditLocation({
       !isFirstOfArea &&
       (location.reference.distance || location.reference.direction || location.reference.location) &&
       (!location.reference.distance || !location.reference.direction || !location.reference.location)
+    ) {
+      return false;
+    }
+
+    if (
+      (location.reference.connectionAngle || location.reference.connectionAngleOrigin) &&
+      (!location.reference.connectionAngle || !location.reference.connectionAngleOrigin)
     ) {
       return false;
     }
@@ -550,7 +576,7 @@ function EditLocation({
                 extraWidth={20}
                 value={location}
                 valuePropertyPath="reference.connectionType"
-                onSelect={HandleUpdateOnSelect}
+                onSelect={HandleSelectRefCon}
                 nothingSelected="-"
                 options={lc.locationConnectionTypes}
                 optionDisplay={(o) => o.display}
@@ -558,30 +584,30 @@ function EditLocation({
                 optionsAtATime={6}
               />
               <Select
-                label={"Ângulo"}
+                label={"Rotaçao de"}
                 extraWidth={0}
                 value={location}
                 valuePropertyPath="reference.connectionAngle"
-                onSelect={HandleUpdateOnSelect}
+                onSelect={HandleSelectRefConAngle}
                 nothingSelected="-"
-                options={lc.locationConnectionTypes}
+                options={lc.directions.filter((d) => d.baseAngle)}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
                 optionsAtATime={10}
-                isDisabled={true}
+                isDisabled={!location.reference.connectionType}
               />
               <Select
-                label={"Origem"}
+                label={"Origem em"}
                 extraWidth={20}
                 value={location}
                 valuePropertyPath="reference.connectionAngleOrigin"
                 onSelect={HandleUpdateOnSelect}
                 nothingSelected="-"
-                options={lc.locationConnectionTypes}
+                options={lc.locationConnectionAngleOrigins}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
                 optionsAtATime={6}
-                isDisabled={true}
+                isDisabled={!location.reference.connectionType}
               />
             </div>
           </>
