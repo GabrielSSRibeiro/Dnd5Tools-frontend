@@ -80,6 +80,12 @@
 }
 .Select-container > ul > div:hover {
   background-color: var(--gray3);
+  color: var(--black);
+}
+
+.Select-container > ul > .new-option-section {
+  background-color: var(--black);
+  color: var(--white);
 }
 
 .Select-container .select-item {

@@ -213,7 +213,7 @@ function ModalManageDungeonRoom({
             <div className="df df-cg-10 room-row">
               <Select
                 label="(cima)"
-                textIcon="↑"
+                preDisplay="↑"
                 extraWidth={45}
                 value={tempRoom}
                 valuePropertyPath="top.connection"
@@ -233,7 +233,7 @@ function ModalManageDungeonRoom({
               </button>
               <Select
                 label="(baixo)"
-                textIcon="↓"
+                preDisplay="↓"
                 extraWidth={45}
                 value={tempRoom}
                 valuePropertyPath="bottom.connection"
@@ -257,7 +257,7 @@ function ModalManageDungeonRoom({
             <div className="df  df-cg-10 room-row">
               <Select
                 label="(esquerda)"
-                textIcon="←"
+                preDisplay="←"
                 extraWidth={45}
                 value={tempRoom}
                 valuePropertyPath="left.connection"
@@ -279,7 +279,7 @@ function ModalManageDungeonRoom({
               </button>
               <Select
                 label="(direita)"
-                textIcon="→"
+                preDisplay="→"
                 extraWidth={45}
                 value={tempRoom}
                 valuePropertyPath="right.connection"
@@ -342,6 +342,7 @@ function ModalManageDungeonRoom({
           extraWidth={250}
           value={tempRoom}
           valuePropertyPath="height"
+          nothingSelected="-"
           onSelect={setTempRoom}
           options={lc.roomHeights}
           optionDisplay={(o) => o.display}

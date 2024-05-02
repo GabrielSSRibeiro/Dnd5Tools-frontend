@@ -17,7 +17,7 @@ function Select({
   optionValue = (o) => o,
   label = null,
   icon = null,
-  textIcon = null,
+  preDisplay = null,
   info = null,
   nothingSelected = null,
   dropUp = false,
@@ -76,10 +76,10 @@ function Select({
     <div className={`Select-container ${className}`} tabIndex="-1" onBlur={() => setIsOpen(false)}>
       {(label || info) && (
         <div className={`label-wrapper ${label && info ? "label-and-info" : !info ? "label" : "info"}`}>
-          {(icon || textIcon || label) && (
+          {(icon || preDisplay || label) && (
             <div className="df df-cg-5">
               {icon && <i className={icon}></i>}
-              {textIcon && <span className="bold">{textIcon}</span>}
+              {preDisplay && <span className="bold">{preDisplay}</span>}
               {label && <span>{label}</span>}
             </div>
           )}
@@ -99,7 +99,7 @@ function Select({
         {selectedOption ? (
           <div className="df df-cg-5">
             {selectedOption.icon && <i className={selectedOption.icon}></i>}
-            {selectedOption.textIcon && <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{selectedOption.textIcon}</h5>}
+            {selectedOption.preDisplay && <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{selectedOption.preDisplay}</h5>}
             <h5 style={{ fontSize: isLarge ? 14 : 12 }}>{optionDisplay(selectedOption)}</h5>
             {selectedOption.info && <Info contents={selectedOption.info} />}
           </div>
@@ -111,7 +111,11 @@ function Select({
       {isOpen && (
         <ul style={ulStyles}>
           {selectOptions.map((option) => (
-            <div key={option === nothingSelected ? nothingSelected : optionDisplay(option)} style={{ padding: "0 10px" }}>
+            <div
+              key={option === nothingSelected ? nothingSelected : optionDisplay(option)}
+              className={`${option.newSection ? "new-option-section" : ""}`}
+              style={{ padding: "0 10px" }}
+            >
               <li
                 className="df df-cg-5 select-item"
                 style={{
@@ -123,7 +127,7 @@ function Select({
                 onClick={() => HandleClick(option)}
               >
                 {option.icon && <i className={option.icon}></i>}
-                {option.textIcon && <span className="bold">{option.textIcon}</span>}
+                {option.preDisplay && <span className="bold">{option.preDisplay}</span>}
                 {option === nothingSelected ? nothingSelected : optionDisplay(option)}
                 {option.info && <Info contents={option.info} />}
               </li>
