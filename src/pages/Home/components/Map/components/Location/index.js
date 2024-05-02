@@ -36,8 +36,13 @@ function Location({
     function AddAreaLoc(loc, areaLocs) {
       areaLocs.push(loc.data);
 
-      //if exterior, add radius
-      if (map[loc.data.exteriorLocationId]) {
+      //if exterior, and not PoI or PoI and not adj, add radius
+      if (
+        map[loc.data.exteriorLocationId] &&
+        (loc.data.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST ||
+          (loc.data.reference.distance !== lc.REFERENCE_DISTANCES.ADJACENT &&
+            loc.data.reference.distance !== lc.REFERENCE_DISTANCES.EXTERIOR_ADJACENT))
+      ) {
         AddAreaLoc(map[loc.data.exteriorLocationId], areaLocs);
       }
     }
