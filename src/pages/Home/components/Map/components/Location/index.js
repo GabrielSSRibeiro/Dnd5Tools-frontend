@@ -208,9 +208,14 @@ function Location({
         const locDistFromCenter = GetLocRadiusForCalc(map[location._id]);
 
         //distance will be the largest between calc dist and all bg area radius
-        const calcDist = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale);
-        const offsetDistance = refLocDistFromCenter + calcDist / 2 + locDistFromCenter;
+        let calcDist = 0;
+        if (location.reference.distance === lc.REFERENCE_DISTANCES.EXTERIOR_ADJACENT) {
+          calcDist = map[location.exteriorLocationId]?.data.radius / 2 ?? 0;
+        } else {
+          calcDist = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale) / 2;
+        }
 
+        const offsetDistance = refLocDistFromCenter + calcDist + locDistFromCenter;
         const coordinatesByDistance = utils.GetCoordinatesByDistance(refOffset, offsetDistance, location.distanceAngle);
 
         return { ...coordinatesByDistance, distance: offsetDistance };
@@ -260,30 +265,30 @@ function Location({
         offsetStyles.push({ key: "height", value: `${refAreaDiameter + refHeightAdditor}px` });
       }
 
-      // Array.from(cbg.getElementsByClassName("con-bg-area")).forEach((bga) => {
-      //   if (bga.classList.contains("needs-adjust")) {
-      //     const isCorner = bga.classList.contains("corner");
+      Array.from(cbg.getElementsByClassName("con-bg-area")).forEach((bga) => {
+        if (bga.classList.contains("needs-adjust")) {
+          const isCorner = bga.classList.contains("corner");
 
-      //     //adjust further
-      //     if (isRefSmaller && isCorner) {
-      //       bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
-      //     }
-      //     //adjust back if not last
-      //     else if (index !== cbgs.length - 1) {
-      //       //control how much should be adjusted by the ref size
-      //       const sliceIndex = refAreaDiameter > connectionLoc.radius / 2 ? index + 1 : index + 2;
+          //adjust further
+          if (isRefSmaller && isCorner) {
+            bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
+          }
+          //adjust back if not last
+          else if (index !== cbgs.length - 1) {
+            //control how much should be adjusted by the ref size
+            const sliceIndex = refAreaDiameter > connectionLoc.radius / 2 ? index + 1 : index + 2;
 
-      //       const modifier = cbgs.slice(sliceIndex).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
-      //       bga.style.width = `calc(100% - ${modifier / 2}px)`;
-      //     }
-      //     //still adjust further as last option
-      //     else if (isCorner) {
-      //       bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
-      //     }
+            const modifier = cbgs.slice(sliceIndex).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
+            bga.style.width = `calc(100% - ${modifier / 2}px)`;
+          }
+          //still adjust further as last option
+          else if (isCorner) {
+            bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
+          }
 
-      //     bga.classList.remove("needs-adjust");
-      //   }
-      // });
+          bga.classList.remove("needs-adjust");
+        }
+      });
 
       const connectionRatio = (distance - refAreaDiameter) / distance;
       offsetStyles.push({ key: "width", value: `${(distance - refAreaDiameter) / 2}px` });

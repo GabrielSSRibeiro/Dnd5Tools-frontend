@@ -60,7 +60,7 @@ function EditLocation({
 
     //add real value to display
     referenceDistances
-      .filter((r) => r.value !== lc.REFERENCE_DISTANCES.ADJACENT)
+      .filter((r) => r.baseDistanceMultiplier > 0)
       .forEach((r) => {
         r.display += ` (${utils.MInUnits((lc.BASE_VISION_IN_M * r.baseDistanceMultiplier) / 4, 1)})`;
       });

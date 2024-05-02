@@ -202,6 +202,7 @@ export const GetElementType = (value) => elementTypes.find((a) => a.value === va
 
 export const REFERENCE_DISTANCES = {
   ADJACENT: 5,
+  EXTERIOR_ADJACENT: 8,
   SMALL: 10,
   SMALL1: 11,
   SMALL2: 12,
@@ -238,6 +239,7 @@ export const REFERENCE_DISTANCES = {
 };
 export const referenceDistances = [
   { display: "Adjacente", value: REFERENCE_DISTANCES.ADJACENT, baseDistanceMultiplier: 0 },
+  { display: "Adjacente Exterior", value: REFERENCE_DISTANCES.EXTERIOR_ADJACENT, baseDistanceMultiplier: 0 },
   { display: "Pequena", newSection: true, value: REFERENCE_DISTANCES.SMALL, baseDistanceMultiplier: 1 },
   { display: "Pequena", value: REFERENCE_DISTANCES.SMALL1, baseDistanceMultiplier: 1.1 },
   { display: "Pequena", value: REFERENCE_DISTANCES.SMALL2, baseDistanceMultiplier: 1.2 },
