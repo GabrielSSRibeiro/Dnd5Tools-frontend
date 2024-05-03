@@ -352,6 +352,7 @@ function EditLocation({
     }
 
     if (
+      !isWorld &&
       (location.reference.connectionAngle || location.reference.connectionAngleOrigin) &&
       (!location.reference.connectionAngle || !location.reference.connectionAngleOrigin)
     ) {

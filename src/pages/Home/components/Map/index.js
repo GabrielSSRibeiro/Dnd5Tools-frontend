@@ -206,23 +206,23 @@ function Map({
 
     return visionRadius;
   }, [combatConfig.travel.currentNode, combatConfig.travel.isOverlook, combatConfig.world, map, pxInMScale]);
-  const maxVisionRadius = useMemo(() => {
-    if (!combatConfig.travel.currentNode) {
-      return 0;
-    }
+  // const maxVisionRadius = useMemo(() => {
+  //   if (!combatConfig.travel.currentNode) {
+  //     return 0;
+  //   }
 
-    const baseVision = lc.BASE_VISION_IN_M / pxInMScale;
-    let visionRadius = baseVision;
+  //   const baseVision = lc.BASE_VISION_IN_M / pxInMScale;
+  //   let visionRadius = baseVision;
 
-    const modifier = lc.GetPanoramicVision(lc.PANORAMIC_VISIONS.EXTREME).modifier;
-    visionRadius *= modifier;
+  //   const modifier = lc.GetPanoramicVision(lc.PANORAMIC_VISIONS.EXTREME).modifier;
+  //   visionRadius *= modifier;
 
-    // if (combatConfig.travel.isOverlook) {
-    //   visionRadius += baseVision;
-    // }
+  //   // if (combatConfig.travel.isOverlook) {
+  //   //   visionRadius += baseVision;
+  //   // }
 
-    return visionRadius;
-  }, [combatConfig.travel.currentNode, pxInMScale]);
+  //   return visionRadius;
+  // }, [combatConfig.travel.currentNode, pxInMScale]);
   const canTravelToPoint = useMemo(
     () => true,
     // locHoverData?.distance.isVisible
@@ -884,6 +884,7 @@ function Map({
                 distance={locHoverData.distance}
                 willExhaust={(combatConfig.travel.exhaustionTimer + locHoverData.distance?.exhaustion ?? 0) / 60 >= exhaustionThreshold.current}
                 canTravelToPoint={canTravelToPoint}
+                lastEncounterLocId={combatConfig.travel.lastEncounterLocId}
               />
             )}
             {locHoverData.node?.name && (
@@ -1289,10 +1290,10 @@ function Map({
                         {!isNightTime && (
                           <div className="vision floating-details day-vision" style={{ width: visionRadius / 4, height: visionRadius / 4 }}></div>
                         )}
-                        <div
+                        {/* <div
                           className="vision floating-details night-vision"
                           style={{ width: maxVisionRadius / 4, height: maxVisionRadius / 4 }}
-                        ></div>
+                        ></div> */}
                         <div className="direction-arrow floating-details" style={arrowStyles}>
                           <div className="pointer"></div>
                         </div>

@@ -22,6 +22,7 @@ function LocationSummary({
   distance = null,
   willExhaust,
   canTravelToPoint,
+  lastEncounterLocId,
 }) {
   const [modal, setModal] = useState(null);
   const avatarProportion = useRef(60);
@@ -54,6 +55,14 @@ function LocationSummary({
     setLocationToEdit(lc.GetNewLocation(exteriorLocationId));
   }
 
+  const shouldRollEncounter = useMemo(
+    () =>
+      distance?.encounterProb >= 0.995 ||
+      location._id !== lastEncounterLocId ||
+      (!location._id && lastEncounterLocId) ||
+      (location._id && !lastEncounterLocId),
+    [distance?.encounterProb, location._id, lastEncounterLocId]
+  );
   const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
   const worldContext = useMemo(() => lh.GetCurrentContext(world), [world]);
   const shouldlAddWorldCreatures = useMemo(
@@ -220,7 +229,9 @@ function LocationSummary({
               {canTravelToPoint && distance?.encounterProb != null && creaturesForDisplay.length > 0 && (
                 <span className="env-type">
                   Chance encontro:
-                  <span className="name">{utils.turnValueIntoPercentageString(distance.encounterProb)}</span>
+                  <span className="name" style={shouldRollEncounter ? { color: dangerColor.current } : {}}>
+                    {utils.turnValueIntoPercentageString(distance.encounterProb)}
+                  </span>
                 </span>
               )}
             </>

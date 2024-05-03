@@ -300,6 +300,7 @@ function Home() {
             temperature: 1,
             nextConditionsUpdate: null,
             cummulativeEncounterChance: 0,
+            lastEncounterLocId: null,
             currentNode: null,
             travelNodes: [],
           },

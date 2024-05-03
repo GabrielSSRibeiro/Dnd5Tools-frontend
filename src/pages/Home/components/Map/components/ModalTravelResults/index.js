@@ -811,6 +811,7 @@ function ModalTravelResults({
 
     if (isEncounter.current) {
       travel.cummulativeEncounterChance = 0;
+      travel.lastEncounterLocId = location._id;
     } else {
       travel.cummulativeEncounterChance = Math.min(1, travel.cummulativeEncounterChance + encounterProb);
     }
@@ -1032,13 +1033,15 @@ function ModalTravelResults({
                     </span>
                   )}
 
-                  <div className="df df-fd-c df-rg-5">
-                    <button className="df df-cg-5 button-simple" onClick={UpdateElements}>
-                      <i className="fas fa-retweet"></i>
-                      Elementos
-                    </button>
-                    <span className="elements-display">{elmentsForDisplay ?? "-"}</span>
-                  </div>
+                  {location.traversal.elements?.length > 0 && (
+                    <div className="df df-fd-c df-rg-5">
+                      <button className="df df-cg-5 button-simple" onClick={UpdateElements}>
+                        <i className="fas fa-retweet"></i>
+                        Elementos
+                      </button>
+                      <span className="elements-display">{elmentsForDisplay ?? "-"}</span>
+                    </div>
+                  )}
                 </>
               )}
             </>
