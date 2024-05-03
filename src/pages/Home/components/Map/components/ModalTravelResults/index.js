@@ -51,19 +51,15 @@ function ModalTravelResults({
   );
   const ProbUpdatedByTravelTimeModCheck = useCallback(
     (probability, updateTimePassed = false) => {
-      try {
-        const travelTimeMod = (hasMoved ? locHoverData.distance.travelTimeInMin : timePassed) / 60;
-        const check = utils.ProbabilityCheckWithRatio(probability, travelTimeMod);
-        const updatedTimePassed = Math.round(check.ratioChecked * 60);
+      const travelTimeMod = (hasMoved ? locHoverData.distance.travelTimeInMin : timePassed) / 60;
+      const check = utils.ProbabilityCheckWithRatio(probability, travelTimeMod);
+      const updatedTimePassed = Math.round(check.ratioChecked * 60);
 
-        if (updateTimePassed && updatedTimePassed !== timePassed) {
-          setTimePassed(updatedTimePassed);
-        }
-
-        return check.probabilityCheck;
-      } catch (error) {
-        return false;
+      if (updateTimePassed && !hasMoved && updatedTimePassed !== timePassed) {
+        setTimePassed(updatedTimePassed);
       }
+
+      return check.probabilityCheck;
     },
     [hasMoved, locHoverData, timePassed]
   );
@@ -666,8 +662,8 @@ function ModalTravelResults({
   function UpdateElements() {
     if (isPointOfInterest || !isEncounter || !location.traversal.elements) setElmentsForDisplay(null);
 
-    const elements = location.traversal.elements.filter((e) => e.type !== element.current?.type);
-    if (elements.length === 0) return null;
+    const elements = location.traversal.elements?.filter((e) => e.type !== element.current?.type);
+    if (!elements || elements.length === 0) return null;
 
     const generatedElements = elements
       .map((e) => {

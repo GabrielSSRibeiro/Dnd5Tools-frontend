@@ -33,7 +33,6 @@ function Map({
   userId,
   shouldRender,
 }) {
-  // const centerMoveRatio = useRef(0.05);
   const mapConditionLevels = useRef(lc.hazardousness.map((h) => h.color));
   const exhaustionThreshold = useRef(8);
   const dayTimeThreshold = useRef(6 * 60);
@@ -218,13 +217,17 @@ function Map({
     const modifier = lc.GetPanoramicVision(lc.PANORAMIC_VISIONS.EXTREME).modifier;
     visionRadius *= modifier;
 
-    if (combatConfig.travel.isOverlook) {
-      visionRadius += baseVision;
-    }
+    // if (combatConfig.travel.isOverlook) {
+    //   visionRadius += baseVision;
+    // }
 
     return visionRadius;
-  }, [combatConfig.travel.currentNode, combatConfig.travel.isOverlook, pxInMScale]);
-  const canTravelToPoint = useMemo(() => locHoverData?.distance.isVisible, [locHoverData?.distance.isVisible]);
+  }, [combatConfig.travel.currentNode, pxInMScale]);
+  const canTravelToPoint = useMemo(
+    () => true,
+    // locHoverData?.distance.isVisible
+    []
+  );
   const paceMove = useMemo(
     () => combatConfig.travel.pace !== lc.TRAVEL_PACES.REST && combatConfig.travel.pace !== lc.TRAVEL_PACES.ACTIVITY,
     [combatConfig.travel.pace]
@@ -272,6 +275,10 @@ function Map({
     setIsMouseDown(false);
     if (locations.length === 0 || (!isRest && !paceMove) || isMouseDragging) {
       setIsMouseDragging(false);
+      return;
+    }
+
+    if (!locHoverData) {
       return;
     }
 
@@ -416,14 +423,6 @@ function Map({
 
     combatConfig.travel.travelNodes.push(newCurrentNode);
   }
-
-  // function GetOffsetRatioValue() {
-  //   const locationsDiv = document.getElementById(locationsContainerId);
-  //   const widthOffset = locationsDiv.offsetWidth * centerMoveRatio.current;
-  //   const heightOffset = locationsDiv.offsetHeight * centerMoveRatio.current;
-
-  //   return { x: widthOffset, y: heightOffset };
-  // }
 
   function HandleCancel() {
     UpdateEditLoc(locationToEdit);
@@ -656,7 +655,7 @@ function Map({
 
   function HandleLocHover(e, location, node) {
     let distance = { centerOffset: GetCenterOffset(e) };
-    distance.isVisible = distance.centerOffset.value <= maxVisionRadius / 8;
+    distance.isVisible = distance.centerOffset.value <= visionRadius / 8;
 
     if (currentNode && mapMode === lc.MAP_MODES.TRAVEL) {
       const distanceInScale = Math.round(distance.centerOffset.value * pxInMScale);
@@ -883,6 +882,7 @@ function Map({
                 precipitation={isPrecipitating ? lc.ROUTINE_PRECIPITATIONS.PRECIPITATING : lc.ROUTINE_PRECIPITATIONS.CLEAR}
                 temperature={isExtremeTemp ? lc.ROUTINE_TEMPERATURES.EXTREME : lc.ROUTINE_TEMPERATURES.NORMAL}
                 distance={locHoverData.distance}
+                willExhaust={(combatConfig.travel.exhaustionTimer + locHoverData.distance?.exhaustion ?? 0) / 60 >= exhaustionThreshold.current}
                 canTravelToPoint={canTravelToPoint}
               />
             )}

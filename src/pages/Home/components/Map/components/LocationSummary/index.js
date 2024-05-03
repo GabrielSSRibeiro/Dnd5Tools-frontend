@@ -20,10 +20,12 @@ function LocationSummary({
   precipitation,
   temperature,
   distance = null,
+  willExhaust,
   canTravelToPoint,
 }) {
   const [modal, setModal] = useState(null);
   const avatarProportion = useRef(60);
+  const dangerColor = useRef(lc.GetHazardousness(lc.HAZARDOUSNESS.EXTREME).color);
 
   function OpenModalLocationDetails(loc, locId, defaultLevel) {
     setLocationToEdit(null);
@@ -144,7 +146,11 @@ function LocationSummary({
           )}
         </header>
         <footer className="details">
-          <div className="divider"></div>
+          <div className="divider">
+            <div className="df visibility">
+              {distance?.isVisible ? <i className="fas fa-eye"></i> : <i className="fas fa-eye-slash" style={{ color: dangerColor.current }}></i>}
+            </div>
+          </div>
 
           {location.isDraft && (
             <span className="df df-cg-5 env-type">
@@ -165,7 +171,10 @@ function LocationSummary({
           {/* exhaustion */}
           {canTravelToPoint && (
             <span className="exhaustion">
-              Desgaste: +<span className="name">{distance.exhaustionInUnits}</span>
+              Desgaste: +
+              <span className="name" style={willExhaust ? { color: dangerColor.current } : {}}>
+                {distance.exhaustionInUnits}
+              </span>
             </span>
           )}
 
