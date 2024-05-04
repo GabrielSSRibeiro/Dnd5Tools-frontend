@@ -1,21 +1,28 @@
 import moment from "moment";
 
-export function randomIntFromInterval(min, max) {
+export function seededRandom(seed = null) {
+  if (seed == null) return Math.random();
+
+  let x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
+export function randomIntFromInterval(min, max, seed = null) {
   // min and max included
-  return Math.floor(Math.random() * (max - min + 1) + min);
+  return Math.floor(seededRandom(seed) * (max - min + 1) + min);
+}
+
+export function randomValueFromVarianceInt(value, varianceInt, seed = null) {
+  const lowerBound = value - varianceInt;
+  const higherBound = value + varianceInt;
+
+  return randomIntFromInterval(lowerBound, higherBound, seed);
 }
 
 export function averageOfArray(values) {
   const sum = values.reduce((a, b) => a + b, 0);
 
   return sum / values.length || 0;
-}
-
-export function randomValueFromVarianceInt(value, varianceInt) {
-  const lowerBound = value - varianceInt;
-  const higherBound = value + varianceInt;
-
-  return randomIntFromInterval(lowerBound, higherBound);
 }
 
 export function randomValueFromVariancePercentage(value, variancePercentage) {
@@ -222,6 +229,40 @@ export const GetDistanceByCoordinates = (pA, pB) => {
   return { value, angle };
 };
 
+export const generateRegularPolygonCoordinatesForCSSClipPath = (numSides) => {
+  const offsetX = 50; // X coordinate offset for CSS clip-path
+  const offsetY = 50; // Y coordinate offset for CSS clip-path
+  const radius = 50; // Radius of the polygon
+
+  let coordinates = [];
+  const angleIncrement = (2 * Math.PI) / numSides;
+
+  for (let i = 0; i < numSides; i++) {
+    const angle = i * angleIncrement;
+    const x = offsetX + radius * Math.cos(angle);
+    const y = offsetY + radius * Math.sin(angle);
+    // Ensure x and y are not negative
+    const normalizedX = Math.max(Math.round(x), 0);
+    const normalizedY = Math.max(Math.round(y), 0);
+    coordinates.push({ x: normalizedX, y: normalizedY });
+  }
+
+  return coordinates;
+};
+
+export const extractNumbersFromString = (inputString) => {
+  // Use regular expression to match numbers
+  let numbersArray = inputString.match(/\d+/g);
+
+  // Join the matched numbers into a single string
+  let numbersString = numbersArray.join("");
+
+  // Parse the string containing only numbers into an integer
+  let result = parseInt(numbersString, 10);
+
+  return result;
+};
+
 export const MInUnits = (m, fixedValue = null) => {
   if (m < 1000) {
     return `${m}m`;
@@ -300,4 +341,8 @@ export function SwapElementsInArray(array, index1, index2) {
 
   // Swap the elements using array destructuring
   [array[index1], array[index2]] = [array[index2], array[index1]];
+}
+
+export function GetValueInBounds(value, min, max) {
+  return Math.min(Math.max(value, min ?? value), max ?? value);
 }

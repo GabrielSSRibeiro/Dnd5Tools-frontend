@@ -138,40 +138,57 @@ function Location({
     return wrapperStyle;
   }, [isMapRendered, loc.data._id, locationsRefs, map]);
 
-  function GetAreaStyles(location, index, isLocArea, isPointOfInterest) {
-    let radius = location.radius;
-    areaLocs.slice(index + 1).forEach((l) => {
-      radius += l.radius;
+  const areaLocsToRender = useMemo(() => {
+    function GetAreaStyles(location, index, isPointOfInterest) {
+      let cummulativeMultiplier = lc.GetLocationSize(location.size).baseRadiusMultiplier;
+      let radius = location.radius;
+      areaLocs.slice(index + 1).forEach((l) => {
+        radius += l.radius;
+        cummulativeMultiplier += lc.GetLocationSize(l.size).baseRadiusMultiplier;
+      });
+
+      //add contrast with type equal to parent but diffrent than grand parent
+      const parentLoc = map[location.exteriorLocationId]?.data;
+      const grandParentLoc = parentLoc ? map[parentLoc.exteriorLocationId]?.data : null;
+      const filterValue =
+        location.traversal.type === parentLoc?.traversal.type && location.traversal.type !== grandParentLoc?.traversal.type ? 0.75 : 1;
+
+      let areaStyles = {
+        width: radius / 2,
+        height: radius / 2,
+        backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type)?.color : cc.GetEnviroment(location.traversal.type)?.color,
+        filter: `contrast(${filterValue})`,
+      };
+      if (!isPointOfInterest) {
+        const baseNumberOfSides = 20;
+        const numberOfSides = Math.round(baseNumberOfSides * cummulativeMultiplier);
+        const idSeed = utils.extractNumbersFromString(location._id.slice(0, 10));
+
+        const varianceInt = 3;
+        const updatedClipData = utils.generateRegularPolygonCoordinatesForCSSClipPath(numberOfSides).map((p) => {
+          const updatedX = utils.randomValueFromVarianceInt(p.x, varianceInt, idSeed + p.x);
+          const updatedY = utils.randomValueFromVarianceInt(p.y, varianceInt, idSeed + p.y);
+
+          return { x: utils.GetValueInBounds(updatedX, 0, 100), y: utils.GetValueInBounds(updatedY, 0, 100) };
+        });
+        areaStyles.clipPath = "polygon(" + updatedClipData.map((p) => `${p.x}% ${p.y}%`).join(",") + ")";
+        areaStyles.overflow = "unset";
+        areaStyles.borderRadius = "unset";
+      }
+
+      return areaStyles;
+    }
+
+    return areaLocs.map((l, index) => {
+      const isLocArea = index === areaLocs.length - 1;
+      const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
+      const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location && l.reference.distance && l.reference.direction);
+      let areaStyles = GetAreaStyles(l, index, isPointOfInterest, hasConnectionBg);
+      let connectionAreaStyles = { backgroundColor: areaStyles.backgroundColor, filter: areaStyles.filter };
+
+      return { data: l, isLocArea, isPointOfInterest, hasConnectionBg, areaStyles, connectionAreaStyles };
     });
-
-    //add contrast with type equal to parent but diffrent than grand parent
-    const parentLoc = map[location.exteriorLocationId]?.data;
-    const grandParentLoc = parentLoc ? map[parentLoc.exteriorLocationId]?.data : null;
-    const filterValue =
-      location.traversal.type === parentLoc?.traversal.type && location.traversal.type !== grandParentLoc?.traversal.type ? 0.75 : 1;
-
-    let areaStyles = {
-      width: radius / 2,
-      height: radius / 2,
-      backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type)?.color : cc.GetEnviroment(location.traversal.type)?.color,
-      filter: `contrast(${filterValue})`,
-      borderRadius: "100%",
-    };
-
-    // if (anyConnectionBg && !isLocArea && connectionLoc && isAdjacent && connectionLoc._id !== location._id) {
-    //   let modifier = 0;
-    //   const areas = areaLocs.toReversed();
-    //   const areaAndExterior = areas.slice(areas.findIndex((l) => l._id === connectionLoc._id) + 1).toReversed();
-    //   const areasToSubtract = areaAndExterior.slice(areaAndExterior.findIndex((l) => l._id === location._id));
-    //   areasToSubtract.forEach((l) => {
-    //     modifier += l.radius / 2;
-    //   });
-
-    //   areaStyles.marginRight = modifier * -1;
-    // }
-
-    return areaStyles;
-  }
+  }, [areaLocs, map]);
 
   function GetOffsetStyles(offset, includeWidth = false) {
     const offsetStyles = [];
@@ -251,6 +268,9 @@ function Location({
     function GetConnectionBgOffsetStyles(cbg, index, cbgs) {
       const offsetStyles = [];
 
+      // let clipPath = "polygon(50% 0%, 80% 10%, 100% 35%, 100% 70%, 80% 90%, 50% 100%, 20% 90%, 0% 70%, 0% 35%, 20% 10%)";
+      // offsetStyles.push({ key: "clip-path", value: clipPath });
+
       let { x, y, distance } = connectionLoc.offset;
 
       //remove the ref offset from x and y, making it the new center for the dist
@@ -265,6 +285,7 @@ function Location({
         offsetStyles.push({ key: "height", value: `${refAreaDiameter + refHeightAdditor}px` });
       }
 
+      //special cases
       Array.from(cbg.getElementsByClassName("con-bg-area")).forEach((bga) => {
         if (bga.classList.contains("needs-adjust")) {
           const isCorner = bga.classList.contains("corner");
@@ -462,51 +483,45 @@ function Location({
         ))
       ) : (
         <div className="area-wrapper" style={areaWrapperStyle}>
-          {areaLocs.map((l, index) => {
-            const isLocArea = index === areaLocs.length - 1;
-            const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
-            const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location && l.reference.distance && l.reference.direction);
-            let areaStyles = GetAreaStyles(l, index, isLocArea, isPointOfInterest, hasConnectionBg);
-            let connectionAreaStyles = { backgroundColor: areaStyles.backgroundColor, filter: areaStyles.filter };
-
-            return (
-              <React.Fragment key={l._id}>
-                {/* connection Bg */}
-                {hasConnectionBg && (
-                  <div
-                    name={l._id}
-                    className={`connection-background con-bg-${loc.data._id} not-flat`}
-                    style={{
-                      backgroundColor: areaStyles.backgroundColor,
-                      height: areaStyles.height,
-                      rotate: `${distanceAngle * -1}deg`,
-                      zIndex: index,
-                    }}
-                    onMouseMove={(e) => HandleHover(e, l)}
-                    onMouseLeave={(e) => HandleHover(e)}
-                  >
-                    <aside className="con-bg-area corner needs-adjust" style={connectionAreaStyles}></aside>
-                  </div>
-                )}
-                {/* area */}
+          {areaLocsToRender.map((l, index) => (
+            <React.Fragment key={l.data._id}>
+              {/* connection Bg */}
+              {l.hasConnectionBg && (
                 <div
-                  name={`${l.name}-area`}
-                  id={isLocArea ? `${l._id}-area` : null}
-                  className={`area${isPointOfInterest ? " point-of-interest" : ""} not-flat`}
+                  name={l.data._id}
+                  className={`connection-background con-bg-${loc.data._id} not-flat`}
                   style={{
-                    width: areaStyles.width,
-                    height: areaStyles.height,
-                    rotate: `${distanceAngle * (hasConnectionBg ? -1 : 1)}deg`,
-                    zIndex: isPointOfInterest ? locations.length : index,
+                    backgroundColor: l.areaStyles.backgroundColor,
+                    height: l.areaStyles.height,
+                    rotate: `${distanceAngle * -1}deg`,
+                    zIndex: index,
                   }}
-                  onMouseMove={(e) => HandleHover(e, l)}
+                  onMouseMove={(e) => HandleHover(e, l.data)}
                   onMouseLeave={(e) => HandleHover(e)}
                 >
-                  <div style={areaStyles}></div>
+                  <aside className="con-bg-area corner needs-adjust" style={l.connectionAreaStyles}></aside>
                 </div>
-              </React.Fragment>
-            );
-          })}
+              )}
+              {/* area */}
+              <div
+                name={`${l.data.name}-area`}
+                id={l.isLocArea ? `${l.data._id}-area` : null}
+                className={`area${l.isPointOfInterest ? " point-of-interest" : ""} not-flat`}
+                style={{
+                  width: l.areaStyles.width,
+                  height: l.areaStyles.height,
+                  borderRadius: l.areaStyles.borderRadius,
+                  overflow: l.areaStyles.overflow,
+                  rotate: `${distanceAngle * (l.hasConnectionBg ? -1 : 1)}deg`,
+                  zIndex: l.isPointOfInterest ? locations.length : index,
+                }}
+                onMouseMove={(e) => HandleHover(e, l.data)}
+                onMouseLeave={(e) => HandleHover(e)}
+              >
+                <div className="inner-area" style={l.areaStyles}></div>
+              </div>
+            </React.Fragment>
+          ))}
         </div>
       )}
     </div>

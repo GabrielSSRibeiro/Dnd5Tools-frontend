@@ -83,9 +83,9 @@
   color: var(--black);
 }
 
-.Select-container > ul > .new-option-section {
-  background-color: var(--black);
-  color: var(--white);
+.Select-container > ul > .new-option-section .select-item {
+  border-bottom: solid 2px var(--black);
+  font-weight: 600;
 }
 
 .Select-container .select-item {
