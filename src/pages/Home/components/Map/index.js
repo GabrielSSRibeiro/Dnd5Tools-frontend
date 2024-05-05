@@ -1297,6 +1297,7 @@ function Map({
                   isMapRendered={isMapRendered}
                   HandleHover={HandleLocHover}
                   travel={() => OpenModalTravelResults()}
+                  zoom={combatConfig.zoom}
                   key={locationId}
                 />
               );

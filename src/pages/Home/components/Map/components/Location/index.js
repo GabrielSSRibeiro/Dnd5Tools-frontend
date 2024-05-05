@@ -19,6 +19,7 @@ function Location({
   HandleHover,
   className = "",
   travel,
+  zoom,
   ...rest
 }) {
   const ref = useRef(null);
@@ -143,9 +144,14 @@ function Location({
         const areaStyles = lh.GetAreaStyles(l, index, isPointOfInterest, areaLocs, map);
         let conBgClipPath = lh.GetLocConBgClipPath(connectionLoc, l._id);
 
+        //temp fix for performance issue with clip-path
+        if (zoom < 1) {
+          conBgClipPath = null;
+        }
+
         return { data: l, isLocArea, isPointOfInterest, hasConnectionBg, areaStyles, conBgClipPath };
       }),
-    [areaLocs, connectionLoc, map]
+    [areaLocs, connectionLoc, map, zoom]
   );
 
   //main setup
@@ -264,6 +270,7 @@ function Location({
             setAllLocationsRefs={setAllLocationsRefs}
             isMapRendered={isMapRendered}
             HandleHover={HandleHover}
+            zoom={zoom}
             key={locationId}
             {...rest}
           />
