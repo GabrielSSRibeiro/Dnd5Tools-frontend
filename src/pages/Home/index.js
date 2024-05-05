@@ -415,7 +415,7 @@ function Home() {
               defaultZoom={defaultZoom}
               userId={currentUser.uid}
               shouldRender={!creatureToEdit && shouldRenderMap}
-              isMobileDevice={isMobileDevice}
+              isMobileDevice={isMobileDevice.current}
             />
           </div>
           {/* <div className={`section-wrapper ${openTab !== MAIN_TABS.COMBAT ? "hidden" : ""}`}>
