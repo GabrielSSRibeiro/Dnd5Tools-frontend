@@ -232,7 +232,7 @@ export const GetDistanceByCoordinates = (pA, pB) => {
 export const generateRegularPolygonCoordinatesForCSSClipPath = (numSides) => {
   const offsetX = 50; // X coordinate offset for CSS clip-path
   const offsetY = 50; // Y coordinate offset for CSS clip-path
-  const radius = 50; // Radius of the polygon
+  const radius = 25; // Radius of the polygon
 
   let coordinates = [];
   const angleIncrement = (2 * Math.PI) / numSides;
