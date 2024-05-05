@@ -217,7 +217,56 @@ export function GetLocRadiusForCalc(location, map) {
   return radius / 2;
 }
 
+//empiric
+const COORDINATES_VARIANCE_INT = 3;
+function GetUpdatedCoordinates(coordinates, baseSeed) {
+  //empiric
+  const seed = utils.extractNumbersFromString(baseSeed.slice(0, 10));
+
+  const updatedCoordinates = coordinates.map((p, i) => {
+    const updatedX = utils.randomValueFromVarianceInt(p.x, COORDINATES_VARIANCE_INT, seed + p.x + i);
+    const updatedY = utils.randomValueFromVarianceInt(p.y, COORDINATES_VARIANCE_INT, seed + p.y + i);
+    return { x: utils.GetValueInBounds(updatedX, 0, 100), y: utils.GetValueInBounds(updatedY, 0, 100) };
+  });
+
+  return updatedCoordinates;
+}
+
+function GetLocAreaClipPath(locationId, cummulativeMultiplier) {
+  //empiric
+  const baseNumberOfSides = 20;
+  const numberOfSides = Math.round(baseNumberOfSides * cummulativeMultiplier);
+  const coordinates = utils.generateRegularPolygonCoordinatesForCSSClipPath(numberOfSides);
+  const updatedCoordinates = GetUpdatedCoordinates(coordinates, locationId);
+
+  return "polygon(" + updatedCoordinates.map((p) => `${p.x}% ${p.y}%`).join(",") + ")";
+}
+
+export function generateConBgCoordinatesForCSSClipPath(location) {
+  const multiplier = lc.GetReferenceDistance(location?.reference.distance)?.baseDistanceMultiplier;
+  if (!multiplier) return [];
+
+  //empiric
+  const baseNumberOfPoints = 20;
+  const numberOfPoints = Math.min(Math.round(baseNumberOfPoints * multiplier), 100);
+
+  let coordinates = [{ x: 0, y: COORDINATES_VARIANCE_INT }];
+  for (let i = 1; i < numberOfPoints; i++) {
+    coordinates.push({ x: Math.round((100 / numberOfPoints) * i), y: COORDINATES_VARIANCE_INT });
+  }
+
+  return coordinates;
+}
+
+export function GetLocConBgClipPath(location, locationId) {
+  const coordinates = generateConBgCoordinatesForCSSClipPath(location);
+
+  const updatedCoordinates = [{ x: 0, y: 50 }, ...GetUpdatedCoordinates(coordinates, locationId), { x: 100, y: 50 }];
+  return "polygon(" + updatedCoordinates.map((p) => `${p.x}% ${p.y}%`).join(",") + ")";
+}
+
 export function GetAreaStyles(location, index, isPointOfInterest, areaLocs, map) {
+  //get all radius
   let cummulativeMultiplier = lc.GetLocationSize(location.size).baseRadiusMultiplier;
   let radius = location.radius;
   areaLocs.slice(index + 1).forEach((l) => {
@@ -236,22 +285,10 @@ export function GetAreaStyles(location, index, isPointOfInterest, areaLocs, map)
     backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type)?.color : cc.GetEnviroment(location.traversal.type)?.color,
     filter: `contrast(${filterValue})`,
   };
+
+  //set clip-path logic
   if (!isPointOfInterest) {
-    //empiric
-    const baseNumberOfSides = 20;
-    const numberOfSides = Math.round(baseNumberOfSides * cummulativeMultiplier);
-    //empiric
-    const idSeed = utils.extractNumbersFromString(location._id.slice(0, 10));
-
-    //empiric
-    const varianceInt = 3;
-    const clipPath = utils.generateRegularPolygonCoordinatesForCSSClipPath(numberOfSides).map((p) => {
-      const updatedX = utils.randomValueFromVarianceInt(p.x, varianceInt, idSeed + p.x);
-      const updatedY = utils.randomValueFromVarianceInt(p.y, varianceInt, idSeed + p.y);
-
-      return { x: utils.GetValueInBounds(updatedX, 0, 100), y: utils.GetValueInBounds(updatedY, 0, 100) };
-    });
-    areaStyles.clipPath = "polygon(" + clipPath.map((p) => `${p.x}% ${p.y}%`).join(",") + ")";
+    areaStyles.clipPath = GetLocAreaClipPath(location._id, cummulativeMultiplier);
     areaStyles.overflow = "unset";
     areaStyles.borderRadius = "unset";
   }

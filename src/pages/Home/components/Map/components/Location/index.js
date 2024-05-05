@@ -141,15 +141,11 @@ function Location({
         const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
         const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location && l.reference.distance && l.reference.direction);
         const areaStyles = lh.GetAreaStyles(l, index, isPointOfInterest, areaLocs, map);
-        const connectionAreaStyles = {
-          backgroundColor: areaStyles.backgroundColor,
-          filter: areaStyles.filter,
-          clipPath: "polygon(0 100%, 0 0, 25% 0, 50% 0, 75% 0, 100% 0, 100% 100%)",
-        };
+        const conBgClipPath = lh.GetLocConBgClipPath(connectionLoc, l._id);
 
-        return { data: l, isLocArea, isPointOfInterest, hasConnectionBg, areaStyles, connectionAreaStyles };
+        return { data: l, isLocArea, isPointOfInterest, hasConnectionBg, areaStyles, conBgClipPath };
       }),
-    [areaLocs, map]
+    [areaLocs, connectionLoc, map]
   );
 
   //main setup
@@ -282,16 +278,22 @@ function Location({
                   name={l.data._id}
                   className={`connection-background con-bg-${loc.data._id} not-flat`}
                   style={{
-                    clipPath: l.connectionAreaStyles.clipPath,
-                    backgroundColor: l.areaStyles.backgroundColor,
                     height: l.areaStyles.height,
+                    filter: l.areaStyles.filter,
                     rotate: `${distanceAngle * -1}deg`,
                     zIndex: index,
                   }}
                   onMouseMove={(e) => HandleHover(e, l.data)}
                   onMouseLeave={(e) => HandleHover(e)}
                 >
-                  <aside className="con-bg-area corner needs-adjust" style={l.connectionAreaStyles}></aside>
+                  <aside
+                    className="con-bg-area corner needs-adjust"
+                    style={{ backgroundColor: l.areaStyles.backgroundColor, clipPath: l.conBgClipPath }}
+                  ></aside>
+                  <aside
+                    className="con-bg-area corner needs-adjust"
+                    style={{ backgroundColor: l.areaStyles.backgroundColor, clipPath: l.conBgClipPath }}
+                  ></aside>
                 </div>
               )}
               {/* area */}

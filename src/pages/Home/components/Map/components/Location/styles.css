@@ -50,11 +50,17 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
-  scale: 1.1;
+  scale: 0.5;
 }
 
 .Location-container .connection-background .con-bg-area {
   width: 100%;
+  position: absolute;
+  height: 100%;
+  background-color: inherit;
+  scale: 2;
+}
+.Location-container .connection-background .con-bg-area:last-of-type {
   rotate: 180deg;
 }
 
