@@ -160,10 +160,13 @@ function Location({
         filter: `contrast(${filterValue})`,
       };
       if (!isPointOfInterest) {
+        //empiric
         const baseNumberOfSides = 20;
         const numberOfSides = Math.round(baseNumberOfSides * cummulativeMultiplier);
+        //empiric
         const idSeed = utils.extractNumbersFromString(location._id.slice(0, 10));
 
+        //empiric
         const varianceInt = 3;
         const updatedClipData = utils.generateRegularPolygonCoordinatesForCSSClipPath(numberOfSides).map((p) => {
           const updatedX = utils.randomValueFromVarianceInt(p.x, varianceInt, idSeed + p.x);
@@ -241,7 +244,6 @@ function Location({
 
     function GetConnectionOffsetStyles(offset) {
       let { x, y, distance } = offset;
-
       //remove the ref offset from x and y, making it the new center for the dist
       x -= map[connectionLoc.reference.location].data.offset.x;
       y -= map[connectionLoc.reference.location].data.offset.y;
@@ -268,8 +270,8 @@ function Location({
     function GetConnectionBgOffsetStyles(cbg, index, cbgs) {
       const offsetStyles = [];
 
-      // let clipPath = "polygon(50% 0%, 80% 10%, 100% 35%, 100% 70%, 80% 90%, 50% 100%, 20% 90%, 0% 70%, 0% 35%, 20% 10%)";
-      // offsetStyles.push({ key: "clip-path", value: clipPath });
+      let clipPath = "polygon(0 100%, 0 0, 25% 0, 50% 0, 75% 0, 100% 0, 100% 100%)";
+      offsetStyles.push({ key: "clip-path", value: clipPath });
 
       let { x, y, distance } = connectionLoc.offset;
 

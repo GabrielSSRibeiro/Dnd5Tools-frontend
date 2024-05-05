@@ -119,19 +119,7 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
               text: "",
             },
             {
-              text: "É representada por uma área ao redor do grupo no mapa. A noite a visao panorâmica é sempre 0",
-            },
-            {
-              text: "",
-            },
-            {
-              text: "A visao máxima é sempre uma área pontilhada. Mesmo se nao visíveis, pontos dentro dessa área podem ser refenreciados ou rastrados pelo grupo",
-            },
-            {
-              text: "",
-            },
-            {
-              text: "Clicar dentro dessa área realiza uma MARCHA",
+              text: "É representada por uma área ao redor do grupo no mapa. A noite, nao existe visao panorâmica",
             },
           ]}
           extraWidth={250}
@@ -143,7 +131,7 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
           optionValue={(o) => o.value}
         />
         <Select
-          label={"Periculosidade (Chance de encontro)"}
+          label={"Periculosidade (chance de encontro)"}
           info={[
             {
               text: "Representado por borda colorida ao redor dos detalhes da localização",
@@ -159,6 +147,12 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
             },
             {
               text: "Essa chance cresce até que um encontro aconteça, depois zera",
+            },
+            {
+              text: "",
+            },
+            {
+              text: "Quando vermelho, indica que uma MARCHA é sugerida",
             },
           ]}
           extraWidth={250}

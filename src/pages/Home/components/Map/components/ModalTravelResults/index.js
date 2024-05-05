@@ -1220,7 +1220,14 @@ function ModalTravelResults({
             {HandleAddTravelNode && !isPointOfInterest && !isSafe && (
               <Button text="Marcar no Mapa" icon="fas fa-bookmark" onClick={HandleSave} isDisabled={!CheckSaveValid()} />
             )}
-            {(HandleAddTravelNode || moveNodeAction) && <Button text="Mover seguro" icon="fas fa-location-arrow" onClick={HandleSafeContinue} />}
+            {(HandleAddTravelNode || moveNodeAction) && (
+              <Button
+                info={[{ text: "Grupo é apenas movido, sem afetar o mundo de nenhuma maneira" }]}
+                text="Mover seguro"
+                icon="fas fa-location-arrow"
+                onClick={HandleSafeContinue}
+              />
+            )}
             {!isSafe && <Button text="Continuar e Salvar" onClick={HandleContinue} />}
           </aside>
         )}

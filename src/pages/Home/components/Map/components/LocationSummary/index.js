@@ -57,11 +57,16 @@ function LocationSummary({
 
   const shouldRollEncounter = useMemo(
     () =>
-      distance?.encounterProb >= 0.995 ||
+      distance?.encounterProb >= 0.245 ||
       location._id !== lastEncounterLocId ||
       (!location._id && lastEncounterLocId) ||
       (location._id && !lastEncounterLocId),
     [distance?.encounterProb, location._id, lastEncounterLocId]
+  );
+
+  const isVisible = useMemo(
+    () => distance?.isVisible || location.traversal.type === cc.CREATURE_ENVIRONMENTS.MOUNTAIN,
+    [distance?.isVisible, location.traversal.type]
   );
   const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
   const worldContext = useMemo(() => lh.GetCurrentContext(world), [world]);
@@ -157,7 +162,7 @@ function LocationSummary({
         <footer className="details">
           <div className="divider">
             <div className="df visibility">
-              {distance?.isVisible ? <i className="fas fa-eye"></i> : <i className="fas fa-eye-slash" style={{ color: dangerColor.current }}></i>}
+              {isVisible ? <i className="fas fa-eye"></i> : <i className="fas fa-eye-slash" style={{ color: dangerColor.current }}></i>}
             </div>
           </div>
 
@@ -226,7 +231,7 @@ function LocationSummary({
                   </div>
                 ))}
               </div>
-              {canTravelToPoint && distance?.encounterProb != null && creaturesForDisplay.length > 0 && (
+              {canTravelToPoint && distance?.encounterProb != null && (
                 <span className="env-type">
                   Chance encontro:
                   <span className="name" style={shouldRollEncounter ? { color: dangerColor.current } : {}}>
