@@ -24,6 +24,8 @@ function Home() {
   };
 
   const defaultZoom = useRef(0.5);
+  const isMobileDevice = useRef(/iPhone|iPad|iPod|Android|Windows Phone/i.test(navigator.userAgent));
+  console.log("isMobileDevice", isMobileDevice.current);
   const [showLoadingText, setShowLoadingText] = useState(false);
   const [openTab, setOpenTab] = useState(MAIN_TABS.MAP);
   const [isPartyOpen, setIsPartyOpen] = useState(false);

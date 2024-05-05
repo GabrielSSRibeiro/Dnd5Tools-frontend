@@ -294,12 +294,11 @@ function Location({
                     style={{
                       backgroundColor: l.areaStyles.backgroundColor,
                       clipPath: l.conBgClipPath,
-                      WebkitClipPath: l.conBgClipPath,
                     }}
                   ></aside>
                   <aside
                     className="con-bg-area corner needs-adjust"
-                    style={{ backgroundColor: l.areaStyles.backgroundColor, clipPath: l.conBgClipPath, WebkitClipPath: l.conBgClipPath }}
+                    style={{ backgroundColor: l.areaStyles.backgroundColor, clipPath: l.conBgClipPath }}
                   ></aside>
                 </div>
               )}
