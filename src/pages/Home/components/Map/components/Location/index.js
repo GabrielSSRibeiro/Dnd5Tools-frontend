@@ -141,7 +141,10 @@ function Location({
         const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
         const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location && l.reference.distance && l.reference.direction);
         const areaStyles = lh.GetAreaStyles(l, index, isPointOfInterest, areaLocs, map);
-        const conBgClipPath = lh.GetLocConBgClipPath(connectionLoc, l._id);
+        let conBgClipPath = lh.GetLocConBgClipPath(connectionLoc, l._id);
+
+        areaStyles.clipPath = null;
+        conBgClipPath = null;
 
         return { data: l, isLocArea, isPointOfInterest, hasConnectionBg, areaStyles, conBgClipPath };
       }),
@@ -288,11 +291,11 @@ function Location({
                 >
                   <aside
                     className="con-bg-area corner needs-adjust"
-                    style={{ backgroundColor: l.areaStyles.backgroundColor, clipPath: l.conBgClipPath2 }}
+                    style={{ backgroundColor: l.areaStyles.backgroundColor, clipPath: l.conBgClipPath }}
                   ></aside>
                   <aside
                     className="con-bg-area corner needs-adjust"
-                    style={{ backgroundColor: l.areaStyles.backgroundColor, clipPath: l.conBgClipPath2 }}
+                    style={{ backgroundColor: l.areaStyles.backgroundColor, clipPath: l.conBgClipPath }}
                   ></aside>
                 </div>
               )}
