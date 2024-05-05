@@ -249,11 +249,7 @@ function Location({
       {/* connection */}
       {connectionStyle && (
         <div id={`${loc.data._id}-connection`} className="connection not-flat" style={connectionStyle}>
-          <LocConnection
-            type={loc.data.reference.connectionType}
-            angle={loc.data.reference.connectionAngle}
-            angleOrigin={loc.data.reference.connectionAngleOrigin}
-          />
+          <LocConnection loc={loc} map={map} />
         </div>
       )}
       {/* locations */}
@@ -295,11 +291,15 @@ function Location({
                 >
                   <aside
                     className="con-bg-area corner needs-adjust"
-                    style={{ backgroundColor: l.areaStyles.backgroundColor, clipPath: l.conBgClipPath }}
+                    style={{
+                      backgroundColor: l.areaStyles.backgroundColor,
+                      clipPath: l.conBgClipPath,
+                      WebkitClipPath: l.conBgClipPath,
+                    }}
                   ></aside>
                   <aside
                     className="con-bg-area corner needs-adjust"
-                    style={{ backgroundColor: l.areaStyles.backgroundColor, clipPath: l.conBgClipPath }}
+                    style={{ backgroundColor: l.areaStyles.backgroundColor, clipPath: l.conBgClipPath, WebkitClipPath: l.conBgClipPath }}
                   ></aside>
                 </div>
               )}
