@@ -749,20 +749,6 @@ function Map({
     setMapMode(newMapMode);
   }
 
-  function GetAllExteriorLocs(location) {
-    function AddExteriorLocsToList(loc, list) {
-      if (map[loc.data.exteriorLocationId]) {
-        list.push(map[loc.data.exteriorLocationId]);
-        AddExteriorLocsToList(map[loc.data.exteriorLocationId], list);
-      }
-    }
-
-    let exteriorLocs = [];
-    AddExteriorLocsToList(map[location._id], exteriorLocs);
-
-    return exteriorLocs;
-  }
-
   function GetAllInteriorLocs(location) {
     function AddInteriorLocsToList(loc, list) {
       Object.values(loc.interiorLocs).forEach((l) => {
@@ -783,21 +769,6 @@ function Map({
     );
 
     return refLocs;
-  }
-
-  function GetLocRadiusForCalc(location) {
-    function GetAllFirstLocRadius(loc) {
-      const interiorLocs = Object.keys(loc.interiorLocs).map((locId) => map[locId]);
-      if (interiorLocs.length === 0) {
-        return loc.data.radius;
-      } else {
-        const interiorLoc = interiorLocs.find((l) => !l.data.reference.location && !l.data.isHidden);
-        return loc.data.radius + (interiorLoc ? GetAllFirstLocRadius(interiorLoc) : 0);
-      }
-    }
-
-    let radius = GetAllFirstLocRadius(location);
-    return radius / 2;
   }
 
   function UpdateEditLoc(loc) {
@@ -1319,8 +1290,6 @@ function Map({
                   map={map}
                   locations={locations}
                   pxInMScale={pxInMScale}
-                  GetLocRadiusForCalc={GetLocRadiusForCalc}
-                  GetAllExteriorLocs={GetAllExteriorLocs}
                   locationsRefs={locationsRefs}
                   setLocationsRefs={setLocationsRefs}
                   allLocationsRefs={allLocationsRefs}

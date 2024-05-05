@@ -55,6 +55,7 @@
 
 .Location-container .connection-background .con-bg-area {
   width: 100%;
+  rotate: 180deg;
 }
 
 .Location-container .connection-background .con-bg-area.corner {

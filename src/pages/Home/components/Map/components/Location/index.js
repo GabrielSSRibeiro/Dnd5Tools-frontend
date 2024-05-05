@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import * as utils from "../../../../../../utils";
 import * as lc from "../../../../../../constants/locationConstants";
-import * as cc from "../../../../../../constants/creatureConstants";
 import * as lh from "../../../../../../helpers/locationHelper";
 
 import LocConnection from "./components/LocConnection";
@@ -13,8 +11,6 @@ function Location({
   map,
   locations,
   pxInMScale,
-  GetLocRadiusForCalc,
-  GetAllExteriorLocs,
   locationsRefs,
   setLocationsRefs,
   allLocationsRefs,
@@ -76,8 +72,8 @@ function Location({
       return null;
     }
 
-    return GetLocRadiusForCalc(map[connectionLoc.reference.location]);
-  }, [GetLocRadiusForCalc, connectionLoc, map]);
+    return lh.GetLocRadiusForCalc(map[connectionLoc.reference.location], map);
+  }, [connectionLoc, map]);
   const distanceAngle = useMemo(() => areaLocs.toReversed().find((l) => l.distanceAngle != null)?.distanceAngle, [areaLocs]);
   const connectionStyle = useMemo(() => {
     if (!loc.data.reference.connectionType) {
@@ -138,237 +134,33 @@ function Location({
     return wrapperStyle;
   }, [isMapRendered, loc.data._id, locationsRefs, map]);
 
-  const areaLocsToRender = useMemo(() => {
-    function GetAreaStyles(location, index, isPointOfInterest) {
-      let cummulativeMultiplier = lc.GetLocationSize(location.size).baseRadiusMultiplier;
-      let radius = location.radius;
-      areaLocs.slice(index + 1).forEach((l) => {
-        radius += l.radius;
-        cummulativeMultiplier += lc.GetLocationSize(l.size).baseRadiusMultiplier;
-      });
+  const areaLocsToRender = useMemo(
+    () =>
+      areaLocs.map((l, index) => {
+        const isLocArea = index === areaLocs.length - 1;
+        const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
+        const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location && l.reference.distance && l.reference.direction);
+        const areaStyles = lh.GetAreaStyles(l, index, isPointOfInterest, areaLocs, map);
+        const connectionAreaStyles = {
+          backgroundColor: areaStyles.backgroundColor,
+          filter: areaStyles.filter,
+          clipPath: "polygon(0 100%, 0 0, 25% 0, 50% 0, 75% 0, 100% 0, 100% 100%)",
+        };
 
-      //add contrast with type equal to parent but diffrent than grand parent
-      const parentLoc = map[location.exteriorLocationId]?.data;
-      const grandParentLoc = parentLoc ? map[parentLoc.exteriorLocationId]?.data : null;
-      const filterValue =
-        location.traversal.type === parentLoc?.traversal.type && location.traversal.type !== grandParentLoc?.traversal.type ? 0.75 : 1;
-
-      let areaStyles = {
-        width: radius / 2,
-        height: radius / 2,
-        backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type)?.color : cc.GetEnviroment(location.traversal.type)?.color,
-        filter: `contrast(${filterValue})`,
-      };
-      if (!isPointOfInterest) {
-        //empiric
-        const baseNumberOfSides = 20;
-        const numberOfSides = Math.round(baseNumberOfSides * cummulativeMultiplier);
-        //empiric
-        const idSeed = utils.extractNumbersFromString(location._id.slice(0, 10));
-
-        //empiric
-        const varianceInt = 3;
-        const updatedClipData = utils.generateRegularPolygonCoordinatesForCSSClipPath(numberOfSides).map((p) => {
-          const updatedX = utils.randomValueFromVarianceInt(p.x, varianceInt, idSeed + p.x);
-          const updatedY = utils.randomValueFromVarianceInt(p.y, varianceInt, idSeed + p.y);
-
-          return { x: utils.GetValueInBounds(updatedX, 0, 100), y: utils.GetValueInBounds(updatedY, 0, 100) };
-        });
-        areaStyles.clipPath = "polygon(" + updatedClipData.map((p) => `${p.x}% ${p.y}%`).join(",") + ")";
-        areaStyles.overflow = "unset";
-        areaStyles.borderRadius = "unset";
-      }
-
-      return areaStyles;
-    }
-
-    return areaLocs.map((l, index) => {
-      const isLocArea = index === areaLocs.length - 1;
-      const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
-      const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location && l.reference.distance && l.reference.direction);
-      let areaStyles = GetAreaStyles(l, index, isPointOfInterest, hasConnectionBg);
-      let connectionAreaStyles = { backgroundColor: areaStyles.backgroundColor, filter: areaStyles.filter };
-
-      return { data: l, isLocArea, isPointOfInterest, hasConnectionBg, areaStyles, connectionAreaStyles };
-    });
-  }, [areaLocs, map]);
-
-  function GetOffsetStyles(offset, includeWidth = false) {
-    const offsetStyles = [];
-
-    if (includeWidth) {
-      offsetStyles.push({ key: "width", value: `${Math.sqrt(offset.x * offset.x + offset.y * offset.y) / 2}px` });
-    }
-
-    //horizontal
-    if (offset.x > 0) {
-      offsetStyles.push({ key: "marginRight", value: `${offset.x * -1}px` });
-    } else {
-      offsetStyles.push({ key: "marginLeft", value: `${offset.x}px` });
-    }
-
-    //vertical
-    if (offset.y > 0) {
-      offsetStyles.push({ key: "marginTop", value: `${offset.y * -1}px` });
-    } else {
-      offsetStyles.push({ key: "marginBottom", value: `${offset.y}px` });
-    }
-
-    return offsetStyles;
-  }
+        return { data: l, isLocArea, isPointOfInterest, hasConnectionBg, areaStyles, connectionAreaStyles };
+      }),
+    [areaLocs, map]
+  );
 
   //main setup
   useEffect(() => {
-    function GetOffset(location) {
-      if (!location.reference.location || !location.reference.distance || !location.reference.direction || !map[location.reference.location]) {
-        return { x: 0, y: 0 };
-      } else {
-        const refOffset = GetOffset(map[location.reference.location].data);
-        const refLocDistFromCenter = GetLocRadiusForCalc(map[location.reference.location]);
-        const locDistFromCenter = GetLocRadiusForCalc(map[location._id]);
-
-        //distance will be the largest between calc dist and all bg area radius
-        let calcDist = 0;
-        if (location.reference.distance === lc.REFERENCE_DISTANCES.EXTERIOR_ADJACENT) {
-          calcDist = map[location.exteriorLocationId]?.data.radius / 2 ?? 0;
-        } else {
-          calcDist = lh.GetNormalizedValue(location.distanceMultiplier, pxInMScale) / 2;
-        }
-
-        const offsetDistance = refLocDistFromCenter + calcDist + locDistFromCenter;
-        const coordinatesByDistance = utils.GetCoordinatesByDistance(refOffset, offsetDistance, location.distanceAngle);
-
-        return { ...coordinatesByDistance, distance: offsetDistance };
-      }
-    }
-
-    function GetConnectionOffsetStyles(offset) {
-      let { x, y, distance } = offset;
-      //remove the ref offset from x and y, making it the new center for the dist
-      x -= map[connectionLoc.reference.location].data.offset.x;
-      y -= map[connectionLoc.reference.location].data.offset.y;
-
-      const offsetStyles = [{ key: "width", value: `${distance / 2}px` }];
-
-      //horizontal
-      if (x > 0) {
-        offsetStyles.push({ key: "marginLeft", value: `${(x * -1) / 2}px` });
-      } else {
-        offsetStyles.push({ key: "marginRight", value: `${x / 2}px` });
-      }
-
-      //vertical
-      if (y > 0) {
-        offsetStyles.push({ key: "marginBottom", value: `${(y * -1) / 2}px` });
-      } else {
-        offsetStyles.push({ key: "marginTop", value: `${y / 2}px` });
-      }
-
-      return offsetStyles;
-    }
-
-    function GetConnectionBgOffsetStyles(cbg, index, cbgs) {
-      const offsetStyles = [];
-
-      let clipPath = "polygon(0 100%, 0 0, 25% 0, 50% 0, 75% 0, 100% 0, 100% 100%)";
-      offsetStyles.push({ key: "clip-path", value: clipPath });
-
-      let { x, y, distance } = connectionLoc.offset;
-
-      //remove the ref offset from x and y, making it the new center for the dist
-      x -= map[connectionLoc.reference.location].data.offset.x;
-      y -= map[connectionLoc.reference.location].data.offset.y;
-
-      const refHeightAdditor = cbgs.slice(index).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
-      const isRefSmaller = cbg.offsetHeight > refAreaDiameter + refHeightAdditor;
-
-      if (isRefSmaller) {
-        //adjust height
-        offsetStyles.push({ key: "height", value: `${refAreaDiameter + refHeightAdditor}px` });
-      }
-
-      //special cases
-      Array.from(cbg.getElementsByClassName("con-bg-area")).forEach((bga) => {
-        if (bga.classList.contains("needs-adjust")) {
-          const isCorner = bga.classList.contains("corner");
-
-          //adjust further
-          if (isRefSmaller && isCorner) {
-            bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
-          }
-          //adjust back if not last
-          else if (index !== cbgs.length - 1) {
-            //control how much should be adjusted by the ref size
-            const sliceIndex = refAreaDiameter > connectionLoc.radius / 2 ? index + 1 : index + 2;
-
-            const modifier = cbgs.slice(sliceIndex).reduce((acc, cur) => acc + map[cur.getAttribute("name")].data.radius / 2, 0);
-            bga.style.width = `calc(100% - ${modifier / 2}px)`;
-          }
-          //still adjust further as last option
-          else if (isCorner) {
-            bga.style.width = `calc(100% + ${refAreaDiameter / 2}px)`;
-          }
-
-          bga.classList.remove("needs-adjust");
-        }
-      });
-
-      const connectionRatio = (distance - refAreaDiameter) / distance;
-      offsetStyles.push({ key: "width", value: `${(distance - refAreaDiameter) / 2}px` });
-
-      //horizontal
-      if (x > 0) {
-        offsetStyles.push({ key: "marginLeft", value: `${(x * connectionRatio * -1) / 2}px` });
-      } else {
-        offsetStyles.push({ key: "marginRight", value: `${(x * connectionRatio) / 2}px` });
-      }
-
-      //vertical
-      if (y > 0) {
-        offsetStyles.push({ key: "marginBottom", value: `${(y * connectionRatio * -1) / 2}px` });
-      } else {
-        offsetStyles.push({ key: "marginTop", value: `${(y * connectionRatio) / 2}px` });
-      }
-
-      return offsetStyles;
-    }
-
-    function GetFlatUpdateStyles(nfel) {
-      const flatUpdateStyles = [];
-      let marginTop = ref.current.style.marginTop ? parseInt(ref.current.style.marginTop) : 0;
-      let marginRight = ref.current.style.marginRight ? parseInt(ref.current.style.marginRight) : 0;
-      let marginBottom = ref.current.style.marginBottom ? parseInt(ref.current.style.marginBottom) : 0;
-      let marginLeft = ref.current.style.marginLeft ? parseInt(ref.current.style.marginLeft) : 0;
-
-      GetAllExteriorLocs(loc.data)
-        .map((l) => document.getElementById(l.data._id))
-        .forEach((el) => {
-          marginTop += el.style.marginTop ? parseInt(el.style.marginTop) : 0;
-          marginRight += el.style.marginRight ? parseInt(el.style.marginRight) : 0;
-          marginBottom += el.style.marginBottom ? parseInt(el.style.marginBottom) : 0;
-          marginLeft += el.style.marginLeft ? parseInt(el.style.marginLeft) : 0;
-        });
-
-      marginTop += nfel.style.marginTop ? parseInt(nfel.style.marginTop) : 0;
-      marginRight += nfel.style.marginRight ? parseInt(nfel.style.marginRight) : 0;
-      marginBottom += nfel.style.marginBottom ? parseInt(nfel.style.marginBottom) : 0;
-      marginLeft += nfel.style.marginLeft ? parseInt(nfel.style.marginLeft) : 0;
-
-      flatUpdateStyles.push({ key: "marginTop", value: `${marginTop}px` });
-      flatUpdateStyles.push({ key: "marginRight", value: `${marginRight}px` });
-      flatUpdateStyles.push({ key: "marginBottom", value: `${marginBottom}px` });
-      flatUpdateStyles.push({ key: "marginLeft", value: `${marginLeft}px` });
-
-      return flatUpdateStyles;
-    }
-
     //set offset and position self
     let locOffset = map[ref.current.id].data.offset;
     if (!locOffset) {
-      map[loc.data._id].data.offset = GetOffset(loc.data);
+      map[loc.data._id].data.offset = lh.GetOffset(loc.data, map, pxInMScale);
       locOffset = map[ref.current.id].data.offset;
 
-      GetOffsetStyles(locOffset).forEach((s) => {
+      lh.GetOffsetStyles(locOffset).forEach((s) => {
         ref.current.style[s.key] = s.value;
       });
     }
@@ -378,7 +170,7 @@ function Location({
       //set connection styles
       let connection = document.getElementById(`${loc.data._id}-connection`);
       if (connection && connection.classList.contains("not-flat")) {
-        GetConnectionOffsetStyles(locOffset).forEach((s) => {
+        lh.GetConnectionOffsetStyles(connectionLoc, locOffset, map).forEach((s) => {
           connection.style[s.key] = s.value;
         });
       }
@@ -387,7 +179,7 @@ function Location({
       Array.from(document.getElementsByClassName(`con-bg-${loc.data._id}`))
         .filter((cbg) => cbg.classList.contains("not-flat"))
         .forEach((cbg, i, self) => {
-          GetConnectionBgOffsetStyles(cbg, i, self).forEach((s) => {
+          lh.GetConnectionBgOffsetStyles(cbg, i, self, connectionLoc, refAreaDiameter, map).forEach((s) => {
             cbg.style[s.key] = s.value;
           });
         });
@@ -397,12 +189,12 @@ function Location({
     if (isMapRendered) {
       //move all interior locs to the world level so the index takes proper effect
       const flatContainer = document.getElementById("flat-locs");
-      Array.from(ref.current.getElementsByClassName("not-flat")).forEach((nfel) => {
-        GetFlatUpdateStyles(nfel).forEach((s) => {
-          nfel.style[s.key] = s.value;
+      Array.from(ref.current.getElementsByClassName("not-flat")).forEach((nfEl) => {
+        lh.GetFlatUpdateStyles(nfEl, ref, loc.data, map).forEach((s) => {
+          nfEl.style[s.key] = s.value;
         });
-        nfel.classList.remove("not-flat");
-        flatContainer.appendChild(nfel);
+        nfEl.classList.remove("not-flat");
+        flatContainer.appendChild(nfEl);
       });
 
       ref.current.style.width = "0px";
@@ -419,8 +211,6 @@ function Location({
       setLocationsRefs([...locationsRefs]);
     }
   }, [
-    GetAllExteriorLocs,
-    GetLocRadiusForCalc,
     allLocationsRefs,
     areaLocs,
     areaWrapperStyle.height,
@@ -464,6 +254,7 @@ function Location({
           />
         </div>
       )}
+      {/* locations */}
       {interiorLocs.length > 0 ? (
         interiorLocs.map((locationId) => (
           <Location
@@ -471,8 +262,6 @@ function Location({
             map={map}
             locations={locations}
             pxInMScale={pxInMScale}
-            GetLocRadiusForCalc={GetLocRadiusForCalc}
-            GetAllExteriorLocs={GetAllExteriorLocs}
             locationsRefs={refs}
             setLocationsRefs={setRefs}
             allLocationsRefs={allLocationsRefs}
@@ -493,6 +282,7 @@ function Location({
                   name={l.data._id}
                   className={`connection-background con-bg-${loc.data._id} not-flat`}
                   style={{
+                    clipPath: l.connectionAreaStyles.clipPath,
                     backgroundColor: l.areaStyles.backgroundColor,
                     height: l.areaStyles.height,
                     rotate: `${distanceAngle * -1}deg`,
