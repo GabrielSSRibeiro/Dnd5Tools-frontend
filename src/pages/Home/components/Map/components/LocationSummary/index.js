@@ -65,8 +65,8 @@ function LocationSummary({
   );
 
   const isVisible = useMemo(
-    () => distance?.isVisible || location.traversal.type === cc.CREATURE_ENVIRONMENTS.MOUNTAIN,
-    [distance?.isVisible, location.traversal.type]
+    () => schedule !== lc.ROUTINE_SCHEDULES.NIGHT && (distance?.isVisible || location.traversal.type === cc.CREATURE_ENVIRONMENTS.MOUNTAIN),
+    [distance?.isVisible, location.traversal.type, schedule]
   );
   const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
   const worldContext = useMemo(() => lh.GetCurrentContext(world), [world]);
