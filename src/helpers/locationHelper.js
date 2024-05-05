@@ -247,8 +247,8 @@ export function generateConBgCoordinatesForCSSClipPath(location) {
   if (!multiplier) return [];
 
   //empiric
-  const baseNumberOfPoints = 20;
-  const numberOfPoints = Math.min(Math.round(baseNumberOfPoints * multiplier), 100);
+  const baseNumberOfPoints = 10;
+  const numberOfPoints = Math.min(Math.round(baseNumberOfPoints * multiplier), 100) / 2;
 
   let coordinates = [{ x: 0, y: COORDINATES_VARIANCE_INT }];
   for (let i = 1; i < numberOfPoints; i++) {
