@@ -20,6 +20,7 @@ function Location({
   className = "",
   travel,
   zoom,
+  isMobileDevice,
   ...rest
 }) {
   const ref = useRef(null);
@@ -145,13 +146,13 @@ function Location({
         let conBgClipPath = lh.GetLocConBgClipPath(connectionLoc, l._id);
 
         //temp fix for performance issue with clip-path
-        if (zoom < 1) {
+        if (zoom < 1 || isMobileDevice) {
           conBgClipPath = null;
         }
 
         return { data: l, isLocArea, isPointOfInterest, hasConnectionBg, areaStyles, conBgClipPath };
       }),
-    [areaLocs, connectionLoc, map, zoom]
+    [areaLocs, connectionLoc, isMobileDevice, map, zoom]
   );
 
   //main setup
@@ -256,6 +257,7 @@ function Location({
       {interiorLocs.length > 0 ? (
         interiorLocs.map((locationId) => (
           <Location
+            key={locationId}
             loc={loc.interiorLocs[locationId]}
             map={map}
             locations={locations}
@@ -267,7 +269,7 @@ function Location({
             isMapRendered={isMapRendered}
             HandleHover={HandleHover}
             zoom={zoom}
-            key={locationId}
+            isMobileDevice={isMobileDevice}
             {...rest}
           />
         ))

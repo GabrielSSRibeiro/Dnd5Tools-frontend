@@ -32,6 +32,7 @@ function Map({
   defaultZoom,
   userId,
   shouldRender,
+  isMobileDevice,
 }) {
   const mapConditionLevels = useRef(lc.hazardousness.map((h) => h.color));
   const exhaustionThreshold = useRef(8);
@@ -1286,6 +1287,7 @@ function Map({
             {rootLocs.map((locationId) => {
               return (
                 <Location
+                  key={locationId}
                   loc={map[locationId]}
                   map={map}
                   locations={locations}
@@ -1298,7 +1300,7 @@ function Map({
                   HandleHover={HandleLocHover}
                   travel={() => OpenModalTravelResults()}
                   zoom={combatConfig.zoom}
-                  key={locationId}
+                  isMobileDevice={isMobileDevice}
                 />
               );
             })}
