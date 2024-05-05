@@ -143,9 +143,6 @@ function Location({
         const areaStyles = lh.GetAreaStyles(l, index, isPointOfInterest, areaLocs, map);
         let conBgClipPath = lh.GetLocConBgClipPath(connectionLoc, l._id);
 
-        areaStyles.clipPath = null;
-        conBgClipPath = null;
-
         return { data: l, isLocArea, isPointOfInterest, hasConnectionBg, areaStyles, conBgClipPath };
       }),
     [areaLocs, connectionLoc, map]
