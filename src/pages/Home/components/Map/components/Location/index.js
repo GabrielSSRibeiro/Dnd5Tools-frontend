@@ -248,7 +248,7 @@ function Location({
       key={rest.key}
     >
       {/* connection */}
-      {connectionStyle && (
+      {connectionStyle && loc.data.reference.distance !== lc.REFERENCE_DISTANCES.ADJACENT && (
         <div id={`${loc.data._id}-connection`} className="connection not-flat" style={connectionStyle}>
           <LocConnection seed={loc.data._id} loc={loc} map={map} />
         </div>

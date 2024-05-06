@@ -15,7 +15,7 @@ function LocConnection({ seed, loc, map }) {
 
     return map[loc.data.exteriorLocationId].data.radius / 2;
   }, [loc.data.exteriorLocationId, map]);
-  const conClipPath = useMemo(() => lh.GetLocConClipPaths(seed), [seed]);
+  const conClipPath = useMemo(() => lh.GetLocConClipPaths(loc.data, seed), [loc.data, seed]);
   const rotation = useMemo(() => {
     if (!angle) return 0;
 

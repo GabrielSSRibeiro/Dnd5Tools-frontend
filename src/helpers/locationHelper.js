@@ -275,29 +275,31 @@ export function GetLocConBgClipPath(location, locationId) {
   const coordinates = generateConBgCoordinatesForCSSClipPath(location, COORDINATES_VARIANCE_INT);
 
   const updatedCoordinates = [
-    { x: 0, y: 50 },
+    { x: 0, y: 55 },
     ...GetUpdatedCoordinates(coordinates, locationId, 1, COORDINATES_VARIANCE_INT, false, true),
-    { x: 100, y: 50 },
+    { x: 100, y: 55 },
   ];
   return "polygon(" + updatedCoordinates.map((p) => `${p.x}% ${p.y}%`).join(",") + ")";
 }
 
-export function generateConCoordinatesForCSSClipPath() {
+export function generateConCoordinatesForCSSClipPath(location) {
+  const multiplier = lc.GetReferenceDistance(location?.reference.distance)?.baseDistanceMultiplier ?? 1;
+
   //empiric
-  const numberOfPoints = 10;
+  const numberOfPoints = 5 * multiplier;
 
   let coordinates = [];
   for (let i = 1; i < numberOfPoints; i++) {
-    coordinates.push({ x: i * 10, y: 50 });
+    coordinates.push({ x: i * (100 / numberOfPoints), y: 50 });
   }
 
   return coordinates;
 }
 
-export function GetLocConClipPaths(seed) {
+export function GetLocConClipPaths(location, seed) {
   //empiric
   const COORDINATES_VARIANCE_INT = 3;
-  const coordinates = generateConCoordinatesForCSSClipPath();
+  const coordinates = generateConCoordinatesForCSSClipPath(location);
 
   const updatedCoordinates = GetUpdatedCoordinates(coordinates, seed, 0, COORDINATES_VARIANCE_INT, false, true);
   let reversedUpdatedCoordinates = [];
