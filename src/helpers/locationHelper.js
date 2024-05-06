@@ -323,7 +323,7 @@ export function GetLocConClipPaths(location, seed) {
       y: updatedCoordinates[i].y + mod,
     });
   }
-  console.log(seed, utils.randomIntFromInterval(1, 5, seed));
+
   return (
     "polygon(" +
     [{ x: 0, y: 50 }, ...updatedCoordinates, { x: 100, y: 50 }, ...reversedUpdatedCoordinates].map((p) => `${p.x}% ${p.y}%`).join(",") +
