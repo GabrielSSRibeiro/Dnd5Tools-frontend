@@ -58,12 +58,12 @@ export const combatAchievements = [
   {
     display: "Criatura menor",
     value: COMBAT_ACHIEVEMENTS.NEUTRALIZE_SMALL_CREATURE,
-    multiplier: 0.25,
+    multiplier: 0.1,
   },
   {
     display: "Criatura maior",
     value: COMBAT_ACHIEVEMENTS.NEUTRALIZE_CREATURE,
-    multiplier: 0.5,
+    multiplier: 1,
   },
   {
     display: "Descobrir segredo",
@@ -73,7 +73,7 @@ export const combatAchievements = [
   {
     display: "Completar missao",
     value: COMBAT_ACHIEVEMENTS.COMPLETE_QUEST,
-    multiplier: 1.5,
+    multiplier: 2,
   },
 ];
 export const GetCombatAchievement = (value) => combatAchievements.find((a) => a.value === value);

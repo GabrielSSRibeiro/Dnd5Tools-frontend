@@ -285,14 +285,14 @@ export const creatureEnvironments = [
   { display: "Celestial", value: CREATURE_ENVIRONMENTS.CELESTIAL, weight: 0, color: "#B8860B", shadowSpread: -40 },
   { display: "Ártico", value: CREATURE_ENVIRONMENTS.ARTIC, weight: 0, color: "#FFFAFA", shadowSpread: -40 },
   { display: "Montanha", value: CREATURE_ENVIRONMENTS.MOUNTAIN, weight: 0, color: "#A9A9A9", shadowSpread: -40 },
-  { display: "Floresta", value: CREATURE_ENVIRONMENTS.FOREST, weight: 0, color: "#228B22", shadowSpread: 50 },
+  { display: "Floresta", value: CREATURE_ENVIRONMENTS.FOREST, weight: 0, color: "#228B22", shadowSpread: 60 },
   { display: "Pântano", value: CREATURE_ENVIRONMENTS.SWAMP, weight: 0, color: "#556B2F", shadowSpread: -40 },
   { display: "Planície", value: CREATURE_ENVIRONMENTS.PLAIN, weight: 0, color: "#90EE90", shadowSpread: -55 },
   { display: "Urbano", value: CREATURE_ENVIRONMENTS.URBAN, weight: 0, color: "#708090", shadowSpread: -40 },
   { display: "Deserto", value: CREATURE_ENVIRONMENTS.DESERT, weight: 0, color: "#F4A460", shadowSpread: -40 },
   { display: "Aquático", value: CREATURE_ENVIRONMENTS.AQUATIC, weight: 0, color: "#6CD7D7", shadowSpread: 10 },
   { display: "Subterrâneo", value: CREATURE_ENVIRONMENTS.SUBTERRANEAN, weight: 0, color: "#808080", shadowSpread: -10 },
-  { display: "Abissal", value: CREATURE_ENVIRONMENTS.ABISSAL, weight: 0, color: "#8B0000", shadowSpread: -35 },
+  { display: "Abissal", value: CREATURE_ENVIRONMENTS.ABISSAL, weight: 0, color: "#8B0000", shadowSpread: -25 },
   { display: "Todos", value: CREATURE_ENVIRONMENTS.ALL, weight: 0, color: "#000000", shadowSpread: -40 },
 ];
 export const GetEnviroment = (value) => creatureEnvironments.find((e) => e.value === value);
