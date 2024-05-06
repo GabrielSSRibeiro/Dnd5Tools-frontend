@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import * as lc from "../../../../../../constants/locationConstants";
+import * as cc from "../../../../../../constants/creatureConstants";
 import * as lh from "../../../../../../helpers/locationHelper";
 
 import LocConnection from "./components/LocConnection";
@@ -141,8 +142,10 @@ function Location({
       areaLocs.map((l, index) => {
         const isLocArea = index === areaLocs.length - 1;
         const isPointOfInterest = l.size === lc.LOCATION_SIZES.POINT_OF_INTEREST;
+        const locType = isPointOfInterest ? lc.GetElementType(l.interaction.type) : cc.GetEnviroment(l.traversal.type);
         const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location && l.reference.distance && l.reference.direction);
-        const areaStyles = lh.GetAreaStyles(l, index, isPointOfInterest, areaLocs, map);
+        const areaStyles = lh.GetAreaStyles(l, index, isPointOfInterest, locType, areaLocs, map);
+        const boxShadow = `20px 20px 500px ${locType.shadowSpread}px rgba(0,0,0,0.25)`;
         let conBgClipPath = lh.GetLocConBgClipPath(connectionLoc, l._id);
 
         //temp fix for performance issue with clip-path
@@ -150,7 +153,7 @@ function Location({
           conBgClipPath = null;
         }
 
-        return { data: l, isLocArea, isPointOfInterest, hasConnectionBg, areaStyles, conBgClipPath };
+        return { data: l, isLocArea, isPointOfInterest, hasConnectionBg, areaStyles, conBgClipPath, boxShadow };
       }),
     [areaLocs, connectionLoc, isMobileDevice, map]
   );
@@ -285,6 +288,7 @@ function Location({
                   style={{
                     height: l.areaStyles.height,
                     filter: l.areaStyles.filter,
+                    boxShadow: l.boxShadow,
                     rotate: `${distanceAngle * -1}deg`,
                     zIndex: index,
                   }}
@@ -314,6 +318,7 @@ function Location({
                   height: l.areaStyles.height,
                   borderRadius: l.areaStyles.borderRadius,
                   overflow: l.areaStyles.overflow,
+                  boxShadow: l.boxShadow,
                   rotate: `${distanceAngle * (l.hasConnectionBg ? -1 : 1)}deg`,
                   zIndex: l.isPointOfInterest ? locations.length : index,
                 }}

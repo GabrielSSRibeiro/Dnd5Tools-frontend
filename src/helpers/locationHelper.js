@@ -1,5 +1,4 @@
 import * as utils from "../utils";
-import * as cc from "../constants/creatureConstants";
 import * as lc from "../constants/locationConstants";
 
 export const GetNormalizedValue = (multiplier, pxInMScale) => {
@@ -217,9 +216,13 @@ export function GetLocRadiusForCalc(location, map) {
   return radius / 2;
 }
 
+function GetLocSeed(baseSeed) {
+  return utils.extractNumbersFromString(baseSeed.slice(0, 10));
+}
+
 function GetUpdatedCoordinates(coordinates, baseSeed, varianceIntX, varianceIntY, extraVarianceX, extraVarianceY) {
   //empiric
-  const seed = utils.extractNumbersFromString(baseSeed.slice(0, 10));
+  const seed = GetLocSeed(baseSeed);
   const targetPercent = utils.randomIntFromInterval(40, 60, seed);
   const percentMod = utils.randomIntFromInterval(4, 6, seed);
 
@@ -310,16 +313,17 @@ export function GetLocConClipPaths(location, seed) {
   //empiric
   const COORDINATES_VARIANCE_INT = 10;
   const coordinates = generateConCoordinatesForCSSClipPath(location);
+  const mod = 2; //utils.randomIntFromInterval(2, 2, GetLocSeed(seed));
 
   const updatedCoordinates = GetUpdatedCoordinates(coordinates, seed, 0, COORDINATES_VARIANCE_INT, false, true);
   let reversedUpdatedCoordinates = [];
   for (let i = updatedCoordinates.length - 1; i >= 0; i--) {
     reversedUpdatedCoordinates.push({
       x: updatedCoordinates[i].x,
-      y: updatedCoordinates[i].y + 2,
+      y: updatedCoordinates[i].y + mod,
     });
   }
-
+  console.log(seed, utils.randomIntFromInterval(1, 5, seed));
   return (
     "polygon(" +
     [{ x: 0, y: 50 }, ...updatedCoordinates, { x: 100, y: 50 }, ...reversedUpdatedCoordinates].map((p) => `${p.x}% ${p.y}%`).join(",") +
@@ -327,7 +331,7 @@ export function GetLocConClipPaths(location, seed) {
   );
 }
 
-export function GetAreaStyles(location, index, isPointOfInterest, areaLocs, map) {
+export function GetAreaStyles(location, index, isPointOfInterest, locType, areaLocs, map) {
   //get all radius
   let cummulativeMultiplier = lc.GetLocationSize(location.size).baseRadiusMultiplier;
   let radius = location.radius;
@@ -344,7 +348,7 @@ export function GetAreaStyles(location, index, isPointOfInterest, areaLocs, map)
   let areaStyles = {
     width: radius / 2,
     height: radius / 2,
-    backgroundColor: isPointOfInterest ? lc.GetElementType(location.interaction.type)?.color : cc.GetEnviroment(location.traversal.type)?.color,
+    backgroundColor: locType?.color,
     filter: `contrast(${filterValue})`,
   };
 

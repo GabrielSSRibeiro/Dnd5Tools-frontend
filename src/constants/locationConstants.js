@@ -191,12 +191,12 @@ export const ELEMENT_TYPES = {
   OBJECT: 60,
 };
 export const elementTypes = [
-  { display: "Declive", value: ELEMENT_TYPES.PIT, color: "#202021" }, //#1b1b1c
-  { display: "Lago", value: ELEMENT_TYPES.LAKE, color: "#00CED1" },
-  { display: "Estrutura", value: ELEMENT_TYPES.STRUCTURE, color: "#D3D3D3" },
-  { display: "Rocha", value: ELEMENT_TYPES.ROCK, color: "#696969", canBeMaterial: true },
-  { display: "Planta", value: ELEMENT_TYPES.PLANT, color: "#008000", canBeMaterial: true },
-  { display: "Objeto", value: ELEMENT_TYPES.OBJECT, color: "#C0C0C0", canBeMaterial: true },
+  { display: "Declive", value: ELEMENT_TYPES.PIT, color: "#202021", shadowSpread: -50 }, //#1b1b1c
+  { display: "Lago", value: ELEMENT_TYPES.LAKE, color: "#00CED1", shadowSpread: -50 },
+  { display: "Estrutura", value: ELEMENT_TYPES.STRUCTURE, color: "#D3D3D3", shadowSpread: -50 },
+  { display: "Rocha", value: ELEMENT_TYPES.ROCK, color: "#696969", canBeMaterial: true, shadowSpread: -50 },
+  { display: "Planta", value: ELEMENT_TYPES.PLANT, color: "#008000", canBeMaterial: true, shadowSpread: -50 },
+  { display: "Objeto", value: ELEMENT_TYPES.OBJECT, color: "#C0C0C0", canBeMaterial: true, shadowSpread: -50 },
 ];
 export const GetElementType = (value) => elementTypes.find((a) => a.value === value);
 
