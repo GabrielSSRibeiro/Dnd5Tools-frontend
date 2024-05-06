@@ -274,12 +274,21 @@ export function GetLocConBgClipPath(location, locationId) {
   const COORDINATES_VARIANCE_INT = 5;
   const coordinates = generateConBgCoordinatesForCSSClipPath(location, COORDINATES_VARIANCE_INT);
 
-  const updatedCoordinates = [
+  const updatedCoordinatesTop = [
     { x: 0, y: 55 },
     ...GetUpdatedCoordinates(coordinates, locationId, 1, COORDINATES_VARIANCE_INT, false, true),
     { x: 100, y: 55 },
   ];
-  return "polygon(" + updatedCoordinates.map((p) => `${p.x}% ${p.y}%`).join(",") + ")";
+  const top = "polygon(" + updatedCoordinatesTop.map((p) => `${p.x}% ${p.y}%`).join(",") + ")";
+
+  const updatedCoordinatesBottom = [
+    { x: 0, y: 55 },
+    ...GetUpdatedCoordinates(coordinates, locationId.split("").reverse().join(""), 1, COORDINATES_VARIANCE_INT * 5, false, true),
+    { x: 100, y: 55 },
+  ];
+  const bottom = "polygon(" + updatedCoordinatesBottom.map((p) => `${p.x}% ${p.y}%`).join(",") + ")";
+
+  return { top, bottom };
 }
 
 export function generateConCoordinatesForCSSClipPath(location) {

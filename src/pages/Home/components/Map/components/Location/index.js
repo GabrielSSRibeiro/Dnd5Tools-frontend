@@ -146,13 +146,13 @@ function Location({
         let conBgClipPath = lh.GetLocConBgClipPath(connectionLoc, l._id);
 
         //temp fix for performance issue with clip-path
-        if (zoom < 1 || isMobileDevice) {
+        if (isMobileDevice) {
           conBgClipPath = null;
         }
 
         return { data: l, isLocArea, isPointOfInterest, hasConnectionBg, areaStyles, conBgClipPath };
       }),
-    [areaLocs, connectionLoc, isMobileDevice, map, zoom]
+    [areaLocs, connectionLoc, isMobileDevice, map]
   );
 
   //main setup
@@ -295,12 +295,12 @@ function Location({
                     className="con-bg-area corner needs-adjust"
                     style={{
                       backgroundColor: l.areaStyles.backgroundColor,
-                      clipPath: l.conBgClipPath,
+                      clipPath: l.conBgClipPath.top,
                     }}
                   ></aside>
                   <aside
                     className="con-bg-area corner needs-adjust"
-                    style={{ backgroundColor: l.areaStyles.backgroundColor, clipPath: l.conBgClipPath }}
+                    style={{ backgroundColor: l.areaStyles.backgroundColor, clipPath: l.conBgClipPath.bottom }}
                   ></aside>
                 </div>
               )}
