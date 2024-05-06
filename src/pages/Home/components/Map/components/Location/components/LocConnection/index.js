@@ -4,7 +4,7 @@ import * as lh from "../../../../../../../../helpers/locationHelper";
 
 import "./styles.css";
 
-function LocConnection({ seed, loc, map }) {
+function LocConnection({ seed, loc, map, isMobileDevice }) {
   const type = useMemo(() => loc.data.reference.connectionType, [loc]);
   const angle = useMemo(() => loc.data.reference.connectionAngle, [loc]);
   const angleOrigin = useMemo(() => loc.data.reference.connectionAngleOrigin, [loc]);

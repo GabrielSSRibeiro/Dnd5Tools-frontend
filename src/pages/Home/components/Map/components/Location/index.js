@@ -145,12 +145,14 @@ function Location({
         const locType = isPointOfInterest ? lc.GetElementType(l.interaction.type) : cc.GetEnviroment(l.traversal.type);
         const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location && l.reference.distance && l.reference.direction);
         const areaStyles = lh.GetAreaStyles(l, index, isPointOfInterest, locType, areaLocs, map);
-        const boxShadow = `20px 20px 500px ${locType.shadowSpread}px rgba(0,0,0,0.25)`;
+        let boxShadow = `20px 20px 500px ${locType.shadowSpread}px rgba(0,0,0,0.25)`;
         let conBgClipPath = lh.GetLocConBgClipPath(connectionLoc, l._id);
 
         //temp fix for performance issue with clip-path
-        if (isMobileDevice) {
-          conBgClipPath = null;
+        if (!isMobileDevice) {
+          areaStyles.clipPath = "circle(25% at 50% 50%)";
+          boxShadow = null;
+          conBgClipPath = { top: null, bottom: null };
         }
 
         return { data: l, isLocArea, isPointOfInterest, hasConnectionBg, areaStyles, conBgClipPath, boxShadow };
@@ -253,7 +255,7 @@ function Location({
       {/* connection */}
       {connectionStyle && (
         <div id={`${loc.data._id}-connection`} className="connection not-flat" style={connectionStyle}>
-          <LocConnection seed={loc.data._id} loc={loc} map={map} />
+          <LocConnection seed={loc.data._id} loc={loc} map={map} isMobileDevice={isMobileDevice} />
         </div>
       )}
       {/* locations */}
