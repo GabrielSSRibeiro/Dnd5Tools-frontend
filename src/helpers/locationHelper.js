@@ -258,7 +258,7 @@ export function generateConBgCoordinatesForCSSClipPath(location, varianceInt) {
   if (!multiplier) return [];
 
   //empiric
-  const baseNumberOfPoints = 100;
+  const baseNumberOfPoints = 5;
   const numberOfPoints = Math.min(Math.round(baseNumberOfPoints * multiplier), 100);
 
   let coordinates = [{ x: 0, y: varianceInt }];
@@ -271,7 +271,7 @@ export function generateConBgCoordinatesForCSSClipPath(location, varianceInt) {
 
 export function GetLocConBgClipPath(location, locationId) {
   //empiric
-  const COORDINATES_VARIANCE_INT = 3;
+  const COORDINATES_VARIANCE_INT = 5;
   const coordinates = generateConBgCoordinatesForCSSClipPath(location, COORDINATES_VARIANCE_INT);
 
   const updatedCoordinates = [
