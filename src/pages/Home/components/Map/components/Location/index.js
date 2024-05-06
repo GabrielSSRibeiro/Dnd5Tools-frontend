@@ -149,7 +149,7 @@ function Location({
         let conBgClipPath = lh.GetLocConBgClipPath(connectionLoc, l._id);
 
         //temp fix for performance issue with clip-path
-        if (!isMobileDevice) {
+        if (isMobileDevice) {
           areaStyles.clipPath = "circle(25% at 50% 50%)";
           boxShadow = null;
           conBgClipPath = { top: null, bottom: null };
