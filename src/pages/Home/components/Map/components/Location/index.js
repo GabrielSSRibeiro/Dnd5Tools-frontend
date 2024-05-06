@@ -250,7 +250,7 @@ function Location({
       {/* connection */}
       {connectionStyle && (
         <div id={`${loc.data._id}-connection`} className="connection not-flat" style={connectionStyle}>
-          <LocConnection loc={loc} map={map} />
+          <LocConnection seed={loc.data._id} loc={loc} map={map} />
         </div>
       )}
       {/* locations */}

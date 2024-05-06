@@ -217,21 +217,21 @@ export function GetLocRadiusForCalc(location, map) {
   return radius / 2;
 }
 
-function GetUpdatedCoordinates(coordinates, baseSeed, varianceInt) {
+function GetUpdatedCoordinates(coordinates, baseSeed, varianceIntX, varianceIntY, extraVarianceX, extraVarianceY) {
   //empiric
   const seed = utils.extractNumbersFromString(baseSeed.slice(0, 10));
   const targetPercent = utils.randomIntFromInterval(40, 60, seed);
   const percentMod = utils.randomIntFromInterval(4, 6, seed);
 
   const updatedCoordinates = coordinates.map((p, i) => {
-    let updatedX = utils.randomValueFromVarianceInt(p.x, varianceInt, seed + p.x + i);
-    let updatedY = utils.randomValueFromVarianceInt(p.y, varianceInt, seed + p.y + i);
+    let updatedX = utils.randomValueFromVarianceInt(p.x, varianceIntX, seed + p.x + i);
+    let updatedY = utils.randomValueFromVarianceInt(p.y, varianceIntY, seed + p.y + i);
 
     //empiric
     const currentPercent = 100 * ((i + 1) / coordinates.length);
     if (currentPercent < targetPercent) {
-      updatedX += -1 * percentMod;
-      updatedY += percentMod;
+      if (extraVarianceX) updatedX += -1 * percentMod;
+      if (extraVarianceY) updatedY += percentMod;
     }
 
     return { x: utils.GetValueInBounds(updatedX, 0, 100), y: utils.GetValueInBounds(updatedY, 0, 100) };
@@ -248,7 +248,7 @@ function GetLocAreaClipPath(locationId, cummulativeMultiplier) {
 
   //empiric
   const COORDINATES_VARIANCE_INT = 1;
-  const updatedCoordinates = GetUpdatedCoordinates(coordinates, locationId, COORDINATES_VARIANCE_INT);
+  const updatedCoordinates = GetUpdatedCoordinates(coordinates, locationId, COORDINATES_VARIANCE_INT, COORDINATES_VARIANCE_INT, true, true);
 
   return "polygon(" + updatedCoordinates.map((p) => `${p.x}% ${p.y}%`).join(",") + ")";
 }
@@ -274,8 +274,45 @@ export function GetLocConBgClipPath(location, locationId) {
   const COORDINATES_VARIANCE_INT = 3;
   const coordinates = generateConBgCoordinatesForCSSClipPath(location, COORDINATES_VARIANCE_INT);
 
-  const updatedCoordinates = [{ x: 0, y: 50 }, ...GetUpdatedCoordinates(coordinates, locationId, COORDINATES_VARIANCE_INT), { x: 100, y: 50 }];
+  const updatedCoordinates = [
+    { x: 0, y: 50 },
+    ...GetUpdatedCoordinates(coordinates, locationId, 1, COORDINATES_VARIANCE_INT, false, true),
+    { x: 100, y: 50 },
+  ];
   return "polygon(" + updatedCoordinates.map((p) => `${p.x}% ${p.y}%`).join(",") + ")";
+}
+
+export function generateConCoordinatesForCSSClipPath() {
+  //empiric
+  const numberOfPoints = 10;
+
+  let coordinates = [];
+  for (let i = 1; i < numberOfPoints; i++) {
+    coordinates.push({ x: i * 10, y: 50 });
+  }
+
+  return coordinates;
+}
+
+export function GetLocConClipPaths(seed) {
+  //empiric
+  const COORDINATES_VARIANCE_INT = 3;
+  const coordinates = generateConCoordinatesForCSSClipPath();
+
+  const updatedCoordinates = GetUpdatedCoordinates(coordinates, seed, 0, COORDINATES_VARIANCE_INT, false, true);
+  let reversedUpdatedCoordinates = [];
+  for (let i = updatedCoordinates.length - 1; i >= 0; i--) {
+    reversedUpdatedCoordinates.push({
+      x: updatedCoordinates[i].x,
+      y: updatedCoordinates[i].y + 2,
+    });
+  }
+
+  return (
+    "polygon(" +
+    [{ x: 0, y: 50 }, ...updatedCoordinates, { x: 100, y: 50 }, ...reversedUpdatedCoordinates].map((p) => `${p.x}% ${p.y}%`).join(",") +
+    ")"
+  );
 }
 
 export function GetAreaStyles(location, index, isPointOfInterest, areaLocs, map) {
