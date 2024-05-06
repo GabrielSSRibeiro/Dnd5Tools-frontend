@@ -239,7 +239,7 @@ export const REFERENCE_DISTANCES = {
 };
 export const referenceDistances = [
   { display: "Adjacente", value: REFERENCE_DISTANCES.ADJACENT, baseDistanceMultiplier: 0 },
-  { display: "Adjacente Exterior", value: REFERENCE_DISTANCES.EXTERIOR_ADJACENT, baseDistanceMultiplier: 0 },
+  { display: "Adjacente Exterior", value: REFERENCE_DISTANCES.EXTERIOR_ADJACENT, baseDistanceMultiplier: 1 },
   { display: "Pequena", newSection: true, value: REFERENCE_DISTANCES.SMALL, baseDistanceMultiplier: 1 },
   { display: "Pequena", value: REFERENCE_DISTANCES.SMALL1, baseDistanceMultiplier: 1.1 },
   { display: "Pequena", value: REFERENCE_DISTANCES.SMALL2, baseDistanceMultiplier: 1.2 },
