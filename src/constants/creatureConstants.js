@@ -290,7 +290,7 @@ export const creatureEnvironments = [
   { display: "Planície", value: CREATURE_ENVIRONMENTS.PLAIN, weight: 0, color: "#90EE90", shadowSpread: -55 },
   { display: "Urbano", value: CREATURE_ENVIRONMENTS.URBAN, weight: 0, color: "#708090", shadowSpread: -40 },
   { display: "Deserto", value: CREATURE_ENVIRONMENTS.DESERT, weight: 0, color: "#F4A460", shadowSpread: -40 },
-  { display: "Aquático", value: CREATURE_ENVIRONMENTS.AQUATIC, weight: 0, color: "#6CD7D7", shadowSpread: 50 },
+  { display: "Aquático", value: CREATURE_ENVIRONMENTS.AQUATIC, weight: 0, color: "#6CD7D7", shadowSpread: 10 },
   { display: "Subterrâneo", value: CREATURE_ENVIRONMENTS.SUBTERRANEAN, weight: 0, color: "#808080", shadowSpread: -10 },
   { display: "Abissal", value: CREATURE_ENVIRONMENTS.ABISSAL, weight: 0, color: "#8B0000", shadowSpread: -35 },
   { display: "Todos", value: CREATURE_ENVIRONMENTS.ALL, weight: 0, color: "#000000", shadowSpread: -40 },
