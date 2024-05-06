@@ -183,7 +183,7 @@ function LocationSummary({
           </span>
 
           {/* exhaustion */}
-          {canTravelToPoint && (
+          {distance?.valueInUnits && canTravelToPoint && (
             <span className="exhaustion">
               Desgaste: +
               <span className="name" style={willExhaust ? { color: dangerColor.current } : {}}>
