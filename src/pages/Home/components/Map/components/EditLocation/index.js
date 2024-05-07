@@ -101,7 +101,7 @@ function EditLocation({
     location.isDraft = isDraft;
 
     //if ref is possible, but not selected, flag as hidden loc
-    location.isHidden = !isWorld && !isFirstOfArea && !location.reference.distance && !location.reference.direction && !location.reference.location;
+    location.isHidden = !isWorld && !isFirstOfArea && lh.ShouldHideLoc(location);
 
     //if a loc is no longer a PoI, update any certain creature routine to extreme
     if (!isPointOfInterest) {
@@ -206,6 +206,10 @@ function EditLocation({
   }
 
   function HandleUpdateOnSelect() {
+    if (!lh.ShouldHideLoc(location)) {
+      location.isHidden = false;
+    }
+
     setLocation({ ...location });
     UpdateLocation(location);
   }

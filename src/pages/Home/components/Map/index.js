@@ -207,23 +207,6 @@ function Map({
 
     return visionRadius;
   }, [combatConfig.travel.currentNode, combatConfig.travel.isOverlook, combatConfig.world, map, pxInMScale]);
-  // const maxVisionRadius = useMemo(() => {
-  //   if (!combatConfig.travel.currentNode) {
-  //     return 0;
-  //   }
-
-  //   const baseVision = lc.BASE_VISION_IN_M / pxInMScale;
-  //   let visionRadius = baseVision;
-
-  //   const modifier = lc.GetPanoramicVision(lc.PANORAMIC_VISIONS.EXTREME).modifier;
-  //   visionRadius *= modifier;
-
-  //   // if (combatConfig.travel.isOverlook) {
-  //   //   visionRadius += baseVision;
-  //   // }
-
-  //   return visionRadius;
-  // }, [combatConfig.travel.currentNode, pxInMScale]);
   const canTravelToPoint = useMemo(
     () => true,
     // locHoverData?.distance.isVisible
@@ -498,7 +481,8 @@ function Map({
         value: { distance: null, direction: null, location: null, connectionType: null },
       },
     ];
-    //is the new is in the root or is it has at least one not hidden loc, make the loc to move hidden
+
+    //if the new exterior is the world or if it has at least one non hidden loc, make the loc to move hidden
     if (!map[newExteriorLocId] || Object.keys(map[newExteriorLocId].interiorLocs).filter((il) => !il.isHidden).length > 0) {
       locToMoveUpdate.push({
         field: "isHidden",
@@ -545,7 +529,7 @@ function Map({
           },
         ];
 
-        //sice they all won't have a ref, they need to be hidden if more than one
+        //since they all won't have a ref, they need to be hidden if more than one
         if (refLocs.length > 1) {
           update.push({
             field: "isHidden",

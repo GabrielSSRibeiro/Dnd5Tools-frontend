@@ -525,3 +525,7 @@ export function GetFlatUpdateStyles(nfel, ref, locData, map) {
 
   return flatUpdateStyles;
 }
+
+export function ShouldHideLoc(location) {
+  return !location.reference.distance || !location.reference.direction || !location.reference.location;
+}
