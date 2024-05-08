@@ -313,7 +313,7 @@ export function GetLocConClipPaths(location, seed) {
   //empiric
   const COORDINATES_VARIANCE_INT = 10;
   const coordinates = generateConCoordinatesForCSSClipPath(location);
-  const modifier = 2;
+  const modifier = 3;
 
   const updatedCoordinates = GetUpdatedCoordinates(coordinates, seed, 0, COORDINATES_VARIANCE_INT, false, true);
   let reversedUpdatedCoordinates = [];
