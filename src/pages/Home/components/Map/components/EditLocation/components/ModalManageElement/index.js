@@ -101,7 +101,7 @@ function ModalManageElement({ element, elements, onClose }) {
           optionValue={(o) => o.value}
         /> */}
         <Select
-          label={"Chance de ser Perigoso"}
+          label={"Chance de ser perigoso"}
           info={[{ text: "Ravinas profundas, lagos poluidos, estruturas desmoronantes, rochas afiadas, plantas venenosas, objetos armadilhas" }]}
           extraWidth={250}
           value={tempElement}
@@ -116,7 +116,7 @@ function ModalManageElement({ element, elements, onClose }) {
         {canBeMaterial && (
           <>
             <Select
-              label={"Frequência de Ser Material Mágico"}
+              label={"Frequência de ser material especial"}
               extraWidth={250}
               value={tempElement}
               valuePropertyPath="material.probability"

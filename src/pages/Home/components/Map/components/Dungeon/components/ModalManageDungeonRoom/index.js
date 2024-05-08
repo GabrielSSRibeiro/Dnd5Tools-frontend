@@ -351,7 +351,7 @@ function ModalManageDungeonRoom({
         <div className="df df-ai-fs df-cg-15 room-row">
           <Select
             label={"Tipo"}
-            extraWidth={50}
+            extraWidth={105}
             value={tempRoom}
             valuePropertyPath="type"
             onSelect={HandleSelectType}
@@ -360,7 +360,7 @@ function ModalManageDungeonRoom({
             optionValue={(o) => o.value}
           />
           <CheckInput
-            label="Toque Perigoso"
+            label="Perigoso"
             info={[{ text: "Ravinas profundas, lagos poluidos, estruturas desmoronantes, rochas afiadas, plantas venenosas, objetos armadilhas" }]}
             onClick={() => setTempRoom({ ...tempRoom, isHazardous: !tempRoom.isHazardous })}
             isSelected={tempRoom.isHazardous}
