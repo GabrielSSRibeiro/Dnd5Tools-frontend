@@ -59,6 +59,7 @@ function NaviBar({
         <div style={{ display: "flex", flexDirection: "column" }}>
           <p>Motivaçoes</p>
           <span>Subir o piso de mestrar uma sessao. Rapido de criar, facil de editar</span>
+          <span>Criar e gerenciar um mundo</span>
           <span>Abstrair o processo de criacao de criaturas, o tornando subjetivo e simples</span>
           <span>
             A ficha de uma criatura é, e deveria ser, desconhecida pelos jogadores, logo algumas liberdades podem ser tomadas durante a criaçao
@@ -71,14 +72,13 @@ function NaviBar({
           <span>Acrescentar novas opcoes táticas ao combate como Pontos Fracos, Comportamentos, e raridade de açoes</span>
           <p>-</p>
           <p>Notas</p>
-          <span>Em versao de celular, use a posiçao paisagem</span>
           <span>No Foundry, ficha de criatura recomendada: "Monster Blocks"</span>
-          <span>No Foundry, módulo de controle de criatura recomendado: "Argon Combat HUD"</span>
           <span>No Foundry, Pontos Fracos estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>
+          <span>No Foundry, módulo de controle de criatura recomendado: "Argon Combat HUD"</span>
           <span>No Foundry, tokens sao genericos, por enquanto</span>
           <p>-</p>
           <p>Próximas Funcionalidades</p>
-          <span>Gerenciador de Combates, Gerador de Mapa de Batalha</span>
+          <span>Gerenciador de Combates</span>
         </div>
         <div className="divider"></div>
         <Button text="Sair" onClick={HandleLogout} />

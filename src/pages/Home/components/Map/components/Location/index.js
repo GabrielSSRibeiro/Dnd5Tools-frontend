@@ -145,12 +145,14 @@ function Location({
         const locType = isPointOfInterest ? lc.GetElementType(l.interaction.type) : cc.GetEnviroment(l.traversal.type);
         const hasConnectionBg = areaLocs.slice(index + 1).some((l) => l.reference.location && l.reference.distance && l.reference.direction);
         const areaStyles = lh.GetAreaStyles(l, index, isPointOfInterest, locType, areaLocs, map);
-        let boxShadow = `20px 20px 500px ${locType.shadowSpread}px rgba(0,0,0,0.25)`;
+        let boxShadow = `20px 20px 500px ${locType?.shadowSpread ?? 0}px rgba(0,0,0,0.25)`;
         let conBgClipPath = lh.GetLocConBgClipPath(connectionLoc, l._id);
 
         //temp fix for performance issue with clip-path
         if (isMobileDevice) {
-          areaStyles.clipPath = "circle(25% at 50% 50%)";
+          areaStyles.clipPath = null;
+          areaStyles.borderRadius = "100%";
+          areaStyles.scale = "2";
           boxShadow = null;
           conBgClipPath = { top: null, bottom: null };
         }

@@ -286,7 +286,7 @@ export function GetLocConBgClipPath(location, locationId) {
 
   const updatedCoordinatesBottom = [
     { x: 0, y: 55 },
-    ...GetUpdatedCoordinates(coordinates, locationId.split("").reverse().join(""), 1, COORDINATES_VARIANCE_INT * 5, false, true),
+    ...GetUpdatedCoordinates(coordinates, utils.reverseString(locationId), 1, COORDINATES_VARIANCE_INT * 5, false, true),
     { x: 100, y: 55 },
   ];
   const bottom = "polygon(" + updatedCoordinatesBottom.map((p) => `${p.x}% ${p.y}%`).join(",") + ")";

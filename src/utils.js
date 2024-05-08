@@ -252,7 +252,7 @@ export const generateRegularPolygonCoordinatesForCSSClipPath = (numSides) => {
 
 export const extractNumbersFromString = (inputString) => {
   // Use regular expression to match numbers
-  let numbersArray = inputString.match(/\d+/g);
+  let numbersArray = inputString.match(/\d+/g) ?? [];
 
   // Join the matched numbers into a single string
   let numbersString = numbersArray.join("");
@@ -345,4 +345,8 @@ export function SwapElementsInArray(array, index1, index2) {
 
 export function GetValueInBounds(value, min, max) {
   return Math.min(Math.max(value, min ?? value), max ?? value);
+}
+
+export function reverseString(string) {
+  return string.split("").reverse().join("");
 }

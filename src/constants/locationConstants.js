@@ -1,4 +1,5 @@
 import * as cc from "./creatureConstants";
+import * as utils from "../utils";
 
 export const POINT_OF_INTEREST_RADIUS = 20;
 export const BASE_VISION_IN_M = 10000;
@@ -8,8 +9,9 @@ export const BASE_PX_IN_M_SCALE = 50;
 
 export const DEFAULT_CONTEXT_NAME = "Normal";
 
-export const GetNewLocation = (exteriorLocationId) => ({
-  owner: false,
+export const GetNewLocation = (owner, exteriorLocationId) => ({
+  _id: utils.reverseString(owner),
+  owner: null,
   name: null,
   isHidden: false,
   exteriorLocationId,

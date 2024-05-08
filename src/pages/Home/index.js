@@ -80,10 +80,18 @@ function Home() {
     setCreatureToEdit(null);
   }
 
-  async function UpdateLocation(location) {
-    if (location._id) {
-      let index = locations.findIndex((l) => l._id === location._id);
-      locations.splice(index, 1, location);
+  function UpdateLocation(id, location) {
+    if (id != null) {
+      let index = locations.findIndex((l) => l._id === id);
+      if (index >= 0) {
+        if (location) {
+          locations.splice(index, 1, location);
+        } else {
+          locations.splice(index, 1);
+        }
+      } else if (location) {
+        locations.push(location);
+      }
 
       setLocations([...locations]);
     }
@@ -92,6 +100,7 @@ function Home() {
   async function HandleSaveLocation(locationToSave) {
     if (locationToSave.exteriorLocationId != null) {
       if (!locationToSave.owner) {
+        locationToSave._id = null;
         locationToSave.owner = currentUser.uid;
       }
 

@@ -9,6 +9,7 @@ import "./styles.css";
 import ModalLocationDetails from "../ModalLocationDetails";
 
 function LocationSummary({
+  userId,
   location,
   id,
   setLocationToEdit,
@@ -52,7 +53,7 @@ function LocationSummary({
   }
 
   function HandleEditNewLocation(exteriorLocationId) {
-    setLocationToEdit(lc.GetNewLocation(exteriorLocationId));
+    setLocationToEdit(lc.GetNewLocation(userId, exteriorLocationId));
   }
 
   const shouldRollEncounter = useMemo(

@@ -336,7 +336,7 @@ function Map({
             node && !isSameNode
               ? null
               : () => {
-                  setLocationToEdit(lc.GetNewLocation(nodeLoc?._id ?? userId));
+                  setLocationToEdit(lc.GetNewLocation(userId, nodeLoc?._id ?? userId));
                   setModal(null);
                 }
           }
@@ -409,7 +409,7 @@ function Map({
   }
 
   function HandleCancel() {
-    UpdateEditLoc(locationToEdit);
+    UpdateEditLoc(locationToEdit._id, locationToEdit._id !== utils.reverseString(userId) ? locationToEdit : null);
     setLocationToEdit(null);
   }
 
@@ -756,9 +756,9 @@ function Map({
     return refLocs;
   }
 
-  function UpdateEditLoc(loc) {
-    if (loc._id) {
-      MapLoadingWrapper(() => UpdateLocation(loc));
+  function UpdateEditLoc(id, loc) {
+    if (id != null) {
+      MapLoadingWrapper(() => UpdateLocation(id, loc));
     }
   }
 
@@ -827,6 +827,7 @@ function Map({
           <div className="location-details floating-details" style={{ ...locHoverData.style, top: locHoverData.top, left: locHoverData.left }}>
             {locHoverData.location && (
               <LocationSummary
+                userId={userId}
                 location={locHoverData.location}
                 id={locHoverData.location._id}
                 setLocationToEdit={setLocationToEdit}
@@ -919,21 +920,6 @@ function Map({
                     />
                     <div className="df df-fd-c travel-options">
                       <CheckInput
-                        label="Orientados"
-                        onClick={() =>
-                          setCombatConfig({
-                            ...combatConfig,
-                            travel: { ...combatConfig.travel, oriented: !combatConfig.travel.oriented },
-                          })
-                        }
-                        isSelected={combatConfig.travel.oriented}
-                        info={[
-                          { text: "Ponto de referência visível para se guiar" },
-                          { text: "" },
-                          { text: "Chance de levemente desviar da direçao. Percepitível com o tempo" },
-                        ]}
-                      />
-                      <CheckInput
                         label="Montados"
                         onClick={() =>
                           setCombatConfig({
@@ -954,6 +940,21 @@ function Map({
                         }
                         isSelected={combatConfig.travel.isOverlook}
                         info={[{ text: "Amplifica visão" }]}
+                      />
+                      <CheckInput
+                        label="Orientados"
+                        onClick={() =>
+                          setCombatConfig({
+                            ...combatConfig,
+                            travel: { ...combatConfig.travel, oriented: !combatConfig.travel.oriented },
+                          })
+                        }
+                        isSelected={combatConfig.travel.oriented}
+                        info={[
+                          { text: "Ponto de referência visível para se guiar" },
+                          { text: "" },
+                          { text: "Chance de levemente desviar da direçao. Percepitível com o tempo" },
+                        ]}
                       />
                     </div>
                   </>
@@ -1297,6 +1298,7 @@ function Map({
         {/* floating */}
         <aside className="world-details floating-details">
           <LocationSummary
+            userId={userId}
             location={combatConfig.world}
             id={userId}
             setLocationToEdit={setLocationToEdit}

@@ -27,13 +27,28 @@ function LocConnection({ seed, loc, map, isMobileDevice }) {
     return " " + lc.GetLocationConnectionAngleOrigin(angleOrigin).cssClass;
   }, [angleOrigin]);
   const color = useRef(lc.GetElementType(lc.GetLocationConnectionType(type).elementType).color);
+  const conStyles = useMemo(() => {
+    let conStyles = {
+      height,
+      backgroundColor: color.current,
+      clipPath: conClipPath,
+    };
+
+    //temp fix for performance issue with clip-path
+    if (isMobileDevice) {
+      conStyles.height = 2;
+      conStyles.clipPath = null;
+    }
+
+    return conStyles;
+  }, [conClipPath, height, isMobileDevice]);
 
   return (
     <div
       className={`LocConnection-container df df-fd-c${type === lc.LOCATION_CONNECTION_TYPES.PASSAGE ? " passage" : ""}${rotationOrigin}`}
       style={{ rotate: `${rotation * -1}deg` }}
     >
-      <section style={{ height, backgroundColor: color.current, clipPath: conClipPath }}></section>
+      <section style={conStyles}></section>
     </div>
   );
 }

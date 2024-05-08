@@ -28,10 +28,10 @@ function ModalSuggestions({ notes, onClose }) {
     "Continuar exercício até que essa localização e as próximas tenham 4-12 criaturas diferentes",
   ]);
   const mapSuggestions = useRef([
-    "Quando começando em um mar ou área aberta, tente criar primeiro, de forma simples, uma localização que engloba tudo que terá ali dentro, como por exemplo um continente ou planície",
+    "Quando começando em um mar ou área aberta, tente criar primeiro, de forma simples, uma localização que engloba tudo que terá ali dentro, como por exemplo um continente",
     "Quando criando uma localização, que tem outras dentro dela, tente criar localizações de tipos de terreno diferentes",
-    "Quando terminar de criar uma localização, prepare uma marcha com ritmo normal, nenhuma montaria e peso medio. A duracao recomendada de uma marcha direta entre marcos importantes sob essas condiçoes é de aproximadamente 8 horas",
-    "Quando colocar pontos em uma localização, sempre ter algum marco ou mudança de terreno com distância pequena. Sempre coloque rios, ravias e montanhas entre os marcos",
+    "Quando terminar de criar uma localização, prepare uma marcha com ritmo normal. A duraçao recomendada de uma marcha direta entre marcos importantes sob essas condiçoes é de aproximadamente 8 horas",
+    "Quando colocar pontos em uma localização, sempre ter algum marco ou mudança de terreno com distância pequena. Sempre coloque rios, ravinas e montanhas entre os marcos",
   ]);
   const dungeonSuggestions = useRef([
     "As salas serem boas é o segredo. Os encontros tem distância pra dar tempo de fazer estratégias e raramente vai ser de fato próximo e sem jeito",

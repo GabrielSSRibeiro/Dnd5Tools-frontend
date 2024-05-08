@@ -206,12 +206,13 @@ function EditLocation({
   }
 
   function HandleUpdateOnSelect() {
-    if (!lh.ShouldHideLoc(location)) {
-      location.isHidden = false;
-    }
+    location.isHidden =
+      (location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && !location.interaction.type) ||
+      (location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST && !location.traversal.type) ||
+      (!isFirstOfArea && lh.ShouldHideLoc(location));
 
     setLocation({ ...location });
-    UpdateLocation(location);
+    UpdateLocation(location._id, location);
   }
 
   function HandleSelectContext(context) {
