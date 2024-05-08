@@ -299,11 +299,11 @@ export function generateConCoordinatesForCSSClipPath(location) {
 
   //empiric
   const baseNumberOfPoints = 2;
-  const numberOfPoints = baseNumberOfPoints * multiplier;
+  const numberOfPoints = baseNumberOfPoints + Math.round(baseNumberOfPoints * multiplier);
 
   let coordinates = [];
   for (let i = 1; i < numberOfPoints; i++) {
-    coordinates.push({ x: i * (100 / numberOfPoints), y: 50 });
+    coordinates.push({ x: i * (100 / numberOfPoints), y: 49 });
   }
 
   return coordinates;
@@ -313,20 +313,22 @@ export function GetLocConClipPaths(location, seed) {
   //empiric
   const COORDINATES_VARIANCE_INT = 10;
   const coordinates = generateConCoordinatesForCSSClipPath(location);
-  const mod = 2; //utils.randomIntFromInterval(2, 2, GetLocSeed(seed));
+  const modifier = 2;
 
   const updatedCoordinates = GetUpdatedCoordinates(coordinates, seed, 0, COORDINATES_VARIANCE_INT, false, true);
   let reversedUpdatedCoordinates = [];
   for (let i = updatedCoordinates.length - 1; i >= 0; i--) {
     reversedUpdatedCoordinates.push({
       x: updatedCoordinates[i].x,
-      y: updatedCoordinates[i].y + mod,
+      y: updatedCoordinates[i].y + modifier,
     });
   }
 
   return (
     "polygon(" +
-    [{ x: 0, y: 50 }, ...updatedCoordinates, { x: 100, y: 50 }, ...reversedUpdatedCoordinates].map((p) => `${p.x}% ${p.y}%`).join(",") +
+    [{ x: 0, y: 49 }, ...updatedCoordinates, { x: 100, y: 49 }, { x: 100, y: 51 }, ...reversedUpdatedCoordinates, { x: 0, y: 51 }]
+      .map((p) => `${p.x}% ${p.y}%`)
+      .join(",") +
     ")"
   );
 }
