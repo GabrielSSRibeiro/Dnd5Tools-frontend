@@ -11,6 +11,7 @@ import ModalLocationDetails from "../ModalLocationDetails";
 function LocationSummary({
   userId,
   location,
+  connection,
   id,
   setLocationToEdit,
   setLocHoverData,
@@ -71,11 +72,23 @@ function LocationSummary({
   );
   const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
   const worldContext = useMemo(() => lh.GetCurrentContext(world), [world]);
+  const type = useMemo(() => {
+    if (connection?.type) {
+      return lc.GetLocationConnectionType(connection.type).display;
+    }
+
+    return location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST
+      ? lc.GetElementType(location.interaction.type).display
+      : cc.GetEnviroment(location.traversal.type).display;
+  }, [connection?.type, location.interaction?.type, location.size, location.traversal?.type]);
+  const firstImpressions = useMemo(
+    () => connection?.description ?? currentContext?.firstImpressions,
+    [connection?.description, currentContext?.firstImpressions]
+  );
   const shouldlAddWorldCreatures = useMemo(
     () => world.name !== location.name && worldContext.name !== lc.DEFAULT_CONTEXT_NAME,
     [location.name, world.name, worldContext.name]
   );
-
   const creaturesForDisplay = useMemo(() => {
     if (creatures.length === 0) {
       return [];
@@ -175,13 +188,14 @@ function LocationSummary({
 
           {/* type and dist */}
           <span className="env-type">
-            {location.size === lc.LOCATION_SIZES.POINT_OF_INTEREST
-              ? lc.GetElementType(location.interaction.type).display
-              : cc.GetEnviroment(location.traversal.type).display}
+            {type}
 
             {distance?.valueInUnits ? `, a ${distance.valueInUnits}` : ""}
             {distance?.timeInUnits ? ` / ${distance.timeInUnits}` : ""}
           </span>
+
+          {/* depth */}
+          {connection?.depth && <span className="exhaustion">{lc.GetConDepth(connection.depth).metersDisplay} (profundo)</span>}
 
           {/* exhaustion */}
           {distance?.valueInUnits && canTravelToPoint && (
@@ -194,10 +208,10 @@ function LocationSummary({
           )}
 
           {/* first impressions */}
-          {lh.GetCurrentContext(location)?.firstImpressions && (
+          {firstImpressions && (
             <>
               <div className="divider"></div>
-              <span className="first-impressions">{location.contexts.find((c) => c.isCurrent).firstImpressions}</span>
+              <span className="first-impressions">{firstImpressions}</span>
             </>
           )}
 

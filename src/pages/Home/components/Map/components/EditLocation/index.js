@@ -11,6 +11,7 @@ import CheckInput from "../../../../../../components/CheckInput";
 import ModalDeleteLocation from "./components/ModalDeleteLocation";
 import ModalMoveLocation from "./components/ModalMoveLocation";
 import ModalManageElement from "./components/ModalManageElement";
+import ModalManageConnection from "./components/ModalManageConnection";
 import ModalManageContext from "./components/ModalManageContext";
 import Dungeon from "../Dungeon";
 import CreatureManager from "../CreatureManager";
@@ -58,6 +59,10 @@ function EditLocation({
   const referenceDistances = useMemo(() => {
     let referenceDistances = utils.clone(lc.referenceDistances);
 
+    if (!map[location.exteriorLocationId]) {
+      referenceDistances = referenceDistances.filter((r) => r.value !== lc.REFERENCE_DISTANCES.EXTERIOR_ADJACENT);
+    }
+
     //add real value to display
     referenceDistances
       .filter((r) => r.baseDistanceMultiplier > 0)
@@ -66,7 +71,7 @@ function EditLocation({
       });
 
     return referenceDistances;
-  }, []);
+  }, [location.exteriorLocationId, map]);
   const referenceLocations = useMemo(() => {
     let refLocations = [];
 
@@ -248,6 +253,35 @@ function EditLocation({
   function DeleteElement(element) {
     location.traversal.elements = location.traversal.elements.filter((e) => e.type !== element.type);
     setLocation({ ...location });
+  }
+
+  function OpenModalManageConnection(connection, index) {
+    setModal(
+      <ModalManageConnection
+        connection={connection}
+        onClose={(tempConnection) => HandleCloseModalManageConnection(index, connection, tempConnection)}
+      />
+    );
+  }
+  function HandleCloseModalManageConnection(index, connection, tempConnection) {
+    if (tempConnection) {
+      if (connection) {
+        location.connections.splice(index, 1, tempConnection);
+      } else {
+        location.connections.push(tempConnection);
+      }
+
+      setLocation({ ...location });
+    }
+
+    HandleUpdateOnSelect();
+    setModal(null);
+  }
+  function DeleteConnection(index) {
+    location.connections.splice(index, 1);
+
+    setLocation({ ...location });
+    HandleUpdateOnSelect();
   }
 
   function OpenModalManageContext(context) {
@@ -532,6 +566,36 @@ function EditLocation({
           />
         )}
 
+        <div className="divider"></div>
+
+        {/* contexts */}
+        <div className="location-detail-group">
+          <div className="location-row location-detail-group-title">
+            <span>Contextos</span>
+            <button onClick={() => OpenModalManageContext()}>
+              <i className="fas fa-plus"></i>
+            </button>
+          </div>
+          {location.contexts.map((c, index) => (
+            <div className="location-row location-detail-group-item" key={c.name}>
+              <div className="df df-cg-10">
+                <CheckInput isSelected={c.isCurrent} onClick={() => HandleSelectContext(c)} />
+                <span className={!c.firstImpressions ? `lacking-data` : ""}>
+                  {index + 1}. {c.name}
+                </span>
+              </div>
+              <div className="group-item-actions">
+                <button onClick={() => OpenModalManageContext(c)}>
+                  <i className="fas fa-pencil-alt"></i>
+                </button>
+                <button onClick={() => DeleteContext(c)} disabled={index === 0}>
+                  <i className="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
         {/* reference */}
         {!isWorld && !isFirstOfArea && (
           <>
@@ -616,31 +680,52 @@ function EditLocation({
                 isDisabled={!location.reference.connectionType}
               />
             </div>
+
+            <TextInput
+              label="Descriçao"
+              value={location}
+              valuePropertyPath="reference.connectionDescription"
+              onChange={setLocation}
+              disabled={!location.reference.connectionType}
+            />
+            <Select
+              label={"Profundidade"}
+              extraWidth={250}
+              value={location}
+              valuePropertyPath="reference.connectionDepth"
+              nothingSelected="-"
+              onSelect={setLocation}
+              options={lc.conDepths}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+              isDisabled={!location.reference.connectionType}
+            />
           </>
         )}
+
         <div className="divider"></div>
 
-        {/* contexts */}
+        {/* connections */}
         <div className="location-detail-group">
           <div className="location-row location-detail-group-title">
-            <span>Contextos</span>
-            <button onClick={() => OpenModalManageContext()}>
+            <span className={location.connections.length === 0 ? `lacking-data` : ""}>Conexões</span>
+            <button onClick={() => OpenModalManageConnection()}>
               <i className="fas fa-plus"></i>
             </button>
           </div>
-          {location.contexts.map((c, index) => (
-            <div className="location-row location-detail-group-item" key={c.name}>
-              <div className="df df-cg-10">
-                <CheckInput isSelected={c.isCurrent} onClick={() => HandleSelectContext(c)} />
-                <span className={!c.firstImpressions ? `lacking-data` : ""}>
-                  {index + 1}. {c.name}
-                </span>
-              </div>
+          {location.connections.map((c, index) => (
+            <div className="location-row location-detail-group-item" key={index}>
+              <span>
+                {c.description ? `${c.description} - ` : ""}
+                {lc.GetLocationConnectionType(c.connectionType).display} (
+                {utils.MInUnits((lc.BASE_VISION_IN_M * lc.GetReferenceDistance(c.distance).baseDistanceMultiplier) / 4, 1)},{" "}
+                {lc.GetDirection(c.direction).baseAngle}°)
+              </span>
               <div className="group-item-actions">
-                <button onClick={() => OpenModalManageContext(c)}>
+                <button onClick={() => OpenModalManageConnection(c, index)}>
                   <i className="fas fa-pencil-alt"></i>
                 </button>
-                <button onClick={() => DeleteContext(c)} disabled={index === 0}>
+                <button onClick={() => DeleteConnection(index)}>
                   <i className="fas fa-trash"></i>
                 </button>
               </div>

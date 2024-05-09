@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
+import * as utils from "../../../../../../utils";
 import * as lc from "../../../../../../constants/locationConstants";
 import * as cc from "../../../../../../constants/creatureConstants";
 import * as lh from "../../../../../../helpers/locationHelper";
@@ -78,18 +79,6 @@ function Location({
     return lh.GetLocRadiusForCalc(map[connectionLoc.reference.location], map);
   }, [connectionLoc, map]);
   const distanceAngle = useMemo(() => areaLocs.toReversed().find((l) => l.distanceAngle != null)?.distanceAngle, [areaLocs]);
-  const connectionStyle = useMemo(() => {
-    if (!loc.data.reference.connectionType) {
-      return null;
-    }
-
-    let connectionStyle = {
-      rotate: `${loc.data.distanceAngle * -1}deg`,
-      zIndex: areaLocs.length,
-    };
-
-    return connectionStyle;
-  }, [areaLocs.length, loc.data.distanceAngle, loc.data.reference.connectionType]);
   const areaWrapperStyle = useMemo(() => {
     let radius = 0;
     areaLocs.forEach((l) => {
@@ -136,7 +125,28 @@ function Location({
 
     return wrapperStyle;
   }, [isMapRendered, loc.data._id, locationsRefs, map]);
+  const connectionStyle = useMemo(() => {
+    if (!loc.data.reference.connectionType) {
+      return null;
+    }
 
+    if (loc.data.reference.connectionAngle && !loc.data.reference.connectionAngleOrigin) {
+      return null;
+    }
+
+    let connectionStyle = {
+      rotate: `${loc.data.distanceAngle * -1}deg`,
+      zIndex: areaLocs.length,
+    };
+
+    return connectionStyle;
+  }, [
+    areaLocs.length,
+    loc.data.distanceAngle,
+    loc.data.reference.connectionAngle,
+    loc.data.reference.connectionAngleOrigin,
+    loc.data.reference.connectionType,
+  ]);
   const areaLocsToRender = useMemo(
     () =>
       areaLocs.map((l, index) => {
@@ -162,6 +172,38 @@ function Location({
     [areaLocs, connectionLoc, isMobileDevice, map]
   );
 
+  function GetConnection(conDesc, conType, conDepth) {
+    return {
+      description: conDesc,
+      type: conType,
+      depth: conDepth,
+    };
+  }
+
+  function GetConnectionStyles(connection) {
+    let connectionStyles = {};
+
+    const calcDist = lh.GetNormalizedValue(lc.GetReferenceDistance(connection.distance).baseDistanceMultiplier, pxInMScale) / 2;
+    const { x, y } = utils.GetCoordinatesByDistance({ x: 0, y: 0 }, calcDist, lh.GetDistanceAngle(connection.direction));
+    connectionStyles.width = calcDist;
+
+    //horizontal
+    if (x > 0) {
+      connectionStyles.marginLeft = x;
+    } else {
+      connectionStyles.marginRight = x * -1;
+    }
+
+    //vertical
+    if (y > 0) {
+      connectionStyles.marginBottom = y;
+    } else {
+      connectionStyles.marginTop = y * -1;
+    }
+
+    return connectionStyles;
+  }
+
   //main setup
   useEffect(() => {
     //set offset and position self
@@ -186,7 +228,7 @@ function Location({
       }
 
       //update backgrounds styles
-      Array.from(document.getElementsByClassName(`con-bg-${loc.data._id}`))
+      Array.from(document.getElementsByClassName(`${loc.data._id}-con-bg`))
         .filter((cbg) => cbg.classList.contains("not-flat"))
         .forEach((cbg, i, self) => {
           lh.GetConnectionBgOffsetStyles(cbg, i, self, connectionLoc, refAreaDiameter, map).forEach((s) => {
@@ -256,10 +298,56 @@ function Location({
     >
       {/* connection */}
       {connectionStyle && (
-        <div id={`${loc.data._id}-connection`} className="connection not-flat" style={connectionStyle}>
-          <LocConnection seed={loc.data._id} loc={loc} map={map} isMobileDevice={isMobileDevice} />
+        <div
+          id={`${loc.data._id}-connection`}
+          className="connection not-flat"
+          style={connectionStyle}
+          onMouseMove={(e) =>
+            HandleHover(
+              e,
+              loc.data,
+              null,
+              GetConnection(loc.data.reference.connectionDescription, loc.data.reference.connectionType, loc.data.reference.connectionDepth)
+            )
+          }
+          onMouseLeave={(e) => HandleHover(e)}
+        >
+          <LocConnection
+            seed={loc.data._id}
+            distance={loc.data.reference.distance}
+            type={loc.data.reference.connectionType}
+            angle={loc.data.reference.connectionAngle}
+            angleOrigin={loc.data.reference.connectionAngleOrigin}
+            loc={loc}
+            map={map}
+            isMobileDevice={isMobileDevice}
+          />
         </div>
       )}
+
+      {/* connections */}
+      {loc.data.connections.map((c, i) => (
+        <div
+          id={`${loc.data._id}-connection-${i}`}
+          key={i}
+          className="connection not-flat"
+          style={{ rotate: `${lc.GetDirection(c.direction).baseAngle * -1}deg`, zIndex: areaLocs.length, ...GetConnectionStyles(c) }}
+          onMouseMove={(e) => HandleHover(e, loc.data, null, GetConnection(c.description, c.connectionType, c.depth))}
+          onMouseLeave={(e) => HandleHover(e)}
+        >
+          <LocConnection
+            seed={c.seed}
+            distance={c.distance}
+            type={c.connectionType}
+            angle={c.connectionAngle}
+            angleOrigin={lh.GetConAngleOrigin(c.connectionAngleOrigin)}
+            loc={loc}
+            map={map}
+            isMobileDevice={isMobileDevice}
+          />
+        </div>
+      ))}
+
       {/* locations */}
       {interiorLocs.length > 0 ? (
         interiorLocs.map((locationId) => (
@@ -288,7 +376,7 @@ function Location({
               {l.hasConnectionBg && (
                 <div
                   name={l.data._id}
-                  className={`connection-background con-bg-${loc.data._id} not-flat`}
+                  className={`connection-background ${loc.data._id}-con-bg not-flat`}
                   style={{
                     height: l.areaStyles.height,
                     filter: l.areaStyles.filter,

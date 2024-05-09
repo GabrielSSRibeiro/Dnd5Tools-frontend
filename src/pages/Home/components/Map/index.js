@@ -638,7 +638,7 @@ function Map({
     return schedule;
   }
 
-  function HandleLocHover(e, location, node) {
+  function HandleLocHover(e, location, node, connection) {
     let distance = { centerOffset: GetCenterOffset(e) };
     distance.isVisible = distance.centerOffset.value <= visionRadius / 8;
 
@@ -657,7 +657,7 @@ function Map({
       }
     }
 
-    setLocHoverData({ top: e.clientY, left: e.clientX, location, node, distance });
+    setLocHoverData({ top: e.clientY, left: e.clientX, location, node, distance, connection });
   }
 
   function GetFinalProb(location, travelTimeInMin) {
@@ -829,6 +829,7 @@ function Map({
               <LocationSummary
                 userId={userId}
                 location={locHoverData.location}
+                connection={locHoverData.connection}
                 id={locHoverData.location._id}
                 setLocationToEdit={setLocationToEdit}
                 setLocHoverData={setLocHoverData}

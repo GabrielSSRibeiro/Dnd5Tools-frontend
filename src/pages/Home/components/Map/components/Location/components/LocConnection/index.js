@@ -4,18 +4,7 @@ import * as lh from "../../../../../../../../helpers/locationHelper";
 
 import "./styles.css";
 
-function LocConnection({ seed, loc, map, isMobileDevice }) {
-  const type = useMemo(() => loc.data.reference.connectionType, [loc]);
-  const angle = useMemo(() => loc.data.reference.connectionAngle, [loc]);
-  const angleOrigin = useMemo(() => loc.data.reference.connectionAngleOrigin, [loc]);
-  const height = useMemo(() => {
-    if (!loc.data.exteriorLocationId || !map[loc.data.exteriorLocationId]) {
-      return null;
-    }
-
-    return map[loc.data.exteriorLocationId].data.radius / 2;
-  }, [loc.data.exteriorLocationId, map]);
-  const conClipPath = useMemo(() => lh.GetLocConClipPaths(loc.data, seed), [loc.data, seed]);
+function LocConnection({ seed, distance, type, angle, angleOrigin, loc, map, isMobileDevice }) {
   const rotation = useMemo(() => {
     if (!angle) return 0;
 
@@ -26,7 +15,16 @@ function LocConnection({ seed, loc, map, isMobileDevice }) {
 
     return " " + lc.GetLocationConnectionAngleOrigin(angleOrigin).cssClass;
   }, [angleOrigin]);
+
+  const height = useMemo(() => {
+    if (!loc.data.exteriorLocationId || !map[loc.data.exteriorLocationId]) {
+      return null;
+    }
+
+    return map[loc.data.exteriorLocationId].data.radius / 2;
+  }, [loc.data.exteriorLocationId, map]);
   const color = useRef(lc.GetElementType(lc.GetLocationConnectionType(type).elementType).color);
+  const conClipPath = useMemo(() => lh.GetLocConClipPaths(distance, seed), [distance, seed]);
   const conStyles = useMemo(() => {
     let conStyles = {
       height,

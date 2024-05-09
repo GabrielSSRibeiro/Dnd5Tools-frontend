@@ -36,7 +36,10 @@ export const GetNewLocation = (owner, exteriorLocationId) => ({
     connectionType: null,
     connectionAngle: null,
     connectionAngleOrigin: null,
+    connectionDescription: null,
+    connectionDepth: null,
   },
+  connections: [],
   contexts: [
     {
       isCurrent: true,
@@ -293,6 +296,22 @@ export const locationConnectionTypes = [
   { display: "Abismo", value: LOCATION_CONNECTION_TYPES.CHASM, elementType: ELEMENT_TYPES.PIT },
 ];
 export const GetLocationConnectionType = (value) => locationConnectionTypes.find((a) => a.value === value);
+
+export const CON_DEPTHS = {
+  LOW: 10,
+  MEDIUM: 20,
+  HIGH: 30,
+  EXTREME: 40,
+  EXTREME2: 50,
+};
+export const conDepths = [
+  { display: "Baixa (9m)", value: CON_DEPTHS.LOW, metersDisplay: "9m", meters: 9 },
+  { display: "Média (18m)", value: CON_DEPTHS.MEDIUM, metersDisplay: "18m", meters: 18 },
+  { display: "Alta (36m)", value: CON_DEPTHS.HIGH, metersDisplay: "36m", meters: 36 },
+  { display: "Extrema (60m)", value: CON_DEPTHS.EXTREME, metersDisplay: "60m", meters: 60 },
+  { display: "Extrema (120m)", value: CON_DEPTHS.EXTREME2, metersDisplay: "120m", meters: 120 },
+];
+export const GetConDepth = (value) => conDepths.find((a) => a.value === value);
 
 export const LOCATION_CONNECTION_ANGLE_ORIGINS = {
   START: 10,

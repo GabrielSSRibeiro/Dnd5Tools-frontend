@@ -294,8 +294,8 @@ export function GetLocConBgClipPath(location, locationId) {
   return { top, bottom };
 }
 
-export function generateConCoordinatesForCSSClipPath(location) {
-  const multiplier = lc.GetReferenceDistance(location?.reference.distance)?.baseDistanceMultiplier ?? 0;
+export function generateConCoordinatesForCSSClipPath(distance) {
+  const multiplier = lc.GetReferenceDistance(distance)?.baseDistanceMultiplier ?? 0;
 
   //empiric
   const baseNumberOfPoints = 2;
@@ -309,10 +309,10 @@ export function generateConCoordinatesForCSSClipPath(location) {
   return coordinates;
 }
 
-export function GetLocConClipPaths(location, seed) {
+export function GetLocConClipPaths(distance, seed) {
   //empiric
   const COORDINATES_VARIANCE_INT = 10;
-  const coordinates = generateConCoordinatesForCSSClipPath(location);
+  const coordinates = generateConCoordinatesForCSSClipPath(distance);
   const modifier = 3;
 
   const updatedCoordinates = GetUpdatedCoordinates(coordinates, seed, 0, COORDINATES_VARIANCE_INT, false, true);
@@ -530,4 +530,10 @@ export function GetFlatUpdateStyles(nfel, ref, locData, map) {
 
 export function ShouldHideLoc(location) {
   return !location.reference.distance || !location.reference.direction || !location.reference.location;
+}
+
+export function GetConAngleOrigin(conAngleOrigin) {
+  if (conAngleOrigin === lc.LOCATION_CONNECTION_ANGLE_ORIGINS.START) return lc.LOCATION_CONNECTION_ANGLE_ORIGINS.END;
+  if (conAngleOrigin === lc.LOCATION_CONNECTION_ANGLE_ORIGINS.END) return lc.LOCATION_CONNECTION_ANGLE_ORIGINS.START;
+  return conAngleOrigin;
 }
