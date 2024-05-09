@@ -193,6 +193,7 @@ function EditLocation({
 
   function HandleSelectRefCon(updatedValue) {
     if (!updatedValue.reference.connectionType) {
+      location.reference.connectionSeed = utils.seededRandom() + "";
       location.reference.connectionAngle = null;
       location.reference.connectionAngleOrigin = null;
     }

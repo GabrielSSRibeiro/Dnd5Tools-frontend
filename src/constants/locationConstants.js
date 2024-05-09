@@ -30,6 +30,7 @@ export const GetNewLocation = (owner, exteriorLocationId) => ({
     rooms: [],
   },
   reference: {
+    connectionSeed: null,
     distance: null,
     direction: null,
     location: null,

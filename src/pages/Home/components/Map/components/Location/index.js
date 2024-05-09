@@ -313,7 +313,7 @@ function Location({
           onMouseLeave={(e) => HandleHover(e)}
         >
           <LocConnection
-            seed={loc.data._id}
+            seed={loc.data.reference.connectionSeed ?? loc.data._id}
             distance={loc.data.reference.distance}
             type={loc.data.reference.connectionType}
             angle={loc.data.reference.connectionAngle}
