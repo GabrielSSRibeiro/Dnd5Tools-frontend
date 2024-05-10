@@ -2,14 +2,11 @@ import React, { useState } from "react";
 import { useAuth } from "../../contexts/Auth";
 import { useHistory } from "react-router-dom";
 
-// import { MAX_COMBATS } from "../../constants/combatConstants";
-
 import SelectButton from "../SelectButton";
-import Modal from "../../components/Modal";
-import Button from "../../components/Button";
 import ModalTextArea from "../../components/ModalTextArea";
 import Party from "./components/Party";
 import Bestiary from "./components/Bestiary";
+import ModalSettings from "./components/ModalSettings";
 
 import "./styles.css";
 
@@ -53,36 +50,14 @@ function NaviBar({
     history.push("/login");
   }
 
-  async function OpenModalMenu() {
+  async function OpenModalSettings() {
     setModal(
-      <Modal title="Versao 2.0" onClickToClose={() => setModal(null)} className="menu-modal-body">
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <p>Motivaçoes</p>
-          <span>Subir o piso de mestrar uma sessao. Rapido de criar, facil de editar</span>
-          <span>Criar e gerenciar um mundo</span>
-          <span>Abstrair o processo de criacao de criaturas, o tornando subjetivo e simples</span>
-          <span>
-            A ficha de uma criatura é, e deveria ser, desconhecida pelos jogadores, logo algumas liberdades podem ser tomadas durante a criaçao
-          </span>
-          <span>
-            Descriçoes excessivas, recargas, multiataque, magias, ações bonus, ações lendárias, e outros foram simplificados para facilitar o controle
-            de criaturas
-          </span>
-          <span>Ter um sistema de forja de items</span>
-          <span>Acrescentar novas opcoes táticas ao combate como Pontos Fracos, Comportamentos, e raridade de açoes</span>
-          <p>-</p>
-          <p>Notas</p>
-          <span>No Foundry, ficha de criatura recomendada: "Monster Blocks"</span>
-          <span>No Foundry, Pontos Fracos estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>
-          <span>No Foundry, módulo de controle de criatura recomendado: "Argon Combat HUD"</span>
-          <span>No Foundry, tokens sao genericos, por enquanto</span>
-          <p>-</p>
-          <p>Próximas Funcionalidades</p>
-          <span>Gerenciador de Combates</span>
-        </div>
-        <div className="divider"></div>
-        <Button text="Sair" onClick={HandleLogout} />
-      </Modal>
+      <ModalSettings
+        combatConfig={combatConfig}
+        onClickToClose={() => setModal(null)}
+        HandleSaveCombatConfig={HandleSaveCombatConfig}
+        HandleLogout={HandleLogout}
+      />
     );
   }
 
@@ -113,12 +88,12 @@ function NaviBar({
           <h3>SCENDANCE</h3>
           <h4>Ferramentas D&amp;D 5</h4>
         </div>
-        <div>
-          <button title="Notas" className="button-simple df df-cg-10" onClick={OpenModalDetails}>
+        <div className="df df-cg-15">
+          <button title="Notas" className="df button-simple" onClick={OpenModalDetails}>
             <i className="fas fa-book"></i>
           </button>
-          <button className="button-simple menu" onClick={OpenModalMenu}>
-            Menu
+          <button className="button-simple menu" onClick={OpenModalSettings}>
+            Configurações
           </button>
         </div>
       </section>

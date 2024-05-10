@@ -47,6 +47,10 @@
   padding: 0 10px;
 }
 
+.EditLocation-container .location-row .new-ref-con {
+  margin-top: 5px;
+}
+
 .EditLocation-container .location-row .interaction {
   margin-top: 23px;
 }

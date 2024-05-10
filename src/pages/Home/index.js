@@ -292,6 +292,7 @@ function Home() {
       } else {
         setCombatConfig({
           owner: currentUser.uid,
+          systemType: null,
           notes: null,
           sandbox: null,
           level: 1,

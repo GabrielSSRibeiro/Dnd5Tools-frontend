@@ -641,10 +641,21 @@ function EditLocation({
                 optionsAtATime={10}
               />
             </div>
-            <div className="location-row df df-jc-sb">
+            <div className="location-row df df-jc-sb df-ai-c">
+              <button
+                title="Novo caminho"
+                className="new-ref-con"
+                onClick={() => {
+                  location.reference.connectionSeed = utils.seededRandom() + "";
+                  HandleUpdateOnSelect();
+                }}
+                disabled={!location.reference.connectionType}
+              >
+                <i className="fas fa-random"></i>
+              </button>
               <Select
                 label={"Conectado por"}
-                extraWidth={20}
+                extraWidth={10}
                 value={location}
                 valuePropertyPath="reference.connectionType"
                 onSelect={HandleSelectRefCon}
@@ -669,7 +680,7 @@ function EditLocation({
               />
               <Select
                 label={"Origem em"}
-                extraWidth={20}
+                extraWidth={0}
                 value={location}
                 valuePropertyPath="reference.connectionAngleOrigin"
                 onSelect={HandleUpdateOnSelect}
@@ -719,10 +730,19 @@ function EditLocation({
               <span>
                 {c.description ? `${c.description} - ` : ""}
                 {lc.GetLocationConnectionType(c.connectionType).display} (
-                {utils.MInUnits((lc.BASE_VISION_IN_M * lc.GetReferenceDistance(c.distance).baseDistanceMultiplier) / 4, 1)},{" "}
+                {utils.MInUnits((lc.BASE_VISION_IN_M * lc.GetReferenceDistance(c.distance).baseDistanceMultiplier) / 4, 1)},
                 {lc.GetDirection(c.direction).baseAngle}°)
               </span>
               <div className="group-item-actions">
+                <button
+                  title="Novo caminho"
+                  onClick={() => {
+                    c.seed = utils.seededRandom() + "";
+                    HandleUpdateOnSelect();
+                  }}
+                >
+                  <i className="fas fa-random"></i>
+                </button>
                 <button onClick={() => OpenModalManageConnection(c, index)}>
                   <i className="fas fa-pencil-alt"></i>
                 </button>

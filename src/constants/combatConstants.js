@@ -77,3 +77,14 @@ export const combatAchievements = [
   },
 ];
 export const GetCombatAchievement = (value) => combatAchievements.find((a) => a.value === value);
+
+export const SYSTEM_TYPES = {
+  DND_5E: 10,
+};
+export const systemTypes = [
+  {
+    display: "D&D 5e",
+    value: SYSTEM_TYPES.DND_5E,
+  },
+];
+export const GetSystemType = (value) => systemTypes.find((a) => a.value === value);
