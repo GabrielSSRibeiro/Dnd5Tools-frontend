@@ -24,7 +24,7 @@ function Login({ history }) {
         <h1>A</h1>
         <h1>SCENDANCE</h1>
       </div>
-      <h4>Ferramentas D&amp;D 5</h4>
+      <h4>Ferramentas GM</h4>
       <form onSubmit={HandleLogin}>
         <TextInput label="E-mail" value={email} onChange={setEmail} />
         <TextInput label="Password" value={password} type="password" onChange={setPassword} />

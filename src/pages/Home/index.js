@@ -454,6 +454,7 @@ function Home() {
         {creatureToEdit && (
           <div className={"section-wrapper edit-creature"}>
             <EditCreature
+              systemType={combatConfig.systemType}
               creatureToEdit={creatureToEdit}
               HandleSave={HandleSaveCreature}
               HandleDelete={HandleDeleteCreature}

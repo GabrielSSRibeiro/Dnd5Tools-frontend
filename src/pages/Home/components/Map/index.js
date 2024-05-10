@@ -309,6 +309,7 @@ function Map({
 
       setModal(
         <ModalTravelResults
+          systemType={combatConfig.systemType}
           isSafe={isSafe}
           isRestSafe={isRestSafe}
           mapMode={mapMode}

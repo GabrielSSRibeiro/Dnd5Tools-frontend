@@ -264,7 +264,7 @@ function Bestiary({
                   onSelect={(value) => handleFilter(setSelectedRarity, value)}
                   nothingSelected="Raridade"
                   options={creatureRarities}
-                  optionDisplay={(o) => o.display}
+                  optionDisplay={(o) => o.treasureDisplay}
                   optionValue={(o) => o.value}
                   optionsAtATime={8}
                 />

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { SYSTEM_TYPES } from "../../../../../constants/combatConstants";
+
 import * as utils from "../../../../../utils";
 import Select from "../../../../../components/Select";
 import CheckInput from "../../../../../components/CheckInput";
@@ -24,7 +26,7 @@ import {
 
 import "./styles.css";
 
-function ModalFastBuild({ creature, onClose }) {
+function ModalFastBuild({ systemType, creature, onClose }) {
   const [tempCreature, setTempCreature] = useState(utils.clone(creature));
   const [hasMeleeAction, setHasMeleeAction] = useState(true);
   const [hasRangedAction, setHasRangedAction] = useState(true);
@@ -238,7 +240,7 @@ function ModalFastBuild({ creature, onClose }) {
           valuePropertyPath="rarity"
           onSelect={setTempCreature}
           options={creatureRarities}
-          optionDisplay={(o) => o.display}
+          optionDisplay={(o) => (systemType === SYSTEM_TYPES.DND_5E ? o.display : o.treasureDisplay)}
           optionValue={(o) => o.value}
         />
         <Select

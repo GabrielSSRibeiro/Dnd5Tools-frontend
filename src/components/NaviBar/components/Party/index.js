@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import { LEVELS } from "../../../../constants/combatConstants";
-import { MAX_CHARACTERS_ALLOWED } from "../../../../constants/combatConstants";
+import { SYSTEM_TYPES, MAX_CHARACTERS_ALLOWED } from "../../../../constants/combatConstants";
 
 import ModalCalcXp from "../../../ModalCalcXp";
 import Button from "../../../Button";
@@ -12,6 +12,7 @@ import TextInput from "../../../TextInput";
 import "./styles.css";
 
 function Party({
+  systemType,
   selectedCharacters,
   setSelectedCharacters,
   isSelecting,
@@ -244,7 +245,7 @@ function Party({
               </h5>
             )}
             <div>
-              {!isSelecting && (
+              {!isSelecting && systemType === SYSTEM_TYPES.DND_5E && (
                 <>
                   <button className="button-simple calc-xp" onClick={OpenModalCalcXp}>
                     Calcular XP

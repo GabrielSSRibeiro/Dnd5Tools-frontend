@@ -273,9 +273,9 @@ function EditLocation({
       }
 
       setLocation({ ...location });
+      HandleUpdateOnSelect();
     }
 
-    HandleUpdateOnSelect();
     setModal(null);
   }
   function DeleteConnection(index) {

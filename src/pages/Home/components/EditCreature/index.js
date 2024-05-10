@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import * as utils from "../../../../utils";
 import { DEFAULT_AVATAR_POSITION, DEFAULT_AVATAR_SCALE, CREATURE_ACTION_FREQUENCIES } from "../../../../constants/creatureConstants";
+import { SYSTEM_TYPES } from "../../../../constants/combatConstants";
 import { IsBasicPack } from "../.../../../../../helpers/creatureHelper";
 
 import ModalTextArea from "../../../../components/ModalTextArea";
@@ -17,7 +18,7 @@ import TextInput from "../../../../components/TextInput";
 
 import "./styles.css";
 
-function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing }) {
+function EditCreature({ systemType, creatureToEdit, HandleSave, HandleDelete, FinishEditing }) {
   const [creature, setCreature] = useState(creatureToEdit);
   const [dragging, setDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -46,7 +47,7 @@ function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing 
 
       return AreAllPreviousStepsValid() && areBasicsDefinitionsValid && areMovimentsValid;
     }
-    progessBarSteps.push({ name: "Atributos", isValid: IsAtributesStepValid() });
+    if (systemType === SYSTEM_TYPES.DND_5E) progessBarSteps.push({ name: "Atributos", isValid: IsAtributesStepValid() });
 
     function IsResistenciesStepValid() {
       let areAttributesValid = [
@@ -63,24 +64,24 @@ function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing 
 
       return AreAllPreviousStepsValid() && areAttributesValid && areWeakSpotsValid;
     }
-    progessBarSteps.push({ name: "Resistências", isValid: IsResistenciesStepValid() });
+    if (systemType === SYSTEM_TYPES.DND_5E) progessBarSteps.push({ name: "Resistências", isValid: IsResistenciesStepValid() });
 
     function IsPassivesStepValid() {
       return AreAllPreviousStepsValid();
     }
-    progessBarSteps.push({ name: "Passivas", isValid: IsPassivesStepValid() });
+    if (systemType === SYSTEM_TYPES.DND_5E) progessBarSteps.push({ name: "Passivas", isValid: IsPassivesStepValid() });
 
     function IsActionsStepValid() {
       return AreAllPreviousStepsValid();
     }
-    progessBarSteps.push({ name: "Açoes", isValid: IsActionsStepValid() });
+    if (systemType === SYSTEM_TYPES.DND_5E) progessBarSteps.push({ name: "Açoes", isValid: IsActionsStepValid() });
 
     function IsTreasureRewardStepValid() {
       let areActionsValid = creature.actions.some((a) => a.frequency === CREATURE_ACTION_FREQUENCIES.COMMON);
 
       return AreAllPreviousStepsValid() && areActionsValid;
     }
-    progessBarSteps.push({ name: "Tesouro", isValid: IsTreasureRewardStepValid() });
+    if (systemType === SYSTEM_TYPES.DND_5E) progessBarSteps.push({ name: "Tesouro", isValid: IsTreasureRewardStepValid() });
 
     function IsSummaryStepValid() {
       return AreAllPreviousStepsValid();
@@ -88,17 +89,36 @@ function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing 
     progessBarSteps.push({ name: "Sumário", isValid: IsSummaryStepValid() });
 
     return progessBarSteps;
-  }, [creature]);
+  }, [
+    creature.actions,
+    creature.attributes.charisma,
+    creature.attributes.constitution,
+    creature.attributes.dexterity,
+    creature.attributes.intelligence,
+    creature.attributes.strength,
+    creature.attributes.wisdom,
+    creature.movements.burrowing,
+    creature.movements.flying,
+    creature.movements.speed,
+    creature.movements.swimming,
+    creature.rarity,
+    creature.size,
+    creature.type,
+    creature.weakSpots,
+    systemType,
+  ]);
 
   const [isFirstStep, setIsFirstStep] = useState(!!!creature.type);
   const [imgUrl, setImgUrl] = useState(creature.image ?? "");
   const [tempCreatureAvatar, setTempCreatureAvatar] = useState(creature.image);
   const [isImgValid, setIsImgValid] = useState(!!creature.image ? true : null);
   const [activeProgessBarStep, setActiveProgessBarStep] = useState(
-    utils
-      .clone(progessBarSteps)
-      .reverse()
-      .find((s) => s.isValid).name
+    !isFirstStep
+      ? utils
+          .clone(progessBarSteps)
+          .reverse()
+          .find((s) => s.isValid).name
+      : null
   );
 
   const avatarProportion = useMemo(() => (isFirstStep ? avatarFirstStepProportion.current : avatarEditProportion.current), [isFirstStep]);
@@ -126,7 +146,6 @@ function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing 
 
   const handleMouseDown = (e) => {
     setDragging(true);
-    console.log("AAAAA");
     const offsetX = e.clientX - (creature.imageX != null ? creature.imageX * avatarProportion : DEFAULT_AVATAR_POSITION);
     const offsetY = e.clientY - (creature.imageY != null ? creature.imageY * avatarProportion : DEFAULT_AVATAR_POSITION);
     setOffset({ x: offsetX, y: offsetY });
@@ -190,7 +209,7 @@ function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing 
   }
 
   async function OpenModalFastBuild() {
-    setModal(<ModalFastBuild creature={creature} onClose={HandleCloseModalFastBuild} />);
+    setModal(<ModalFastBuild systemType={systemType} creature={creature} onClose={HandleCloseModalFastBuild} />);
   }
   function HandleCloseModalFastBuild(tempCreature) {
     if (tempCreature != null) {
@@ -245,6 +264,7 @@ function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing 
           )}
         </div>
         <main>
+          {/* avatar */}
           <aside className="creature-avatar" style={{ width: avatarProportion, height: avatarProportion }}>
             {tempCreatureAvatar ? (
               <>
@@ -314,7 +334,9 @@ function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing 
         </main>
         {isFirstStep && (
           <div className="first-step-options">
-            <Button text="Continuar" onClick={() => setIsFirstStep(false)} isDisabled={!creature.image || !creature.name} />
+            {systemType === SYSTEM_TYPES.DND_5E && (
+              <Button text="Continuar" onClick={() => setIsFirstStep(false)} isDisabled={!creature.image || !creature.name} />
+            )}
             <Button text="Criação Rápida" onClick={OpenModalFastBuild} isDisabled={!creature.image || !creature.name} />
           </div>
         )}
@@ -349,7 +371,7 @@ function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing 
           ))}
         </header>
         <main>
-          {activeProgessBarStep === "Definiçao" && <Definition creature={creature} setCreature={setCreature} />}
+          {activeProgessBarStep === "Definiçao" && <Definition systemType={systemType} creature={creature} setCreature={setCreature} />}
           {activeProgessBarStep === "Atributos" && <Atributes creature={creature} setCreature={setCreature} />}
           {activeProgessBarStep === "Resistências" && <Resistencies creature={creature} setCreature={setCreature} />}
           {activeProgessBarStep === "Passivas" && <Passives creature={creature} setCreature={setCreature} />}
@@ -357,6 +379,7 @@ function EditCreature({ creatureToEdit, HandleSave, HandleDelete, FinishEditing 
           {activeProgessBarStep === "Tesouro" && <TreasureReward creature={creature} setCreature={setCreature} />}
           {activeProgessBarStep === "Sumário" && (
             <Summary
+              systemType={systemType}
               creature={creature}
               onSave={() => HandleSave(creature)}
               onDelete={creatureToEdit.owner ? () => HandleDelete(creature) : null}

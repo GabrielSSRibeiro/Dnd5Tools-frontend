@@ -2,6 +2,7 @@ import React, { useState, useRef, useMemo, useCallback } from "react";
 import * as utils from "../../../../../../utils";
 import * as cc from "../../../../../../constants/creatureConstants";
 import * as lc from "../../../../../../constants/locationConstants";
+import { SYSTEM_TYPES } from "../../../../../../constants/combatConstants";
 import * as ch from "../../../../../../helpers/creatureHelper";
 import * as lh from "../../../../../../helpers/locationHelper";
 import * as th from "../../../../../../helpers/treasureHelper";
@@ -17,6 +18,7 @@ import ModalExport from "../../../../../../components/ModalExport";
 import "./styles.css";
 
 function ModalTravelResults({
+  systemType,
   isSafe,
   isRestSafe,
   mapMode,
@@ -1021,13 +1023,13 @@ function ModalTravelResults({
               <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={setName} />
               {!isSafe && (
                 <>
-                  <span>Encontrar Recursos: CD {findResourcesDifficulty.current}</span>
+                  {systemType === SYSTEM_TYPES.DND_5E && <span>Encontrar Recursos: CD {findResourcesDifficulty.current}</span>}
                   {tracksForDisplay.current.length > 0 && (
                     <span>
                       Rastros de: <span className="bold">"{tracksForDisplay.current.join(", ")}"</span>
                     </span>
                   )}
-                  {remainsForDisplay.current > 0 && (
+                  {remainsForDisplay.current > 0 && systemType === SYSTEM_TYPES.DND_5E && (
                     <span>
                       Restos mortais com o equivalente a <span className="bold">{remainsForDisplay.current}</span> PO
                     </span>

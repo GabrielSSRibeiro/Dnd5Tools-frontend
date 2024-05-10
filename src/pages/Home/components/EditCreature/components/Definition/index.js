@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { SYSTEM_TYPES } from "../../../../../../constants/combatConstants";
+
 import {
   creatureRarities,
   creatureEnvironments,
@@ -22,7 +24,7 @@ import SelectButton from "../../../../../../components/SelectButton";
 
 import "./styles.css";
 
-function Definition({ creature, setCreature }) {
+function Definition({ systemType, creature, setCreature }) {
   const [isMulticlass, setIsMulticlass] = useState(!!creature.secondaryClass);
 
   function getSubClasses(selectedClass) {
@@ -106,7 +108,8 @@ function Definition({ creature, setCreature }) {
         />
       </div>
 
-      {creature.type === CREATURE_TYPES.HUMANOID && (
+      {/* basic */}
+      {creature.type === CREATURE_TYPES.HUMANOID && systemType === SYSTEM_TYPES.DND_5E && (
         <>
           <div className="extra-definitions">
             <Select
@@ -182,57 +185,62 @@ function Definition({ creature, setCreature }) {
         </>
       )}
 
-      <h2>Deslocamentos</h2>
-      <div className="movement">
-        <Select
-          label={"Terrestre"}
-          extraWidth={100}
-          optionsAtATime={4}
-          value={creature}
-          valuePropertyPath="movements.speed"
-          onSelect={setCreature}
-          nothingSelected="Nenhum"
-          options={creatureSpeedMovements}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
-        <Select
-          label={"Vôo / Planar"}
-          extraWidth={100}
-          optionsAtATime={4}
-          value={creature}
-          valuePropertyPath="movements.flying"
-          onSelect={setCreature}
-          nothingSelected="Nenhum"
-          options={creatureFlyingMovements}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
-        <Select
-          label={"Natação"}
-          extraWidth={100}
-          optionsAtATime={4}
-          value={creature}
-          valuePropertyPath="movements.swimming"
-          onSelect={setCreature}
-          nothingSelected="Nenhum"
-          options={creatureSwimmingMovements}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
-        <Select
-          label={"Escavação / Escalada"}
-          extraWidth={100}
-          optionsAtATime={4}
-          value={creature}
-          valuePropertyPath="movements.burrowing"
-          onSelect={setCreature}
-          nothingSelected="Nenhum"
-          options={creatureBurrowingMovements}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-        />
-      </div>
+      {/* moviment */}
+      {systemType === SYSTEM_TYPES.DND_5E && (
+        <>
+          <h2>Deslocamentos</h2>
+          <div className="movement">
+            <Select
+              label={"Terrestre"}
+              extraWidth={100}
+              optionsAtATime={4}
+              value={creature}
+              valuePropertyPath="movements.speed"
+              onSelect={setCreature}
+              nothingSelected="Nenhum"
+              options={creatureSpeedMovements}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+            <Select
+              label={"Vôo / Planar"}
+              extraWidth={100}
+              optionsAtATime={4}
+              value={creature}
+              valuePropertyPath="movements.flying"
+              onSelect={setCreature}
+              nothingSelected="Nenhum"
+              options={creatureFlyingMovements}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+            <Select
+              label={"Natação"}
+              extraWidth={100}
+              optionsAtATime={4}
+              value={creature}
+              valuePropertyPath="movements.swimming"
+              onSelect={setCreature}
+              nothingSelected="Nenhum"
+              options={creatureSwimmingMovements}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+            <Select
+              label={"Escavação / Escalada"}
+              extraWidth={100}
+              optionsAtATime={4}
+              value={creature}
+              valuePropertyPath="movements.burrowing"
+              onSelect={setCreature}
+              nothingSelected="Nenhum"
+              options={creatureBurrowingMovements}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+          </div>
+        </>
+      )}
 
       <h2>Tendências</h2>
       <div className="alignment">

@@ -24,7 +24,7 @@ function SignUp({ history }) {
         <h1>A</h1>
         <h1>SCENDANCE</h1>
       </div>
-      <h4>Ferramentas D&amp;D 5</h4>
+      <h4>Ferramentas GM</h4>
       <form>
         <div>
           <TextInput label="E-mail" value={email} onChange={setEmail} />

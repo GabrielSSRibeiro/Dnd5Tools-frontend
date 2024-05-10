@@ -1,5 +1,5 @@
 <h1 align="center">
-  ASCENDANCE: D&D 5 Tools
+  ASCENDANCE: GM Tools
 </h1>
 
 <br>
@@ -15,7 +15,9 @@
 <br>
 
 ## Technologies
+
 This project was developed with the following:
+
 - React JS
 - Global styles
 - Firebase
@@ -26,11 +28,13 @@ This project was developed with the following:
 <br>
 
 ## Project
-Web application to create, manage and control D&D 5e party, creatures, combat and exploration in a mordern and innovative interface.
+
+Web application to create, manage and control party, creatures, combat and exploration in a mordern and innovative interface.
 
 <br>
 
 ## Getting Started
+
 - Install node.js
 - Run npm install
 - To run frontend: yarn start

@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import * as utils from "../../../../../../utils";
 import * as tc from "../../../../../../constants/treasureConstants";
 import * as cc from "../../../../../../constants/creatureConstants";
+import { SYSTEM_TYPES } from "../../../../../../constants/combatConstants";
 import {
   GetCreatureOffensiveRatio,
   GetCreatureDefensiveRatio,
@@ -19,7 +20,7 @@ import ModalWarning from "../../../../../../components/ModalWarning";
 
 import "./styles.css";
 
-function Summary({ creature, onSave, onDelete, isBasicPack }) {
+function Summary({ systemType, creature, onSave, onDelete, isBasicPack }) {
   const [isBusy, setIsBusy] = useState(false);
   const [modal, setModal] = useState(null);
 
@@ -55,14 +56,14 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
     [averageLevel, creature.reactions]
   );
 
-  const summaryRows = useMemo(
-    () => [
+  const summaryRows = useMemo(() => {
+    let summaryRows = [
       {
         boxes: [
           {
             header: "Definições Básicas",
             items: [
-              { title: "Raridade", value: cc.GetRarity(creature.rarity).display },
+              { title: "Raridade", value: cc.GetRarity(creature.rarity).treasureDisplay },
               { title: "Ambiente", value: cc.GetEnviroment(creature.environment)?.display },
               { title: "Tamanho", value: cc.GetSize(creature.size).display },
               { title: "Tipo", value: cc.GetType(creature.type).display },
@@ -75,7 +76,10 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
           },
         ],
       },
-      {
+    ];
+
+    if (systemType === SYSTEM_TYPES.DND_5E) {
+      summaryRows.push({
         boxes: [
           {
             header: "Deslocamentos",
@@ -94,8 +98,8 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
             ],
           },
         ],
-      },
-      {
+      });
+      summaryRows.push({
         boxes: [
           {
             header: "Atributos",
@@ -109,8 +113,8 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
             ],
           },
         ],
-      },
-      {
+      });
+      summaryRows.push({
         boxes: [
           {
             header: "Valores Básicos",
@@ -126,8 +130,8 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
             items: creature.weakSpots.map((ws) => ({ title: null, value: ws })),
           },
         ],
-      },
-      {
+      });
+      summaryRows.push({
         boxes: [
           {
             header: "Resistências e Vulnerabilidades",
@@ -150,8 +154,8 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
             ),
           },
         ],
-      },
-      {
+      });
+      summaryRows.push({
         boxes: [
           {
             header: "Idiomas",
@@ -167,8 +171,8 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
             ].filter((item) => item.value),
           },
         ],
-      },
-      {
+      });
+      summaryRows.push({
         boxes: [
           {
             header: "Especiais",
@@ -182,16 +186,16 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
             ].filter((item) => item.value),
           },
         ],
-      },
-      {
+      });
+      summaryRows.push({
         boxes: [
           {
             header: "Açoes",
             items: actionItems,
           },
         ],
-      },
-      {
+      });
+      summaryRows.push({
         boxes: [
           {
             header: "Reaçoes",
@@ -202,59 +206,61 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
             items: creature.aura ? [{ title: creature.aura.name, value: cc.GetAuraReach(creature.aura.reach).display }] : [],
           },
         ],
-      },
-      {
+      });
+      summaryRows.push({
         boxes: [
           {
             header: "Tesouros",
             items: creature.treasures.map((t) => ({ title: t.name, value: tc.GetTreasureType(t.type).display })),
           },
         ],
-      },
-    ],
-    [
-      actionItems,
-      creature.armorClass,
-      creature.attributes.charisma,
-      creature.attributes.constitution,
-      creature.attributes.dexterity,
-      creature.attributes.intelligence,
-      creature.attributes.strength,
-      creature.attributes.wisdom,
-      creature.aura,
-      creature.class,
-      creature.conditionImmunities,
-      creature.customSpecials,
-      creature.damagesEffectiveness,
-      creature.environment,
-      creature.initiative,
-      creature.languages,
-      creature.legendaryResistences,
-      creature.movements.burrowing,
-      creature.movements.flying,
-      creature.movements.speed,
-      creature.movements.swimming,
-      creature.primaryAlignment,
-      creature.race,
-      creature.rarity,
-      creature.regeneration.amount,
-      creature.secondaryAlignment,
-      creature.secondaryClass,
-      creature.secondarySubClass,
-      creature.senses.blindSight,
-      creature.senses.darkVision,
-      creature.senses.tremorsense,
-      creature.senses.trueSight,
-      creature.size,
-      creature.subClass,
-      creature.treasures,
-      creature.type,
-      creature.weakSpots,
-      creatureAttacksUpdated,
-      creatureHPUpdated,
-      reactionItems,
-    ]
-  );
+      });
+    }
+
+    return summaryRows;
+  }, [
+    actionItems,
+    creature.armorClass,
+    creature.attributes.charisma,
+    creature.attributes.constitution,
+    creature.attributes.dexterity,
+    creature.attributes.intelligence,
+    creature.attributes.strength,
+    creature.attributes.wisdom,
+    creature.aura,
+    creature.class,
+    creature.conditionImmunities,
+    creature.customSpecials,
+    creature.damagesEffectiveness,
+    creature.environment,
+    creature.initiative,
+    creature.languages,
+    creature.legendaryResistences,
+    creature.movements.burrowing,
+    creature.movements.flying,
+    creature.movements.speed,
+    creature.movements.swimming,
+    creature.primaryAlignment,
+    creature.race,
+    creature.rarity,
+    creature.regeneration.amount,
+    creature.secondaryAlignment,
+    creature.secondaryClass,
+    creature.secondarySubClass,
+    creature.senses.blindSight,
+    creature.senses.darkVision,
+    creature.senses.tremorsense,
+    creature.senses.trueSight,
+    creature.size,
+    creature.subClass,
+    creature.treasures,
+    creature.type,
+    creature.weakSpots,
+    creatureAttacksUpdated,
+    creatureHPUpdated,
+    reactionItems,
+    systemType,
+  ]);
 
   async function OpenModalExport() {
     setModal(<ModalExport creature={creature} onClose={setModal} />);
@@ -334,9 +340,11 @@ function Summary({ creature, onSave, onDelete, isBasicPack }) {
           </aside>
         </div>
         <div className="actions">
-          <button onClick={OpenModalExport} className="creature-export">
-            <i className="fas fa-upload"></i>
-          </button>
+          {systemType === SYSTEM_TYPES.DND_5E && (
+            <button onClick={OpenModalExport} className="creature-export">
+              <i className="fas fa-upload"></i>
+            </button>
+          )}
           {onDelete && (
             <button className="button-simple" onClick={OpenDeleteConfirmation} disabled={isBasicPack}>
               Deletar

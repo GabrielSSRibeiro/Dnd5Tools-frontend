@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useAuth } from "../../contexts/Auth";
 import { useHistory } from "react-router-dom";
 
+import { SYSTEM_TYPES } from "../../constants/combatConstants";
+
 import SelectButton from "../SelectButton";
 import ModalTextArea from "../../components/ModalTextArea";
 import Party from "./components/Party";
@@ -86,7 +88,7 @@ function NaviBar({
         <div>
           <h3>A</h3>
           <h3>SCENDANCE</h3>
-          <h4>Ferramentas D&amp;D 5</h4>
+          <h4>Ferramentas GM</h4>
         </div>
         <div className="df df-cg-15">
           <button title="Notas" className="df button-simple" onClick={OpenModalDetails}>
@@ -100,6 +102,7 @@ function NaviBar({
       {!creatureToEdit && (
         <section>
           <Party
+            systemType={combatConfig.systemType}
             selectedCharacters={selectedCharacters}
             setSelectedCharacters={setSelectedCharacters}
             isSelecting={isSelectingParty}
@@ -115,13 +118,16 @@ function NaviBar({
             setInactiveGroup={setInactiveGroup}
             setModal={setModal}
           />
-          <SelectButton
-            isLarge={true}
-            isSelected={openTab === tabOptions.SKILL_CHECK}
-            isLong={false}
-            text={tabOptions.SKILL_CHECK}
-            onClick={() => setOpenTab(tabOptions.SKILL_CHECK)}
-          />
+          {combatConfig.systemType === SYSTEM_TYPES.DND_5E && (
+            <SelectButton
+              isLarge={true}
+              isSelected={openTab === tabOptions.SKILL_CHECK}
+              isLong={false}
+              text={tabOptions.SKILL_CHECK}
+              onClick={() => setOpenTab(tabOptions.SKILL_CHECK)}
+            />
+          )}
+
           <div className="combat-section">
             <SelectButton
               isLarge={true}
@@ -152,13 +158,15 @@ function NaviBar({
               ))}
             </div> */}
           </div>
-          <SelectButton
-            isLarge={true}
-            isSelected={openTab === tabOptions.TREASURE}
-            isLong={false}
-            text={tabOptions.TREASURE}
-            onClick={() => setOpenTab(tabOptions.TREASURE)}
-          />
+          {combatConfig.systemType === SYSTEM_TYPES.DND_5E && (
+            <SelectButton
+              isLarge={true}
+              isSelected={openTab === tabOptions.TREASURE}
+              isLong={false}
+              text={tabOptions.TREASURE}
+              onClick={() => setOpenTab(tabOptions.TREASURE)}
+            />
+          )}
           <Bestiary
             selectedCreatures={selectedCreatures}
             selectedCharacters={selectedCharacters}
