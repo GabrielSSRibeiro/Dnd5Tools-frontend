@@ -1,13 +1,13 @@
 .ModalSuggestions-container.modal-body {
   position: relative;
   width: fit-content;
-  min-height: calc(100% - 100px);
+  min-height: calc(95% - 100px);
   max-width: 80%;
-  margin-top: 50px;
+  margin-top: 75px;
 }
 
 .ModalSuggestions-container .content {
-  min-height: calc(100% - 210px);
+  min-height: calc(80% - 210px);
   height: 100%;
 }
 
@@ -25,6 +25,12 @@
 
 .ModalSuggestions-container .content .map-suggestions {
   height: 100%;
+}
+
+.ModalSuggestions-container .content .map-suggestions .img-examples img {
+  object-fit: contain;
+  width: 25%;
+  height: 90%;
 }
 
 .ModalSuggestions-container .description {

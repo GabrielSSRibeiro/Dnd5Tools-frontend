@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import * as utils from "../../../../../../utils";
 import { creatureEnvironments, CREATURE_ENVIRONMENTS, creatureTypes } from "../../../../../../constants/creatureConstants";
 
@@ -7,6 +7,11 @@ import Button from "../../../../../../components/Button";
 import TextInput from "../../../../../../components/TextInput";
 import SelectButton from "../../../../../../components/SelectButton";
 
+import MapX1 from "../../../../../../assets/MapX1.png";
+import MapX2 from "../../../../../../assets/MapX2.png";
+import MapX3 from "../../../../../../assets/MapX3.png";
+import DungeonX1 from "../../../../../../assets/DungeonX1.png";
+import DungeonX2 from "../../../../../../assets/DungeonX2.png";
 import "./styles.css";
 
 function ModalSuggestions({ notes, onClose }) {
@@ -42,6 +47,7 @@ function ModalSuggestions({ notes, onClose }) {
     "Proporçao de 1/3 criaturas, 1/3 vazios, 1/3 tesouros e armadilhas",
   ]);
   const [suggestionMode, setSuggestionMode] = useState(mapSuggestion.current);
+  const imgExamples = useMemo(() => (suggestionMode === mapSuggestion.current ? [MapX1, MapX2, MapX3] : [DungeonX1, DungeonX2]), [suggestionMode]);
   const [tempNotes, setTempNotes] = useState(notes);
   const [randomType, setRandomType] = useState(null);
 
@@ -73,9 +79,14 @@ function ModalSuggestions({ notes, onClose }) {
             </aside>
           </div>
         ) : (
-          <aside className="map-suggestions df df-fd-c df-jc-fs df-ai-fs df-rg-20">
+          <aside className="map-suggestions df df-fd-c df-jc-fs df-ai-fs df-rg-15">
+            <div className="df df-cg-20 full-width img-examples">
+              {imgExamples.map((e, i) => (
+                <img src={e} key={i} alt={`Img example ${i + 1}`} />
+              ))}
+            </div>
             {(suggestionMode === mapSuggestion.current ? mapSuggestions.current : dungeonSuggestions.current).map((message, index) => (
-              <h3 key={index}>{message}</h3>
+              <h5 key={index}>{message}</h5>
             ))}
           </aside>
         )}
