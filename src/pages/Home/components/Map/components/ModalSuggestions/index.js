@@ -12,6 +12,7 @@ import MapX2 from "../../../../../../assets/MapX2.png";
 import MapX3 from "../../../../../../assets/MapX3.png";
 import DungeonX1 from "../../../../../../assets/DungeonX1.png";
 import DungeonX2 from "../../../../../../assets/DungeonX2.png";
+import DungeonX3 from "../../../../../../assets/DungeonX3.png";
 import "./styles.css";
 
 function ModalSuggestions({ notes, onClose }) {
@@ -47,7 +48,10 @@ function ModalSuggestions({ notes, onClose }) {
     "Proporçao de 1/3 criaturas, 1/3 vazios, 1/3 tesouros e armadilhas",
   ]);
   const [suggestionMode, setSuggestionMode] = useState(mapSuggestion.current);
-  const imgExamples = useMemo(() => (suggestionMode === mapSuggestion.current ? [MapX1, MapX2, MapX3] : [DungeonX1, DungeonX2]), [suggestionMode]);
+  const imgExamples = useMemo(
+    () => (suggestionMode === mapSuggestion.current ? [MapX1, MapX2, MapX3] : [DungeonX1, DungeonX3, DungeonX2]),
+    [suggestionMode]
+  );
   const [tempNotes, setTempNotes] = useState(notes);
   const [randomType, setRandomType] = useState(null);
 
