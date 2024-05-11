@@ -642,20 +642,48 @@ function EditLocation({
               />
             </div>
             <div className="location-row df df-jc-sb df-ai-c">
-              <button
-                title="Novo caminho"
-                className="new-ref-con"
-                onClick={() => {
-                  location.reference.connectionSeed = utils.seededRandom() + "";
-                  HandleUpdateOnSelect();
-                }}
-                disabled={!location.reference.connectionType}
-              >
-                <i className="fas fa-random"></i>
-              </button>
+              <div className="df df-fd-c">
+                <button
+                  title="Novo caminho variado"
+                  className="con-random-seed"
+                  onClick={() => {
+                    location.reference.connectionSeed = utils.seededRandom() + "";
+                    location.reference.connectionSeedType = lc.CON_SEED_TYPES.HIGH;
+                    HandleUpdateOnSelect();
+                  }}
+                  disabled={!location.reference.connectionType}
+                >
+                  <i className="fas fa-random"></i>
+                </button>
+                <button
+                  title="Novo caminho"
+                  className="con-random-seed"
+                  onClick={() => {
+                    location.reference.connectionSeed = utils.seededRandom() + "";
+                    location.reference.connectionSeedType = lc.CON_SEED_TYPES.MEDIUM;
+                    HandleUpdateOnSelect();
+                  }}
+                  disabled={!location.reference.connectionType}
+                >
+                  <i className="fas fa-random"></i>
+                </button>
+                <button
+                  title="Novo caminho simples"
+                  className="con-random-seed"
+                  onClick={() => {
+                    location.reference.connectionSeed = utils.seededRandom() + "";
+                    location.reference.connectionSeedType = lc.CON_SEED_TYPES.LOW;
+                    HandleUpdateOnSelect();
+                  }}
+                  disabled={!location.reference.connectionType}
+                >
+                  <i className="fas fa-random"></i>
+                </button>
+              </div>
+
               <Select
                 label={"Conectado por"}
-                extraWidth={10}
+                extraWidth={20}
                 value={location}
                 valuePropertyPath="reference.connectionType"
                 onSelect={HandleSelectRefCon}
@@ -726,7 +754,7 @@ function EditLocation({
             </button>
           </div>
           {location.connections.map((c, index) => (
-            <div className="location-row location-detail-group-item" key={index}>
+            <div className="location-row location-detail-group-item loc-connection" key={index}>
               <span>
                 {c.description ? `${c.description} - ` : ""}
                 {lc.GetLocationConnectionType(c.connectionType).display} (
@@ -734,15 +762,44 @@ function EditLocation({
                 {lc.GetDirection(c.direction).baseAngle}°)
               </span>
               <div className="group-item-actions">
-                <button
-                  title="Novo caminho"
-                  onClick={() => {
-                    c.seed = utils.seededRandom() + "";
-                    HandleUpdateOnSelect();
-                  }}
-                >
-                  <i className="fas fa-random"></i>
-                </button>
+                <div className="df">
+                  <button
+                    title="Novo caminho variado"
+                    className="con-random-seed"
+                    onClick={() => {
+                      c.seed = utils.seededRandom() + "";
+                      c.seedType = lc.CON_SEED_TYPES.HIGH;
+                      HandleUpdateOnSelect();
+                    }}
+                  >
+                    <i className="fas fa-random"></i>
+                  </button>
+
+                  <button
+                    title="Novo caminho"
+                    className="con-random-seed"
+                    onClick={() => {
+                      c.seed = utils.seededRandom() + "";
+                      c.seedType = lc.CON_SEED_TYPES.MEDIUM;
+                      HandleUpdateOnSelect();
+                    }}
+                  >
+                    <i className="fas fa-random"></i>
+                  </button>
+
+                  <button
+                    title="Novo caminho simples"
+                    className="con-random-seed"
+                    onClick={() => {
+                      c.seed = utils.seededRandom() + "";
+                      c.seedType = lc.CON_SEED_TYPES.LOW;
+                      HandleUpdateOnSelect();
+                    }}
+                  >
+                    <i className="fas fa-random"></i>
+                  </button>
+                </div>
+
                 <button onClick={() => OpenModalManageConnection(c, index)}>
                   <i className="fas fa-pencil-alt"></i>
                 </button>

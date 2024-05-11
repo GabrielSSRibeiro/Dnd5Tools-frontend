@@ -37,7 +37,7 @@ function ModalSuggestions({ notes, onClose }) {
     "As salas serem boas é o segredo. Os encontros tem distância pra dar tempo de fazer estratégias e raramente vai ser de fato próximo e sem jeito",
     "Propósito da masmorra? Toda masmorra deve ter um tema que representa ela toda e seus perigos básicos",
     "Quais os habitantes? Como as criaturas interagem umas com as outras? Existem Sub regiões na masmorra? A entrada de cada sub região, incluindo a entrada principal, pode ser bloqueada com alguma lógica que se repete pela masmorra e impede a passagem fácil ou a modifica",
-    "Defina uma disposição. Arrudeios e caminhos alternativos podem ser interessantes e as vezes secretos",
+    "Defina uma disposição. Arrudeios e caminhos alternativos podem ser interessantes e as vezes secretos. Lembre de criar passagens bloqueadas",
     "Rastros e mensagens em salas",
     "Proporçao de 1/3 criaturas, 1/3 vazios, 1/3 tesouros e armadilhas",
   ]);

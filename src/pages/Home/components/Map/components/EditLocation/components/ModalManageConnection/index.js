@@ -15,6 +15,7 @@ function ModalManageConnection({ connection, onClose }) {
       ? utils.clone(connection)
       : {
           seed: utils.seededRandom() + "",
+          seedType: lc.CON_SEED_TYPES.MEDIUM,
           distance: null,
           direction: null,
           connectionType: null,

@@ -31,6 +31,7 @@ export const GetNewLocation = (owner, exteriorLocationId) => ({
   },
   reference: {
     connectionSeed: null,
+    connectionSeedType: CON_SEED_TYPES.MEDIUM,
     distance: null,
     direction: null,
     location: null,
@@ -297,6 +298,18 @@ export const locationConnectionTypes = [
   { display: "Abismo", value: LOCATION_CONNECTION_TYPES.CHASM, elementType: ELEMENT_TYPES.PIT },
 ];
 export const GetLocationConnectionType = (value) => locationConnectionTypes.find((a) => a.value === value);
+
+export const CON_SEED_TYPES = {
+  LOW: 10,
+  MEDIUM: 20,
+  HIGH: 30,
+};
+export const conSeedTypes = [
+  { display: "Baixa", value: CON_SEED_TYPES.LOW, baseNumberOfPoints: 2, varianceInt: 3 },
+  { display: "Média", value: CON_SEED_TYPES.MEDIUM, baseNumberOfPoints: 2, varianceInt: 10 },
+  { display: "Alta", value: CON_SEED_TYPES.HIGH, baseNumberOfPoints: 3, varianceInt: 20 },
+];
+export const GetConSeedType = (value) => conSeedTypes.find((a) => a.value === value);
 
 export const CON_DEPTHS = {
   LOW: 10,

@@ -4,7 +4,7 @@ import * as lh from "../../../../../../../../helpers/locationHelper";
 
 import "./styles.css";
 
-function LocConnection({ seed, distance, type, angle, angleOrigin, loc, map, isMobileDevice }) {
+function LocConnection({ seed, seedType, distance, type, angle, angleOrigin, loc, map, isMobileDevice }) {
   const rotation = useMemo(() => {
     if (!angle) return 0;
 
@@ -24,7 +24,7 @@ function LocConnection({ seed, distance, type, angle, angleOrigin, loc, map, isM
     return map[loc.data.exteriorLocationId].data.radius / 2;
   }, [loc.data.exteriorLocationId, map]);
   const color = useRef(lc.GetElementType(lc.GetLocationConnectionType(type).elementType).color);
-  const conClipPath = useMemo(() => lh.GetLocConClipPaths(distance, seed), [distance, seed]);
+  const conClipPath = useMemo(() => lh.GetLocConClipPaths(distance, seed, seedType), [distance, seed, seedType]);
   const conStyles = useMemo(() => {
     let conStyles = {
       height,

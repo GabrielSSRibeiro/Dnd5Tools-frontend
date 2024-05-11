@@ -47,10 +47,6 @@
   padding: 0 10px;
 }
 
-.EditLocation-container .location-row .new-ref-con {
-  margin-top: 5px;
-}
-
 .EditLocation-container .location-row .interaction {
   margin-top: 23px;
 }
@@ -86,6 +82,16 @@
   background-color: var(--white);
   column-gap: 20px;
   border-top: 1px solid var(--black);
+}
+
+.EditLocation-container .con-random-seed:first-of-type {
+  transform: rotate(-90deg);
+}
+.EditLocation-container .con-random-seed {
+  transform: scaleX(-1);
+}
+.EditLocation-container .con-random-seed:last-of-type {
+  transform: rotate(90deg);
 }
 
 .EditLocation-container .group-item-actions {

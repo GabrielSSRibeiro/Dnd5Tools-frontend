@@ -294,11 +294,10 @@ export function GetLocConBgClipPath(location, locationId) {
   return { top, bottom };
 }
 
-export function generateConCoordinatesForCSSClipPath(distance) {
+export function generateConCoordinatesForCSSClipPath(distance, baseNumberOfPoints) {
   const multiplier = lc.GetReferenceDistance(distance)?.baseDistanceMultiplier ?? 0;
 
   //empiric
-  const baseNumberOfPoints = 2;
   const numberOfPoints = baseNumberOfPoints + Math.round(baseNumberOfPoints * multiplier);
 
   let coordinates = [];
@@ -309,13 +308,14 @@ export function generateConCoordinatesForCSSClipPath(distance) {
   return coordinates;
 }
 
-export function GetLocConClipPaths(distance, seed) {
+export function GetLocConClipPaths(distance, seed, seedType = lc.CON_SEED_TYPES.MEDIUM) {
+  const conSeedType = lc.GetConSeedType(seedType);
+
   //empiric
-  const COORDINATES_VARIANCE_INT = 10;
-  const coordinates = generateConCoordinatesForCSSClipPath(distance);
+  const coordinates = generateConCoordinatesForCSSClipPath(distance, conSeedType.baseNumberOfPoints);
   const modifier = 3;
 
-  const updatedCoordinates = GetUpdatedCoordinates(coordinates, seed, 0, COORDINATES_VARIANCE_INT, false, true);
+  const updatedCoordinates = GetUpdatedCoordinates(coordinates, seed, 0, conSeedType.varianceInt, false, true);
   let reversedUpdatedCoordinates = [];
   for (let i = updatedCoordinates.length - 1; i >= 0; i--) {
     reversedUpdatedCoordinates.push({

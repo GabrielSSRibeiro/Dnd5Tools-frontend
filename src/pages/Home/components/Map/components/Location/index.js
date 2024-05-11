@@ -314,6 +314,7 @@ function Location({
         >
           <LocConnection
             seed={loc.data.reference.connectionSeed ?? loc.data._id}
+            seedType={loc.data.reference.connectionSeedType}
             distance={loc.data.reference.distance}
             type={loc.data.reference.connectionType}
             angle={loc.data.reference.connectionAngle}
@@ -337,6 +338,7 @@ function Location({
         >
           <LocConnection
             seed={c.seed}
+            seedType={c.seedType}
             distance={c.distance}
             type={c.connectionType}
             angle={c.connectionAngle}
