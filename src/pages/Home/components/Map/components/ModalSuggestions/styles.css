@@ -45,16 +45,7 @@
 
 .ModalSuggestions-container footer {
   width: 100%;
-}
-
-.ModalSuggestions-container footer > aside {
-  position: absolute;
-}
-
-.ModalSuggestions-container footer .suggestion-actions {
-  left: 25px;
-}
-
-.ModalSuggestions-container footer .suggestion-modes {
-  right: 25px;
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
 }

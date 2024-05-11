@@ -53,6 +53,8 @@ function ModalTravelResults({
   );
   const ProbUpdatedByTravelTimeModCheck = useCallback(
     (probability, updateTimePassed = false) => {
+      if (isSafe) return false;
+
       const travelTimeMod = (hasMoved ? locHoverData.distance.travelTimeInMin : timePassed) / 60;
       const check = utils.ProbabilityCheckWithRatio(probability, travelTimeMod);
       const updatedTimePassed = Math.round(check.ratioChecked * 60);
@@ -63,7 +65,7 @@ function ModalTravelResults({
 
       return check.probabilityCheck;
     },
-    [hasMoved, locHoverData, timePassed]
+    [hasMoved, locHoverData, timePassed, isSafe]
   );
   const DETAILS_VIEWS = useRef({
     MARCH: 0,

@@ -183,7 +183,7 @@ function Location({
   function GetConnectionStyles(connection) {
     let connectionStyles = {};
 
-    const calcDist = lh.GetNormalizedValue(lc.GetReferenceDistance(connection.distance).baseDistanceMultiplier, pxInMScale) / 2;
+    const calcDist = lh.GetNormalizedValue(lc.GetReferenceDistance(connection.distance).baseDistanceMultiplier, pxInMScale) / 4;
     const { x, y } = utils.GetCoordinatesByDistance({ x: 0, y: 0 }, calcDist, lh.GetDistanceAngle(connection.direction));
     connectionStyles.width = calcDist;
 

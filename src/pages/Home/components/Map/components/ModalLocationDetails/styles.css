@@ -98,3 +98,11 @@
   margin-top: 10px;
   margin-bottom: 25px;
 }
+
+.ModalLocationDetails-container footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 15px;
+}
