@@ -754,7 +754,7 @@ function EditLocation({
             </button>
           </div>
           {location.connections.map((c, index) => (
-            <div className="location-row location-detail-group-item loc-connection" key={index}>
+            <div className="location-row location-detail-group-item" key={index}>
               <span>
                 {c.description ? `${c.description} - ` : ""}
                 {lc.GetLocationConnectionType(c.connectionType).display} (

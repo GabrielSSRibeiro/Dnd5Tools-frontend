@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import * as util from "../../utils";
+import * as utils from "../../utils";
 import * as lc from "../../constants/locationConstants";
 import * as cc from "../../constants/creatureConstants";
 import api from "../../services/api";
@@ -99,6 +99,7 @@ function Home() {
 
   async function HandleSaveLocation(locationToSave) {
     if (locationToSave.exteriorLocationId != null) {
+      const locIdToMatch = locationToSave._id;
       if (!locationToSave.owner) {
         locationToSave._id = null;
         locationToSave.owner = currentUser.uid;
@@ -108,9 +109,9 @@ function Home() {
         .then((response) => {
           if (response.data) {
             // window.location.reload(false);
-            let index = locations.findIndex((l) => l._id === locationToSave._id);
+            let index = locations.findIndex((l) => l._id === locIdToMatch);
             if (index >= 0) {
-              locations.splice(index, 1, locationToSave);
+              locations.splice(index, 1, response.data);
             } else {
               locationToSave._id = response.data._id;
               locations.push(locationToSave);
@@ -137,7 +138,7 @@ function Home() {
           updateLocsReq.ids.forEach((id, i) => {
             let location = locations.find((l) => l._id === id);
             updateLocsReq.updates[i].forEach((u) => {
-              util.setObjPropertyValue(location, u.field, u.value);
+              utils.setObjPropertyValue(location, u.field, u.value);
             });
           });
 
