@@ -305,7 +305,7 @@ function Map({
       const isSameNode = combatConfig.travel.currentNode.x === newCurrentNode.x && combatConfig.travel.currentNode.y === newCurrentNode.y;
       const hasMoved =
         newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST && combatConfig.travel.currentNode.locId === newLocation._id ? false : !isSameNode;
-      const isSafe = mapMode !== lc.MAP_MODES.TRAVEL || (!canTravelToPoint && !isRest);
+      const isSafe = mapMode !== lc.MAP_MODES.TRAVEL || (!canTravelToPoint && !isRest) || locHoverData.connection;
 
       setModal(
         <ModalTravelResults

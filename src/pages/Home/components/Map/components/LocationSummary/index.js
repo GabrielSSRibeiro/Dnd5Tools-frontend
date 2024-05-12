@@ -70,6 +70,7 @@ function LocationSummary({
     () => schedule !== lc.ROUTINE_SCHEDULES.NIGHT && (distance?.isVisible || location.traversal.type === cc.CREATURE_ENVIRONMENTS.MOUNTAIN),
     [distance?.isVisible, location.traversal.type, schedule]
   );
+
   const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
   const worldContext = useMemo(() => lh.GetCurrentContext(world), [world]);
   const type = useMemo(() => {
@@ -81,16 +82,29 @@ function LocationSummary({
       ? lc.GetElementType(location.interaction.type).display
       : cc.GetEnviroment(location.traversal.type).display;
   }, [connection?.type, location.interaction?.type, location.size, location.traversal?.type]);
+
+  const name = useMemo(() => {
+    let name = location.name;
+
+    if (connection) {
+      name = type;
+      if (connection.depth) {
+        name += ", " + lc.GetConDepth(connection.depth).metersDisplay + " (profundo)";
+      }
+    }
+
+    return name;
+  }, [connection, location.name, type]);
   const firstImpressions = useMemo(
-    () => connection?.description ?? currentContext?.firstImpressions,
-    [connection?.description, currentContext?.firstImpressions]
+    () => (connection ? connection.description : currentContext?.firstImpressions),
+    [connection, currentContext?.firstImpressions]
   );
   const shouldlAddWorldCreatures = useMemo(
     () => world.name !== location.name && worldContext.name !== lc.DEFAULT_CONTEXT_NAME,
     [location.name, world.name, worldContext.name]
   );
   const creaturesForDisplay = useMemo(() => {
-    if (creatures.length === 0) {
+    if (creatures.length === 0 || connection) {
       return [];
     }
 
@@ -138,6 +152,7 @@ function LocationSummary({
     const SHOW_AT_A_TIME = 3;
     return sortedCreaturesForDisplay.filter((_, i) => i < SHOW_AT_A_TIME);
   }, [
+    connection,
     creatures,
     location.size,
     location.interaction,
@@ -164,7 +179,7 @@ function LocationSummary({
               </button>
             </aside>
           )}
-          <span className="name">{location.name}</span>
+          <span className="name">{name}</span>
           {!distance && (
             <aside className="header-details">
               <button title="Abrir Detalhes" onClick={() => OpenModalLocationDetails(location, id, true)}>
@@ -188,14 +203,11 @@ function LocationSummary({
 
           {/* type and dist */}
           <span className="env-type">
-            {type}
+            {!connection && type}
 
-            {distance?.valueInUnits ? `, a ${distance.valueInUnits}` : ""}
+            {distance?.valueInUnits ? `${!connection ? ", " : ""}a ${distance.valueInUnits}` : ""}
             {distance?.timeInUnits ? ` / ${distance.timeInUnits}` : ""}
           </span>
-
-          {/* depth */}
-          {connection?.depth && <span className="exhaustion">{lc.GetConDepth(connection.depth).metersDisplay} (profundo)</span>}
 
           {/* exhaustion */}
           {distance?.valueInUnits && canTravelToPoint && (
