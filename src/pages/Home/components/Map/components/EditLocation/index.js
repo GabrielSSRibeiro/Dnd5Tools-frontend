@@ -746,73 +746,75 @@ function EditLocation({
         <div className="divider"></div>
 
         {/* connections */}
-        <div className="location-detail-group">
-          <div className="location-row location-detail-group-title">
-            <span className={location.connections.length === 0 ? `lacking-data` : ""}>Conexões</span>
-            <button onClick={() => OpenModalManageConnection()}>
-              <i className="fas fa-plus"></i>
-            </button>
-          </div>
-          {location.connections.map((c, index) => (
-            <div className="location-row location-detail-group-item" key={index}>
-              <span>
-                {c.description ? `${c.description} - ` : ""}
-                {lc.GetLocationConnectionType(c.connectionType).display} (
-                {utils.MInUnits((lc.BASE_VISION_IN_M * lc.GetReferenceDistance(c.distance).baseDistanceMultiplier) / 4, 1)},
-                {lc.GetDirection(c.direction).baseAngle}°)
-              </span>
-              <div className="group-item-actions">
-                <div className="df">
-                  <button
-                    title="Novo caminho variado"
-                    className="con-random-seed"
-                    onClick={() => {
-                      c.seed = utils.seededRandom() + "";
-                      c.seedType = lc.CON_SEED_TYPES.HIGH;
-                      HandleUpdateOnSelect();
-                    }}
-                  >
-                    <i className="fas fa-random"></i>
-                  </button>
+        {isPointOfInterest && (
+          <div className="location-detail-group">
+            <div className="location-row location-detail-group-title">
+              <span className={location.connections.length === 0 ? `lacking-data` : ""}>Conexões</span>
+              <button onClick={() => OpenModalManageConnection()}>
+                <i className="fas fa-plus"></i>
+              </button>
+            </div>
+            {location.connections.map((c, index) => (
+              <div className="location-row location-detail-group-item" key={index}>
+                <span>
+                  {c.description ? `${c.description} - ` : ""}
+                  {lc.GetLocationConnectionType(c.connectionType).display} (
+                  {utils.MInUnits((lc.BASE_VISION_IN_M * lc.GetReferenceDistance(c.distance).baseDistanceMultiplier) / 4, 1)},
+                  {lc.GetDirection(c.direction).baseAngle}°)
+                </span>
+                <div className="group-item-actions">
+                  <div className="df">
+                    <button
+                      title="Novo caminho variado"
+                      className="con-random-seed"
+                      onClick={() => {
+                        c.seed = utils.seededRandom() + "";
+                        c.seedType = lc.CON_SEED_TYPES.HIGH;
+                        HandleUpdateOnSelect();
+                      }}
+                    >
+                      <i className="fas fa-random"></i>
+                    </button>
 
-                  <button
-                    title="Novo caminho"
-                    className="con-random-seed"
-                    onClick={() => {
-                      c.seed = utils.seededRandom() + "";
-                      c.seedType = lc.CON_SEED_TYPES.MEDIUM;
-                      HandleUpdateOnSelect();
-                    }}
-                  >
-                    <i className="fas fa-random"></i>
-                  </button>
+                    <button
+                      title="Novo caminho"
+                      className="con-random-seed"
+                      onClick={() => {
+                        c.seed = utils.seededRandom() + "";
+                        c.seedType = lc.CON_SEED_TYPES.MEDIUM;
+                        HandleUpdateOnSelect();
+                      }}
+                    >
+                      <i className="fas fa-random"></i>
+                    </button>
 
-                  <button
-                    title="Novo caminho simples"
-                    className="con-random-seed"
-                    onClick={() => {
-                      c.seed = utils.seededRandom() + "";
-                      c.seedType = lc.CON_SEED_TYPES.LOW;
-                      HandleUpdateOnSelect();
-                    }}
-                  >
-                    <i className="fas fa-random"></i>
+                    <button
+                      title="Novo caminho simples"
+                      className="con-random-seed"
+                      onClick={() => {
+                        c.seed = utils.seededRandom() + "";
+                        c.seedType = lc.CON_SEED_TYPES.LOW;
+                        HandleUpdateOnSelect();
+                      }}
+                    >
+                      <i className="fas fa-random"></i>
+                    </button>
+                  </div>
+
+                  <button onClick={() => OpenModalManageConnection(c, index)}>
+                    <i className="fas fa-pencil-alt"></i>
+                  </button>
+                  <button onClick={() => DeleteConnection(index)}>
+                    <i className="fas fa-trash"></i>
                   </button>
                 </div>
-
-                <button onClick={() => OpenModalManageConnection(c, index)}>
-                  <i className="fas fa-pencil-alt"></i>
-                </button>
-                <button onClick={() => DeleteConnection(index)}>
-                  <i className="fas fa-trash"></i>
-                </button>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* elements */}
-        {location.size && location.size !== lc.LOCATION_SIZES.POINT_OF_INTEREST && location.exteriorLocationId != null && (
+        {!isPointOfInterest && location.exteriorLocationId != null && (
           <>
             <div className="divider"></div>
             <div className="location-detail-group">

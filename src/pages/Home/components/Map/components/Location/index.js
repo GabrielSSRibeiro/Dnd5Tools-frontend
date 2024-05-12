@@ -327,28 +327,29 @@ function Location({
       )}
 
       {/* connections */}
-      {loc.data.connections.map((c, i) => (
-        <div
-          id={`${loc.data._id}-connection-${i}`}
-          key={i}
-          className="connection not-flat"
-          style={{ rotate: `${lc.GetDirection(c.direction).baseAngle * -1}deg`, zIndex: areaLocs.length, ...GetConnectionStyles(c) }}
-          onMouseMove={(e) => HandleHover(e, loc.data, null, GetConnection(c.description, c.connectionType, c.depth))}
-          onMouseLeave={(e) => HandleHover(e)}
-        >
-          <LocConnection
-            seed={c.seed}
-            seedType={c.seedType}
-            distance={c.distance}
-            type={c.connectionType}
-            angle={c.connectionAngle}
-            angleOrigin={lh.GetConAngleOrigin(c.connectionAngleOrigin)}
-            loc={loc}
-            map={map}
-            isMobileDevice={isMobileDevice}
-          />
-        </div>
-      ))}
+      {loc.data.size === lc.LOCATION_SIZES.POINT_OF_INTEREST &&
+        loc.data.connections.map((c, i) => (
+          <div
+            id={`${loc.data._id}-connection-${i}`}
+            key={i}
+            className="connection not-flat"
+            style={{ rotate: `${lc.GetDirection(c.direction).baseAngle * -1}deg`, zIndex: areaLocs.length, ...GetConnectionStyles(c) }}
+            onMouseMove={(e) => HandleHover(e, loc.data, null, GetConnection(c.description, c.connectionType, c.depth))}
+            onMouseLeave={(e) => HandleHover(e)}
+          >
+            <LocConnection
+              seed={c.seed}
+              seedType={c.seedType}
+              distance={c.distance}
+              type={c.connectionType}
+              angle={c.connectionAngle}
+              angleOrigin={lh.GetConAngleOrigin(c.connectionAngleOrigin)}
+              loc={loc}
+              map={map}
+              isMobileDevice={isMobileDevice}
+            />
+          </div>
+        ))}
 
       {/* locations */}
       {interiorLocs.length > 0 ? (
