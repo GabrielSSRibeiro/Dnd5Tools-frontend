@@ -642,7 +642,7 @@ function EditLocation({
               />
             </div>
             <div className="location-row df df-jc-sb df-ai-c">
-              <div className="df df-fd-c">
+              <div className="df df-fd-c df-jc-sb full-height">
                 <button
                   title="Novo caminho variado"
                   className="con-random-seed"
