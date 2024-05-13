@@ -722,14 +722,14 @@ function EditLocation({
             </div>
 
             <TextInput
-              label="Descriçao"
+              label="Descriçao da conexao"
               value={location}
               valuePropertyPath="reference.connectionDescription"
               onChange={setLocation}
               disabled={!location.reference.connectionType}
             />
             <Select
-              label={"Profundidade"}
+              label={"Profundidade da conexao"}
               extraWidth={250}
               value={location}
               valuePropertyPath="reference.connectionDepth"
