@@ -1,6 +1,8 @@
 .ModalManageConnection-container.modal-body {
   width: fit-content;
-  height: fit-content;
+  margin-top: 160px;
+  height: 70%;
+  justify-content: space-between;
 }
 
 .ModalManageConnection-container .new-connection-wrapper {
@@ -12,7 +14,6 @@
   margin-bottom: 25px;
 
   overflow-y: auto;
-  height: 350px;
 }
 
 .ModalManageConnection-container footer {

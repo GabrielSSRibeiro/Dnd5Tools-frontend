@@ -1,7 +1,8 @@
 .ModalManageElement-container.modal-body {
   width: fit-content;
-  height: 450px;
   margin-top: 160px;
+  height: 70%;
+  justify-content: space-between;
 }
 
 .ModalManageElement-container .new-element-wrapper {
@@ -13,7 +14,6 @@
   margin-bottom: 25px;
 
   overflow-y: auto;
-  height: 350px;
 }
 
 .ModalManageElement-container footer {

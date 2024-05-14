@@ -1,14 +1,14 @@
 .ModalManageContext-container.modal-body {
   width: fit-content;
-  height: 450px;
   margin-top: 160px;
+  height: 70%;
+  justify-content: space-between;
 }
 
 .ModalManageContext-container .new-context-wrapper {
   row-gap: 10px;
   margin-bottom: 25px;
   overflow-y: auto;
-  height: 350px;
 }
 
 .ModalManageContext-container .details-wrapper {

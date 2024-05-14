@@ -1,7 +1,9 @@
 .ModalManageDungeonRoom-container.modal-body {
   width: fit-content;
-  height: 450px;
-  margin-top: 200px;
+  margin-top: 160px;
+  height: 70%;
+
+  justify-content: space-between;
 }
 
 .ModalManageDungeonRoom-container .new-room-wrapper {
@@ -13,7 +15,6 @@
   margin-bottom: 25px;
 
   overflow-y: auto;
-  height: 350px;
 }
 
 .ModalManageDungeonRoom-container .new-room-wrapper .room-row {
