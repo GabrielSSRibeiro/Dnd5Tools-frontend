@@ -826,8 +826,8 @@ export const ROOM_CONNECTIONS = {
   OPEN: 40,
 };
 export const roomConnections = [
-  { display: "Bloqueada", value: ROOM_CONNECTIONS.BLOCKED },
-  { display: "Desbloqueada", value: ROOM_CONNECTIONS.UNBLOCKED },
+  { display: "Bloqueada", value: ROOM_CONNECTIONS.BLOCKED, icon: "fas fa-lock" },
+  { display: "Desbloqueada", value: ROOM_CONNECTIONS.UNBLOCKED, icon: "fas fa-lock-open" },
   { display: "Aberta", value: ROOM_CONNECTIONS.OPEN },
 ];
 export const GetRoomConnection = (value) => roomConnections.find((a) => a.value === value);

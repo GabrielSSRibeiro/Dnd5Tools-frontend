@@ -185,7 +185,7 @@ function ModalManageDungeonRoom({
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                nothingSelected="Nenhuma"
+                nothingSelected="-"
               />
               <Select
                 label={"Direção conexão"}
@@ -196,7 +196,7 @@ function ModalManageDungeonRoom({
                 options={lc.roomConnectionDirections.filter((d) => d.value !== tempRoom.ceiling.direction)}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                nothingSelected="Nenhuma"
+                nothingSelected="-"
                 isDisabled={!tempRoom.floor.connection}
               />
               <button
@@ -222,7 +222,7 @@ function ModalManageDungeonRoom({
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                nothingSelected="Nenhuma"
+                nothingSelected="-"
               />
               <button
                 title="Descriçao"
@@ -242,7 +242,7 @@ function ModalManageDungeonRoom({
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                nothingSelected="Nenhuma"
+                nothingSelected="-"
               />
               <button
                 title="Descriçao"
@@ -266,7 +266,7 @@ function ModalManageDungeonRoom({
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                nothingSelected="Nenhuma"
+                nothingSelected="-"
               />
               <button
                 title="Descriçao"
@@ -288,7 +288,7 @@ function ModalManageDungeonRoom({
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                nothingSelected="Nenhuma"
+                nothingSelected="-"
               />
               <button
                 title="Descriçao"
@@ -311,7 +311,7 @@ function ModalManageDungeonRoom({
                 options={lc.roomConnections}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                nothingSelected="Nenhuma"
+                nothingSelected="-"
               />
               <Select
                 label={"Direção conexão"}
@@ -322,7 +322,7 @@ function ModalManageDungeonRoom({
                 options={lc.roomConnectionDirections.filter((d) => d.value !== tempRoom.floor.direction)}
                 optionDisplay={(o) => o.display}
                 optionValue={(o) => o.value}
-                nothingSelected="Nenhuma"
+                nothingSelected="-"
                 isDisabled={!tempRoom.ceiling.connection}
               />
               <button
