@@ -188,7 +188,7 @@ function ModalManageDungeonRoom({
               />
               <Select
                 label={"Direção conexão"}
-                extraWidth={70}
+                extraWidth={75}
                 value={tempRoom}
                 valuePropertyPath="floor.direction"
                 onSelect={setTempRoom}
@@ -314,7 +314,7 @@ function ModalManageDungeonRoom({
               />
               <Select
                 label={"Direção conexão"}
-                extraWidth={70}
+                extraWidth={75}
                 value={tempRoom}
                 valuePropertyPath="ceiling.direction"
                 onSelect={setTempRoom}
