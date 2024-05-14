@@ -8,7 +8,16 @@ import ModalManageDungeonRoom from "./components/ModalManageDungeonRoom";
 
 import "./styles.css";
 
-function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, roomSelect, currentRoomIndex = null, isMovingCreatures = false }) {
+function Dungeon({
+  location,
+  setLocation,
+  HandleSelectCreatures,
+  UpdateBoundCreatures,
+  creatures,
+  roomSelect,
+  currentRoomIndex = null,
+  isMovingCreatures = false,
+}) {
   const [modal, setModal] = useState(null);
   const [roomToSwap, setRoomToSwap] = useState(null);
   const [roomToolTip, setRoomToolTip] = useState(null);
@@ -68,6 +77,7 @@ function Dungeon({ location, setLocation, HandleSelectCreatures, creatures, room
         contexts={location.contexts}
         creatures={creatures}
         HandleSelectCreatures={(creaturesObj, setter) => HandleSelectCreatures(creaturesObj, setter)}
+        UpdateBoundCreatures={UpdateBoundCreatures}
         SwapDungeonRoom={() => SwapDungeonRoom(index)}
         DeleteDungeonRoom={() => DeleteDungeonRoom(index)}
         onClose={(tempRoom) => HandleCloseModalManageDungeonRoom(index, tempRoom, isEntrance)}

@@ -23,6 +23,7 @@ function ModalManageDungeonRoom({
   contexts,
   creatures,
   HandleSelectCreatures,
+  UpdateBoundCreatures,
   SwapDungeonRoom,
   DeleteDungeonRoom,
   onClose,
@@ -388,6 +389,7 @@ function ModalManageDungeonRoom({
           contexts={contexts}
           creatures={creatures}
           HandleSelectCreatures={HandleSelectCreatures}
+          UpdateBoundCreatures={UpdateBoundCreatures}
           isPointOfInterest={true}
         />
       </div>

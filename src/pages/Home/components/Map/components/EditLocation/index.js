@@ -858,6 +858,7 @@ function EditLocation({
               location={location}
               setLocation={setLocation}
               HandleSelectCreatures={HandleSelectCreatures}
+              UpdateBoundCreatures={UpdateBoundCreatures}
               creatures={creatures}
               isEdit={true}
             />
