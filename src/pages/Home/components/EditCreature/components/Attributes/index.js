@@ -47,7 +47,7 @@ function Attributes({ creature, setCreature }) {
 
   function HandleWeakSpotChange(value, index) {
     if (value.weakSpots[index] === "") {
-      value.weakSpots[index] = null;
+      value.weakSpots.splice(index, 1);
     }
 
     setCreature(value);

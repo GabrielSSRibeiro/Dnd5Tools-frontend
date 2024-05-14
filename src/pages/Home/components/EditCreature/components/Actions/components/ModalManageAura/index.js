@@ -17,7 +17,7 @@ import {
   creatureAttributeNames,
 } from "../../../../../../../../constants/creatureConstants";
 import { GetActionDamangeAndConditionString } from "../../../../../../../../helpers/combatHelper";
-import { GetActionReachValue } from "../../../../../../../../helpers/creatureHelper";
+import { GetAuraReachValue } from "../../../../../../../../helpers/creatureHelper";
 
 import Button from "../../../../../../../../components/Button";
 import TextInput from "../../../../../../../../components/TextInput";
@@ -336,9 +336,7 @@ function ModalManageAura({ level, aura, weakSpots, onClose }) {
             />
             <div className="extra-details">
               <span className="action-preview">
-                {CheckFinalButtonValid()
-                  ? GetActionReachValue(tempAura.reach, tempAura.type) + GetActionDamangeAndConditionString(tempAura, level)
-                  : ""}
+                {CheckFinalButtonValid() ? GetAuraReachValue(tempAura.reach) + GetActionDamangeAndConditionString(tempAura, level) : ""}
               </span>
               <aside>
                 <button className="button-simple" onClick={HandleCancel}>
