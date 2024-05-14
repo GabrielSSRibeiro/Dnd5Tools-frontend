@@ -357,6 +357,7 @@ function ModalManageDungeonRoom({
             valuePropertyPath="type"
             onSelect={HandleSelectType}
             options={lc.elementTypes}
+            optionsAtATime={6}
             optionDisplay={(o) => o.display}
             optionValue={(o) => o.value}
           />
@@ -377,6 +378,7 @@ function ModalManageDungeonRoom({
             onSelect={setTempRoom}
             nothingSelected="Nenhuma"
             options={creatureRarities}
+            optionsAtATime={6}
             optionDisplay={(o) => o.treasureDisplay}
             optionValue={(o) => o.value}
           />
