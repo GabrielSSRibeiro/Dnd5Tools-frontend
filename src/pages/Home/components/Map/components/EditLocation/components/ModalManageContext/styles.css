@@ -9,6 +9,7 @@
   row-gap: 10px;
   margin-bottom: 25px;
   overflow-y: auto;
+  flex: 1;
 }
 
 .ModalManageContext-container .details-wrapper {
