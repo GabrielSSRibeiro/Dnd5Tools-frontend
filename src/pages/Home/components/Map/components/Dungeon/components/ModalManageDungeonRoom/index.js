@@ -171,7 +171,7 @@ function ModalManageDungeonRoom({
               valuePropertyPath="size"
               onSelect={setTempRoom}
               options={lc.roomSizes}
-              optionDisplay={(o) => o.display}
+              optionDisplay={(o) => (o.meters ? `${o.display} (${o.meters}m x ${o.meters}m)` : o.display)}
               optionValue={(o) => o.value}
             />
 
