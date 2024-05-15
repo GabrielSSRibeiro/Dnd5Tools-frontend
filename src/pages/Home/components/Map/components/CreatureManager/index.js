@@ -162,7 +162,7 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
       <div className="location-row location-detail-group-title">
         <span className={data.creatures.length === 0 ? `lacking-data` : ""}>Criaturas</span>
         <div className="df df-cg-5">
-          {!isPointOfInterest && !isWorld && (
+          {!isPointOfInterest && !isWorld && map[data.exteriorLocationId] && (
             <button title="Copiar de exterior" onClick={HandleCopyFromExterior}>
               <i className="fas fa-clone"></i>
             </button>
