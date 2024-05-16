@@ -696,7 +696,8 @@ function Map({
     }
 
     const finalProb = utils.ProbabilityCheckWithRatio(lc.GetHazardousness(locationContext.hazardousness).probability, travelTimeInMin / 60).finalProb;
-    return Math.min(1, utils.getProbabilityOfTwoIndependent(finalProb, combatConfig.travel.cummulativeEncounterChance));
+    return finalProb;
+    // return Math.min(1, utils.getProbabilityOfTwoIndependent(finalProb, combatConfig.travel.cummulativeEncounterChance));
   }
 
   function AdjustCoodernate(coodernate) {

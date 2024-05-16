@@ -534,14 +534,14 @@ export const HAZARDOUSNESS = {
   EXTREME: 40,
 };
 export const hazardousness = [
-  { display: "Baixa (5% / hora de exploraçao)", value: HAZARDOUSNESS.LOW, color: cc.GetRarity(HAZARDOUSNESS.LOW).color, probability: 0.05 },
-  { display: "Média (10% / hora de exploraçao)", value: HAZARDOUSNESS.MEDIUM, color: cc.GetRarity(HAZARDOUSNESS.MEDIUM).color, probability: 0.1 },
-  { display: "Alta (15% / hora de exploraçao)", value: HAZARDOUSNESS.HIGH, color: cc.GetRarity(HAZARDOUSNESS.HIGH).color, probability: 0.15 },
+  { display: "Baixa (10% / hora de exploraçao)", value: HAZARDOUSNESS.LOW, color: cc.GetRarity(HAZARDOUSNESS.LOW).color, probability: 0.1 },
+  { display: "Média (15% / hora de exploraçao)", value: HAZARDOUSNESS.MEDIUM, color: cc.GetRarity(HAZARDOUSNESS.MEDIUM).color, probability: 0.15 },
+  { display: "Alta (20% / hora de exploraçao)", value: HAZARDOUSNESS.HIGH, color: cc.GetRarity(HAZARDOUSNESS.HIGH).color, probability: 0.2 },
   {
-    display: "Extrema (20% / hora de exploraçao)",
+    display: "Extrema (25% / hora de exploraçao)",
     value: HAZARDOUSNESS.EXTREME,
     color: cc.GetRarity(HAZARDOUSNESS.EXTREME).color,
-    probability: 0.2,
+    probability: 0.25,
   },
 ];
 export const GetHazardousness = (value) => hazardousness.find((a) => a.value === value);
