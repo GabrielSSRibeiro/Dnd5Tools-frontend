@@ -4,9 +4,29 @@
   /* max-height: 450px; */
 }
 
+.ModalTravelResults-container.modal-body.show-details {
+  max-height: 70%;
+}
+
 .ModalTravelResults-container .content {
   position: relative;
   column-gap: 25px;
+}
+
+.ModalTravelResults-container .loc-details {
+  width: 1250px;
+  overflow: auto;
+}
+
+.ModalTravelResults-container .loc-details span {
+  font-size: 15px;
+  font-family: var(--primaryFont);
+}
+
+.ModalTravelResults-container .loc-details .details span {
+  text-align: justify;
+  white-space: break-spaces;
+  word-break: break-word;
 }
 
 .ModalTravelResults-container .details-wrapper {

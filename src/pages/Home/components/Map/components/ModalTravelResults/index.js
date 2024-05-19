@@ -9,7 +9,7 @@ import * as th from "../../../../../../helpers/treasureHelper";
 
 import Dungeon from "../Dungeon";
 import Info from "../../../../../../components/Info";
-import SelectButton from "../../../../../../components/SelectButton";
+import CheckInput from "../../../../../../components/CheckInput";
 import TextInput from "../../../../../../components/TextInput";
 import Button from "../../../../../../components/Button";
 import Modal from "../../../../../../components/Modal";
@@ -48,6 +48,8 @@ function ModalTravelResults({
   moveNodeAction,
 }) {
   const avatarProportion = useRef(60);
+  const noDetails = useRef("...");
+  const [showDetails, setShowDetails] = useState(false);
   const [timePassed, setTimePassed] = useState(
     travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY ? 0 : lc.GetRestTime(restTime).timeInMin
   );
@@ -67,19 +69,6 @@ function ModalTravelResults({
     },
     [hasMoved, locHoverData, timePassed, isSafe]
   );
-  const DETAILS_VIEWS = useRef({
-    MARCH: 0,
-    FIRST_IMPRESSIONS: 1,
-    DETAILS: 2,
-    RUMORS: 3,
-    SECRETS: 4,
-    CREATURES: 5,
-  });
-  const ROOM_DETAILS_VIEWS = useRef({
-    ROOM: 0,
-    FIRST_IMPRESSIONS: 1,
-    SECRETS: 2,
-  });
   const defaultNotes = useRef("Nenhum ponto chama a atençao…");
   const viewingCurrent = useMemo(
     () => !hasMoved && travel.pace !== lc.TRAVEL_PACES.REST && travel.pace !== lc.TRAVEL_PACES.ACTIVITY,
@@ -87,21 +76,6 @@ function ModalTravelResults({
   );
   const [location, setLocation] = useState(GetModalLocation());
   const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
-  const allLocationCreatures = useMemo(() => {
-    let allLocationCreatures = [...newLocation.creatures];
-
-    newLocation.interaction?.rooms
-      .filter((r) => r)
-      .forEach((r) => {
-        r.creatures.forEach((c) => {
-          if (!allLocationCreatures.some((lc) => lc.creatureId === c.creatureId)) {
-            allLocationCreatures.push(c);
-          }
-        });
-      });
-
-    return newLocation.creatures;
-  }, [newLocation.creatures, newLocation.interaction]);
   const isPointOfInterest = useMemo(() => newLocation.size === lc.LOCATION_SIZES.POINT_OF_INTEREST, [newLocation.size]);
   const encounterLocation = useRef(
     isPointOfInterest &&
@@ -464,6 +438,27 @@ function ModalTravelResults({
 
     return finalCreatures;
   }, [GetRoomCreatures, addExteriorCreatures, location]);
+  const allLocationCreatures = useMemo(() => {
+    let allLocationCreatures = [...location.creatures];
+
+    location.interaction?.rooms
+      .filter((r) => r)
+      .forEach((r) => {
+        r.creatures.forEach((c) => {
+          if (!allLocationCreatures.some((lc) => lc.creatureId === c.creatureId)) {
+            allLocationCreatures.push(c);
+          }
+        });
+      });
+
+    finalCreatures.creatures.forEach((fc) => {
+      if (!allLocationCreatures.some((lc) => lc.creatureId === fc.id)) {
+        allLocationCreatures.push(encounterLocation.current.creatures.find((c) => c.creatureId === fc.id));
+      }
+    });
+
+    return allLocationCreatures;
+  }, [finalCreatures, location.creatures, location.interaction?.rooms]);
   const hasSelectedCreature = useMemo(() => finalCreatures.creatures.some((c) => c.isSelected), [finalCreatures]);
 
   const remainsForDisplay = useRef(
@@ -490,8 +485,6 @@ function ModalTravelResults({
       })
   );
   const [modal, setModal] = useState(null);
-  const [locDetails, setLocDetails] = useState(DETAILS_VIEWS.current.MARCH);
-  const [locRoomDetails, setLocRoomDetails] = useState(ROOM_DETAILS_VIEWS.current.ROOM);
   const [name, setName] = useState(
     newCurrentNode.name ??
       (isPointOfInterest
@@ -568,100 +561,26 @@ function ModalTravelResults({
 
     return newTemperature;
   }, [mapConditionLevels, newLocation.contexts, shoudUpdateConditions, travel.temperature]);
-  const detailsViews = useMemo(
-    () => [
-      {
-        text: "Marcha",
-        icon: null,
-        onClick: () => setLocDetails(DETAILS_VIEWS.current.MARCH),
-        isSelected: locDetails === DETAILS_VIEWS.current.MARCH,
-        isDisabled: false,
-        marginLeft: 0,
-        className: null,
-      },
-      {
-        text: null,
-        icon: "fas fa-eye",
-        onClick: () => setLocDetails(DETAILS_VIEWS.current.FIRST_IMPRESSIONS),
-        isSelected: locDetails === DETAILS_VIEWS.current.FIRST_IMPRESSIONS,
-        isDisabled: !currentContext.firstImpressions,
-        marginLeft: -130,
-        className: "icon-view",
-      },
-      {
-        text: null,
-        icon: "fas fa-info-circle",
-        onClick: () => setLocDetails(DETAILS_VIEWS.current.DETAILS),
-        isSelected: locDetails === DETAILS_VIEWS.current.DETAILS,
-        isDisabled: !currentContext.details,
-        marginLeft: -130,
-        className: "icon-view",
-      },
-      {
-        text: null,
-        icon: "fas fa-assistive-listening-systems",
-        onClick: () => setLocDetails(DETAILS_VIEWS.current.RUMORS),
-        isSelected: locDetails === DETAILS_VIEWS.current.RUMORS,
-        isDisabled: !currentContext.rumors,
-        marginLeft: -130,
-        className: "icon-view",
-      },
-      {
-        text: null,
-        icon: "fas fa-mask",
-        onClick: () => setLocDetails(DETAILS_VIEWS.current.SECRETS),
-        isSelected: locDetails === DETAILS_VIEWS.current.SECRETS,
-        isDisabled: !currentContext.secrets,
-        marginLeft: -130,
-        className: "icon-view",
-      },
-      {
-        text: "Criaturas",
-        icon: null,
-        onClick: () => setLocDetails(DETAILS_VIEWS.current.CREATURES),
-        isSelected: locDetails === DETAILS_VIEWS.current.CREATURES,
-        isDisabled: allLocationCreatures.length === 0,
-        marginLeft: -80,
-        className: "creatures-view",
-      },
-    ],
-    [allLocationCreatures.length, currentContext.details, currentContext.firstImpressions, currentContext.rumors, currentContext.secrets, locDetails]
-  );
-  const roomDetailsViews = useMemo(
-    () =>
-      location.interaction
-        ? [
-            {
-              text: "Área",
-              icon: null,
-              onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.ROOM),
-              isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.ROOM,
-              isDisabled: isSafe,
-              marginLeft: 4,
-              className: null,
-            },
-            {
-              text: null,
-              icon: "fas fa-eye",
-              onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.FIRST_IMPRESSIONS),
-              isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.FIRST_IMPRESSIONS,
-              isDisabled: room == null || !room.firstImpressions,
-              marginLeft: -128,
-              className: "icon-view",
-            },
-            {
-              text: null,
-              icon: "fas fa-mask",
-              onClick: () => setLocRoomDetails(ROOM_DETAILS_VIEWS.current.SECRETS),
-              isSelected: locRoomDetails === ROOM_DETAILS_VIEWS.current.SECRETS,
-              isDisabled: room == null || !room.secrets,
-              marginLeft: -128,
-              className: "icon-view",
-            },
-          ]
-        : null,
-    [isSafe, locRoomDetails, location.interaction, room]
-  );
+
+  const contextData = useMemo(() => {
+    let contextData = [];
+
+    contextData.push({
+      label: "Primeiras Impressoes",
+      icon: "fas fa-eye",
+      value: currentContext.firstImpressions ? currentContext.firstImpressions : noDetails.current,
+    });
+    contextData.push({ label: "Geral", icon: "fas fa-info-circle", value: currentContext.details ? currentContext.details : noDetails.current });
+    contextData.push({
+      label: "Rumores",
+      icon: "fas fa-assistive-listening-systems",
+      value: currentContext.rumors ? currentContext.rumors : noDetails.current,
+    });
+    contextData.push({ label: "Segredos", icon: "fas fa-mask", value: currentContext.secrets ? currentContext.secrets : noDetails.current });
+
+    return contextData;
+  }, [currentContext]);
+  const hasDetails = useMemo(() => contextData.some((d) => d.value !== noDetails.current), [contextData]);
 
   function UpdateElements() {
     if (isPointOfInterest || !isEncounter || !location.traversal.elements) setElmentsForDisplay(null);
@@ -874,7 +793,6 @@ function ModalTravelResults({
       setLocation({ ...location });
     } else {
       SetRoomIndex(index);
-      setLocRoomDetails(ROOM_DETAILS_VIEWS.current.ROOM);
     }
   }
 
@@ -902,27 +820,74 @@ function ModalTravelResults({
   }
 
   return (
-    <Modal title={newLocation.name} className="ModalTravelResults-container df">
+    <Modal title={newLocation.name} className={`ModalTravelResults-container df${showDetails ? " show-details" : ""}`}>
       {modal}
-      <main className="content df df-jc-c df-ai-fs df-f1">
-        {/* world */}
-        <aside className="details-wrapper df df-fd-c df-jc-fs">
-          <div className="df df-cg-5" style={{ zIndex: 1 }}>
-            {detailsViews.map((d, index) => (
-              <div key={index} style={{ zIndex: -1 - index, marginLeft: d.marginLeft }}>
-                <SelectButton
-                  text={d.text}
-                  icon={d.icon}
-                  isDisabled={d.isDisabled}
-                  onClick={d.onClick}
-                  isSelected={d.isSelected}
-                  className={`details-views${d.className ? ` ${d.className}` : ""}`}
-                />
+      {/* details */}
+      {showDetails ? (
+        contextData.length > 0 && (
+          <aside className="loc-details df df-fd-c df-jc-fs df-rg-20">
+            {allLocationCreatures.length > 0 && (
+              <div className="df df-fd-c df-jc-fs df-rg-5">
+                <h3 className="bold">Criaturas</h3>
+                <div className="creature-list">
+                  {allLocationCreatures.map((ec) => {
+                    const creature = creatures.find((c) => c._id === ec.creatureId);
+
+                    return (
+                      <div
+                        className="df encounter-creature"
+                        onClick={() => OpenModalExport(creature)}
+                        key={ec.creatureId}
+                        style={{
+                          width: avatarProportion.current,
+                          height: avatarProportion.current,
+                          borderColor: cc.GetRarity(creature.rarity).color,
+                        }}
+                      >
+                        <Info
+                          contents={[{ text: creature.name }, { text: "..." }, { text: "[Exportar]", icon: "fas fa-upload" }]}
+                          tooltipOnly={true}
+                        />
+                        <img
+                          className="creature-avatar"
+                          style={{
+                            width: avatarProportion.current,
+                            height: avatarProportion.current,
+                            left: creature.imageX != null ? creature.imageX * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
+                            top: creature.imageY != null ? creature.imageY * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
+                            transform: `scale(${creature.imageScale != null ? creature.imageScale : cc.DEFAULT_AVATAR_SCALE})`,
+                            transformOrigin: "top left",
+                          }}
+                          src={creature.image}
+                          alt="creature-avatar"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            ))}
-          </div>
-          {locDetails === DETAILS_VIEWS.current.MARCH &&
-            (isSafe ? (
+            )}
+
+            <div className="df df-fd-c df-rg-20 full-width">
+              {contextData.map((data, i) => (
+                <div className="df df-fd-c df-rg-5 full-width" key={i}>
+                  <span className="bold">
+                    <i className={data.icon}></i> {data.label}
+                  </span>
+                  <div className="details full-width">
+                    <span>{data.value}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </aside>
+        )
+      ) : (
+        <main className="content df df-jc-c df-ai-fs df-f1">
+          {/* world */}
+          <aside className="details-wrapper df df-fd-c df-jc-fs">
+            <h3 className="bold">Marcha</h3>
+            {isSafe ? (
               <>
                 <span>Grupo movido seguramente sem marcha</span>
                 <span>Tempo não é passado e outros fatores não são afetados</span>
@@ -964,230 +929,171 @@ function ModalTravelResults({
                   </h4>
                 )}
               </>
-            ))}
-          {locDetails === DETAILS_VIEWS.current.FIRST_IMPRESSIONS && <span> {currentContext.firstImpressions} </span>}
-          {locDetails === DETAILS_VIEWS.current.DETAILS && <span> {currentContext.details} </span>}
-          {locDetails === DETAILS_VIEWS.current.RUMORS && <span> {currentContext.rumors} </span>}
-          {locDetails === DETAILS_VIEWS.current.SECRETS && <span> {currentContext.secrets} </span>}
-          {locDetails === DETAILS_VIEWS.current.CREATURES && (
-            <div className="creature-list">
-              {allLocationCreatures.length > 0 &&
-                allLocationCreatures.map((ec) => {
-                  const creature = creatures.find((c) => c._id === ec.creatureId);
+            )}
+          </aside>
 
-                  return (
-                    <div
-                      className="df encounter-creature"
-                      onClick={() => OpenModalExport(creature)}
-                      key={ec.creatureId}
-                      style={{
-                        width: avatarProportion.current,
-                        height: avatarProportion.current,
-                        borderColor: cc.GetRarity(creature.rarity).color,
-                      }}
-                    >
-                      <Info contents={[{ text: creature.name }, { text: "..." }, { text: "[Exportar]", icon: "fas fa-upload" }]} tooltipOnly={true} />
-                      <img
-                        className="creature-avatar"
-                        style={{
-                          width: avatarProportion.current,
-                          height: avatarProportion.current,
-                          left: creature.imageX != null ? creature.imageX * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
-                          top: creature.imageY != null ? creature.imageY * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
-                          transform: `scale(${creature.imageScale != null ? creature.imageScale : cc.DEFAULT_AVATAR_SCALE})`,
-                          transformOrigin: "top left",
-                        }}
-                        src={creature.image}
-                        alt="creature-avatar"
+          {/* loc */}
+          <aside className="details-wrapper dungeon df df-fd-c df-jc-fs" style={{ zIndex: 2 }}>
+            {isPointOfInterest ? (
+              <fieldset className="df dungeon-wrapper" disabled={isSafe}>
+                <Dungeon
+                  location={location}
+                  setLocation={setLocation}
+                  roomSelect={HandleSelectRoomIndex}
+                  creatures={creatures}
+                  currentRoomIndex={roomIndex}
+                  isMovingCreatures={hasSelectedCreature}
+                />
+              </fieldset>
+            ) : (
+              <>
+                <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={setName} />
+                {!isSafe && (
+                  <>
+                    {systemType === SYSTEM_TYPES.DND_5E && <span>Encontrar Recursos: CD {findResourcesDifficulty.current}</span>}
+                    {tracksForDisplay.current.length > 0 && (
+                      <span>
+                        Rastros de: <span className="bold">"{tracksForDisplay.current.join(", ")}"</span>
+                      </span>
+                    )}
+                    {remainsForDisplay.current > 0 && systemType === SYSTEM_TYPES.DND_5E && (
+                      <span>
+                        Restos mortais com o equivalente a <span className="bold">{remainsForDisplay.current}</span> PO
+                      </span>
+                    )}
+
+                    {location.traversal.elements?.length > 0 && (
+                      <div className="df df-fd-c df-rg-5">
+                        <button className="df df-cg-5 button-simple" onClick={UpdateElements}>
+                          <i className="fas fa-retweet"></i>
+                          Elementos
+                        </button>
+                        <span className="elements-display">{elmentsForDisplay ?? "-"}</span>
+                      </div>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+          </aside>
+
+          {/* surroundings */}
+          <aside className="details-wrapper df df-fd-c df-jc-fs">
+            <h3 className="bold">{isPointOfInterest ? "Área" : "Arredores"}</h3>
+            {isSafe ? (
+              <span>-</span>
+            ) : (
+              <div className="df df-jc-fs df-fd-c df-rg-10 room-data">
+                {room?.purpose && <span> {room.purpose} </span>}
+                {roomDimentions && <span> {roomDimentions} </span>}
+                {roomType && <span> {roomType} </span>}
+                {(materialRarityDisplay || isHazardous) && (
+                  <div className="df surroundings">
+                    <div className="material">
+                      {materialRarityDisplay && <span>Material {materialRarityDisplay}</span>}
+                      {materialRarityDisplay && isHazardous && <span> - </span>}
+                      {isHazardous && <span>Interação Perigosa</span>}
+                    </div>
+                  </div>
+                )}
+                {/* creatures */}
+                {finalCreatures.creatures.length > 0 ? (
+                  <>
+                    {/* label and actions */}
+                    <div className="df df-cg-5">
+                      {room && (
+                        <fieldset className="df df-cg-10" disabled={!hasSelectedCreature}>
+                          <button
+                            title="Matar"
+                            className={`button-simple kill${!hasSelectedCreature ? " element-disabled" : ""}`}
+                            onClick={() => SetCreaturesStatus(true)}
+                          >
+                            <i className="fas fa-skull"></i>
+                          </button>
+                          <button
+                            title="Salvar"
+                            className={`button-simple save${!hasSelectedCreature ? " element-disabled" : ""}`}
+                            onClick={() => SetCreaturesStatus(false)}
+                          >
+                            <i className="fas fa-heart"></i>
+                          </button>
+                          <span> - </span>
+                        </fieldset>
+                      )}
+                      {isPointOfInterest ? (
+                        <span className="imminent"> {lc.GetNodeCreatureCondition(lc.NODE_CREATURE_CONDITIONS.IMMINENT).display}</span>
+                      ) : (
+                        <span className={finalCreatures.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
+                          {`${lc.GetNodeCreatureCondition(finalCreatures.condition).display} ${finalCreatures.distance}`}
+                        </span>
+                      )}
+                      <Info
+                        contents={[
+                          { text: "Combate não é obrigatório e pode ser evitado" },
+                          { text: "" },
+                          { text: "Clique em uma criatura para interagir" },
+                        ]}
                       />
                     </div>
-                  );
-                })}
-            </div>
-          )}
-        </aside>
 
-        {/* loc */}
-        <aside className="details-wrapper dungeon df df-fd-c df-jc-fs" style={{ zIndex: 2 }}>
-          {isPointOfInterest ? (
-            <fieldset className="df dungeon-wrapper" disabled={isSafe}>
-              <Dungeon
-                location={location}
-                setLocation={setLocation}
-                roomSelect={HandleSelectRoomIndex}
-                creatures={creatures}
-                currentRoomIndex={roomIndex}
-                isMovingCreatures={hasSelectedCreature}
-              />
-            </fieldset>
-          ) : (
-            <>
-              <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={setName} />
-              {!isSafe && (
-                <>
-                  {systemType === SYSTEM_TYPES.DND_5E && <span>Encontrar Recursos: CD {findResourcesDifficulty.current}</span>}
-                  {tracksForDisplay.current.length > 0 && (
-                    <span>
-                      Rastros de: <span className="bold">"{tracksForDisplay.current.join(", ")}"</span>
-                    </span>
-                  )}
-                  {remainsForDisplay.current > 0 && systemType === SYSTEM_TYPES.DND_5E && (
-                    <span>
-                      Restos mortais com o equivalente a <span className="bold">{remainsForDisplay.current}</span> PO
-                    </span>
-                  )}
+                    {/* list */}
+                    <div className="creature-list">
+                      {finalCreatures.creatures.map((c, index) => {
+                        let contents = [{ text: c.creature.name }, { text: `${c.type} ${c.size}` }];
 
-                  {location.traversal.elements?.length > 0 && (
-                    <div className="df df-fd-c df-rg-5">
-                      <button className="df df-cg-5 button-simple" onClick={UpdateElements}>
-                        <i className="fas fa-retweet"></i>
-                        Elementos
-                      </button>
-                      <span className="elements-display">{elmentsForDisplay ?? "-"}</span>
-                    </div>
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </aside>
+                        if (c.creature.description) {
+                          contents.push({ text: "" });
+                          contents.push({ text: c.creature.description.slice(0, 200) + "..." });
+                        }
 
-        {/* surroundings */}
-        <aside className="details-wrapper df df-fd-c df-jc-fs">
-          {roomDetailsViews && (
-            <div className="df df-cg-5" style={{ zIndex: 1 }}>
-              {roomDetailsViews.map((d, index) => (
-                <div key={index} style={{ zIndex: -1 - index, marginLeft: d.marginLeft }}>
-                  <SelectButton
-                    text={d.text}
-                    icon={d.icon}
-                    isDisabled={d.isDisabled}
-                    onClick={d.onClick}
-                    isSelected={d.isSelected}
-                    className={`details-views${d.className ? ` ${d.className}` : ""}`}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-          {isSafe ? (
-            <span>-</span>
-          ) : (
-            <>
-              {locRoomDetails === ROOM_DETAILS_VIEWS.current.ROOM && (
-                <div className="df df-jc-fs df-fd-c df-rg-10 room-data">
-                  {room?.purpose && <span> {room.purpose} </span>}
-                  {roomDimentions && <span> {roomDimentions} </span>}
-                  {roomType && <span> {roomType} </span>}
-                  {(materialRarityDisplay || isHazardous) && (
-                    <div className="df surroundings">
-                      <div className="material">
-                        {materialRarityDisplay && <span>Material {materialRarityDisplay}</span>}
-                        {materialRarityDisplay && isHazardous && <span> - </span>}
-                        {isHazardous && <span>Interação Perigosa</span>}
-                      </div>
-                    </div>
-                  )}
-                  {/* creatures */}
-                  {finalCreatures.creatures.length > 0 ? (
-                    <>
-                      {/* label and actions */}
-                      <div className="df df-cg-5">
-                        {room && (
-                          <fieldset className="df df-cg-10" disabled={!hasSelectedCreature}>
-                            <button
-                              title="Matar"
-                              className={`button-simple kill${!hasSelectedCreature ? " element-disabled" : ""}`}
-                              onClick={() => SetCreaturesStatus(true)}
+                        return (
+                          <div className="df df-cg-10" key={index}>
+                            {index > 0 && c.bindingFirst && <div> - </div>}
+                            <div
+                              className={`df encounter-creature${c.isSelected ? " selected-creature" : ""}`}
+                              onClick={() => ToggleCreatureSelection(index)}
+                              style={{
+                                width: avatarProportion.current,
+                                height: avatarProportion.current,
+                                borderColor: c.color,
+                              }}
                             >
-                              <i className="fas fa-skull"></i>
-                            </button>
-                            <button
-                              title="Salvar"
-                              className={`button-simple save${!hasSelectedCreature ? " element-disabled" : ""}`}
-                              onClick={() => SetCreaturesStatus(false)}
-                            >
-                              <i className="fas fa-heart"></i>
-                            </button>
-                            <span> - </span>
-                          </fieldset>
-                        )}
-                        {isPointOfInterest ? (
-                          <span className="imminent"> {lc.GetNodeCreatureCondition(lc.NODE_CREATURE_CONDITIONS.IMMINENT).display}</span>
-                        ) : (
-                          <span className={finalCreatures.condition === lc.NODE_CREATURE_CONDITIONS.IMMINENT ? "imminent" : "near"}>
-                            {`${lc.GetNodeCreatureCondition(finalCreatures.condition).display} ${finalCreatures.distance}`}
-                          </span>
-                        )}
-                        <Info
-                          contents={[
-                            { text: "Combate não é obrigatório e pode ser evitado" },
-                            { text: "" },
-                            { text: "Clique em uma criatura para interagir" },
-                          ]}
-                        />
-                      </div>
-
-                      {/* list */}
-                      <div className="creature-list">
-                        {finalCreatures.creatures.map((c, index) => {
-                          let contents = [{ text: c.creature.name }, { text: `${c.type} ${c.size}` }];
-
-                          if (c.creature.description) {
-                            contents.push({ text: "" });
-                            contents.push({ text: c.creature.description.slice(0, 200) + "..." });
-                          }
-
-                          return (
-                            <div className="df df-cg-10" key={index}>
-                              {index > 0 && c.bindingFirst && <div> - </div>}
-                              <div
-                                className={`df encounter-creature${c.isSelected ? " selected-creature" : ""}`}
-                                onClick={() => ToggleCreatureSelection(index)}
+                              <img
+                                className={`creature-avatar${c.isDead ? " dead-creature" : ""}`}
                                 style={{
                                   width: avatarProportion.current,
                                   height: avatarProportion.current,
-                                  borderColor: c.color,
+                                  left: c.creature.imageX != null ? c.creature.imageX * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
+                                  top: c.creature.imageY != null ? c.creature.imageY * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
+                                  transform: `scale(${c.creature.imageScale != null ? c.creature.imageScale : cc.DEFAULT_AVATAR_SCALE})`,
+                                  transformOrigin: "top left",
                                 }}
-                              >
-                                <img
-                                  className={`creature-avatar${c.isDead ? " dead-creature" : ""}`}
-                                  style={{
-                                    width: avatarProportion.current,
-                                    height: avatarProportion.current,
-                                    left: c.creature.imageX != null ? c.creature.imageX * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
-                                    top: c.creature.imageY != null ? c.creature.imageY * avatarProportion.current : cc.DEFAULT_AVATAR_POSITION,
-                                    transform: `scale(${c.creature.imageScale != null ? c.creature.imageScale : cc.DEFAULT_AVATAR_SCALE})`,
-                                    transformOrigin: "top left",
-                                  }}
-                                  src={c.creature.image}
-                                  alt="creature-avatar"
-                                />
-                                {c.isDead && <i className="fas fa-skull dead-icon"></i>}
-                                <Info contents={contents} tooltipOnly={true} />
-                              </div>
-                              {index < finalCreatures.creatures.length - 1 && c.bindingLast && <div> - </div>}
+                                src={c.creature.image}
+                                alt="creature-avatar"
+                              />
+                              {c.isDead && <i className="fas fa-skull dead-icon"></i>}
+                              <Info contents={contents} tooltipOnly={true} />
                             </div>
-                          );
-                        })}
-                      </div>
-                    </>
-                  ) : (
-                    !room?.purpose && !roomDimentions && !roomType && !materialRarityDisplay && !isHazardous && <span>-</span>
-                  )}
-                </div>
-              )}
-              {locRoomDetails === ROOM_DETAILS_VIEWS.current.FIRST_IMPRESSIONS && <span> {room.firstImpressions} </span>}
-              {locRoomDetails === ROOM_DETAILS_VIEWS.current.SECRETS && <span> {room.secrets} </span>}
-            </>
-          )}
-        </aside>
-      </main>
+                            {index < finalCreatures.creatures.length - 1 && c.bindingLast && <div> - </div>}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                ) : (
+                  !room?.purpose && !roomDimentions && !roomType && !materialRarityDisplay && !isHazardous && <span>-</span>
+                )}
+              </div>
+            )}
+          </aside>
+        </main>
+      )}
 
       <div className="divider"></div>
 
       <footer>
         <div className="df df-jc-fs df-cg-20 df-f1">
+          <CheckInput label="Mostrar detalhes" isSelected={showDetails} onClick={() => setShowDetails(!showDetails)} isDisabled={!hasDetails} />
           {addAction && !isPointOfInterest && (
             <button className="df df-cg-5 button-simple" onClick={addAction}>
               <i className="fas fa-plus"></i>

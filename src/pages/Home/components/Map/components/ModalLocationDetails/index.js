@@ -35,21 +35,10 @@ function ModalLocationDetails({
   const contextData = useMemo(() => {
     let contextData = [];
 
-    if (context.firstImpressions) {
-      contextData.push({ label: "Primeiras Impressoes", icon: "fas fa-eye", value: context.firstImpressions });
-    }
-
-    if (context.details) {
-      contextData.push({ label: "Geral", icon: "fas fa-info-circle", value: context.details });
-    }
-
-    if (context.rumors) {
-      contextData.push({ label: "Rumores", icon: "fas fa-assistive-listening-systems", value: context.rumors });
-    }
-
-    if (context.secrets) {
-      contextData.push({ label: "Segredos", icon: "fas fa-mask", value: context.secrets });
-    }
+    contextData.push({ label: "Primeiras Impressoes", icon: "fas fa-eye", value: context.firstImpressions ? context.firstImpressions : "..." });
+    contextData.push({ label: "Geral", icon: "fas fa-info-circle", value: context.details ? context.details : "..." });
+    contextData.push({ label: "Rumores", icon: "fas fa-assistive-listening-systems", value: context.rumors ? context.rumors : "..." });
+    contextData.push({ label: "Segredos", icon: "fas fa-mask", value: context.secrets ? context.secrets : "..." });
 
     return contextData;
   }, [context]);
