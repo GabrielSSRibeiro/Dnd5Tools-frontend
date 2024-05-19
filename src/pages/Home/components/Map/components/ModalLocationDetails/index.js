@@ -36,19 +36,19 @@ function ModalLocationDetails({
     let contextData = [];
 
     if (context.firstImpressions) {
-      contextData.push({ label: "Primeiras Impressoes", value: context.firstImpressions });
+      contextData.push({ label: "Primeiras Impressoes", icon: "fas fa-eye", value: context.firstImpressions });
     }
 
     if (context.details) {
-      contextData.push({ label: "Detalhes", value: context.details });
+      contextData.push({ label: "Geral", icon: "fas fa-info-circle", value: context.details });
     }
 
     if (context.rumors) {
-      contextData.push({ label: "Rumores", value: context.rumors });
+      contextData.push({ label: "Rumores", icon: "fas fa-assistive-listening-systems", value: context.rumors });
     }
 
     if (context.secrets) {
-      contextData.push({ label: "Segredos", value: context.secrets });
+      contextData.push({ label: "Segredos", icon: "fas fa-mask", value: context.secrets });
     }
 
     return contextData;
@@ -133,11 +133,15 @@ function ModalLocationDetails({
       <main className="content df df-ai-fs df-jc-sb df-f1">
         {contextData.length > 0 && (
           <aside className="details-wrapper df df-fd-c df-jc-fs">
-            <h3>Localização atual</h3>
+            <h3>Detalhes</h3>
             <div className="df df-fd-c df-rg-20">
               {contextData.map((data, i) => (
                 <div className="df df-fd-c df-rg-5" key={i}>
-                  {contextData.length > 1 && <span className="bold">{data.label}</span>}
+                  {contextData.length > 1 && (
+                    <span className="bold">
+                      <i className={data.icon}></i> {data.label}
+                    </span>
+                  )}
                   <div className="details">
                     <span>{data.value}</span>
                   </div>

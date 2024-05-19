@@ -1,7 +1,8 @@
 .ModalManageCreatureRoutine-container.modal-body {
   width: fit-content;
-  height: 450px;
   margin-top: 160px;
+  height: 70%;
+  justify-content: space-between;
 }
 
 .ModalManageCreatureRoutine-container .new-creature-wrapper {
@@ -11,9 +12,9 @@
   justify-content: flex-start;
   row-gap: 10px;
   margin-bottom: 25px;
+  flex: 1;
 
   overflow-y: auto;
-  height: 350px;
 }
 
 .ModalManageCreatureRoutine-container footer {

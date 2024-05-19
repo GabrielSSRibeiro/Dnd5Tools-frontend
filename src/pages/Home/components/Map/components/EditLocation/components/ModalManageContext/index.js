@@ -188,7 +188,7 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
           >
             <i className="fas fa-eye"></i>
           </button>
-          <button title="Detalhes" className="button-simple" onClick={() => OpenModalDetails("details", "Descrição", "Descrição")}>
+          <button title="Geral" className="button-simple" onClick={() => OpenModalDetails("details", "Geral", "Geral")}>
             <i className="fas fa-info-circle"></i>
           </button>
           <button title="Rumores" className="button-simple" onClick={() => OpenModalDetails("rumors", "Rumores", "Rumores")}>
