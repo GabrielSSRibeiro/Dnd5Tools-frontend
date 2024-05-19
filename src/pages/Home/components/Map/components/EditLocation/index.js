@@ -458,6 +458,30 @@ function EditLocation({
     utils.downloadData(content.join("\n\n"), `${world.name}.txt`);
   }
 
+  function DeleteDungeon() {
+    setModal(
+      <ModalWarning
+        title="Resetar Masmorra"
+        messages={["Tem certeza que deseja deletar a masmorra?"]}
+        actions={[
+          {
+            text: "Cancelar",
+            click: () => setModal(null),
+            isSimple: true,
+          },
+          {
+            text: "Resetar",
+            click: () => {
+              location.interaction.rooms = [];
+              setLocation({ ...location });
+              setModal(null);
+            },
+          },
+        ]}
+      />
+    );
+  }
+
   function OpenModalConfirmReset() {
     setModal(
       <ModalWarning
@@ -848,11 +872,16 @@ function EditLocation({
           <div className="location-detail-group">
             <div className="location-row location-detail-group-title">
               <span>Disposição</span>
-              {HandleDelete && (
-                <button onClick={OpenModalConfirmReset}>
-                  <i className="fas fa-undo-alt"></i>
+              <div className="df df-cg-5">
+                {HandleDelete && (
+                  <button title="Resetar" onClick={OpenModalConfirmReset}>
+                    <i className="fas fa-undo-alt"></i>
+                  </button>
+                )}
+                <button title="Deletar" onClick={DeleteDungeon} disabled={location.interaction.rooms.length === 0}>
+                  <i className="fas fa-trash"></i>
                 </button>
-              )}
+              </div>
             </div>
             <Dungeon
               location={location}

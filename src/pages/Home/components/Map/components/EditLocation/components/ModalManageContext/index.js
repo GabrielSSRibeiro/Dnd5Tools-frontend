@@ -75,7 +75,6 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
         { text: "Ex: dominada pelo clã bandido/atormentada pelo dragão verde" },
       ]}
       className="ModalManageContext-container"
-      onClickToClose={onClose}
     >
       {modal}
       <div className="new-context-wrapper df df-fd-c df-jc-fs">

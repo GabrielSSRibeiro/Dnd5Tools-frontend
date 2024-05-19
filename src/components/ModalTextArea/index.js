@@ -18,7 +18,7 @@ function ModalTextArea({ title, text, info = null, placeholder = null, onClose }
   }
 
   return (
-    <Modal className="ModalTextArea-container" title={title} info={info} onClickToClose={onClose}>
+    <Modal className="ModalTextArea-container" title={title} info={info}>
       <TextInput value={tempText} onChange={SetTempText} isMultiLine={true} placeholder={placeholder} className="description" />
       <footer>
         <button className="button-simple" onClick={HandleCancel}>

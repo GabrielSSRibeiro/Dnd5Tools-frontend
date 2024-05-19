@@ -24,8 +24,10 @@
 .ModalLocationDetails-container .details-wrapper .details {
   width: 300px;
   text-align: justify;
-  text-indent: 25px;
+  line-height: 1;
+  /* text-indent: 25px; */
   word-break: break-word;
+  padding-right: 20px;
 }
 
 .ModalLocationDetails-container .location-filters {

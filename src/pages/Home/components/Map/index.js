@@ -1303,6 +1303,7 @@ function Map({
           <LocationSummary
             userId={userId}
             location={combatConfig.world}
+            map={map}
             id={userId}
             setLocationToEdit={setLocationToEdit}
             setLocHoverData={setLocHoverData}

@@ -11,6 +11,7 @@ import ModalLocationDetails from "../ModalLocationDetails";
 function LocationSummary({
   userId,
   location,
+  map,
   connection,
   id,
   setLocationToEdit,
@@ -35,6 +36,7 @@ function LocationSummary({
     setModal(
       <ModalLocationDetails
         location={loc}
+        map={map}
         id={locId}
         defaultLevel={defaultLevel}
         locations={locations}
@@ -183,7 +185,7 @@ function LocationSummary({
           {!distance && (
             <aside className="header-details">
               <button title="Abrir Detalhes" onClick={() => OpenModalLocationDetails(location, id, true)}>
-                <i className="fas fa-book"></i>
+                <i className="fas fa-eye"></i>
               </button>
             </aside>
           )}

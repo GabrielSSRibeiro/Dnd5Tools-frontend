@@ -11,6 +11,7 @@ import "./styles.css";
 
 function ModalLocationDetails({
   location,
+  map,
   id,
   defaultLevel,
   locations,
@@ -30,6 +31,28 @@ function ModalLocationDetails({
   const context = useMemo(() => {
     return location.contexts.find((c) => c.isCurrent);
   }, [location]);
+
+  const contextData = useMemo(() => {
+    let contextData = [];
+
+    if (context.firstImpressions) {
+      contextData.push({ label: "Primeiras Impressoes", value: context.firstImpressions });
+    }
+
+    if (context.details) {
+      contextData.push({ label: "Detalhes", value: context.details });
+    }
+
+    if (context.rumors) {
+      contextData.push({ label: "Rumores", value: context.rumors });
+    }
+
+    if (context.secrets) {
+      contextData.push({ label: "Segredos", value: context.secrets });
+    }
+
+    return contextData;
+  }, [context]);
 
   const filteredLocations = useMemo(() => {
     function filter() {
@@ -108,16 +131,23 @@ function ModalLocationDetails({
   return (
     <Modal title={location.name} className="ModalLocationDetails-container df" onClickToClose={onClose}>
       <main className="content df df-ai-fs df-jc-sb df-f1">
-        {context.details && (
+        {contextData.length > 0 && (
           <aside className="details-wrapper df df-fd-c df-jc-fs">
-            <h3>Detalhes</h3>
-            <div className="details">
-              <span>{context.details}</span>
+            <h3>Localização atual</h3>
+            <div className="df df-fd-c df-rg-20">
+              {contextData.map((data, i) => (
+                <div className="df df-fd-c df-rg-5" key={i}>
+                  {contextData.length > 1 && <span className="bold">{data.label}</span>}
+                  <div className="details">
+                    <span>{data.value}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </aside>
         )}
         <aside className="details-wrapper df df-fd-c df-jc-fs">
-          <h3>Localizações</h3>
+          <h3>Localizações interiores</h3>
 
           <div className="location-filters">
             <div className="filter-text">
@@ -168,13 +198,13 @@ function ModalLocationDetails({
                     <i className="fas fa-plus"></i>
                   </button>
                   <span>{loc.name}</span>
-                  {loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? (
+                  {loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST || Object.keys(map[loc._id].interiorLocs).length === 0 ? (
                     <button title="Editar" onClick={() => HandleEditLocation(loc)}>
                       <i className="fas fa-pen"></i>
                     </button>
                   ) : (
                     <button title="Abrir Detalhes" onClick={() => OpenModalLocationDetails(loc, loc._id, false)}>
-                      <i className="fas fa-book"></i>
+                      <i className="fas fa-eye"></i>
                     </button>
                   )}
                 </div>
