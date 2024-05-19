@@ -88,7 +88,7 @@ function ModalTravelResults({
   const [location, setLocation] = useState(GetModalLocation());
   const currentContext = useMemo(() => lh.GetCurrentContext(location), [location]);
   const allLocationCreatures = useMemo(() => {
-    let allLocationCreatures = newLocation.creatures;
+    let allLocationCreatures = [...newLocation.creatures];
 
     newLocation.interaction?.rooms
       .filter((r) => r)
