@@ -588,22 +588,25 @@ function ModalTravelResults({
     const elements = location.traversal.elements?.filter((e) => e.type !== element.current?.type);
     if (!elements || elements.length === 0) return null;
 
-    const generatedElements = elements
-      .map((e) => {
-        const prob = lc.GetEncounterFrequency(e.frequency).probability;
-        const options = ["cima esquerda", "cima", "cima direita", "esquerda", "direita", "baixo esquerda", "baixo", "baixo direita"];
-        let elements = [];
-        while (utils.ProbabilityCheck(prob)) {
-          elements.push(utils.randomItemFromArray(options));
-        }
+    let generatedElements = [];
+    while (generatedElements.length === 0) {
+      generatedElements = elements
+        .map((e) => {
+          const prob = lc.GetEncounterFrequency(e.frequency).probability;
+          const options = ["cima esquerda", "cima", "cima direita", "esquerda", "direita", "baixo esquerda", "baixo", "baixo direita"];
+          let elements = [];
+          while (utils.ProbabilityCheck(prob)) {
+            elements.push(utils.randomItemFromArray(options));
+          }
 
-        if (elements.length === 0) return null;
-        utils.sortByCustomOrder(elements, options);
+          if (elements.length === 0) return null;
+          utils.sortByCustomOrder(elements, options);
 
-        return `${lc.GetElementType(e.type).display} (${elements.join(", ")})`;
-      })
-      .filter((e) => e)
-      .join(", ");
+          return `${lc.GetElementType(e.type).display} (${elements.join(", ")})`;
+        })
+        .filter((e) => e)
+        .join(", ");
+    }
 
     setElmentsForDisplay(generatedElements.length > 0 ? generatedElements : null);
   }
@@ -952,7 +955,7 @@ function ModalTravelResults({
                   <>
                     {systemType === SYSTEM_TYPES.DND_5E && <span>Encontrar Recursos: CD {findResourcesDifficulty.current}</span>}
                     {tracksForDisplay.current.length > 0 && (
-                      <span>
+                      <span className="center-text">
                         Rastros de: <span className="bold">"{tracksForDisplay.current.join(", ")}"</span>
                       </span>
                     )}
@@ -968,7 +971,7 @@ function ModalTravelResults({
                           <i className="fas fa-retweet"></i>
                           Elementos
                         </button>
-                        <span className="elements-display">{elmentsForDisplay ?? "-"}</span>
+                        {elmentsForDisplay && <span className="elements-display">{elmentsForDisplay ?? "-"}</span>}
                       </div>
                     )}
                   </>
@@ -1093,7 +1096,12 @@ function ModalTravelResults({
 
       <footer>
         <div className="df df-jc-fs df-cg-20 df-f1">
-          <CheckInput label="Mostrar detalhes" isSelected={showDetails} onClick={() => setShowDetails(!showDetails)} isDisabled={!hasDetails} />
+          <CheckInput
+            label="Mostrar detalhes"
+            isSelected={showDetails}
+            onClick={() => setShowDetails(!showDetails)}
+            isDisabled={!hasDetails && allLocationCreatures.length === 0}
+          />
           {addAction && !isPointOfInterest && (
             <button className="df df-cg-5 button-simple" onClick={addAction}>
               <i className="fas fa-plus"></i>

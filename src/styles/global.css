@@ -126,6 +126,10 @@ button {
   font-weight: 600;
 }
 
+.center-text {
+  text-align: center;
+}
+
 .element-disabled {
   opacity: 0.6;
   pointer-events: none;

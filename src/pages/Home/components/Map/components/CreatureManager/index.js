@@ -160,7 +160,10 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
     <div className="CreatureManager-container location-detail-group">
       {modal}
       <div className="location-row location-detail-group-title">
-        <span className={data.creatures.length === 0 ? `lacking-data` : ""}>Criaturas</span>
+        <div className="df df-cg-5">
+          <i className="fas fa-dragon"></i>
+          <span className={data.creatures.length === 0 ? `lacking-data` : ""}>Criaturas</span>
+        </div>
         <div className="df df-cg-5">
           {!isPointOfInterest && !isWorld && map[data.exteriorLocationId] && (
             <button title="Copiar de exterior" onClick={HandleCopyFromExterior} disabled={map[data.exteriorLocationId].data.creatures.length === 0}>
@@ -230,9 +233,7 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
 
                 return (
                   <div className="routine df df-jc-sb df-cg-5" key={r.encounterFrequency + rIndex}>
-                    <span>
-                      {lc.GetGroupSize(r.groupSize).routineDisplay} <i className="fas fa-dragon"></i>
-                    </span>
+                    <span>{lc.GetGroupSize(r.groupSize).routineDisplay}</span>
                     <div className="df df-cg-5">
                       {rContextIndex >= 0 && <span>{rContextIndex + 1}.</span>}
                       {r.schedule && (

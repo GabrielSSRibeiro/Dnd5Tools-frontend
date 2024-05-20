@@ -596,7 +596,10 @@ function EditLocation({
         {/* contexts */}
         <div className="location-detail-group">
           <div className="location-row location-detail-group-title">
-            <span>Contextos</span>
+            <div className="df df-cg-5">
+              <i className="fas fa-clock"></i>
+              <span>Contextos</span>
+            </div>
             <button onClick={() => OpenModalManageContext()}>
               <i className="fas fa-plus"></i>
             </button>
