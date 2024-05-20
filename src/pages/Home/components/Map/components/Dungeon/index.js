@@ -214,17 +214,16 @@ function Dungeon({
     let roomTooltip = [];
 
     if (purpose) {
-      roomTooltip.push({ text: `(${purpose})` });
+      roomTooltip.push({ text: `(${purpose})`, icon: "fas fa-info-circle" });
     }
 
     if (room) {
       if (room.firstImpressions) {
-        roomTooltip.push({ text: room.firstImpressions });
+        roomTooltip.push({ text: room.firstImpressions, icon: "fas fa-eye" });
       }
 
       if (room.secrets) {
-        roomTooltip.push({ text: "-------------------------------- Segredos" });
-        roomTooltip.push({ text: room.secrets });
+        roomTooltip.push({ text: room.secrets, icon: "fas fa-mask" });
       }
 
       if (roomTooltip.length > 0) {
@@ -246,6 +245,7 @@ function Dungeon({
 
     if (roomCurrentCreatures.length > 0) {
       roomTooltip.push({ text: "" });
+      roomTooltip.push({ text: null, icon: "fas fa-dragon" });
 
       Object.values(utils.GroupArrayBy(roomCurrentCreatures, "creatureId")).forEach((creatureList) => {
         const id = creatureList[0].creatureId;
