@@ -829,6 +829,7 @@ function ModalTravelResults({
       {showDetails ? (
         contextData.length > 0 && (
           <aside className="loc-details df df-fd-c df-jc-fs df-rg-20">
+            {/* creatures */}
             {allLocationCreatures.length > 0 && (
               <div className="df df-fd-c df-jc-fs df-rg-5">
                 <h3 className="bold">Criaturas</h3>
@@ -847,10 +848,6 @@ function ModalTravelResults({
                           borderColor: cc.GetRarity(creature.rarity).color,
                         }}
                       >
-                        <Info
-                          contents={[{ text: creature.name }, { text: "..." }, { text: "[Exportar]", icon: "fas fa-upload" }]}
-                          tooltipOnly={true}
-                        />
                         <img
                           className="creature-avatar"
                           style={{
@@ -863,6 +860,10 @@ function ModalTravelResults({
                           }}
                           src={creature.image}
                           alt="creature-avatar"
+                        />
+                        <Info
+                          contents={[{ text: creature.name }, { text: "..." }, { text: "[Exportar]", icon: "fas fa-upload" }]}
+                          tooltipOnly={true}
                         />
                       </div>
                     );
@@ -951,6 +952,16 @@ function ModalTravelResults({
             ) : (
               <>
                 <TextInput className="name" placeholder="Nomear ponto" value={name} onChange={setName} />
+                {location.traversal.elements?.length > 0 && (
+                  <div className="df df-fd-c df-rg-5">
+                    <button className="df df-cg-5 button-simple" onClick={UpdateElements}>
+                      <i className="fas fa-retweet"></i>
+                      Elementos
+                    </button>
+                    {elmentsForDisplay && <span className="elements-display">{elmentsForDisplay ?? "-"}</span>}
+                  </div>
+                )}
+
                 {!isSafe && (
                   <>
                     {systemType === SYSTEM_TYPES.DND_5E && <span>Encontrar Recursos: CD {findResourcesDifficulty.current}</span>}
@@ -963,16 +974,6 @@ function ModalTravelResults({
                       <span>
                         Restos mortais com o equivalente a <span className="bold">{remainsForDisplay.current}</span> PO
                       </span>
-                    )}
-
-                    {location.traversal.elements?.length > 0 && (
-                      <div className="df df-fd-c df-rg-5">
-                        <button className="df df-cg-5 button-simple" onClick={UpdateElements}>
-                          <i className="fas fa-retweet"></i>
-                          Elementos
-                        </button>
-                        {elmentsForDisplay && <span className="elements-display">{elmentsForDisplay ?? "-"}</span>}
-                      </div>
                     )}
                   </>
                 )}

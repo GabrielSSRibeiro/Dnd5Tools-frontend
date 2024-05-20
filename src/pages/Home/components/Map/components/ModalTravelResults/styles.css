@@ -33,7 +33,7 @@
   height: 100%;
   width: 400px;
   row-gap: 10px;
-  height: 250px;
+  max-height: 250px;
 }
 
 .ModalTravelResults-container .details-wrapper.dungeon {
