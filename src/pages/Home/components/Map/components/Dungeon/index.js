@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import * as utils from "../../../../../../utils";
 import * as lc from "../../../../../../constants/locationConstants";
+import * as lh from "../../../../../../helpers/locationHelper";
 import { GetRarity } from "../../../../../../constants/creatureConstants";
 
 import Info from "../../../../../../components/Info";
@@ -84,14 +85,6 @@ function Dungeon({
     );
   }
   function HandleCloseModalManageDungeonRoom(index, tempRoom, isEntrance) {
-    const addNewRow = () => {
-      location.interaction.rooms.push(...Array(lc.ROOMS_PER_ROW));
-      let scrollableElement = document.getElementById("EditLocation-scroll");
-      setTimeout(() => {
-        scrollableElement.scrollTop = scrollableElement.scrollHeight;
-      }, 100);
-    };
-
     if (tempRoom) {
       if (isEntrance) {
         location.interaction.type = tempRoom.type;
@@ -105,14 +98,14 @@ function Dungeon({
 
           //add new row if needed
           if (location.interaction.rooms.length < index + lc.ROOMS_PER_ROW) {
-            addNewRow();
+            lh.addDungeonRow(location);
           }
         }
         //if empty
         else {
-          addNewRow();
+          lh.addDungeonRow(location);
           location.interaction.rooms[Math.floor(lc.ROOMS_PER_ROW / 2)] = tempRoom;
-          addNewRow();
+          lh.addDungeonRow(location);
         }
       }
     }

@@ -537,3 +537,11 @@ export function GetConAngleOrigin(conAngleOrigin) {
   if (conAngleOrigin === lc.LOCATION_CONNECTION_ANGLE_ORIGINS.END) return lc.LOCATION_CONNECTION_ANGLE_ORIGINS.START;
   return conAngleOrigin;
 }
+
+export function addDungeonRow(location) {
+  location.interaction.rooms.push(...Array(lc.ROOMS_PER_ROW));
+  let scrollableElement = document.getElementById("EditLocation-scroll");
+  setTimeout(() => {
+    scrollableElement.scrollTop = scrollableElement.scrollHeight;
+  }, 100);
+}

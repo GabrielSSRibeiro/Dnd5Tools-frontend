@@ -459,7 +459,7 @@ function EditLocation({
   }
 
   function AddRow() {
-    location.interaction.rooms.push(...Array(lc.ROOMS_PER_ROW));
+    lh.addDungeonRow(location);
     setLocation({ ...location });
   }
 
