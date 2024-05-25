@@ -232,7 +232,10 @@ function Dungeon({
 
       AddRoomDetails(roomTooltip, room.type, room.size, room.height, room.isHazardous, room.rarity);
     } else {
-      roomTooltip.push({ text: "" });
+      if (location.interaction.type) {
+        roomTooltip.push({ text: "" });
+      }
+
       AddRoomDetails(
         roomTooltip,
         location.interaction.type,
