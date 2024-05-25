@@ -9,6 +9,8 @@ export const BASE_PX_IN_M_SCALE = 50;
 
 export const DEFAULT_CONTEXT_NAME = "Normal";
 
+export const ROOMS_PER_ROW = 9;
+
 export const GetNewLocation = (owner, exteriorLocationId) => ({
   _id: utils.reverseString(owner),
   owner: null,

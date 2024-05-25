@@ -458,6 +458,11 @@ function EditLocation({
     utils.downloadData(content.join("\n\n"), `${world.name}.txt`);
   }
 
+  function AddRow() {
+    location.interaction.rooms.push(...Array(lc.ROOMS_PER_ROW));
+    setLocation({ ...location });
+  }
+
   function DeleteDungeon() {
     setModal(
       <ModalWarning
@@ -881,6 +886,9 @@ function EditLocation({
                     <i className="fas fa-undo-alt"></i>
                   </button>
                 )}
+                <button title="Adicionar linha" onClick={AddRow}>
+                  <i className="fas fa-plus"></i>
+                </button>
                 <button title="Deletar" onClick={DeleteDungeon} disabled={location.interaction.rooms.length === 0}>
                   <i className="fas fa-trash"></i>
                 </button>

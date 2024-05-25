@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo } from "react";
 import * as utils from "../../../../../../utils";
 import * as lc from "../../../../../../constants/locationConstants";
 import { GetRarity } from "../../../../../../constants/creatureConstants";
@@ -22,14 +22,13 @@ function Dungeon({
   const [roomToSwap, setRoomToSwap] = useState(null);
   const [roomToolTip, setRoomToolTip] = useState(null);
 
-  const roomsPerRow = useRef(9);
   const rooms = useMemo(() => {
     let rooms = location.interaction.rooms;
 
     //if not edit and last row is empty, remove row
-    const lastRows = rooms.slice(-roomsPerRow.current);
+    const lastRows = rooms.slice(-lc.ROOMS_PER_ROW);
     if (roomSelect && lastRows.every((r) => !r)) {
-      rooms.splice(rooms.length - roomsPerRow.current, roomsPerRow.current);
+      rooms.splice(rooms.length - lc.ROOMS_PER_ROW, lc.ROOMS_PER_ROW);
     }
 
     return rooms;
@@ -86,7 +85,7 @@ function Dungeon({
   }
   function HandleCloseModalManageDungeonRoom(index, tempRoom, isEntrance) {
     const addNewRow = () => {
-      location.interaction.rooms.push(...Array(roomsPerRow.current));
+      location.interaction.rooms.push(...Array(lc.ROOMS_PER_ROW));
       let scrollableElement = document.getElementById("EditLocation-scroll");
       setTimeout(() => {
         scrollableElement.scrollTop = scrollableElement.scrollHeight;
@@ -105,14 +104,14 @@ function Dungeon({
           location.interaction.rooms.splice(index, 1, tempRoom);
 
           //add new row if needed
-          if (location.interaction.rooms.length < index + roomsPerRow.current) {
+          if (location.interaction.rooms.length < index + lc.ROOMS_PER_ROW) {
             addNewRow();
           }
         }
         //if empty
         else {
           addNewRow();
-          location.interaction.rooms[Math.floor(roomsPerRow.current / 2)] = tempRoom;
+          location.interaction.rooms[Math.floor(lc.ROOMS_PER_ROW / 2)] = tempRoom;
           addNewRow();
         }
       }
@@ -129,9 +128,9 @@ function Dungeon({
     location.interaction.rooms[index] = null;
 
     //if last of row, remove row
-    const lastRows = location.interaction.rooms.slice(-roomsPerRow.current * 2);
+    const lastRows = location.interaction.rooms.slice(-lc.ROOMS_PER_ROW * 2);
     if (lastRows.every((r) => !r)) {
-      location.interaction.rooms.splice(location.interaction.rooms.length - roomsPerRow.current, roomsPerRow.current);
+      location.interaction.rooms.splice(location.interaction.rooms.length - lc.ROOMS_PER_ROW, lc.ROOMS_PER_ROW);
 
       //if empty, clear
       if (location.interaction.rooms.every((r) => !r)) {
@@ -145,18 +144,18 @@ function Dungeon({
 
   function CanBeNewRoom(i) {
     return !roomSelect;
-    // const isLeftCorner = i % roomsPerRow.current === 0;
-    // const isRightCorner = i !== 0 && i % (roomsPerRow.current - 1) === 0;
+    // const isLeftCorner = i % lc.ROOMS_PER_ROW === 0;
+    // const isRightCorner = i !== 0 && i % (lc.ROOMS_PER_ROW - 1) === 0;
 
-    // const topLeftIndex = i - roomsPerRow.current - 1;
+    // const topLeftIndex = i - lc.ROOMS_PER_ROW - 1;
     // const topLeft = location.interaction.rooms[topLeftIndex];
     // const hasValidTopLeft = topLeft && !isLeftCorner;
 
-    // const toptIndex = i - roomsPerRow.current;
+    // const toptIndex = i - lc.ROOMS_PER_ROW;
     // const top = location.interaction.rooms[toptIndex];
     // const hasValidTop = top;
 
-    // const topRightIndex = i - roomsPerRow.current + 1;
+    // const topRightIndex = i - lc.ROOMS_PER_ROW + 1;
     // const topRight = location.interaction.rooms[topRightIndex];
     // const hasValidTopRight = topRight && !isRightCorner;
 
@@ -168,15 +167,15 @@ function Dungeon({
     // const right = location.interaction.rooms[rightIndex];
     // const hasValidRight = right && !isRightCorner;
 
-    // const bottomLeftIndex = i + roomsPerRow.current - 1;
+    // const bottomLeftIndex = i + lc.ROOMS_PER_ROW - 1;
     // const bottomLeft = location.interaction.rooms[bottomLeftIndex];
     // const hasValidBottomLeft = bottomLeft && !isLeftCorner;
 
-    // const bottomIndex = i + roomsPerRow.current;
+    // const bottomIndex = i + lc.ROOMS_PER_ROW;
     // const bottom = location.interaction.rooms[bottomIndex];
     // const hasValidBottom = bottom;
 
-    // const bottomRightIndex = i + roomsPerRow.current + 1;
+    // const bottomRightIndex = i + lc.ROOMS_PER_ROW + 1;
     // const bottomRight = location.interaction.rooms[bottomRightIndex];
     // const hasValidBottomRight = bottomRight && !isRightCorner;
 
