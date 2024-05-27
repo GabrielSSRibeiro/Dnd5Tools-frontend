@@ -952,7 +952,7 @@ export const conditions = [
   { display: "Puxado 1,5m", value: CONDITIONS.PULLED, weight: 1 },
   { display: "Agarrado", value: CONDITIONS.GRAPPLED, weight: 1 },
   { display: "Derrubado", value: CONDITIONS.PRONE, weight: 2 },
-  { display: "Cego/Surdo", value: CONDITIONS.BLINDED, weight: 3 },
+  { display: "Cego", value: CONDITIONS.BLINDED, weight: 3 },
   { display: "Impedido", value: CONDITIONS.RESTRAINED, weight: 4 },
   { display: "Envenenado", value: CONDITIONS.POISONED, weight: 5 },
   { display: "Amedrontado", value: CONDITIONS.FRIGHTENED, weight: 6 },
