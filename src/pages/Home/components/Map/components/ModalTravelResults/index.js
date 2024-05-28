@@ -452,7 +452,7 @@ function ModalTravelResults({
       });
 
     finalCreatures.creatures.forEach((fc) => {
-      if (!allLocationCreatures.some((lc) => lc.creatureId === fc.id)) {
+      if (!allLocationCreatures.some((lc) => lc?.creatureId === fc.id)) {
         allLocationCreatures.push(encounterLocation.current.creatures.find((c) => c.creatureId === fc.id));
       }
     });
