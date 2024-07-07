@@ -2,7 +2,6 @@ import React, { useState, useMemo } from "react";
 import * as utils from "../../../../../../utils";
 import * as lc from "../../../../../../constants/locationConstants";
 import * as lh from "../../../../../../helpers/locationHelper";
-import { GetRarity } from "../../../../../../constants/creatureConstants";
 
 import Info from "../../../../../../components/Info";
 import ModalManageDungeonRoom from "./components/ModalManageDungeonRoom";
@@ -58,7 +57,7 @@ function Dungeon({
           type: location.interaction.type,
           height: location.interaction.height,
           isHazardous: location.interaction.isHazardous,
-          rarity: location.interaction.rarity,
+          hasTreasure: location.interaction.hasTreasure,
           creatures: location.creatures,
           boundCreatures: location.boundCreatures,
         }
@@ -90,7 +89,7 @@ function Dungeon({
         location.interaction.type = tempRoom.type;
         location.interaction.height = tempRoom.height;
         location.interaction.isHazardous = tempRoom.isHazardous;
-        location.interaction.rarity = tempRoom.rarity;
+        location.interaction.hasTreasure = tempRoom.hasTreasure;
         location.creatures = tempRoom.creatures;
       } else {
         if (index != null) {
@@ -184,7 +183,7 @@ function Dungeon({
     // );
   }
 
-  function AddRoomDetails(roomTooltip, type, size, height, isHazardous, rarity) {
+  function AddRoomDetails(roomTooltip, type, size, height, isHazardous, hasTreasure) {
     const sizeInMeters = size ? lc.GetRoomSize(size).meters : null;
     const roomHeight = height ? lc.GetRoomHeight(height).metersDisplay : null;
     if (sizeInMeters && roomHeight) {
@@ -194,11 +193,7 @@ function Dungeon({
     }
 
     if (type) {
-      roomTooltip.push({ text: `${lc.GetElementType(type).display}${isHazardous ? " (perigoso)" : ""}` });
-    }
-
-    if (rarity) {
-      roomTooltip.push({ text: `Material ${GetRarity(rarity).treasureDisplay}` });
+      roomTooltip.push({ text: `${lc.GetElementType(type).display}` });
     }
   }
 
@@ -222,7 +217,7 @@ function Dungeon({
         roomTooltip.push({ text: "" });
       }
 
-      AddRoomDetails(roomTooltip, room.type, room.size, room.height, room.isHazardous, room.rarity);
+      AddRoomDetails(roomTooltip, room.type, room.size, room.height, room.isHazardous, room.hasTreasure);
     } else {
       if (location.interaction.type) {
         roomTooltip.push({ text: "" });
@@ -234,7 +229,7 @@ function Dungeon({
         null,
         location.interaction.height,
         location.interaction.isHazardous,
-        location.interaction.rarity
+        location.interaction.hasTreasure
       );
     }
 
@@ -310,7 +305,7 @@ function Dungeon({
           <Info className="dungeon-tooltip" contents={GetRoomTooltip("Entrada", entranceCreatures)} tooltipOnly={true} />
           <div className="df entrance-contents">
             <i className={`fas fa-dungeon ${entranceCreatures.length > 0 ? "creatures" : ""}`}></i>
-            {location.interaction.rarity && <i className={`fas fa-gem treasure`}></i>}
+            {location.interaction.hasTreasure && <i className={`fas fa-gem treasure`}></i>}
           </div>
         </button>
       </div>
@@ -634,13 +629,13 @@ function Dungeon({
                     {r.size === lc.ROOM_SIZES.EXIT ? (
                       <div className="df dungeon-exit">
                         <i className={`fas fa-dungeon ${roomCreatures.length > 0 ? "creatures" : ""}`}></i>
-                        {r.rarity && <i className={`fas fa-gem treasure`}></i>}
+                        {r.hasTreasure && <i className={`fas fa-gem treasure`}></i>}
                       </div>
                     ) : (
-                      (r.rarity || roomCreatures.length > 0) && (
+                      (r.hasTreasure || roomCreatures.length > 0) && (
                         <div className="df room-content">
                           {roomCreatures.length > 0 ? (
-                            <i className={`fas fa-skull ${r.rarity ? "treasure" : "creatures"}`}></i>
+                            <i className={`fas fa-skull ${r.hasTreasure ? "treasure" : "creatures"}`}></i>
                           ) : (
                             <i className="fas fa-gem treasure"></i>
                           )}

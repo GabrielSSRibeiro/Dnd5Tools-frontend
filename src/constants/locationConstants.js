@@ -27,7 +27,7 @@ export const GetNewLocation = (owner, exteriorLocationId) => ({
     type: null,
     height: null,
     isHazardous: false,
-    rarity: null,
+    hasTreasure: false,
     currentCreatures: null,
     rooms: [],
   },

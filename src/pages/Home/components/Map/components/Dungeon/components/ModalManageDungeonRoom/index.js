@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-import { creatureRarities } from "../../../../../../../../constants/creatureConstants";
 import * as lc from "../../../../../../../../constants/locationConstants";
-import * as cc from "../../../../../../../../constants/creatureConstants";
 import * as utils from "../../../../../../../../utils";
 
 import Modal from "../../../../../../../../components/Modal";
@@ -65,13 +63,12 @@ function ModalManageDungeonRoom({
           },
           type: lc.ELEMENT_TYPES.STRUCTURE,
           isHazardous: false,
-          rarity: null,
+          hasTreasure: false,
           creatures: [],
           boundCreatures: [],
           currentCreatures: null,
         }
   );
-  const [canBeMaterial, setCanBeMaterial] = useState(false);
   const [modal, setModal] = useState(false);
 
   function HandleCancel() {
@@ -121,10 +118,6 @@ function ModalManageDungeonRoom({
   }
 
   function HandleSelectType(newValue) {
-    if (!canBeMaterial) {
-      newValue.rarity = null;
-    }
-
     setTempRoom(newValue);
   }
 
@@ -144,18 +137,6 @@ function ModalManageDungeonRoom({
 
     return true;
   }
-
-  useEffect(() => {
-    if (lc.GetElementType(tempRoom.type)?.canBeMaterial) {
-      setCanBeMaterial(true);
-    } else {
-      tempRoom.material = {
-        probability: null,
-        rarity: cc.CREATURE_RARITIES.COMMON,
-      };
-      setCanBeMaterial(false);
-    }
-  }, [tempRoom, tempRoom.type]);
 
   return (
     <Modal title={title} className="ModalManageDungeonRoom-container" onClickToClose={onClose} info={info}>
@@ -349,7 +330,7 @@ function ModalManageDungeonRoom({
           optionDisplay={(o) => o.display}
           optionValue={(o) => o.value}
         />
-        <div className="df df-ai-fs df-cg-15 room-row">
+        <div className="df df-ai-fs df-cg-15">
           <Select
             label={"Tipo"}
             extraWidth={105}
@@ -361,28 +342,22 @@ function ModalManageDungeonRoom({
             optionDisplay={(o) => o.display}
             optionValue={(o) => o.value}
           />
-          <CheckInput
-            label="Perigoso"
-            info={[{ text: "Ravinas profundas, lagos poluidos, estruturas desmoronantes, rochas afiadas, plantas venenosas, objetos armadilhas" }]}
-            onClick={() => setTempRoom({ ...tempRoom, isHazardous: !tempRoom.isHazardous })}
-            isSelected={tempRoom.isHazardous}
-            className="interaction"
-          />
+          <div className="df full-height df-fd-c df-jc-fe df-rg-10 df-ai-fs">
+            <CheckInput
+              label="Perigoso"
+              info={[{ text: "Ravinas profundas, lagos poluidos, estruturas desmoronantes, rochas afiadas, plantas venenosas, objetos armadilhas" }]}
+              onClick={() => setTempRoom({ ...tempRoom, isHazardous: !tempRoom.isHazardous })}
+              isSelected={tempRoom.isHazardous}
+              className="interaction"
+            />
+            <CheckInput
+              label="Tesouro"
+              onClick={() => setTempRoom({ ...tempRoom, hasTreasure: !tempRoom.hasTreasure })}
+              isSelected={tempRoom.hasTreasure}
+              className="interaction"
+            />
+          </div>
         </div>
-        {canBeMaterial && (
-          <Select
-            label={"Raridade de Material"}
-            extraWidth={250}
-            value={tempRoom}
-            valuePropertyPath="rarity"
-            onSelect={setTempRoom}
-            nothingSelected="Nenhuma"
-            options={creatureRarities}
-            optionsAtATime={6}
-            optionDisplay={(o) => o.treasureDisplay}
-            optionValue={(o) => o.value}
-          />
-        )}
 
         {/* creatures */}
         <CreatureManager

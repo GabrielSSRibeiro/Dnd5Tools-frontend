@@ -134,14 +134,11 @@ function ModalTravelResults({
           element.current?.material.probability &&
           utils.ProbabilityCheck(lc.GetElementMaterialFrequency(element.current.material.probability).probability)
           ? element.current.material.rarity
-          : //othewise, if point of interest
-          isPointOfInterest
-          ? room?.rarity
           : //otherwise null
             null
         : //otherwise current
           newCurrentNode.materialRarity,
-    [HandleAddTravelNode, isPointOfInterest, newCurrentNode.materialRarity, room]
+    [HandleAddTravelNode, newCurrentNode.materialRarity]
   );
   const materialRarityDisplay = useMemo(() => (materialRarity ? cc.GetRarity(materialRarity).treasureDisplay : null), [materialRarity]);
   const isHazardous = useMemo(
