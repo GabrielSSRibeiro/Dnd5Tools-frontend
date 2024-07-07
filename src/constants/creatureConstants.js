@@ -1261,3 +1261,118 @@ export const creatureActionRepetitions = [
   { display: "Multiação extrema (x4)", value: CREATURE_ACTION_REPETITIONS.MULTIACTION_EXTREME, weight: 0, multiplier: 4 },
 ];
 export const GetActionRepetitions = (value) => creatureActionRepetitions.find((s) => s.value === value);
+
+export const ACTION_TEMPLATES = {
+  MEELE_LIGHT: 10,
+  MEELE: 20,
+  MEELE_HEAVY: 30,
+  RANGED_LIGHT: 40,
+  RANGED: 50,
+  RANGED_HEAVY: 60,
+};
+export const actionTemplates = [
+  {
+    display: "Ataque próximo rápido",
+    value: ACTION_TEMPLATES.MEELE_LIGHT,
+    frequency: CREATURE_ACTION_FREQUENCIES.UNCOMMON,
+    damageIntensity: DAMAGE_INTENSITIES.LOW,
+  },
+  {
+    display: "Ataque próximo",
+    value: ACTION_TEMPLATES.MEELE,
+    frequency: CREATURE_ACTION_FREQUENCIES.COMMON,
+    damageIntensity: DAMAGE_INTENSITIES.MEDIUM,
+  },
+  {
+    display: "Ataque próximo pesado",
+    value: ACTION_TEMPLATES.MEELE_HEAVY,
+    frequency: CREATURE_ACTION_FREQUENCIES.RARE,
+    damageIntensity: DAMAGE_INTENSITIES.HIGH,
+  },
+  {
+    display: "Ataque a distância rápido",
+    value: ACTION_TEMPLATES.RANGED_LIGHT,
+    frequency: CREATURE_ACTION_FREQUENCIES.UNCOMMON,
+    damageIntensity: DAMAGE_INTENSITIES.LOW,
+  },
+  {
+    display: "Ataque a distância",
+    value: ACTION_TEMPLATES.RANGED,
+    frequency: CREATURE_ACTION_FREQUENCIES.COMMON,
+    damageIntensity: DAMAGE_INTENSITIES.MEDIUM,
+  },
+  {
+    display: "Ataque a distância pesado",
+    value: ACTION_TEMPLATES.RANGED_HEAVY,
+    frequency: CREATURE_ACTION_FREQUENCIES.RARE,
+    damageIntensity: DAMAGE_INTENSITIES.HIGH,
+  },
+];
+export const GetActionTemplate = (value) => actionTemplates.find((s) => s.value === value);
+
+export const ACTION_DETAILS = [
+  {
+    rarity: CREATURE_RARITIES.COMMON,
+    repetitions: CREATURE_ACTION_REPETITIONS.NORMAL,
+    armorClass: CREATURE_ARMOR_CLASSES.LOW,
+  },
+  {
+    rarity: CREATURE_RARITIES.UNCOMMON,
+    repetitions: CREATURE_ACTION_REPETITIONS.MULTIACTION_COMMOM,
+    armorClass: CREATURE_ARMOR_CLASSES.MEDIUM,
+  },
+  {
+    rarity: CREATURE_RARITIES.RARE,
+    repetitions: CREATURE_ACTION_REPETITIONS.MULTIACTION_COMMOM,
+    armorClass: CREATURE_ARMOR_CLASSES.MEDIUM,
+  },
+  {
+    rarity: CREATURE_RARITIES.VERY_RARE,
+    repetitions: CREATURE_ACTION_REPETITIONS.MULTIACTION_EXTRA,
+    armorClass: CREATURE_ARMOR_CLASSES.HIGH,
+  },
+  {
+    rarity: CREATURE_RARITIES.LEGENDARY,
+    repetitions: CREATURE_ACTION_REPETITIONS.MULTIACTION_EXTREME,
+    armorClass: CREATURE_ARMOR_CLASSES.EXTREME,
+  },
+];
+
+export const SIZE_DETAILS = [
+  {
+    size: CREATURE_SIZES.TINY,
+    speed: CREATURE_MOVEMENTS.LOW,
+    melee: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
+    ranged: CREATURE_ACTION_ATTACK_REACHES.RANGED_CLOSE,
+  },
+  {
+    size: CREATURE_SIZES.SMALL,
+    speed: CREATURE_MOVEMENTS.MEDIUM,
+    melee: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
+    ranged: CREATURE_ACTION_ATTACK_REACHES.RANGED_CLOSE,
+  },
+  {
+    size: CREATURE_SIZES.MEDIUM,
+    speed: CREATURE_MOVEMENTS.MEDIUM,
+    melee: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
+    ranged: CREATURE_ACTION_ATTACK_REACHES.RANGED_CLOSE,
+  },
+  {
+    size: CREATURE_SIZES.LARGE,
+    speed: CREATURE_MOVEMENTS.HIGH,
+    melee: CREATURE_ACTION_ATTACK_REACHES.MELEE_EXTRA,
+    ranged: CREATURE_ACTION_ATTACK_REACHES.RANGED_EXTRA,
+  },
+  {
+    size: CREATURE_SIZES.HUGE,
+    speed: CREATURE_MOVEMENTS.HIGH,
+    melee: CREATURE_ACTION_ATTACK_REACHES.MELEE_EXTRA,
+    ranged: CREATURE_ACTION_ATTACK_REACHES.RANGED_EXTRA,
+  },
+  {
+    size: CREATURE_SIZES.GARGANTUAN,
+    speed: CREATURE_MOVEMENTS.EXTREME,
+    melee: CREATURE_ACTION_ATTACK_REACHES.MELEE_FAR,
+    ranged: CREATURE_ACTION_ATTACK_REACHES.RANGED_FAR,
+  },
+];

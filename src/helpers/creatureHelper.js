@@ -169,3 +169,36 @@ export const GetActionSpellValue = (frequency, level) => {
   const reducer = cc.creatureActionFrequencies.length - 1 - cc.creatureActionFrequencies.findIndex((f) => f.value === frequency);
   return Math.min(1, highestSpellSlotLevelAvailable - reducer);
 };
+
+export const GetActionFromTemplate = (actionTemplateValue, rarity, size, isReaction = false) => {
+  const actionTemplate = cc.GetActionTemplate(actionTemplateValue);
+  const actionDetails = cc.ACTION_DETAILS.find((r) => r.rarity === rarity);
+  const sizeDetails = cc.SIZE_DETAILS.find((r) => r.size === size);
+
+  let action = {
+    name: actionTemplate.display,
+    description: null,
+    type: cc.CREATURE_ACTION_TYPES.ATTACK,
+    reach: sizeDetails.melee,
+    frequency: actionTemplate.frequency,
+    damageIntensity: actionTemplate.damageIntensity,
+    damageType: cc.DAMAGE_TYPES.SLASHING,
+    condition: null,
+    conditionDuration: null,
+    difficultyClass: null,
+    savingThrowAttribute: null,
+    associatedWeakSpot: null,
+    isSpell: false,
+    repetitions:
+      (actionTemplateValue === cc.ACTION_TEMPLATES.MEELE_LIGHT || actionTemplateValue === cc.ACTION_TEMPLATES.RANGED_LIGHT) &&
+      rarity === cc.CREATURE_RARITIES.COMMON
+        ? cc.CREATURE_ACTION_REPETITIONS.MULTIACTION_COMMOM
+        : actionDetails.repetitions,
+  };
+
+  if (isReaction) {
+    action.trigger = cc.CREATURE_REACTION_TRIGGERS.ON_END_OF_PLAYER_TURN;
+  }
+
+  return action;
+};

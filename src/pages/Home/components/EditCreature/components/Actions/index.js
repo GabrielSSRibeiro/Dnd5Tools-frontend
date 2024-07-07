@@ -8,8 +8,9 @@ import {
   creatureActionFrequencies,
   creatureAuraReaches,
   CREATURE_ACTION_FREQUENCIES,
+  actionTemplates,
 } from "../../../../../../constants/creatureConstants";
-import { GetAverageLevel } from "../../../../../../helpers/creatureHelper";
+import { GetAverageLevel, GetActionFromTemplate } from "../../../../../../helpers/creatureHelper";
 
 import Button from "../../../../../../components/Button";
 import Select from "../../../../../../components/Select";
@@ -22,9 +23,19 @@ import "./styles.css";
 
 function Actions({ creature, setCreature }) {
   const [modal, setModal] = useState(null);
+  const [actionTemplate, setActionTemplate] = useState(null);
+  const [reActionTemplate, setReactionTemplate] = useState(null);
 
   const maxNumberOfActions = 6;
 
+  function AddAction() {
+    if (!actionTemplate) {
+      OpenModalManageAction();
+    } else {
+      HandleCloseModalManageAction(null, GetActionFromTemplate(actionTemplate, creature.rarity, creature.size));
+      setActionTemplate(null);
+    }
+  }
   function OpenModalManageAction(action) {
     let invalidNames = creature.actions.filter((a) => a.name !== action?.name).map((a) => a.name);
 
@@ -71,6 +82,14 @@ function Actions({ creature, setCreature }) {
     setCreature({ ...creature });
   }
 
+  function AddReaction() {
+    if (!reActionTemplate) {
+      OpenModalManageReaction();
+    } else {
+      HandleCloseModalManageReaction(null, GetActionFromTemplate(reActionTemplate, creature.rarity, creature.size, true));
+      setReactionTemplate(null);
+    }
+  }
   function OpenModalManageReaction(reaction) {
     let invalidNames = creature.reactions.filter((r) => r.name !== reaction?.name).map((r) => r.name);
 
@@ -135,7 +154,18 @@ function Actions({ creature, setCreature }) {
             <h2>Ações</h2>
             <Info contents={[{ text: "Mínimo de 1 ação comum" }]} />
           </div>
-          <Button text="Adicionar" onClick={() => OpenModalManageAction()} isDisabled={creature.actions.length >= maxNumberOfActions} />
+          <div className="df df-cg-5">
+            <Button icon="fas fa-plus" onClick={AddAction} isDisabled={creature.actions.length >= maxNumberOfActions} />
+            <Select
+              extraWidth={120}
+              value={actionTemplate}
+              nothingSelected="Personalizado"
+              onSelect={setActionTemplate}
+              options={actionTemplates.filter((t) => !creature.actions.some((a) => a.name === t.display))}
+              optionDisplay={(o) => o.display}
+              optionValue={(o) => o.value}
+            />
+          </div>
           <div className="actions-wrapper">
             {creature.actions.length > 0 ? (
               creature.actions.map((action) => (
@@ -160,10 +190,21 @@ function Actions({ creature, setCreature }) {
         <div className="reactions">
           <h2>Reações</h2>
           <div className="reactions-options-wrapper">
-            <Button text="Adicionar" onClick={() => OpenModalManageReaction()} isDisabled={creature.reactions.length >= maxNumberOfActions} />
+            <div className="df df-cg-5">
+              <Button icon="fas fa-plus" onClick={AddReaction} isDisabled={creature.reactions.length >= maxNumberOfActions} />
+              <Select
+                extraWidth={120}
+                value={reActionTemplate}
+                nothingSelected="Personalizado"
+                onSelect={setReactionTemplate}
+                options={actionTemplates.filter((t) => !creature.reactions.some((r) => r.name === t.display))}
+                optionDisplay={(o) => o.display}
+                optionValue={(o) => o.value}
+              />
+            </div>
             <Select
               label={"Reações / Rodada"}
-              extraWidth={120}
+              extraWidth={90}
               value={creature}
               valuePropertyPath="reactionsPerRound"
               onSelect={setCreature}

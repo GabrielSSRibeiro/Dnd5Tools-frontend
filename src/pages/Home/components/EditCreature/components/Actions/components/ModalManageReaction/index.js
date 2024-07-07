@@ -42,7 +42,7 @@ function ModalManageReaction({ level, reaction, invalidNames, weakSpots, onClose
           type: CREATURE_ACTION_TYPES.ATTACK,
           // creatureActionPowerTotalPercentage: null,
           reach: CREATURE_ACTION_ATTACK_REACHES.MELEE_CLOSE,
-          trigger: CREATURE_REACTION_TRIGGERS.ON_DAMAGE_TAKEN,
+          trigger: CREATURE_REACTION_TRIGGERS.ON_END_OF_PLAYER_TURN,
           triggerDescription: null,
           frequency: CREATURE_ACTION_FREQUENCIES.COMMON,
           damageIntensity: null,
