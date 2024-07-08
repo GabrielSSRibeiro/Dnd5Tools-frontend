@@ -293,7 +293,7 @@ export const LOCATION_CONNECTION_TYPES = {
   CHASM: 30,
 };
 export const locationConnectionTypes = [
-  { display: "Elevaçao", value: LOCATION_CONNECTION_TYPES.ELEVATION, elementType: ELEMENT_TYPES.ROCK },
+  { display: "Platô", value: LOCATION_CONNECTION_TYPES.ELEVATION, elementType: ELEMENT_TYPES.ROCK },
   { display: "Estrada", value: LOCATION_CONNECTION_TYPES.ROAD, elementType: ELEMENT_TYPES.STRUCTURE },
   { display: "Rio", value: LOCATION_CONNECTION_TYPES.RIVER, elementType: ELEMENT_TYPES.LAKE },
   { display: "Passagem", value: LOCATION_CONNECTION_TYPES.PASSAGE, elementType: ELEMENT_TYPES.STRUCTURE },
