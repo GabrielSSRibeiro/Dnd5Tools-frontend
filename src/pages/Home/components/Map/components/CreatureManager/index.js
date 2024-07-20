@@ -50,8 +50,8 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
 
     setModal(null);
   }
-  function DeleteRoutine(creature, cIndex, routine) {
-    creature.routines = creature.routines.filter((r) => r.encounterFrequency !== routine.encounterFrequency);
+  function DeleteRoutine(creature, cIndex, rIndex) {
+    creature.routines.splice(rIndex, 1);
     data.creatures[cIndex] = creature;
     setData({ ...data, creatures: data.creatures });
   }
@@ -256,7 +256,7 @@ function CreatureManager({ data, setData, contexts, creatures, HandleSelectCreat
                         <button onClick={() => OpenModalManageRoutine(locC, r, rIndex)}>
                           <i className="fas fa-pencil-alt"></i>
                         </button>
-                        <button onClick={() => DeleteRoutine(locC, cIndex, r)} disabled={locC.routines.length === 1}>
+                        <button onClick={() => DeleteRoutine(locC, cIndex, rIndex)} disabled={locC.routines.length === 1}>
                           <i className="fas fa-trash"></i>
                         </button>
                       </div>
