@@ -90,6 +90,7 @@ function SkillCheck({ resultText, level }) {
               optionDisplay={(o) => o.display}
               optionValue={(o) => o.value}
               isDisabled={!condition}
+              dropUp
             />
           </main>
         </Panel>

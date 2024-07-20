@@ -40,7 +40,8 @@ function Select({
     };
 
     if (dropUp) {
-      ulStyles.top = `calc(-1 * (${selectOptions.length}00% + ${(label ? (selectOptions.length + 1) * -23 : 0) + 5}px))`;
+      const mod = Math.min(optionsAtATime, selectOptions.length);
+      ulStyles.top = `calc(-1 * (${mod}00% + ${(label ? (mod + 1) * -23 : 0) + 5}px))`;
     }
 
     return ulStyles;
