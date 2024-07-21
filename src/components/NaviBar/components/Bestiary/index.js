@@ -70,7 +70,7 @@ function Bestiary({
   let filteredCreatures = [];
 
   function GetMaxNumberOfCreatures() {
-    let maxNumberOfCreatures = 200;
+    let maxNumberOfCreatures = 400;
 
     const basicPackLength = creatures.filter((c) => IsBasicPack(c.owner)).length;
     if (basicPackLength > 0) {
