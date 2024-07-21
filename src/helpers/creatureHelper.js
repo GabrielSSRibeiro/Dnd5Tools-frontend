@@ -179,7 +179,7 @@ export const GetActionFromTemplate = (actionTemplateValue, rarity, size, isReact
     name: actionTemplate.display,
     description: null,
     type: cc.CREATURE_ACTION_TYPES.ATTACK,
-    reach: sizeDetails.melee,
+    reach: actionDetails.isMelee ? sizeDetails.melee : sizeDetails.ranged,
     frequency: actionTemplate.frequency,
     damageIntensity: actionTemplate.damageIntensity,
     damageType: cc.DAMAGE_TYPES.SLASHING,

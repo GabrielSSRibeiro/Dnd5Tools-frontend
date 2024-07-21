@@ -1276,18 +1276,21 @@ export const actionTemplates = [
     value: ACTION_TEMPLATES.MEELE_LIGHT,
     frequency: CREATURE_ACTION_FREQUENCIES.UNCOMMON,
     damageIntensity: DAMAGE_INTENSITIES.LOW,
+    isMelee: true,
   },
   {
     display: "Ataque próximo",
     value: ACTION_TEMPLATES.MEELE,
     frequency: CREATURE_ACTION_FREQUENCIES.COMMON,
     damageIntensity: DAMAGE_INTENSITIES.MEDIUM,
+    isMelee: true,
   },
   {
     display: "Ataque próximo pesado",
     value: ACTION_TEMPLATES.MEELE_HEAVY,
     frequency: CREATURE_ACTION_FREQUENCIES.RARE,
     damageIntensity: DAMAGE_INTENSITIES.HIGH,
+    isMelee: true,
   },
   {
     display: "Ataque a distância rápido",
