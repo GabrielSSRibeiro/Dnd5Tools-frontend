@@ -198,6 +198,7 @@ export const GetActionFromTemplate = (actionTemplateValue, rarity, size, isReact
 
   if (isReaction) {
     action.trigger = cc.CREATURE_REACTION_TRIGGERS.ON_END_OF_PLAYER_TURN;
+    action.repetitions = cc.CREATURE_ACTION_REPETITIONS.NORMAL;
   }
 
   return action;
