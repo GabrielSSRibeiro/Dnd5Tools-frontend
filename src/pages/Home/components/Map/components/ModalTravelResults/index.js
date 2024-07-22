@@ -169,13 +169,18 @@ function ModalTravelResults({
     function GetNodeCreatures() {
       function GetCreatureCondition() {
         const dayTimeImminentEncounterProb = 0.5;
+        const nightTimeSlowPaceImminentEncounterProb = 0.8;
         const nightTimeImminentEncounterProb = 1;
 
         return isEncounter.current
           ? //emcounter conditions
             utils.ProbabilityCheck(
               Math.min(
-                isNightTime ? nightTimeImminentEncounterProb : dayTimeImminentEncounterProb * lc.GetTravelPace(travel.pace).imminentEncounterProbMod,
+                isNightTime
+                  ? travel.pace === lc.TRAVEL_PACES.SLOW
+                    ? nightTimeSlowPaceImminentEncounterProb
+                    : nightTimeImminentEncounterProb
+                  : dayTimeImminentEncounterProb * lc.GetTravelPace(travel.pace).imminentEncounterProbMod,
                 1
               )
             )
