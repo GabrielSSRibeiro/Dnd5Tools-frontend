@@ -354,10 +354,15 @@ function Summary({ systemType, creature, onSave, onDelete, isBasicPack }) {
             info={[{ text: "Rascunho" }]}
             icon="fas fa-pencil-ruler"
             onClick={() => HandleSaveCreature(true)}
-            isDisabled={isBusy || isBasicPack}
+            isDisabled={isBusy || isBasicPack || !creature.name || !creature.image}
             className="creature-save"
           />
-          <Button text={isBusy ? "Salvando" : "Salvar"} onClick={HandleSaveCreature} isDisabled={isBusy || isBasicPack} className="creature-save" />
+          <Button
+            text={isBusy ? "Salvando" : "Salvar"}
+            onClick={HandleSaveCreature}
+            isDisabled={isBusy || isBasicPack || !creature.name || !creature.image}
+            className="creature-save"
+          />
         </div>
       </div>
       <div className="summary-fields">

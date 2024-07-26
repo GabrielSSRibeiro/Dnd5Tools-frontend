@@ -144,6 +144,24 @@ function EditCreature({ systemType, creatureToEdit, HandleSave, HandleDelete, Fi
     }
   }
 
+  function CopyCreature() {
+    let copiedCreature = utils.clone(creature);
+    copiedCreature._id = null;
+    copiedCreature.owner = null;
+    copiedCreature.name = null;
+    copiedCreature.description = null;
+    copiedCreature.image = null;
+    copiedCreature.imageX = null;
+    copiedCreature.imageY = null;
+    copiedCreature.imageScale = null;
+    setCreature(copiedCreature);
+    localStorage.setItem("creatureToEdit", JSON.stringify(copiedCreature));
+
+    setImgUrl("");
+    setTempCreatureAvatar(null);
+    setIsImgValid(false);
+  }
+
   const handleMouseDown = (e) => {
     setDragging(true);
     const offsetX = e.clientX - (creature.imageX != null ? creature.imageX * avatarProportion : DEFAULT_AVATAR_POSITION);
@@ -262,6 +280,9 @@ function EditCreature({ systemType, creatureToEdit, HandleSave, HandleDelete, Fi
               <input type="file" onChange={ImportAscendance} ref={inputRef} hidden={true} accept="application/JSON" />
             </button>
           )}
+          <button onClick={CopyCreature} className="creature-import">
+            <i className="fas fa-copy import"></i>
+          </button>
         </div>
         <main>
           {/* avatar */}
