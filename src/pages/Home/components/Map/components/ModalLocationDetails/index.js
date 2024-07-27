@@ -186,7 +186,7 @@ function ModalLocationDetails({
                     title="Adicionar Dentro"
                     className={`${loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST ? "invisible" : ""}`}
                     onClick={() => HandleNewLocation(loc._id)}
-                    disabled={locations.length >= 100 || loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST}
+                    disabled={locations.length >= lc.LOCATIONS_LIMIT || loc.size === lc.LOCATION_SIZES.POINT_OF_INTEREST}
                   >
                     <i className="fas fa-plus"></i>
                   </button>
