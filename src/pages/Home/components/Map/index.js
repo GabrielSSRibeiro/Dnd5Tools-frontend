@@ -334,7 +334,7 @@ function Map({
           HandleSaveLoc={(updatedLoc) => HandleSave(updatedLoc, false)}
           encounterProb={locHoverData?.distance.encounterProb ?? 0}
           addAction={
-            node && !isSameNode
+            (node && !isSameNode) || locations.length >= lc.LOCATIONS_LIMIT
               ? null
               : () => {
                   setLocationToEdit(lc.GetNewLocation(userId, nodeLoc?._id ?? userId));

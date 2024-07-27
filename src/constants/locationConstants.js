@@ -1,6 +1,7 @@
 import * as cc from "./creatureConstants";
 import * as utils from "../utils";
 
+export const LOCATIONS_LIMIT = 200;
 export const POINT_OF_INTEREST_RADIUS = 20;
 export const BASE_VISION_IN_M = 10000;
 export const BASE_TRAVEL_DISTANCE_PER_HOUR_IN_M = 2500;

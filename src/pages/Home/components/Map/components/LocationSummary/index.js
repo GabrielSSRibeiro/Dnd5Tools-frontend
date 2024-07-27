@@ -180,7 +180,7 @@ function LocationSummary({
         <header className="header">
           {!distance && (
             <aside className="header-action">
-              <button title="Adicionar Dentro" onClick={() => HandleEditNewLocation(id)} disabled={locations.length >= 100}>
+              <button title="Adicionar Dentro" onClick={() => HandleEditNewLocation(id)} disabled={locations.length >= lc.LOCATIONS_LIMIT}>
                 <i className="fas fa-plus"></i>
               </button>
             </aside>
