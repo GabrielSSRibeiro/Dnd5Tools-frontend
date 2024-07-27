@@ -111,9 +111,9 @@ function Select({
       </section>
       {isOpen && (
         <ul style={ulStyles}>
-          {selectOptions.map((option) => (
+          {selectOptions.map((option, i) => (
             <div
-              key={option === nothingSelected ? nothingSelected : optionDisplay(option)}
+              key={option === nothingSelected ? nothingSelected : i}
               className={`${option.newSection ? "new-option-section" : ""}`}
               style={{ padding: "0 10px" }}
             >

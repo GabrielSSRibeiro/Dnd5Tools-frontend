@@ -68,7 +68,9 @@ function ModalLocationDetails({
         }
 
         if (selectedType) {
-          temp = temp.filter((l) => l.type === selectedType);
+          temp = temp.filter((l) =>
+            selectedSize === lc.LOCATION_SIZES.POINT_OF_INTEREST ? l.interaction.type === selectedType : l.traversal.type === selectedType
+          );
         }
 
         if (selectedLevel) {
