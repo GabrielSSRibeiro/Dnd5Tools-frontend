@@ -290,14 +290,16 @@ function Actions({ creature, setCreature }) {
           <div className="actions-wrapper">
             <div className="creature-action">
               <span>{creature.aura.name}</span>
-              <div>
+              <div className="df df-cg-25">
                 <span>{creatureAuraReaches.find((ar) => ar.value === creature.aura.reach).display}</span>
-                <button onClick={() => OpenModalManageAura()} className="edit-row">
-                  <i className="fas fa-pencil-alt"></i>
-                </button>
-                <button onClick={() => DeleteAura()} className="delete-row">
-                  Deletar
-                </button>
+                <div className="df df-cg-10">
+                  <button onClick={() => OpenModalManageAura()} className="edit-row">
+                    <i className="fas fa-pencil-alt"></i>
+                  </button>
+                  <button onClick={() => DeleteAura()} className="edit-row">
+                    <i className="fas fa-trash"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
