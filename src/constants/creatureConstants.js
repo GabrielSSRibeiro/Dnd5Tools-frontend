@@ -1135,23 +1135,25 @@ export const CREATURE_ACTION_SAVING_THROW_REACHES = {
   LINE_CLOSE: 10,
   LINE_MEDIUM: 20,
   LINE_FAR: 30,
-  CONE_SHORT: 40,
-  CONE_MEDIUM: 50,
-  CONE_LARGE: 60,
+  CONE_SHORT: 50,
+  CONE_MEDIUM: 60,
+  CONE_LARGE: 65,
   SPHERE_SMALL: 70,
   SPHERE_MEDIUM: 80,
   SHEPRE_BIG: 90,
+  SHEPRE_EXTREME: 100,
 };
 export const creatureActionSavingThrowReaches = [
   { display: "Linha, 3m", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_CLOSE, weight: 1 },
   { display: "Linha, 9m", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_MEDIUM, weight: 2 },
   { display: "Linha, 18m", value: CREATURE_ACTION_SAVING_THROW_REACHES.LINE_FAR, weight: 3 },
-  { display: "Cone, 3m", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_SHORT, weight: 1 },
-  { display: "Cone, 4,5m", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_MEDIUM, weight: 2 },
-  { display: "Cone, 9m", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_LARGE, weight: 3 },
+  { display: "Cone, 4,5m", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_SHORT, weight: 2 },
+  { display: "Cone, 9m", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_MEDIUM, weight: 3 },
+  { display: "Cone, 18m", value: CREATURE_ACTION_SAVING_THROW_REACHES.CONE_LARGE, weight: 4 },
   { display: "Esfera, 1,5m", value: CREATURE_ACTION_SAVING_THROW_REACHES.SPHERE_SMALL, weight: 2 },
   { display: "Esfera, 3m", value: CREATURE_ACTION_SAVING_THROW_REACHES.SPHERE_MEDIUM, weight: 3 },
   { display: "Esfera, 6m", value: CREATURE_ACTION_SAVING_THROW_REACHES.SHEPRE_BIG, weight: 4 },
+  { display: "Esfera, 9m", value: CREATURE_ACTION_SAVING_THROW_REACHES.SHEPRE_EXTREME, weight: 5 },
 ];
 export const GetCreatureActionSavingThrowReache = (value) => creatureActionSavingThrowReaches.find((i) => i.value === value);
 

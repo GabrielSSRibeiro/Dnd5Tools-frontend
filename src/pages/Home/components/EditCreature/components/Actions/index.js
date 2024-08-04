@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as utils from "../../../../../../utils";
 
 import { TREASURE_TYPES } from "../../../../../../constants/treasureConstants";
 import {
@@ -36,8 +37,11 @@ function Actions({ creature, setCreature }) {
       setActionTemplate(null);
     }
   }
-  function OpenModalManageAction(action) {
-    let invalidNames = creature.actions.filter((a) => a.name !== action?.name).map((a) => a.name);
+  function OpenModalManageAction(action, index) {
+    let invalidNames = creature.actions.map((a) => a.name);
+    if (index != null) {
+      invalidNames = invalidNames.filter((n) => n !== action?.name);
+    }
 
     setModal(
       <ModalManageAction
@@ -45,36 +49,48 @@ function Actions({ creature, setCreature }) {
         action={action}
         invalidNames={invalidNames}
         weakSpots={creature.weakSpots}
-        onClose={(tempAction) => HandleCloseModalManageAction(action, tempAction)}
+        onClose={(tempAction) => HandleCloseModalManageAction(action, tempAction, index)}
       />
     );
   }
-  function HandleCloseModalManageAction(action, tempAction) {
-    if (tempAction) {
-      if (action) {
-        if (action.frequency === CREATURE_ACTION_FREQUENCIES.COMMON) {
-          creature.treasures = creature.treasures.filter((t) => t.equipment.ability !== action.name);
-        }
-
-        if (action.name !== tempAction.name) {
-          creature.treasures
-            .filter((t) => t.type === TREASURE_TYPES.EQUIPMENT && t.equipment.ability === action.name)
-            .forEach((t) => {
-              t.equipment.ability = tempAction.name;
-            });
-        }
-
-        let actionIndex = creature.actions.findIndex((a) => a.name === action.name);
-        creature.actions.splice(actionIndex, 1, tempAction);
-      } else {
-        creature.actions.push(tempAction);
-      }
-
-      setCreature({ ...creature });
+  function HandleCloseModalManageAction(action, tempAction, index) {
+    //if cancel, leave
+    if (!tempAction) {
+      setModal(null);
+      return;
     }
 
+    //if new, add and sort
+    if (!action || index == null) {
+      creature.actions.push(tempAction);
+      creature.actions = utils.GetArrayOfObjMultisortedByProperties(creature.actions, ["frequency", "name"]);
+      setCreature({ ...creature });
+      setModal(null);
+      return;
+    }
+
+    //if now common, remove from treasure
+    if (tempAction.frequency === CREATURE_ACTION_FREQUENCIES.COMMON) {
+      creature.treasures = creature.treasures.filter((t) => t.equipment.ability !== action.name);
+    }
+    //if new name, update treasure
+    else if (action.name !== tempAction.name) {
+      creature.treasures
+        .filter((t) => t.type === TREASURE_TYPES.EQUIPMENT && t.equipment.ability === action.name)
+        .forEach((t) => {
+          t.equipment.ability = tempAction.name;
+        });
+    }
+
+    //update existing and sort
+    let actionIndex = creature.actions.findIndex((a) => a.name === action.name);
+    creature.actions.splice(actionIndex, 1, tempAction);
+    creature.actions = utils.GetArrayOfObjMultisortedByProperties(creature.actions, ["frequency", "name"]);
+
+    setCreature({ ...creature });
     setModal(null);
   }
+
   function DeleteAction(action) {
     creature.treasures = creature.treasures.filter((t) => t.equipment.ability !== action.name);
 
@@ -90,8 +106,11 @@ function Actions({ creature, setCreature }) {
       setReactionTemplate(null);
     }
   }
-  function OpenModalManageReaction(reaction) {
-    let invalidNames = creature.reactions.filter((r) => r.name !== reaction?.name).map((r) => r.name);
+  function OpenModalManageReaction(reaction, index) {
+    let invalidNames = creature.reactions.map((a) => a.name);
+    if (index != null) {
+      invalidNames = invalidNames.filter((n) => n !== reaction?.name);
+    }
 
     setModal(
       <ModalManageReaction
@@ -99,22 +118,32 @@ function Actions({ creature, setCreature }) {
         reaction={reaction}
         invalidNames={invalidNames}
         weakSpots={creature.weakSpots}
-        onClose={(tempReaction) => HandleCloseModalManageReaction(reaction, tempReaction)}
+        onClose={(tempReaction) => HandleCloseModalManageReaction(reaction, tempReaction, index)}
       />
     );
   }
-  function HandleCloseModalManageReaction(reaction, tempReaction) {
-    if (tempReaction) {
-      if (reaction) {
-        let reactionIndex = creature.reactions.findIndex((a) => a.name === reaction.name);
-        creature.reactions.splice(reactionIndex, 1, tempReaction);
-      } else {
-        creature.reactions.push(tempReaction);
-      }
-
-      setCreature({ ...creature });
+  function HandleCloseModalManageReaction(reaction, tempReaction, index) {
+    //if cancel, leave
+    if (!tempReaction) {
+      setModal(null);
+      return;
     }
 
+    //if new, add and sort
+    if (!reaction || index == null) {
+      creature.reactions.push(tempReaction);
+      creature.reactions = utils.GetArrayOfObjMultisortedByProperties(creature.reactions, ["frequency", "name"]);
+      setCreature({ ...creature });
+      setModal(null);
+      return;
+    }
+
+    //update existing and sort
+    let reactionIndex = creature.reactions.findIndex((a) => a.name === reaction.name);
+    creature.reactions.splice(reactionIndex, 1, tempReaction);
+    creature.reactions = utils.GetArrayOfObjMultisortedByProperties(creature.reactions, ["frequency", "name"]);
+
+    setCreature({ ...creature });
     setModal(null);
   }
   function DeleteReaction(reaction) {
@@ -168,17 +197,29 @@ function Actions({ creature, setCreature }) {
           </div>
           <div className="actions-wrapper">
             {creature.actions.length > 0 ? (
-              creature.actions.map((action) => (
+              creature.actions.map((action, i) => (
                 <div className="creature-action" key={action.name}>
                   <span>{action.name}</span>
-                  <div>
+                  <div className="df df-cg-25">
                     <span>{creatureActionFrequencies.find((af) => af.value === action.frequency).display}</span>
-                    <button onClick={() => OpenModalManageAction(action)} className="edit-row">
-                      <i className="fas fa-pencil-alt"></i>
-                    </button>
-                    <button onClick={() => DeleteAction(action)} className="delete-row">
-                      Deletar
-                    </button>
+                    <div className="df df-cg-10">
+                      <button onClick={() => OpenModalManageAction(action, i)} className="edit-row" title="Editar">
+                        <i className="fas fa-pencil-alt"></i>
+                      </button>
+                      <button onClick={() => OpenModalManageAction(utils.clone(action))} className="edit-row" title="Copiar">
+                        <i className="fas fa-copy"></i>
+                      </button>
+                      <button
+                        onClick={() => OpenModalManageReaction({ ...utils.clone(action), repetitions: null })}
+                        className="edit-row"
+                        title="Criar reaçao"
+                      >
+                        <i className="fas fa-arrow-right"></i>
+                      </button>
+                      <button onClick={() => DeleteAction(action)} className="edit-row" title="Deletar">
+                        <i className="fas fa-trash"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))
@@ -215,17 +256,22 @@ function Actions({ creature, setCreature }) {
             />
           </div>
           <div className="actions-wrapper">
-            {creature.reactions.map((reaction) => (
+            {creature.reactions.map((reaction, i) => (
               <div className="creature-action" key={reaction.name}>
                 <span>{reaction.name}</span>
-                <div>
+                <div className="df df-cg-25">
                   <span>{creatureActionFrequencies.find((af) => af.value === reaction.frequency).display}</span>
-                  <button onClick={() => OpenModalManageReaction(reaction)} className="edit-row">
-                    <i className="fas fa-pencil-alt"></i>
-                  </button>
-                  <button onClick={() => DeleteReaction(reaction)} className="delete-row">
-                    Deletar
-                  </button>
+                  <div className="df df-cg-10">
+                    <button onClick={() => OpenModalManageReaction(reaction, i)} className="edit-row" title="Editar">
+                      <i className="fas fa-pencil-alt"></i>
+                    </button>
+                    <button onClick={() => OpenModalManageReaction(reaction)} className="edit-row" title="Copiar">
+                      <i className="fas fa-copy"></i>
+                    </button>
+                    <button onClick={() => DeleteReaction(reaction)} className="edit-row" title="Deletar">
+                      <i className="fas fa-trash"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

@@ -79,6 +79,26 @@ export function SortArrayOfObjByStringProperty(arrayOfObj, property, isDescendin
   arrayOfObj.sort(compare);
 }
 
+export function GetArrayOfObjMultisortedByProperties(array, stringProperties) {
+  if (stringProperties.length === 1) {
+    SortArrayOfObjByStringProperty(array, stringProperties[0]);
+    return array;
+  }
+
+  let groupOfArrays = Object.values(GroupArrayBy(array, stringProperties[0]));
+
+  let finalArray = [];
+  groupOfArrays.forEach((group) => {
+    var sortedArray = GetArrayOfObjMultisortedByProperties(
+      group,
+      stringProperties.filter((_, i) => i > 0)
+    );
+    finalArray.push(...sortedArray);
+  });
+
+  return finalArray;
+}
+
 export function turnValueIntoPercentageString(value) {
   return Math.round(value * 100) + "%";
 }
