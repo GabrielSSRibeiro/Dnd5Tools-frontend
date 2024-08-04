@@ -280,9 +280,11 @@ function EditCreature({ systemType, creatureToEdit, HandleSave, HandleDelete, Fi
               <input type="file" onChange={ImportAscendance} ref={inputRef} hidden={true} accept="application/JSON" />
             </button>
           )}
-          <button onClick={CopyCreature} className="creature-import">
-            <i className="fas fa-copy import"></i>
-          </button>
+          {!isFirstStep && (
+            <button onClick={CopyCreature} className="creature-import">
+              <i className="fas fa-copy import"></i>
+            </button>
+          )}
         </div>
         <main>
           {/* avatar */}
