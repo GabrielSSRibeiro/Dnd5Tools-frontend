@@ -33,7 +33,7 @@ function ModalManageDungeonRoom({
           purpose: null,
           firstImpressions: null,
           secrets: null,
-          size: lc.ROOM_SIZES.MEDIUM,
+          size: lc.ROOM_SIZES.CORRIDOR,
           height: lc.ROOM_HEIGHTS.MEDIUM,
           top: {
             connection: null,
