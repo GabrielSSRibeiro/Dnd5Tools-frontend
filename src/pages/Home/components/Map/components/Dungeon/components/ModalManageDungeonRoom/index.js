@@ -36,19 +36,19 @@ function ModalManageDungeonRoom({
           size: lc.ROOM_SIZES.CORRIDOR,
           height: lc.ROOM_HEIGHTS.MEDIUM,
           top: {
-            connection: null,
+            connection: lc.ROOM_CONNECTIONS.OPEN,
             description: null,
           },
           bottom: {
-            connection: null,
+            connection: lc.ROOM_CONNECTIONS.OPEN,
             description: null,
           },
           left: {
-            connection: null,
+            connection: lc.ROOM_CONNECTIONS.OPEN,
             description: null,
           },
           right: {
-            connection: null,
+            connection: lc.ROOM_CONNECTIONS.OPEN,
             description: null,
           },
           floor: {
