@@ -88,6 +88,11 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
         />
         <Select
           label={"Chance de Precipitação"}
+          info={[
+            {
+              text: "Precipitação deixa a visao limitada",
+            },
+          ]}
           extraWidth={250}
           value={tempContext}
           valuePropertyPath="precipitationFrequency"
@@ -99,6 +104,11 @@ function ModalManageContext({ context, isDefault, invalidNames, onClose }) {
         />
         <Select
           label={"Chance de Temperatura Intensa"}
+          info={[
+            {
+              text: "Temperatura intensa dobra desgaste",
+            },
+          ]}
           extraWidth={250}
           value={tempContext}
           valuePropertyPath="intenseTemperatureFrequency"

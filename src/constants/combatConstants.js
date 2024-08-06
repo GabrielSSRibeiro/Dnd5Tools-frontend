@@ -46,6 +46,7 @@ export const COMBAT_ACHIEVEMENTS = {
   OVERCOME_CHALLANGE: 10,
   NEUTRALIZE_SMALL_CREATURE: 15,
   NEUTRALIZE_CREATURE: 20,
+  NEUTRALIZE_LARGE_CREATURE: 25,
   UNCOVER_SECRET: 30,
   COMPLETE_QUEST: 40,
 };
@@ -61,8 +62,13 @@ export const combatAchievements = [
     multiplier: 0.1,
   },
   {
-    display: "Criatura maior",
+    display: "Criatura",
     value: COMBAT_ACHIEVEMENTS.NEUTRALIZE_CREATURE,
+    multiplier: 0.3,
+  },
+  {
+    display: "Criatura maior",
+    value: COMBAT_ACHIEVEMENTS.NEUTRALIZE_LARGE_CREATURE,
     multiplier: 1,
   },
   {
