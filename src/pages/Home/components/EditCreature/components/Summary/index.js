@@ -37,7 +37,7 @@ function Summary({ systemType, creature, onSave, onDelete, isBasicPack }) {
     let attackBonus = cc.GetAttackBonus(creature.attack);
     let attackValue = ch.GetAttackBonusValue(attackBonus.value, averageLevel);
 
-    return `${attackBonus.display} +(${attackValue - cc.CREATURE_ATTACK_VARIANCE}-${attackValue + cc.CREATURE_ATTACK_VARIANCE})`;
+    return `${attackBonus.display} (+${attackValue})`;
   }, [averageLevel, creature.attack]);
   const actionItems = useMemo(
     () =>

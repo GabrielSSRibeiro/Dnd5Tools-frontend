@@ -27,7 +27,7 @@ export const GetXpValue = (level) => {
 
 export const GetAttributeValue = (attribute) => {
   const baseValue = cc.GetAttribute(attribute).baseOutput;
-  return utils.randomValueFromVarianceInt(baseValue, 2);
+  return baseValue + (utils.ProbabilityCheck(0.5) ? cc.CREATURE_ATTRIBUTE_VARIANCE : 0);
 };
 
 export const GetACValue = (armorClass) => {

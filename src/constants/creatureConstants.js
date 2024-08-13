@@ -777,18 +777,39 @@ export const creatureSecondaryAlignments = [
 export const GetSecondaryAlignment = (value) => creatureSecondaryAlignments.find((a) => a.value === value);
 
 export const CREATURE_ATTRIBUTES = {
-  LOW: 10,
-  MEDIUM: 20,
-  HIGH: 30,
-  EXTREME: 40,
+  LOW1: 5,
+  LOW2: 6,
+  LOW3: 7,
+  LOW4: 8,
+  LOW5: 10,
+  MEDIUM1: 15,
+  MEDIUM2: 20,
+  HIGH1: 25,
+  HIGH2: 30,
+  EXTREME1: 35,
+  EXTREME2: 36,
+  EXTREME3: 37,
+  EXTREME4: 38,
+  EXTREME5: 40,
 };
 export const creatureAttributes = [
-  { display: "Baixo (6-10)", value: CREATURE_ATTRIBUTES.LOW, weight: 1, baseOutput: 8 },
-  { display: "Médio (12-16)", value: CREATURE_ATTRIBUTES.MEDIUM, weight: 2, baseOutput: 14 },
-  { display: "Alto (18-22)", value: CREATURE_ATTRIBUTES.HIGH, weight: 3, baseOutput: 20 },
-  { display: "Extremo (24-28)", value: CREATURE_ATTRIBUTES.EXTREME, weight: 4, baseOutput: 26 },
+  { display: "Baixo (4-5)", value: CREATURE_ATTRIBUTES.LOW1, newSection: true, weight: 1, baseOutput: 4 },
+  { display: "Baixo (6-7)", value: CREATURE_ATTRIBUTES.LOW2, weight: 1, baseOutput: 6 },
+  { display: "Baixo (8-9)", value: CREATURE_ATTRIBUTES.LOW3, weight: 1, baseOutput: 8 },
+  { display: "Baixo (10-11)", value: CREATURE_ATTRIBUTES.LOW4, weight: 1, baseOutput: 10 },
+  { display: "Baixo (12-13)", value: CREATURE_ATTRIBUTES.LOW5, weight: 1, baseOutput: 12 },
+  { display: "Médio (14-15)", value: CREATURE_ATTRIBUTES.MEDIUM1, newSection: true, weight: 2, baseOutput: 14 },
+  { display: "Médio (16-17)", value: CREATURE_ATTRIBUTES.MEDIUM2, weight: 2, baseOutput: 16 },
+  { display: "Alto (18-19)", value: CREATURE_ATTRIBUTES.HIGH1, newSection: true, weight: 3, baseOutput: 18 },
+  { display: "Alto (20-21)", value: CREATURE_ATTRIBUTES.HIGH2, weight: 3, baseOutput: 20 },
+  { display: "Extremo (22-23)", value: CREATURE_ATTRIBUTES.EXTREME1, newSection: true, weight: 4, baseOutput: 22 },
+  { display: "Extremo (24-25)", value: CREATURE_ATTRIBUTES.EXTREME2, weight: 4, baseOutput: 24 },
+  { display: "Extremo (26-27)", value: CREATURE_ATTRIBUTES.EXTREME3, weight: 4, baseOutput: 26 },
+  { display: "Extremo (28-29)", value: CREATURE_ATTRIBUTES.EXTREME4, weight: 4, baseOutput: 28 },
+  { display: "Extremo (30-31)", value: CREATURE_ATTRIBUTES.EXTREME5, weight: 4, baseOutput: 30 },
 ];
 export const GetAttribute = (value) => creatureAttributes.find((a) => a.value === value);
+export const CREATURE_ATTRIBUTE_VARIANCE = 1;
 
 export const CREATURE_ATTRIBUTE_NAMES = {
   STRENGTH: 10,
@@ -823,34 +844,66 @@ export const creatureHitPoints = [
 export const GetHitPoints = (value) => creatureHitPoints.find((a) => a.value === value);
 
 export const CREATURE_ATTACKS = {
-  LOW: 10,
-  MEDIUM: 20,
-  HIGH: 30,
-  EXTREME: 40,
+  LOW1: 5,
+  LOW2: 10,
+  MEDIUM1: 15,
+  MEDIUM2: 20,
+  HIGH1: 25,
+  HIGH2: 30,
+  EXTREME1: 35,
+  EXTREME2: 40,
 };
 export const creatureAttacks = [
-  { display: "Baixo", value: CREATURE_ATTACKS.LOW, weight: 1, baseOutput: 2 },
-  { display: "Médio", value: CREATURE_ATTACKS.MEDIUM, weight: 2, baseOutput: 4 },
-  { display: "Alto", value: CREATURE_ATTACKS.HIGH, weight: 3, baseOutput: 6 },
-  { display: "Extremo", value: CREATURE_ATTACKS.EXTREME, weight: 4, baseOutput: 8 },
+  { display: "Baixo", value: CREATURE_ATTACKS.LOW1, newSection: true, weight: 1, baseOutput: 2 },
+  { display: "Baixo", value: CREATURE_ATTACKS.LOW2, weight: 1, baseOutput: 3 },
+  { display: "Médio", value: CREATURE_ATTACKS.MEDIUM1, newSection: true, weight: 2, baseOutput: 4 },
+  { display: "Médio", value: CREATURE_ATTACKS.MEDIUM2, weight: 2, baseOutput: 5 },
+  { display: "Alto", value: CREATURE_ATTACKS.HIGH1, newSection: true, weight: 3, baseOutput: 6 },
+  { display: "Alto", value: CREATURE_ATTACKS.HIGH2, weight: 3, baseOutput: 7 },
+  { display: "Extremo", value: CREATURE_ATTACKS.EXTREME1, newSection: true, weight: 4, baseOutput: 8 },
+  { display: "Extremo", value: CREATURE_ATTACKS.EXTREME2, weight: 4, baseOutput: 9 },
 ];
 export const GetAttackBonus = (value) => creatureAttacks.find((a) => a.value === value);
-export const CREATURE_ATTACK_VARIANCE = 1;
+export const CREATURE_ATTACK_VARIANCE = 0;
 
 export const CREATURE_ARMOR_CLASSES = {
-  LOW: 10,
-  MEDIUM: 20,
-  HIGH: 30,
-  EXTREME: 40,
+  LOW1: 5,
+  LOW2: 6,
+  LOW3: 7,
+  LOW4: 10,
+  MEDIUM1: 15,
+  MEDIUM2: 16,
+  MEDIUM3: 17,
+  MEDIUM4: 20,
+  HIGH1: 25,
+  HIGH2: 26,
+  HIGH3: 27,
+  HIGH4: 30,
+  EXTREME1: 35,
+  EXTREME2: 36,
+  EXTREME3: 37,
+  EXTREME4: 40,
 };
 export const creatureArmorClasses = [
-  { display: "Baixa (10-12)", value: CREATURE_ARMOR_CLASSES.LOW, weight: 1, baseOutput: 11 },
-  { display: "Média (14-16)", value: CREATURE_ARMOR_CLASSES.MEDIUM, weight: 2, baseOutput: 15 },
-  { display: "Alta (18-20)", value: CREATURE_ARMOR_CLASSES.HIGH, weight: 3, baseOutput: 19 },
-  { display: "Extrema (22-24)", value: CREATURE_ARMOR_CLASSES.EXTREME, weight: 4, baseOutput: 23 },
+  { display: "Baixa (10)", value: CREATURE_ARMOR_CLASSES.LOW1, newSection: true, weight: 1, baseOutput: 10 },
+  { display: "Baixa (11)", value: CREATURE_ARMOR_CLASSES.LOW2, weight: 1, baseOutput: 11 },
+  { display: "Baixa (12)", value: CREATURE_ARMOR_CLASSES.LOW3, weight: 1, baseOutput: 12 },
+  { display: "Baixa (13)", value: CREATURE_ARMOR_CLASSES.LOW4, weight: 1, baseOutput: 13 },
+  { display: "Média (14)", value: CREATURE_ARMOR_CLASSES.MEDIUM1, newSection: true, weight: 2, baseOutput: 14 },
+  { display: "Média (15)", value: CREATURE_ARMOR_CLASSES.MEDIUM2, weight: 2, baseOutput: 15 },
+  { display: "Média (16)", value: CREATURE_ARMOR_CLASSES.MEDIUM3, weight: 2, baseOutput: 16 },
+  { display: "Média (17)", value: CREATURE_ARMOR_CLASSES.MEDIUM4, weight: 2, baseOutput: 17 },
+  { display: "Alta (18)", value: CREATURE_ARMOR_CLASSES.HIGH1, newSection: true, weight: 3, baseOutput: 18 },
+  { display: "Alta (19)", value: CREATURE_ARMOR_CLASSES.HIGH2, weight: 3, baseOutput: 19 },
+  { display: "Alta (20)", value: CREATURE_ARMOR_CLASSES.HIGH3, weight: 3, baseOutput: 20 },
+  { display: "Alta (21)", value: CREATURE_ARMOR_CLASSES.HIGH4, weight: 3, baseOutput: 21 },
+  { display: "Extrema (22)", value: CREATURE_ARMOR_CLASSES.EXTREME1, newSection: true, weight: 4, baseOutput: 22 },
+  { display: "Extrema (23)", value: CREATURE_ARMOR_CLASSES.EXTREME2, weight: 4, baseOutput: 23 },
+  { display: "Extrema (24)", value: CREATURE_ARMOR_CLASSES.EXTREME3, weight: 4, baseOutput: 24 },
+  { display: "Extrema (25)", value: CREATURE_ARMOR_CLASSES.EXTREME4, weight: 4, baseOutput: 25 },
 ];
 export const GetArmorClass = (value) => creatureArmorClasses.find((a) => a.value === value);
-export const CREATURE_ARMOR_CLASS_VARIANCE = 1;
+export const CREATURE_ARMOR_CLASS_VARIANCE = 0;
 
 export const CREATURE_INITIATIVES = {
   LOW: 10,

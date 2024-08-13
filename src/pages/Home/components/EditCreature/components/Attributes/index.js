@@ -4,7 +4,6 @@ import {
   creatureAttributes,
   creatureHitPoints,
   creatureAttacks,
-  CREATURE_ATTACK_VARIANCE,
   creatureArmorClasses,
   creatureInitiatives,
 } from "../../../../../../constants/creatureConstants";
@@ -32,7 +31,7 @@ function Attributes({ creature, setCreature }) {
       creatureAttacks.map((a) => {
         let attackValue = ch.GetAttackBonusValue(a.value, ch.GetAverageLevel(creature.rarity));
 
-        return { ...a, display: `${a.display} +(${attackValue - CREATURE_ATTACK_VARIANCE}-${attackValue + CREATURE_ATTACK_VARIANCE})` };
+        return { ...a, display: `${a.display} (+${attackValue})` };
       }),
     [creature.rarity]
   );
