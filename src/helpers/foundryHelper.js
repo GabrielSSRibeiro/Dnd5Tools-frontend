@@ -100,7 +100,7 @@ const GetAbilities = (creature, str) => {
 };
 
 const GetAttributes = (creature, level) => {
-  const hp = ch.GetHPValue(level, creature.hitPoints, creature.attributes.constitution);
+  const hp = ch.GetHP(level, creature.hitPoints, creature.attributes.constitution);
   const weakSpots =
     creature.weakSpots.length > 0
       ? `${creature.weakSpots.map((ws) => `${ws}(${Math.round(hp / (creature.weakSpots.length + 2))})`).join(", ")}`

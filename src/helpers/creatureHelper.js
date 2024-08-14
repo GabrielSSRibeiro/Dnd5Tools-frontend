@@ -40,23 +40,21 @@ export const GetAttackBonusValue = (attack, level) => {
   return utils.randomValueFromVarianceInt(baseValue, cc.CREATURE_ATTACK_VARIANCE) + GetProfByLevel(level);
 };
 
+export const GetHP = (level, HP, con) => {
+  const numberOfIterations = 5;
+  const iterationsList = utils.createArrayFromInt(numberOfIterations).map((_) => GetHPValue(level, HP, con));
+
+  return Math.round(utils.averageOfArray(iterationsList));
+};
+
 export const GetHPValue = (level, HP, con) => {
   const conValue = cc.creatureAttributes.find((a) => a.value === con).baseOutput;
 
   const baseHp = sch.getDamage(HP, level) - DAMANE_MOD;
   const balanceFactor = 3;
   let hp = (baseHp * conValue) / balanceFactor;
-  const hpVariance = 0.1;
+  const hpVariance = 0.05;
   return utils.randomValueFromVariancePercentage(hp, hpVariance);
-
-  // [3, 12, 20].forEach((level) => {
-  //   console.log("level:", level);
-  //   cc.creatureHitPoints.forEach((hp) => {
-  //     cc.creatureAttributes.forEach((a) => {
-  //       console.log(`hp(${hp.display})/con(${a.display}):`, GetHPValue(level, hp.value, a.value));
-  //     });
-  //   });
-  // });
 };
 
 export const GetInitiativeValue = (initiative) => {

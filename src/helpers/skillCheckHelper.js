@@ -9,6 +9,7 @@ const variance = utils.randomValueFromVariancePercentage;
 export const getDamage = (damageIntensity, level = null) => {
   const numberOfIterations = 10;
   const iterationsList = utils.createArrayFromInt(numberOfIterations).map((_) => getDamageValue(damageIntensity, level));
+
   return Math.round(utils.averageOfArray(iterationsList));
 };
 

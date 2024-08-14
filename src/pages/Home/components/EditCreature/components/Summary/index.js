@@ -29,7 +29,7 @@ function Summary({ systemType, creature, onSave, onDelete, isBasicPack }) {
   const creatureDefensiveRatio = useMemo(() => GetCreatureDefensiveRatio(creature), [creature]);
   const creatureHPUpdated = useMemo(() => {
     let hitPoints = cc.GetHitPoints(creature.hitPoints);
-    let hp = ch.GetHPValue(ch.GetAverageLevel(creature.rarity), hitPoints.value, creature.attributes.constitution);
+    let hp = ch.GetHP(ch.GetAverageLevel(creature.rarity), hitPoints.value, creature.attributes.constitution);
 
     return `${hitPoints.display} (~${hp})`;
   }, [creature.attributes.constitution, creature.hitPoints, creature.rarity]);

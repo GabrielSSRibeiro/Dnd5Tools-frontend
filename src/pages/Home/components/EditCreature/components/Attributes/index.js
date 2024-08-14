@@ -20,7 +20,7 @@ function Attributes({ creature, setCreature }) {
   const creatureHPUpdated = useMemo(
     () =>
       creatureHitPoints.map((a) => {
-        let hp = ch.GetHPValue(ch.GetAverageLevel(creature.rarity), a.value, creature.attributes.constitution);
+        let hp = ch.GetHP(ch.GetAverageLevel(creature.rarity), a.value, creature.attributes.constitution);
 
         return { ...a, display: `${a.display} (~${hp})` };
       }),
