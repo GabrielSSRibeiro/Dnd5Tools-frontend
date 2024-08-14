@@ -455,12 +455,21 @@ function ModalTravelResults({
 
     finalCreatures.creatures.forEach((fc) => {
       if (!allLocationCreatures.some((lc) => lc?.creatureId === fc.id)) {
-        allLocationCreatures.push(encounterLocation.current.creatures.find((c) => c.creatureId === fc.id));
+        let creatureToAdd = encounterLocation.current.creatures.find((c) => c.creatureId === fc.id);
+
+        //if nothing found, check exterior loc
+        if (!creatureToAdd) {
+          creatureToAdd = exteriorLocation?.creatures.find((c) => c.creatureId === fc.id);
+        }
+
+        if (creatureToAdd) {
+          allLocationCreatures.push(creatureToAdd);
+        }
       }
     });
 
     return allLocationCreatures;
-  }, [finalCreatures, location.creatures, location.interaction?.rooms]);
+  }, [finalCreatures, location.creatures, location.interaction?.rooms, exteriorLocation?.creatures]);
   const hasSelectedCreature = useMemo(() => finalCreatures.creatures.some((c) => c.isSelected), [finalCreatures]);
 
   const remainsForDisplay = useRef(
