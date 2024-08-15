@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import * as utils from "../../utils";
 import { CREATURE_RARITIES, GetRarity } from "../../constants/creatureConstants";
 import { GetAverageLevel } from "../../helpers/creatureHelper";
@@ -13,21 +13,39 @@ import "./styles.css";
 
 function ModalExport({ creature, showDetails = false, onClose }) {
   const rarity = useRef(GetRarity(creature.rarity));
-  const exports = useRef([
-    {
-      display: "Ascendance",
-      method: HandleAscendanceExport,
-    },
-    {
-      display: "Foundry VTT",
-      method: HandleFoundryExport,
-    },
-  ]);
-  const [exportPlatform, setExportPlatform] = useState(exports.current[0]);
+
   const [exportLevel, setExportLevel] = useState(
     creature.rarity === CREATURE_RARITIES.LEGENDARY ? rarity.current.baseOutputMin : GetAverageLevel(creature.rarity)
   );
   const [isClean, setIsClean] = useState(false);
+
+  const exports = useMemo(() => {
+    function HandleFoundryExport(exportLvl) {
+      const foundryFormattedCreature = GetFoundryFormattedCreature(creature, exportLvl);
+      utils.downloadData(JSON.stringify(foundryFormattedCreature), `Foundry Export - ${creature.name}.json`);
+    }
+
+    function HandleAscendanceExport() {
+      let exportCreature = utils.clone(creature);
+      exportCreature._id = null;
+      exportCreature.owner = null;
+      exportCreature.isClean = isClean;
+
+      utils.downloadData(JSON.stringify(exportCreature), `${exportCreature.name}.json`);
+    }
+
+    return [
+      {
+        display: "Ascendance",
+        method: HandleAscendanceExport,
+      },
+      {
+        display: "Foundry VTT",
+        method: HandleFoundryExport,
+      },
+    ];
+  }, [isClean, creature]);
+  const [exportPlatform, setExportPlatform] = useState(exports[0].display);
 
   function GetExportVersions() {
     const versionText = ["Mais Fraca", "Fraca", "Média", "Forte", "Mais Forte"];
@@ -41,22 +59,8 @@ function ModalExport({ creature, showDetails = false, onClose }) {
     return exportVersions;
   }
 
-  function HandleFoundryExport(exportLvl) {
-    const foundryFormattedCreature = GetFoundryFormattedCreature(creature, exportLvl);
-    utils.downloadData(JSON.stringify(foundryFormattedCreature), `Foundry Export - ${creature.name}.json`);
-  }
-
-  function HandleAscendanceExport() {
-    let exportCreature = utils.clone(creature);
-    exportCreature._id = null;
-    exportCreature.owner = null;
-    exportCreature.isClean = isClean;
-
-    utils.downloadData(JSON.stringify(exportCreature), `${exportCreature.name}.json`);
-  }
-
   function HandleExport() {
-    exportPlatform.method(exportLevel);
+    exports.find((e) => e.display === exportPlatform).method(exportLevel);
   }
 
   return (
@@ -67,18 +71,18 @@ function ModalExport({ creature, showDetails = false, onClose }) {
           label={"Plataforma"}
           extraWidth={90}
           value={exportPlatform}
-          options={exports.current}
+          options={exports}
           onSelect={setExportPlatform}
           optionDisplay={(o) => o.display}
-          optionValue={(o) => o}
+          optionValue={(o) => o.display}
           optionsAtATime={10}
           className="version"
         />
-        {exports.current[0] === exportPlatform ? (
+        {exports[0].display === exportPlatform ? (
           <div className="clean-check">
             <CheckInput
               isSelected={isClean}
-              onClick={() => setIsClean(true)}
+              onClick={() => setIsClean(!isClean)}
               label="Exportar limpo"
               info={[{ text: "Nome e avatar são retirados. Importar uma criatura assim mantem valores atuais" }]}
             />
