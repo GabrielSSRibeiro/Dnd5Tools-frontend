@@ -248,6 +248,16 @@ function EditCreature({ systemType, creatureToEdit, HandleSave, HandleDelete, Fi
       let reader = new FileReader();
       reader.onload = (e) => {
         let uploadedCreature = JSON.parse(e.target.result);
+
+        if (uploadedCreature.isClean) {
+          uploadedCreature.name = creature.name;
+          uploadedCreature.description = creature.description;
+          uploadedCreature.image = creature.image;
+          uploadedCreature.imageX = creature.imageX;
+          uploadedCreature.imageY = creature.imageY;
+          uploadedCreature.imageScale = creature.imageScale;
+        }
+
         setCreature(uploadedCreature);
         setTempCreatureAvatar(uploadedCreature.image);
         setImgUrl(null);

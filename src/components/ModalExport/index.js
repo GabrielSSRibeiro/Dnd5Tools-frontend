@@ -4,6 +4,7 @@ import { CREATURE_RARITIES, GetRarity } from "../../constants/creatureConstants"
 import { GetAverageLevel } from "../../helpers/creatureHelper";
 import { GetFoundryFormattedCreature } from "../../helpers/foundryHelper";
 
+import CheckInput from "../CheckInput";
 import Button from "../Button";
 import Select from "../Select";
 import Modal from "../Modal";
@@ -26,6 +27,7 @@ function ModalExport({ creature, showDetails = false, onClose }) {
   const [exportLevel, setExportLevel] = useState(
     creature.rarity === CREATURE_RARITIES.LEGENDARY ? rarity.current.baseOutputMin : GetAverageLevel(creature.rarity)
   );
+  const [isClean, setIsClean] = useState(false);
 
   function GetExportVersions() {
     const versionText = ["Mais Fraca", "Fraca", "Média", "Forte", "Mais Forte"];
@@ -48,6 +50,7 @@ function ModalExport({ creature, showDetails = false, onClose }) {
     let exportCreature = utils.clone(creature);
     exportCreature._id = null;
     exportCreature.owner = null;
+    exportCreature.isClean = isClean;
 
     utils.downloadData(JSON.stringify(exportCreature), `${exportCreature.name}.json`);
   }
@@ -71,18 +74,29 @@ function ModalExport({ creature, showDetails = false, onClose }) {
           optionsAtATime={10}
           className="version"
         />
-        <Select
-          label={"Versão (Nível)"}
-          info={[{ text: "Dentre as diferentes versões dessa criatura no mundo, qual é essa em particular" }]}
-          extraWidth={150}
-          value={exportLevel}
-          options={GetExportVersions()}
-          onSelect={setExportLevel}
-          optionDisplay={(o) => o.display}
-          optionValue={(o) => o.value}
-          optionsAtATime={10}
-          className="version"
-        />
+        {exports.current[0] === exportPlatform ? (
+          <div className="clean-check">
+            <CheckInput
+              isSelected={isClean}
+              onClick={() => setIsClean(true)}
+              label="Exportar limpo"
+              info={[{ text: "Nome e avatar são retirados. Importar uma criatura assim mantem valores atuais" }]}
+            />
+          </div>
+        ) : (
+          <Select
+            label={"Versão (Nível)"}
+            info={[{ text: "Dentre as diferentes versões dessa criatura no mundo, qual é essa em particular" }]}
+            extraWidth={150}
+            value={exportLevel}
+            options={GetExportVersions()}
+            onSelect={setExportLevel}
+            optionDisplay={(o) => o.display}
+            optionValue={(o) => o.value}
+            optionsAtATime={10}
+            className="version"
+          />
+        )}
       </div>
       <div className="divider"></div>
       <Button text="Exportar" onClick={HandleExport} />
