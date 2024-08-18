@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 
 import * as util from "../../utils";
 
@@ -26,6 +26,7 @@ function Select({
   isDisabled = false,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const customSelectRef = useRef(null);
 
   const selectOptions = useMemo(() => (nothingSelected ? [nothingSelected, ...options] : options), [options, nothingSelected]);
   const selectWidth = 100;
@@ -73,8 +74,21 @@ function Select({
     }
   }
 
+  const handleClickOutside = (event) => {
+    if (customSelectRef.current && !customSelectRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className={`Select-container ${className}`} onBlur={() => setIsOpen(false)}>
+    <div ref={customSelectRef} className={`Select-container ${className}`}>
       {(label || info) && (
         <div className={`label-wrapper ${label && info ? "label-and-info" : !info ? "label" : "info"}`}>
           {(icon || preDisplay || label) && (
