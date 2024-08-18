@@ -74,7 +74,7 @@ function Select({
   }
 
   return (
-    <div className={`Select-container ${className}`} tabIndex="-1" onBlur={() => setIsOpen(false)}>
+    <div className={`Select-container ${className}`} tabIndex="-1" onblur={() => setIsOpen(false)}>
       {(label || info) && (
         <div className={`label-wrapper ${label && info ? "label-and-info" : !info ? "label" : "info"}`}>
           {(icon || preDisplay || label) && (
