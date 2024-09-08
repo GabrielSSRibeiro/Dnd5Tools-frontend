@@ -226,7 +226,7 @@ function ModalTravelResults({
 
       let newNodeCreatures = newCurrentNode.currentCreatures ?? [];
       if (newNodeCreatures.length === 0) {
-        const differentCreatureProb = 0.5;
+        const differentCreatureProb = 0.2;
 
         if (!hasAnyCreature.current) {
           return [];
