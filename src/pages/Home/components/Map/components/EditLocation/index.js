@@ -85,6 +85,8 @@ function EditLocation({
           rl.refListName = interiorLocs.find(
             (il) => !il.data.reference.location && !il.isHidden && Object.keys(il.interiorLocs).length === 0
           ).data.name;
+
+          rl.info = [{ text: rl.name }];
         } else {
           rl.refListName = rl.name;
         }
