@@ -715,7 +715,7 @@ const GetActionDamageParts = (action, level) => {
     let part = [];
 
     const damage = Math.max(5, sch.getDamage(action.damageIntensity, level));
-    part.push(utils.GetValueAsDiceString(damage, true));
+    part.push(utils.GetValueAsDiceString(damage, true, damage > 10 ? 0.5 : 1));
 
     if (action.type !== cc.CREATURE_ACTION_TYPES.HEALING) {
       part.push(cc.damageTypes.find((dt) => dt.value === action.damageType).foundryDisplay);
