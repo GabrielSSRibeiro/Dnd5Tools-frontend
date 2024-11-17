@@ -250,8 +250,6 @@ function EditCreature({ systemType, creatureToEdit, HandleSave, HandleDelete, Fi
         let uploadedCreature = JSON.parse(e.target.result);
 
         if (uploadedCreature.isClean) {
-          console.log(uploadedCreature.id, creature.id);
-
           uploadedCreature._id = creature._id;
           uploadedCreature.name = creature.name;
           uploadedCreature.description = creature.description;
