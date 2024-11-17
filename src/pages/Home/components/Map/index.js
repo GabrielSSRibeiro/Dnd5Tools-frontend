@@ -202,7 +202,7 @@ function Map({
     visionRadius *= modifier;
 
     if (combatConfig.travel.isOverlook) {
-      visionRadius += baseVision;
+      visionRadius += baseVision * 2;
     }
 
     return visionRadius;
