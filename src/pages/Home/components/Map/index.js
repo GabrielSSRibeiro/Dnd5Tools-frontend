@@ -1247,9 +1247,9 @@ function Map({
                   >
                     {n.isCurrent && (
                       <>
-                        {!isNightTime && (
+                        {/* {!isNightTime && (
                           <div className="vision floating-details day-vision" style={{ width: visionRadius / 4, height: visionRadius / 4 }}></div>
-                        )}
+                        )} */}
                         {/* <div
                           className="vision floating-details night-vision"
                           style={{ width: maxVisionRadius / 4, height: maxVisionRadius / 4 }}
