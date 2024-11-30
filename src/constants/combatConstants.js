@@ -52,11 +52,6 @@ export const COMBAT_ACHIEVEMENTS = {
 };
 export const combatAchievements = [
   {
-    display: "Superar desafio",
-    value: COMBAT_ACHIEVEMENTS.OVERCOME_CHALLANGE,
-    multiplier: 0.1,
-  },
-  {
     display: "Criatura menor",
     value: COMBAT_ACHIEVEMENTS.NEUTRALIZE_SMALL_CREATURE,
     multiplier: 0.1,
@@ -72,7 +67,7 @@ export const combatAchievements = [
     multiplier: 1,
   },
   {
-    display: "Descobrir segredo",
+    display: "Descobrir marco",
     value: COMBAT_ACHIEVEMENTS.UNCOVER_SECRET,
     multiplier: 1,
   },
