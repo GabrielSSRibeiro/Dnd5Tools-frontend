@@ -429,7 +429,7 @@ function ModalManageAction({ level, action, invalidNames, weakSpots, onClose }) 
               label={"Ponto Fraco associado"}
               info={[
                 {
-                  text: "Selecione um dos Pontos Fracos da criatura para associar a essa açao",
+                  text: "Selecione um dos Partes da criatura para associar a essa açao",
                 },
                 {
                   text: "Uma açao só pode ser realizada se o Ponto Fraco nao foi destruído",

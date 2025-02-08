@@ -32,11 +32,11 @@ function ModalSettings({ combatConfig, onClickToClose, HandleSaveCombatConfig, H
           de criaturas
         </span>
         <span>Ter um sistema de forja de items</span>
-        <span>Acrescentar novas opcoes táticas ao combate como Pontos Fracos, Comportamentos, e raridade de açoes</span>
+        <span>Acrescentar novas opcoes táticas ao combate como Partes, Comportamentos, e raridade de açoes</span>
         <p>-</p>
         <p>Notas</p>
         <span>No Foundry, ficha de criatura recomendada: "Monster Blocks"</span>
-        <span>No Foundry, Pontos Fracos estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>
+        <span>No Foundry, Partes estao junto ao PV na ficha e opcoes de Compartamento estao em Efeitos</span>
         <span>No Foundry, módulo de controle de criatura recomendado: "Argon Combat HUD"</span>
         <span>No Foundry, tokens sao genericos, por enquanto</span>
         <p>-</p>
