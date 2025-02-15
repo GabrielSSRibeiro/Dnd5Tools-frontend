@@ -322,12 +322,12 @@ function Treasure({ resultText, level }) {
               </div>
               <div className="modal-materials">
                 <ResultBox
-                  headers={["Preço / CD / Dias", "Forja de Item"]}
+                  headers={["Preço / Dias / CD", "Forja de Item"]}
                   subHeaders={["Comprar", "Vender"]}
                   resultBackgroundColumn={true}
                   values={getItemCraftBuyPrices(materialPriceInflation).map((item, index) => ({
                     label: null,
-                    top: item() + " PO / CD " + GetDCValue(creatureRarities[index].value, 10) + " / " + ITEMS_CRAFT_TIMES[index]() + " d",
+                    top: item() + " PO / " + ITEMS_CRAFT_TIMES[index]() + "d / CD " + GetDCValue(creatureRarities[index].value, 10),
                     bottom: getItemCraftSellPrices()[index]() + " PO",
                   }))}
                 />
