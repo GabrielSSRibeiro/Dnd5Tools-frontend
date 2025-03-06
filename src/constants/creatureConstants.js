@@ -1210,7 +1210,10 @@ export const creatureActionSavingThrowReaches = [
 ];
 export const GetCreatureActionSavingThrowReache = (value) => creatureActionSavingThrowReaches.find((i) => i.value === value);
 
-export const creatureActionHealingReaches = [...creatureActionAttackReaches, ...creatureActionSavingThrowReaches];
+export const creatureActionHealingReaches = [...creatureActionAttackReaches, ...creatureActionSavingThrowReaches].map((e, i) => ({
+  ...e,
+  value: i + 1,
+}));
 
 export const CREATURE_ACTION_TYPES = {
   ATTACK: 10,
