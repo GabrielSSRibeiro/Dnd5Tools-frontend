@@ -1212,7 +1212,7 @@ export const GetCreatureActionSavingThrowReache = (value) => creatureActionSavin
 
 export const creatureActionHealingReaches = [...creatureActionAttackReaches, ...creatureActionSavingThrowReaches].map((e, i) => ({
   ...e,
-  value: i + 1,
+  value: (i + 1) * 10,
 }));
 
 export const CREATURE_ACTION_TYPES = {
