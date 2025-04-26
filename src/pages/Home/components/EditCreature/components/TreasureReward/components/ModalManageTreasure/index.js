@@ -183,7 +183,6 @@ function ModalManageTreasure({ treasure, creatureRarity, creatureActions, invali
                 options={creatureRarities}
                 optionDisplay={(o) => o.treasureDisplay}
                 optionValue={(o) => o.value}
-                isDisabled={true}
               />
             )}
             {tempTreasure.type === TREASURE_TYPES.EQUIPMENT && (
